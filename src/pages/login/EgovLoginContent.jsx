@@ -88,7 +88,7 @@ function EgovLoginContent(props) {
       body: JSON.stringify(userInfo),
     };
 
-    let result = {
+    /*let result = {
       id: userInfo.id,
       password: userInfo.password,
       name: "테스트",
@@ -102,10 +102,10 @@ function EgovLoginContent(props) {
     document.querySelector(".all_menu.WEB").classList.add("closed");
     document.querySelector(".btnAllMenu").classList.remove("active");
     document.querySelector(".btnAllMenu").title = "전체메뉴 닫힘";
-    document.querySelector(".all_menu.Mobile").classList.add("closed");
+    document.querySelector(".all_menu.Mobile").classList.add("closed");*/
 
 
-    /*EgovNet.requestFetch(loginUrl, requestOptions, (resp) => {
+    EgovNet.requestFetch(loginUrl, requestOptions, (resp) => {
       let resultVO = resp.resultVO;
       let jToken = resp?.jToken || null;
 
@@ -125,7 +125,7 @@ function EgovLoginContent(props) {
       } else {
         alert(resp.resultMessage);
       }
-    });*/
+    });
   };
 
   console.log("------------------------------EgovLoginContent [End]");
