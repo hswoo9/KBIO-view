@@ -7,6 +7,18 @@ export default defineConfig({
   base: "/",
   server: {
     port: 3000,
+    proxy: {
+      "/naver" : {
+        target: "https://nid.naver.com",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/naver/, ""),
+      },
+      "/userInfo" : {
+        target: "https://openapi.naver.com",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/userInfo/, ""),
+      }
+    }
   },
   resolve: {
     alias: [{ find: "@", replacement: "/src" }],

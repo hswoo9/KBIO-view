@@ -45,6 +45,9 @@ const URL = {
   INFORM_GALLERY_MODIFY: "/inform/gallery/modify", // 알림마당/사이트갤러리수정
   INFORM_GALLERY_REPLY: "/inform/gallery/reply", // 알림마당/사이트갤러리답글
 
+  //TEMPLATES
+  TEMPLATES: "/templates", // 기본양식
+
   //ADMIN
   ADMIN: "/admin", // 사이트관리
   ADMIN_SCHEDULE: "/admin/schedule", // 사이트관리/일정관리

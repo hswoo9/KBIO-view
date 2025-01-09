@@ -48,6 +48,8 @@ import EgovGalleryList from "@/pages/inform/gallery/EgovGalleryList";
 import EgovGalleryDetail from "@/pages/inform/gallery/EgovGalleryDetail";
 import EgovGalleryEdit from "@/pages/inform/gallery/EgovGalleryEdit";
 
+import Templates from "@/pages/templates/Templates";
+
 //ADMIN
 import EgovAdminScheduleList from "@/pages/admin/schedule/EgovAdminScheduleList";
 import EgovAdminScheduleDetail from "@/pages/admin/schedule/EgovAdminScheduleDetail";
@@ -192,6 +194,8 @@ const SecondRoutes = () => {
         <Route path={URL.INTRO_WORKS} element={<EgovIntroWork />} />
         <Route path={URL.INTRO_SERVICE} element={<EgovIntroService />} />
 
+
+
         {/* SUPPORT */}
         <Route
           path={URL.SUPPORT}
@@ -259,6 +263,10 @@ const SecondRoutes = () => {
           path={URL.INFORM_GALLERY_REPLY}
           element={<EgovGalleryEdit mode={CODE.MODE_REPLY} />}
         />
+
+        {/* TEMPLATES */}
+        <Route path={URL.TEMPLATES} element={<Templates />} />
+
 
         {/* ADMIN */}
         <Route

@@ -48,6 +48,9 @@ const URL = {
     "/egovframe-template-simple-react/inform/gallery/modify", // 알림마당/사이트갤러리수정
   INFORM_GALLERY_REPLY: "/egovframe-template-simple-react/inform/gallery/reply", // 알림마당/사이트갤러리답글
 
+  //TEMPLATES
+  TEMPLATES: "/egovframe-template-simple-react/templates", // 기본양식
+
   //ADMIN
   ADMIN: "/egovframe-template-simple-react/admin", // 사이트관리
   ADMIN_SCHEDULE: "/egovframe-template-simple-react/admin/schedule", // 사이트관리/일정관리
@@ -90,6 +93,8 @@ const URL = {
   //MYPAGE
   MYPAGE_MODIFY: "/mypage/modify", // 고객지원/마이페이지/회원 수정
   MYPAGE_CREATE: "/mypage/create", // 고객지원/마이페이지/회원 등록
+
+
 };
 
 // eslint-disable-next-line react-refresh/only-export-components

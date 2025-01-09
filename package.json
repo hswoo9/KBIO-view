@@ -4,12 +4,16 @@
   "version": "0.0.0",
   "type": "module",
   "dependencies": {
+    "axios": "^1.7.9",
     "egovframe-template-simple-react": "file:",
     "qs": "^6.11.0",
     "react": "^18.3.1",
     "react-datepicker": "^4.8.0",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.4.0",
+    "react-sweetalert2": "^0.6.0",
+    "sweetalert2": "^11.15.10",
+    "sweetalert2-react-content": "^5.1.0",
     "web-vitals": "^2.1.4"
   },
   "devDependencies": {

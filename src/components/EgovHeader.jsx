@@ -116,6 +116,14 @@ function EgovHeader() {
                 알림마당
               </NavLink>
             </li>
+            <li>
+              <NavLink
+                to={URL.TEMPLATES}
+                className={({ isActive }) => (isActive ? "cur" : "")}
+              >
+                공통양식
+              </NavLink>
+            </li>
             {sessionUserSe === "ADM" && (
               <li>
                 <NavLink

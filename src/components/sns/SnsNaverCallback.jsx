@@ -2,8 +2,14 @@ import { useEffect } from "react";
 import * as EgovNet from "@/api/egovFetch";
 import CODE from "@/constants/code";
 import { setSessionItem } from "@/utils/storage";
+import axios from "axios";
 
 const SnsNaverCallback = () => {
+
+  const NAVER_CLIENT_ID = import.meta.env.VITE_APP_NAVER_CLIENTID; // 발급받은 클라이언트 아이디
+  const REDIRECT_URI = import.meta.env.VITE_APP_NAVER_CALLBACKURL; // Callback URL
+  const STATE = import.meta.env.VITE_APP_STATE; //다른 서버와 통신 시 암호화문자
+
   //백엔드 호출
   const callBackEnd = () => {
     // 백엔드로 코드값을 넘겨주는 로직
@@ -12,7 +18,26 @@ const SnsNaverCallback = () => {
     console.log("code, state=====>", code, state);
     // 요청이 성공하면
     if (code) {
-      const naverLoginUrl = `/login/naver/callback?code=${code}&state=${state}`;
+      const naverLoginUrl = `/naver/oauth2.0/token?code=${code}&state=${state}&grant_type=authorization_code&client_id=${NAVER_CLIENT_ID}&client_secret=7yAhvzbtMb`;
+      console.log("1");
+
+      const test = async () => {
+        const response = await axios.get(naverLoginUrl);
+        console.log(response);
+        console.log(response.data);
+
+        axios.defaults.headers.common[
+            'Authorization'
+            ] = `Bearer ${response.data.access_token}`;
+        const userInfoUrl = `/userInfo/v1/nid/me`;
+        const useInfo = await axios.get(userInfoUrl);
+        console.log(useInfo.data);
+
+      }
+      test();
+      console.log("2");
+
+      /*const naverLoginUrl = `/login/naver/callback?code=${code}&state=${state}`;
       const requestOptions = {
         method: "GET",
         headers: {
@@ -37,7 +62,7 @@ const SnsNaverCallback = () => {
           //React.StrictMode 에서 fetch가 자동으로 2번 실행할 때 아래 메인화면으로 이동된다.
           window.location.replace("/");
         }
-      });
+      });*/
     }
   };
   useEffect(callBackEnd, []);
