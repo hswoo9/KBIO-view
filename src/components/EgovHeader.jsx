@@ -5,8 +5,8 @@ import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
 
-import logoImg from "/assets/images/logo_w.png";
-import logoImgMobile from "/assets/images/logo_m.png";
+import logoImg from "@/assets/images/kbio.png";
+import logoImgMobile from "@/assets/images/kbio.png";
 import { getSessionItem, setSessionItem } from "@/utils/storage";
 
 function EgovHeader() {
@@ -38,7 +38,18 @@ function EgovHeader() {
       },
       credentials: "include",
     };
-    EgovNet.requestFetch(logOutUrl, requestOptions, function (resp) {
+
+    setSessionItem("loginUser", { id: "" });
+    setSessionItem("jToken", null);
+    window.alert("로그아웃되었습니다!");
+    navigate(URL.MAIN);
+    // PC와 Mobile 열린메뉴 닫기
+    document.querySelector(".all_menu.WEB").classList.add("closed");
+    document.querySelector(".btnAllMenu").classList.remove("active");
+    document.querySelector(".btnAllMenu").title = "전체메뉴 닫힘";
+    document.querySelector(".all_menu.Mobile").classList.add("closed");
+
+    /*EgovNet.requestFetch(logOutUrl, requestOptions, function (resp) {
       console.log("===>>> logout resp= ", resp);
       if (parseInt(resp.resultCode) === parseInt(CODE.RCV_SUCCESS)) {
         //onChangeLogin({ loginVO: {} });
@@ -52,7 +63,7 @@ function EgovHeader() {
         document.querySelector(".btnAllMenu").title = "전체메뉴 닫힘";
         document.querySelector(".all_menu.Mobile").classList.add("closed");
       }
-    });
+    });*/
   };
 
   console.log("------------------------------EgovHeader [End]");
@@ -70,13 +81,13 @@ function EgovHeader() {
           <Link to={URL.MAIN} className="w">
             <img
               src={logoImg}
-              alt="표준프레임워크포털 eGovFrame 심플홈페이지"
+              alt="K바이오랩허브"
             />
           </Link>
           <Link to={URL.MAIN} className="m">
             <img
               src={logoImgMobile}
-              alt="표준프레임워크포털 eGovFrame 심플홈페이지"
+              alt="K바이오랩허브"
             />
           </Link>
         </h1>
@@ -320,6 +331,14 @@ function EgovHeader() {
               </li>
             </ul>
           </div>
+          <div className="col">
+            <h3>공통양식</h3>
+            <ul>
+              <li>
+                <NavLink to={URL.TEMPLATES}>공통양식</NavLink>
+              </li>
+            </ul>
+          </div>
           {sessionUserSe === "ADM" && (
             <div className="col">
               <h3>사이트관리</h3>
@@ -544,6 +563,16 @@ function EgovHeader() {
                 >
                   사이트 갤러리
                 </NavLink>
+              </li>
+            </ul>
+          </div>
+          <h3>
+            <Link to={URL.TEMPLATES}>공통양식</Link>
+          </h3>
+          <div className="submenu closed">
+            <ul>
+              <li>
+                <NavLink to={URL.TEMPLATES}>공통양식</NavLink>
               </li>
             </ul>
           </div>
