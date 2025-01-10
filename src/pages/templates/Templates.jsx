@@ -46,7 +46,6 @@ function Templates(props) {
   const fileUploadTemplates = async () => {
     const formData = new FormData();
     selectedFiles.map((file) => {
-      console.log("a");
       formData.append("files", file);
     });
     const requestOptions = {
