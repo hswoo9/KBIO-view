@@ -82,6 +82,9 @@ const URL = {
   ADMIN_MEMBERS_DETAIL: "/admin/members/detail", // 사이트관리/회원관리 상세
   ADMIN_MEMBERS_CREATE: "/admin/members/create", // 사이트관리/회원관리 등록
   ADMIN_MEMBERS_MODIFY: "/admin/members/modify", // 사이트관리/회원관리 상세/수정
+  
+  //메뉴 관련
+  ADMIN_MENU: "/admin/menu",
 
   //MYPAGE
   MYPAGE_MODIFY: "/mypage/modify", // 고객지원/마이페이지/회원 수정
