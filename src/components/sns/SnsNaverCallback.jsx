@@ -22,7 +22,7 @@ const SnsNaverCallback = () => {
     console.log("code, state=====>", code, state);
     // 요청이 성공하면
     if (code) {
-      const naverLoginUrl = `/naver/oauth2.0/token?code=${code}&state=${state}&grant_type=authorization_code&client_id=${NAVER_CLIENT_ID}&client_secret=7yAhvzbtMb`;
+      /*const naverLoginUrl = `/naver/oauth2.0/token?code=${code}&state=${state}&grant_type=authorization_code&client_id=${NAVER_CLIENT_ID}&client_secret=7yAhvzbtMb`;
       console.log("1");
 
       const naverLoginAction = async () => {
@@ -53,14 +53,18 @@ const SnsNaverCallback = () => {
           document.querySelector(".all_menu.Mobile").classList.add("closed");
         }
       }
-      naverLoginAction();
+      naverLoginAction();*/
 
-      /*const naverLoginUrl = `/login/naver/callback?code=${code}&state=${state}`;
+      const naverLoginUrl = `/naver/callback`;
       const requestOptions = {
-        method: "GET",
+        method: "POST",
         headers: {
           "Content-type": "application/json",
         },
+        body: JSON.stringify({
+          code: {code},
+          state: {state}
+        })
       };
       EgovNet.requestFetch(naverLoginUrl, requestOptions, (resp) => {
         let resultVO = resp.resultVO;
@@ -80,7 +84,7 @@ const SnsNaverCallback = () => {
           //React.StrictMode 에서 fetch가 자동으로 2번 실행할 때 아래 메인화면으로 이동된다.
           window.location.replace("/");
         }
-      });*/
+      });
     }
   };
   useEffect(callBackEnd, []);
