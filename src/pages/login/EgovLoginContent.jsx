@@ -7,6 +7,7 @@ import CODE from "@/constants/code";
 import { getLocalItem, setLocalItem, setSessionItem } from "@/utils/storage";
 import SnsNaverBt from "@/components/sns/SnsNaverBt";
 import SnsKakaoBt from "@/components/sns/SnsKakaoBt";
+import SnsGoogleBt from "@/components/sns/SnsGoogleBt.jsx";
 
 function EgovLoginContent(props) {
   console.group("EgovLoginContent");
@@ -207,6 +208,7 @@ function EgovLoginContent(props) {
         <div className="btn_social">
           <SnsNaverBt />
           <SnsKakaoBt />
+          <SnsGoogleBt />
         </div>
       </div>
       {/* <!--// 본문 --> */}

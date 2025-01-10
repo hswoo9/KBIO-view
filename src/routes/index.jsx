@@ -78,6 +78,7 @@ import EgovAdminMemberEdit from "@/pages/admin/members/EgovAdminMemberEdit";
 import EgovMypageEdit from "@/pages/mypage/EgovMypageEdit";
 import * as EgovNet from "@/api/egovFetch"; // jwt토큰 위조 검사 때문에 추가
 import initPage from "@/js/ui";
+import SnsGoogleCallback from "../components/sns/SnsGoogleCallback.jsx";
 
 const RootRoutes = () => {
   //useLocation객체를 이용하여 정규표현식을 사용한 /admin/~ 으로 시작하는 경로와 비교에 사용(아래 1줄) */}
@@ -176,6 +177,15 @@ const SecondRoutes = () => {
             <SnsKakaoCallback onChangeLogin={(user) => setLoginVO(user)} />
           }
         />
+
+        {/* Sns GOOGLE Callback */}
+        <Route
+            path={URL.SMS_GOOGLE_CB}
+            element={
+              <SnsGoogleCallback onChangeLogin={(user) => setLoginVO(user)} />
+            }
+        />
+
 
         {/* ERROR */}
         <Route path={URL.ERROR} element={<EgovError />} />
