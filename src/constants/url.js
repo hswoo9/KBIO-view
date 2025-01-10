@@ -5,6 +5,7 @@ const URL = {
   LOGIN: "/login", //로그인
   SNS_NAVER_CB: "/login/naver/callback", //Sns Naver Callback
   SNS_KAKAO_CB: "/login/kakao/callback", //Sns Kakao Callback
+  SMS_GOOGLE_CB: "/login/google/callback", //Sns Google Callback
   ERROR: "/error", //로그인
 
   //ABOUT
