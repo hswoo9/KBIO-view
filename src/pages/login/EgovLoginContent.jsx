@@ -79,7 +79,8 @@ function EgovLoginContent(props) {
   const submitFormHandler = () => {
     console.log("EgovLoginContent submitFormHandler()");
 
-    const loginUrl = "/auth/login-jwt";
+    //const loginUrl = "/auth/login-jwt";
+    const loginUrl = "/loginAction";
 
     const requestOptions = {
       method: "POST",
@@ -114,6 +115,9 @@ function EgovLoginContent(props) {
 
       if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
         //setLoginVO(resultVO);
+        resultVO.userSe = "ADM";
+        resultVO.id = resultVO.emplyrId;
+        resultVO.name = resultVO.userNm;
         setSessionItem("loginUser", resultVO);
         props.onChangeLogin(resultVO);
         if (saveIDFlag) setLocalItem(KEY_ID, resultVO?.id);

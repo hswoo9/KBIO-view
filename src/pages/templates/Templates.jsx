@@ -37,6 +37,35 @@ function Templates(props) {
     });
   }
 
+  //첨부파일 관련
+  const [selectedFiles, setSelectedFiles] = useState({});
+  const handleFileChange = (e) => {
+    setSelectedFiles(Array.from(e.target.files));
+  }
+
+  const fileUploadTemplates = async () => {
+    const formData = new FormData();
+    selectedFiles.map((file) => {
+      formData.append("files", file);
+    });
+    const requestOptions = {
+      method: "POST",
+      body: formData
+    };
+
+    EgovNet.requestFetch(`/fileCheck`, requestOptions, function (resp) {
+      console.log("--------------------------------------------");
+      console.log(resp);
+      console.log("--------------------------------------------");
+      if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
+        console.log(resp);
+      } else {
+        console.log("ERROR");
+        console.log(resp);
+      }
+    });
+  }
+
   const location = useLocation();
 
   const swalNormal = () => {
@@ -75,12 +104,16 @@ function Templates(props) {
           {/* <!--// Navigation --> */}
 
           <button onClick={swalNormal}>기본알럿</button>
+          <br/>
           <button onClick={fetchTemplates}>api</button>
+          <br/>
+          <input type={"file"} name={"files"} onChange={handleFileChange} multiple={"multiple"}/>
+          <button onClick={fileUploadTemplates}>업로드</button>
         </div>
       </div>
     </div>
-)
-  ;
+  )
+      ;
 }
 
 export default Templates;

@@ -49,6 +49,7 @@ import EgovGalleryDetail from "@/pages/inform/gallery/EgovGalleryDetail";
 import EgovGalleryEdit from "@/pages/inform/gallery/EgovGalleryEdit";
 
 import Templates from "@/pages/templates/Templates";
+import EgovAdminMenuList from "@/pages/admin/menu/EgovAdminMenuList";
 
 //ADMIN
 import EgovAdminScheduleList from "@/pages/admin/schedule/EgovAdminScheduleList";
@@ -371,6 +372,10 @@ const SecondRoutes = () => {
         <Route
           path={URL.MYPAGE_MODIFY}
           element={<EgovMypageEdit mode={CODE.MODE_MODIFY} />}
+        />
+        <Route
+          path={URL.ADMIN_MENU}
+          element={<EgovAdminMenuList mode={CODE.ADMIN_MENU} />}
         />
       </Routes>
 
