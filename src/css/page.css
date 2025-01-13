@@ -50,7 +50,7 @@
   color: #aaa;
   opacity: 1;
 }
-.Plogin .login_box button {
+.Plogin .login_box .login_button {
   display: block;
   position: absolute;
   left: 435px;
@@ -65,7 +65,7 @@
   line-height: 110px;
   background: #169bd5;
 }
-.Plogin .login_box button span {
+.Plogin .login_box .login_button span {
   display: block;
   position: relative;
   height: 100%;
@@ -74,6 +74,23 @@
   margin-top: 20px;
   font-size: 0;
 }
+.Plogin .login_box .chk .f_chk {
+  float : right;
+  display: inline-block;
+}
+
+.Plogin .login_box .chk .btn {
+  color: #fff;
+  background: #169bd5;
+  margin-right: 10px;
+  height: 30px;
+  width: 150px;
+  border-radius: 8px;
+  font-size: 14px;
+  text-align: center;
+  line-height: 30px;
+}
+
 .Plogin .login_box .chk em {
   display: inline-block;
   height: 30px;

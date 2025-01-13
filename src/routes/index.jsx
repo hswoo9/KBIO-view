@@ -14,6 +14,8 @@ import EgovError from "@/components/EgovError";
 import EgovMain from "@/pages/main/EgovMain";
 import EgovLogin from "@/pages/login/EgovLogin";
 
+import EgovFindIdPswd from "@/pages/login/EgovFindIdPswd";
+
 //SNS
 import SnsNaverCallback from "@/components/sns/SnsNaverCallback";
 import SnsKakaoCallback from "@/components/sns/SnsKakaoCallback";
@@ -430,6 +432,11 @@ const SecondRoutes = () => {
         <Route
             path={URL.MANAGER_BBS_AUTHORITY_MANAGEMENT}
             element={<ManagerBbsAuthorityManagement />}
+        />
+
+        <Route
+            path={URL.FIND_ID_PSWD}
+            element={<EgovFindIdPswd />}
         />
 
       </Routes>
