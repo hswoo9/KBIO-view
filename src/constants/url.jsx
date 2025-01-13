@@ -97,7 +97,10 @@ const URL = {
   MYPAGE_MODIFY: "/mypage/modify", // 고객지원/마이페이지/회원 수정
   MYPAGE_CREATE: "/mypage/create", // 고객지원/마이페이지/회원 등록
 
-
+  //관리자 페이지
+  MANAGER: "/manager/main",
+  MANAGER_NORMAL_MEMBER: "/manager/normalMember",
+  MANAGER_RESIDENT_COMPANY: "/manager/residentMember",
 };
 
 // eslint-disable-next-line react-refresh/only-export-components

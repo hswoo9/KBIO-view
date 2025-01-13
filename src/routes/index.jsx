@@ -6,6 +6,7 @@ import CODE from "@/constants/code";
 
 //COMMON
 import EgovHeader from "@/components/EgovHeader";
+import ManagerHeader from "@/components/manager/ManagerHeader";
 import EgovFooter from "@/components/EgovFooter";
 import EgovInfoPopup from "@/components/EgovInfoPopup";
 import EgovError from "@/components/EgovError";
@@ -50,6 +51,12 @@ import EgovGalleryEdit from "@/pages/inform/gallery/EgovGalleryEdit";
 
 import Templates from "@/pages/templates/Templates";
 import EgovAdminMenuList from "@/pages/admin/menu/EgovAdminMenuList";
+
+
+//MANAGER
+import MamagerIndex from "@/pages/manager/Index";
+import MemberNormalMember from "@/pages/manager/ManagerNormalMember";
+import MemberResidentMember from "@/pages/manager/ManagerResidentMember";
 
 //ADMIN
 import EgovAdminScheduleList from "@/pages/admin/schedule/EgovAdminScheduleList";
@@ -150,9 +157,10 @@ const SecondRoutes = () => {
     }
   }, []);
 
+  const requestUrl = window.location.pathname.split("/")[1];
   return (
     <>
-      <EgovHeader />
+      {requestUrl === "manager" ? (<ManagerHeader/>) : (<EgovHeader />) }
       <Routes>
         {/* MAIN */}
         <Route path={URL.MAIN} element={<EgovMain />} />
@@ -377,9 +385,21 @@ const SecondRoutes = () => {
           path={URL.ADMIN_MENU}
           element={<EgovAdminMenuList mode={CODE.ADMIN_MENU} />}
         />
-      </Routes>
 
-      <EgovFooter />
+        <Route
+          path={URL.MANAGER}
+          element={<MamagerIndex mode={CODE.MANAGER} />}
+        />
+        <Route
+          path={URL.MANAGER_NORMAL_MEMBER}
+          element={<MemberNormalMember />}
+        />
+        <Route
+          path={URL.MANAGER_RESIDENT_COMPANY}
+          element={<MemberResidentMember />}
+        />
+      </Routes>
+      {requestUrl === "manager" ? "" : (<EgovFooter />) }
       <EgovInfoPopup />
     </>
   );

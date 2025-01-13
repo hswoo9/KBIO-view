@@ -41,6 +41,40 @@ body {
   top: 20px;
   line-height: 30px;
 }
+
+.header .manager_user_info {
+  position: absolute;
+  right: 100px;
+  top: 20px;
+  line-height: 30px;
+}
+
+.header .manager_user_info .person {
+  display: inline-block;
+  color: #169bd5;
+  font-weight: 500;
+}
+.header .manager_user_info .person::before {
+  content: "";
+  display: inline-block;
+  width: 22px;
+  height: 22px;
+  margin-right: 7px;
+  background: url(./images/ico_person.png) no-repeat;
+  background-size: contain;
+  vertical-align: -4px;
+}
+.header .manager_user_info .btn {
+  margin-left: 14px;
+  padding: 0 20px;
+  border-radius: 15px;
+  color: #fff;
+  font-size: 14px;
+  line-height: 30px;
+  background: #169bd5;
+}
+
+
 .header .user_info .person {
   display: inline-block;
   color: #169bd5;
@@ -72,10 +106,48 @@ body {
   top: 78px;
   width: 920px;
 }
+
 .header .gnb ul {
   font-size: 0;
   text-align: center;
 }
+
+/* MANAGER START */
+.header .managerGnb {
+  position: absolute;
+  top: 20px;
+  width: 920px;
+}
+
+.header .managerGnb ul {
+  font-size: 0;
+  text-align: center;
+}
+
+.header .managerGnb ul::after {
+  content: "";
+  display: block;
+  clear: both;
+}
+
+.header .managerGnb ul li {
+  float: left;
+}
+.header .managerGnb ul li + li {
+  margin-left: 98px;
+}
+.header .managerGnb ul li a {
+  color: #666;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.25px;
+}
+.header .managerGnb ul li a.cur {
+  color: #222;
+}
+
+/* MANAGER END */
+
 .header .gnb ul::after {
   content: "";
   display: block;
@@ -96,6 +168,29 @@ body {
 .header .gnb ul li a.cur {
   color: #222;
 }
+
+
+.header .manager_right_a {
+  position: absolute;
+  right: 50px;
+  top: 20px;
+}
+.header .manager_right_a .btn {
+  width: 30px;
+  height: 30px;
+  font-size: 0;
+  background: url(./images/ico_allmenu.png) no-repeat right;
+  background-size: 22px 18px;
+}
+.header .manager_right_a .btn.active {
+  background: url(./images/ico_allmenu_close.png) no-repeat right;
+  background-size: 22px 18px;
+}
+.header .manager_right_a .btn.mobile {
+  display: none;
+}
+
+
 
 .header .right_a {
   position: absolute;
