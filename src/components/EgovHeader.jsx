@@ -1,4 +1,5 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
+import React, { useEffect, useRef } from "react";
 
 import * as EgovNet from "@/api/egovFetch";
 
@@ -8,6 +9,7 @@ import CODE from "@/constants/code";
 import logoImg from "@/assets/images/kbio.png";
 import logoImgMobile from "@/assets/images/kbio.png";
 import { getSessionItem, setSessionItem } from "@/utils/storage";
+import Swal from 'sweetalert2';
 
 function EgovHeader() {
   console.group("EgovHeader");
@@ -68,6 +70,42 @@ function EgovHeader() {
 
   console.log("------------------------------EgovHeader [End]");
   console.groupEnd("EgovHeader");
+
+  //자동 로그아웃
+  const logoutTimer = useRef(null);
+  const idleTimeLimit = 30 * 60 * 1000;
+
+  const resetTimer = () => {
+    if (logoutTimer.current) {
+      clearTimeout(logoutTimer.current);
+    }
+    // 일정 시간이 지나면 로그아웃 처리
+    logoutTimer.current = setTimeout(() => {
+      handleLogout();
+    }, idleTimeLimit);
+  };
+
+  const handleLogout = () => {
+    Swal.fire('30분 이상 액션이 없어<br/>자동 로그아웃 처리됩니다.');
+    navigate("/");
+  };
+
+  useEffect(() => {
+    // 이벤트 리스너 추가
+    const events = ["mousemove", "mousedown", "keypress", "scroll", "touchstart"];
+    events.forEach((event) => window.addEventListener(event, resetTimer) );
+    // 초기 타이머 설정
+    resetTimer();
+
+    return () => {
+      // 컴포넌트가 언마운트될 때 이벤트 리스너 제거 및 타이머 초기화
+      events.forEach((event) => window.removeEventListener(event, resetTimer));
+      if (logoutTimer.current) {
+        clearTimeout(logoutTimer.current);
+      }
+    };
+  }, []);
+
 
   return (
     // <!-- header -->

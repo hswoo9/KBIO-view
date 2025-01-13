@@ -57,6 +57,9 @@ import EgovAdminMenuList from "@/pages/admin/menu/EgovAdminMenuList";
 import MamagerIndex from "@/pages/manager/Index";
 import MemberNormalMember from "@/pages/manager/member/ManagerNormalMember";
 import MemberResidentMember from "@/pages/manager/member/ManagerResidentMember";
+import MemberRelatedMember from "@/pages/manager/member/ManagerRelatedMember";
+import MemberNonResidentMember from "@/pages/manager/member/ManagerNonResidentMember";
+import MemberConsultentMember from "@/pages/manager/member/ManagerConsultentMember";
 import ManagerMenuManagement from "@/pages/manager/menu/ManagerMenuManagement";
 import ManagerBbsManagement from "@/pages/manager/board/ManagerBbsManagement";
 import ManagerBbsAuthorityManagement from "@/pages/manager/board/ManagerBbsAuthorityManagement";
@@ -398,6 +401,18 @@ const SecondRoutes = () => {
           element={<MemberNormalMember />}
         />
         <Route
+            path={URL.MANAGER_RELATED_COMPANY}
+            element={<MemberRelatedMember />}
+        />
+        <Route
+            path={URL.MANAGER_NONRESIDENT_COMPANY}
+            element={<MemberNonResidentMember />}
+        />
+        <Route
+            path={URL.MANAGER_CONSULTENT}
+            element={<MemberConsultentMember />}
+        />
+        <Route
           path={URL.MANAGER_RESIDENT_COMPANY}
           element={<MemberResidentMember />}
         />
@@ -416,6 +431,7 @@ const SecondRoutes = () => {
             path={URL.MANAGER_BBS_AUTHORITY_MANAGEMENT}
             element={<ManagerBbsAuthorityManagement />}
         />
+
       </Routes>
       {requestUrl === "manager" ? "" : (<EgovFooter />) }
       <EgovInfoPopup />
