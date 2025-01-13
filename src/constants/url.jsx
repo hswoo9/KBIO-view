@@ -103,6 +103,9 @@ const URL = {
   MANAGER_RESIDENT_COMPANY: "/manager/residentMember",
 
   MANAGER_MENU_MANAGEMENT: "/manager/menuManagement",
+
+  MANAGER_BBS_MANAGEMENT:"/manager/bbsManagement",
+  MANAGER_BBS_AUTHORITY_MANAGEMENT:"/manager/bbsAuthorityManagement",
 };
 
 // eslint-disable-next-line react-refresh/only-export-components

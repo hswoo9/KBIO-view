@@ -92,7 +92,7 @@ function ManagerHeader() {
             </li>
             <li>
               <NavLink
-                to={""}
+                to={URL.MANAGER_BBS_MANAGEMENT}
                 className={({ isActive }) => (isActive ? "cur" : "")}
               >
                 게시판관리

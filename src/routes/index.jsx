@@ -58,6 +58,8 @@ import MamagerIndex from "@/pages/manager/Index";
 import MemberNormalMember from "@/pages/manager/member/ManagerNormalMember";
 import MemberResidentMember from "@/pages/manager/member/ManagerResidentMember";
 import ManagerMenuManagement from "@/pages/manager/menu/ManagerMenuManagement";
+import ManagerBbsManagement from "@/pages/manager/board/ManagerBbsManagement";
+import ManagerBbsAuthorityManagement from "@/pages/manager/board/ManagerBbsAuthorityManagement";
 
 //ADMIN
 import EgovAdminScheduleList from "@/pages/admin/schedule/EgovAdminScheduleList";
@@ -403,6 +405,16 @@ const SecondRoutes = () => {
         <Route
             path={URL.MANAGER_MENU_MANAGEMENT}
             element={<ManagerMenuManagement />}
+        />
+
+        <Route
+            path={URL.MANAGER_BBS_MANAGEMENT}
+            element={<ManagerBbsManagement />}
+        />
+
+        <Route
+            path={URL.MANAGER_BBS_AUTHORITY_MANAGEMENT}
+            element={<ManagerBbsAuthorityManagement />}
         />
       </Routes>
       {requestUrl === "manager" ? "" : (<EgovFooter />) }
