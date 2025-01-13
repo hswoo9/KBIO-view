@@ -8,6 +8,8 @@ const URL = {
   SMS_GOOGLE_CB: "/login/google/callback", //Sns Google Callback
   ERROR: "/error", //로그인
 
+  FIND_ID_PSWD:"/findIdPswd", //아이디 비번찾기
+
   //ABOUT
   ABOUT: "/about", //사이트소개
   ABOUT_SITE: "/about/site", // 사이트소개/소개
@@ -94,6 +96,8 @@ const URL = {
   MANAGER_RELATED_COMPANY: "/manager/relatedMember",
   MANAGER_NONRESIDENT_COMPANY: "/manager/nonresidentMember",
   MANAGER_CONSULTENT: "/manager/consultent",
+
+  MANAGER_COMMON_CODE: "/manager/commonCode",
 
   MANAGER_MENU_MANAGEMENT: "/manager/menuManagement",
 

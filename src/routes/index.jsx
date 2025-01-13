@@ -14,6 +14,8 @@ import EgovError from "@/components/EgovError";
 import EgovMain from "@/pages/main/EgovMain";
 import EgovLogin from "@/pages/login/EgovLogin";
 
+import EgovFindIdPswd from "@/pages/login/EgovFindIdPswd";
+
 //SNS
 import SnsNaverCallback from "@/components/sns/SnsNaverCallback";
 import SnsKakaoCallback from "@/components/sns/SnsKakaoCallback";
@@ -63,6 +65,7 @@ import MemberConsultentMember from "@/pages/manager/member/ManagerConsultentMemb
 import ManagerMenuManagement from "@/pages/manager/menu/ManagerMenuManagement";
 import ManagerBbsManagement from "@/pages/manager/board/ManagerBbsManagement";
 import ManagerBbsAuthorityManagement from "@/pages/manager/board/ManagerBbsAuthorityManagement";
+import ManagerCommonCodeList from "@/pages/manager/common/ManagerCommonCode";
 
 //ADMIN
 import EgovAdminScheduleList from "@/pages/admin/schedule/EgovAdminScheduleList";
@@ -438,6 +441,15 @@ const SecondRoutes = () => {
         <Route
             path={URL.MANAGER_BBS_AUTHORITY_MANAGEMENT}
             element={<ManagerBbsAuthorityManagement />}
+        />
+
+        <Route
+            path={URL.FIND_ID_PSWD}
+            element={<EgovFindIdPswd />}
+        />
+        <Route
+            path={URL.MANAGER_COMMON_CODE}
+            element={<ManagerCommonCodeList />}
         />
 
       </Routes>
