@@ -5,6 +5,8 @@ const URL = {
   LOGIN: "/egovframe-template-simple-react/login", //로그인
   ERROR: "/egovframe-template-simple-react/error", //로그인
 
+  FIND_ID_PSWD:"/egovframe-template-simple-react/findIdPswd", //아이디 비번찾기
+
   //ABOUT
   ABOUT: "/egovframe-template-simple-react/about", //사이트소개
   ABOUT_SITE: "/egovframe-template-simple-react/about/site", // 사이트소개/소개

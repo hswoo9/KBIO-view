@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import {NavLink, useLocation, useNavigate} from "react-router-dom";
 import * as EgovNet from "@/api/egovFetch";
 
 import URL from "@/constants/url";
@@ -177,6 +177,12 @@ function EgovLoginContent(props) {
                 />
               </span>
               <div className="chk">
+                <NavLink to={URL.MYPAGE_CREATE} className={({ isActive }) => (isActive ? "btn" : "btn")}>
+                  회원가입
+                </NavLink>
+                <NavLink to={URL.FIND_ID_PSWD} className={({ isActive }) => (isActive ? "btn" : "btn")}>
+                  ID/비밀번호 찾기
+                </NavLink>
                 <label className="f_chk" htmlFor="saveid" ref={checkRef}>
                   <input
                     type="checkbox"
@@ -188,7 +194,7 @@ function EgovLoginContent(props) {
                   <em>ID저장</em>
                 </label>
               </div>
-              <button type="button" onClick={submitFormHandler}>
+              <button className="login_button" type="button" onClick={submitFormHandler}>
                 <span>LOGIN</span>
               </button>
             </fieldset>
