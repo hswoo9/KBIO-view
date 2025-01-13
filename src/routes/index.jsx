@@ -55,8 +55,8 @@ import EgovAdminMenuList from "@/pages/admin/menu/EgovAdminMenuList";
 
 //MANAGER
 import MamagerIndex from "@/pages/manager/Index";
-import MemberNormalMember from "@/pages/manager/ManagerNormalMember";
-import MemberResidentMember from "@/pages/manager/ManagerResidentMember";
+import MemberNormalMember from "@/pages/manager/member/ManagerNormalMember";
+import MemberResidentMember from "@/pages/manager/member/ManagerResidentMember";
 
 //ADMIN
 import EgovAdminScheduleList from "@/pages/admin/schedule/EgovAdminScheduleList";
