@@ -178,7 +178,7 @@ function EgovMypageEdit(props) {
         tmplatId: "TMPLAT_MYPAGE_DEFAULT", //Template 고정
         groupId: "GROUP_00000000000001", //그룹ID 초기값
         mberSttus: "P", //로그인가능여부 초기값
-        checkIdResult: "중복확인",
+        checkIdResult: "",
       });
       return;
     }
@@ -206,6 +206,11 @@ function EgovMypageEdit(props) {
         alert("회원ID를 입력해 주세요");
         return false;
       }
+      const regex = /^[a-zA-Z0-9]{6,12}$/;
+      if (!regex.test(checkId)) {
+        alert("회원ID는 6~12자의 영문 대소문자와 숫자만 사용 가능합니다.");
+        return false;
+      }
       const checkIdURL = `/etc/member_checkid/${checkId}`;
       const reqOptions = {
         method: "GET",
@@ -220,7 +225,8 @@ function EgovMypageEdit(props) {
         ) {
           setMemberDetail({
             ...memberDetail,
-            checkIdResult: "이미 사용중인 아이디입니다. [ID체크]",
+            checkIdResult: "중복된 아이디입니다.",
+            checkIdResultColor: "red", 
             mberId: checkId,
           });
           resolve(resp.result.usedCnt);
@@ -228,6 +234,7 @@ function EgovMypageEdit(props) {
           setMemberDetail({
             ...memberDetail,
             checkIdResult: "사용 가능한 아이디입니다.",
+            checkIdResultColor: "green", 
             mberId: checkId,
           });
           resolve(0);
@@ -253,6 +260,13 @@ function EgovMypageEdit(props) {
           alert("암호는 필수 값입니다.");
           return false;
         }
+
+        const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?/~_`|-]).{8,20}$/;
+        if (!passwordRegex.test(formData.get("password"))) {
+          alert("암호는 영문자, 숫자, 특수문자 조합으로 8~20자리 이내여야 합니다.");
+          return false;
+        }
+
         if (formData.get("password_chk") === null ||
             formData.get("password_chk") === ""
         ) {
@@ -265,6 +279,20 @@ function EgovMypageEdit(props) {
         }
         if (formData.get("mberNm") === null || formData.get("mberNm") === "") {
           alert("회원명은 필수 값입니다.");
+          return false;
+        }
+        const mberNmRegex = /^[a-zA-Zㄱ-ㅎ가-힣]+$/;
+        if (!mberNmRegex.test(formData.get("mberNm"))) {
+          alert("회원명은 한글 또는 영문자만 사용 가능합니다.");
+          return false;
+        }
+        if (formData.get("phonenum") === null || formData.get("phonenum") === "") {
+          alert("전화번호는 필수 값입니다.");
+          return false;
+        }
+        const phonenumRegex = /^[0-9\-]+$/;
+        if (!phonenumRegex.test(formData.get("phonenum"))) {
+          alert("전화번호는 숫자와 하이픈(-)만 포함할 수 있습니다.");
           return false;
         }
         resolve(true);
@@ -282,6 +310,11 @@ function EgovMypageEdit(props) {
     }
     if (checkRef.current[2].value === "") {
       alert("회원명은 필수 값입니다.");
+      return false;
+    }
+    const phonenumRegex = /^[0-9\-]+$/;
+    if (!phonenumRegex.test(formData.get("phonenum"))) {
+      alert("전화번호는 숫자와 하이픈(-)만 포함할 수 있습니다.");
       return false;
     }
     return true;
@@ -441,6 +474,7 @@ function EgovMypageEdit(props) {
                                   setMemberDetail({
                                     ...memberDetail,
                                     mberId: e.target.value,
+                                    checkIdResult: "",
                                   })
                               }
                               ref={(el) => (checkRef.current[0] = el)}
@@ -453,7 +487,7 @@ function EgovMypageEdit(props) {
                                 checkIdDplct();
                               }}
                           >
-                            {memberDetail.checkIdResult}
+                            중복확인
                           </button>
                           <span
                               style={{
@@ -468,6 +502,17 @@ function EgovMypageEdit(props) {
                           >
                           아이디는 6~12자 영문,숫자-,_만 가능합니다.
                         </span>
+                          {memberDetail.checkIdResult && (
+                              <div
+                                  style={{
+                                    marginTop: '10px',
+                                    color: memberDetail.checkIdResultColor,
+                                    fontSize: '16px',
+                                  }}
+                              >
+                                {memberDetail.checkIdResult}
+                              </div>
+                          )}
                         </>
                     )}
                     {/* 수정/조회 일때 변경 불가 */}
@@ -790,6 +835,7 @@ function EgovMypageEdit(props) {
                           }
                           style={{width: "70%"}}
                           required
+                          readOnly
                       />
                       <button
                           className="btn btn_skyblue_h46"
