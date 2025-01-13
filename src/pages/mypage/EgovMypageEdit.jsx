@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { useNavigate, useLocation } from "react-router-dom"; //Link, 제거
+import { useNavigate, useLocation } from "react-router-dom"; 
 
 import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";

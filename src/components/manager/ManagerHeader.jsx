@@ -376,7 +376,7 @@ function ManagerHeader() {
                 로그인
               </button>
               <NavLink
-                to={URL.MYPAGE_CREATE}
+                to={URL.TERMS_AGREEMENT}
                 className={({ isActive }) =>
                   isActive ? "btn login cur" : "btn login"
                 }

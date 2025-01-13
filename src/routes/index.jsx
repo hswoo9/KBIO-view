@@ -89,6 +89,8 @@ import EgovAdminMemberList from "@/pages/admin/members/EgovAdminMemberList";
 import EgovAdminMemberEdit from "@/pages/admin/members/EgovAdminMemberEdit";
 //마이페이지 기능 추가
 import EgovMypageEdit from "@/pages/mypage/EgovMypageEdit";
+import EgovTermsAgreement from '@/pages/mypage/EgovTermsAgreement';
+import EgovIdentityVerification from '@/pages/mypage/EgovIdentityVerification';
 import * as EgovNet from "@/api/egovFetch"; // jwt토큰 위조 검사 때문에 추가
 import initPage from "@/js/ui";
 import SnsGoogleCallback from "../components/sns/SnsGoogleCallback.jsx";
@@ -379,9 +381,15 @@ const SecondRoutes = () => {
           element={<EgovAdminMemberEdit mode={CODE.MODE_MODIFY} />}
         />
         {/* MYPAGE */}
-        <Route
+        {/*<Route
           path={URL.MYPAGE_CREATE}
           element={<EgovMypageEdit mode={CODE.MODE_CREATE} />}
+        />*/}
+        <Route path={URL.TERMS_AGREEMENT} element={<EgovTermsAgreement />} />
+        <Route path={URL.IDENTITY_VERIFICATION} element={<EgovIdentityVerification />} />
+        <Route
+            path={URL.MYPAGE_CREATE}
+            element={<EgovMypageEdit mode={CODE.MODE_CREATE} />}
         />
         <Route
           path={URL.MYPAGE_MODIFY}
