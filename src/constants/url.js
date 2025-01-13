@@ -105,6 +105,8 @@ const URL = {
   //MYPAGE
   MYPAGE_MODIFY: "/mypage/modify", // 고객지원/마이페이지/회원 수정
   MYPAGE_CREATE: "/mypage/create", // 고객지원/마이페이지/회원 등록
+  TERMS_AGREEMENT: "/mypage/agreement", //회원가입시 동의
+  IDENTITY_VERIFICATION: "/mypage/identity", // 회원가입시 본인인증
 };
 
 // eslint-disable-next-line react-refresh/only-export-components

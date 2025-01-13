@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { useNavigate, useLocation } from "react-router-dom"; //Link, 제거
+import { useNavigate, useLocation } from "react-router-dom"; 
 
 import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
@@ -1846,13 +1846,25 @@ function EgovMypageEdit(props) {
 
 
                 {/* <!-- 버튼영역 --> */}
-                <div className="board_btn_area">
-                  <div className="left_col btn1">
+                <div className="board_btn_area" style={{ display: "flex", justifyContent: "center", gap: "10px" }}>
                     <button
                         className="btn btn_skyblue_h46 w_100"
                         onClick={() => updateMember()}
+                        style={{width: '10%'}}
                     >
-                      저장
+                      가입 신청
+                    </button>
+                    <button
+                        className="btn btn_skyblue_h46 w_100"
+                        onClick={() => navigate(URL.LOGIN)}
+                        style={{
+                          width: "10%",
+                          backgroundColor: "red",
+                          color: "white",
+                          border: "none",
+                        }}
+                    >
+                      가입 취소
                     </button>
                     {modeInfo.mode === CODE.MODE_MODIFY && (
                         <button
@@ -1865,7 +1877,7 @@ function EgovMypageEdit(props) {
                         </button>
                     )}
                     {/* memberDetail.uniqId 제거 서버단에서 토큰값 사용 */}
-                  </div>
+
                 </div>
                 {/* <!--// 버튼영역 --> */}
               </div>
