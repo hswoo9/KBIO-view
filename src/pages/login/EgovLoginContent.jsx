@@ -22,6 +22,7 @@ function EgovLoginContent(props) {
     id: "",
     password: "default",
     userSe: "USR",
+    loginType : "base"
   });
   // eslint-disable-next-line no-unused-vars
   const [loginVO, setLoginVO] = useState({});
@@ -60,28 +61,28 @@ function EgovLoginContent(props) {
   useEffect(() => {
     let data = getLocalItem(KEY_ID);
     if (data !== null) {
-      setUserInfo({ id: data, password: "default", userSe: "USR" });
+      setUserInfo({ id: data, password: "default", userSe: "USR", loginType: "base"});
     }
   }, []);
 
   const activeEnter = (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
-      if (e.target === idRef.current && passwordRef.current.value === "") {
-        //엔터 키 이벤트 발생한 입력 필드가 아이디인지 확인하기
-        alert("비밀번호 입력 여부를 확인하여 주세요");
-        passwordRef.current.focus();
-      } else {
-        submitFormHandler(e);
-      }
+      submitFormHandler(e);
     }
   };
   const submitFormHandler = () => {
-    console.log("EgovLoginContent submitFormHandler()");
+    if(!idRef.current.value){
+      alert("아이디를 입력해주세요.");
+      idRef.current.focus();
+      return;
+    }else if(!passwordRef.current.value){
+      alert("비밀번호를 입력해주세요.");
+      passwordRef.current.focus();
+      return;
+    }
 
-    //const loginUrl = "/auth/login-jwt";
     const loginUrl = "/loginAction";
-
     const requestOptions = {
       method: "POST",
       headers: {
@@ -90,51 +91,18 @@ function EgovLoginContent(props) {
       body: JSON.stringify(userInfo),
     };
 
-    /*let result = {
-      id: userInfo.id,
-      password: userInfo.password,
-      name: "테스트",
-      //userSe: "USR",
-      userSe: "ADM"
-    };
-    setSessionItem("loginUser", result);
-    props.onChangeLogin(result);
-    navigate(URL.MAIN);
-    // PC와 Mobile 열린메뉴 닫기
-    document.querySelector(".all_menu.WEB").classList.add("closed");
-    document.querySelector(".btnAllMenu").classList.remove("active");
-    document.querySelector(".btnAllMenu").title = "전체메뉴 닫힘";
-    document.querySelector(".all_menu.Mobile").classList.add("closed");*/
-
-
     EgovNet.requestFetch(loginUrl, requestOptions, (resp) => {
-      let resultVO = resp.resultVO;
-      let jToken = resp?.jToken || null;
-
-      setSessionItem("jToken", jToken);
-
-      if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
-        //setLoginVO(resultVO);
-        resultVO.userSe = "ADM";
-        resultVO.id = resultVO.emplyrId;
-        resultVO.name = resultVO.userNm;
-        setSessionItem("loginUser", resultVO);
-        props.onChangeLogin(resultVO);
-        if (saveIDFlag) setLocalItem(KEY_ID, resultVO?.id);
-        navigate(URL.MAIN);
-        // PC와 Mobile 열린메뉴 닫기
-        document.querySelector(".all_menu.WEB").classList.add("closed");
-        document.querySelector(".btnAllMenu").classList.remove("active");
-        document.querySelector(".btnAllMenu").title = "전체메뉴 닫힘";
-        document.querySelector(".all_menu.Mobile").classList.add("closed");
-      } else {
+      if(resp.resultCode != "200"){
         alert(resp.resultMessage);
+        return;
+      }else{
+        setSessionItem("userName", resp.userName);
+        setSessionItem("jToken", resp.jToken);
+        if (saveIDFlag) setLocalItem(KEY_ID, resultVO?.id);
+        navigate("/");
       }
     });
   };
-
-  console.log("------------------------------EgovLoginContent [End]");
-  console.groupEnd("EgovLoginContent");
 
   return (
     <div className="contents" id="contents">

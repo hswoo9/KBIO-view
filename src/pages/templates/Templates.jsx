@@ -11,30 +11,26 @@ import { default as EgovLeftNav } from "@/components/leftmenu/EgovLeftNavTemplat
 import Swal from 'sweetalert2';
 
 function Templates(props) {
+
   const fetchTemplates = async () => {
-    const requestOptions = {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify({
-        a: "aa",
-        b: "bb",
-        code: "200",
-      }),
-    };
-    
-    EgovNet.requestFetch(`/callback`, requestOptions, function (resp) {
-      console.log("--------------------------------------------");
-      console.log(resp);
-      console.log("--------------------------------------------");
-      if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
-        console.log(resp);
-      } else {
-        console.log("ERROR");
-        console.log(resp);
-      }
-    });
+    const response = await axios.post(
+        "http://localhost:8080/admin/statistics/getStatistics.do",
+        JSON.stringify({
+          page: "devices",
+          dimensions: JSON.stringify(["deviceCategory"]),
+          metrics: JSON.stringify(["sessions"]),
+          startDate: "2025-01-01",
+          endDate: "2025-01-31",
+        }),
+        {
+          headers: {
+            "Content-Type": "application/json",
+          }
+        }
+    );
+
+    console.log(response);
+    console.log("response.data:", response.data);
   }
 
   //첨부파일 관련

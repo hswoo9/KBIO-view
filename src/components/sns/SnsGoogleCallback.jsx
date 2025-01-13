@@ -12,25 +12,27 @@ const SnsGoogleCallback = () => {
   const REDIRECT_URI = import.meta.env.VITE_APP_NAVER_CALLBACKURL; // Callback URL
   const STATE = import.meta.env.VITE_APP_STATE; //다른 서버와 통신 시 암호화문자
 
-  //백엔드 호출
   const callBackEnd = () => {
-
-    // 백엔드로 코드값을 넘겨주는 로직
     let authorizationCode  = new URL(window.location.href).searchParams.get("code");
-    console.log("authorizationCode =====>", authorizationCode);
     if (authorizationCode) {
       const googleLoginAction = async () => {
         const response = await axios.post(
-            "http://localhost:8080/loginAction",
-            JSON.stringify({ code : authorizationCode, snsType : "google"}),
+            "/loginAction",
+            JSON.stringify({code : authorizationCode, loginType : "sns", snsType : "google"}),
   {
           headers: {
             "Content-Type": "application/json",
           }
         });
 
-        console.log(response);
-        console.log("response.data:",response.data);
+        if(response.data.resultCode == "999"){
+          alert("회원가입이 필요합니다.\n회원가입 페이지로 이동합니다.");
+          navigate("/mypage/agreement");
+        }else{
+          setSessionItem("userName", resp.userName);
+          setSessionItem("jToken", response.data.jToken);
+          navigate("/");
+        }
       }
       googleLoginAction();
     }
