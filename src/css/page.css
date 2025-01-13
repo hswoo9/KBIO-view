@@ -123,6 +123,74 @@
   margin-top: 5px;
 }
 
+/*Id,비밀번호 찾기*/
+.Flogin {
+  padding-bottom: 100px;
+}
+.Flogin h1 {
+  color: #222;
+  font-size: 48px;
+  font-weight: 500;
+  letter-spacing: -2px;
+  line-height: 48px;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.Flogin h2 {
+  color: #222;
+  font-size: 36px;
+  font-weight: 500;
+  letter-spacing: -2px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.Flogin .box {
+  position: relative;
+  width: 690px;
+  margin: 54px auto 0;
+  padding: 30px 70px;
+  border: 1px solid #dde2e5;
+  border-radius: 25px;
+  box-shadow: 3px 4px 5px #ccc;
+  text-align: center;
+}
+.Flogin .box .group {
+  display: block;
+  text-align: center;
+}
+.Flogin .box input[type="text"]{
+  width: 80%;
+  height: 46px;
+  padding: 0 20px;
+  border: 0;
+  border-radius: 8px;
+  color: #666;
+  font-size: 16px;
+  background: #f5f5f5;
+}
+.Flogin .box .group input + input {
+  margin-top: 18px;
+}
+.Flogin .box input[type="text"]:-ms-input-placeholder{
+  color: #aaa;
+  opacity: 1;
+}
+.Flogin .box .btn {
+  color: #fff;
+  background: #169bd5;
+  margin-top: 20px;
+  margin-right: 10px;
+  height: 30px;
+  width: 150px;
+  border-radius: 8px;
+  font-size: 14px;
+  text-align: center;
+  line-height: 30px;
+}
+
+
 /* Board */
 /* 메인 */
 .P_MAIN {
