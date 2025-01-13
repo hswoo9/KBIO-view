@@ -92,6 +92,12 @@ function EgovFindIdPswd(props) {
                             </form>
                         </div>
 
+                        <ul className="list">
+                            <li>
+                                SNS회원은 가입한 홈페이지에서 아이디 및 비밀번호 찾기를 진행 바랍니다.
+                            </li>
+                        </ul>
+
                     </div>
                     {/* <!-- 본문 --> */}
                 </div>

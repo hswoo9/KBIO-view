@@ -139,7 +139,7 @@
 
 .Flogin h2 {
   color: #222;
-  font-size: 36px;
+  font-size: 30px;
   font-weight: 500;
   letter-spacing: -2px;
   margin-bottom: 20px;
@@ -188,6 +188,31 @@
   font-size: 14px;
   text-align: center;
   line-height: 30px;
+}
+
+.Flogin .list {
+  margin-top: 44px;
+  padding: 0 360px;
+}
+.Flogin .list li {
+  position: relative;
+  padding-left: 15px;
+  color: #c72626;
+  font-size: 16px;
+  line-height: 26px;
+}
+.Flogin .list li::before {
+  content: "";
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 12px;
+  width: 4px;
+  height: 4px;
+  background: #666;
+}
+.Flogin .list li + li {
+  margin-top: 5px;
 }
 
 
