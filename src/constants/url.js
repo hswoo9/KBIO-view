@@ -97,6 +97,8 @@ const URL = {
   MANAGER_NONRESIDENT_COMPANY: "/manager/nonresidentMember",
   MANAGER_CONSULTENT: "/manager/consultent",
 
+  MANAGER_COMMON_CODE: "/manager/commonCode",
+
   MANAGER_MENU_MANAGEMENT: "/manager/menuManagement",
 
   MANAGER_BBS_MANAGEMENT:"/manager/bbsManagement",

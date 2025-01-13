@@ -65,6 +65,7 @@ import MemberConsultentMember from "@/pages/manager/member/ManagerConsultentMemb
 import ManagerMenuManagement from "@/pages/manager/menu/ManagerMenuManagement";
 import ManagerBbsManagement from "@/pages/manager/board/ManagerBbsManagement";
 import ManagerBbsAuthorityManagement from "@/pages/manager/board/ManagerBbsAuthorityManagement";
+import ManagerCommonCodeList from "@/pages/manager/common/ManagerCommonCode";
 
 //ADMIN
 import EgovAdminScheduleList from "@/pages/admin/schedule/EgovAdminScheduleList";
@@ -445,6 +446,10 @@ const SecondRoutes = () => {
         <Route
             path={URL.FIND_ID_PSWD}
             element={<EgovFindIdPswd />}
+        />
+        <Route
+            path={URL.MANAGER_COMMON_CODE}
+            element={<ManagerCommonCodeList />}
         />
 
       </Routes>

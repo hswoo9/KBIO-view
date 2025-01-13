@@ -1,0 +1,155 @@
+import React, { useState, useEffect, useCallback, useRef } from "react";
+import { Link, useLocation } from "react-router-dom";
+import axios from "axios";
+import * as EgovNet from "@/api/egovFetch";
+import URL from "@/constants/url";
+import CODE from "@/constants/code";
+
+import { default as EgovLeftNav } from "@/components/leftmenu/ManagerLeftCode";
+
+import EgovPaging from "@/components/EgovPaging";
+function ManagerCommonCode(props) {
+
+    const location = useLocation();
+
+    const [paginationInfo, setPaginationInfo] = useState({});
+
+    const [searchCondition, setSearchCondition] = useState(
+        location.state?.searchCondition || {
+            pageIndex: 1,
+            searchCnd: "0",
+            searchWrd: "",
+        }
+    );
+
+    const cndRef = useRef();
+    const wrdRef = useRef();
+    const [listTag, setListTag] = useState([]);
+    const Location = React.memo(function Location() {
+        return (
+            <div className="location">
+                <ul>
+                    <li>
+                        <Link to={URL.MANAGER} className="home">
+                            Home
+                        </Link>
+                    </li>
+                    <li>
+                        <Link to={URL.MANAGER_COMMON_CODE}>코드관리</Link>
+                    </li>
+                    <li>코드관리</li>
+                </ul>
+            </div>
+        );
+    });
+
+
+    return (
+        <div className="container">
+            <div className="c_wrap">
+                {/* <!-- Location --> */}
+                <Location/>
+                {/* <!--// Location --> */}
+
+                <div className="layout">
+                    {/* <!-- Navigation --> */}
+                    {/* <!--// Navigation --> */}
+                    <EgovLeftNav/>
+                    <div className="contents BOARD_CREATE_LIST" id="contents">
+                        {/* <!-- 본문 --> */}
+                        {/* <!-- 검색조건 --> */}
+                        <div className="condition">
+                            <ul>
+                                <li className="third_1 L">
+                                    <span className="lb">검색유형선택</span>
+                                    <label className="f_select" htmlFor="searchCnd">
+                                        <select
+                                            id="searchCnd"
+                                            name="searchCnd"
+                                            title="검색유형선택"
+                                        >
+                                            <option value="0">그룹코드명</option>
+                                        </select>
+                                    </label>
+                                </li>
+                                <li className="third_2 R">
+                                    <span className="lb">검색어</span>
+                                    <span className="f_search w_400">
+                    <input
+                        type="text"
+                        name=""
+                        defaultValue={
+                            searchCondition && searchCondition.searchWrd
+                        }
+                        placeholder=""
+                        ref={wrdRef}
+                        onChange={(e) => {
+                            wrdRef.current.value = e.target.value;
+                        }}
+                    />
+                    <button
+                        type="button"
+                        onClick={() => {
+                            retrieveList({
+                                ...searchCondition,
+                                pageIndex: 1,
+                                searchCnd: cndRef.current.value,
+                                searchWrd: wrdRef.current.value,
+                            });
+                        }}
+                    >
+                      조회
+                    </button>
+                  </span>
+                                </li>
+                                <li>
+                                    <Link
+                                        to={""}
+                                        className="btn btn_blue_h46 pd35"
+                                    >
+                                        등록
+                                    </Link>
+                                </li>
+                            </ul>
+                        </div>
+                        {/* <!--// 검색조건 --> */}
+
+                        {/* <!-- 게시판목록 --> */}
+                        <div className="board_list BRD006">
+                            <div className="head">
+                                <span>번호</span>
+                                <span>그룹코드</span>
+                                <span>그룹코드명</span>
+                                <span>비고</span>
+                                <span>정렬순서</span>
+                                <span>활성여부</span>
+                            </div>
+                            <div className="result">{listTag}</div>
+                        </div>
+                        {/* <!--// 게시판목록 --> */}
+
+                        <div className="board_bot">
+                            {/* <!-- Paging --> */}
+                            <EgovPaging
+                                pagination={paginationInfo}
+                                moveToPage={(passedPage) => {
+                                    retrieveList({
+                                        ...searchCondition,
+                                        pageIndex: passedPage,
+                                        searchCnd: cndRef.current.value,
+                                        searchWrd: wrdRef.current.value,
+                                    });
+                                }}
+                            />
+                            {/* <!--/ Paging --> */}
+                        </div>
+
+                        {/* <!--// 본문 --> */}
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+export default ManagerCommonCode;
