@@ -101,6 +101,9 @@ const URL = {
   MANAGER: "/manager/main",
   MANAGER_NORMAL_MEMBER: "/manager/normalMember",
   MANAGER_RESIDENT_COMPANY: "/manager/residentMember",
+  MANAGER_RELATED_COMPANY: "/manager/relatedMember",
+  MANAGER_NONRESIDENT_COMPANY: "/manager/nonresidentMember",
+  MANAGER_CONSULTENT: "/manager/consultent",
 
   MANAGER_MENU_MANAGEMENT: "/manager/menuManagement",
 };
