@@ -57,6 +57,7 @@ import EgovAdminMenuList from "@/pages/admin/menu/EgovAdminMenuList";
 import MamagerIndex from "@/pages/manager/Index";
 import MemberNormalMember from "@/pages/manager/member/ManagerNormalMember";
 import MemberResidentMember from "@/pages/manager/member/ManagerResidentMember";
+import ManagerMenuManagement from "@/pages/manager/menu/ManagerMenuManagement";
 
 //ADMIN
 import EgovAdminScheduleList from "@/pages/admin/schedule/EgovAdminScheduleList";
@@ -397,6 +398,11 @@ const SecondRoutes = () => {
         <Route
           path={URL.MANAGER_RESIDENT_COMPANY}
           element={<MemberResidentMember />}
+        />
+
+        <Route
+            path={URL.MANAGER_MENU_MANAGEMENT}
+            element={<ManagerMenuManagement />}
         />
       </Routes>
       {requestUrl === "manager" ? "" : (<EgovFooter />) }

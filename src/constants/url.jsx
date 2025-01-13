@@ -101,6 +101,8 @@ const URL = {
   MANAGER: "/manager/main",
   MANAGER_NORMAL_MEMBER: "/manager/normalMember",
   MANAGER_RESIDENT_COMPANY: "/manager/residentMember",
+
+  MANAGER_MENU_MANAGEMENT: "/manager/menuManagement",
 };
 
 // eslint-disable-next-line react-refresh/only-export-components

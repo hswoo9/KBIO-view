@@ -84,7 +84,7 @@ function ManagerHeader() {
             </li>
             <li>
               <NavLink
-                to={""}
+                to={URL.MANAGER_MENU_MANAGEMENT}
                 className={({ isActive }) => (isActive ? "cur" : "")}
               >
                 메뉴관리
