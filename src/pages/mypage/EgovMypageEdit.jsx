@@ -4,6 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom"; //Link, 제거
 import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
+import axios from "axios";
 
 import { setSessionItem } from "@/utils/storage";
 
@@ -89,6 +90,43 @@ function EgovMypageEdit(props) {
     }).open();
   };
 
+  const kbioauth = async () => {
+    const businessNumber = `${memberDetail.bizRegNum1}-${memberDetail.bizRegNum2}-${memberDetail.bizRegNum3}`;
+
+    if (!businessNumber || businessNumber.includes("--")) {
+      alert("사업자 등록번호를 정확히 입력하세요.");
+      return;
+    }
+
+    const apiKey = import.meta.env.VITE_APP_DATA_API_CLIENTID;
+    const url = `https://api.odcloud.kr/api/nts-businessman/v1/status?serviceKey=${apiKey}`;
+
+    try {
+      const response = await axios.post(url, {
+        b_no: [businessNumber.replace(/-/g, '')],
+      });
+
+      const businessData = response.data.data[0];
+      console.log(businessData);
+
+      const businessStatus = response.data.data[0]?.b_stt_cd;
+
+      if (businessStatus === '01') {
+        alert("사업자가 정상적으로 운영 중입니다.");
+      } else if (businessStatus === '02') {
+        alert("사업자가 휴업 중입니다.");
+      } else if (businessStatus === '03') {
+        alert("사업자가 폐업 상태입니다.");
+      } else {
+        alert("사업자가 존재 하지 않습니다.");
+      }
+
+    } catch (error) {
+      console.error("Error fetching business status:", error);
+      alert("사업자 등록번호 조회에 실패했습니다.");
+    }
+  };
+
   const nonsearchAddress = () => {
     if (!window.daum || !window.daum.Postcode) {
       alert('주소 검색 API가 아직 로드되지 않았습니다. 잠시 후 다시 시도해주세요.');
@@ -109,9 +147,6 @@ function EgovMypageEdit(props) {
     }).open();
   };
 
-  const kbioauth = () => {
-
-  }
 
   const initMode = () => {
     switch (props.mode) {
@@ -1027,6 +1062,9 @@ function EgovMypageEdit(props) {
                               maxLength="3"
                               value={memberDetail.bizRegNum1 || ""}
                               style={{width: "100px", marginRight: "5px"}}
+                              onChange={(e) =>
+                                  setMemberDetail({ ...memberDetail, bizRegNum1: e.target.value })
+                              }
                           />
                           <span style={{
                             marginLeft: '10px',
@@ -1044,6 +1082,9 @@ function EgovMypageEdit(props) {
                               maxLength="2"
                               value={memberDetail.bizRegNum2 || ""}
                               style={{width: "70px", margin: "0 5px"}}
+                              onChange={(e) =>
+                                  setMemberDetail({ ...memberDetail, bizRegNum2: e.target.value })
+                              }
                           />
                           <span style={{
                             marginLeft: '10px',
@@ -1060,6 +1101,9 @@ function EgovMypageEdit(props) {
                               maxLength="5"
                               value={memberDetail.bizRegNum3 || ""}
                               style={{width: "130px", marginLeft: "5px"}}
+                              onChange={(e) =>
+                                  setMemberDetail({ ...memberDetail, bizRegNum3: e.target.value })
+                              }
                           />
                           <button
                               className="btn btn_skyblue_h46"
