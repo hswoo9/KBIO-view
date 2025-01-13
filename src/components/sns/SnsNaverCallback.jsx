@@ -22,49 +22,17 @@ const SnsNaverCallback = () => {
     console.log("code, state=====>", code, state);
     // 요청이 성공하면
     if (code) {
-      /*const naverLoginUrl = `/naver/oauth2.0/token?code=${code}&state=${state}&grant_type=authorization_code&client_id=${NAVER_CLIENT_ID}&client_secret=7yAhvzbtMb`;
-      console.log("1");
-
-      const naverLoginAction = async () => {
-        const response = await axios.get(naverLoginUrl);
-        console.log(response);
-        console.log(response.data);
-
-        axios.defaults.headers.common[
-            'Authorization'
-            ] = `Bearer ${response.data.access_token}`;
-        const userInfoUrl = `/userInfo/v1/nid/me`;
-        const useInfo = await axios.get(userInfoUrl);
-        console.log(useInfo.data);
-        if(useInfo.status){
-          let result = {
-            id: useInfo.data.response.email,
-            password: "?",
-            name: useInfo.data.response.name,
-            //userSe: "USR",
-            userSe: "ADM"
-          };
-          setSessionItem("loginUser", result);
-          navigate("/");
-          // PC와 Mobile 열린메뉴 닫기
-          document.querySelector(".all_menu.WEB").classList.add("closed");
-          document.querySelector(".btnAllMenu").classList.remove("active");
-          document.querySelector(".btnAllMenu").title = "전체메뉴 닫힘";
-          document.querySelector(".all_menu.Mobile").classList.add("closed");
-        }
-      }
-      naverLoginAction();*/
-
       const naverLoginUrl = `/naver/callback`;
+      const parmas = {
+        code: code,
+        state: state
+      }
       const requestOptions = {
         method: "POST",
         headers: {
           "Content-type": "application/json",
         },
-        body: JSON.stringify({
-          code: {code},
-          state: {state}
-        })
+        body: JSON.stringify(parmas)
       };
       EgovNet.requestFetch(naverLoginUrl, requestOptions, (resp) => {
         let resultVO = resp.resultVO;
