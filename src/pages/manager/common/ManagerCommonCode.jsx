@@ -12,8 +12,6 @@ function ManagerCommonCode(props) {
 
     const location = useLocation();
 
-    const [paginationInfo, setPaginationInfo] = useState({});
-
     const [searchCondition, setSearchCondition] = useState(
         location.state?.searchCondition || {
             pageIndex: 1,
@@ -22,9 +20,92 @@ function ManagerCommonCode(props) {
         }
     );
 
+    const [paginationInfo, setPaginationInfo] = useState({});
+
     const cndRef = useRef();
     const wrdRef = useRef();
+
     const [listTag, setListTag] = useState([]);
+
+    const retrieveList = useCallback(
+        (srchCnd) => {
+            console.groupCollapsed("EgovAdminBoardList.retrieveList()");
+
+            const retrieveListURL = "/bbsMaster" + EgovNet.getQueryString(srchCnd);
+
+            const requestOptions = {
+                method: "GET",
+                headers: {
+                    "Content-type": "application/json",
+                },
+            };
+
+            EgovNet.requestFetch(
+                retrieveListURL,
+                requestOptions,
+                (resp) => {
+                    setPaginationInfo(resp.result.paginationInfo);
+
+                    let mutListTag = [];
+                    listTag.push(
+                        <p className="no_data" key="0">
+                            검색된 결과가 없습니다.
+                        </p>
+                    ); // 게시판 목록 초기값
+
+                    const resultCnt = parseInt(resp.result.resultCnt);
+                    const currentPageNo = resp.result.paginationInfo.currentPageNo;
+                    const pageSize = resp.result.paginationInfo.pageSize;
+
+                    // 리스트 항목 구성
+                    resp.result.resultList.forEach(function (item, index) {
+                        if (index === 0) mutListTag = []; // 목록 초기화
+                        const listIdx = itemIdxByPage(
+                            resultCnt,
+                            currentPageNo,
+                            pageSize,
+                            index
+                        );
+
+                        mutListTag.push(
+                            <Link
+                                to={{ pathname: URL.ADMIN_BOARD_MODIFY }}
+                                state={{
+                                    bbsId: item.bbsId,
+                                    searchCondition: searchCondition,
+                                }}
+                                key={listIdx}
+                                className="list_item"
+                            >
+                                <div>{listIdx}</div>
+                                <div>{item.bbsNm}</div>
+                                <div>{item.bbsTyCodeNm}</div>
+                                <div>{item.bbsAttrbCodeNm}</div>
+                                <div>{item.frstRegisterPnttm}</div>
+                                <div>{item.useAt === "Y" ? "사용" : "사용안함"}</div>
+                            </Link>
+                        );
+                    });
+
+                    setListTag(mutListTag);
+                },
+                function (resp) {
+                    console.log("err response : ", resp);
+                }
+            );
+            console.groupEnd("EgovAdminBoardList.retrieveList()");
+        },
+        [listTag, searchCondition]
+    );
+
+    useEffect(() => {
+        retrieveList(searchCondition);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+
+
+
     const Location = React.memo(function Location() {
         return (
             <div className="location">
