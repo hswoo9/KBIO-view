@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Link, useLocation } from "react-router-dom";
+import {Link, NavLink, useLocation} from "react-router-dom";
 import axios from "axios";
 import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
@@ -26,6 +26,11 @@ function Index(props) {
                 </li>
                 <li>입주기업</li>
             </ul>
+            <div>
+                <NavLink to={URL.RESIDENT_COMPANY_CREATE}>
+                    입주기업 등록
+                </NavLink>
+            </div>
         </div>
     );
   });

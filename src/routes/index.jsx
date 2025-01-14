@@ -66,6 +66,7 @@ import ManagerMenuManagement from "@/pages/manager/menu/ManagerMenuManagement";
 import ManagerBbsManagement from "@/pages/manager/board/ManagerBbsManagement";
 import ManagerBbsAuthorityManagement from "@/pages/manager/board/ManagerBbsAuthorityManagement";
 import ManagerCommonCodeList from "@/pages/manager/common/ManagerCommonCode";
+import ResidentCompanyCreate from "@/pages/manager/member/ResidentCompanyCreate";
 
 //ADMIN
 import EgovAdminScheduleList from "@/pages/admin/schedule/EgovAdminScheduleList";
@@ -452,9 +453,16 @@ const SecondRoutes = () => {
             element={<ManagerCommonCodeList />}
         />
 
+        <Route
+            path={URL.RESIDENT_COMPANY_CREATE}
+            element={<ResidentCompanyCreate mode={CODE.MODE_CREATE}/>}
+        />
+
       </Routes>
       {requestUrl === "manager" ? "" : (<EgovFooter />) }
       <EgovInfoPopup />
+
+
     </>
   );
 };
