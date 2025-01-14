@@ -215,9 +215,9 @@ function Index(props) {
                     setSearchDto({
                         searchData : ""
                     });
-                    /*getMenuList({
+                    getMenuList({
                         searchData : ""
-                    });*/
+                    });
                 }
             )
         }
