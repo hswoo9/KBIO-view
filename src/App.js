@@ -11,9 +11,7 @@ function App() {
 
   return (
     <div className="wrap">
-      <React.StrictMode>
         <RootRoutes />
-      </React.StrictMode>
     </div>
   )
 }
