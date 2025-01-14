@@ -200,7 +200,7 @@ function EgovHeader() {
                 로그인
               </button>
               <NavLink
-                to={URL.TERMS_AGREEMENT}
+                to={URL.SIGNUP_CHOICE}
                 className={({ isActive }) =>
                   isActive ? "btn login cur" : "btn login"
                 }
