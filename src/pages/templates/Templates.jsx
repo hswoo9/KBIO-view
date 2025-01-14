@@ -16,9 +16,9 @@ function Templates(props) {
   const fetchTemplates = async () => {
     const sessionUser = getSessionItem("loginUser");
     const response = await axios.post(
-        "http://localhost:8080/common/getRedisUserInfo",
+        "http://localhost:8080/menuApi/getMenu",
         JSON.stringify({
-          userSn : sessionUser?.userSn
+          menuSn: 1,
         }),
         {
           headers: {
@@ -27,7 +27,6 @@ function Templates(props) {
         }
     );
 
-    console.log(response);
     console.log("response.data:", response.data);
   }
 

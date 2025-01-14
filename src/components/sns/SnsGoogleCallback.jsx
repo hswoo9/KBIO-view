@@ -18,7 +18,7 @@ const SnsGoogleCallback = () => {
     if (authorizationCode) {
       const googleLoginAction = async () => {
         const resp = await axios.post(
-            "http://localhost:8080/loginAction",
+            "http://localhost:8080/loginApi/loginAction",
             JSON.stringify({code : authorizationCode, loginType : "sns", snsType : "google"}),
   {
           headers: {
@@ -26,13 +26,17 @@ const SnsGoogleCallback = () => {
           }
         });
 
-        if(resp.resultCode == "999"){
+        if(resp.data.resultCode == "999"){
           Swal.fire("회원가입이 필요합니다.\n회원가입 페이지로 이동합니다.");
           navigate("/mypage/agreement");
         }else{
-          setSessionItem("loginUser", {userSn : resp.result.userSn, name : resp.result.userName, id : resp.result.userId, userSe : resp.result.userSe});
-          // setSessionItem("userName", resp.result.userName);
-          setSessionItem("jToken", resp.result.jToken);
+          setSessionItem("loginUser", {
+            userSn : resp.data.result.userSn,
+            name : resp.data.result.userName,
+            id : resp.data.result.userId,
+            userSe : resp.data.result.userSe
+          });
+          setSessionItem("jToken", resp.data.result.jToken);
           navigate("/");
         }
       }

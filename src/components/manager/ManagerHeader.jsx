@@ -32,7 +32,7 @@ function ManagerHeader() {
   };
   const logOutHandler = () => {
     // 로그인 정보 존재할 때
-    const logOutUrl = "/logoutAction";
+    const logOutUrl = "/loginApi/logoutAction";
     const requestOptions = {
       method: "POST",
       headers: {

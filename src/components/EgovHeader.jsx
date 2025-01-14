@@ -34,7 +34,7 @@ function EgovHeader() {
     document.querySelector(".all_menu.Mobile").classList.add("closed");
   };
   const logOutHandler = () => {
-    const logOutUrl = "/logoutAction";
+    const logOutUrl = "/loginApi/logoutAction";
     const requestOptions = {
       method: "POST",
       headers: {

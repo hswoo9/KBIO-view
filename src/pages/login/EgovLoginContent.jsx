@@ -77,7 +77,7 @@ function EgovLoginContent(props) {
       return;
     }
 
-    const loginUrl = "/loginAction";
+    const loginUrl = "/loginApi/loginAction";
     const requestOptions = {
       method: "POST",
       headers: {
