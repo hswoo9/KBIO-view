@@ -6,6 +6,7 @@ import URL from "@/constants/url";
 import CODE from "@/constants/code";
 
 import { getSessionItem, setSessionItem } from "@/utils/storage";
+import Swal from "sweetalert2";
 
 function ManagerHeader() {
   console.group("EgovHeader");
@@ -33,37 +34,21 @@ function ManagerHeader() {
     // 로그인 정보 존재할 때
     const logOutUrl = "/logoutAction";
     const requestOptions = {
+      method: "POST",
       headers: {
         "Content-type": "application/json",
       },
-      credentials: "include",
+      body : JSON.stringify({userSn : sessionUserSn})
     };
 
-    setSessionItem("loginUser", { userSn: "" });
-    setSessionItem("jToken", null);
-    window.alert("로그아웃되었습니다!");
-    navigate(URL.MAIN);
-    // PC와 Mobile 열린메뉴 닫기
-    document.querySelector(".all_menu.WEB").classList.add("closed");
-    document.querySelector(".btnAllMenu").classList.remove("active");
-    document.querySelector(".btnAllMenu").title = "전체메뉴 닫힘";
-    document.querySelector(".all_menu.Mobile").classList.add("closed");
-
-    /*EgovNet.requestFetch(logOutUrl, requestOptions, function (resp) {
-      console.log("===>>> logout resp= ", resp);
-      if (parseInt(resp.resultCode) === parseInt(CODE.RCV_SUCCESS)) {
-        //onChangeLogin({ loginVO: {} });
-        setSessionItem("loginUser", { id: "" });
+    EgovNet.requestFetch(logOutUrl, requestOptions, function (resp) {
+      if(resp.resultCode == "200"){
+        setSessionItem("loginUser", { userSn: "" });
         setSessionItem("jToken", null);
-        window.alert("로그아웃되었습니다!");
+        Swal.fire("로그아웃되었습니다!");
         navigate(URL.MAIN);
-        // PC와 Mobile 열린메뉴 닫기
-        document.querySelector(".all_menu.WEB").classList.add("closed");
-        document.querySelector(".btnAllMenu").classList.remove("active");
-        document.querySelector(".btnAllMenu").title = "전체메뉴 닫힘";
-        document.querySelector(".all_menu.Mobile").classList.add("closed");
       }
-    });*/
+    });
   };
 
   console.log("------------------------------EgovHeader [End]");
