@@ -5,6 +5,7 @@ import { setSessionItem } from "@/utils/storage";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
+import Swal from "sweetalert2";
 
 const SnsGoogleCallback = () => {
   const navigate = useNavigate();
@@ -26,10 +27,10 @@ const SnsGoogleCallback = () => {
         });
 
         if(resp.resultCode == "999"){
-          alert("회원가입이 필요합니다.\n회원가입 페이지로 이동합니다.");
+          Swal.fire("회원가입이 필요합니다.\n회원가입 페이지로 이동합니다.");
           navigate("/mypage/agreement");
         }else{
-          setSessionItem("loginUser", {name : resp.result.userName, id : resp.result.userId, userSe : resp.result.userSe});
+          setSessionItem("loginUser", {userSn : resp.result.userSn, name : resp.result.userName, id : resp.result.userId, userSe : resp.result.userSe});
           // setSessionItem("userName", resp.result.userName);
           setSessionItem("jToken", resp.result.jToken);
           navigate("/");

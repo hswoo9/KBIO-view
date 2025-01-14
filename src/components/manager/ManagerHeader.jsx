@@ -15,6 +15,8 @@ function ManagerHeader() {
   const sessionUserId = sessionUser?.id;
   const sessionUserName = sessionUser?.name;
   const sessionUserSe = sessionUser?.userSe;
+  const sessionUserSn = sessionUser?.userSn;
+
 
   const navigate = useNavigate();
 
@@ -29,7 +31,7 @@ function ManagerHeader() {
   };
   const logOutHandler = () => {
     // 로그인 정보 존재할 때
-    const logOutUrl = "/auth/logout";
+    const logOutUrl = "/logoutAction";
     const requestOptions = {
       headers: {
         "Content-type": "application/json",
@@ -37,7 +39,7 @@ function ManagerHeader() {
       credentials: "include",
     };
 
-    setSessionItem("loginUser", { id: "" });
+    setSessionItem("loginUser", { userSn: "" });
     setSessionItem("jToken", null);
     window.alert("로그아웃되었습니다!");
     navigate(URL.MAIN);

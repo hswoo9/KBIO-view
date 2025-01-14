@@ -1,13 +1,13 @@
 import { useState, useEffect, useRef } from "react";
 import {NavLink, useLocation, useNavigate} from "react-router-dom";
 import * as EgovNet from "@/api/egovFetch";
-
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
 import { getLocalItem, setLocalItem, setSessionItem } from "@/utils/storage";
 import SnsNaverBt from "@/components/sns/SnsNaverBt";
 import SnsKakaoBt from "@/components/sns/SnsKakaoBt";
 import SnsGoogleBt from "@/components/sns/SnsGoogleBt.jsx";
+import Swal from "sweetalert2";
 
 function EgovLoginContent(props) {
   const navigate = useNavigate();
@@ -68,11 +68,11 @@ function EgovLoginContent(props) {
   };
   const submitFormHandler = () => {
     if(!idRef.current.value){
-      alert("아이디를 입력해주세요.");
+      Swal.fire("아이디를 입력해주세요.");
       idRef.current.focus();
       return;
     }else if(!passwordRef.current.value){
-      alert("비밀번호를 입력해주세요.");
+      Swal.fire("비밀번호를 입력해주세요.");
       passwordRef.current.focus();
       return;
     }
@@ -88,11 +88,11 @@ function EgovLoginContent(props) {
 
     EgovNet.requestFetch(loginUrl, requestOptions, (resp) => {
       if(resp.resultCode != "200"){
-        alert(resp.resultMessage);
+        Swal.fire(resp.resultMessage);
         return;
       }else{
         console.log(resp)
-        setSessionItem("loginUser", {name : resp.result.userName, id : resp.result.userId, userSe : resp.result.userSe});
+        setSessionItem("loginUser", {userSn : resp.result.userSn, name : resp.result.userName, id : resp.result.userId, userSe : resp.result.userSe});
         // setSessionItem("userName", resp.userName);
         setSessionItem("jToken", resp.result.jToken);
         if (saveIDFlag) setLocalItem(KEY_ID, resultVO?.id);
