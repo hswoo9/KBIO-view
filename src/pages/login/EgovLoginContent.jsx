@@ -10,13 +10,8 @@ import SnsKakaoBt from "@/components/sns/SnsKakaoBt";
 import SnsGoogleBt from "@/components/sns/SnsGoogleBt.jsx";
 
 function EgovLoginContent(props) {
-  console.group("EgovLoginContent");
-  console.log("[Start] EgovLoginContent ------------------------------");
-  console.log("EgovLoginContent [props] : ", props);
-
   const navigate = useNavigate();
   const location = useLocation();
-  console.log("EgovLoginContent [location] : ", location);
 
   const [userInfo, setUserInfo] = useState({
     id: "",
@@ -96,8 +91,10 @@ function EgovLoginContent(props) {
         alert(resp.resultMessage);
         return;
       }else{
-        setSessionItem("userName", resp.userName);
-        setSessionItem("jToken", resp.jToken);
+        console.log(resp)
+        setSessionItem("loginUser", {name : resp.result.userName, id : resp.result.userId, userSe : resp.result.userSe});
+        // setSessionItem("userName", resp.userName);
+        setSessionItem("jToken", resp.result.jToken);
         if (saveIDFlag) setLocalItem(KEY_ID, resultVO?.id);
         navigate("/");
       }

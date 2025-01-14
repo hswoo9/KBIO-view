@@ -37,8 +37,9 @@ const SnsKakaoCallback = () => {
           alert("회원가입이 필요합니다.\n회원가입 페이지로 이동합니다.");
           navigate("/mypage/agreement");
         }else{
-          setSessionItem("userName", resp.userName);
-          setSessionItem("jToken", resp.jToken);
+          setSessionItem("loginUser", {name : resp.result.userName, id : resp.result.userId, userSe : resp.result.userSe});
+          // setSessionItem("userName", resp.result.userName);
+          setSessionItem("jToken", resp.result.jToken);
           navigate("/");
         }
       });
