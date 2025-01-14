@@ -38,7 +38,12 @@ const SnsKakaoCallback = () => {
           Swal.fire("회원가입이 필요합니다.\n회원가입 페이지로 이동합니다.");
           navigate("/mypage/agreement");
         }else{
-          setSessionItem("loginUser", {userSn : resp.result.userSn, name : resp.result.userName, id : resp.result.userId, userSe : resp.result.userSe});
+          setSessionItem("loginUser", {
+            userSn : resp.result.userSn,
+            name : resp.result.userName,
+            id : resp.result.userId,
+            userSe : resp.result.userSe
+          });
           // setSessionItem("userName", resp.result.userName);
           setSessionItem("jToken", resp.result.jToken);
           navigate("/");

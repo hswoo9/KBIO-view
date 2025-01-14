@@ -9,18 +9,16 @@ import { default as EgovLeftNav } from "@/components/leftmenu/EgovLeftNavTemplat
 
 //alert
 import Swal from 'sweetalert2';
+import {getSessionItem} from "../../utils/storage.js";
 
 function Templates(props) {
 
   const fetchTemplates = async () => {
+    const sessionUser = getSessionItem("loginUser");
     const response = await axios.post(
-        "http://localhost:8080/admin/statistics/getStatistics.do",
+        "http://localhost:8080/menuApi/getMenu",
         JSON.stringify({
-          page: "devices",
-          dimensions: JSON.stringify(["deviceCategory"]),
-          metrics: JSON.stringify(["sessions"]),
-          startDate: "2025-01-01",
-          endDate: "2025-01-31",
+          menuSn: 1,
         }),
         {
           headers: {
@@ -29,7 +27,6 @@ function Templates(props) {
         }
     );
 
-    console.log(response);
     console.log("response.data:", response.data);
   }
 

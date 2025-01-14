@@ -34,7 +34,7 @@ function EgovHeader() {
     document.querySelector(".all_menu.Mobile").classList.add("closed");
   };
   const logOutHandler = () => {
-    const logOutUrl = "/logoutAction";
+    const logOutUrl = "/loginApi/logoutAction";
     const requestOptions = {
       method: "POST",
       headers: {
@@ -200,7 +200,7 @@ function EgovHeader() {
                 로그인
               </button>
               <NavLink
-                to={URL.TERMS_AGREEMENT}
+                to={URL.SIGNUP_CHOICE}
                 className={({ isActive }) =>
                   isActive ? "btn login cur" : "btn login"
                 }
