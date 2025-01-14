@@ -1201,3 +1201,63 @@ select::-ms-expand {
 .react-datepicker__tab-loop {
   display: inline-block;
 }
+
+
+
+
+/*          CUSTOM       */
+.write_div {
+  /*border-top: 2px solid #222;*/
+}
+.write_div dl {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+  border-bottom: 1px solid #dde2e5;
+}
+.write_div dl > * {
+  display: table-cell;
+  table-layout: fixed;
+  vertical-align: middle;
+  margin: 0;
+}
+.write_div dl dt {
+  width: 100px;
+  color: #000;
+  font-size: 15px;
+  letter-spacing: -2px;
+  background: #f5f6f7;
+  word-break: break-all;
+  text-align: center;
+}
+.write_div dl dt .req {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-left: 2px;
+  font-size: 0;
+  background: url(./images/ico_req.png) no-repeat;
+  vertical-align: 17px;
+}
+.write_div dl dd {
+  padding: 5px 5px;
+  color: #222;
+  font-size: 16px;
+  font-weight: 300;
+}
+.write_div .file_add {
+  margin-top: 5px;
+}
+.write_div .f_select,
+.write_div .f_input2 {
+  vertical-align: top;
+}
+
+.write_div .customDd {
+  display: flex;
+}
+
+.write_div .customDl dd select{
+  width: 30%;
+}
+

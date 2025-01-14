@@ -17,7 +17,7 @@ const SnsNaverCallback = () => {
     let code = new URL(window.location.href).searchParams.get("code");
     let state = new URL(window.location.href).searchParams.get("state");
     if (code) {
-      const naverLoginUrl = `/loginAction`;
+      const naverLoginUrl = `/loginApi/loginAction`;
       const parmas = {
         code: code,
         state: state,

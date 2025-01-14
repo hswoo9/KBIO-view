@@ -17,7 +17,7 @@ function EgovLeftNav() {
           </li>
           <li>
             <NavLink
-              to={URL.MANAGER}
+              to={URL.MANAGER_MENU_AUTHORITY}
               className={({ isActive }) => (isActive ? "cur" : "")}
             >
               메뉴권한관리

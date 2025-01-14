@@ -6,11 +6,13 @@
   "dependencies": {
     "@react-oauth/google": "^0.12.1",
     "axios": "^1.7.9",
+    "bootstrap": "^5.3.3",
     "ci": "^2.3.0",
     "egovframe-template-simple-react": "file:",
     "jwt-decode": "^4.0.0",
     "qs": "^6.11.0",
     "react": "^18.3.1",
+    "react-bootstrap": "^2.10.7",
     "react-checkbox-tree": "^1.8.0",
     "react-datepicker": "^4.8.0",
     "react-dom": "^18.3.1",

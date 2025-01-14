@@ -1392,5 +1392,23 @@
   font-weight: 300;
 }
 
+.leftDiv {
+  border: 1px solid black;
+  float: left;
+  width:30%;
+}
+
+.rightDiv {
+  border: 1px solid black;
+  float: right;
+  width:65%;
+}
+
+.btnRightGroup {
+  float: right !important;
+  display: flex !important;
+  gap: 10px !important;
+}
+
 /* 관리자 - 입주기업등록 */
 

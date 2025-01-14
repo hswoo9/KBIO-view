@@ -156,32 +156,32 @@ function ManagerCommonCode(props) {
                                 <li className="third_2 R">
                                     <span className="lb">검색어</span>
                                     <span className="f_search w_400">
-                    <input
-                        type="text"
-                        name=""
-                        defaultValue={
-                            searchCondition && searchCondition.searchWrd
-                        }
-                        placeholder=""
-                        ref={wrdRef}
-                        onChange={(e) => {
-                            wrdRef.current.value = e.target.value;
-                        }}
-                    />
-                    <button
-                        type="button"
-                        onClick={() => {
-                            retrieveList({
-                                ...searchCondition,
-                                pageIndex: 1,
-                                searchCnd: cndRef.current.value,
-                                searchWrd: wrdRef.current.value,
-                            });
-                        }}
-                    >
-                      조회
-                    </button>
-                  </span>
+                                    <input
+                                        type="text"
+                                        name=""
+                                        defaultValue={
+                                            searchCondition && searchCondition.searchWrd
+                                        }
+                                        placeholder=""
+                                        ref={wrdRef}
+                                        onChange={(e) => {
+                                            wrdRef.current.value = e.target.value;
+                                        }}
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            retrieveList({
+                                                ...searchCondition,
+                                                pageIndex: 1,
+                                                searchCnd: cndRef.current.value,
+                                                searchWrd: wrdRef.current.value,
+                                            });
+                                        }}
+                                    >
+                                      조회
+                                    </button>
+                                  </span>
                                 </li>
                                 <li>
                                     <Link
