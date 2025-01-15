@@ -62,10 +62,14 @@ import MemberResidentMember from "@/pages/manager/member/ManagerResidentMember";
 import MemberRelatedMember from "@/pages/manager/member/ManagerRelatedMember";
 import MemberNonResidentMember from "@/pages/manager/member/ManagerNonResidentMember";
 import MemberConsultentMember from "@/pages/manager/member/ManagerConsultentMember";
+
 import ManagerMenuManagement from "@/pages/manager/menu/ManagerMenuManagement";
 import ManagerMenuAuthority from "@/pages/manager/menu/ManagerMenuAuthority";
+
 import ManagerBbsManagement from "@/pages/manager/board/ManagerBbsManagement";
+import ManagerBbsCreate from "@/pages/manager/board/ManagerBbsCreate";
 import ManagerBbsAuthorityManagement from "@/pages/manager/board/ManagerBbsAuthorityManagement";
+
 import ManagerCommonCodeList from "@/pages/manager/common/ManagerCommonCode";
 import ResidentCompanyCreate from "@/pages/manager/member/ResidentCompanyCreate";
 
@@ -445,6 +449,12 @@ const SecondRoutes = () => {
             path={URL.MANAGER_BBS_MANAGEMENT}
             element={<ManagerBbsManagement />}
         />
+
+        <Route
+            path={URL.MANAGER_BBS_CREATE}
+            element={<ManagerBbsCreate />}
+        />
+
 
         <Route
             path={URL.MANAGER_BBS_AUTHORITY_MANAGEMENT}
