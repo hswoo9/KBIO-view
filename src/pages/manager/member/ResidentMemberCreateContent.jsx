@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import {useState, useEffect, useRef, useCallback} from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
 import * as EgovNet from "@/api/egovFetch";
@@ -11,6 +11,10 @@ import { setSessionItem } from "@/utils/storage";
 
 function ResidentMemberCreateContent(props){
     const [modeInfo, setModeInfo] = useState({ mode: props.mode });
+    const [saveMode, setSaveMode] = useState({
+        mode : "insert"
+    });
+
     const navigate = useNavigate();
     const [residentDetail, setResidentDetail] = useState({
         
@@ -124,7 +128,7 @@ function ResidentMemberCreateContent(props){
             alert("세부주소를 입력해주십시오.");
             return false;
         }
-        if (formData.get("entTelNo") === null || formData.get("entTelNo") === "") {
+        if (formData.get("entTelno") === null || formData.get("entTelNo") === "") {
             alert("대표번호는 필수 값입니다.");
             return false;
         }
@@ -139,10 +143,9 @@ function ResidentMemberCreateContent(props){
     const updateResident = () => {
         //let modeStr = modeInfo.mode === CODE.MODE_CREATE ? "POST" : "PUT";
         let modeStr = "POST";
-        let requestOptions = {};
         console.log("modeStr", modeStr);
 
-        const brno = `${residentDetail.brno1}-${residentDetail.brno2}-${residentDetail.brno3}`;
+        const brno = `${residentDetail.brno1}${residentDetail.brno2}${residentDetail.brno3}`;
         setResidentDetail({...residentDetail, brno: brno});
 
 
@@ -154,13 +157,30 @@ function ResidentMemberCreateContent(props){
             }
 
             formValidator(formData).then((res) => {
-                for (let [key, value] of formData.entries()) {
-                    console.log(key, value);
-                }
+                const mvnEntURL = "/mvnEntApi/setMvnEnt";
+                let requestOptions = {
+                    method:"POST",
+                    headers: {
+                        "Content-type": "application/json",
+                    },
+                    body: JSON.stringify(residentDetail)
+                };
+
+                console.log("residentDetail",residentDetail);
+
+                EgovNet.requestFetch(
+                    mvnEntURL,
+                    requestOptions,
+                    (resp) => {
+                        console.log(resp);
+                        setSaveMode({mode:"insert"});
+                    }
+                )
             });
         }
 
     };
+
 
     /*useEffect(() => {
         initMode();
@@ -391,21 +411,21 @@ function ResidentMemberCreateContent(props){
             {/* 대표번호 */}
             <dl>
                 <dt>
-                    <label htmlFor="entTelNo">대표번호</label>
+                    <label htmlFor="entTelno">대표번호</label>
                     <span className="req">필수</span>
                 </dt>
                 <dd>
                     <input
                         className="f_input2 w_full"
                         type="text"
-                        name="entTelNo"
+                        name="entTelno"
                         maxLength="11"
-                        value={residentDetail.entTelNo || ""}
+                        value={residentDetail.entTelno || ""}
                         style={{width: "80%", marginRight: "5px"}}
                         onChange={(e) => {
                             const inputValue = e.target.value;
                             if (/^\d*$/.test(inputValue)) { // 숫자만 허용
-                                setResidentDetail({ ...residentDetail, entTelNo: inputValue });
+                                setResidentDetail({ ...residentDetail, entTelno: inputValue });
                             }
                         }}
                     />

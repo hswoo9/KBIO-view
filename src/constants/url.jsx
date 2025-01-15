@@ -101,6 +101,7 @@ const URL = {
   TERMS_AGREEMENT: "/mypage/agreement", //회원가입시 동의
   IDENTITY_VERICICATION: "/mypage/identity", // 회원가입시 본인인증
   SIGNUP_CHOICE: "/mypage/signupchoice", // 회원가입시 회원방식 선택
+  COMPLETE_MEMBER: "/mypage/completemember", //회원가입 신청 완료
 
   //관리자 페이지
   MANAGER: "/manager/main",
