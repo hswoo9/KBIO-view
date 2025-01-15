@@ -1,9 +1,11 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import axios from "axios";
 import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
+import moment from 'moment';
+import 'moment/locale/ko';
 
 import { default as EgovLeftNav } from "@/components/leftmenu/ManagerLeftMenu";
 
@@ -20,16 +22,29 @@ import Form from 'react-bootstrap/Form';
 import 'bootstrap/dist/css/bootstrap.css';
 
 function ManagerMenuAuthority(props) {
+    console.group("ManagerMenuAuthority");
+    console.log("[Start] ManagerMenuAuthority ------------------------------");
+    console.log("ManagerMenuAuthority [props] : ", props);
+
+    const location = useLocation();
+
 
     const [saveMode, setSaveMode] = useState({
         mode : "insert"
     });
 
     const [searchDto, setSearchDto] = useState(
-        {
-            searchData : ""
+        location.state?.searchDto || {
+            pageIndex: 1,
+            searchCnd: "0",
+            searchWrd: "",
+            menuSn: ""
         }
     );
+
+    const [paginationInfo, setPaginationInfo] = useState({});
+    const cndRef = useRef();
+    const wrdRef = useRef();
 
     useEffect(() => {
         getMenu(searchDto);
@@ -56,8 +71,16 @@ function ManagerMenuAuthority(props) {
         setSearchDto({menuSn : e.value, menuNm : e.label});
     };
 
+    const checkGroupAllCheck = (e) => {
+        let checkBoolean = e.target.checked;
+        document.getElementsByName("authorityCheck").forEach(function (item, index){
+            item.checked = checkBoolean;
+        });
+    }
+
+
     const [menuList, setMenuList] = useState([]);
-    const [listTag, setListTag] = useState([]);
+    const [authorityList, setAuthorityList] = useState([]);
 
     const saveMenu = () => {
         Swal.fire({
@@ -156,6 +179,60 @@ function ManagerMenuAuthority(props) {
         }
     );
 
+    const getAuthorityList = useCallback(
+        (searchDto) => {
+            const menuListURL = "/menuApi/getMenuAuthGroupListOnPage.do";
+            const requestOptions = {
+                method: "POST",
+                headers: {
+                    "Content-type": "application/json",
+                },
+                body: JSON.stringify(searchDto)
+            };
+            EgovNet.requestFetch(
+                menuListURL,
+                requestOptions,
+                (resp) => {
+                    setPaginationInfo(resp.paginationInfo);
+                    let dataList = [];
+                    authorityList.push(
+                        <tr>
+                            <td colSpan="5">검색된 결과가 없습니다.</td>
+                        </tr>
+                    );
+
+                    const resultCnt = parseInt(resp.paginationInfo.totalRecordCount);
+                    const currentPageNo = resp.paginationInfo.currentPageNo;
+                    const pageSize = resp.paginationInfo.pageSize;
+
+                    resp.result.authGroup.forEach(function (item, index) {
+                        if (index === 0) dataList = []; // 목록 초기화
+
+                        dataList.push(
+                            <tr key={item.authrtGroupSn}>
+                                <td>
+                                    <input type="checkbox" name="authorityCheck" value={item.authrtGroupSn}/>
+                                </td>
+                                <td>{item.authrtGroupNm}</td>
+                                <td>{item.authrtType}</td>
+                                <td>{item.actvtnYn === "Y" ? "사용" : "사용안함"}</td>
+                                <td>{moment(item.frstCrtDt).format('YYYY-MM-DD')}</td>
+                            </tr>
+                        );
+                    });
+                    console.log("---------------------------");
+                    console.log(dataList);
+                    console.log("---------------------------");
+                    setAuthorityList(dataList);
+                },
+                function (resp) {
+                    console.log("err response : ", resp);
+                }
+            )
+        },
+        [authorityList, searchDto]
+    );
+
     const setMenu = useCallback(
         (menuDetail) => {
             const menuListURL = "/menuApi/setMenu";
@@ -210,12 +287,10 @@ function ManagerMenuAuthority(props) {
 
     useEffect(() => {
         getMenuList(searchDto);
+        getAuthorityList(searchDto);
     }, []);
 
 
-
-  const location = useLocation();
-    
   const Location = React.memo(function Location() {
     return (
         <div className="location">
@@ -259,28 +334,42 @@ function ManagerMenuAuthority(props) {
                         <div className="rightDiv">
                             <BtTable
                                 striped bordered hover size="sm"
+                                className="btTable"
                             >
+                                <colgroup>
+                                    <col width="50px"/>
+                                    <col width="200px"/>
+                                    <col/>
+                                    <col width="80px"/>
+                                    <col/>
+                                </colgroup>
                                 <thead>
                                     <tr>
-                                        <th>일련번호</th>
+                                        <th>
+                                            <input type="checkbox" name="authorityCheck"
+                                                onClick={checkGroupAllCheck}
+                                            />
+                                        </th>
                                         <th>권한그룹명</th>
+                                        <th>권한구분</th>
+                                        <th>활성여부</th>
+                                        <th>등록일</th>
                                     </tr>
                                 </thead>
+                                <tbody>
+                                {authorityList}
+                                </tbody>
                             </BtTable>
                             <div className="board_bot">
-                                {/* <!-- Paging --> */}
                                 <EgovPaging
-                                    /*pagination={paginationInfo}
+                                    pagination={paginationInfo}
                                     moveToPage={(passedPage) => {
-                                        retrieveList({
-                                            ...searchCondition,
-                                            pageIndex: passedPage,
-                                            searchCnd: cndRef.current.value,
-                                            searchWrd: wrdRef.current.value,
+                                        getAuthorityList({
+                                            ...searchDto,
+                                            pageIndex: passedPage
                                         });
-                                    }}*/
+                                    }}
                                 />
-                                {/* <!--/ Paging --> */}
                             </div>
                         </div>
                     </div>

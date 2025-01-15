@@ -1410,5 +1410,10 @@
   gap: 10px !important;
 }
 
+/* 권한관리 */
+.btTable th, td{
+  text-align: center;
+}
+
 /* 관리자 - 입주기업등록 */
 
