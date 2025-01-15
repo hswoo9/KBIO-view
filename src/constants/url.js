@@ -102,8 +102,10 @@ const URL = {
   MANAGER_MENU_MANAGEMENT: "/manager/menuManagement",
   MANAGER_MENU_AUTHORITY: "/manager/menuAuthority",
 
-  MANAGER_BBS_MANAGEMENT:"/manager/bbsManagement",
-  MANAGER_BBS_CREATE: "/manager/bbsCreate",
+  MANAGER_BBS_LIST:"/manager/bbs/list",
+  MANAGER_BBS_CREATE: "/manager/bbs/create",
+  MANAGER_BBS_MODIFY: "/manager/bbs/modify",
+
   MANAGER_BBS_AUTHORITY_MANAGEMENT:"/manager/bbsAuthorityManagement",
 
   RESIDENT_COMPANY_CREATE:"/manager/residentCompanyCreate", //회원관리/입주기업 /입주기업 등록
