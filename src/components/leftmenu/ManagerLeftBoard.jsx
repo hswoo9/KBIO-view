@@ -9,7 +9,7 @@ function EgovLeftNav() {
                 <ul className="menu4">
                     <li>
                         <NavLink
-                            to={URL.MANAGER_BBS_MANAGEMENT}
+                            to={URL.MANAGER_BBS_LIST}
                             className={({ isActive }) => (isActive ? "cur" : "")}
                         >
                             게시판관리

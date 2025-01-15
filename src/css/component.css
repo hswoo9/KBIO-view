@@ -91,7 +91,7 @@ a.google:before {
   border-radius: 5px;
   color: #fff;
   font-size: 16px;
-  line-height: 46px;
+  line-height: normal;
   text-align: center;
   background: #169bd5;
 }
@@ -100,7 +100,7 @@ a.google:before {
   border-radius: 5px;
   color: #005b82;
   font-size: 16px;
-  line-height: 46px;
+  line-height: normal;
   text-align: center;
   background: #daedf5;
 }

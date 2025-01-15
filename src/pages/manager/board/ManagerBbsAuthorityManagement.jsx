@@ -22,7 +22,7 @@ function Index(props) {
                         </Link>
                     </li>
                     <li>
-                        <Link to={URL.MANAGER_BBS_MANAGEMENT}>게시판관리</Link>
+                        <Link to={URL.MANAGER_BBS_LIST}>게시판관리</Link>
                     </li>
                     <li>게시판권한관리</li>
                 </ul>

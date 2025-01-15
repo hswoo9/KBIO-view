@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import axios from "axios";
 import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
+import CODE from "@/constants/code";
 import 'moment/locale/ko';
 import { default as EgovLeftNav } from "@/components/leftmenu/ManagerLeftBoard";
 
@@ -72,7 +73,7 @@ function ManagerBbs(props) {
                                     <input type="checkbox" name="bbsCheck" value={item.bbsSn}/>
                                 </td>
                                 <td>{item.bbsNm}</td>
-                                <td>{item.bbsType}</td>
+                                <td>{item.bbsType == "0" ? "일반게시판" : item.bbsType == "1" ? "faQ" : "QnA"}</td>
                                 <td>{item.wrtrRlsYn === "Y" ? "공개" : "비공개"}</td>
                                 <td>{item.atchFileYn === "Y" ? "가능" : "불가능"}</td>
                                 <td>{item.cmntPsbltyYn === "Y" ? "가능" : "불가능"}</td>
@@ -107,7 +108,7 @@ function ManagerBbs(props) {
                             </Link>
                         </li>
                         <li>
-                            <Link to={URL.MANAGER_BBS_MANAGEMENT}>게시판관리</Link>
+                            <Link to={URL.MANAGER_BBS_LIST}>게시판관리</Link>
                         </li>
                         <li>게시판관리</li>
                     </ul>
@@ -130,7 +131,8 @@ function ManagerBbs(props) {
                                             }}
                                         >
                                             <option value="0">일반게시판</option>
-                                            <option value="1">게시판유형</option>
+                                            <option value="1">FAQ</option>
+                                            <option value="2">QNA</option>
                                         </select>
                                     </label>
                                 </li>
@@ -168,6 +170,7 @@ function ManagerBbs(props) {
                                     <Link
                                         to={URL.MANAGER_BBS_CREATE}
                                         className="btn btn_blue_h46 pd35"
+                                        mode={CODE.MODE_CREATE}
                                     >
                                         등록
                                     </Link>
