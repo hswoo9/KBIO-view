@@ -35,12 +35,12 @@ function ManagerBbs(props) {
     const bbsNmRef = useRef();
     const [bbsList, setAuthorityList] = useState([]);
 
-    const checkGroupAllCheck = (e) => {
-        let checkBoolean = e.target.checked;
-        document.getElementsByName("bbsCheck").forEach(function (item, index){
-            item.checked = checkBoolean;
-        });
-    }
+    const activeEnter = (e) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            getBbsList(searchDto);
+        }
+    };
 
     const getBbsList = useCallback(
         (searchDto) => {
@@ -70,10 +70,14 @@ function ManagerBbs(props) {
                         dataList.push(
                             <tr key={item.bbsSn}>
                                 <td>
-                                    <input type="checkbox" name="bbsCheck" value={item.bbsSn}/>
+                                    <Link to={URL.MANAGER_BBS_MODIFY}
+                                          mode={CODE.MODE_MODIFY}
+                                          state={{ bbsSn: item.bbsSn }}
+                                          >
+                                        {item.bbsNm}
+                                    </Link>
                                 </td>
-                                <td>{item.bbsNm}</td>
-                                <td>{item.bbsType == "0" ? "일반게시판" : item.bbsType == "1" ? "faQ" : "QnA"}</td>
+                                <td>{item.bbsType == "0" ? "일반" : item.bbsType == "1" ? "faQ" : "QnA"}</td>
                                 <td>{item.wrtrRlsYn === "Y" ? "공개" : "비공개"}</td>
                                 <td>{item.atchFileYn === "Y" ? "가능" : "불가능"}</td>
                                 <td>{item.cmntPsbltyYn === "Y" ? "가능" : "불가능"}</td>
@@ -127,10 +131,10 @@ function ManagerBbs(props) {
                                             title="게시판유형선택"
                                             ref={bbsTypeRef}
                                             onChange={(e) => {
-                                                bbsTypeRef.current.value = e.target.value;
+                                                setSearchDto({ ...searchDto, bbsType: e.target.value })
                                             }}
                                         >
-                                            <option value="0">일반게시판</option>
+                                            <option value="0">일반</option>
                                             <option value="1">FAQ</option>
                                             <option value="2">QNA</option>
                                         </select>
@@ -143,13 +147,14 @@ function ManagerBbs(props) {
                                             type="text"
                                             name=""
                                             defaultValue={
-                                                searchDto && searchDto.searchWrd
+                                                searchDto && searchDto.bbsNm
                                             }
                                             placeholder=""
                                             ref={bbsNmRef}
                                             onChange={(e) => {
-                                                bbsNmRef.current.value = e.target.value;
+                                                setSearchDto({ ...searchDto, bbsNm: e.target.value })
                                             }}
+                                            onKeyDown={activeEnter}
                                         />
                                         <button
                                             type="button"
@@ -184,7 +189,6 @@ function ManagerBbs(props) {
                                 className="btTable"
                             >
                                 <colgroup>
-                                    <col width="50"/>
                                     <col/>
                                     <col width="100"/>
                                     <col width="150"/>
@@ -196,11 +200,6 @@ function ManagerBbs(props) {
                                 </colgroup>
                                 <thead>
                                 <tr>
-                                    <th>
-                                        <input type="checkbox" name="authorityCheck"
-                                           onClick={checkGroupAllCheck}
-                                        />
-                                    </th>
                                     <th>게시판명</th>
                                     <th>게시판유형</th>
                                     <th>작성자공개유무</th>
@@ -219,7 +218,7 @@ function ManagerBbs(props) {
                             <EgovPaging
                                     pagination={paginationInfo}
                                     moveToPage={(passedPage) => {
-                                        getAuthorityList({
+                                        getBbsList({
                                             ...searchDto,
                                             pageIndex: passedPage
                                         });

@@ -12,6 +12,7 @@ import Swal from "sweetalert2";
 
 function setBbs(props) {
   const navigate = useNavigate();
+  const location = useLocation();
   const checkRef = useRef([]);
   // const bbsNmRef = useRef([]);
   // const atchFileKndNmRef = useRef([]);
@@ -36,8 +37,7 @@ function setBbs(props) {
     { value: "N", label: "미사용" },
   ];
 
-
-  const bbsSn = location.state?.bbsSn || "";
+  const [searchDto, setSearchDto] = useState({bbsSn : location.state?.bbsSn});
 
   const [modeInfo, setModeInfo] = useState({ mode: props.mode });
   const [bbsDetail, setBbsDetail] = useState({});
@@ -49,10 +49,10 @@ function setBbs(props) {
       editURL: `/bbsApi/setBbs`,
     });
 
-    getBbs();
+    getBbs(searchDto);
   };
 
-  const getBbs = () => {
+  const getBbs = (searchDto) => {
     if (modeInfo.mode === CODE.MODE_CREATE) {
       // 조회/등록이면 조회 안함
       setBbsDetail({
@@ -66,29 +66,26 @@ function setBbs(props) {
       });
       return;
     }
-    //
-    // const getBbsURL = `/bbsApi/getBbs`;
-    //
-    // const requestOptions = {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-type": "application/json",
-    //   },
-    // };
-    //
-    // EgovNet.requestFetch(retrieveDetailURL, requestOptions, function (resp) {
-    //   // 수정모드일 경우 조회값 세팅
-    //   if (modeInfo.mode === CODE.MODE_MODIFY) {
-    //     setBbsDetail(resp.result.boardMasterVO);
-    //   }
-    // });
+
+    const getBbsURL = `/bbsApi/getBbs`;
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(searchDto)
+    };
+
+    EgovNet.requestFetch(getBbsURL, requestOptions, function (resp) {
+      if (modeInfo.mode === CODE.MODE_MODIFY) {
+        setBbsDetail(resp.result.bbs);
+        console.log(bbsDetail)
+      }
+    });
   };
 
-  const updateBoard = () => {
-    let modeStr = modeInfo.mode === CODE.MODE_CREATE ? "POST" : "PUT";
-
+  const setBbs = () => {
     let requestOptions = {};
-    console.log(bbsDetail)
     if (!bbsDetail.bbsNm) {
       alert("게시판명은 필수 값입니다.");
       return;
@@ -111,7 +108,6 @@ function setBbs(props) {
       formData.append(key, bbsDetail[key]);
     }
 
-
     Swal.fire({
       title: "저장하시겠습니까?",
       showCloseButton: true,
@@ -121,17 +117,17 @@ function setBbs(props) {
     }).then((result) => {
       if(result.isConfirmed) {
         requestOptions = {
-          method: modeStr,
+          method: "POST",
           headers: {
             "Content-type": "application/json",
           },
-          body: JSON.stringify({ ...bbsDetail }),
+          body: JSON.stringify(bbsDetail),
         };
 
         EgovNet.requestFetch(modeInfo.editURL, requestOptions, (resp) => {
           if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
             Swal.fire("등록되었습니다.");
-            navigate({ pathname: URL.MANAGER_BBS_LIST });
+            navigate(URL.MANAGER_BBS_LIST);
           } else {
             navigate(
                 { pathname: URL.ERROR },
@@ -147,23 +143,35 @@ function setBbs(props) {
 
   };
 
-  const deleteBoardArticle = (bbsSn) => {
-    const deleteBoardURL = `/bbsMaster/${bbsSn}`;
+  const setBbsDel = (bbsSn) => {
+    const setBbsDelUrl = "/bbsApi/setBbsDel";
 
-    const requestOptions = {
-      method: "PATCH",
-      headers: {
-        "Content-type": "application/json",
-      },
-    };
+    Swal.fire({
+      title: "삭제하시겠습니까?",
+      showCloseButton: true,
+      showCancelButton: true,
+      confirmButtonText: "삭제",
+      cancelButtonText: "취소"
+    }).then((result) => {
+      if(result.isConfirmed) {
+        const requestOptions = {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify({bbsSn : bbsSn}),
+        };
 
-    EgovNet.requestFetch(deleteBoardURL, requestOptions, (resp) => {
-      console.log("====>>> board delete= ", resp);
-      if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
-        alert("게시글이 삭제되었습니다.");
-        navigate(URL.ADMIN_BOARD, { replace: true });
+        EgovNet.requestFetch(setBbsDelUrl, requestOptions, (resp) => {
+          if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
+            Swal.fire("삭제되었습니다.");
+            navigate(URL.MANAGER_BBS_LIST);
+          } else {
+            alert("ERR : " + resp.resultMessage);
+          }
+        });
       } else {
-        alert("ERR : " + resp.resultMessage);
+        //취소
       }
     });
   };
@@ -265,10 +273,10 @@ function setBbs(props) {
                     )}
                     {modeInfo.mode === CODE.MODE_MODIFY && (
                         <span>
-                      {bbsDetail.bbsTyCode &&
+                      {bbsDetail.bbsType &&
                           getSelectedLabel(
                               bbsTypeOptions,
-                              bbsDetail.bbsTyCode
+                              bbsDetail.bbsType
                           )}
                     </span>
                     )}
@@ -415,7 +423,7 @@ function setBbs(props) {
                   <div className="left_col btn1">
                     <button
                         className="btn btn_skyblue_h46 w_100"
-                        onClick={() => updateBoard()}
+                        onClick={() => setBbs()}
                     >
                       저장
                     </button>
@@ -423,7 +431,7 @@ function setBbs(props) {
                         <button
                             className="btn btn_skyblue_h46 w_100"
                             onClick={() => {
-                              deleteBoardArticle(bbsDetail.bbsSn);
+                              setBbsDel(bbsDetail.bbsSn);
                             }}
                         >
                           삭제

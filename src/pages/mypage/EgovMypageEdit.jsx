@@ -211,7 +211,7 @@ function EgovMypageEdit(props) {
         alert("회원ID는 6~12자의 영문 대소문자와 숫자만 사용 가능합니다.");
         return false;
       }
-      const checkIdURL = `/memberApi/membercheckid.do`;
+      const checkIdURL = `/memberApi/checkMemberId.do`;
       const reqOptions = {
         method: "POST",
         headers: {
@@ -396,7 +396,7 @@ function EgovMypageEdit(props) {
 
   // 회원가입 신청
   const insertMember = () => {
-    const insertMemURL = `/memberApi/insertmember.do`;
+    const insertMemURL = `/memberApi/insertMember.do`;
 
     formValidator(memberDetail).then((res) => {
       if (res) {
