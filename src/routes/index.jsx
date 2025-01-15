@@ -101,6 +101,7 @@ import EgovMypageEdit from "@/pages/mypage/EgovMypageEdit";
 import EgovTermsAgreement from '@/pages/mypage/EgovTermsAgreement';
 import EgovIdentityVerification from '@/pages/mypage/EgovIdentityVerification';
 import EgovSignupChoice from '@/pages/mypage/EgovSignupChoice';
+import EgovCompleteMember from '@/pages/mypage/EgovCompleteMember';
 import * as EgovNet from "@/api/egovFetch"; // jwt토큰 위조 검사 때문에 추가
 import initPage from "@/js/ui";
 import SnsGoogleCallback from "../components/sns/SnsGoogleCallback.jsx";
@@ -395,6 +396,7 @@ const SecondRoutes = () => {
           path={URL.MYPAGE_CREATE}
           element={<EgovMypageEdit mode={CODE.MODE_CREATE} />}
         />*/}
+        <Route path={URL.COMPLETE_MEMBER} element={<EgovCompleteMember />} />
         <Route path={URL.SIGNUP_CHOICE} element={<EgovSignupChoice />} />
         <Route path={URL.TERMS_AGREEMENT} element={<EgovTermsAgreement />} />
         <Route path={URL.IDENTITY_VERIFICATION} element={<EgovIdentityVerification />} />
