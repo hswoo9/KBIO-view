@@ -154,7 +154,7 @@ function EgovMypageEdit(props) {
         setModeInfo({
           ...modeInfo,
           modeTitle: "등록",
-          editURL: "/etc/member_insert",
+          editURL: "/memberApi/memberinsert.do",
         });
         break;
 
@@ -211,22 +211,23 @@ function EgovMypageEdit(props) {
         alert("회원ID는 6~12자의 영문 대소문자와 숫자만 사용 가능합니다.");
         return false;
       }
-      const checkIdURL = `/etc/member_checkid/${checkId}`;
+      const checkIdURL = `/memberApi/membercheckid.do`;
       const reqOptions = {
-        method: "GET",
+        method: "POST",
         headers: {
           "Content-type": "application/json",
         },
+        body: JSON.stringify({
+          memberId : checkId
+        })
       };
       EgovNet.requestFetch(checkIdURL, reqOptions, function (resp) {
-        if (
-            Number(resp.resultCode) === Number(CODE.RCV_SUCCESS) &&
-            resp.result.usedCnt > 0
+        if (resp.resultCode === 400 && resp.result.usedCnt > 0
         ) {
           setMemberDetail({
             ...memberDetail,
             checkIdResult: "중복된 아이디입니다.",
-            checkIdResultColor: "red", 
+            checkIdResultColor: "red",
             mberId: checkId,
           });
           resolve(resp.result.usedCnt);
@@ -234,7 +235,7 @@ function EgovMypageEdit(props) {
           setMemberDetail({
             ...memberDetail,
             checkIdResult: "사용 가능한 아이디입니다.",
-            checkIdResultColor: "green", 
+            checkIdResultColor: "green",
             mberId: checkId,
           });
           resolve(0);
@@ -245,56 +246,70 @@ function EgovMypageEdit(props) {
 
   const formValidator = (formData) => {
     return new Promise((resolve) => {
-      if (formData.get("mberId") === null || formData.get("mberId") === "") {
+      const form = new FormData();
+
+      Object.keys(formData).forEach((key) => {
+        form.append(key, formData[key]);
+      });
+      console.log(formData)
+      if (form.get("mberId") === null || form.get("mberId") === "") {
         alert("회원ID는 필수 값입니다.");
         return false;
       }
+
       checkIdDplct().then((res) => {
         if (res > 0) {
           return false;
         }
+
         if (
-            formData.get("password") === null ||
-            formData.get("password") === ""
+            form.get("password") === null ||
+            form.get("password") === ""
         ) {
           alert("암호는 필수 값입니다.");
           return false;
         }
 
         const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?/~_`|-]).{8,20}$/;
-        if (!passwordRegex.test(formData.get("password"))) {
+        if (!passwordRegex.test(form.get("password"))) {
           alert("암호는 영문자, 숫자, 특수문자 조합으로 8~20자리 이내여야 합니다.");
           return false;
         }
 
-        if (formData.get("password_chk") === null ||
-            formData.get("password_chk") === ""
+        if (form.get("password_chk") === null ||
+            form.get("password_chk") === ""
         ) {
           alert("비밀번호 확인은 필수 값입니다.");
           return false;
         }
-        if (formData.get("password") !== formData.get("password_chk")) {
+
+        if (form.get("password") !== form.get("password_chk")) {
           alert("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
           return false;
         }
-        if (formData.get("mberNm") === null || formData.get("mberNm") === "") {
+
+        if (form.get("mberNm") === null || form.get("mberNm") === "") {
           alert("회원명은 필수 값입니다.");
           return false;
         }
+
         const mberNmRegex = /^[a-zA-Zㄱ-ㅎ가-힣]+$/;
-        if (!mberNmRegex.test(formData.get("mberNm"))) {
+        if (!mberNmRegex.test(form.get("mberNm"))) {
           alert("회원명은 한글 또는 영문자만 사용 가능합니다.");
           return false;
         }
-        if (formData.get("phonenum") === null || formData.get("phonenum") === "") {
+
+        if (form.get("phonenum") === null || form.get("phonenum") === "") {
           alert("전화번호는 필수 값입니다.");
           return false;
         }
+
         const phonenumRegex = /^[0-9\-]+$/;
-        if (!phonenumRegex.test(formData.get("phonenum"))) {
+        if (!phonenumRegex.test(form.get("phonenum"))) {
           alert("전화번호는 숫자와 하이픈(-)만 포함할 수 있습니다.");
           return false;
         }
+
         resolve(true);
       });
     });
@@ -320,7 +335,8 @@ function EgovMypageEdit(props) {
     return true;
   };
 
-  const updateMember = () => {
+
+  /*const updateMember = () => {
     let modeStr = modeInfo.mode === CODE.MODE_CREATE ? "POST" : "PUT";
 
     let requestOptions = {};
@@ -376,7 +392,42 @@ function EgovMypageEdit(props) {
         });
       }
     }
+  };*/
+
+  // 회원가입 신청
+  const insertMember = () => {
+    const insertMemURL = `/memberApi/insertmember.do`;
+
+    formValidator(memberDetail).then((res) => {
+      if (res) {
+        const reqOptions = {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify(memberDetail),
+        };
+
+        EgovNet.requestFetch(insertMemURL, reqOptions, function (resp) {
+          if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
+            setMemberDetail({
+              ...memberDetail,
+              insertMemResult: "회원가입신청이 완료되었습니다.",
+            });
+            navigate({ pathname: URL.MAIN });
+          } else {
+            navigate(
+                { pathname: URL.ERROR },
+                { state: { msg: resp.resultMessage } }
+            );
+          }
+        });
+      }
+    });
   };
+
+
+
 
   const deleteMember = () => {
     if (formObjValidator(checkRef)) {
@@ -441,7 +492,7 @@ function EgovMypageEdit(props) {
               {/* <!-- 본문 --> */}
 
               <div className="top_tit">
-                <h1 className="tit_1">마이페이지</h1>
+                <h1 className="tit_1">회원 가입</h1>
               </div>
 
               {modeInfo.mode === CODE.MODE_CREATE && (
@@ -902,11 +953,11 @@ function EgovMypageEdit(props) {
                             type="radio"
                             name="email-receive"
                             id="email-receive"
-                            checked={memberDetail.emailReceive === true}
+                            checked={memberDetail.emailReceive === 1}
                             onChange={() => {
                               setMemberDetail({
                                 ...memberDetail,
-                                emailReceive: true,
+                                emailReceive: 1,
                               });
                             }}
                             style={{transform: 'scale(1.2)'}}
@@ -920,11 +971,11 @@ function EgovMypageEdit(props) {
                             type="radio"
                             name="email-no-receive"
                             id="email-no-receive"
-                            checked={memberDetail.emailReceive === false}
+                            checked={memberDetail.emailReceive === 2}
                             onChange={() => {
                               setMemberDetail({
                                 ...memberDetail,
-                                emailReceive: false,
+                                emailReceive: 2,
                               });
                             }}
                             style={{transform: 'scale(1.2)'}}
@@ -962,11 +1013,11 @@ function EgovMypageEdit(props) {
                             type="radio"
                             name="sms-receive"
                             id="sms-receive"
-                            checked={memberDetail.smsReceive === "receive"}
+                            checked={memberDetail.smsReceive === 1}
                             onChange={() => {
                               setMemberDetail({
                                 ...memberDetail,
-                                smsReceive: memberDetail.smsReceive === "receive" ? "no-receive" : "receive",
+                                smsReceive: 1,
                               });
                             }}
                             style={{transform: 'scale(1.2)'}}
@@ -980,11 +1031,11 @@ function EgovMypageEdit(props) {
                             type="radio"
                             name="sms-no-receive"
                             id="sms-no-receive"
-                            checked={memberDetail.smsReceive === "no-receive"}
+                            checked={memberDetail.smsReceive === 2}
                             onChange={() => {
                               setMemberDetail({
                                 ...memberDetail,
-                                smsReceive: memberDetail.smsReceive === "no-receive" ? "receive" : "no-receive",
+                                smsReceive: 2,
                               });
                             }}
                             style={{transform: 'scale(1.2)'}}
@@ -1895,7 +1946,7 @@ function EgovMypageEdit(props) {
                 <div className="board_btn_area" style={{ display: "flex", justifyContent: "center", gap: "10px" }}>
                     <button
                         className="btn btn_skyblue_h46 w_100"
-                        onClick={() => updateMember()}
+                        onClick={() => insertMember()}
                         style={{width: '10%'}}
                     >
                       가입 신청
