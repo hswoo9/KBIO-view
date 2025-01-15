@@ -114,10 +114,11 @@ const URL = {
   
   MANAGER_MENU_MANAGEMENT: "/manager/menuManagement",
   MANAGER_MENU_AUTHORITY: "/manager/menuAuthority",
-  
-  MANAGER_BBS_LIST:"/manager/bbs/list",
-  MANAGER_BBS_CREATE: "/manager/bbs/create",
-  MANAGER_BBS_MODIFY: "/manager/bbs/modify",
+
+  MANAGER_BBS_LIST2:"/manager/bbs/pst/bbsList",
+  MANAGER_PST_LIST:"/manager/bbs/pst/list",
+  MANAGER_PST_CREATE: "/manager/bbs/pst/create",
+  MANAGER_PST_MODIFY: "/manager/bbs/pst/modify",
 
 
   MANAGER_BBS_AUTHORITY_MANAGEMENT:"/manager/bbsAuthorityManagement",

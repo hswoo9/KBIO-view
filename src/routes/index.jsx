@@ -68,7 +68,12 @@ import ManagerMenuAuthority from "@/pages/manager/menu/ManagerMenuAuthority";
 
 import ManagerBbsList from "@/pages/manager/board/ManagerBbsList";
 import ManagerBbsEdit from "@/pages/manager/board/ManagerBbsEdit";
-import ManagerBbsAuthorityManagement from "@/pages/manager/board/ManagerBbsAuthorityManagement";
+
+import ManagerBbsList2 from "@/pages/manager/board/pst/ManagerBbsList";
+import ManagerBbsPstList from "@/pages/manager/board/pst/ManagerPstList";
+import ManagerBbsPstEdit from "@/pages/manager/board/pst/ManagerPstEdit";
+
+
 
 import ManagerCommonCodeList from "@/pages/manager/common/ManagerCommonCode";
 import ResidentCompanyCreate from "@/pages/manager/member/ResidentCompanyCreate";
@@ -461,8 +466,23 @@ const SecondRoutes = () => {
         />
 
         <Route
-            path={URL.MANAGER_BBS_AUTHORITY_MANAGEMENT}
-            element={<ManagerBbsAuthorityManagement />}
+            path={URL.MANAGER_BBS_LIST2}
+            element={<ManagerBbsList2 />}
+        />
+
+        <Route
+            path={URL.MANAGER_PST_LIST}
+            element={<ManagerBbsPstList />}
+        />
+
+        <Route
+            path={URL.MANAGER_PST_CREATE}
+            element={<ManagerBbsPstEdit mode={CODE.MODE_CREATE}/>}
+        />
+
+        <Route
+            path={URL.MANAGER_PST_MODIFY}
+            element={<ManagerBbsPstEdit mode={CODE.MODE_MODIFY}/>}
         />
 
         <Route

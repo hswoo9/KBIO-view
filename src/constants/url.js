@@ -106,6 +106,11 @@ const URL = {
   MANAGER_BBS_CREATE: "/manager/bbs/create",
   MANAGER_BBS_MODIFY: "/manager/bbs/modify",
 
+  MANAGER_BBS_LIST2:"/manager/bbs/pst/bbsList",
+  MANAGER_PST_LIST:"/manager/bbs/pst/list",
+  MANAGER_PST_CREATE: "/manager/bbs/pst/create",
+  MANAGER_PST_MODIFY: "/manager/bbs/pst/modify",
+
   MANAGER_BBS_AUTHORITY_MANAGEMENT:"/manager/bbsAuthorityManagement",
 
   RESIDENT_COMPANY_CREATE:"/manager/residentCompanyCreate", //회원관리/입주기업 /입주기업 등록

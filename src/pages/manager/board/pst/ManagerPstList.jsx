@@ -18,32 +18,32 @@ import 'bootstrap/dist/css/bootstrap.css';
 import moment from "moment/moment.js";
 
 
-function ManagerBbs(props) {
+function ManagerPst(props) {
     const location = useLocation();
     const [searchDto, setSearchDto] = useState(
         location.state?.searchDto || {
             pageIndex: 1,
-            bbsType: "",
-            searchWrd: "",
-            bbsNm : "",
+            bbsSn : location.state?.bbsSn,
+            searchType: "",
+            searchVal : "",
             actvtnYn : "",
         }
     );
     const [paginationInfo, setPaginationInfo] = useState({});
-    const bbsTypeRef = useRef();
-    const bbsNmRef = useRef();
-    const [bbsList, setAuthorityList] = useState([]);
+    const [pstList, setPstList] = useState([]);
+    const searchTypeRef = useRef();
+    const searchValRef = useRef();
 
     const activeEnter = (e) => {
         if (e.key === "Enter") {
             e.preventDefault();
-            getBbsList(searchDto);
+            getPstList(searchDto);
         }
     };
 
-    const getBbsList = useCallback(
+    const getPstList = useCallback(
         (searchDto) => {
-            const bbsListURL = "/bbsApi/getBbsList.do";
+            const pstListURL = "/bbsApi/getPstList.do";
             const requestOptions = {
                 method: "POST",
                 headers: {
@@ -52,52 +52,48 @@ function ManagerBbs(props) {
                 body: JSON.stringify(searchDto)
             };
             EgovNet.requestFetch(
-                bbsListURL,
+                pstListURL,
                 requestOptions,
                 (resp) => {
                     setPaginationInfo(resp.paginationInfo);
                     let dataList = [];
                     dataList.push(
                         <tr>
-                            <td colSpan="8">검색된 결과가 없습니다.</td>
+                            <td colSpan="4">검색된 결과가 없습니다.</td>
                         </tr>
                     );
 
-                    resp.result.bbsList.forEach(function (item, index) {
+                    resp.result.pstList.forEach(function (item, index) {
                         if (index === 0) dataList = []; // 목록 초기화
 
                         dataList.push(
-                            <tr key={item.bbsSn}>
-                                <td>
-                                    <Link to={URL.MANAGER_BBS_MODIFY}
+                            <tr key={item.pstSn}>
+                                <td>{resp.paginationInfo.totalRecordCount - (resp.paginationInfo.currentPageNo - 1) * resp.paginationInfo.pageSize - index}</td>
+                                <td style={{textAlign:"left", paddingLeft:"15px"}}>
+                                    <Link to={URL.MANAGER_PST_MODIFY}
                                           mode={CODE.MODE_MODIFY}
-                                          state={{ bbsSn: item.bbsSn }}
+                                          state={{ pstSn: item.pstSn }}
                                           >
-                                        {item.bbsNm}
+                                        {item.pstTtl}
                                     </Link>
                                 </td>
-                                <td>{item.bbsType == "0" ? "일반" : item.bbsType == "1" ? "faQ" : "QnA"}</td>
-                                <td>{item.wrtrRlsYn === "Y" ? "공개" : "비공개"}</td>
-                                <td>{item.atchFileYn === "Y" ? "가능" : "불가능"}</td>
-                                <td>{item.cmntPsbltyYn === "Y" ? "가능" : "불가능"}</td>
-                                <td>{item.replyPsbltyYn === "Y" ? "사용" : "미사용"}</td>
                                 <td>{item.actvtnYn === "Y" ? "사용" : "미사용"}</td>
                                 <td>{moment(item.frstCrtDt).format('YYYY-MM-DD')}</td>
                             </tr>
                         );
                     });
-                    setAuthorityList(dataList);
+                    setPstList(dataList);
                 },
                 function (resp) {
                     console.log("err response : ", resp);
                 }
             )
         },
-        [bbsList, searchDto]
+        [pstList, searchDto]
     );
 
     useEffect(() => {
-        getBbsList(searchDto);
+        getPstList(searchDto);
     }, []);
 
     return (
@@ -111,7 +107,7 @@ function ManagerBbs(props) {
                             </Link>
                         </li>
                         <li>
-                            <Link to={URL.MANAGER_BBS_LIST}>게시판관리</Link>
+                            <Link to={URL.MANAGER_BBS_LIST2}>게시글관리</Link>
                         </li>
                         <li>게시판관리</li>
                     </ul>
@@ -122,26 +118,20 @@ function ManagerBbs(props) {
                         <div className="condition">
                             <ul>
                                 <li className="third_1 L">
-                                    <span className="lb">게시판유형</span>
+                                    <span className="lb">검색유형</span>
                                     <label className="f_select" htmlFor="bbsType">
                                         <select
                                             id="bbsType"
                                             name="bbsType"
-                                            title="게시판유형선택"
-                                            ref={bbsTypeRef}
+                                            title="검색유형"
+                                            ref={searchTypeRef}
                                             onChange={(e) => {
-                                                getBbsList({
-                                                    ...searchDto,
-                                                    pageIndex: 1,
-                                                    bbsType: bbsTypeRef.current.value,
-                                                    bbsNm: bbsNmRef.current.value,
-                                                });
+                                                setSearchDto({...searchDto, searchType: e.target.value})
                                             }}
                                         >
                                             <option value="">선택</option>
-                                            <option value="0">일반</option>
-                                            <option value="1">FAQ</option>
-                                            <option value="2">QNA</option>
+                                            <option value="pstTtl">제목</option>
+                                            <option value="pstCn">내용</option>
                                         </select>
                                     </label>
                                 </li>
@@ -152,23 +142,23 @@ function ManagerBbs(props) {
                                             type="text"
                                             name=""
                                             defaultValue={
-                                                searchDto && searchDto.bbsNm
+                                                searchDto && searchDto.searchVal
                                             }
                                             placeholder=""
-                                            ref={bbsNmRef}
+                                            ref={searchValRef}
                                             onChange={(e) => {
-                                                setSearchDto({ ...searchDto, bbsNm: e.target.value })
+                                                setSearchDto({ ...searchDto, searchVal: e.target.value })
                                             }}
                                             onKeyDown={activeEnter}
                                         />
                                         <button
                                             type="button"
                                             onClick={() => {
-                                                getBbsList({
+                                                getPstList({
                                                     ...searchDto,
                                                     pageIndex: 1,
-                                                    bbsType: bbsTypeRef.current.value,
-                                                    bbsNm: bbsNmRef.current.value,
+                                                    searchType : searchTypeRef.current.value,
+                                                    searchVal : searchValRef.current.value,
                                                 });
                                             }}
                                         >
@@ -178,7 +168,7 @@ function ManagerBbs(props) {
                                 </li>
                                 <li>
                                     <Link
-                                        to={URL.MANAGER_BBS_CREATE}
+                                        to={URL.MANAGER_PST_CREATE}
                                         className="btn btn_blue_h46 pd35"
                                         mode={CODE.MODE_CREATE}
                                     >
@@ -194,36 +184,28 @@ function ManagerBbs(props) {
                                 className="btTable"
                             >
                                 <colgroup>
+                                    <col width="80"/>
                                     <col/>
-                                    <col width="100"/>
-                                    <col width="150"/>
-                                    <col width="150"/>
-                                    <col width="100"/>
-                                    <col width="100"/>
                                     <col width="80"/>
                                     <col width="100"/>
                                 </colgroup>
                                 <thead>
                                 <tr>
-                                    <th>게시판명</th>
-                                    <th>게시판유형</th>
-                                    <th>작성자공개유무</th>
-                                    <th>파일첨부가능여부</th>
-                                    <th>댓글가능여부</th>
-                                    <th>답글사용유무</th>
+                                    <th>번호</th>
+                                    <th>제목</th>
                                     <th>사용여부</th>
                                     <th>생성일</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {bbsList}
+                                {pstList}
                                 </tbody>
                             </BtTable>
                             <div className="board_bot">
                             <EgovPaging
                                     pagination={paginationInfo}
                                     moveToPage={(passedPage) => {
-                                        getBbsList({
+                                        getPstList({
                                             ...searchDto,
                                             pageIndex: passedPage
                                         });
@@ -239,4 +221,4 @@ function ManagerBbs(props) {
     );
 }
 
-export default ManagerBbs;
+export default ManagerPst;
