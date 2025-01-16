@@ -73,7 +73,7 @@ import ManagerBbsList2 from "@/pages/manager/board/pst/ManagerBbsList";
 import ManagerBbsPstList from "@/pages/manager/board/pst/ManagerPstList";
 import ManagerBbsPstEdit from "@/pages/manager/board/pst/ManagerPstEdit";
 
-
+import ManagerNormalMemberEdit from "@/pages/manager/member/ManagerNormalMemberEdit";
 
 import ManagerCodeGroup from "@/pages/manager/common/ManagerCodeGroup";
 import ManagerCodeGroupEdit from "@/pages/manager/common/ManagerCodeGroupEdit";
@@ -529,6 +529,11 @@ const SecondRoutes = () => {
         <Route
             path={URL.MANAGER_CODE_MODIFY}
             element={<ManagerCodeEdit mode={CODE.MODE_MODIFY} />}
+        />
+
+        <Route
+          path={URL.MANAGER_NORMAL_MEMBER_MODIFY}
+          element={<ManagerNormalMemberEdit mode={CODE.MODE_MODIFY}/>}
         />
 
       </Routes>

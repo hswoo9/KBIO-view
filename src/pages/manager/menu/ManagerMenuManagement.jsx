@@ -46,6 +46,11 @@ function Index(props) {
         setMenu(saveMenuData);
     }, [saveMenuData]);
 
+    const [deleteMenu, setDeleteMenu] = useState({});
+    useEffect(() => {
+        setMenuDel(deleteMenu);
+    }, [deleteMenu]);
+
     const [checked, setChecked] = useState([]);
 
     const [upperMenuList, setUpperMenuList] = useState([]);
@@ -107,10 +112,16 @@ function Index(props) {
             });
 
             menuList.map((menu) => {
-                if(menu.menuSn == e.target.value){
+                if(menu.menuSn == document.getElementById("upperMenuList").value){
                     if(menu.childTblMenu != null && menu.childTblMenu.length > 0){
                         menu.childTblMenu.map((subMenu) => {
-                            filterMenuList.push(subMenu);
+                           if(subMenu.menuSn == e.target.value){
+                               if(subMenu.childTblMenu != null && subMenu.childTblMenu.length > 0){
+                                   subMenu.childTblMenu.map((subSubMenu) => {
+                                       filterMenuList.push(subSubMenu);
+                                   });
+                               }
+                           }
                         });
                     }
                 }
@@ -216,7 +227,7 @@ function Index(props) {
         });
     }
 
-    const deleteMenu = () => {
+    const deleteMenuFn = () => {
         Swal.fire({
             title: "삭제하시겠습니까?",
             showCloseButton: true,
@@ -225,13 +236,46 @@ function Index(props) {
             cancelButtonText: "취소"
         }).then((result) => {
             if(result.isConfirmed) {
-                //확인시
-                Swal.fire("삭제되었습니다.");
+                let deleteMenu = [];
+                deleteMenu.push(menuDetail.menuSn);
+                setDeleteMenu({
+                    menuSns : deleteMenu.join(",")
+                });
             } else {
-                //취소
             }
         });
     }
+
+    const setMenuDel = useCallback(
+        (deleteMenu) => {
+            const menuListURL = "/menuApi/setMenuDel.do";
+            const requestOptions = {
+                method: "POST",
+                headers: {
+                    "Content-type": "application/json",
+                },
+                body: JSON.stringify(deleteMenu)
+            };
+            EgovNet.requestFetch(
+                menuListURL,
+                requestOptions,
+                (resp) => {
+                    setSaveMode({mode:"insert"});
+                    setMenuDetail({});
+                    document.getElementById("upperMenuList").value = "";
+                    setUpperMenuList2(makerMenuOption([]));
+                    setUpperMenuList3(makerMenuOption([]));
+                    setSearchDto({
+                        searchData : ""
+                    });
+                    getMenuList({
+                        searchData : ""
+                    });
+                }
+            )
+        }
+    );
+
 
     const makerMenuOption = (data) => {
         let resultMenuList = [];
@@ -270,6 +314,24 @@ function Index(props) {
                             item.childTblMenu.forEach(function (subItem, subIndex) {
                                 subItem.value = subItem.menuSn;
                                 subItem.label = subItem.menuNm;
+                                if(subItem.childTblMenu != null){
+                                    subItem.childTblMenu.forEach(function (subSubItem, subSubIndex) {
+                                        subSubItem.value = subSubItem.menuSn;
+                                        subSubItem.label = subSubItem.menuNm;
+                                        if(subSubItem.childTblMenu != null){
+                                            subSubItem.childTblMenu.forEach(function (subSubSubItem, subSubSubIndex){
+                                                subSubSubItem.value = subSubSubItem.menuSn;
+                                                subSubSubItem.label = subSubSubItem.menuNm;
+                                            });
+                                            if(subSubItem.childTblMenu.length > 0){
+                                                subSubItem.children = subSubItem.childTblMenu;
+                                            }
+                                        }
+                                    });
+                                    if(subItem.childTblMenu.length > 0){
+                                        subItem.children = subItem.childTblMenu;
+                                    }
+                                }
                             });
                             item.children = item.childTblMenu;
                         }
@@ -325,7 +387,55 @@ function Index(props) {
                 (resp) => {
                     if(resp.result.menu != null){
                         setSaveMode({mode: "update"});
-                        resp.result.menu.menuSnPath;
+                        if(resp.result.menu.menuSnPath.indexOf("|") > -1){
+                            if(resp.result.menu.upperMenuSn == 0){
+                                document.getElementById("upperMenuList").value = 0;
+                            }else{
+                                const filterMenuList = [];
+                                let menuSnPath = resp.result.menu.menuSnPath.split("|");
+                                if(resp.result.menu.menuSeq == 1){
+                                    document.getElementById("upperMenuList").value = resp.result.menu.upperMenuSn;
+                                    document.getElementById("upperMenuList2").value = "";
+                                    document.getElementById("upperMenuList3").value = "";
+                                }else if(resp.result.menu.menuSeq == 2){
+                                    document.getElementById("upperMenuList").value = menuSnPath[0];
+
+                                    menuList.map((menu) => {
+                                        if(menuSnPath[0] == String(menu.menuSn)){
+                                            if(menu.childTblMenu != null && menu.childTblMenu.length > 0){
+                                                menu.childTblMenu.map((subMenu) => {
+                                                    filterMenuList.push(subMenu);
+                                                });
+                                            }
+                                        }
+                                    });
+                                    setUpperMenuList2(makerMenuOption(filterMenuList));
+                                    document.getElementById("upperMenuList2").value = menuSnPath[1];
+
+                                    const filterMenuList2 = [];
+                                    menuList.map((menu) => {
+                                        if(menuSnPath[0] == String(menu.menuSn)){
+                                            if(menu.childTblMenu != null && menu.childTblMenu.length > 0){
+                                                menu.childTblMenu.map((subMenu) => {
+                                                    if(menuSnPath[1] == String(subMenu.menuSn)){
+                                                        if(subMenu.childTblMenu != null && subMenu.childTblMenu.length > 0){
+                                                            subMenu.childTblMenu.map((subSubMenu) => {
+                                                                filterMenuList2.push(subSubMenu);
+                                                            });
+                                                        }
+                                                    }
+                                                });
+                                            }
+                                        }
+                                    });
+                                    setUpperMenuList3(makerMenuOption(filterMenuList2));
+
+
+                                }
+
+                            }
+
+                        }
                         setMenuDetail(resp.result.menu);
                     }
                 }
@@ -395,7 +505,7 @@ function Index(props) {
                                             onClick={saveMenu}
                                         >저장</BTButton>
                                         <BTButton variant="danger" size="sm"
-                                            onClick={deleteMenu}
+                                            onClick={deleteMenuFn}
                                         >삭제</BTButton>
                                     </dd>
                                 </dl>

@@ -197,23 +197,6 @@ function ManagerMenuAuthority(props) {
         setChecked([]);
     }
 
-    const deleteMenu = () => {
-        Swal.fire({
-            title: "삭제하시겠습니까?",
-            showCloseButton: true,
-            showCancelButton: true,
-            confirmButtonText: "삭제",
-            cancelButtonText: "취소"
-        }).then((result) => {
-            if(result.isConfirmed) {
-                //확인시
-                Swal.fire("삭제되었습니다.");
-            } else {
-                //취소
-            }
-        });
-    }
-
     const selectAuthorityDelete = () => {
         Swal.fire({
             title: "삭제하시겠습니까?",
@@ -266,6 +249,26 @@ function ManagerMenuAuthority(props) {
                             item.childTblMenu.forEach(function (subItem, subIndex) {
                                 subItem.value = subItem.menuSn;
                                 subItem.label = subItem.menuNm;
+                                if(subItem.childTblMenu != null){
+                                    subItem.childTblMenu.forEach(function (subSubItem, subIndex) {
+                                        subSubItem.value = subSubItem.menuSn;
+                                        subSubItem.label = subSubItem.menuNm;
+                                        expandedArr.push(subSubItem.menuSn);
+                                        if(subSubItem.childTblMenu != null){
+                                            subSubItem.childTblMenu.forEach(function (subSubSubItem, subSubSubIndex){
+                                                subSubSubItem.value = subSubSubItem.menuSn;
+                                                subSubSubItem.label = subSubSubItem.menuNm;
+                                                expandedArr.push(subSubSubItem.menuSn);
+                                            });
+                                            if(subSubItem.childTblMenu.length > 0){
+                                                subSubItem.children = subSubItem.childTblMenu;
+                                            }
+                                        }
+                                    });
+                                    if(subItem.childTblMenu.length > 0){
+                                        subItem.children = subItem.childTblMenu;
+                                    }
+                                }
                                 expandedArr.push(subItem.menuSn);
                             });
                             item.children = item.childTblMenu;

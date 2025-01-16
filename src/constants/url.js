@@ -117,6 +117,8 @@ const URL = {
   MANAGER_PST_CREATE: "/manager/bbs/pst/create",
   MANAGER_PST_MODIFY: "/manager/bbs/pst/modify",
 
+  MANAGER_NORMAL_MEMBER_MODIFY: "/manager/normal/member/modfiy",
+
   MANAGER_BBS_AUTHORITY_MANAGEMENT:"/manager/bbsAuthorityManagement",
 
   RESIDENT_COMPANY_CREATE:"/manager/residentCompanyCreate", //회원관리/입주기업 /입주기업 등록

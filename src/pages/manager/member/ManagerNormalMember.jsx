@@ -72,7 +72,7 @@ function NormalMemberList(props) {
                             <tr key={item.userSn}>
                                 <td>
                                 <Link
-                                    to={URL.MANAGER_MEMBERS_MODIFY}
+                                    to={URL.MANAGER_NORMAL_MEMBER_MODIFY}
                                     mode={CODE.MODE_MODIFY}
                                     state={{userSn: item.userSn}}
                                     >
@@ -198,7 +198,7 @@ function NormalMemberList(props) {
                                 </li>
                                 <li>
                                     <Link
-                                        to={URL.MANAGER_MEMBERS_CREATE}
+                                        to={URL.ADMIN_MEMBERS_CREATE}
                                         className="btn btn_blue_h46 pd35"
                                     >
                                         등록

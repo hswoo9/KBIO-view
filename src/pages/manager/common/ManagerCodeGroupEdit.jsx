@@ -260,6 +260,7 @@ function ManagerCodeGroupEdit(props) {
                         onChange={(e) =>
                             setCdGroupDetail({...cdGroupDetail, cdGroup: e.target.value})
                         }
+                        disabled={modeInfo.mode === CODE.MODE_MODIFY}
                         ref={(el) => (checkRef.current[0] = el)}
                     />
                   </dd>
