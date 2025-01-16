@@ -117,7 +117,7 @@ const URL = {
   MANAGER_PST_CREATE: "/manager/bbs/pst/create",
   MANAGER_PST_MODIFY: "/manager/bbs/pst/modify",
 
-  MANAGER_NORMAL_MEMBER_MODIFY: "/manger/normal/member/modfiy",
+  MANAGER_NORMAL_MEMBER_MODIFY: "/manager/normal/member/modfiy",
 
   MANAGER_BBS_AUTHORITY_MANAGEMENT:"/manager/bbsAuthorityManagement",
 

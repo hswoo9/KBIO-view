@@ -135,7 +135,11 @@ function setNormalMember(props) {
                     headers: {
                         "Content-type": "application/json",
                     },
-                    body: JSON.stringify({userSn : userSn}),
+                    body: JSON.stringify({
+                        ...memberDetail,
+                        zip: "N",
+                        userSn: userSn
+                    }),
                 };
 
                 EgovNet.requestFetch(setNormalMemberUrl, requestOptions, (resp) => {
@@ -311,7 +315,7 @@ function setNormalMember(props) {
                                         <button
                                             className="btn btn_skyblue_h46 w_100"
                                             onClick={() => {
-                                                deleteMember(memberDetail.userSn);
+                                                setNormalMemberDel(memberDetail.userSn);
                                             }}
                                         >
                                             삭제
