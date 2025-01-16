@@ -29,7 +29,7 @@ const EgovSignUpComplete = () => {
                     <div className="contents SIGN_UP_COMPLETE" id="contents">
                         {/* Header */}
                         <div className="top_tit">
-                            <h1 className="tit_1">회원가입 신청 완료</h1>
+                            <h1 className="tit_1">회원가입 완료</h1>
                         </div>
 
                         {/* Success Message */}
