@@ -9,8 +9,6 @@ import 'moment/locale/ko';
 import EgovPaging from "@/components/EgovPaging";
 
 import BtTable from 'react-bootstrap/Table';
-import BTButton from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
 import 'bootstrap/dist/css/bootstrap.css';
 import moment from "moment/moment.js";
 
@@ -33,6 +31,8 @@ function ResidentCompanyList(){
 
     const getRcList = useCallback(
         (searchDto)=>{
+
+
             const rcListUrl = "/mvnEntApi/getMvnEntList.do";
             const requestOptions = {
                 method: "POST",
@@ -67,7 +67,7 @@ function ResidentCompanyList(){
 
                                 </td>
                                 <td>{item.rpsvNm}</td>
-                                <td>{item.brno}</td>
+                                <td>{formatBrno(item.brno)}</td>
                                 <td>{moment(item.frstCrtDt).format('YYYY-MM-DD')}</td>
                             </tr>
                         );
@@ -87,8 +87,17 @@ function ResidentCompanyList(){
        getRcList(searchDto);
     }, []);
 
+    function formatBrno(brno) {
+        if (!brno || brno.length < 10) {
+            console.error("Invalid brno length or undefined value.");
+            return brno; // 값이 유효하지 않을 경우 원래 값을 반환
+        }
+
+        return `${brno.slice(0, 3)}-${brno.slice(3, 5)}-${brno.slice(5)}`;
+    }
 
     return(
+
         <div className="board_list BRD006">
         <BtTable
             striped bordered hover size="sm"
