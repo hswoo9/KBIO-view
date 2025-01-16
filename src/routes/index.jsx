@@ -75,7 +75,10 @@ import ManagerBbsPstEdit from "@/pages/manager/board/pst/ManagerPstEdit";
 
 
 
-import ManagerCommonCodeList from "@/pages/manager/common/ManagerCommonCode";
+import ManagerCodeGroup from "@/pages/manager/common/ManagerCodeGroup";
+import ManagerCodeGroupEdit from "@/pages/manager/common/ManagerCodeGroupEdit";
+
+
 import ResidentCompanyCreate from "@/pages/manager/member/ResidentCompanyCreate";
 
 //ADMIN
@@ -492,8 +495,17 @@ const SecondRoutes = () => {
             element={<EgovFindIdPswd />}
         />
         <Route
-            path={URL.MANAGER_COMMON_CODE}
-            element={<ManagerCommonCodeList />}
+            path={URL.MANAGER_CODE_GROUP}
+            element={<ManagerCodeGroup />}
+        />
+        <Route
+            path={URL.MANAGER_CODE_GROUP_CREATE}
+            element={<ManagerCodeGroupEdit mode={CODE.MODE_CREATE}/>}
+        />
+
+        <Route
+            path={URL.MANAGER_CODE_GROUP_MODIFY}
+            element={<ManagerCodeGroupEdit mode={CODE.MODE_MODIFY}/>}
         />
 
         <Route

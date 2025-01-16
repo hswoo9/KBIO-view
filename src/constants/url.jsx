@@ -111,8 +111,10 @@ const URL = {
   MANAGER_NONRESIDENT_COMPANY: "/manager/nonresidentMember",
   MANAGER_CONSULTENT: "/manager/consultent",
 
-  MANAGER_COMMON_CODE: "/manager/commonCode",
-  
+  MANAGER_CODE_GROUP: "/manager/codeGroup",
+  MANAGER_CODE_GROUP_CREATE: "/manager/codeGroup/create",
+  MANAGER_CODE_GROUP_MODIFY: "/manager/codeGroup/modify",
+
   MANAGER_MENU_MANAGEMENT: "/manager/menuManagement",
   MANAGER_MENU_AUTHORITY: "/manager/menuAuthority",
 
