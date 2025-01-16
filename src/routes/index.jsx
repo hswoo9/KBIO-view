@@ -78,6 +78,9 @@ import ManagerBbsPstEdit from "@/pages/manager/board/pst/ManagerPstEdit";
 import ManagerCodeGroup from "@/pages/manager/common/ManagerCodeGroup";
 import ManagerCodeGroupEdit from "@/pages/manager/common/ManagerCodeGroupEdit";
 
+import ManagerCodeList from "@/pages/manager/code/ManagerCodeList";
+import ManagerCodeEdit from "@/pages/manager/code/ManagerCodeEdit";
+
 
 import ResidentCompanyCreate from "@/pages/manager/member/ResidentCompanyCreate";
 
@@ -511,6 +514,16 @@ const SecondRoutes = () => {
         <Route
             path={URL.RESIDENT_COMPANY_CREATE}
             element={<ResidentCompanyCreate mode={CODE.MODE_CREATE}/>}
+        />
+
+        <Route path={URL.MANAGER_CODE} element={<ManagerCodeList />} />
+        <Route
+            path={URL.MANAGER_CODE_CREATE}
+            element={<ManagerCodeEdit mode={CODE.MODE_CREATE} />}
+        />
+        <Route
+            path={URL.MANAGER_CODE_MODIFY}
+            element={<ManagerCodeEdit mode={CODE.MODE_MODIFY} />}
         />
 
       </Routes>

@@ -115,6 +115,10 @@ const URL = {
   MANAGER_CODE_GROUP_CREATE: "/manager/codeGroup/create",
   MANAGER_CODE_GROUP_MODIFY: "/manager/codeGroup/modify",
 
+  MANAGER_CODE: "/manager/code",
+  MANAGER_CODE_CREATE: "/manager/code/create",
+  MANAGER_CODE_MODIFY: "/manager/code/modify",
+
   MANAGER_MENU_MANAGEMENT: "/manager/menuManagement",
   MANAGER_MENU_AUTHORITY: "/manager/menuAuthority",
 

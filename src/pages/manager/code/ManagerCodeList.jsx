@@ -20,12 +20,14 @@ import { getSessionItem } from "@/utils/storage";
 
 function ManagerCodeGroup(props) {
     const location = useLocation();
+    console.log(location);
     const sessionUser = getSessionItem("loginUser");
     const [searchCondition, setSearchCondition] = useState(
         location.state?.searchCondition || {
             pageIndex: 1,
             searchCnd: "0",
             searchWrd: "",
+            cdGroupSn: location.state?.cdGroupSn
         }
     );
 
@@ -34,7 +36,7 @@ function ManagerCodeGroup(props) {
     const cndRef = useRef();
     const wrdRef = useRef();
 
-    const [codeGroupList, setCodeGroupList] = useState([]);
+    const [codeList, setCodeList] = useState([]);
 
     const [saveEvent, setSaveEvent] = useState({});
     useEffect(() => {
@@ -45,7 +47,7 @@ function ManagerCodeGroup(props) {
         }
     }, [saveEvent]);
 
-    const delBtnEvent = (cdGroupSn) => {
+    const delBtnEvent = (comCdSn) => {
         Swal.fire({
             title: "삭제하시겠습니까?",
             showCloseButton: true,
@@ -58,18 +60,18 @@ function ManagerCodeGroup(props) {
                     ...saveEvent,
                     save: true,
                     mode: "delete",
-                    cdGroupSn: cdGroupSn
+                    comCdSn: comCdSn
                 });
             } else {
                 //취소
             }
         });
-        console.log(cdGroupSn);
+        console.log(comCdSn);
     }
 
     const delCdGroupData = useCallback(
         (cdGroupDetail) => {
-            const menuListURL = "/commonApi/setComCdGroupDel";
+            const menuListURL = "/commonApi/setComCdDel";
             const requestOptions = {
                 method: "POST",
                 headers: {
@@ -83,7 +85,7 @@ function ManagerCodeGroup(props) {
                 (resp) => {
 
                     if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
-                        getCodeGroupList(searchCondition);
+                        getCodeList(searchCondition);
                     } else {
                         navigate(
                             { pathname: URL.ERROR },
@@ -96,9 +98,9 @@ function ManagerCodeGroup(props) {
         }
     );
 
-    const getCodeGroupList = useCallback(
+    const getCodeList = useCallback(
         (searchCondition) => {
-            const menuListURL = "/commonApi/getComCdGroupListOnPageing.do";
+            const menuListURL = "/commonApi/getComCdListOnPageing.do";
             const requestOptions = {
                 method: "POST",
                 headers: {
@@ -112,48 +114,32 @@ function ManagerCodeGroup(props) {
                 (resp) => {
                     setPaginationInfo(resp.paginationInfo);
                     let dataList = [];
-                    codeGroupList.push(
+                    codeList.push(
                         <tr>
                             <td colSpan="6" key="noData">검색된 결과가 없습니다.</td>
                         </tr>
                     );
 
-                    const resultCnt = parseInt(resp.paginationInfo.totalRecordCount);
-                    const currentPageNo = resp.paginationInfo.currentPageNo;
-                    const pageSize = resp.paginationInfo.pageSize;
-
-                    resp.result.authGroup.forEach(function (item, index) {
+                    resp.result.cdList.forEach(function (item, index) {
                         if (index === 0) dataList = []; // 목록 초기화
 
                         dataList.push(
-                            <tr key={item.cdGroupSn}>
+                            <tr key={item.comCdSn}>
                                 <td onClick={(e) => {e.stopPropagation()}}>
                                     {resp.paginationInfo.totalRecordCount - (resp.paginationInfo.currentPageNo - 1) * resp.paginationInfo.pageSize - index}
                                 </td>
-                                <td>{item.cdGroup}</td>
-                                <td>{item.cdGroupNm}</td>
-                                <td>{item.rmrkCn}</td>
+                                <td>{item.cd}</td>
+                                <td>{item.cdNm}</td>
+                                <td>{item.sortSeq}</td>
                                 <td>{item.actvtnYn === "Y" ? "사용" : "사용안함"}</td>
                                 <td className="btnGroupTd">
-                                    <Link
-                                          to={{ pathname: URL.MANAGER_CODE }}
-                                          state={{
-                                              cdGroupSn : item.cdGroupSn
-                                          }}
-                                          key={item.cdGroupSn}
-                                    >
-                                        <BTButton variant="secondary" size="sm"
-
-                                        >
-                                            코드목록
-                                        </BTButton>
-                                    </Link>
                                     <Link 
-                                        to={{ pathname: URL.MANAGER_CODE_GROUP_MODIFY }}
+                                        to={{ pathname: URL.MANAGER_CODE_MODIFY }}
                                         state={{
-                                            cdGroupSn : item.cdGroupSn
+                                            comCdSn : item.comCdSn,
+                                            cdGroupSn: location.state?.cdGroupSn
                                         }}
-                                        key={item.cdGroupSn}
+                                        key={item.comCdSn}
                                     >
                                         <BTButton variant="primary" size="sm"
                                         >
@@ -162,7 +148,7 @@ function ManagerCodeGroup(props) {
                                     </Link>
                                     <BTButton variant="danger" size="sm"
                                         onClick={() => {
-                                            delBtnEvent(item.cdGroupSn);
+                                            delBtnEvent(item.comCdSn);
                                         }}
                                     >
                                         삭제
@@ -171,18 +157,18 @@ function ManagerCodeGroup(props) {
                             </tr>
                         );
                     });
-                    setCodeGroupList(dataList);
+                    setCodeList(dataList);
                 },
                 function (resp) {
                     console.log("err response : ", resp);
                 }
             )
         },
-        [codeGroupList, searchCondition]
+        [codeList, searchCondition]
     );
 
     useEffect(() => {
-        getCodeGroupList(searchCondition);
+        getCodeList(searchCondition);
     }, []);
 
     const Location = React.memo(function Location() {
@@ -197,7 +183,7 @@ function ManagerCodeGroup(props) {
                     <li>
                         <Link to={URL.MANAGER_CODE_GROUP}>코드관리</Link>
                     </li>
-                    <li>코드관리</li>
+                    <li>코드목록</li>
                 </ul>
             </div>
         );
@@ -222,7 +208,7 @@ function ManagerCodeGroup(props) {
                                             name="searchCnd"
                                             title="검색유형선택"
                                         >
-                                            <option value="0">코드그룹명</option>
+                                            <option value="0">코드명</option>
                                         </select>
                                     </label>
                                 </li>
@@ -258,7 +244,11 @@ function ManagerCodeGroup(props) {
                                 </li>
                                 <li>
                                     <Link
-                                        to={URL.MANAGER_CODE_GROUP_CREATE}
+                                        to={{ pathname: URL.MANAGER_CODE_CREATE }}
+                                        state={{
+                                            cdGroupSn : location.state?.cdGroupSn
+                                        }}
+                                        key={location.state?.cdGroupSn}
                                         className="btn btn_blue_h46 pd35"
                                     >
                                         등록
@@ -280,22 +270,22 @@ function ManagerCodeGroup(props) {
                             <thead>
                             <tr>
                                 <th>번호</th>
-                                <th>코드그룹</th>
-                                <th>코드그룹명</th>
-                                <th>비고</th>
+                                <th>코드</th>
+                                <th>코드명</th>
+                                <th>정렬순서</th>
                                 <th>활성여부</th>
                                 <th>관리</th>
                             </tr>
                             </thead>
                             <tbody>
-                            {codeGroupList}
+                            {codeList}
                             </tbody>
                         </BtTable>
                         <div className="board_bot">
                             <EgovPaging
                                 pagination={paginationInfo}
                                 moveToPage={(passedPage) => {
-                                    getCodeGroupList({
+                                    getCodeList({
                                         ...searchCondition,
                                         pageIndex: passedPage
                                     });
