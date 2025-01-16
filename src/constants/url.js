@@ -97,7 +97,13 @@ const URL = {
   MANAGER_NONRESIDENT_COMPANY: "/manager/nonresidentMember",
   MANAGER_CONSULTENT: "/manager/consultent",
 
-  MANAGER_COMMON_CODE: "/manager/commonCode",
+  MANAGER_CODE_GROUP: "/manager/codeGroup",
+  MANAGER_CODE_GROUP_CREATE: "/manager/codeGroup/create",
+  MANAGER_CODE_GROUP_MODIFY: "/manager/codeGroup/modify",
+
+  MANAGER_CODE: "/manager/code",
+  MANAGER_CODE_CREATE: "/manager/code/create",
+  MANAGER_CODE_MODIFY: "/manager/code/modify",
 
   MANAGER_MENU_MANAGEMENT: "/manager/menuManagement",
   MANAGER_MENU_AUTHORITY: "/manager/menuAuthority",
@@ -105,6 +111,11 @@ const URL = {
   MANAGER_BBS_LIST:"/manager/bbs/list",
   MANAGER_BBS_CREATE: "/manager/bbs/create",
   MANAGER_BBS_MODIFY: "/manager/bbs/modify",
+
+  MANAGER_BBS_LIST2:"/manager/bbs/pst/bbsList",
+  MANAGER_PST_LIST:"/manager/bbs/pst/list",
+  MANAGER_PST_CREATE: "/manager/bbs/pst/create",
+  MANAGER_PST_MODIFY: "/manager/bbs/pst/modify",
 
   MANAGER_BBS_AUTHORITY_MANAGEMENT:"/manager/bbsAuthorityManagement",
 

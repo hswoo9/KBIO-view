@@ -101,6 +101,7 @@ const URL = {
   TERMS_AGREEMENT: "/mypage/agreement", //회원가입시 동의
   IDENTITY_VERICICATION: "/mypage/identity", // 회원가입시 본인인증
   SIGNUP_CHOICE: "/mypage/signupchoice", // 회원가입시 회원방식 선택
+  COMPLETE_MEMBER: "/mypage/completemember", //회원가입 신청 완료
 
   //관리자 페이지
   MANAGER: "/manager/main",
@@ -110,14 +111,21 @@ const URL = {
   MANAGER_NONRESIDENT_COMPANY: "/manager/nonresidentMember",
   MANAGER_CONSULTENT: "/manager/consultent",
 
-  MANAGER_COMMON_CODE: "/manager/commonCode",
-  
+  MANAGER_CODE_GROUP: "/manager/codeGroup",
+  MANAGER_CODE_GROUP_CREATE: "/manager/codeGroup/create",
+  MANAGER_CODE_GROUP_MODIFY: "/manager/codeGroup/modify",
+
+  MANAGER_CODE: "/manager/code",
+  MANAGER_CODE_CREATE: "/manager/code/create",
+  MANAGER_CODE_MODIFY: "/manager/code/modify",
+
   MANAGER_MENU_MANAGEMENT: "/manager/menuManagement",
   MANAGER_MENU_AUTHORITY: "/manager/menuAuthority",
-  
-  MANAGER_BBS_LIST:"/manager/bbs/list",
-  MANAGER_BBS_CREATE: "/manager/bbs/create",
-  MANAGER_BBS_MODIFY: "/manager/bbs/modify",
+
+  MANAGER_BBS_LIST2:"/manager/bbs/pst/bbsList",
+  MANAGER_PST_LIST:"/manager/bbs/pst/list",
+  MANAGER_PST_CREATE: "/manager/bbs/pst/create",
+  MANAGER_PST_MODIFY: "/manager/bbs/pst/modify",
 
 
   MANAGER_BBS_AUTHORITY_MANAGEMENT:"/manager/bbsAuthorityManagement",

@@ -68,9 +68,20 @@ import ManagerMenuAuthority from "@/pages/manager/menu/ManagerMenuAuthority";
 
 import ManagerBbsList from "@/pages/manager/board/ManagerBbsList";
 import ManagerBbsEdit from "@/pages/manager/board/ManagerBbsEdit";
-import ManagerBbsAuthorityManagement from "@/pages/manager/board/ManagerBbsAuthorityManagement";
 
-import ManagerCommonCodeList from "@/pages/manager/common/ManagerCommonCode";
+import ManagerBbsList2 from "@/pages/manager/board/pst/ManagerBbsList";
+import ManagerBbsPstList from "@/pages/manager/board/pst/ManagerPstList";
+import ManagerBbsPstEdit from "@/pages/manager/board/pst/ManagerPstEdit";
+
+
+
+import ManagerCodeGroup from "@/pages/manager/common/ManagerCodeGroup";
+import ManagerCodeGroupEdit from "@/pages/manager/common/ManagerCodeGroupEdit";
+
+import ManagerCodeList from "@/pages/manager/code/ManagerCodeList";
+import ManagerCodeEdit from "@/pages/manager/code/ManagerCodeEdit";
+
+
 import ResidentCompanyCreate from "@/pages/manager/member/ResidentCompanyCreate";
 
 //ADMIN
@@ -101,6 +112,7 @@ import EgovMypageEdit from "@/pages/mypage/EgovMypageEdit";
 import EgovTermsAgreement from '@/pages/mypage/EgovTermsAgreement';
 import EgovIdentityVerification from '@/pages/mypage/EgovIdentityVerification';
 import EgovSignupChoice from '@/pages/mypage/EgovSignupChoice';
+import EgovCompleteMember from '@/pages/mypage/EgovCompleteMember';
 import * as EgovNet from "@/api/egovFetch"; // jwt토큰 위조 검사 때문에 추가
 import initPage from "@/js/ui";
 import SnsGoogleCallback from "../components/sns/SnsGoogleCallback.jsx";
@@ -395,6 +407,7 @@ const SecondRoutes = () => {
           path={URL.MYPAGE_CREATE}
           element={<EgovMypageEdit mode={CODE.MODE_CREATE} />}
         />*/}
+        <Route path={URL.COMPLETE_MEMBER} element={<EgovCompleteMember />} />
         <Route path={URL.SIGNUP_CHOICE} element={<EgovSignupChoice />} />
         <Route path={URL.TERMS_AGREEMENT} element={<EgovTermsAgreement />} />
         <Route path={URL.IDENTITY_VERIFICATION} element={<EgovIdentityVerification />} />
@@ -461,8 +474,23 @@ const SecondRoutes = () => {
         />
 
         <Route
-            path={URL.MANAGER_BBS_AUTHORITY_MANAGEMENT}
-            element={<ManagerBbsAuthorityManagement />}
+            path={URL.MANAGER_BBS_LIST2}
+            element={<ManagerBbsList2 />}
+        />
+
+        <Route
+            path={URL.MANAGER_PST_LIST}
+            element={<ManagerBbsPstList />}
+        />
+
+        <Route
+            path={URL.MANAGER_PST_CREATE}
+            element={<ManagerBbsPstEdit mode={CODE.MODE_CREATE}/>}
+        />
+
+        <Route
+            path={URL.MANAGER_PST_MODIFY}
+            element={<ManagerBbsPstEdit mode={CODE.MODE_MODIFY}/>}
         />
 
         <Route
@@ -470,8 +498,17 @@ const SecondRoutes = () => {
             element={<EgovFindIdPswd />}
         />
         <Route
-            path={URL.MANAGER_COMMON_CODE}
-            element={<ManagerCommonCodeList />}
+            path={URL.MANAGER_CODE_GROUP}
+            element={<ManagerCodeGroup />}
+        />
+        <Route
+            path={URL.MANAGER_CODE_GROUP_CREATE}
+            element={<ManagerCodeGroupEdit mode={CODE.MODE_CREATE}/>}
+        />
+
+        <Route
+            path={URL.MANAGER_CODE_GROUP_MODIFY}
+            element={<ManagerCodeGroupEdit mode={CODE.MODE_MODIFY}/>}
         />
 
         <Route
@@ -482,6 +519,16 @@ const SecondRoutes = () => {
         <Route
             path={URL.RESIDENT_COMPANY_MODIFY}
             element={<ResidentCompanyCreate mode={CODE.MODE_MODIFY}/>}
+        />
+
+        <Route path={URL.MANAGER_CODE} element={<ManagerCodeList />} />
+        <Route
+            path={URL.MANAGER_CODE_CREATE}
+            element={<ManagerCodeEdit mode={CODE.MODE_CREATE} />}
+        />
+        <Route
+            path={URL.MANAGER_CODE_MODIFY}
+            element={<ManagerCodeEdit mode={CODE.MODE_MODIFY} />}
         />
 
       </Routes>

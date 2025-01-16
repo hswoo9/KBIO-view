@@ -32,13 +32,26 @@ function Index(props) {
         getMenu(searchDto);
     }, [searchDto]);
 
+    const [searchMenu, setSearchMenu] = useState({});
+    useEffect(() => {
+    }, [searchMenu]);
 
     const [menuDetail, setMenuDetail] = useState({});
     useEffect(() => {
         console.log(menuDetail);
     }, [menuDetail]);
 
+    const [saveMenuData, setSaveMenuData] = useState({});
+    useEffect(() => {
+        setMenu(saveMenuData);
+    }, [saveMenuData]);
+
     const [checked, setChecked] = useState([]);
+
+    const [upperMenuList, setUpperMenuList] = useState([]);
+    const [upperMenuList2, setUpperMenuList2] = useState([]);
+    const [upperMenuList3, setUpperMenuList3] = useState([]);
+
     const [expanded, setExpanded] = useState(['Documents']);
 
     const onCheck = (value) => {
@@ -55,6 +68,83 @@ function Index(props) {
 
     const [menuList, setMenuList] = useState([]);
 
+    const upperMenuChange = (e, menuSeq) => {
+        console.log(e.target.value);
+        const filterMenuList = [];
+        if(e.target.value != 0 && e.target.value != "" && menuSeq == 1){
+            setMenuDetail({
+                ...menuDetail,
+                upperMenuSn : e.target.value,
+                menuSeq : menuSeq
+            })
+
+            setSearchMenu({
+                ...searchMenu,
+                upperMenuSn : e.target.value,
+                menuSeq : menuSeq
+            });
+
+            menuList.map((menu) => {
+               if(menu.menuSn == e.target.value){
+                   if(menu.childTblMenu != null && menu.childTblMenu.length > 0){
+                       menu.childTblMenu.map((subMenu) => {
+                           filterMenuList.push(subMenu);
+                       });
+                   }
+               }
+            });
+            setUpperMenuList2(makerMenuOption(filterMenuList));
+        }else if(e.target.value != 0 && e.target.value != "" && menuSeq == 2){
+            setMenuDetail({
+                ...menuDetail,
+                upperMenuSn : e.target.value,
+                menuSeq : menuSeq
+            })
+            setSearchMenu({
+                ...searchMenu,
+                upperMenuSn : e.target.value,
+                menuSeq : menuSeq
+            });
+
+            menuList.map((menu) => {
+                if(menu.menuSn == e.target.value){
+                    if(menu.childTblMenu != null && menu.childTblMenu.length > 0){
+                        menu.childTblMenu.map((subMenu) => {
+                            filterMenuList.push(subMenu);
+                        });
+                    }
+                }
+            });
+            setUpperMenuList3(makerMenuOption(filterMenuList));
+        }else if(e.target.value != 0 && e.target.value != "" && menuSeq == 3){
+            setMenuDetail({
+                ...menuDetail,
+                upperMenuSn : e.target.value,
+                menuSeq : menuSeq
+            })
+        }else{
+            let finalUperMenuSn = 0;
+            let finalMenuSeq = 0;
+            if(menuSeq == 1){
+                finalUperMenuSn = 0;
+                finalMenuSeq = 0;
+                setUpperMenuList2(makerMenuOption([]));
+            }else if(menuSeq == 2){
+                finalUperMenuSn = document.getElementById("upperMenuList").value;
+                finalMenuSeq = 1;
+                setUpperMenuList3(makerMenuOption([]));
+            }else if(menuSeq == 3){
+                finalUperMenuSn = document.getElementById("upperMenuList2").value;
+                finalMenuSeq = 2;
+            }
+            setMenuDetail({
+                ...menuDetail,
+                upperMenuSn : finalUperMenuSn,
+                menuSeq : finalMenuSeq
+            })
+        }
+    }
+
     const saveMenu = () => {
         Swal.fire({
             title: "저장하시겠습니까?",
@@ -64,58 +154,40 @@ function Index(props) {
             cancelButtonText: "취소"
         }).then((result) => {
             if(result.isConfirmed) {
-                /*if(saveMode.mode === "insert"){
+                if(saveMode.mode === "insert"){
                     if(menuDetail.creatrSn == null){
                         setMenuDetail({
                             ...menuDetail,
                             creatrSn: sessionUser.userSn,
-                            mdfrSn: null
                         })
                     }
-                    if(menuDetail.upperMenuSn == null){
+
+                    if(menuDetail.menuNm == null || menuDetail.menuNm == ""){
+                        Swal.fire("메뉴명이 없습니다.");
+                        return;
+                    }
+                    if(menuDetail.menuType == null || menuDetail.menuType == ""){
+                        menuDetail.menuType = "n";
+                    }
+                    if(menuDetail.menuPathNm == null || menuDetail.menuPathNm == ""){
+                        Swal.fire("메뉴경로가 없습니다.");
+                        return;
+                    }
+
+                    if(menuDetail.menuSortSeq == null || menuDetail.menuSortSeq == ""){
+                        Swal.fire("메뉴순서가 없습니다.");
+                        return;
+                    }
+                    if(menuDetail.actvtnYn == null || menuDetail.actvtnYn == ""){
                         setMenuDetail({
                             ...menuDetail,
-                            upperMenuSn: document.getElementById("upperMenuSn").value == null ? "0" : document.getElementById("upperMenuSn").value
+                            actvtnYn: "Y"
                         })
                     }
-                    if(menuDetail.menuNm == null){
-                        setMenuDetail({
-                            ...menuDetail,
-                            menuNm: document.getElementById("menuNm").value == null ? "메뉴명없음" : document.getElementById("menuNm").value
-                        })
-                    }
-                    if(menuDetail.menuType == null){
-                        setMenuDetail({
-                            ...menuDetail,
-                            menuType: document.getElementById("menuType").value == null ? "n" : document.getElementById("menuType").value
-                        })
-                    }
-                    if(menuDetail.menuPathNm == null){
-                        setMenuDetail({
-                            ...menuDetail,
-                            menuPathNm: document.getElementById("menuPathNm").value == null ? "-" : document.getElementById("menuPathNm").value
-                        })
-                    }
-                    if(menuDetail.menuSeq == null){
-                        setMenuDetail({
-                            ...menuDetail,
-                            menuSeq: "0"
-                        })
-                    }
-                    if(menuDetail.menuSortSeq == null){
-                        setMenuDetail({
-                            ...menuDetail,
-                            menuSortSeq: document.getElementById("menuSortSeq").value == null ? "100" : document.getElementById("menuSortSeq").value
-                        })
-                    }
-                    if(menuDetail.actvtnYn == null){
-                        setMenuDetail({
-                            ...menuDetail,
-                            actvtnYn: document.getElementById("actvtnYn").value == null ? "Y" : document.getElementById("actvtnYn").value
-                        })
-                    }
-                }*/
-                setMenu(menuDetail);
+                    setSaveMenuData(menuDetail);
+                }else{
+                    setMenu(menuDetail);
+                }
             } else {
                 //취소
             }
@@ -133,6 +205,9 @@ function Index(props) {
             if(result.isConfirmed) {
                 setSaveMode({mode:"insert"});
                 setMenuDetail({});
+                document.getElementById("upperMenuList").value = "";
+                setUpperMenuList2(makerMenuOption([]));
+                setUpperMenuList3(makerMenuOption([]));
                 setSearchDto({
                     searchData : ""
                 });
@@ -158,6 +233,16 @@ function Index(props) {
         });
     }
 
+    const makerMenuOption = (data) => {
+        let resultMenuList = [];
+        data.forEach(function (item, index){
+            resultMenuList.push(
+                <option value={item.menuSn} key={item.menuSn}>{item.menuNm}</option>
+            )
+        });
+        return resultMenuList;
+    }
+
     const getMenuList = useCallback(
         (searchDto) => {
             const menuListURL = "/menuApi/getMenuTreeList.do";
@@ -172,6 +257,7 @@ function Index(props) {
                 menuListURL,
                 requestOptions,
                 (resp) => {
+                    let upperMenus = [];
                     let dataList = [];
                     menuList.push(
                         { value: "", label: "데이터가 없습니다."}
@@ -188,7 +274,7 @@ function Index(props) {
                             item.children = item.childTblMenu;
                         }
                     });
-
+                    setUpperMenuList(makerMenuOption(resp.result.menus));
                     setMenuList(resp.result.menus);
                 }
             )
@@ -239,6 +325,7 @@ function Index(props) {
                 (resp) => {
                     if(resp.result.menu != null){
                         setSaveMode({mode: "update"});
+                        resp.result.menu.menuSnPath;
                         setMenuDetail(resp.result.menu);
                     }
                 }
@@ -319,23 +406,26 @@ function Index(props) {
                                     </dt>
                                     <dd className="customDd">
                                         <Form.Select size="sm"
-                                             id="upperMenuSn"
-                                             onChange={(e) =>
-                                                 setMenuDetail({
-                                                     ...menuDetail,
-                                                     upperMenuSn: e.target.value,
-                                                     mdfrSn: sessionUser.userSn
-                                                 })
-                                             }
+                                             id="upperMenuList"
+                                             onChange={(e) => upperMenuChange(e, 1)}
                                         >
-                                            <option value="">선택하세요</option>
+                                            <option value="">선택</option>
                                             <option value="0">최상위</option>
+                                            {upperMenuList}
                                         </Form.Select>
-                                        <Form.Select size="sm">
+                                        <Form.Select size="sm"
+                                            id="upperMenuList2"
+                                            onChange={(e) => upperMenuChange(e, 2)}
+                                        >
                                             <option value="">선택</option>
+                                            {upperMenuList2}
                                         </Form.Select>
-                                        <Form.Select size="sm">
+                                        <Form.Select size="sm"
+                                            id="upperMenuList3"
+                                            onChange={(e) => upperMenuChange(e, 3)}
+                                        >
                                             <option value="">선택</option>
+                                            {upperMenuList3}
                                         </Form.Select>
                                     </dd>
                                 </dl>
@@ -369,7 +459,6 @@ function Index(props) {
                                             value={menuDetail.menuType || "n"}
                                             id="menuType"
                                         >
-                                            <option value="">선택하세요</option>
                                             <option value="n">일반</option>
                                             <option value="c">컨텐츠</option>
                                             <option value="b">게시판</option>

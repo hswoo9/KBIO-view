@@ -17,10 +17,10 @@ function EgovLeftNav() {
                     </li>
                     <li>
                         <NavLink
-                            to={URL.MANAGER_BBS_AUTHORITY_MANAGEMENT}
+                            to={URL.MANAGER_BBS_LIST2}
                             className={({ isActive }) => (isActive ? "cur" : "")}
                         >
-                            게시판권한관리
+                            게시글관리
                         </NavLink>
                     </li>
 

@@ -1422,5 +1422,12 @@
 #saveViewDl {
   display: none;
 }
+
+/* 코드관리 */
+.btnGroupTd {
+  justify-content: center;
+  display: flex !important;
+  gap: 10px !important;
+}
 /* 관리자 - 입주기업등록 */
 

@@ -95,7 +95,7 @@ function ManagerHeader() {
             </li>
             <li>
               <NavLink
-                to={URL.MANAGER_COMMON_CODE}
+                to={URL.MANAGER_CODE_GROUP}
                 className={({ isActive }) => (isActive ? "cur" : "")}
               >
                 코드관리

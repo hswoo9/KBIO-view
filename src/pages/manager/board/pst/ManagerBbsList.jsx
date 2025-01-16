@@ -32,7 +32,7 @@ function ManagerBbs(props) {
     const [paginationInfo, setPaginationInfo] = useState({});
     const bbsTypeRef = useRef();
     const bbsNmRef = useRef();
-    const [bbsList, setAuthorityList] = useState([]);
+    const [bbsList, setBbsList] = useState([]);
 
     const activeEnter = (e) => {
         if (e.key === "Enter") {
@@ -59,7 +59,7 @@ function ManagerBbs(props) {
                     let dataList = [];
                     dataList.push(
                         <tr>
-                            <td colSpan="8">검색된 결과가 없습니다.</td>
+                            <td colSpan="4">검색된 결과가 없습니다.</td>
                         </tr>
                     );
 
@@ -69,24 +69,28 @@ function ManagerBbs(props) {
                         dataList.push(
                             <tr key={item.bbsSn}>
                                 <td>
-                                    <Link to={URL.MANAGER_BBS_MODIFY}
-                                          mode={CODE.MODE_MODIFY}
-                                          state={{ bbsSn: item.bbsSn }}
-                                          >
-                                        {item.bbsNm}
-                                    </Link>
+                                    {item.bbsNm}
+                                    {/*<Link to={URL.MANAGER_BBS_MODIFY}*/}
+                                    {/*      mode={CODE.MODE_MODIFY}*/}
+                                    {/*      state={{ bbsSn: item.bbsSn }}*/}
+                                    {/*      >*/}
+                                    {/*    {item.bbsNm}*/}
+                                    {/*</Link>*/}
                                 </td>
                                 <td>{item.bbsType == "0" ? "일반" : item.bbsType == "1" ? "faQ" : "QnA"}</td>
-                                <td>{item.wrtrRlsYn === "Y" ? "공개" : "비공개"}</td>
-                                <td>{item.atchFileYn === "Y" ? "가능" : "불가능"}</td>
-                                <td>{item.cmntPsbltyYn === "Y" ? "가능" : "불가능"}</td>
-                                <td>{item.replyPsbltyYn === "Y" ? "사용" : "미사용"}</td>
                                 <td>{item.actvtnYn === "Y" ? "사용" : "미사용"}</td>
                                 <td>{moment(item.frstCrtDt).format('YYYY-MM-DD')}</td>
+                                <td>
+                                    <Link to={URL.MANAGER_PST_LIST}
+                                          state={{ bbsSn: item.bbsSn }}
+                                    >
+                                        <BTButton variant="primary" size="sm">게시글 관리</BTButton>
+                                    </Link>
+                                </td>
                             </tr>
                         );
                     });
-                    setAuthorityList(dataList);
+                    setBbsList(dataList);
                 },
                 function (resp) {
                     console.log("err response : ", resp);
@@ -176,15 +180,15 @@ function ManagerBbs(props) {
                                         </button>
                                   </span>
                                 </li>
-                                <li>
-                                    <Link
-                                        to={URL.MANAGER_BBS_CREATE}
-                                        className="btn btn_blue_h46 pd35"
-                                        mode={CODE.MODE_CREATE}
-                                    >
-                                        등록
-                                    </Link>
-                                </li>
+                                {/*<li>*/}
+                                {/*    <Link*/}
+                                {/*        to={URL.MANAGER_BBS_CREATE}*/}
+                                {/*        className="btn btn_blue_h46 pd35"*/}
+                                {/*        mode={CODE.MODE_CREATE}*/}
+                                {/*    >*/}
+                                {/*        등록*/}
+                                {/*    </Link>*/}
+                                {/*</li>*/}
                             </ul>
                         </div>
 
@@ -196,23 +200,17 @@ function ManagerBbs(props) {
                                 <colgroup>
                                     <col/>
                                     <col width="100"/>
+                                    <col width="100"/>
+                                    <col width="100"/>
                                     <col width="150"/>
-                                    <col width="150"/>
-                                    <col width="100"/>
-                                    <col width="100"/>
-                                    <col width="80"/>
-                                    <col width="100"/>
                                 </colgroup>
                                 <thead>
                                 <tr>
                                     <th>게시판명</th>
                                     <th>게시판유형</th>
-                                    <th>작성자공개유무</th>
-                                    <th>파일첨부가능여부</th>
-                                    <th>댓글가능여부</th>
-                                    <th>답글사용유무</th>
                                     <th>사용여부</th>
                                     <th>생성일</th>
+                                    <th>관리</th>
                                 </tr>
                                 </thead>
                                 <tbody>

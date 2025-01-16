@@ -414,7 +414,7 @@ function EgovMypageEdit(props) {
               ...memberDetail,
               insertMemResult: "회원가입신청이 완료되었습니다.",
             });
-            navigate({ pathname: URL.MAIN });
+            navigate({ pathname: URL.COMPLETE_MEMBER });
           } else {
             navigate(
                 { pathname: URL.ERROR },
