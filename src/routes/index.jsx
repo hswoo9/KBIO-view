@@ -479,6 +479,11 @@ const SecondRoutes = () => {
             element={<ResidentCompanyCreate mode={CODE.MODE_CREATE}/>}
         />
 
+        <Route
+            path={URL.RESIDENT_COMPANY_MODIFY}
+            element={<ResidentCompanyCreate mode={CODE.MODE_MODIFY}/>}
+        />
+
       </Routes>
       {requestUrl === "manager" ? "" : (<EgovFooter />) }
       <EgovInfoPopup />

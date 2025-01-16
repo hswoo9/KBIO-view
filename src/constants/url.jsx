@@ -123,6 +123,7 @@ const URL = {
   MANAGER_BBS_AUTHORITY_MANAGEMENT:"/manager/bbsAuthorityManagement",
 
   RESIDENT_COMPANY_CREATE:"/manager/residentCompanyCreate", //회원관리/입주기업 /입주기업 등록
+  RESIDENT_COMPANY_MODIFY:"/manager/residentCompanyModify",
 };
 
 // eslint-disable-next-line react-refresh/only-export-components

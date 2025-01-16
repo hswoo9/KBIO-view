@@ -1,26 +1,86 @@
 import {useState, useEffect, useRef, useCallback} from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import {useNavigate, NavLink, useLocation} from "react-router-dom";
 
 import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
 import axios from "axios";
+import Swal from "sweetalert2";
 
-import { setSessionItem } from "@/utils/storage";
 
 
 function ResidentMemberCreateContent(props){
-    const [modeInfo, setModeInfo] = useState({ mode: props.mode });
-    const [saveMode, setSaveMode] = useState({
-        mode : "insert"
-    });
+    const location = useLocation();
+    const [modeInfo, setModeInfo] = useState({ mode: location.state?.mode });
 
     const navigate = useNavigate();
-    const [residentDetail, setResidentDetail] = useState({
-        
-    });
+    const [residentDetail, setResidentDetail] = useState({});
+    const [searchDto, setSearchDto] = useState({mvnEntSn : location.state?.mvnEntSn});
+
+
+    const initMode = () => {
+        setModeInfo({
+            ...modeInfo,
+            modeTitle: "등록",
+            editURL: `/mvnEntApi/setMvnEnt`,
+        });
+
+        getRc(searchDto);
+    };
+
+    function splitBrno(brno) {
+        if (!brno || brno.length < 10) {
+            console.error("Invalid brno length or undefined value.");
+            return { brno1: "", brno2: "", brno3: "" }; // 기본값 반환
+        }
+
+        return {
+            brno1: brno.slice(0, 3), // 앞 3자리
+            brno2: brno.slice(3, 5), // 중간 2자리
+            brno3: brno.slice(5),    // 마지막 5자리
+        };
+    }
+
+    const getRc = (searchDto) =>{
+        console.log("state : ",searchDto);
+        if (modeInfo.mode === CODE.MODE_CREATE) {
+            console.log("residentDetail",residentDetail);
+            return;
+        }
+
+        const getRcURL = '/mvnEntApi/getRc';
+        const requestOptions = {
+                method: "POST",
+                headers: {
+                    "Content-type": "application/json",
+                },
+                body: JSON.stringify(searchDto)
+        };
+
+        EgovNet.requestFetch(getRcURL, requestOptions, function (resp){
+            if(modeInfo.mode === CODE.MODE_MODIFY){
+
+                const brno = resp.result.rc.brno;
+                const { brno1, brno2, brno3 } = splitBrno(brno);
+                const updatedRc = {
+                    ...resp.result.rc,
+                    brno1,
+                    brno2,
+                    brno3,
+                };
+                setResidentDetail(updatedRc);
+
+
+                console.log("resp.result.rc",resp.result.rc);
+            }
+        });
+
+
+
+    }
 
     useEffect(() => {
+        initMode();
         const script = document.createElement("script");
         script.type = "text/javascript";
         script.src = "https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js";
@@ -37,8 +97,10 @@ function ResidentMemberCreateContent(props){
         };
     }, []);
 
+    //사업자번호 상태 확인
     const kbioauth = async () => {
         const businessNumber = `${residentDetail.brno1}-${residentDetail.brno2}-${residentDetail.brno3}`;
+        const businessNo = `${residentDetail.brno1}${residentDetail.brno2}${residentDetail.brno3}`;
 
         console.log(businessNumber);
 
@@ -62,6 +124,7 @@ function ResidentMemberCreateContent(props){
 
             if (businessStatus === '01') {
                 alert("사업자가 정상적으로 운영 중입니다.");
+                setResidentDetail({...residentDetail, brno: businessNo});
                 document.getElementById("confirmText").style.display = "block";
             } else if (businessStatus === '02') {
                 alert("사업자가 휴업 중입니다.");
@@ -80,6 +143,7 @@ function ResidentMemberCreateContent(props){
         }
     };
 
+    //주소찾기 api
     const searchAddress = () => {
         if (!window.daum || !window.daum.Postcode) {
             alert('주소 검색 API가 아직 로드되지 않았습니다. 잠시 후 다시 시도해주세요.');
@@ -99,93 +163,88 @@ function ResidentMemberCreateContent(props){
         }).open();
     };
 
-    const formValidator = (formData) =>{
-        return new Promise((resolve) => {
-        if (formData.get("brno1") === null || formData.get("brno1") === "" ||
-            formData.get("brno2") === null || formData.get("brno2") === "" ||
-            formData.get("brno3") === null || formData.get("brno3") === "") {
+
+    //등록and수정
+    const updateResident = () => {
+        let requestOptions = {};
+
+        if (!residentDetail.brno1 || !residentDetail.brno2 || !residentDetail.brno3) {
             alert("사업자번호는 필수 값입니다.");
             return false;
         }
-        if (formData.get("mvnEntNm") === null || formData.get("mvnEntNm") === "") {
+        if (!residentDetail.brno) {
+            alert("사업자번호 인증을 진행해주십시오.");
+            return false;
+        }
+        if (!residentDetail.mvnEntNm) {
             alert("기업명은 필수 값입니다.");
             return false;
         }
-        if (formData.get("rpsvNm") === null || formData.get("rpsvNm") === "") {
+        if (!residentDetail.rpsvNm) {
             alert("대표자명은 필수 값입니다.");
             return false;
         }
-        if (formData.get("clsNm") === null || formData.get("clsNm") === "") {
+        if (!residentDetail.clsNm) {
             alert("산업은 필수 값입니다.");
             return false;
         }
-        if (formData.get("zip") === null || formData.get("zip") === ""
-            || formData.get("entAddr") === null || formData.get("entAddr") === "") {
+        if (!residentDetail.zip || !residentDetail.entAddr) {
             alert("주소는 필수 값입니다.");
             return false;
         }
-        if (formData.get("entDaddr") === null || formData.get("entDaddr") === "") {
+        if (!residentDetail.entDaddr) {
             alert("세부주소를 입력해주십시오.");
             return false;
         }
-        if (formData.get("entTelno") === null || formData.get("entTelNo") === "") {
+        if (!residentDetail.entTelno) {
             alert("대표번호는 필수 값입니다.");
             return false;
         }
-        /*if (formData.get("bzentyEmlAddr") === null || formData.get("bzentyEmlAddr") === "") {
-            alert("기업메일은 필수 값입니다.");
-            return false;
-        }*/
-            resolve(true);
-        });
-    };
-
-    const updateResident = () => {
-        //let modeStr = modeInfo.mode === CODE.MODE_CREATE ? "POST" : "PUT";
-        let modeStr = "POST";
-        console.log("modeStr", modeStr);
 
         const brno = `${residentDetail.brno1}${residentDetail.brno2}${residentDetail.brno3}`;
         setResidentDetail({...residentDetail, brno: brno});
 
+        const formData = new FormData();
 
+        for (let key in residentDetail) {
+            formData.append(key, residentDetail[key]);
+        }
 
-        if (modeStr === "POST") {
-            const formData = new FormData();
-            for (let key in residentDetail) {
-                formData.append(key, residentDetail[key]);
-            }
-
-            formValidator(formData).then((res) => {
-                const mvnEntURL = "/mvnEntApi/setMvnEnt";
-                let requestOptions = {
-                    method:"POST",
+        Swal.fire({
+            title: "저장하시겠습니까?",
+            showCloseButton: true,
+            showCancelButton: true,
+            confirmButtonText: "저장",
+            cancelButtonText: "취소"
+        }).then((result) => {
+            if(result.isConfirmed) {
+                requestOptions = {
+                    method: "POST",
                     headers: {
                         "Content-type": "application/json",
                     },
-                    body: JSON.stringify(residentDetail)
+                    body: JSON.stringify(residentDetail),
                 };
 
-                console.log("residentDetail",residentDetail);
-
-                EgovNet.requestFetch(
-                    mvnEntURL,
-                    requestOptions,
-                    (resp) => {
-                        console.log(resp);
-                        setSaveMode({mode:"insert"});
+                EgovNet.requestFetch(modeInfo.editURL, requestOptions, (resp) => {
+                    if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
+                        Swal.fire("등록되었습니다.");
+                        navigate(URL.MANAGER_RESIDENT_COMPANY);
+                    } else {
+                        navigate(
+                            { pathname: URL.ERROR },
+                            { state: { msg: resp.resultMessage } }
+                        );
                     }
-                )
-            });
-        }
+                });
+            } else {
+                //취소
+            }
+        });
 
     };
 
 
-    /*useEffect(() => {
-        initMode();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);*/
 
 
     return(
@@ -461,12 +520,13 @@ function ResidentMemberCreateContent(props){
                     >
                         등록
                     </button>
-                    <button
+                    <NavLink
+                        to={URL.MANAGER_RESIDENT_COMPANY}
                         className="btn btn_skyblue_h46 w_100"
                         style={{width: "10%"}}
                     >
                         목록
-                    </button>
+                    </NavLink>
                 </div>
                 {/* <!--// 버튼영역 --> */}
                 
