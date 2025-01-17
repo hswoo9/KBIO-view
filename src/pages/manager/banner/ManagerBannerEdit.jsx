@@ -101,7 +101,7 @@ function ManagerBannerEdit(props) {
 
   const saveCdData = useCallback(
       (cdDetail) => {
-        const menuListURL = "/commonApi/setComCd";
+        const menuListURL = "/codeApi/setComCd";
         const requestOptions = {
           method: "POST",
           headers: {
@@ -135,7 +135,7 @@ function ManagerBannerEdit(props) {
 
   const delCdData = useCallback(
       (cdDetail) => {
-        const menuListURL = "/commonApi/setComCdDel";
+        const menuListURL = "/codeApi/setComCdDel";
         const requestOptions = {
           method: "POST",
           headers: {
@@ -180,10 +180,10 @@ function ManagerBannerEdit(props) {
       default:
         navigate({ pathname: URL.ERROR }, { state: { msg: "" } });
     }
-    //getBannerPopupData();
+    //getBnrPopupData();
   };
 
-  const getBannerPopupData = () => {
+  const getBnrPopupData = () => {
     if(modeInfo.mode === CODE.MODE_CREATE){
       setBnrPopupDetail({
         creatrSn: sessionUser.userSn,
@@ -193,7 +193,7 @@ function ManagerBannerEdit(props) {
       return;
     }
 
-    const getBannerPopupDataURL = `/commonApi/getComCd`;
+    const getBnrPopupDataURL = `/codeApi/getComCd`;
 
     const requestOptions = {
       method: "POST",
@@ -221,7 +221,7 @@ function ManagerBannerEdit(props) {
 
   const getComCdList = useCallback(
       (searchDto) => {
-        const comCdListURL = "/commonApi/getComCdGroupList.do";
+        const comCdListURL = "/codeApi/getComCdGroupList.do";
         const requestOptions = {
           method: "POST",
           headers: {
@@ -329,7 +329,7 @@ function ManagerBannerEdit(props) {
                         size="sm"
                         id="bnrPopupKnd"
                     >
-                      {dataListToOptionHtml(comCdGroupList, "cdGroup", "BANNER_POPUP_GROUP")}
+                      {dataListToOptionHtml(comCdGroupList, "cdGroup", "BNR_POPUP_GROUP")}
                         defaultValue={bnrPopupDetail.bnrPopupKnd}
                         onChange={(e) =>
                           setBnrPopupDetail({...bnrPopupDetail, bnrPopupKnd: e.target.value})

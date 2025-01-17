@@ -71,7 +71,7 @@ function ManagerCodeGroup(props) {
 
     const delCdGroupData = useCallback(
         (cdGroupDetail) => {
-            const menuListURL = "/commonApi/setComCdDel";
+            const menuListURL = "/codeApi/setComCdDel";
             const requestOptions = {
                 method: "POST",
                 headers: {

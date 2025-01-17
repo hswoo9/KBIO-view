@@ -92,7 +92,7 @@ function ManagerCodeEdit(props) {
 
   const saveCdData = useCallback(
       (cdDetail) => {
-        const menuListURL = "/commonApi/setComCd";
+        const menuListURL = "/codeApi/setComCd";
         const requestOptions = {
           method: "POST",
           headers: {
@@ -126,7 +126,7 @@ function ManagerCodeEdit(props) {
 
   const delCdData = useCallback(
       (cdDetail) => {
-        const menuListURL = "/commonApi/setComCdDel";
+        const menuListURL = "/codeApi/setComCdDel";
         const requestOptions = {
           method: "POST",
           headers: {
@@ -184,7 +184,7 @@ function ManagerCodeEdit(props) {
       return;
     }
 
-    const getCdDetailURL = `/commonApi/getComCd`;
+    const getCdDetailURL = `/codeApi/getComCd`;
 
     const requestOptions = {
       method: "POST",

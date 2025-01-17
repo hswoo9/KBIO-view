@@ -92,7 +92,7 @@ function ManagerCodeGroupEdit(props) {
 
   const saveCdGroupData = useCallback(
       (cdGroupDetail) => {
-        const menuListURL = "/commonApi/setComCdGroup";
+        const menuListURL = "/codeApi/setComCdGroup";
         const requestOptions = {
           method: "POST",
           headers: {
@@ -121,7 +121,7 @@ function ManagerCodeGroupEdit(props) {
 
   const delCdGroupData = useCallback(
       (cdGroupDetail) => {
-        const menuListURL = "/commonApi/setComCdGroupDel";
+        const menuListURL = "/codeApi/setComCdGroupDel";
         const requestOptions = {
           method: "POST",
           headers: {
@@ -178,7 +178,7 @@ function ManagerCodeGroupEdit(props) {
       return;
     }
 
-    const getCdGroupDetailURL = `/commonApi/getComCdGroup`;
+    const getCdGroupDetailURL = `/codeApi/getComCdGroup`;
 
     const requestOptions = {
       method: "POST",
