@@ -31,7 +31,7 @@ function setNormalMember(props) {
     const initMode = () => {
         setModeInfo({
             ...modeInfo,
-            modeTitle: "등록",
+            modeTitle: modeInfo.mode === CODE.MODE_CREATE ? "회원 등록" : "회원 수정",
             editURL: `/memberApi/setNormalMember`,
         });
 
@@ -63,14 +63,64 @@ function setNormalMember(props) {
         });
     };
 
+    const checkIdDplct = () => {
+        return new Promise((resolve) => {
+            let checkId = memberDetail["emplyrId"];
+            if (checkId === null || checkId === undefined) {
+                alert("회원ID를 입력해 주세요");
+                return false;
+            }
+            const regex = /^[a-zA-Z0-9]{6,12}$/;
+            if (!regex.test(checkId)) {
+                alert("회원ID는 6~12자의 영문 대소문자와 숫자만 사용 가능합니다.");
+                return false;
+            }
+            const checkIdURL = `/memberApi/checkMemberId.do`;
+            const reqOptions = {
+                method: "POST",
+                headers: {
+                    "Content-type": "application/json",
+                },
+                body: JSON.stringify({
+                    memberId : checkId
+                })
+            };
+            EgovNet.requestFetch(checkIdURL, reqOptions, function (resp) {
+                if (resp.resultCode === 400 && resp.result.usedCnt > 0
+                ) {
+                    setMemberDetail({
+                        ...memberDetail,
+                        checkIdResult: "중복된 아이디입니다.",
+                        checkIdResultColor: "red",
+                        mberId: checkId,
+                    });
+                    resolve(resp.result.usedCnt);
+                } else {
+                    setMemberDetail({
+                        ...memberDetail,
+                        checkIdResult: "사용 가능한 아이디입니다.",
+                        checkIdResultColor: "green",
+                        mberId: checkId,
+                    });
+                    resolve(0);
+                }
+            });
+        });
+    };
+
     const setNormalMember = () => {
         let requestOptions = {};
         const formData = new FormData();
 
-            if (!memberDetail.emplyrId) {
-                alert("회원ID은 필수 값입니다.");
-                return;
-            }
+        if (memberDetail.checkIdResultColor === "red") {
+            alert("아이디 중복이 확인되었습니다. 다른 아이디를 사용해주세요.");
+            return;
+        }
+
+        if (!memberDetail.emplyrId) {
+            alert("회원ID은 필수 값입니다.");
+            return;
+        }
             /*if (!memberDetail.mbtlnum) {
                 alert("휴대전화는 필수 값입니다.");
                 return;
@@ -182,7 +232,7 @@ function setNormalMember(props) {
                         <li>
                             <Link to={URL.MANAGER_NORMAL_MEMBER}>회원관리</Link>
                         </li>
-                        <li>회원 수정</li>
+                        <li>{modeInfo.mode === CODE.MODE_CREATE ? "회원 생성" : "회원 수정"}</li>
                     </ul>
                 </div>
                 {/* <!--// Location --> */}
@@ -193,13 +243,7 @@ function setNormalMember(props) {
                     {/* <!--// Navigation --> */}
 
                     <div className="contents MEMBER_CREATE_REG" id="contents">
-                        {modeInfo.mode === CODE.MODE_CREATE && (
-                            <h2 className="tit_2">회원 생성</h2>
-                        )}
-
-                        {modeInfo.mode === CODE.MODE_MODIFY && (
-                            <h2 className="tit_2">회원 수정</h2>
-                        )}
+                        <h2 className="tit_2">{modeInfo.mode === CODE.MODE_CREATE ? "회원 생성" : "회원 수정"}</h2>
 
                         <div className="board_view2">
                             <dl>
@@ -214,44 +258,64 @@ function setNormalMember(props) {
                                         name="emplyrId"
                                         title=""
                                         id="emplyrId"
-                                        placeolder=""
+                                        placeholder=""
                                         defaultValue={memberDetail.emplyrId}
                                         onChange={(e) =>
                                             setMemberDetail({
                                                 ...memberDetail,
                                                 emplyrId: e.target.value,
                                             })
-                                         }
+                                        }
                                         ref={(el) => (checkRef.current[0] = el)}
-                                        readOnly
-                                        style={{width:'300px', marginRight:'5px'}}
+                                        readOnly={modeInfo.mode === CODE.MODE_MODIFY}
+                                        style={{ width: '300px', marginRight: '5px' }}
                                     />
-
-                            </dd>
-                        </dl>
-                        <dl>
-                            <dt>
-                                <label htmlFor="password">회원암호</label>
-                                <span className="req">필수</span>
-                            </dt>
-                            <dd>
-                                <input
-                                    className="f_input2 w_full"
-                                    type="password"
-                                    name="password"
-                                    title=""
-                                    id="password"
-                                    placeholder=""
-                                    defaultValue={memberDetail.password}
-                                    onChange={(e) =>
-                                        setMemberDetail({
-                                            ...memberDetail,
-                                            password: e.target.value,
-                                        })
-                                }
-                                    ref={(el) => (checkRef.current[1] = el)}
-                                    required
-                                />
+                                    {modeInfo.mode === CODE.MODE_CREATE && (
+                                        <button
+                                            className="btn btn_skyblue_h46"
+                                            onClick={() => {
+                                                checkIdDplct();
+                                            }}
+                                        >
+                                            중복확인
+                                        </button>
+                                    )}
+                                    {memberDetail.checkIdResult && (
+                                        <div
+                                            style={{
+                                                marginTop: '10px',
+                                                color: memberDetail.checkIdResultColor,
+                                                fontSize: '16px',
+                                            }}
+                                        >
+                                            {memberDetail.checkIdResult}
+                                        </div>
+                                    )}
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <label htmlFor="password">회원암호</label>
+                                    <span className="req">필수</span>
+                                </dt>
+                                <dd>
+                                    <input
+                                        className="f_input2 w_full"
+                                        type="password"
+                                        name="password"
+                                        title=""
+                                        id="password"
+                                        placeholder=""
+                                        defaultValue={memberDetail.password}
+                                        onChange={(e) =>
+                                            setMemberDetail({
+                                                ...memberDetail,
+                                                password: e.target.value,
+                                            })
+                                        }
+                                        ref={(el) => (checkRef.current[1] = el)}
+                                        required
+                                    />
                                 </dd>
                             </dl>
                             <dl>
@@ -275,7 +339,7 @@ function setNormalMember(props) {
                                             })
                                         }
                                         ref={(el) => (checkRef.current[2] = el)}
-                                        readonly
+                                        readOnly={modeInfo.mode === CODE.MODE_MODIFY}
                                     />
                                 </dd>
                             </dl>
@@ -297,6 +361,7 @@ function setNormalMember(props) {
                                             }
                                             value={memberDetail.groupId}
                                         >
+                                            {/* Options can be added here */}
                                         </select>
                                     </label>
                                 </dd>

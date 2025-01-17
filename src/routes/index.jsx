@@ -83,6 +83,13 @@ import ManagerCodeList from "@/pages/manager/code/ManagerCodeList";
 import ManagerCodeEdit from "@/pages/manager/code/ManagerCodeEdit";
 
 
+import ManagerBannerList from "@/pages/manager/banner/ManagerBannerList";
+import ManagerBannerEdit from "@/pages/manager/banner/ManagerBannerEdit";
+import ManagerPopupList from "@/pages/manager/popup/ManagerPopupList";
+import ManagerPopupEdit from "@/pages/manager/popup/ManagerPopupEdit";
+import ManagerImagesPopup from "@/pages/manager/popup/ManagerImagesPopup";
+
+
 import ResidentCompanyCreate from "@/pages/manager/member/ResidentCompanyCreate";
 
 //ADMIN
@@ -191,7 +198,9 @@ const SecondRoutes = () => {
   const requestUrl = window.location.pathname.split("/")[1];
   return (
     <>
-      {requestUrl === "manager" ? (<ManagerHeader/>) : (<EgovHeader />) }
+      {requestUrl === "manager" ? (<ManagerHeader/>) :
+        requestUrl === "popupView" ? "" : (<EgovHeader />)
+      }
       <Routes>
         {/* MAIN */}
         <Route path={URL.MAIN} element={<EgovMain />} />
@@ -542,8 +551,25 @@ const SecondRoutes = () => {
           element={<ManagerNormalMemberEdit mode={CODE.MODE_MODIFY}/>}
         />
 
+        <Route
+            path={URL.MANAGER_NORMAL_MEMBER_CREATE}
+            element={<ManagerNormalMemberEdit mode={CODE.MODE_CREATE}/>}
+        />
+
+        <Route path={URL.MANAGER_BANNER_LIST} element={<ManagerBannerList />} />
+        <Route path={URL.MANAGER_BANNER_CREATE} element={<ManagerBannerEdit mode={CODE.MODE_CREATE} />} />
+        <Route path={URL.MANAGER_BANNER_MODIFY} element={<ManagerBannerEdit mode={CODE.MODE_MODIFY} />} />
+        <Route path={URL.MANAGER_POPUP_LIST} element={<ManagerPopupList />} />
+        <Route path={URL.MANAGER_POPUP_CREATE} element={<ManagerPopupEdit mode={CODE.MODE_CREATE} />} />
+        <Route path={URL.MANAGER_POPUP_MODIFY} element={<ManagerPopupEdit mode={CODE.MODE_MODIFY} />} />
+
+        <Route path={URL.MANAGER_IMAGES_POPUP} element={<ManagerImagesPopup />} />
+
       </Routes>
-      {requestUrl === "manager" ? "" : (<EgovFooter />) }
+
+      {requestUrl === "manager" ? "" :
+          requestUrl === "popupView" ? "" : (<EgovFooter />)
+      }
       <EgovInfoPopup />
 
 
