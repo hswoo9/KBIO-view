@@ -36,7 +36,7 @@ function ManagerCodeGroup(props) {
     const cndRef = useRef();
     const wrdRef = useRef();
 
-    const [codeList, setCodeList] = useState([]);
+    const [bnrPopupList, setBnrPopupList] = useState([]);
 
     const [saveEvent, setSaveEvent] = useState({});
     useEffect(() => {
@@ -98,9 +98,9 @@ function ManagerCodeGroup(props) {
         }
     );
 
-    const getCodeList = useCallback(
+    const getBnrPopupList = useCallback(
         (searchCondition) => {
-            const menuListURL = "/commonApi/getComCdListOnPageing.do";
+            const menuListURL = "/pannerPopupApi/getBnrPopupListOnPage.do";
             const requestOptions = {
                 method: "POST",
                 headers: {
@@ -120,7 +120,7 @@ function ManagerCodeGroup(props) {
                         </tr>
                     );
 
-                    resp.result.cdList.forEach(function (item, index) {
+                    resp.result.bnrPopupList.forEach(function (item, index) {
                         if (index === 0) dataList = []; // 목록 초기화
 
                         dataList.push(
@@ -128,10 +128,10 @@ function ManagerCodeGroup(props) {
                                 <td onClick={(e) => {e.stopPropagation()}}>
                                     {resp.paginationInfo.totalRecordCount - (resp.paginationInfo.currentPageNo - 1) * resp.paginationInfo.pageSize - index}
                                 </td>
-                                <td>{item.cd}</td>
-                                <td>{item.cdNm}</td>
-                                <td>{item.sortSeq}</td>
-                                <td>{item.actvtnYn === "Y" ? "사용" : "사용안함"}</td>
+                                <td></td>
+                                <td>{item.bnrPopupTtl}</td>
+                                <td>{item.bnrPopupFrm}</td>
+                                <td>{item.useYn === "Y" ? "출력" : "출력안함"}</td>
                                 <td className="btnGroupTd">
                                     <Link 
                                         to={{ pathname: URL.MANAGER_CODE_MODIFY }}
@@ -157,18 +157,18 @@ function ManagerCodeGroup(props) {
                             </tr>
                         );
                     });
-                    setCodeList(dataList);
+                    setBnrPopupList(dataList);
                 },
                 function (resp) {
                     console.log("err response : ", resp);
                 }
             )
         },
-        [codeList, searchCondition]
+        [bnrPopupList, searchCondition]
     );
 
     useEffect(() => {
-        getCodeList(searchCondition);
+        getBnrPopupList(searchCondition);
     }, []);
 
     const Location = React.memo(function Location() {
@@ -181,7 +181,7 @@ function ManagerCodeGroup(props) {
                         </Link>
                     </li>
                     <li>
-                        <Link to={URL.MANAGER_BANNER_POPUP}>배너팝업관리</Link>
+                        <Link to={URL.MANAGER_BANNER_LIST}>배너팝업관리</Link>
                     </li>
                     <li>배너관리</li>
                 </ul>
@@ -208,7 +208,7 @@ function ManagerCodeGroup(props) {
                                             name="searchCnd"
                                             title="검색유형선택"
                                         >
-                                            <option value="0">코드명</option>
+                                            <option value="0">배너제목</option>
                                         </select>
                                     </label>
                                 </li>
@@ -278,7 +278,7 @@ function ManagerCodeGroup(props) {
                             </tr>
                             </thead>
                             <tbody>
-                            {codeList}
+                            {bnrPopupList}
                             </tbody>
                         </BtTable>
                         <div className="board_bot">

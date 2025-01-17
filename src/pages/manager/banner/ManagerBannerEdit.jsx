@@ -15,20 +15,29 @@ import Form from 'react-bootstrap/Form';
 import 'bootstrap/dist/css/bootstrap.css';
 import { getSessionItem } from "@/utils/storage";
 
-function ManagerCodeEdit(props) {
+function ManagerBannerEdit(props) {
   const navigate = useNavigate();
   const location = useLocation();
   const checkRef = useRef([]);
   const sessionUser = getSessionItem("loginUser");
 
-  const [searchDto, setSearchDto] = useState({bbsSn : location.state?.bbsSn});
+  const [searchDto, setSearchDto] = useState(
+      {
+        search: "",
+      }
+  );
 
   const [modeInfo, setModeInfo] = useState({ mode: props.mode });
 
-  const [cdDetail, setCdDetail] = useState({});
+  const [bnrPopupDetail, setBnrPopupDetail] = useState({});
   useEffect(() => {
-    console.log(cdDetail);
-  }, [cdDetail]);
+    console.log(bnrPopupDetail);
+  }, [bnrPopupDetail]);
+
+  const [comCdGroupList, setComCdGroupList] = useState([]);
+  useEffect(() => {
+    console.log(comCdGroupList);
+  }, [comCdGroupList]);
 
   const [saveEvent, setSaveEvent] = useState({});
   useEffect(() => {
@@ -171,33 +180,33 @@ function ManagerCodeEdit(props) {
       default:
         navigate({ pathname: URL.ERROR }, { state: { msg: "" } });
     }
-    getCdDetail();
+    //getBannerPopupData();
   };
 
-  const getCdDetail = () => {
+  const getBannerPopupData = () => {
     if(modeInfo.mode === CODE.MODE_CREATE){
-      setCdDetail({
+      setBnrPopupDetail({
         creatrSn: sessionUser.userSn,
         actvtnYn: "Y",
-        cdGroupSn: location.state?.cdGroupSn
+        bnrPopupSn: location.state?.bnrPopupSn
       });
       return;
     }
 
-    const getCdDetailURL = `/commonApi/getComCd`;
+    const getBannerPopupDataURL = `/commonApi/getComCd`;
 
     const requestOptions = {
       method: "POST",
       headers: {
         "Content-type": "application/json",
       },
-      body: JSON.stringify({comCdSn : location.state?.comCdSn})
+      body: JSON.stringify({bnrPopupSn : location.state?.bnrPopupSn})
     };
 
     EgovNet.requestFetch(getCdDetailURL, requestOptions, function (resp) {
       if (modeInfo.mode === CODE.MODE_MODIFY) {
         if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
-          setCdDetail(resp.result.comCd);
+          setBnrPopupDetail(resp.result.comCd);
         } else {
           navigate(
               { pathname: URL.ERROR },
@@ -210,7 +219,61 @@ function ManagerCodeEdit(props) {
 
   };
 
+  const getComCdList = useCallback(
+      (searchDto) => {
+        const comCdListURL = "/commonApi/getComCdGroupList.do";
+        const requestOptions = {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify(searchDto)
+        };
+        EgovNet.requestFetch(
+            comCdListURL,
+            requestOptions,
+            (resp) => {
+              setComCdGroupList(resp.result.cdGroupList);
+            },
+            function (resp) {
+              console.log("err response : ", resp);
+            }
+        )
+      },
+      [comCdGroupList, searchDto]
+  )
+
+  const dataListToOptionHtml = (data, filterField, filterData) => {
+    console.log(" CALL dataListToOptionHtml : " + filterField + " , " + filterData);
+    if(data != null){
+      if(data.length > 0){
+        const returnList = [];
+        data.map((v) => {
+          if(v[filterField] == filterData){
+            if(v.comCdList != null){
+              v.comCdList.forEach(function (item, index){
+                returnList.push(
+                    <option key={item.comCdSn} value={item.cd}>{item.cdNm}</option>
+                )
+              })
+            }
+          }
+        });
+        return returnList;
+      }else{
+        return (
+            <></>
+        )
+      }
+    }else{
+      return (
+          <></>
+      )
+    }
+  }
+
   useEffect(() => {
+    getComCdList(searchDto);
     initMode();
   }, []);
 
@@ -224,9 +287,15 @@ function ManagerCodeEdit(props) {
               </Link>
             </li>
             <li>
-              <Link to={URL.MANAGER_BANNER_POPUP}>배너팝업관리</Link>
+              <Link to={URL.MANAGER_BANNER_LIST}>배너팝업관리</Link>
             </li>
-            <li>배너등록</li>
+            {modeInfo.mode === CODE.MODE_CREATE && (
+                <li>배너등록</li>
+
+            )}
+            {modeInfo.mode === CODE.MODE_MODIFY && (
+                <li>배너수정</li>
+            )}
           </ul>
         </div>
     );
@@ -258,10 +327,14 @@ function ManagerCodeEdit(props) {
                   <dd>
                     <Form.Select
                         size="sm"
-                        id=""
+                        id="bnrPopupKnd"
                     >
-                      <option value="Y">사용</option>
-                      <option value="N">미사용</option>
+                      {dataListToOptionHtml(comCdGroupList, "cdGroup", "BANNER_POPUP_GROUP")}
+                        defaultValue={bnrPopupDetail.bnrPopupKnd}
+                        onChange={(e) =>
+                          setBnrPopupDetail({...bnrPopupDetail, bnrPopupKnd: e.target.value})
+                      }
+                      ref={(el) => (checkRef.current[0] = el)}
                     </Form.Select>
                   </dd>
                 </dl>
@@ -274,12 +347,12 @@ function ManagerCodeEdit(props) {
                     <Form.Control
                         size="sm"
                         type="text"
-                        id="cdNm"
+                        id="bnrPopupTtl"
                         placeholder=""
                         required="required"
-                        defaultValue={cdDetail.cdNm}
+                        defaultValue={bnrPopupDetail.bnrPopupTtl}
                         onChange={(e) =>
-                            setCdDetail({...cdDetail, cdNm: e.target.value})
+                            setBnrPopupDetail({...bnrPopupDetail, bnrPopupTtl: e.target.value})
                         }
                         ref={(el) => (checkRef.current[0] = el)}
                     />
@@ -290,18 +363,19 @@ function ManagerCodeEdit(props) {
                     <label htmlFor="rmrkCn">배너형식</label>
                   </dt>
                   <dd>
-                    <Form.Control
-                        size="sm"
-                        type="text"
-                        id="rmrkCn"
-                        placeholder=""
-                        required="required"
-                        defaultValue={cdDetail.rmrkCn}
-                        onChange={(e) =>
-                            setCdDetail({...cdDetail, rmrkCn: e.target.value})
-                        }
-                        ref={(el) => (checkRef.current[0] = el)}
+                    <Form.Check
+                      inline
+                      type="radio"
+                      label="이미지형식"
+                      id="1"
+                      name="bnrPopupFrm"
+                      defaultValue={bnrPopupDetail.bnrPopupFrm}
+                      onChange={(e) =>
+                          setBnrPopupDetail({...bnrPopupDetail, bnrPopupFrm: e.target.value})
+                      }
+                      ref={(el) => (checkRef.current[0] = el)}
                     />
+                    
                   </dd>
                 </dl>
                 <dl>
@@ -323,11 +397,11 @@ function ManagerCodeEdit(props) {
                     <Form.Control
                         size="sm"
                         type="text"
-                        id="etcMttr2"
+                        id="bnrPopupUrlAddr"
                         placeholder=""
-                        defaultValue={cdDetail.etcMttr2}
+                        defaultValue={bnrPopupDetail.bnrPopupUrlAddr}
                         onChange={(e) =>
-                            setCdDetail({...cdDetail, etcMttr2: e.target.value})
+                            setBnrPopupDetail({...bnrPopupDetail, bnrPopupUrlAddr: e.target.value})
                         }
                         ref={(el) => (checkRef.current[0] = el)}
                     />
@@ -340,10 +414,14 @@ function ManagerCodeEdit(props) {
                   <dd>
                     <Form.Select
                         size="sm"
-                        id=""
+                        id="useYn"
+                        defaultValue={bnrPopupDetail.useYn}
+                        onChange={(e) =>
+                            setBnrPopupDetail({...bnrPopupDetail, useYn: e.target.value})
+                        }
+                        ref={(el) => (checkRef.current[0] = el)}
                     >
-                      <option value="Y">사용</option>
-                      <option value="N">미사용</option>
+                      {dataListToOptionHtml(comCdGroupList, "cdGroup", "ACTVTN_YN")}
                     </Form.Select>
                   </dd>
                 </dl>
@@ -385,4 +463,4 @@ function ManagerCodeEdit(props) {
   );
 }
 
-export default ManagerCodeEdit;
+export default ManagerBannerEdit;
