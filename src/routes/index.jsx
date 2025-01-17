@@ -545,6 +545,11 @@ const SecondRoutes = () => {
           element={<ManagerNormalMemberEdit mode={CODE.MODE_MODIFY}/>}
         />
 
+        <Route
+            path={URL.MANAGER_NORMAL_MEMBER_CREATE}
+            element={<ManagerNormalMemberEdit mode={CODE.MODE_CREATE}/>}
+        />
+
         <Route path={URL.MANAGER_BANNER_LIST} element={<ManagerBannerList />} />
         <Route path={URL.MANAGER_BANNER_CREATE} element={<ManagerBannerEdit mode={CODE.MODE_CREATE} />} />
         <Route path={URL.MANAGER_BANNER_MODIFY} element={<ManagerBannerEdit mode={CODE.MODE_MODIFY} />} />

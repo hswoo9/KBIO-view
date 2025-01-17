@@ -198,7 +198,7 @@ function NormalMemberList(props) {
                                 </li>
                                 <li>
                                     <Link
-                                        to={URL.ADMIN_MEMBERS_CREATE}
+                                        to={URL.MANAGER_NORMAL_MEMBER_CREATE}
                                         className="btn btn_blue_h46 pd35"
                                     >
                                         등록
