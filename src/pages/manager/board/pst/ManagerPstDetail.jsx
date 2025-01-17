@@ -12,7 +12,6 @@ import Swal from "sweetalert2";
 import Form from "react-bootstrap/Form";
 import ReactDatePicker from 'react-datepicker';
 import moment from "moment";
-import ko from "date-fns/locale/ko";
 import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css'; // 스타일
 

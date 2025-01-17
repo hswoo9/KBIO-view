@@ -12,7 +12,6 @@ import Swal from "sweetalert2";
 import Form from "react-bootstrap/Form";
 import ReactDatePicker from 'react-datepicker';
 import moment from "moment";
-import ko from "date-fns/locale/ko";
 import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css'; // 스타일
 
@@ -321,7 +320,7 @@ function setPst(props) {
                     ></Form.Check>
                     <ReactDatePicker
                         name="ntcBgngDt"
-                        locale={ko}
+                        /*locale={ko}*/
                         selected={startDate}
                         onChange={(date) => setStartDate(date)}
                         dateFormat="yyyy-MM-dd"
@@ -329,7 +328,7 @@ function setPst(props) {
                     />~
                     <ReactDatePicker
                         name="ntcEndDate"
-                        locale={ko}
+                        /*locale={ko}*/
                         selected={endDate}
                         onChange={(date) => setEndDate(date)}
                         dateFormat="yyyy-MM-dd"
