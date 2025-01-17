@@ -82,7 +82,10 @@ function ManagerBbs(props) {
                                 <td>{moment(item.frstCrtDt).format('YYYY-MM-DD')}</td>
                                 <td>
                                     <Link to={URL.MANAGER_PST_LIST}
-                                          state={{ bbsSn: item.bbsSn }}
+                                        state={{
+                                            bbsSn: item.bbsSn,
+                                            atchFileYn : item.atchFileYn
+                                        }}
                                     >
                                         <BTButton variant="primary" size="sm">게시글 관리</BTButton>
                                     </Link>
@@ -117,7 +120,7 @@ function ManagerBbs(props) {
                         <li>
                             <Link to={URL.MANAGER_BBS_LIST}>게시판관리</Link>
                         </li>
-                        <li>게시판관리</li>
+                        <li>게시글관리</li>
                     </ul>
                 </div>
                 <div className="layout">

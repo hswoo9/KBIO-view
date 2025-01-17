@@ -43,6 +43,11 @@ function Templates(props) {
     selectedFiles.map((file) => {
       formData.append("files", file);
     });
+
+    for (let [key, value] of formData.entries()) {
+      console.log(key, value); // FormData 내용 확인
+    }
+
     const requestOptions = {
       method: "POST",
       body: formData

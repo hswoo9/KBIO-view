@@ -71,6 +71,7 @@ import ManagerBbsEdit from "@/pages/manager/board/ManagerBbsEdit";
 
 import ManagerBbsList2 from "@/pages/manager/board/pst/ManagerBbsList";
 import ManagerBbsPstList from "@/pages/manager/board/pst/ManagerPstList";
+import ManagerPstDetail from "@/pages/manager/board/pst/ManagerPstDetail";
 import ManagerBbsPstEdit from "@/pages/manager/board/pst/ManagerPstEdit";
 
 import ManagerNormalMemberEdit from "@/pages/manager/member/ManagerNormalMemberEdit";
@@ -481,6 +482,11 @@ const SecondRoutes = () => {
         <Route
             path={URL.MANAGER_PST_LIST}
             element={<ManagerBbsPstList />}
+        />
+
+        <Route
+            path={URL.MANAGER_PST_DETAIL}
+            element={<ManagerPstDetail mode={CODE.MODE_READ}/>}
         />
 
         <Route

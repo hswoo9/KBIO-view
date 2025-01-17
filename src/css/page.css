@@ -1415,6 +1415,12 @@
   gap: 10px !important;
 }
 
+.pstUpendNtcDd {
+  display: flex !important;
+  gap: 10px !important;
+}
+
+
 /* 권한관리 */
 .btTable th, td{
   text-align: center;

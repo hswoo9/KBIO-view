@@ -1,7 +1,7 @@
 
-import React, { useState, useEffect, useRef } from "react";
+import React, {useState, useEffect, useRef, useMemo, useCallback} from "react";
+import { useDropzone } from 'react-dropzone';
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import axios from "axios";
 import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
@@ -9,64 +9,41 @@ import 'moment/locale/ko';
 import { default as EgovLeftNav } from "@/components/leftmenu/ManagerLeftBoard";
 import EgovRadioButtonGroup from "@/components/EgovRadioButtonGroup";
 import Swal from "sweetalert2";
+import Form from "react-bootstrap/Form";
+import ReactDatePicker from 'react-datepicker';
+import moment from "moment";
+import ko from "date-fns/locale/ko";
+import ReactQuill from 'react-quill-new';
+import 'react-quill-new/dist/quill.snow.css'; // 스타일
 
-function setBbs(props) {
+function setPst(props) {
   const navigate = useNavigate();
   const location = useLocation();
-  const checkRef = useRef([]);
-  // const bbsNmRef = useRef([]);
-  // const atchFileKndNmRef = useRef([]);
-  // const rmrkCnRef = useRef([]);
 
-  const bbsTypeOptions = [
-    { value: "", label: "선택" },
-    { value: "0", label: "일반" },
-    { value: "1", label: "FaQ" },
-    { value: "2", label: "QnA" },
-  ];
-  const wrtrRlsYnRadioGroup = [
-    { value: "Y", label: "공개" },
-    { value: "N", label: "비공개" },
-  ];
-  const accessRadioGroup = [
-    { value: "Y", label: "가능" },
-    { value: "N", label: "불가능" },
-  ];
-  const activeRadioGroup = [
-    { value: "Y", label: "사용" },
-    { value: "N", label: "미사용" },
-  ];
+  const [searchDto, setSearchDto] = useState({
+    bbsSn : location.state?.bbsSn,
+    pstSn : location.state?.pstSn
+  });
 
-  const [searchDto, setSearchDto] = useState({bbsSn : location.state?.bbsSn});
-
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
   const [modeInfo, setModeInfo] = useState({ mode: props.mode });
+  const [pstDetail, setPstDetail] = useState({});
+  const [isDatePickerEnabled, setIsDatePickerEnabled] = useState(false);
+  const [acceptFileTypes, setAcceptFileTypes] = useState('');
+  const [fileList, setFileList] = useState([]);
   const [bbsDetail, setBbsDetail] = useState({});
 
-  const initMode = () => {
-    setModeInfo({
-      ...modeInfo,
-      modeTitle: "등록",
-      editURL: `/bbsApi/setBbs`,
-    });
+  const rlsYnRadioGroup = [
+    { value: "Y", label: "비공개" },
+    { value: "N", label: "공개" },
+  ];
 
-    getBbs(searchDto);
+  const handleChange = (value) => {
+    setPstDetail({...pstDetail, pstCn: value});
   };
 
   const getBbs = (searchDto) => {
-    if (modeInfo.mode === CODE.MODE_CREATE) {
-      // 조회/등록이면 조회 안함
-      setBbsDetail({
-        tmplatId: "TMPLAT_BOARD_DEFAULT", //Template 고정
-        pstCtgryYn: "N",
-        wrtrRlsYn: "N",
-        atchFileYn : "N",
-        cmntPsbltyYn : "N",
-        replyPsbltyYn : "N",
-        actvtnYn : "Y",
-      });
-      return;
-    }
-
     const getBbsURL = `/bbsApi/getBbs`;
     const requestOptions = {
       method: "POST",
@@ -77,36 +54,167 @@ function setBbs(props) {
     };
 
     EgovNet.requestFetch(getBbsURL, requestOptions, function (resp) {
+      setBbsDetail(resp.result.bbs);
+      setAcceptFileTypes(
+          resp.result.bbs.atchFileKndNm != ""
+              ? resp.result.bbs.atchFileKndNm.split(',').join(',')
+              : ''
+      );
+    });
+  };
+
+  const onDrop = useCallback((acceptedFiles) => {
+    const allowedExtensions = acceptFileTypes.split(','); // 허용된 확장자 목록
+    const validFiles = acceptedFiles.filter((file) => {
+      const fileExtension = file.name.split(".").pop().toLowerCase();
+      return allowedExtensions.includes(fileExtension);
+    });
+
+    if (validFiles.length > 0) {
+      setFileList((prevFiles) => [...prevFiles, ...validFiles]); // 유효한 파일만 추가
+    }
+
+    if (validFiles.length !== acceptedFiles.length) {
+      Swal.fire(
+          `허용되지 않은 파일 유형이 포함되어 있습니다! (허용 파일: ${acceptFileTypes})`
+      );
+    }
+
+  }, [acceptFileTypes]);
+
+  const { getRootProps, getInputProps } = useDropzone({
+    onDrop,
+    accept: acceptFileTypes, // accept 값은 `acceptFileTypes` 상태에 따라 동적으로 변경됩니다.
+    multiple: true, // 멀티파일 허용
+  });
+
+  const handleDeleteFile = (index) => {
+    const updatedFileList = fileList.filter((_, i) => i !== index);
+    setFileList(updatedFileList);  // 파일 리스트 업데이트
+  };
+
+
+  const initMode = () => {
+    setModeInfo({
+      ...modeInfo,
+      modeTitle: "등록",
+      editURL: `/bbsApi/setPst`,
+    });
+
+    getPst(searchDto);
+  };
+
+  const getPst = (searchDto) => {
+    if (modeInfo.mode === CODE.MODE_CREATE) {
+      getBbs(searchDto)
+      // 조회/등록이면 조회 안함
+      setPstDetail({
+        bbsSn : searchDto.bbsSn,
+        otsdLink : "",
+        upendNtcYn : "N",
+        rlsYn : "N",
+        actvtnYn : "Y",
+      });
+      return;
+    }
+
+    const getPstURL = `/bbsApi/getPst`;
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(searchDto)
+    };
+
+    EgovNet.requestFetch(getPstURL, requestOptions, function (resp) {
       if (modeInfo.mode === CODE.MODE_MODIFY) {
         setBbsDetail(resp.result.bbs);
-        console.log(bbsDetail)
+        setAcceptFileTypes(
+            resp.result.bbs.atchFileKndNm != ""
+                ? resp.result.bbs.atchFileKndNm.split(',').join(',')
+                : ''
+        );
+
+        setPstDetail(resp.result.pst);
+        setStartDate(
+            new Date(
+                resp.result.pst.ntcBgngDt.substring(0, 4),
+                resp.result.pst.ntcBgngDt.substring(4, 6) - 1,
+                resp.result.pst.ntcBgngDt.substring(6, 8)
+            )
+        )
+        setEndDate(
+            new Date(
+                resp.result.pst.ntcEndDate.substring(0, 4),
+                resp.result.pst.ntcEndDate.substring(4, 6) - 1,
+                resp.result.pst.ntcEndDate.substring(6, 8)
+            )
+        )
+        setIsDatePickerEnabled(resp.result.pst.upendNtcYn === "Y");
       }
     });
   };
 
-  const setBbs = () => {
-    let requestOptions = {};
-    if (!bbsDetail.bbsNm) {
-      alert("게시판명은 필수 값입니다.");
-      return;
-    }
-    if (!bbsDetail.bbsType) {
-      alert("게시판 유형은 필수 값입니다.");
-      return;
-    }
+  const setFileDel = (atchFileSn) => {
+    Swal.fire({
+      title: "삭제한 파일은 복구할 수 없습니다.\n그래도 삭제하시겠습니까?",
+      showCloseButton: true,
+      showCancelButton: true,
+      confirmButtonText: "확인",
+      cancelButtonText: "취소"
+    }).then((result) => {
+      if(result.isConfirmed) {
+        const requestOptions = {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body:  JSON.stringify({
+            atchFileSn: atchFileSn,
+          }),
+        };
 
-    if(bbsDetail.atchFileYn == "Y"){
-      if (!bbsDetail.atchFileKndNm) {
-        alert("파일첨부가능 확장자는 필수 값입니다.");
+        EgovNet.requestFetch("/commonApi/setFileDel", requestOptions, (resp) => {
+          if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
+            Swal.fire("삭제되었습니다.");
+
+            const updatedFiles = pstDetail.pstFiles.filter(file => file.atchFileSn !== atchFileSn);
+            setPstDetail({ ...pstDetail, pstFiles: updatedFiles });  // 상태 업데이트
+          } else {
+          }
+        });
+      } else {
+        //취소
+      }
+    });
+  }
+
+  const setPst = async () => {
+    if (pstDetail.upendNtcYn == "Y") {
+      if(!pstDetail.ntcBgngDt && !pstDetail.ntcEndDate){
+        Swal.fire("공지기간은 선택해주세요.");
         return;
       }
     }
 
-    const formData = new FormData();
-
-    for (let key in bbsDetail) {
-      formData.append(key, bbsDetail[key]);
+    if (!pstDetail.pstTtl) {
+      Swal.fire("제목은 필수 값입니다.");
+      return;
     }
+    if (!pstDetail.pstCn) {
+      Swal.fire("내용은 필수 값입니다.");
+      return;
+    }
+
+    const formData = new FormData();
+    for (let key in pstDetail) {
+      formData.append(key, pstDetail[key]);
+    }
+
+    fileList.map((file) => {
+      formData.append("files", file);
+    });
 
     Swal.fire({
       title: "저장하시겠습니까?",
@@ -116,69 +224,31 @@ function setBbs(props) {
       cancelButtonText: "취소"
     }).then((result) => {
       if(result.isConfirmed) {
-        requestOptions = {
+        const requestOptions = {
           method: "POST",
-          headers: {
-            "Content-type": "application/json",
-          },
-          body: JSON.stringify(bbsDetail),
+          body: formData
         };
 
         EgovNet.requestFetch(modeInfo.editURL, requestOptions, (resp) => {
           if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
             Swal.fire("등록되었습니다.");
-            navigate(URL.MANAGER_BBS_LIST);
-          } else {
             navigate(
-                { pathname: URL.ERROR },
-                { state: { msg: resp.resultMessage } }
+                { pathname : URL.MANAGER_PST_LIST},
+                { state: {
+                    bbsSn: bbsDetail.bbsSn,
+                    atchFileYn: bbsDetail.atchFileYn,
+                  }
+                }
             );
-          }
-        });
-      } else {
-        //취소
-      }
-    });
-
-
-  };
-
-  const setBbsDel = (bbsSn) => {
-    const setBbsDelUrl = "/bbsApi/setBbsDel";
-
-    Swal.fire({
-      title: "삭제하시겠습니까?",
-      showCloseButton: true,
-      showCancelButton: true,
-      confirmButtonText: "삭제",
-      cancelButtonText: "취소"
-    }).then((result) => {
-      if(result.isConfirmed) {
-        const requestOptions = {
-          method: "POST",
-          headers: {
-            "Content-type": "application/json",
-          },
-          body: JSON.stringify({bbsSn : bbsSn}),
-        };
-
-        EgovNet.requestFetch(setBbsDelUrl, requestOptions, (resp) => {
-          if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
-            Swal.fire("삭제되었습니다.");
-            navigate(URL.MANAGER_BBS_LIST);
           } else {
-            alert("ERR : " + resp.resultMessage);
           }
         });
       } else {
         //취소
       }
     });
-  };
 
-  const getSelectedLabel = (objArray, findLabel = "") => {
-    let foundValueLabelObj = objArray.find((o) => o["value"] === findLabel);
-    return foundValueLabelObj["label"];
+
   };
 
   useEffect(() => {
@@ -201,9 +271,17 @@ function setBbs(props) {
                 </Link>
               </li>
               <li>
-                <Link to={URL.MANAGER_BBS_LIST}>게시판관리</Link>
+                <Link
+                    to={URL.MANAGER_PST_LIST}
+                    state={{
+                      bbsSn: bbsDetail.bbsSn,
+                      atchFileYn : bbsDetail.atchFileYn
+                    }}
+                >
+                  게시글관리
+                </Link>
               </li>
-              <li>게시판생성</li>
+              <li>게시글생성</li>
             </ul>
           </div>
 
@@ -212,154 +290,150 @@ function setBbs(props) {
 
             <div className="contents BOARD_CREATE_REG" id="contents">
               {modeInfo.mode === CODE.MODE_CREATE && (
-                  <h2 className="tit_2">게시판 생성</h2>
+                  <h2 className="tit_2">게시글 생성</h2>
               )}
 
               {modeInfo.mode === CODE.MODE_MODIFY && (
-                  <h2 className="tit_2">게시판 수정</h2>
+                  <h2 className="tit_2">게시글 수정</h2>
               )}
 
               <div className="board_view2">
                 <dl>
                   <dt>
-                    <label htmlFor="bbsNm">게시판명</label>
+                    <label htmlFor="bbsNm">공지(기간)</label>
+                    <span className="req">필수</span>
+                  </dt>
+                  <dd className="pstUpendNtcDd">
+                    <Form.Check
+                        type="checkbox"
+                        id="upendNtcYn"
+                        label="공지"
+                        checked={pstDetail.upendNtcYn == "Y"}
+                        onChange={(e) => {
+                          setPstDetail({
+                            ...pstDetail,
+                            upendNtcYn: e.target.checked ? "Y" : "N",
+                            ntcBgngDt: e.target.checked ? moment(startDate).format('YYYYMMDD') : null,
+                            ntcEndDate: e.target.checked ? moment(endDate).format('YYYYMMDD') : null
+                          })
+                          setIsDatePickerEnabled(e.target.checked);
+                        }}
+                    ></Form.Check>
+                    <ReactDatePicker
+                        name="ntcBgngDt"
+                        locale={ko}
+                        selected={startDate}
+                        onChange={(date) => setStartDate(date)}
+                        dateFormat="yyyy-MM-dd"
+                        disabled={!isDatePickerEnabled} // 활성화 여부 결정
+                    />~
+                    <ReactDatePicker
+                        name="ntcEndDate"
+                        locale={ko}
+                        selected={endDate}
+                        onChange={(date) => setEndDate(date)}
+                        dateFormat="yyyy-MM-dd"
+                        disabled={!isDatePickerEnabled} // 활성화 여부 결정
+                    />
+                  </dd>
+                </dl>
+                <dl>
+                  <dt>
+                    <label htmlFor="pstTtl">제목</label>
                     <span className="req">필수</span>
                   </dt>
                   <dd>
                     <input
                         className="f_input2 w_full"
                         type="text"
-                        name="bbsNm"
+                        name="pstTtl"
                         title=""
-                        id="bbsNm"
-                        placeholder=""
-                        defaultValue={bbsDetail.bbsNm}
+                        id="pstTtl"
+                        defaultValue={pstDetail.pstTtl}
                         onChange={(e) =>
-                            setBbsDetail({...bbsDetail, bbsNm: e.target.value})
+                            setPstDetail({...pstDetail, pstTtl: e.target.value})
                         }
-                        ref={(el) => (checkRef.current[0] = el)}
                     />
                   </dd>
                 </dl>
+
                 <dl>
                   <dt>
-                    게시판유형<span className="req">필수</span>
+                    <label htmlFor="pstTtl">작성일</label>
+                    <span className="req">필수</span>
                   </dt>
                   <dd>
-                    {/* 수정/조회 일때 변경 불가 */}
-                    {modeInfo.mode === CODE.MODE_CREATE && (
-                        <label className="f_select w_130" htmlFor="bbsType">
-                          <select
-                              id="bbsType"
-                              name="bbsType"
-                              title="게시판유형선택"
-                              onChange={(e) =>
-                                  setBbsDetail({
-                                    ...bbsDetail,
-                                    bbsType: e.target.value,
-                                  })
-                              }
-                              value={bbsDetail.bbsType}
-                          >
-                            {bbsTypeOptions.map((option) => {
-                              return (
-                                  <option value={option.value} key={option.value}>
-                                    {option.label}
-                                  </option>
-                              );
+                    {moment(pstDetail.frstCrtDt).format('YYYY-MM-DD')}
+                  </dd>
+                </dl>
+                {bbsDetail.atchFileYn == "Y" && (
+                    <dl>
+                      <dt>
+                        <label htmlFor="pstTtl">첨부파일</label>
+                      </dt>
+                      <dd>
+                        <div
+                            {...getRootProps({
+                              style: {
+                                border: "2px dashed #cccccc",
+                                padding: "20px",
+                                textAlign: "center",
+                                cursor: "pointer",
+                              },
                             })}
-                          </select>
-                        </label>
-                    )}
-                    {modeInfo.mode === CODE.MODE_MODIFY && (
-                        <span>
-                      {bbsDetail.bbsType &&
-                          getSelectedLabel(
-                              bbsTypeOptions,
-                              bbsDetail.bbsType
-                          )}
-                    </span>
-                    )}
-                  </dd>
-                </dl>
+                        >
+                          <input {...getInputProps()} />
+                          <p>파일을 이곳에 드롭하거나 클릭하여 업로드하세요</p>
+                        </div>
+                        {pstDetail.pstFiles.length > 0 && (
+                            <ul>
+                              {pstDetail.pstFiles.map((file, index) => (
+                                  <li key={index}>
+                                    {file.atchFileNm} - {(file.atchFileSz / 1024).toFixed(2)} KB
+
+                                    <button
+                                        onClick={() => setFileDel(file.atchFileSn)}  // 삭제 버튼 클릭 시 처리할 함수
+                                        style={{marginLeft: '10px', color: 'red'}}
+                                    >
+                                      삭제
+                                    </button>
+                                  </li>
+                              ))}
+                            </ul>
+                        )}
+                        {fileList.length > 0 && (
+                            <ul>
+                              {fileList.map((file, index) => (
+                                  <li key={index}>
+                                  {file.name} - {(file.size / 1024).toFixed(2)} KB
+
+                                    <button
+                                        onClick={() => handleDeleteFile(index)}  // 삭제 버튼 클릭 시 처리할 함수
+                                        style={{marginLeft: '10px', color: 'red'}}
+                                    >
+                                      삭제
+                                    </button>
+                                  </li>
+                              ))}
+                            </ul>
+                        )}
+                      </dd>
+                    </dl>
+                )}
                 <dl>
                   <dt>
-                    카테고리사용유무<span className="req">필수</span>
-                  </dt>
-                  <dd>
-                    <EgovRadioButtonGroup
-                        name="pstCtgryYn"
-                        radioGroup={activeRadioGroup}
-                        setValue={bbsDetail.pstCtgryYn}
-                        setter={(v) =>
-                            setBbsDetail({...bbsDetail, pstCtgryYn: v})
-                        }
-                    />
-                  </dd>
-                </dl>
-                <dl>
-                  <dt>
-                    작성자공개유무<span className="req">필수</span>
-                  </dt>
-                  <dd>
-                    <EgovRadioButtonGroup
-                        name="wrtrRlsYn"
-                        radioGroup={wrtrRlsYnRadioGroup}
-                        setValue={bbsDetail.wrtrRlsYn}
-                        setter={(v) =>
-                            setBbsDetail({...bbsDetail, wrtrRlsYn: v})
-                        }
-                    />
-                  </dd>
-                </dl>
-                <dl>
-                  <dt>
-                    파일첨부가능여부<span className="req">필수</span>
-                  </dt>
-                  <dd>
-                    <EgovRadioButtonGroup
-                        name="atchFileYn"
-                        radioGroup={accessRadioGroup}
-                        setValue={bbsDetail.atchFileYn}
-                        setter={(v) =>
-                            setBbsDetail({...bbsDetail, atchFileYn: v})
-                        }
-                    />
-                  </dd>
-                </dl>
-                <dl>
-                  <dt>
-                    <label htmlFor="atchFileKndNm">
-                      파일첨부가능 확장자
-                    </label>
+                    <label htmlFor="pstTtl">외부링크</label>
                   </dt>
                   <dd>
                     <input
                         className="f_input2 w_full"
                         type="text"
-                        name="atchFileKndNm"
+                        name="otsdLink"
                         title=""
-                        id="atchFileKndNm"
-                        placeholder="쉼표(,)로 분리"
-                        defaultValue={bbsDetail.atchFileKndNm}
+                        id="otsdLink"
+                        defaultValue={pstDetail.otsdLink}
                         onChange={(e) =>
-                            setBbsDetail({...bbsDetail, atchFileKndNm: e.target.value})
-                        }
-                        ref={(el) => (checkRef.current[1] = el)}
-                    />
-                  </dd>
-                </dl>
-                <dl>
-                  <dt>
-                    댓글가능여부<span className="req">필수</span>
-                  </dt>
-                  <dd>
-                    <EgovRadioButtonGroup
-                        name="cmntPsbltyYn"
-                        radioGroup={accessRadioGroup}
-                        setValue={bbsDetail.cmntPsbltyYn}
-                        setter={(v) =>
-                            setBbsDetail({...bbsDetail, cmntPsbltyYn: v})
+                            setPstDetail({...pstDetail, otsdLink: e.target.value})
                         }
                     />
                   </dd>
@@ -367,63 +441,55 @@ function setBbs(props) {
 
                 <dl>
                   <dt>
-                    답글사용유무<span className="req">필수</span>
+                    <label htmlFor="pstCn">
+                      내용
+                    </label>
+                    <span className="req">필수</span>
                   </dt>
                   <dd>
-                    <EgovRadioButtonGroup
-                        name="cmntPsbltyYn"
-                        radioGroup={activeRadioGroup}
-                        setValue={bbsDetail.replyPsbltyYn}
-                        setter={(v) =>
-                            setBbsDetail({...bbsDetail, replyPsbltyYn: v})
-                        }
+                    <ReactQuill
+                        value={pstDetail.pstCn}
+                        onChange={handleChange}
                     />
                   </dd>
                 </dl>
+                {bbsDetail.wrtrRlsYn == "Y" && (
                 <dl>
                   <dt>
-                    <label htmlFor="atchFileKndNm">
-                      비고
-                    </label>
+                    <label htmlFor="pstTtl">공개여부</label>
+                    <span className="req">필수</span>
                   </dt>
                   <dd>
+                    <EgovRadioButtonGroup
+                        name="rlsYn"
+                        radioGroup={rlsYnRadioGroup}
+                        setValue={pstDetail.rlsYn}
+                        setter={(v) =>
+                            setPstDetail({...pstDetail, rlsYn: v})
+                        }
+                    />
                     <input
                         className="f_input2 w_full"
-                        type="text"
-                        name="rmrkCn"
+                        type="password"
+                        name="prvtPswd"
                         title=""
-                        id="rmrkCn"
-                        placeholder=""
-                        defaultValue={bbsDetail.rmrkCn}
+                        id="prvtPswd"
+                        placeholder="비밀번호"
+                        defaultValue={pstDetail.prvtPswd}
                         onChange={(e) =>
-                            setBbsDetail({...bbsDetail, rmrkCn: e.target.value})
+                            setPstDetail({...pstDetail, prvtPswd: e.target.value})
                         }
-                        ref={(el) => (checkRef.current[2] = el)}
+                        disabled={pstDetail.rlsYn == "N"} // 활성화 여부 결정
                     />
                   </dd>
                 </dl>
-                <dl>
-                  <dt>
-                    사용여부<span className="req">필수</span>
-                  </dt>
-                  <dd>
-                    <EgovRadioButtonGroup
-                        name="actvtnYn"
-                        radioGroup={activeRadioGroup}
-                        setValue={bbsDetail.actvtnYn}
-                        setter={(v) =>
-                            setBbsDetail({...bbsDetail, actvtnYn: v})
-                        }
-                    />
-                  </dd>
-                </dl>
-
+                )}
                 {/* <!-- 버튼영역 --> */}
                 <div className="board_btn_area">
                   <div className="left_col btn1">
                     <button
                         className="btn btn_skyblue_h46 w_100"
-                        onClick={() => setBbs()}
+                        onClick={() => setPst()}
                     >
                       저장
                     </button>
@@ -431,7 +497,7 @@ function setBbs(props) {
                         <button
                             className="btn btn_skyblue_h46 w_100"
                             onClick={() => {
-                              setBbsDel(bbsDetail.bbsSn);
+                              setPstDel(pstDetail.pstSn);
                             }}
                         >
                           삭제
@@ -440,7 +506,14 @@ function setBbs(props) {
                   </div>
 
                   <div className="right_col btn1">
-                    <Link to={URL.MANAGER_BBS_LIST} className="btn btn_blue_h46 w_100">
+                    <Link
+                        to={URL.MANAGER_PST_LIST}
+                        className="btn btn_blue_h46 w_100"
+                        state={{
+                          bbsSn: bbsDetail.bbsSn,
+                          atchFileYn : bbsDetail.atchFileYn
+                        }}
+                    >
                       목록
                     </Link>
                   </div>
@@ -456,4 +529,4 @@ function setBbs(props) {
   );
 }
 
-export default setBbs;
+export default setPst;

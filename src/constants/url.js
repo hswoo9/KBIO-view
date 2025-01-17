@@ -114,6 +114,7 @@ const URL = {
 
   MANAGER_BBS_LIST2:"/manager/bbs/pst/bbsList",
   MANAGER_PST_LIST:"/manager/bbs/pst/list",
+  MANAGER_PST_DETAIL: "/manager/bbs/pst/detail",
   MANAGER_PST_CREATE: "/manager/bbs/pst/create",
   MANAGER_PST_MODIFY: "/manager/bbs/pst/modify",
 

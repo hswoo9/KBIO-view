@@ -79,7 +79,6 @@ function setBbs(props) {
     EgovNet.requestFetch(getBbsURL, requestOptions, function (resp) {
       if (modeInfo.mode === CODE.MODE_MODIFY) {
         setBbsDetail(resp.result.bbs);
-        console.log(bbsDetail)
       }
     });
   };
@@ -87,17 +86,17 @@ function setBbs(props) {
   const setBbs = () => {
     let requestOptions = {};
     if (!bbsDetail.bbsNm) {
-      alert("게시판명은 필수 값입니다.");
+      Swal.fire("게시판명은 필수 값입니다.");
       return;
     }
     if (!bbsDetail.bbsType) {
-      alert("게시판 유형은 필수 값입니다.");
+      Swal.fire("게시판 유형은 필수 값입니다.");
       return;
     }
 
     if(bbsDetail.atchFileYn == "Y"){
       if (!bbsDetail.atchFileKndNm) {
-        alert("파일첨부가능 확장자는 필수 값입니다.");
+        Swal.fire("파일첨부가능 확장자는 필수 값입니다.");
         return;
       }
     }

@@ -22,6 +22,7 @@ function ManagerPst(props) {
     const location = useLocation();
     const [searchDto, setSearchDto] = useState(
         location.state?.searchDto || {
+            atchFileYn : location.state?.atchFileYn,
             pageIndex: 1,
             bbsSn : location.state?.bbsSn,
             searchType: "",
@@ -59,7 +60,7 @@ function ManagerPst(props) {
                     let dataList = [];
                     dataList.push(
                         <tr>
-                            <td colSpan="4">검색된 결과가 없습니다.</td>
+                            <td colSpan={searchDto.atchFileYn == "Y" ? "5" : "4"}>검색된 결과가 없습니다.</td>
                         </tr>
                     );
 
@@ -68,17 +69,24 @@ function ManagerPst(props) {
 
                         dataList.push(
                             <tr key={item.pstSn}>
-                                <td>{resp.paginationInfo.totalRecordCount - (resp.paginationInfo.currentPageNo - 1) * resp.paginationInfo.pageSize - index}</td>
-                                <td style={{textAlign:"left", paddingLeft:"15px"}}>
-                                    <Link to={URL.MANAGER_PST_MODIFY}
-                                          mode={CODE.MODE_MODIFY}
-                                          state={{ pstSn: item.pstSn }}
-                                          >
+                                <td>
+                                    {item.upendNtcYn == "Y" ?
+                                        "공지" :
+                                        resp.paginationInfo.totalRecordCount - (resp.paginationInfo.currentPageNo - 1) * resp.paginationInfo.pageSize - index}
+                                </td>
+                                <td style={{textAlign: "left", paddingLeft: "15px"}}>
+                                    <Link to={URL.MANAGER_PST_DETAIL}
+                                          mode={CODE.MODE_READ}
+                                          state={{pstSn: item.pstSn}}
+                                    >
                                         {item.pstTtl}
                                     </Link>
                                 </td>
-                                <td>{item.actvtnYn === "Y" ? "사용" : "미사용"}</td>
+                                {searchDto.atchFileYn == "Y" && (
+                                    <td>{item.fileCnt != 0 ? "있음" : "없음"}</td>
+                                )}
                                 <td>{moment(item.frstCrtDt).format('YYYY-MM-DD')}</td>
+                                <td>{item.actvtnYn === "Y" ? "사용" : "미사용"}</td>
                             </tr>
                         );
                     });
@@ -107,9 +115,14 @@ function ManagerPst(props) {
                             </Link>
                         </li>
                         <li>
-                            <Link to={URL.MANAGER_BBS_LIST2}>게시글관리</Link>
+                            <Link
+                                to={URL.MANAGER_BBS_LIST2}
+                                state={{bbsSn : searchDto.bbsSn}}
+                            >
+                                게시글관리
+                            </Link>
                         </li>
-                        <li>게시판관리</li>
+                        <li>게시글관리</li>
                     </ul>
                 </div>
                 <div className="layout">
@@ -147,7 +160,7 @@ function ManagerPst(props) {
                                             placeholder=""
                                             ref={searchValRef}
                                             onChange={(e) => {
-                                                setSearchDto({ ...searchDto, searchVal: e.target.value })
+                                                setSearchDto({...searchDto, searchVal: e.target.value})
                                             }}
                                             onKeyDown={activeEnter}
                                         />
@@ -157,8 +170,8 @@ function ManagerPst(props) {
                                                 getPstList({
                                                     ...searchDto,
                                                     pageIndex: 1,
-                                                    searchType : searchTypeRef.current.value,
-                                                    searchVal : searchValRef.current.value,
+                                                    searchType: searchTypeRef.current.value,
+                                                    searchVal: searchValRef.current.value,
                                                 });
                                             }}
                                         >
@@ -166,13 +179,20 @@ function ManagerPst(props) {
                                         </button>
                                   </span>
                                 </li>
-                                <li>
+                                <li style={{
+                                    float: "right",
+                                    marginTop: "10px"
+                                }}>
                                     <Link
                                         to={URL.MANAGER_PST_CREATE}
                                         className="btn btn_blue_h46 pd35"
+                                        state={{bbsSn : searchDto.bbsSn}}
                                         mode={CODE.MODE_CREATE}
                                     >
                                         등록
+                                    </Link>
+                                    <Link to={URL.MANAGER_BBS_LIST2} className="btn btn_blue_h46 pd35" style={{marginLeft: "5px"}}>
+                                        게시판 목록
                                     </Link>
                                 </li>
                             </ul>
@@ -186,15 +206,21 @@ function ManagerPst(props) {
                                 <colgroup>
                                     <col width="80"/>
                                     <col/>
+                                    {searchDto.atchFileYn == "Y" && (
                                     <col width="80"/>
+                                    )}
                                     <col width="100"/>
+                                    <col width="80"/>
                                 </colgroup>
                                 <thead>
                                 <tr>
                                     <th>번호</th>
                                     <th>제목</th>
+                                    {searchDto.atchFileYn == "Y" && (
+                                    <th>첨부파일</th>
+                                    )}
+                                    <th>등록일</th>
                                     <th>사용여부</th>
-                                    <th>생성일</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -202,7 +228,7 @@ function ManagerPst(props) {
                                 </tbody>
                             </BtTable>
                             <div className="board_bot">
-                            <EgovPaging
+                                <EgovPaging
                                     pagination={paginationInfo}
                                     moveToPage={(passedPage) => {
                                         getPstList({
