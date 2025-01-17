@@ -90,6 +90,25 @@ function EgovMypageEdit(props) {
     }).open();
   };
 
+  const handleBusinessNumberChange = (e, part) => {
+    const value = e.target.value;
+
+    // 사업자 등록번호가 변경되면 모든 관련 값을 초기화
+    setMemberDetail({
+      ...memberDetail,
+      bizRegNum1: part === 'bizRegNum1' ? value : memberDetail.bizRegNum1,
+      bizRegNum2: part === 'bizRegNum2' ? value : memberDetail.bizRegNum2,
+      bizRegNum3: part === 'bizRegNum3' ? value : memberDetail.bizRegNum3,
+
+      // 입력 필드가 바뀔 때마다 관련 값들 초기화
+      mvnEntNm: "",         // 사업자명 초기화
+      rpsvNm: "",           // 대표자명 초기화
+      clsNm: "",            // 산업명 초기화
+      entTelno: "",         // 대표번호 초기화
+      bzentyEmlAddr: "",    // 기업메일 초기화
+      address: "",          // 주소 초기화
+    });
+  };
   // 버튼 클릭 핸들러
   const kbioauth = async () => {
     const businessNumber = `${memberDetail.bizRegNum1}-${memberDetail.bizRegNum2}-${memberDetail.bizRegNum3}`;
@@ -1202,26 +1221,28 @@ function EgovMypageEdit(props) {
                           <span className="req">필수</span>
                         </dt>
                         <dd>
-                        <input
+                          <input
                               className="f_input2 w_full"
                               type="text"
                               name="bizRegNum1"
                               maxLength="3"
                               value={memberDetail.bizRegNum1 || ""}
                               style={{width: "100px", marginRight: "5px"}}
-                              onChange={(e) =>
-                                  setMemberDetail({ ...memberDetail, bizRegNum1: e.target.value })
-                              }
+                              onChange={(e) => handleBusinessNumberChange(e, 'bizRegNum1')}
                           />
-                          <span style={{
-                            marginLeft: '10px',
-                            marginRight: '10px',
-                            marginTop: '10px',
-                            fontSize: '13px',
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                          }}>-</span>
+                          <span
+                              style={{
+                                marginLeft: '10px',
+                                marginRight: '10px',
+                                marginTop: '10px',
+                                fontSize: '13px',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                              }}
+                          >
+                            -
+                          </span>
                           <input
                               className="f_input2 w_full"
                               type="text"
@@ -1229,18 +1250,20 @@ function EgovMypageEdit(props) {
                               maxLength="2"
                               value={memberDetail.bizRegNum2 || ""}
                               style={{width: "70px", margin: "0 5px"}}
-                              onChange={(e) =>
-                                  setMemberDetail({ ...memberDetail, bizRegNum2: e.target.value })
-                              }
+                              onChange={(e) => handleBusinessNumberChange(e, 'bizRegNum2')}
                           />
-                          <span style={{
-                            marginLeft: '10px',
-                            marginRight: '10px',
-                            fontSize: '13px',
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                          }}>-</span>
+                          <span
+                              style={{
+                                marginLeft: '10px',
+                                marginRight: '10px',
+                                fontSize: '13px',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                              }}
+                          >
+                            -
+                          </span>
                           <input
                               className="f_input2 w_full"
                               type="text"
@@ -1248,9 +1271,7 @@ function EgovMypageEdit(props) {
                               maxLength="5"
                               value={memberDetail.bizRegNum3 || ""}
                               style={{width: "130px", marginLeft: "5px"}}
-                              onChange={(e) =>
-                                  setMemberDetail({ ...memberDetail, bizRegNum3: e.target.value })
-                              }
+                              onChange={(e) => handleBusinessNumberChange(e, 'bizRegNum3')}
                           />
                           <button
                               className="btn btn_skyblue_h46"
@@ -1318,7 +1339,7 @@ function EgovMypageEdit(props) {
 
                       {/* 기업메일 */}
                       <dl>
-                        <dt>
+                      <dt>
                           <label htmlFor="email">기업메일</label>
                         </dt>
                         <dd>
