@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef, useCallback} from "react";
-import {useNavigate, useLocation, Link} from "react-router-dom";
+import {useNavigate, useLocation, Link, NavLink} from "react-router-dom";
 import axios from "axios";
 import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
@@ -24,10 +24,12 @@ function ResidentCompanyList(){
     );
 
     const [paginationInfo, setPaginationInfo] = useState({});
-    const brnoRef = useRef();
-    const mvnEntNmRef = useRef();
-    const rpsvNmRef = useRef();
     const [rcList, setAuthorityList] = useState([]);
+
+    const handleSearch = () => {
+        setSearchDto({ ...searchDto, pageIndex: 1 });
+        getRcList(searchDto);
+    };
 
     const getRcList = useCallback(
         (searchDto)=>{
@@ -90,52 +92,142 @@ function ResidentCompanyList(){
     function formatBrno(brno) {
         if (!brno || brno.length < 10) {
             console.error("Invalid brno length or undefined value.");
-            return brno; // 값이 유효하지 않을 경우 원래 값을 반환
+            return brno;
         }
 
         return `${brno.slice(0, 3)}-${brno.slice(3, 5)}-${brno.slice(5)}`;
     }
 
+    const activeEnter = (e) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            getRcList(searchDto);
+        }
+    };
+
+
     return(
+        <div className="contents BOARD_CREATE_LIST" id="contents">
 
-        <div className="board_list BRD006">
-        <BtTable
-            striped bordered hover size="sm"
-            className="btTable"
-        >
-            <colgroup>
-                <col width="20"/>
-                <col width="100"/>
-                <col width="50"/>
-                <col width="80"/>
-                <col width="50"/>
-            </colgroup>
-            <thead>
-            <tr>
-                <th>번호</th>
-                <th>기업이름</th>
-                <th>대표자</th>
-                <th>사업자등록번호</th>
-                <th>등록일</th>
-            </tr>
-            </thead>
-            <tbody>
-            {rcList}
-            </tbody>
-        </BtTable>
+            <div className="condition">
+                <ul>
+                    <li className="third_2 R">
+                        <span className="lb">기업이름</span>
+                        <span className="f_search w_400" style={{ width: "20%" }}>
+                                        <input
+                                            type="text"
+                                            name="mvnEntName"
+                                            placeholder=""
+                                            value={searchDto.mvnEntNm} // 입력 값 바인딩
+                                            onChange={(e) =>
+                                                setSearchDto({
+                                                    ...searchDto,
+                                                    mvnEntNm: e.target.value,
+                                                })
+                                            }
+                                            onKeyDown={activeEnter}
+                                        />
+                                    </span>
+                        <span className="lb" style={{ marginLeft: "10px" }}>
+                                        대표자
+                                    </span>
+                        <span className="f_search w_400" style={{ width: "20%" }}>
+                                        <input
+                                            type="text"
+                                            name="rpsvNm"
+                                            placeholder=""
+                                            value={searchDto.rpsvNm} // 입력 값 바인딩
+                                            onChange={(e) =>
+                                                setSearchDto({
+                                                    ...searchDto,
+                                                    rpsvNm: e.target.value,
+                                                })
+                                            }
+                                            onKeyDown={activeEnter}
+                                        />
+                                    </span>
+                        <span className="lb" style={{ marginLeft: "10px" }}>
+                                        사업자번호
+                                    </span>
+                        <span className="f_search w_400" style={{ width: "20%" }}>
+                                        <input
+                                            type="text"
+                                            name="brno"
+                                            placeholder=" - 제외하고 입력"
+                                            value={searchDto.brno} // 입력 값 바인딩
+                                            onChange={(e) => {
+                                                const value = e.target.value;
+                                                setSearchDto({
+                                                    ...searchDto,
+                                                    brno: value.replace(/-/g, ''),
+                                                })
+                                            }}
+                                            onKeyDown={activeEnter}
+                                        />
+                                    </span>
+                        <button className="btn"
+                                type="button"
+                                style={{marginLeft:"15px", backgroundColor:"#169bd5", color:"white", width:"8%", marginTop:"3px"}}
+                                onClick={handleSearch}>
+                            조회
+                        </button>
+                    </li>
+                </ul>
+            </div>
+            <div style={{
+                overflow: "hidden",
+            }}>
+                <NavLink
+                    to={URL.RESIDENT_COMPANY_CREATE}
+                    className="btn  btn_blue_h46 pd35"
+                    style={{float: "right", marginRight: "20px", marginTop: "15px", marginBottom: "15px"}}
+                >
+                    입주기업 등록
+                </NavLink>
+            </div>
+            {/*테이블 영역*/}
+            <div className="board_list BRD006">
+                <BtTable
+                    striped bordered hover size="sm"
+                    className="btTable"
+                >
+                    <colgroup>
+                        <col width="20"/>
+                        <col width="100"/>
+                        <col width="50"/>
+                        <col width="80"/>
+                        <col width="50"/>
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>번호</th>
+                        <th>기업이름</th>
+                        <th>대표자</th>
+                        <th>사업자등록번호</th>
+                        <th>등록일</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {rcList}
+                    </tbody>
+                </BtTable>
 
-    <div className="board_bot">
-        <EgovPaging
-            pagination={paginationInfo}
-            moveToPage={(passedPage) => {
-                getRcList({
-                    ...searchDto,
-                    pageIndex: passedPage
-                });
-            }}
-        />
-    </div>
+                <div className="board_bot">
+                    <EgovPaging
+                        pagination={paginationInfo}
+                        moveToPage={(passedPage) => {
+                            getRcList({
+                                ...searchDto,
+                                pageIndex: passedPage
+                            });
+                        }}
+                    />
+                </div>
+            </div>
         </div>
+
+
+
 
     );
 }
