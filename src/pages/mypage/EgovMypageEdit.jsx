@@ -119,7 +119,19 @@ function EgovMypageEdit(props) {
           console.log("로컬 데이터:", businessData);
 
           if (businessData) {
-            alert(`로컬 데이터: 사업자명 - ${businessData.mvnEntNm}, 대표자이름 - ${businessData.rpsvNm}`);
+
+            const fullAddress = `${businessData.entAddr || ""} ${businessData.entDaddr || ""}`.trim();
+
+            setMemberDetail({
+              ...memberDetail,
+              mvnEntNm: businessData.mvnEntNm,
+              rpsvNm: businessData.rpsvNm,
+              clsNm: businessData.clsNm,
+              entTelno: businessData.entTelno,
+              bzentyEmlAddr: businessData.bzentyEmlAddr,
+              address: fullAddress,
+
+            });
           } else {
             alert("로컬 데이터는 있으나 상세 정보가 없습니다.");
           }
@@ -1257,7 +1269,7 @@ function EgovMypageEdit(props) {
                           <label htmlFor="companyName">기업명</label>
                         </dt>
                         <dd>
-                          <span>{memberDetail.companyName || ""}</span> {/* 텍스트로 기업명 표시 */}
+                          <span>{memberDetail.mvnEntNm || ""}</span> {/* 기업명 표시 */}
                         </dd>
                       </dl>
 
@@ -1267,7 +1279,7 @@ function EgovMypageEdit(props) {
                           <label htmlFor="ceoName">대표자</label>
                         </dt>
                         <dd>
-                          <span>{memberDetail.ceoName || ""}</span> {/* 텍스트로 대표자 표시 */}
+                          <span>{memberDetail.rpsvNm || ""}</span> {/* 대표자 이름 표시 */}
                         </dd>
                       </dl>
 
@@ -1277,7 +1289,7 @@ function EgovMypageEdit(props) {
                           <label htmlFor="industry">산업</label>
                         </dt>
                         <dd>
-                          <span>{memberDetail.industry || ""}</span> {/* 텍스트로 산업 표시 */}
+                          <span>{memberDetail.clsNm || ""}</span> {/* 산업명 표시 */}
                         </dd>
                       </dl>
 
@@ -1287,14 +1299,11 @@ function EgovMypageEdit(props) {
                           <label htmlFor="address">주소</label>
                         </dt>
                         <dd style={{display: "block"}}>
-                          <span>{memberDetail.address1 || ""}</span> {/* 첫 번째 줄 주소 */}
+                          <span>{memberDetail.address || ""}</span>
                         </dd>
-                        <dd style={{display: "block"}}>
-                          <span>{memberDetail.address2 || ""}</span> {/* 두 번째 줄 주소 */}
-                        </dd>
-                        <dd style={{display: "block"}}>
-                          <span>{memberDetail.address3 || ""}</span> {/* 세 번째 줄 주소 */}
-                        </dd>
+                        {/*<dd style={{display: "block"}}>
+                          <span>{memberDetail.entDaddr || ""}</span>  두 번째 줄 주소
+                        </dd>*/}
                       </dl>
 
                       {/* 대표번호 */}
@@ -1303,17 +1312,17 @@ function EgovMypageEdit(props) {
                           <label htmlFor="phoneNum">대표번호</label>
                         </dt>
                         <dd>
-                          <span>{memberDetail.phoneNum || ""}</span> {/* 텍스트로 대표번호 표시 */}
+                          <span>{memberDetail.entTelno || ""}</span> {/* 대표번호 표시 */}
                         </dd>
                       </dl>
 
                       {/* 기업메일 */}
                       <dl>
-                      <dt>
+                        <dt>
                           <label htmlFor="email">기업메일</label>
                         </dt>
                         <dd>
-                          <span>{memberDetail.email || ""}</span> {/* 텍스트로 기업메일 표시 */}
+                          <span>{memberDetail.bzentyEmlAddr || ""}</span> {/* 기업메일 표시 */}
                         </dd>
                       </dl>
                     </div>
