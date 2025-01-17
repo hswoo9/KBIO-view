@@ -90,6 +90,7 @@ function EgovMypageEdit(props) {
     }).open();
   };
 
+  // 버튼 클릭 핸들러
   const kbioauth = async () => {
     const businessNumber = `${memberDetail.bizRegNum1}-${memberDetail.bizRegNum2}-${memberDetail.bizRegNum3}`;
 
@@ -98,34 +99,71 @@ function EgovMypageEdit(props) {
       return;
     }
 
-    const apiKey = import.meta.env.VITE_APP_DATA_API_CLIENTID;
-    const url = `https://api.odcloud.kr/api/nts-businessman/v1/status?serviceKey=${apiKey}`;
-
     try {
-      const response = await axios.post(url, {
-        b_no: [businessNumber.replace(/-/g, '')],
+      // Step 1: 로컬 데이터베이스에서 사업자 등록번호 조회
+      const checkBusinessURL = '/memberApi/checkBusiness.do';
+      const reqOptions = {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({
+          businessNumber: businessNumber.replace(/-/g, ''),
+        }),
+      };
+
+      // 비동기 함수로 처리하기 위해 내부 콜백 함수를 async로 설정
+      await EgovNet.requestFetch(checkBusinessURL, reqOptions, async function (resp) {
+        if (resp.resultCode === 200) {
+          const businessData = resp.result.businessData;
+          console.log("로컬 데이터:", businessData);
+
+          if (businessData) {
+            alert(`로컬 데이터: 사업자명 - ${businessData.mvnEntNm}, 대표자이름 - ${businessData.rpsvNm}`);
+          } else {
+            alert("로컬 데이터는 있으나 상세 정보가 없습니다.");
+          }
+        } else if (resp.resultCode === 400) {
+          const apiKey = import.meta.env.VITE_APP_DATA_API_CLIENTID;
+          const url = `https://api.odcloud.kr/api/nts-businessman/v1/status?serviceKey=${apiKey}`;
+
+          try {
+            const response = await axios.post(url, {
+              b_no: [businessNumber.replace(/-/g, '')],
+            });
+
+            const businessData = response.data[0];
+            console.log("공공포털 데이터:", businessData);
+
+            const businessStatus = response.data.data[0]?.b_stt_cd;
+
+            if (businessStatus === '01') {
+              alert("사업자가 정상적으로 운영 중입니다.");
+            } else if (businessStatus === '02') {
+              alert("사업자가 휴업 중입니다.");
+            } else if (businessStatus === '03') {
+              alert("사업자가 폐업 상태입니다.");
+            } else {
+              alert("사업자가 존재하지 않습니다.");
+            }
+          } catch (error) {
+            console.error("공공 API 요청 실패:", error);
+            alert("공공 API 요청 중 문제가 발생했습니다.");
+          }
+        } else {
+          alert("서버에서 데이터를 조회할 수 없습니다.");
+        }
+      }, function (error) {
+        console.error("로컬 데이터 요청 실패:", error);
+        alert("로컬 데이터 요청 중 문제가 발생했습니다.");
       });
-
-      const businessData = response.data.data[0];
-      console.log(businessData);
-
-      const businessStatus = response.data.data[0]?.b_stt_cd;
-
-      if (businessStatus === '01') {
-        alert("사업자가 정상적으로 운영 중입니다.");
-      } else if (businessStatus === '02') {
-        alert("사업자가 휴업 중입니다.");
-      } else if (businessStatus === '03') {
-        alert("사업자가 폐업 상태입니다.");
-      } else {
-        alert("사업자가 존재 하지 않습니다.");
-      }
-
     } catch (error) {
-      console.error("Error fetching business status:", error);
-      alert("사업자 등록번호 조회에 실패했습니다.");
+      console.error("에러 발생:", error);
+      alert("오류가 발생했습니다.");
     }
   };
+
+
 
   const nonsearchAddress = () => {
     if (!window.daum || !window.daum.Postcode) {
