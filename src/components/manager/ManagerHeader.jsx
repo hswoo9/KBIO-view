@@ -87,7 +87,7 @@ function ManagerHeader() {
             </li>
             <li>
               <NavLink
-                to={""}
+                to={URL.MANAGER_BANNER_LIST}
                 className={({ isActive }) => (isActive ? "cur" : "")}
               >
                 배너팝업관리

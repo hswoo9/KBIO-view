@@ -97,6 +97,7 @@ const URL = {
   MANAGER_NONRESIDENT_COMPANY: "/manager/nonresidentMember",
   MANAGER_CONSULTENT: "/manager/consultent",
 
+  /* 코드 관리 시작 */
   MANAGER_CODE_GROUP: "/manager/codeGroup",
   MANAGER_CODE_GROUP_CREATE: "/manager/codeGroup/create",
   MANAGER_CODE_GROUP_MODIFY: "/manager/codeGroup/modify",
@@ -104,6 +105,17 @@ const URL = {
   MANAGER_CODE: "/manager/code",
   MANAGER_CODE_CREATE: "/manager/code/create",
   MANAGER_CODE_MODIFY: "/manager/code/modify",
+  /* 코드 관리 종료 */
+
+  /* 배너팝업관리 시작 */
+  MANAGER_BANNER_POPUP: "/manager/bannerPopup",
+  MANAGER_BANNER_LIST: "/manager/banner/list",
+  MANAGER_BANNER_CREATE: "/manager/banner/create",
+  MANAGER_POPUP_LIST: "/manager/popup/list",
+  MANAGER_POPUP_CREATE: "/manager/popup/create",
+  MANAGER_IMAGES_POPUP: "/popupView/images",
+
+  /* 배너팝업관리 종료 */
 
   MANAGER_MENU_MANAGEMENT: "/manager/menuManagement",
   MANAGER_MENU_AUTHORITY: "/manager/menuAuthority",
