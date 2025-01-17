@@ -15,7 +15,7 @@ function ManagerImagesPopup(props) {
     }, []);
     return (
         <>
-            <img src={imgFile} id="templatesImgTag" />
+            <img src={imgFile} id="templatesImgTag" alt={imgFile || '이미지가 없습니다.'}/>
         </>
     );
 }
