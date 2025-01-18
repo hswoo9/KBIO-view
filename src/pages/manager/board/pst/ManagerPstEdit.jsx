@@ -189,7 +189,7 @@ function setPst(props) {
     });
   }
 
-  const setPst = async () => {
+  const setPstData = async () => {
     if (pstDetail.upendNtcYn == "Y") {
       if(!pstDetail.ntcBgngDt && !pstDetail.ntcEndDate){
         Swal.fire("공지기간은 선택해주세요.");
@@ -384,7 +384,8 @@ function setPst(props) {
                           <input {...getInputProps()} />
                           <p>파일을 이곳에 드롭하거나 클릭하여 업로드하세요</p>
                         </div>
-                        {pstDetail.pstFiles.length > 0 && (
+
+                        {pstDetail != null && pstDetail.pstFiles != null &&pstDetail.pstFiles.length > 0 && (
                             <ul>
                               {pstDetail.pstFiles.map((file, index) => (
                                   <li key={index}>
@@ -488,7 +489,7 @@ function setPst(props) {
                   <div className="left_col btn1">
                     <button
                         className="btn btn_skyblue_h46 w_100"
-                        onClick={() => setPst()}
+                        onClick={() => setPstData()}
                     >
                       저장
                     </button>
