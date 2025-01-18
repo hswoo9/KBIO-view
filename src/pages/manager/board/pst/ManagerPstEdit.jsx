@@ -318,20 +318,16 @@ function setPst(props) {
                           setIsDatePickerEnabled(e.target.checked);
                         }}
                     ></Form.Check>
-                    <ReactDatePicker
+                    <input type="date"
                         name="ntcBgngDt"
                         /*locale={ko}*/
-                        selected={startDate}
                         onChange={(date) => setStartDate(date)}
-                        dateFormat="yyyy-MM-dd"
                         disabled={!isDatePickerEnabled} // 활성화 여부 결정
                     />~
-                    <ReactDatePicker
+                    <input type="date"
                         name="ntcEndDate"
                         /*locale={ko}*/
-                        selected={endDate}
                         onChange={(date) => setEndDate(date)}
-                        dateFormat="yyyy-MM-dd"
                         disabled={!isDatePickerEnabled} // 활성화 여부 결정
                     />
                   </dd>
