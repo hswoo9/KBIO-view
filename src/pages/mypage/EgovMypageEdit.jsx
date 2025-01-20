@@ -16,6 +16,7 @@ function EgovMypageEdit(props) {
   const navigate = useNavigate();
   const location = useLocation();
   const checkRef = useRef([]);
+  const signupType = location.state?.signupType;
 
   console.log("EgovMypageEdit [location] : ", location);
   //const uniqId = location.state?.uniqId || "";
@@ -49,6 +50,11 @@ function EgovMypageEdit(props) {
 
     script.onload = () => {
       console.log("카카오 주소 검색 API가 로드되었습니다.");
+
+      // 여기서 type 콘솔에 찍기
+      if (location.state?.signupType) {
+        console.log("Signup Type: ", location.state.signupType);
+      }
     };
 
     document.body.appendChild(script);
@@ -56,7 +62,7 @@ function EgovMypageEdit(props) {
     return () => {
       document.body.removeChild(script);
     };
-  }, []);
+  }, [location.state]);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -320,69 +326,76 @@ function EgovMypageEdit(props) {
       Object.keys(formData).forEach((key) => {
         form.append(key, formData[key]);
       });
-      console.log(formData)
+
+      // 회원 ID 필수 값 확인
       if (form.get("mberId") === null || form.get("mberId") === "") {
         alert("회원ID는 필수 값입니다.");
-        return false;
+        return resolve(false); //
       }
 
+      // 아이디 중복 체크
       checkIdDplct().then((res) => {
-        if (res > 0) {
-          return false;
+        if (res > 0) { // 중복된 아이디
+          alert("중복된 아이디입니다. 다른 아이디를 사용해주세요.");
+          return resolve(false);
         }
 
-        if (
-            form.get("password") === null ||
-            form.get("password") === ""
-        ) {
+        // 비밀번호 필수 값 확인
+        if (form.get("password") === null || form.get("password") === "") {
           alert("암호는 필수 값입니다.");
-          return false;
+          return resolve(false);
         }
 
+        // 비밀번호 형식 확인
         const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?/~_`|-]).{8,20}$/;
         if (!passwordRegex.test(form.get("password"))) {
           alert("암호는 영문자, 숫자, 특수문자 조합으로 8~20자리 이내여야 합니다.");
-          return false;
+          return resolve(false);
         }
 
-        if (form.get("password_chk") === null ||
-            form.get("password_chk") === ""
-        ) {
+        // 비밀번호 확인 필수 값 확인
+        if (form.get("password_chk") === null || form.get("password_chk") === "") {
           alert("비밀번호 확인은 필수 값입니다.");
-          return false;
+          return resolve(false);
         }
 
+        // 비밀번호와 비밀번호 확인 일치 여부 확인
         if (form.get("password") !== form.get("password_chk")) {
           alert("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
-          return false;
+          return resolve(false);
         }
 
+        // 회원명 필수 값 확인
         if (form.get("mberNm") === null || form.get("mberNm") === "") {
           alert("회원명은 필수 값입니다.");
-          return false;
+          return resolve(false);
         }
 
+        // 회원명 형식 확인
         const mberNmRegex = /^[a-zA-Zㄱ-ㅎ가-힣]+$/;
         if (!mberNmRegex.test(form.get("mberNm"))) {
           alert("회원명은 한글 또는 영문자만 사용 가능합니다.");
-          return false;
+          return resolve(false);
         }
 
+        // 전화번호 필수 값 확인
         if (form.get("phonenum") === null || form.get("phonenum") === "") {
           alert("전화번호는 필수 값입니다.");
-          return false;
+          return resolve(false);
         }
 
+        // 전화번호 형식 확인
         const phonenumRegex = /^[0-9\-]+$/;
         if (!phonenumRegex.test(form.get("phonenum"))) {
           alert("전화번호는 숫자와 하이픈(-)만 포함할 수 있습니다.");
-          return false;
+          return resolve(false);
         }
 
         resolve(true);
       });
     });
   };
+
 
   const formObjValidator = (checkRef) => {
     if (checkRef.current[0].value === "") {
@@ -467,31 +480,33 @@ function EgovMypageEdit(props) {
   const insertMember = () => {
     const insertMemURL = `/memberApi/insertMember.do`;
 
-    formValidator(memberDetail).then((res) => {
-      if (res) {
-        const reqOptions = {
-          method: "POST",
-          headers: {
-            "Content-type": "application/json",
-          },
-          body: JSON.stringify(memberDetail),
-        };
+    formValidator(memberDetail).then((isValid) => {
+      if (!isValid) return; // 검증 실패 시 함수 종료
 
-        EgovNet.requestFetch(insertMemURL, reqOptions, function (resp) {
-          if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
-            setMemberDetail({
-              ...memberDetail,
-              insertMemResult: "회원가입신청이 완료되었습니다.",
-            });
-            navigate({ pathname: URL.COMPLETE_MEMBER });
-          } else {
-            navigate(
-                { pathname: URL.ERROR },
-                { state: { msg: resp.resultMessage } }
-            );
-          }
-        });
-      }
+      const reqOptions = {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify(memberDetail),
+      };
+
+      EgovNet.requestFetch(insertMemURL, reqOptions, function (resp) {
+        console.log("Result Code:", resp.resultCode);
+        console.log("Expected Code:", CODE.RCV_SUCCESS);
+        if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
+          setMemberDetail({
+            ...memberDetail,
+            insertMemResult: "회원가입신청이 완료되었습니다.",
+          });
+          navigate({ pathname: URL.COMPLETE_MEMBER });
+        } else {
+          navigate(
+              { pathname: URL.ERROR },
+              { state: { msg: resp.resultMessage } }
+          );
+        }
+      });
     });
   };
 
@@ -568,10 +583,6 @@ function EgovMypageEdit(props) {
                   <h2 className="tit_2">회원 생성</h2>
               )}
 
-              {modeInfo.mode === CODE.MODE_MODIFY && (
-                  <h2 className="tit_2">회원 수정</h2>
-              )}
-
               <div className="board_view2">
                 <dl>
                   <dt>
@@ -600,12 +611,14 @@ function EgovMypageEdit(props) {
                               ref={(el) => (checkRef.current[0] = el)}
                               required
                               style={{width: '30%', marginRight: '10px'}}
+                              disabled={signupType === "kakao" || signupType === "naver" || signupType === "google"}
                           />
                           <button
                               className="btn btn_skyblue_h46"
                               onClick={() => {
                                 checkIdDplct();
                               }}
+                              disabled={signupType === "kakao" || signupType === "naver" || signupType === "google"}
                           >
                             중복확인
                           </button>
@@ -635,21 +648,6 @@ function EgovMypageEdit(props) {
                           )}
                         </>
                     )}
-                    {/* 수정/조회 일때 변경 불가 */}
-                    {modeInfo.mode === CODE.MODE_MODIFY && (
-                        <input
-                            className="f_input2 w_full"
-                            type="text"
-                            name="mberId"
-                            title=""
-                            id="mberId"
-                            placeholder=""
-                            defaultValue={memberDetail.mberId}
-                            ref={(el) => (checkRef.current[0] = el)}
-                            readOnly
-                            required
-                        />
-                    )}
                   </dd>
                 </dl>
                 <dl>
@@ -678,6 +676,7 @@ function EgovMypageEdit(props) {
                               ref={(el) => (checkRef.current[1] = el)}
                               required
                               style={{width: '30%', marginrigth: '30px'}}
+                              disabled={signupType === "kakao" || signupType === "naver" || signupType === "google"}
                           />
                           <span
                               style={{
@@ -693,25 +692,6 @@ function EgovMypageEdit(props) {
                           영문자, 숫자, 특수문자 조합으로 8~20자리이내만 가능합니다.
                         </span>
                         </>
-                    )}
-                    {/* 수정/조회 일때 */}
-                    {modeInfo.mode === CODE.MODE_MODIFY && (
-                        <input
-                            className="f_input2 w_full"
-                            type="password"
-                            name="password"
-                            title=""
-                            id="password"
-                            placeholder="빈값이면 기존 암호가 변경되지 않고 그대로 유지됩니다."
-                            defaultValue=""
-                            onChange={(e) =>
-                                setMemberDetail({
-                                  ...memberDetail,
-                                  password: e.target.value,
-                                })
-                            }
-                            ref={(el) => (checkRef.current[1] = el)}
-                        />
                     )}
                   </dd>
                 </dl>
@@ -741,6 +721,7 @@ function EgovMypageEdit(props) {
                               ref={(el) => (checkRef.current[2] = el)}
                               required
                               style={{width: '30%'}}
+                              disabled={signupType === "kakao" || signupType === "naver" || signupType === "google"}
                           />
                           <span
                               style={{
@@ -756,25 +737,6 @@ function EgovMypageEdit(props) {
                       비밀번호 한번 더 입력하세요.
                       </span>
                         </>
-                    )}
-                    {/* 수정/조회 일때 */}
-                    {modeInfo.mode === CODE.MODE_MODIFY && (
-                        <input
-                            className="f_input2 w_full"
-                            type="password"
-                            name="password_chk"
-                            title=""
-                            id="password_chk"
-                            placeholder="빈값이면 기존 암호가 변경되지 않고 그대로 유지됩니다."
-                            defaultValue=""
-                            onChange={(e) =>
-                                setMemberDetail({
-                                  ...memberDetail,
-                                  password: e.target.value,
-                                })
-                            }
-                            ref={(el) => (checkRef.current[2] = el)}
-                        />
                     )}
                   </dd>
                 </dl>
@@ -873,7 +835,7 @@ function EgovMypageEdit(props) {
                                 emailDomain: e.target.value,
                               })
                           }
-                          disabled={memberDetail.emailProvider !== "direct"}  // 이메일 제공자가 직접입력이 아닐 경우 비활성화
+                          disabled={memberDetail.emailProvider && memberDetail.emailProvider !== "direct"}
                           required
                           style={{width: '20%'}}
                       />
@@ -932,6 +894,7 @@ function EgovMypageEdit(props) {
                     </div>
                   </dd>
                 </dl>
+
                 <dl>
                   <dt>
                     <label htmlFor="address">주소</label>
@@ -1339,7 +1302,7 @@ function EgovMypageEdit(props) {
 
                       {/* 기업메일 */}
                       <dl>
-                      <dt>
+                        <dt>
                           <label htmlFor="email">기업메일</label>
                         </dt>
                         <dd>
@@ -1348,7 +1311,6 @@ function EgovMypageEdit(props) {
                       </dl>
                     </div>
                 )}
-
 
 
                 {/* 비입주기업 기업정보 섹션 */}
@@ -1706,7 +1668,7 @@ function EgovMypageEdit(props) {
                           <span className="req">필수</span>
                         </dt>
                         <dd>
-                        {/* 사진 업로드 부분 */}
+                          {/* 사진 업로드 부분 */}
                           <div style={{display: "flex", alignItems: "center", marginBottom: "10px"}}>
                             {/* 첨부 파일 이미지 (사진 자리) */}
                             <div
@@ -1768,7 +1730,7 @@ function EgovMypageEdit(props) {
                           <span className="req">필수</span>
                         </dt>
                         <dd>
-                        <input
+                          <input
                               className="f_input2 w_full"
                               type="text"
                               name="consultantAffiliation"
@@ -1792,7 +1754,7 @@ function EgovMypageEdit(props) {
                           <span className="req">필수</span>
                         </dt>
                         <dd>
-                        <input
+                          <input
                               className="f_input2 w_full"
                               type="text"
                               name="consultantPosition"
@@ -1816,7 +1778,7 @@ function EgovMypageEdit(props) {
                           <span className="req">필수</span>
                         </dt>
                         <dd>
-                        <input
+                          <input
                               className="f_input2 w_full"
                               type="text"
                               name="consultantExperience"
@@ -1847,7 +1809,7 @@ function EgovMypageEdit(props) {
                           <span className="req">필수</span>
                         </dt>
                         <dd>
-                        <input
+                          <input
                               className="f_input2 w_full"
                               type="text"
                               name="consultantArea"
@@ -1870,7 +1832,7 @@ function EgovMypageEdit(props) {
                           <span className="req">필수</span>
                         </dt>
                         <dd>
-                        <div>
+                          <div>
                             <label
                                 style={{
                                   display: "block",
@@ -1924,7 +1886,7 @@ function EgovMypageEdit(props) {
                           <span className="req">필수</span>
                         </dt>
                         <dd>
-                        <input
+                          <input
                               className="f_input2 w_full"
                               type="text"
                               name="consultantIntroduction"
@@ -2011,37 +1973,27 @@ function EgovMypageEdit(props) {
 
 
                 {/* <!-- 버튼영역 --> */}
-                <div className="board_btn_area" style={{ display: "flex", justifyContent: "center", gap: "10px" }}>
-                    <button
-                        className="btn btn_skyblue_h46 w_100"
-                        onClick={() => insertMember()}
-                        style={{width: '10%'}}
-                    >
-                      가입 신청
-                    </button>
-                    <button
-                        className="btn btn_skyblue_h46 w_100"
-                        onClick={() => navigate(URL.LOGIN)}
-                        style={{
-                          width: "10%",
-                          backgroundColor: "red",
-                          color: "white",
-                          border: "none",
-                        }}
-                    >
-                      가입 취소
-                    </button>
-                    {modeInfo.mode === CODE.MODE_MODIFY && (
-                        <button
-                            className="btn btn_skyblue_h46 w_100"
-                            onClick={() => {
-                              deleteMember();
-                            }}
-                        >
-                          탈퇴
-                        </button>
-                    )}
-                    {/* memberDetail.uniqId 제거 서버단에서 토큰값 사용 */}
+                <div className="board_btn_area" style={{display: "flex", justifyContent: "center", gap: "10px"}}>
+                  <button
+                      className="btn btn_skyblue_h46 w_100"
+                      onClick={() => insertMember()}
+                      style={{width: '10%'}}
+                  >
+                    가입 신청
+                  </button>
+                  <button
+                      className="btn btn_skyblue_h46 w_100"
+                      onClick={() => navigate(URL.LOGIN)}
+                      style={{
+                        width: "10%",
+                        backgroundColor: "red",
+                        color: "white",
+                        border: "none",
+                      }}
+                  >
+                    가입 취소
+                  </button>
+                  {/* memberDetail.uniqId 제거 서버단에서 토큰값 사용 */}
 
                 </div>
                 {/* <!--// 버튼영역 --> */}

@@ -1,10 +1,19 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import URL from "@/constants/url";
 
 const EgovIdentityVerification = () => {
     const [isVerified, setIsVerified] = useState(false);
     const navigate = useNavigate();
+    const location = useLocation();
+
+    const [signupType, setSignupType] = useState("");
+
+    useEffect(() => {
+        if (location.state?.signupType) {
+            setSignupType(location.state.signupType);
+        }
+    }, [location.state]);
 
     const handleVerification = () => {
         // 실제 본인인증 로직을 여기에 추가
@@ -18,7 +27,7 @@ const EgovIdentityVerification = () => {
             alert("본인인증을 완료해야 회원가입을 진행할 수 있습니다.");
             return;
         }
-        navigate(URL.MYPAGE_CREATE);
+        navigate(URL.MYPAGE_CREATE, { state: { signupType } });
     };
 
     return (

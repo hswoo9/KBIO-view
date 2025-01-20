@@ -1,10 +1,19 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import URL from "@/constants/url";
 
 const EgovTermsAgreement = () => {
     const [isAgreed, setIsAgreed] = useState(false);
     const navigate = useNavigate();
+    const location = useLocation();
+
+    const [signupType, setSignupType] = useState("");
+
+    useEffect(() => {
+        if (location.state?.signupType) {
+            setSignupType(location.state.signupType);
+        }
+    }, [location.state]);
 
     const handleAgreementChange = (e) => {
         setIsAgreed(e.target.checked);
@@ -16,7 +25,7 @@ const EgovTermsAgreement = () => {
             return;
         }
         // navigate(URL.MYPAGE_CREATE); // 회원가입 폼 페이지로 이동
-        navigate(URL.IDENTITY_VERIFICATION);
+        navigate(URL.IDENTITY_VERIFICATION, { state: { signupType } });
     };
 
     return (

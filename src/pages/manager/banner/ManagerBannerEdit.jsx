@@ -1,4 +1,5 @@
 import React, {useState, useEffect, useRef, useCallback} from "react";
+import $ from 'jquery';
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import * as EgovNet from "@/api/egovFetch";
@@ -43,14 +44,49 @@ function ManagerBannerEdit(props) {
   useEffect(() => {
     if(saveEvent.save){
       if(saveEvent.mode == "save"){
-        saveCdData(cdDetail);
+        saveBnrPopupData(bnrPopupDetail);
       }
       if(saveEvent.mode == "delete"){
-        delCdData(cdDetail);
+        delBnrPopupData(bnrPopupDetail);
       }
-
     }
   }, [saveEvent]);
+
+  const [acceptFileTypes, setAcceptFileTypes] = useState('jpg,jpeg,png,gif,bmp,tiff,tif,webp,svg,ico,heic,avif');
+  const [selectedFiles, setSelectedFiles] = useState({});
+  useEffect(() => {
+    console.log(selectedFiles);
+  }, [selectedFiles]);
+
+  const handleFileChange = (e) => {
+    console.log(bnrPopupDetail.tblComFiles);
+    if(bnrPopupDetail.tblComFiles != null && bnrPopupDetail.tblComFiles.length > 0){
+      Swal.fire("기존 파일 삭제 후 첨부가 가능합니다.");
+      e.target.value = null;
+      return false;
+    }
+
+    const allowedExtensions = acceptFileTypes.split(',');
+    console.log(allowedExtensions);
+    console.log(e.target.files);
+    if(e.target.files.length > 0){
+      const fileExtension = e.target.files[0].name.split(".").pop().toLowerCase();
+      if(allowedExtensions.includes(fileExtension)){
+        setSelectedFiles(Array.from(e.target.files));
+      }else{
+        Swal.fire({
+          title: "허용되지 않은 확장자입니다.",
+          text: `허용 확장자: ` + acceptFileTypes
+        });
+        e.target.value = null;
+      }
+    }else{
+      Swal.fire(
+          `선택된 파일이 없습니다.`
+      );
+    }
+
+  }
 
   const saveBtnEvent = () => {
     Swal.fire({
@@ -61,12 +97,12 @@ function ManagerBannerEdit(props) {
       cancelButtonText: "취소"
     }).then((result) => {
       if(result.isConfirmed) {
-        if(cdDetail.cd == null){
-          Swal.fire("코드가 없습니다.");
+        if(bnrPopupDetail.bnrPopupTtl == null){
+          Swal.fire("배너제목이 없습니다.");
           return;
         }
-        if(cdDetail.cdNm == null){
-          Swal.fire("코드명이 없습니다.");
+        if($("#formFile").val() == null || $("#formFile").val() == ""){
+          Swal.fire("첨부된 파일이 없습니다.");
           return;
         }
         setSaveEvent({
@@ -99,15 +135,22 @@ function ManagerBannerEdit(props) {
     });
   }
 
-  const saveCdData = useCallback(
-      (cdDetail) => {
-        const menuListURL = "/codeApi/setComCd";
+  const saveBnrPopupData = useCallback(
+      (bnrPopupDetail) => {
+        const formData = new FormData();
+        for (let key in bnrPopupDetail) {
+          if(bnrPopupDetail[key] != null){
+            formData.append(key, bnrPopupDetail[key]);
+          }
+        }
+
+        selectedFiles.map((file) => {
+          formData.append("files", file);
+        });
+        const menuListURL = "/bannerPopupApi/setBnrPopup";
         const requestOptions = {
           method: "POST",
-          headers: {
-            "Content-type": "application/json",
-          },
-          body: JSON.stringify(cdDetail)
+          body: formData
         };
         EgovNet.requestFetch(
             menuListURL,
@@ -116,10 +159,7 @@ function ManagerBannerEdit(props) {
 
               if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
                 navigate(
-                    { pathname: URL.MANAGER_CODE },
-                    { state:
-                          { cdGroupSn: location.state?.cdGroupSn }
-                    }
+                    { pathname: URL.MANAGER_BANNER_LIST }
                 );
               } else {
                 navigate(
@@ -133,15 +173,16 @@ function ManagerBannerEdit(props) {
       }
   );
 
-  const delCdData = useCallback(
-      (cdDetail) => {
-        const menuListURL = "/codeApi/setComCdDel";
+  const delBnrPopupData = useCallback(
+      (bnrPopupDetail) => {
+        console.log(bnrPopupDetail);
+        const menuListURL = "/bannerPopupApi/setBnrPopupDel";
         const requestOptions = {
           method: "POST",
           headers: {
             "Content-type": "application/json",
           },
-          body: JSON.stringify(cdDetail)
+          body: JSON.stringify(bnrPopupDetail)
         };
         EgovNet.requestFetch(
             menuListURL,
@@ -149,7 +190,7 @@ function ManagerBannerEdit(props) {
             (resp) => {
 
               if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
-                navigate({ pathname: URL.MANAGER_CODE }, { state: { cdGroupSn : location.state?.cdGroupSn }});
+                navigate({ pathname: URL.MANAGER_BANNER_LIST });
               } else {
                 navigate(
                     { pathname: URL.ERROR },
@@ -180,7 +221,7 @@ function ManagerBannerEdit(props) {
       default:
         navigate({ pathname: URL.ERROR }, { state: { msg: "" } });
     }
-    //getBnrPopupData();
+    getBnrPopupData();
   };
 
   const getBnrPopupData = () => {
@@ -188,12 +229,14 @@ function ManagerBannerEdit(props) {
       setBnrPopupDetail({
         creatrSn: sessionUser.userSn,
         actvtnYn: "Y",
-        bnrPopupSn: location.state?.bnrPopupSn
+        useYn: "Y",
+        bnrPopupSn: location.state?.bnrPopupSn,
+        bnrPopupKnd: "TOP"
       });
       return;
     }
 
-    const getBnrPopupDataURL = `/codeApi/getComCd`;
+    const getBnrPopupDataURL = `/bannerPopupApi/getBnrPopup`;
 
     const requestOptions = {
       method: "POST",
@@ -203,10 +246,18 @@ function ManagerBannerEdit(props) {
       body: JSON.stringify({bnrPopupSn : location.state?.bnrPopupSn})
     };
 
-    EgovNet.requestFetch(getCdDetailURL, requestOptions, function (resp) {
+    EgovNet.requestFetch(getBnrPopupDataURL, requestOptions, function (resp) {
       if (modeInfo.mode === CODE.MODE_MODIFY) {
         if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
-          setBnrPopupDetail(resp.result.comCd);
+          resp.result.tblBnrPopup.mdfrSn = sessionUser.userSn;
+          setBnrPopupDetail(resp.result.tblBnrPopup);
+          if(resp.result.tblBnrPopup.bnrPopupFrm != null){
+            $.each($("input[name='bnrPopupFrm']"), function(item, index){
+              if(this.value == resp.result.tblBnrPopup.bnrPopupFrm){
+                $(this).prop("checked", true);
+              }
+            });
+          }
         } else {
           navigate(
               { pathname: URL.ERROR },
@@ -270,6 +321,38 @@ function ManagerBannerEdit(props) {
           <></>
       )
     }
+  }
+
+  const setFileDel = (atchFileSn) => {
+    Swal.fire({
+      title: "삭제한 파일은 복구할 수 없습니다.\n그래도 삭제하시겠습니까?",
+      showCloseButton: true,
+      showCancelButton: true,
+      confirmButtonText: "확인",
+      cancelButtonText: "취소"
+    }).then((result) => {
+      if(result.isConfirmed) {
+        const requestOptions = {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body:  JSON.stringify({
+            atchFileSn: atchFileSn,
+          }),
+        };
+
+        EgovNet.requestFetch("/commonApi/setFileDel", requestOptions, (resp) => {
+          if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
+            Swal.fire("삭제되었습니다.");
+            setBnrPopupDetail({ ...bnrPopupDetail, tblComFiles: [] });  // 상태 업데이트
+          } else {
+          }
+        });
+      } else {
+        //취소
+      }
+    });
   }
 
   useEffect(() => {
@@ -369,7 +452,7 @@ function ManagerBannerEdit(props) {
                       label="이미지형식"
                       id="1"
                       name="bnrPopupFrm"
-                      defaultValue={bnrPopupDetail.bnrPopupFrm}
+                      value="images"
                       onChange={(e) =>
                           setBnrPopupDetail({...bnrPopupDetail, bnrPopupFrm: e.target.value})
                       }
@@ -385,8 +468,26 @@ function ManagerBannerEdit(props) {
                   </dt>
                   <dd>
                     <Form.Group controlId="formFile">
-                      <Form.Control type="file" />
+                      <Form.Control type="file"
+                        onChange={handleFileChange}
+                      />
                     </Form.Group>
+                    {bnrPopupDetail != null && bnrPopupDetail.tblComFiles != null && bnrPopupDetail.tblComFiles.length > 0 && (
+                        <ul>
+                          {bnrPopupDetail.tblComFiles.map((file, index) => (
+                              <li key={index}>
+                                {file.atchFileNm} - {(file.atchFileSz / 1024).toFixed(2)} KB
+
+                                <button
+                                    onClick={() => setFileDel(file.atchFileSn)}  // 삭제 버튼 클릭 시 처리할 함수
+                                    style={{marginLeft: '10px', color: 'red'}}
+                                >
+                                  삭제
+                                </button>
+                              </li>
+                          ))}
+                        </ul>
+                    )}
                   </dd>
                 </dl>
                 <dl>
@@ -443,10 +544,7 @@ function ManagerBannerEdit(props) {
                   </div>
 
                   <div className="right_col btn1">
-                    <Link to={URL.MANAGER_CODE}
-                      state={{
-                        cdGroupSn: location.state?.cdGroupSn
-                      }}
+                    <Link to={URL.MANAGER_BANNER_LIST}
                     >
                       <BTButton variant="secondary">목록</BTButton>
                     </Link>

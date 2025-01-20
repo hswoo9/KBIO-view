@@ -142,7 +142,7 @@ function EgovLoginContent(props) {
                 />
               </span>
               <div className="chk">
-                <NavLink to={URL.MYPAGE_CREATE} className={({ isActive }) => (isActive ? "btn" : "btn")}>
+                <NavLink to={URL.SIGNUP_CHOICE} className={({ isActive }) => (isActive ? "btn" : "btn")}>
                   회원가입
                 </NavLink>
                 <NavLink to={URL.FIND_ID_PSWD} className={({ isActive }) => (isActive ? "btn" : "btn")}>
