@@ -53,7 +53,7 @@ function ManagerBannerEdit(props) {
   }, [saveEvent]);
 
   const [acceptFileTypes, setAcceptFileTypes] = useState('jpg,jpeg,png,gif,bmp,tiff,tif,webp,svg,ico,heic,avif');
-  const [selectedFiles, setSelectedFiles] = useState({});
+  const [selectedFiles, setSelectedFiles] = useState([]);
   useEffect(() => {
     console.log(selectedFiles);
   }, [selectedFiles]);
@@ -101,10 +101,13 @@ function ManagerBannerEdit(props) {
           Swal.fire("배너제목이 없습니다.");
           return;
         }
-        if($("#formFile").val() == null || $("#formFile").val() == ""){
+        if($("#formFile").val() == null || $("#formFile").val() == ""
+        && (bnrPopupDetail.tblComFiles == null || bnrPopupDetail.tblComFiles == "" || bnrPopupDetail.tblComFiles.length == 0)
+        ){
           Swal.fire("첨부된 파일이 없습니다.");
           return;
         }
+
         setSaveEvent({
           ...saveEvent,
           save: true,
@@ -139,7 +142,7 @@ function ManagerBannerEdit(props) {
       (bnrPopupDetail) => {
         const formData = new FormData();
         for (let key in bnrPopupDetail) {
-          if(bnrPopupDetail[key] != null){
+          if(bnrPopupDetail[key] != null && key != "tblComFiles"){
             formData.append(key, bnrPopupDetail[key]);
           }
         }
@@ -231,7 +234,8 @@ function ManagerBannerEdit(props) {
         actvtnYn: "Y",
         useYn: "Y",
         bnrPopupSn: location.state?.bnrPopupSn,
-        bnrPopupKnd: "TOP"
+        bnrPopupKnd: "bnr",
+        npagYn: "Y"
       });
       return;
     }
@@ -404,25 +408,6 @@ function ManagerBannerEdit(props) {
               <div className="board_view2">
                 <dl>
                   <dt>
-                    <label htmlFor="cd">배너종류</label>
-                    <span className="req">필수</span>
-                  </dt>
-                  <dd>
-                    <Form.Select
-                        size="sm"
-                        id="bnrPopupKnd"
-                    >
-                      {dataListToOptionHtml(comCdGroupList, "cdGroup", "BNR_POPUP_GROUP")}
-                        defaultValue={bnrPopupDetail.bnrPopupKnd}
-                        onChange={(e) =>
-                          setBnrPopupDetail({...bnrPopupDetail, bnrPopupKnd: e.target.value})
-                      }
-                      ref={(el) => (checkRef.current[0] = el)}
-                    </Form.Select>
-                  </dd>
-                </dl>
-                <dl>
-                  <dt>
                     <label htmlFor="cdNm">배너제목</label>
                     <span className="req">필수</span>
                   </dt>
@@ -433,7 +418,7 @@ function ManagerBannerEdit(props) {
                         id="bnrPopupTtl"
                         placeholder=""
                         required="required"
-                        defaultValue={bnrPopupDetail.bnrPopupTtl}
+                        value={bnrPopupDetail.bnrPopupTtl}
                         onChange={(e) =>
                             setBnrPopupDetail({...bnrPopupDetail, bnrPopupTtl: e.target.value})
                         }
@@ -500,12 +485,23 @@ function ManagerBannerEdit(props) {
                         type="text"
                         id="bnrPopupUrlAddr"
                         placeholder=""
-                        defaultValue={bnrPopupDetail.bnrPopupUrlAddr}
+                        value={bnrPopupDetail.bnrPopupUrlAddr}
                         onChange={(e) =>
                             setBnrPopupDetail({...bnrPopupDetail, bnrPopupUrlAddr: e.target.value})
                         }
                         ref={(el) => (checkRef.current[0] = el)}
                     />
+                    <Form.Select
+                        size="sm"
+                        id="npagYn"
+                        value={bnrPopupDetail.npagYn}
+                        onChange={(e) =>
+                            setBnrPopupDetail({...bnrPopupDetail, npagYn: e.target.value})
+                        }
+                    >
+                      <option value="Y">새창</option>
+                      <option value="N">현재창</option>
+                    </Form.Select>
                   </dd>
                 </dl>
                 <dl>
@@ -516,7 +512,7 @@ function ManagerBannerEdit(props) {
                     <Form.Select
                         size="sm"
                         id="useYn"
-                        defaultValue={bnrPopupDetail.useYn}
+                        value={bnrPopupDetail.useYn}
                         onChange={(e) =>
                             setBnrPopupDetail({...bnrPopupDetail, useYn: e.target.value})
                         }
@@ -526,7 +522,6 @@ function ManagerBannerEdit(props) {
                     </Form.Select>
                   </dd>
                 </dl>
-                {/* <!-- 버튼영역 --> */}
                 <div className="board_btn_area">
                   <div className="left_col btn1">
                     <BTButton variant="primary"
@@ -550,10 +545,7 @@ function ManagerBannerEdit(props) {
                     </Link>
                   </div>
                 </div>
-                {/* <!--// 버튼영역 --> */}
               </div>
-
-              {/* <!--// 본문 --> */}
             </div>
           </div>
         </div>

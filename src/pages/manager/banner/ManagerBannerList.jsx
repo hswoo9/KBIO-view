@@ -27,7 +27,7 @@ function ManagerCodeGroup(props) {
             pageIndex: 1,
             searchCnd: "0",
             searchWrd: "",
-            cdGroupSn: location.state?.cdGroupSn
+            bnrPopupKnd: "bnr"
         }
     );
 
