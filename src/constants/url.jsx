@@ -125,6 +125,7 @@ const URL = {
   MANAGER_BANNER_POPUP: "/manager/bannerPopup",
   MANAGER_BANNER_LIST: "/manager/banner/list",
   MANAGER_BANNER_CREATE: "/manager/banner/create",
+  MANAGER_BANNER_MODIFY: "/manager/banner/modify",
   MANAGER_POPUP_LIST: "/manager/popup/list",
   MANAGER_POPUP_CREATE: "/manager/popup/create",
   MANAGER_IMAGES_POPUP: "/popupView/images",

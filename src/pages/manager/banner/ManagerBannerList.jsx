@@ -42,12 +42,12 @@ function ManagerCodeGroup(props) {
     useEffect(() => {
         if(saveEvent.save){
             if(saveEvent.mode == "delete"){
-                delCdGroupData(saveEvent);
+                delBnrPopupData(saveEvent);
             }
         }
     }, [saveEvent]);
 
-    const delBtnEvent = (comCdSn) => {
+    const delBtnEvent = (bnrPopupSn) => {
         Swal.fire({
             title: "삭제하시겠습니까?",
             showCloseButton: true,
@@ -60,7 +60,7 @@ function ManagerCodeGroup(props) {
                     ...saveEvent,
                     save: true,
                     mode: "delete",
-                    comCdSn: comCdSn
+                    bnrPopupSn: bnrPopupSn
                 });
             } else {
                 //취소
@@ -69,9 +69,9 @@ function ManagerCodeGroup(props) {
         console.log(comCdSn);
     }
 
-    const delCdGroupData = useCallback(
-        (cdGroupDetail) => {
-            const menuListURL = "/codeApi/setComCdDel";
+    const delBnrPopupData = useCallback(
+        (saveEvent) => {
+            const menuListURL = "/bannerPopupApi/setBnrPopupDel";
             const requestOptions = {
                 method: "POST",
                 headers: {
@@ -85,7 +85,7 @@ function ManagerCodeGroup(props) {
                 (resp) => {
 
                     if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
-                        getCodeList(searchCondition);
+                        getBnrPopupList(searchCondition);
                     } else {
                         navigate(
                             { pathname: URL.ERROR },
@@ -100,7 +100,7 @@ function ManagerCodeGroup(props) {
 
     const getBnrPopupList = useCallback(
         (searchCondition) => {
-            const menuListURL = "/pannerPopupApi/getBnrPopupListOnPage.do";
+            const menuListURL = "/bannerPopupApi/getBnrPopupListOnPage.do";
             const requestOptions = {
                 method: "POST",
                 headers: {
@@ -114,32 +114,31 @@ function ManagerCodeGroup(props) {
                 (resp) => {
                     setPaginationInfo(resp.paginationInfo);
                     let dataList = [];
-                    codeList.push(
+                    bnrPopupList.push(
                         <tr>
                             <td colSpan="6" key="noData">검색된 결과가 없습니다.</td>
                         </tr>
                     );
 
-                    resp.result.bnrPopupList.forEach(function (item, index) {
+                    resp.result.bannerPopupList.forEach(function (item, index) {
                         if (index === 0) dataList = []; // 목록 초기화
 
                         dataList.push(
-                            <tr key={item.comCdSn}>
+                            <tr key={item.bnrPopupSn}>
                                 <td onClick={(e) => {e.stopPropagation()}}>
                                     {resp.paginationInfo.totalRecordCount - (resp.paginationInfo.currentPageNo - 1) * resp.paginationInfo.pageSize - index}
                                 </td>
-                                <td></td>
+                                <td>{item.bnrPopupKnd}</td>
                                 <td>{item.bnrPopupTtl}</td>
                                 <td>{item.bnrPopupFrm}</td>
                                 <td>{item.useYn === "Y" ? "출력" : "출력안함"}</td>
                                 <td className="btnGroupTd">
                                     <Link 
-                                        to={{ pathname: URL.MANAGER_CODE_MODIFY }}
+                                        to={{ pathname: URL.MANAGER_BANNER_MODIFY }}
                                         state={{
-                                            comCdSn : item.comCdSn,
-                                            cdGroupSn: location.state?.cdGroupSn
+                                            bnrPopupSn : item.bnrPopupSn
                                         }}
-                                        key={item.comCdSn}
+                                        key={item.bnrPopupSn}
                                     >
                                         <BTButton variant="primary" size="sm"
                                         >
@@ -148,7 +147,7 @@ function ManagerCodeGroup(props) {
                                     </Link>
                                     <BTButton variant="danger" size="sm"
                                         onClick={() => {
-                                            delBtnEvent(item.comCdSn);
+                                            delBtnEvent(item.bnrPopupSn);
                                         }}
                                     >
                                         삭제
@@ -245,10 +244,6 @@ function ManagerCodeGroup(props) {
                                 <li>
                                     <Link
                                         to={{ pathname: URL.MANAGER_BANNER_CREATE }}
-                                        state={{
-                                            cdGroupSn : location.state?.cdGroupSn
-                                        }}
-                                        key={location.state?.cdGroupSn}
                                         className="btn btn_blue_h46 pd35"
                                     >
                                         등록
