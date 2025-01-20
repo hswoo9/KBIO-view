@@ -62,6 +62,54 @@ function EgovFindIdPswd(props) {
         }
     };
 
+    const handleFindPassword = async () => {
+        // 입력값 확인
+        const id = document.querySelector('input[name="pwdid"]').value;
+        const name = document.querySelector('input[name="pwdname"]').value;
+        const email = document.querySelector('input[name="pwdemail"]').value;
+
+        if (!id || !name || !email) {
+            Swal.fire({
+                title: "입력 오류",
+                text: "아이디, 이름, 이메일을 모두 입력해주세요.",
+            });
+            return;
+        }
+
+        try {
+            const findPasswordURL = "/memberApi/findPassword.do";
+            const reqOptions = {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ id, name, email }),
+            };
+
+            // 서버 응답 처리
+            await EgovNet.requestFetch(findPasswordURL, reqOptions, function (response) {
+                if (response.resultCode === 200) {
+                    Swal.fire({
+                        title: "비밀번호 찾기 성공",
+                        text: "임시 비밀번호가 이메일로 전송되었습니다.",
+                    });
+                } else {
+                    Swal.fire({
+                        title: "찾기 실패",
+                        text: "일치하는 회원 정보가 없습니다. 다시 확인해주세요.",
+                    });
+                }
+            });
+        } catch (error) {
+            console.error("비밀번호 찾기 요청 실패:", error);
+            Swal.fire({
+                title: "오류 발생",
+                text: "서버와 통신 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.",
+            });
+        }
+    };
+
+
 
     return (
         <div className="container">
@@ -129,28 +177,32 @@ function EgovFindIdPswd(props) {
                                         <span className="group">
                       <input
                           type="text"
-                          name=""
+                          name="pwdid"
                           title="아이디"
                           placeholder="아이디"
                       />
                       <input
                           type="text"
-                          name=""
+                          name="pwdname"
                           title="이름"
                           placeholder="이름"
                       />
                       <input
                           type="text"
-                          name=""
+                          name="pwdemail"
                           title="이메일"
                           placeholder="이메일"
                       />
-                      <button className="btn pswd_btn" type="button">
-                        <span>비밀번호 찾기</span>
+                      <button
+                          className="btn pswd_btn"
+                          type="button"
+                          onClick={handleFindPassword}
+                      >
+                      <span>비밀번호 찾기</span>
                       </button>
-                    </span>
-                                    </fieldset>
-                                </form>
+                                    </span>
+                               </fieldset>
+                             </form>
                             </div>
 
                             <ul className="list">

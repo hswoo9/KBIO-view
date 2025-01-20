@@ -67,8 +67,6 @@ function ManagerBannerEdit(props) {
     }
 
     const allowedExtensions = acceptFileTypes.split(',');
-    console.log(allowedExtensions);
-    console.log(e.target.files);
     if(e.target.files.length > 0){
       const fileExtension = e.target.files[0].name.split(".").pop().toLowerCase();
       if(allowedExtensions.includes(fileExtension)){
