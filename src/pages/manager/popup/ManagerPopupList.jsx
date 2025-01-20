@@ -4,7 +4,7 @@ import axios from "axios";
 import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
-
+import moment from "moment/moment.js";
 import { default as EgovLeftNav } from "@/components/leftmenu/ManagerLeftBannerPopup";
 
 import EgovPaging from "@/components/EgovPaging";
@@ -27,7 +27,7 @@ function ManagerCodeGroup(props) {
             pageIndex: 1,
             searchCnd: "0",
             searchWrd: "",
-            cdGroupSn: location.state?.cdGroupSn
+            bnrPopupKnd: "popup"
         }
     );
 
@@ -36,18 +36,18 @@ function ManagerCodeGroup(props) {
     const cndRef = useRef();
     const wrdRef = useRef();
 
-    const [codeList, setCodeList] = useState([]);
+    const [bnrPopupList, setBnrPopupList] = useState([]);
 
     const [saveEvent, setSaveEvent] = useState({});
     useEffect(() => {
         if(saveEvent.save){
             if(saveEvent.mode == "delete"){
-                delCdGroupData(saveEvent);
+                delBnrPopupData(saveEvent);
             }
         }
     }, [saveEvent]);
 
-    const delBtnEvent = (comCdSn) => {
+    const delBtnEvent = (bnrPopupSn) => {
         Swal.fire({
             title: "삭제하시겠습니까?",
             showCloseButton: true,
@@ -60,7 +60,7 @@ function ManagerCodeGroup(props) {
                     ...saveEvent,
                     save: true,
                     mode: "delete",
-                    comCdSn: comCdSn
+                    bnrPopupSn: bnrPopupSn
                 });
             } else {
                 //취소
@@ -69,9 +69,9 @@ function ManagerCodeGroup(props) {
         console.log(comCdSn);
     }
 
-    const delCdGroupData = useCallback(
-        (cdGroupDetail) => {
-            const menuListURL = "/codeApi/setComCdDel";
+    const delBnrPopupData = useCallback(
+        (saveEvent) => {
+            const menuListURL = "/bannerPopupApi/setBnrPopupDel";
             const requestOptions = {
                 method: "POST",
                 headers: {
@@ -85,7 +85,7 @@ function ManagerCodeGroup(props) {
                 (resp) => {
 
                     if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
-                        getCodeList(searchCondition);
+                        getBnrPopupList(searchCondition);
                     } else {
                         navigate(
                             { pathname: URL.ERROR },
@@ -98,9 +98,9 @@ function ManagerCodeGroup(props) {
         }
     );
 
-    const getCodeList = useCallback(
+    const getBnrPopupList = useCallback(
         (searchCondition) => {
-            const menuListURL = "/codeApi/getComCdListOnPageing.do";
+            const menuListURL = "/bannerPopupApi/getBnrPopupListOnPage.do";
             const requestOptions = {
                 method: "POST",
                 headers: {
@@ -114,32 +114,34 @@ function ManagerCodeGroup(props) {
                 (resp) => {
                     setPaginationInfo(resp.paginationInfo);
                     let dataList = [];
-                    codeList.push(
+                    bnrPopupList.push(
                         <tr>
                             <td colSpan="6" key="noData">검색된 결과가 없습니다.</td>
                         </tr>
                     );
 
-                    resp.result.cdList.forEach(function (item, index) {
+                    resp.result.bannerPopupList.forEach(function (item, index) {
                         if (index === 0) dataList = []; // 목록 초기화
 
                         dataList.push(
-                            <tr key={item.comCdSn}>
+                            <tr key={item.bnrPopupSn}>
                                 <td onClick={(e) => {e.stopPropagation()}}>
                                     {resp.paginationInfo.totalRecordCount - (resp.paginationInfo.currentPageNo - 1) * resp.paginationInfo.pageSize - index}
                                 </td>
-                                <td>{item.cd}</td>
-                                <td>{item.cdNm}</td>
-                                <td>{item.sortSeq}</td>
-                                <td>{item.actvtnYn === "Y" ? "사용" : "사용안함"}</td>
+                                <td>{moment(item.popupBgngDt).format('YYYY-MM-DD HH:mm')}<br/>{moment(item.popupEndDt).format('YYYY-MM-DD HH:mm')}</td>
+                                <td>{item.bnrPopupTtl}</td>
+                                <td>{item.popupPstnUpend}</td>
+                                <td>{item.popupPstnWdth}</td>
+                                <td>{item.popupWdthSz} X {item.popupVrtcSz}</td>
+                                <td>{item.npagYn === "Y" ? "새창" : "현재창"}</td>
+                                <td>{item.useYn === "Y" ? "출력" : "출력안함"}</td>
                                 <td className="btnGroupTd">
-                                    <Link 
-                                        to={{ pathname: URL.MANAGER_CODE_MODIFY }}
+                                    <Link
+                                        to={{ pathname: URL.MANAGER_POPUP_MODIFY }}
                                         state={{
-                                            comCdSn : item.comCdSn,
-                                            cdGroupSn: location.state?.cdGroupSn
+                                            bnrPopupSn : item.bnrPopupSn
                                         }}
-                                        key={item.comCdSn}
+                                        key={item.bnrPopupSn}
                                     >
                                         <BTButton variant="primary" size="sm"
                                         >
@@ -147,9 +149,9 @@ function ManagerCodeGroup(props) {
                                         </BTButton>
                                     </Link>
                                     <BTButton variant="danger" size="sm"
-                                        onClick={() => {
-                                            delBtnEvent(item.comCdSn);
-                                        }}
+                                              onClick={() => {
+                                                  delBtnEvent(item.bnrPopupSn);
+                                              }}
                                     >
                                         삭제
                                     </BTButton>
@@ -157,18 +159,18 @@ function ManagerCodeGroup(props) {
                             </tr>
                         );
                     });
-                    setCodeList(dataList);
+                    setBnrPopupList(dataList);
                 },
                 function (resp) {
                     console.log("err response : ", resp);
                 }
             )
         },
-        [codeList, searchCondition]
+        [bnrPopupList, searchCondition]
     );
 
     useEffect(() => {
-        getCodeList(searchCondition);
+        getBnrPopupList(searchCondition);
     }, []);
 
     const Location = React.memo(function Location() {
@@ -181,9 +183,9 @@ function ManagerCodeGroup(props) {
                         </Link>
                     </li>
                     <li>
-                        <Link to={URL.MANAGER_CODE_GROUP}>코드관리</Link>
+                        <Link to={URL.MANAGER_BANNER_LIST}>배너팝업관리</Link>
                     </li>
-                    <li>코드목록</li>
+                    <li>팝업관리</li>
                 </ul>
             </div>
         );
@@ -208,7 +210,7 @@ function ManagerCodeGroup(props) {
                                             name="searchCnd"
                                             title="검색유형선택"
                                         >
-                                            <option value="0">코드명</option>
+                                            <option value="0">팝업제목</option>
                                         </select>
                                     </label>
                                 </li>
@@ -245,10 +247,6 @@ function ManagerCodeGroup(props) {
                                 <li>
                                     <Link
                                         to={{ pathname: URL.MANAGER_POPUP_CREATE }}
-                                        state={{
-                                            cdGroupSn : location.state?.cdGroupSn
-                                        }}
-                                        key={location.state?.cdGroupSn}
                                         className="btn btn_blue_h46 pd35"
                                     >
                                         등록
@@ -270,15 +268,18 @@ function ManagerCodeGroup(props) {
                             <thead>
                             <tr>
                                 <th>번호</th>
-                                <th>코드</th>
-                                <th>코드명</th>
-                                <th>정렬순서</th>
-                                <th>활성여부</th>
+                                <th>팝업설정 기간</th>
+                                <th>제목</th>
+                                <th>TOP</th>
+                                <th>LEFT</th>
+                                <th>팝업크기</th>
+                                <th>출력방식</th>
+                                <th>상태</th>
                                 <th>관리</th>
                             </tr>
                             </thead>
                             <tbody>
-                            {codeList}
+                            {bnrPopupList}
                             </tbody>
                         </BtTable>
                         <div className="board_bot">
