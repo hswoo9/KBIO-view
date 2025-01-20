@@ -136,21 +136,23 @@ function setPst(props) {
         );
 
         setPstDetail(resp.result.pst);
-        setStartDate(
-            new Date(
-                resp.result.pst.ntcBgngDt.substring(0, 4),
-                resp.result.pst.ntcBgngDt.substring(4, 6) - 1,
-                resp.result.pst.ntcBgngDt.substring(6, 8)
-            )
-        )
-        setEndDate(
-            new Date(
-                resp.result.pst.ntcEndDate.substring(0, 4),
-                resp.result.pst.ntcEndDate.substring(4, 6) - 1,
-                resp.result.pst.ntcEndDate.substring(6, 8)
-            )
-        )
-        setIsDatePickerEnabled(resp.result.pst.upendNtcYn === "Y");
+        if(resp.result.pst.upendNtcYn == "Y"){
+          setStartDate(
+              new Date(
+                  resp.result.pst.ntcBgngDt.substring(0, 4),
+                  resp.result.pst.ntcBgngDt.substring(4, 6) - 1,
+                  resp.result.pst.ntcBgngDt.substring(6, 8)
+              )
+          )
+          setEndDate(
+              new Date(
+                  resp.result.pst.ntcEndDate.substring(0, 4),
+                  resp.result.pst.ntcEndDate.substring(4, 6) - 1,
+                  resp.result.pst.ntcEndDate.substring(6, 8)
+              )
+          )
+          setIsDatePickerEnabled(true);
+        }
       }
     });
   };
@@ -208,7 +210,13 @@ function setPst(props) {
 
     const formData = new FormData();
     for (let key in pstDetail) {
-      formData.append(key, pstDetail[key]);
+      if(pstDetail[key] != null){
+        formData.append(key, pstDetail[key]);
+      }
+    }
+
+    for (const [key, value] of formData.entries()) {
+      console.log(`${key}: ${value}`);
     }
 
     fileList.map((file) => {
