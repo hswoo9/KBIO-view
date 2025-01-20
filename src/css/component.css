@@ -399,6 +399,7 @@ a.google:before {
 .board_btn_area {
   position: relative;
   min-height: 46px;
+  margin-top: 20px;
 }
 .board_btn_area .left_col {
   font-size: 0;
@@ -1261,3 +1262,10 @@ select::-ms-expand {
   width: 30%;
 }
 
+.bottom_navi {
+  margin-top: 30px;
+}
+
+.reply_row {
+  content: url("@/assets/images/arrow-return-right.svg");
+}

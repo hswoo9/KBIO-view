@@ -16,9 +16,11 @@ import BTButton from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import 'bootstrap/dist/css/bootstrap.css';
 import moment from "moment/moment.js";
+import {getSessionItem} from "../../../../utils/storage.js";
 
 
 function ManagerPst(props) {
+    const sessionUser = getSessionItem("loginUser");
     const location = useLocation();
     const [searchDto, setSearchDto] = useState(
         location.state?.searchDto || {
@@ -66,6 +68,32 @@ function ManagerPst(props) {
 
                     resp.result.pstList.forEach(function (item, index) {
                         if (index === 0) dataList = []; // 목록 초기화
+                        let reTag = "";
+                        let rlsYnFlag = false;
+                        let pstSn = "";
+
+                        if(item.rlsYn == "N"){
+                            rlsYnFlag = true;
+                        }
+                        if(sessionUser.userSe == "ADM"){
+                            rlsYnFlag = true;
+                        }
+
+                        if(sessionUser.userSn == item.creatrSn){
+                            rlsYnFlag = true;
+                            pstSn = item.pstSn;
+                        }
+
+                        if(pstSn == item.orgnlPstSn){
+                            rlsYnFlag = true;
+                        }
+
+                        if(item.orgnlPstSn != null) {  // 답글
+                            reTag = "<span style='color:#5b72ff ' class='reply_row'>[RE]</span>"
+                            if (resp.result.pstList.find(v => v.pstSn == item.orgnlPstSn).rlsYn == "N") {
+                                rlsYnFlag = true;
+                            }
+                        }
 
                         dataList.push(
                             <tr key={item.pstSn}>
@@ -79,7 +107,8 @@ function ManagerPst(props) {
                                           mode={CODE.MODE_READ}
                                           state={{pstSn: item.pstSn}}
                                     >
-                                        {item.pstTtl}
+                                        {reTag ? <span dangerouslySetInnerHTML={{__html: reTag}} style={{marginRight: "5px"}}></span> : ""}
+                                        {item.rlsYn == "Y" ? (rlsYnFlag ? item.pstTtl : item.pstTtl.replaceAll(/./g, '*')) : item.pstTtl}
                                     </Link>
                                 </td>
                                 {searchDto.atchFileYn == "Y" && (

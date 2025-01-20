@@ -25,6 +25,8 @@ function setPst(props) {
     bbsSn : location.state?.bbsSn,
     pstSn : location.state?.pstSn
   });
+  const orgnlPstSn = location.state?.orgnlPstSn || null;
+  const pstGroup = location.state?.pstGroup || null;
 
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
@@ -94,7 +96,6 @@ function setPst(props) {
     setFileList(updatedFileList);  // 파일 리스트 업데이트
   };
 
-
   const initMode = () => {
     setModeInfo({
       ...modeInfo,
@@ -117,6 +118,7 @@ function setPst(props) {
         actvtnYn : "Y",
         creatrSn: sessionUser.userSn,
       });
+
       return;
     }
 
@@ -219,9 +221,18 @@ function setPst(props) {
       }
     }
 
-    for (const [key, value] of formData.entries()) {
-      console.log(`${key}: ${value}`);
+    if(orgnlPstSn != null){
+      formData.append("orgnlPstSn", orgnlPstSn);
     }
+
+    if(pstGroup != null){
+      formData.append("pstGroup", pstGroup);
+    }
+
+
+    // for (const [key, value] of formData.entries()) {
+    //   console.log(`${key}: ${value}`);
+    // }
 
     fileList.map((file) => {
       formData.append("files", file);
@@ -349,41 +360,41 @@ function setPst(props) {
               )}
 
               <div className="board_view2">
-                <dl>
-                  <dt>
-                    <label htmlFor="bbsNm">공지(기간)</label>
-                    <span className="req">필수</span>
-                  </dt>
-                  <dd className="pstUpendNtcDd">
-                    <Form.Check
-                        type="checkbox"
-                        id="upendNtcYn"
-                        label="공지"
-                        checked={pstDetail.upendNtcYn == "Y"}
-                        onChange={(e) => {
-                          setPstDetail({
-                            ...pstDetail,
-                            upendNtcYn: e.target.checked ? "Y" : "N",
-                            ntcBgngDt: e.target.checked ? moment(startDate).format('YYYYMMDD') : null,
-                            ntcEndDate: e.target.checked ? moment(endDate).format('YYYYMMDD') : null
-                          })
-                          setIsDatePickerEnabled(e.target.checked);
-                        }}
-                    ></Form.Check>
-                    <input type="date"
-                        name="ntcBgngDt"
-                        /*locale={ko}*/
-                        onChange={(date) => setStartDate(date)}
-                        disabled={!isDatePickerEnabled} // 활성화 여부 결정
-                    />~
-                    <input type="date"
-                        name="ntcEndDate"
-                        /*locale={ko}*/
-                        onChange={(date) => setEndDate(date)}
-                        disabled={!isDatePickerEnabled} // 활성화 여부 결정
-                    />
-                  </dd>
-                </dl>
+                {orgnlPstSn == null && (
+                    <dl>
+                      <dt>
+                        <label htmlFor="bbsNm">공지(기간)</label>
+                        <span className="req">필수</span>
+                      </dt>
+                      <dd className="pstUpendNtcDd">
+                        <Form.Check
+                            type="checkbox"
+                            id="upendNtcYn"
+                            label="공지"
+                            checked={pstDetail.upendNtcYn == "Y"}
+                            onChange={(e) => {
+                              setPstDetail({
+                                ...pstDetail,
+                                upendNtcYn: e.target.checked ? "Y" : "N",
+                                ntcBgngDt: e.target.checked ? moment(startDate).format('YYYYMMDD') : null,
+                                ntcEndDate: e.target.checked ? moment(endDate).format('YYYYMMDD') : null
+                              })
+                              setIsDatePickerEnabled(e.target.checked);
+                            }}
+                        ></Form.Check>
+                        <input type="date"
+                               name="ntcBgngDt"
+                               onChange={(date) => setStartDate(date)}
+                               disabled={!isDatePickerEnabled} // 활성화 여부 결정
+                        />~
+                        <input type="date"
+                               name="ntcEndDate"
+                               onChange={(date) => setEndDate(date)}
+                               disabled={!isDatePickerEnabled} // 활성화 여부 결정
+                        />
+                      </dd>
+                    </dl>
+                )}
                 <dl>
                   <dt>
                     <label htmlFor="pstTtl">제목</label>
@@ -501,7 +512,7 @@ function setPst(props) {
                     />
                   </dd>
                 </dl>
-                {bbsDetail.wrtrRlsYn == "Y" && (
+                {bbsDetail.wrtrRlsYn == "Y" && orgnlPstSn == null && (
                 <dl>
                   <dt>
                     <label htmlFor="pstTtl">공개여부</label>
