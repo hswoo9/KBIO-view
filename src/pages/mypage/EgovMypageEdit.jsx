@@ -326,69 +326,76 @@ function EgovMypageEdit(props) {
       Object.keys(formData).forEach((key) => {
         form.append(key, formData[key]);
       });
-      console.log(formData)
+
+      // 회원 ID 필수 값 확인
       if (form.get("mberId") === null || form.get("mberId") === "") {
         alert("회원ID는 필수 값입니다.");
-        return false;
+        return resolve(false); //
       }
 
+      // 아이디 중복 체크
       checkIdDplct().then((res) => {
-        if (res > 0) {
-          return false;
+        if (res > 0) { // 중복된 아이디
+          alert("중복된 아이디입니다. 다른 아이디를 사용해주세요.");
+          return resolve(false);
         }
 
-        if (
-            form.get("password") === null ||
-            form.get("password") === ""
-        ) {
+        // 비밀번호 필수 값 확인
+        if (form.get("password") === null || form.get("password") === "") {
           alert("암호는 필수 값입니다.");
-          return false;
+          return resolve(false);
         }
 
+        // 비밀번호 형식 확인
         const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?/~_`|-]).{8,20}$/;
         if (!passwordRegex.test(form.get("password"))) {
           alert("암호는 영문자, 숫자, 특수문자 조합으로 8~20자리 이내여야 합니다.");
-          return false;
+          return resolve(false);
         }
 
-        if (form.get("password_chk") === null ||
-            form.get("password_chk") === ""
-        ) {
+        // 비밀번호 확인 필수 값 확인
+        if (form.get("password_chk") === null || form.get("password_chk") === "") {
           alert("비밀번호 확인은 필수 값입니다.");
-          return false;
+          return resolve(false);
         }
 
+        // 비밀번호와 비밀번호 확인 일치 여부 확인
         if (form.get("password") !== form.get("password_chk")) {
           alert("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
-          return false;
+          return resolve(false);
         }
 
+        // 회원명 필수 값 확인
         if (form.get("mberNm") === null || form.get("mberNm") === "") {
           alert("회원명은 필수 값입니다.");
-          return false;
+          return resolve(false);
         }
 
+        // 회원명 형식 확인
         const mberNmRegex = /^[a-zA-Zㄱ-ㅎ가-힣]+$/;
         if (!mberNmRegex.test(form.get("mberNm"))) {
           alert("회원명은 한글 또는 영문자만 사용 가능합니다.");
-          return false;
+          return resolve(false);
         }
 
+        // 전화번호 필수 값 확인
         if (form.get("phonenum") === null || form.get("phonenum") === "") {
           alert("전화번호는 필수 값입니다.");
-          return false;
+          return resolve(false);
         }
 
+        // 전화번호 형식 확인
         const phonenumRegex = /^[0-9\-]+$/;
         if (!phonenumRegex.test(form.get("phonenum"))) {
           alert("전화번호는 숫자와 하이픈(-)만 포함할 수 있습니다.");
-          return false;
+          return resolve(false);
         }
 
         resolve(true);
       });
     });
   };
+
 
   const formObjValidator = (checkRef) => {
     if (checkRef.current[0].value === "") {
@@ -473,31 +480,33 @@ function EgovMypageEdit(props) {
   const insertMember = () => {
     const insertMemURL = `/memberApi/insertMember.do`;
 
-    formValidator(memberDetail).then((res) => {
-      if (res) {
-        const reqOptions = {
-          method: "POST",
-          headers: {
-            "Content-type": "application/json",
-          },
-          body: JSON.stringify(memberDetail),
-        };
+    formValidator(memberDetail).then((isValid) => {
+      if (!isValid) return; // 검증 실패 시 함수 종료
 
-        EgovNet.requestFetch(insertMemURL, reqOptions, function (resp) {
-          if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
-            setMemberDetail({
-              ...memberDetail,
-              insertMemResult: "회원가입신청이 완료되었습니다.",
-            });
-            navigate({ pathname: URL.COMPLETE_MEMBER });
-          } else {
-            navigate(
-                { pathname: URL.ERROR },
-                { state: { msg: resp.resultMessage } }
-            );
-          }
-        });
-      }
+      const reqOptions = {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify(memberDetail),
+      };
+
+      EgovNet.requestFetch(insertMemURL, reqOptions, function (resp) {
+        console.log("Result Code:", resp.resultCode);
+        console.log("Expected Code:", CODE.RCV_SUCCESS);
+        if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
+          setMemberDetail({
+            ...memberDetail,
+            insertMemResult: "회원가입신청이 완료되었습니다.",
+          });
+          navigate({ pathname: URL.COMPLETE_MEMBER });
+        } else {
+          navigate(
+              { pathname: URL.ERROR },
+              { state: { msg: resp.resultMessage } }
+          );
+        }
+      });
     });
   };
 
