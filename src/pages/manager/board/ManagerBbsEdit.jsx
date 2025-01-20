@@ -9,8 +9,10 @@ import 'moment/locale/ko';
 import { default as EgovLeftNav } from "@/components/leftmenu/ManagerLeftBoard";
 import EgovRadioButtonGroup from "@/components/EgovRadioButtonGroup";
 import Swal from "sweetalert2";
+import {getSessionItem} from "../../../utils/storage.js";
 
 function setBbs(props) {
+  const sessionUser = getSessionItem("loginUser");
   const navigate = useNavigate();
   const location = useLocation();
   const checkRef = useRef([]);
@@ -63,6 +65,7 @@ function setBbs(props) {
         cmntPsbltyYn : "N",
         replyPsbltyYn : "N",
         actvtnYn : "Y",
+        creatrSn: sessionUser.userSn,
       });
       return;
     }
@@ -79,6 +82,10 @@ function setBbs(props) {
     EgovNet.requestFetch(getBbsURL, requestOptions, function (resp) {
       if (modeInfo.mode === CODE.MODE_MODIFY) {
         setBbsDetail(resp.result.bbs);
+        setBbsDetail({
+          ...bbsDetail,
+          mdfrSn: sessionUser.userSn
+        })
       }
     });
   };

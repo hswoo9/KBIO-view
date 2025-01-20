@@ -44,7 +44,7 @@ function ManagerPst(props) {
 
     const getPstList = useCallback(
         (searchDto) => {
-            const pstListURL = "/bbsApi/getPstList.do";
+            const pstListURL = "/pstApi/getPstList.do";
             const requestOptions = {
                 method: "POST",
                 headers: {

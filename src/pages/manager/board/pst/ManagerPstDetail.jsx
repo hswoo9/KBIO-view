@@ -28,7 +28,7 @@ function setPst(props) {
   const [bbsDetail, setBbsDetail] = useState({});
 
   const getPst = (searchDto) => {
-    const getPstURL = `/bbsApi/getPst`;
+    const getPstURL = `/pstApi/getPst`;
     const requestOptions = {
       method: "POST",
       headers: {
@@ -45,7 +45,7 @@ function setPst(props) {
   };
 
   const setPstDel = (pstSn) => {
-    const setPstDelUrl = "/bbsApi/setPstDel";
+    const setPstDelUrl = "/pstApi/setPstDel";
 
     Swal.fire({
       title: "삭제하시겠습니까?",

@@ -14,8 +14,10 @@ import ReactDatePicker from 'react-datepicker';
 import moment from "moment";
 import ReactQuill from 'react-quill-new';
 import '@/css/quillSnow.css';
+import {getSessionItem} from "../../../../utils/storage.js";
 
 function setPst(props) {
+  const sessionUser = getSessionItem("loginUser");
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -97,7 +99,7 @@ function setPst(props) {
     setModeInfo({
       ...modeInfo,
       modeTitle: "등록",
-      editURL: `/bbsApi/setPst`,
+      editURL: `/pstApi/setPst`,
     });
 
     getPst(searchDto);
@@ -113,11 +115,12 @@ function setPst(props) {
         upendNtcYn : "N",
         rlsYn : "N",
         actvtnYn : "Y",
+        creatrSn: sessionUser.userSn,
       });
       return;
     }
 
-    const getPstURL = `/bbsApi/getPst`;
+    const getPstURL = `/pstApi/getPst`;
     const requestOptions = {
       method: "POST",
       headers: {
@@ -135,6 +138,7 @@ function setPst(props) {
                 : ''
         );
 
+        resp.result.pst.mdfrSn = sessionUser.userSn
         setPstDetail(resp.result.pst);
         if(resp.result.pst.upendNtcYn == "Y"){
           setStartDate(
@@ -210,7 +214,7 @@ function setPst(props) {
 
     const formData = new FormData();
     for (let key in pstDetail) {
-      if(pstDetail[key] != null){
+      if(pstDetail[key] != null && key != "pstFiles"){
         formData.append(key, pstDetail[key]);
       }
     }
@@ -256,6 +260,46 @@ function setPst(props) {
     });
 
 
+  };
+
+  const setPstDel = (pstSn) => {
+    const setPstDelUrl = "/pstApi/setPstDel";
+
+    Swal.fire({
+      title: "삭제하시겠습니까?",
+      showCloseButton: true,
+      showCancelButton: true,
+      confirmButtonText: "삭제",
+      cancelButtonText: "취소"
+    }).then((result) => {
+      if(result.isConfirmed) {
+        const requestOptions = {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify({pstSn : pstSn}),
+        };
+
+        EgovNet.requestFetch(setPstDelUrl, requestOptions, (resp) => {
+          if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
+            Swal.fire("삭제되었습니다.");
+            navigate(
+                { pathname : URL.MANAGER_PST_LIST},
+                { state: {
+                    bbsSn: bbsDetail.bbsSn,
+                    atchFileYn: bbsDetail.atchFileYn,
+                  }
+                }
+            );
+          } else {
+            alert("ERR : " + resp.resultMessage);
+          }
+        });
+      } else {
+        //취소
+      }
+    });
   };
 
   useEffect(() => {
