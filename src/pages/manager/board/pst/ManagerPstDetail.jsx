@@ -1,4 +1,3 @@
-
 import React, {useState, useEffect, useRef, useMemo, useCallback} from "react";
 import { useDropzone } from 'react-dropzone';
 import { Link, useNavigate, useLocation } from "react-router-dom";
@@ -14,6 +13,7 @@ import ReactDatePicker from 'react-datepicker';
 import moment from "moment";
 import ReactQuill from 'react-quill-new';
 import '@/css/quillSnow.css';
+import PstEvl  from "./PstEvl.jsx";
 
 function setPst(props) {
   const navigate = useNavigate();
@@ -269,7 +269,9 @@ function setPst(props) {
                   </Link>
                 </div>
               </div>
+              <PstEvl pstSn={pstDetail.pstSn}/>
             </div>
+
           </div>
         </div>
       </div>
