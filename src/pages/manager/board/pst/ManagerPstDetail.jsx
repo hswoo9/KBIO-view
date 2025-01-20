@@ -25,6 +25,7 @@ function setPst(props) {
   });
 
   const [pstDetail, setPstDetail] = useState({});
+  const [pstPrevNext, setPstPrevNext] = useState([]);
   const [bbsDetail, setBbsDetail] = useState({});
 
   const getPst = (searchDto) => {
@@ -40,6 +41,7 @@ function setPst(props) {
     EgovNet.requestFetch(getPstURL, requestOptions, function (resp) {
       setBbsDetail(resp.result.bbs);
       setPstDetail(resp.result.pst);
+      setPstPrevNext(resp.result.pstPrevNext);
 
     });
   };
@@ -84,9 +86,16 @@ function setPst(props) {
     });
   };
 
+  function pstPrevNextSearch(pstSn) {
+    setSearchDto({
+      ...searchDto,
+      pstSn: pstSn
+    })
+  }
+
   useEffect(() => {
     getPst(searchDto);
-  }, []);
+  }, [searchDto.pstSn]);
 
   return (
       <div className="container">
@@ -174,43 +183,90 @@ function setPst(props) {
                       내용
                     </label>
                   </dt>
-                  <dd dangerouslySetInnerHTML={{ __html: pstDetail.pstCn }}/>
+                  <dd dangerouslySetInnerHTML={{__html: pstDetail.pstCn}}/>
                 </dl>
-                {/* <!-- 버튼영역 --> */}
-                <div className="board_btn_area">
-                  <div className="left_col btn1">
-                    <Link
-                        to={URL.MANAGER_PST_MODIFY}
-                        mode={CODE.MODE_MODIFY}
-                        className="btn btn_skyblue_h46 w_100"
-                        state={{
-                          pstSn: pstDetail.pstSn,
-                        }}
-                    >
-                      수정
-                    </Link>
-                    <button
-                        className="btn btn_skyblue_h46 w_100"
-                        onClick={() => {
-                          setPstDel(pstDetail.pstSn);
-                        }}
-                    >
-                      삭제
-                    </button>
-                  </div>
+              </div>
+              <div className="bottom_navi">
+                <dl>
+                  <dt>이전글</dt>
+                  <dd>
+                    {pstPrevNext.find(i => i.position === "PREV") ? (
+                      <span style={{cursor:"pointer"}}
+                          onClick={() =>
+                              pstPrevNextSearch(pstPrevNext.find(i => i.position === "PREV").pstSn)
+                          }
+                      >
+                          {pstPrevNext.find(i => i.position === "PREV").pstTtl}
+                      </span>
+                    ) : "이전글이 존재하지 않습니다."
+                    }
+                  </dd>
+                </dl>
+                <dl>
+                  <dt>다음글</dt>
+                  <dd>
+                    {pstPrevNext.find(i => i.position === "NEXT") ? (
+                        <span style={{cursor:"pointer"}}
+                          onClick={() =>
+                            pstPrevNextSearch(pstPrevNext.find(i => i.position === "NEXT").pstSn)
+                          }
+                        >
+                          {pstPrevNext.find(i => i.position === "NEXT").pstTtl}
+                        </span>
+                    ) : "다음글이 존재하지 않습니다."
+                    }
+                  </dd>
+                </dl>
+              </div>
 
-                  <div className="right_col btn1">
-                    <Link
-                        to={URL.MANAGER_PST_LIST}
-                        className="btn btn_blue_h46 w_100"
-                        state={{
-                          bbsSn: bbsDetail.bbsSn,
-                          atchFileYn: bbsDetail.atchFileYn
-                        }}
-                    >
-                      목록
-                    </Link>
-                  </div>
+
+              {/* <!-- 버튼영역 --> */}
+              <div className="board_btn_area">
+                <div className="left_col btn1">
+                  {bbsDetail.replyPsbltyYn == "Y" && (
+                      <Link
+                          to={URL.MANAGER_PST_CREATE}
+                          className="btn btn_blue_h46 pd35"
+                          state={{
+                            bbsSn : pstDetail.bbsSn,
+                            pstGroup : pstDetail.pstGroup,
+                            orgnlPstSn: pstDetail.pstSn,
+                          }}
+                      >
+                        답변
+                      </Link>
+                  )}
+                  <Link
+                      to={URL.MANAGER_PST_MODIFY}
+                      mode={CODE.MODE_MODIFY}
+                      className="btn btn_skyblue_h46 w_100"
+                      state={{
+                        pstSn: pstDetail.pstSn,
+                      }}
+                  >
+                    수정
+                  </Link>
+                  <button
+                      className="btn btn_skyblue_h46 w_100"
+                      onClick={() => {
+                        setPstDel(pstDetail.pstSn);
+                      }}
+                  >
+                    삭제
+                  </button>
+                </div>
+
+                <div className="right_col btn1">
+                  <Link
+                      to={URL.MANAGER_PST_LIST}
+                      className="btn btn_blue_h46 w_100"
+                      state={{
+                        bbsSn: bbsDetail.bbsSn,
+                        atchFileYn: bbsDetail.atchFileYn
+                      }}
+                  >
+                    목록
+                  </Link>
                 </div>
               </div>
             </div>
