@@ -2,3 +2,34 @@
 body {
     min-width: 0 !important;
 }
+
+#templatesImgTag {
+    margin-top: 10px;
+    width: 500px;
+    height: 500px;
+}
+
+#popupWdthSz, #popupVrtcSz, #popupPstnUpend, #popupPstnWdth {
+    width: 150px;
+    display: inline-block;
+}
+
+.mr-l20 {
+    margin-left: 20px;
+}
+
+#npagYn {
+    display: inline-block;
+    width: 150px;
+    float: right;
+}
+
+#bnrPopupUrlAddr {
+    display: inline-block;
+    width: 60%;
+}
+
+.form-check:has(#youtubeYn) {
+    display: inline-block;
+    margin-left: 10px;
+}

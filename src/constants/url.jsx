@@ -128,6 +128,7 @@ const URL = {
   MANAGER_BANNER_MODIFY: "/manager/banner/modify",
   MANAGER_POPUP_LIST: "/manager/popup/list",
   MANAGER_POPUP_CREATE: "/manager/popup/create",
+  MANAGER_POPUP_MODIFY: "/manager/popup/modify",
   MANAGER_IMAGES_POPUP: "/popupView/images",
   /* 배너팝업관리 종료 */
 
