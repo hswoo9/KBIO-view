@@ -360,7 +360,7 @@ function setPst(props) {
               )}
 
               <div className="board_view2">
-                {orgnlPstSn == null && (
+                {orgnlPstSn == null && pstDetail.orgnlPstSn == null && (
                     <dl>
                       <dt>
                         <label htmlFor="bbsNm">공지(기간)</label>
@@ -512,7 +512,7 @@ function setPst(props) {
                     />
                   </dd>
                 </dl>
-                {bbsDetail.wrtrRlsYn == "Y" && orgnlPstSn == null && (
+                {bbsDetail.wrtrRlsYn == "Y" && orgnlPstSn == null && pstDetail.orgnlPstSn == null && (
                 <dl>
                   <dt>
                     <label htmlFor="pstTtl">공개여부</label>
