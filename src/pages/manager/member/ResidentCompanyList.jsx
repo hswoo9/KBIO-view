@@ -25,6 +25,7 @@ function ResidentCompanyList(){
 
     const [paginationInfo, setPaginationInfo] = useState({});
     const [rcList, setAuthorityList] = useState([]);
+    const [activeTab, setActiveTab] = useState(1);
 
     const handleSearch = () => {
         setSearchDto({ ...searchDto, pageIndex: 1 });
@@ -185,7 +186,32 @@ function ResidentCompanyList(){
                     입주기업 등록
                 </NavLink>
             </div>
+
+            <div className="board_list_container">
+                <div className="tab_menu">
+                    {/*탭 영역*/}
+                    <button
+                        className={activeTab === 1 ? "active" : ""}
+                        onClick={() => setActiveTab(1)}
+                    >
+                        입주기업
+                    </button>
+                    <button
+                        className={activeTab === 2 ? "active" : ""}
+                        onClick={() => setActiveTab(2)}
+                    >
+                        유관기관
+                    </button>
+                    <button
+                        className={activeTab === 3 ? "active" : ""}
+                        onClick={() => setActiveTab(3)}
+                    >
+                        비입주기업
+                    </button>
+                </div>
+            <div className="tab_content">
             {/*테이블 영역*/}
+            {activeTab === 1 && (
             <div className="board_list BRD006">
                 <BtTable
                     striped bordered hover size="sm"
@@ -224,6 +250,93 @@ function ResidentCompanyList(){
                     />
                 </div>
             </div>
+            )}
+
+                {activeTab === 2 && (
+                    <div className="board_list BRD006">
+                        <BtTable
+                            striped bordered hover size="sm"
+                            className="btTable"
+                        >
+                            <colgroup>
+                                <col width="20"/>
+                                <col width="100"/>
+                                <col width="50"/>
+                                <col width="80"/>
+                                <col width="50"/>
+                            </colgroup>
+                            <thead>
+                            <tr>
+                                <th>번호</th>
+                                <th>기업이름</th>
+                                <th>대표자</th>
+                                <th>사업자등록번호</th>
+                                <th>등록일</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </BtTable>
+
+                        <div className="board_bot">
+                            <EgovPaging
+                                pagination={paginationInfo}
+                                moveToPage={(passedPage) => {
+                                    getRcList({
+                                        ...searchDto,
+                                        pageIndex: passedPage
+                                    });
+                                }}
+                            />
+                        </div>
+                    </div>
+                )}
+
+                {activeTab === 3 && (
+                    <div className="board_list BRD006">
+                        <BtTable
+                            striped bordered hover size="sm"
+                            className="btTable"
+                        >
+                            <colgroup>
+                                <col width="20"/>
+                                <col width="100"/>
+                                <col width="50"/>
+                                <col width="80"/>
+                                <col width="50"/>
+                            </colgroup>
+                            <thead>
+                            <tr>
+                                <th>번호</th>
+                                <th>기업이름</th>
+                                <th>대표자</th>
+                                <th>사업자등록번호</th>
+                                <th>등록일</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </BtTable>
+
+                        <div className="board_bot">
+                            <EgovPaging
+                                pagination={paginationInfo}
+                                moveToPage={(passedPage) => {
+                                    getRcList({
+                                        ...searchDto,
+                                        pageIndex: passedPage
+                                    });
+                                }}
+                            />
+                        </div>
+                    </div>
+                )}
+
+            </div>
+            </div>
+
         </div>
 
 
