@@ -216,6 +216,7 @@ function Index(props) {
                 setSaveMode({mode:"insert"});
                 setMenuDetail({});
                 document.getElementById("upperMenuList").value = "";
+                document.getElementById("actvtnYn").value = "N";
                 setUpperMenuList2(makerMenuOption([]));
                 setUpperMenuList3(makerMenuOption([]));
                 setSearchDto({
@@ -393,6 +394,14 @@ function Index(props) {
                 requestOptions,
                 (resp) => {
                     if(resp.result.menu != null){
+                        if(resp.result.menu.actvtnYn != null){
+                            if(resp.result.menu.actvtnYn == "Y"){
+                                document.getElementById("actvtnYn").checked = true;
+                            }else{
+                                document.getElementById("actvtnYn").checked = false;
+                            }
+                        }
+
                         setSaveMode({mode: "update"});
                         if(resp.result.menu.menuSnPath.indexOf("|") > -1){
                             if(resp.result.menu.upperMenuSn == 0){
@@ -607,11 +616,10 @@ function Index(props) {
                                     <div className="toggleSwithWrap">
                                         <input type="checkbox"
                                                id="actvtnYn"
-                                               checked={menuDetail.actvtnYn == "Y"}
                                                onChange={(e) =>
                                                    setMenuDetail({
                                                        ...menuDetail,
-                                                       actvtnYn: e.target.value,
+                                                       actvtnYn: e.target.checked ? "Y" : "N",
                                                        mdfrSn: sessionUser.userSn
                                                    })
                                                }
