@@ -192,7 +192,7 @@ function ManagerCodeGroup(props) {
         <div id="container" className="container layout cms">
             <ManagerTop/>
             <div className="inner">
-                <h2 class="pageTitle"><p>코드그룹관리</p></h2>
+                <h2 className="pageTitle"><p>코드그룹관리</p></h2>
 
 
                 <div className="cateWrap">
