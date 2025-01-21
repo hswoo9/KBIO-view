@@ -15,7 +15,6 @@ import EgovPaging from "@/components/EgovPaging";
 import MtTable from 'react-bootstrap/Table';
 import MTButton from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import 'bootstrap/dist/css/bootstrap.css';
 import moment from "moment/moment.js";
 
 function NormalMemberList(props) {

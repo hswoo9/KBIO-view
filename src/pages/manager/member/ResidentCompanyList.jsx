@@ -9,7 +9,6 @@ import 'moment/locale/ko';
 import EgovPaging from "@/components/EgovPaging";
 
 import BtTable from 'react-bootstrap/Table';
-import 'bootstrap/dist/css/bootstrap.css';
 import moment from "moment/moment.js";
 
 function ResidentCompanyList(){

@@ -13,7 +13,6 @@ import moment from "moment/moment.js";
 import BtTable from 'react-bootstrap/Table';
 import BTButton from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import 'bootstrap/dist/css/bootstrap.css';
 import { getSessionItem,setSessionItem, removeSessionItem } from "@/utils/storage";
 
 function ManagerCodeEdit(props) {

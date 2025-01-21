@@ -13,7 +13,6 @@ import Swal from "sweetalert2";
 import BtTable from 'react-bootstrap/Table';
 import BTButton from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import 'bootstrap/dist/css/bootstrap.css';
 import { getSessionItem } from "@/utils/storage";
 
 function ManagerBannerEdit(props) {
