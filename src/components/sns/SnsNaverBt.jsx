@@ -8,11 +8,12 @@ const SnsNaverBt = () => {
     window.location.href = NAVER_AUTH_URL;
   };
 
-  return (
-    <a href="#!" onClick={NaverLogin} className="btn_center social naver">
-      <button>네이버 로그인</button>
-    </a>
-  );
+    return (
+        <button type="button" onClick={NaverLogin}>
+            <div className="icon"></div>
+            <p style={{ margin: 0, textAlign: "center" }}>네이버 아이디 로그인</p>
+        </button>
+    );
 };
 
 export default SnsNaverBt;

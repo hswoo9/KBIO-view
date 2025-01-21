@@ -12,9 +12,10 @@ const SnsGoogleBt = () => {
   };
 
   return (
-    <a href="#!" onClick={GoogleLogin} className="btn_center social google">
-      <button>구글 로그인</button>
-    </a>
+      <button type="button" onClick={GoogleLogin}>
+        <div className="icon"></div>
+        <p style={{ margin: 0, textAlign: "center" }}>구글 아이디 로그인</p>
+      </button>
   );
 };
 

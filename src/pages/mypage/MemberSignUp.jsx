@@ -675,7 +675,7 @@ function MemberSignUp(props) {
                         emailPrefix: e.target.value,
                       })}
                       ref={(el) => (checkRef.current[5] = el)}
-                      style={{width: '50%'}}  // 기본 스타일만 유지
+                      style={{width: '50%'}}
                   />
 
                   <span>@</span>
@@ -691,7 +691,7 @@ function MemberSignUp(props) {
                         emailDomain: e.target.value,
                       })}
                       disabled={memberDetail.emailProvider && memberDetail.emailProvider !== "direct"}
-                      style={{width: '140px'}}  // 기본 스타일만 유지
+                      style={{width: '30%'}}
                   />
 
                   {/* 도메인 선택 */}
@@ -1344,6 +1344,7 @@ function MemberSignUp(props) {
                     </label>
                   </div>
                 </div>
+                <span className="warningText">※ 메일링 서비스 수신동의 시 K-바이오랩허브 관련한 다양한 정보를 받으실 수 있습니다</span>
               </li>
             </ul>
 
