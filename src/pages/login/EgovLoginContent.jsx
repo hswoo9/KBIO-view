@@ -8,6 +8,7 @@ import SnsNaverBt from "@/components/sns/SnsNaverBt";
 import SnsKakaoBt from "@/components/sns/SnsKakaoBt";
 import SnsGoogleBt from "@/components/sns/SnsGoogleBt.jsx";
 import Swal from "sweetalert2";
+import {getSessionItem} from "../../utils/storage.js";
 
 function EgovLoginContent(props) {
   const navigate = useNavigate();
@@ -91,11 +92,13 @@ function EgovLoginContent(props) {
         Swal.fire(resp.resultMessage);
         return;
       }else{
-        console.log(resp)
+        console.log("resp",resp)
         setSessionItem("loginUser", {userSn : resp.result.userSn, name : resp.result.userName, id : resp.result.userId, userSe : resp.result.userSe});
         // setSessionItem("userName", resp.userName);
         setSessionItem("jToken", resp.result.jToken);
-        if (saveIDFlag) setLocalItem(KEY_ID, resultVO?.id);
+        //if (saveIDFlag) setLocalItem(KEY_ID, resultVO?.id);
+        if (saveIDFlag) setLocalItem(KEY_ID, resp.result.userId);
+        Swal.fire("로그인 성공");
         navigate("/");
       }
     });
