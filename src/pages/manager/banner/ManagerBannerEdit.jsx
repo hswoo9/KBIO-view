@@ -1,13 +1,12 @@
 import React, {useState, useEffect, useRef, useCallback} from "react";
 import $ from 'jquery';
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
 import 'moment/locale/ko';
-import { default as EgovLeftNav } from "@/components/leftmenu/ManagerLeftBannerPopup";
-import EgovRadioButtonGroup from "@/components/EgovRadioButtonGroup";
+import ManagerTop from "@/components/manager/ManagerTop";
 import Swal from "sweetalert2";
 
 import BtTable from 'react-bootstrap/Table';
@@ -58,6 +57,7 @@ function ManagerBannerEdit(props) {
   }, [selectedFiles]);
 
   const handleFileChange = (e) => {
+    document.getElementById("fileNamePTag").textContent = "";
     console.log(bnrPopupDetail.tblComFiles);
     if(bnrPopupDetail.tblComFiles != null && bnrPopupDetail.tblComFiles.length > 0){
       Swal.fire("기존 파일 삭제 후 첨부가 가능합니다.");
@@ -69,6 +69,11 @@ function ManagerBannerEdit(props) {
     if(e.target.files.length > 0){
       const fileExtension = e.target.files[0].name.split(".").pop().toLowerCase();
       if(allowedExtensions.includes(fileExtension)){
+        let fileName = e.target.files[0].name;
+        if(fileName.length > 30){
+          fileName = fileName.slice(0, 30) + "...";
+        }
+        document.getElementById("fileNamePTag").textContent = fileName;
         setSelectedFiles(Array.from(e.target.files));
       }else{
         Swal.fire({
@@ -234,6 +239,7 @@ function ManagerBannerEdit(props) {
         bnrPopupKnd: "bnr",
         npagYn: "Y"
       });
+      document.getElementById("useYn").checked = true;
       return;
     }
 
@@ -258,6 +264,13 @@ function ManagerBannerEdit(props) {
                 $(this).prop("checked", true);
               }
             });
+          }
+          if(resp.result.tblBnrPopup.useYn != null){
+            if(resp.result.tblBnrPopup.useYn == "Y"){
+              document.getElementById("useYn").checked = true;
+            }else{
+              document.getElementById("useYn").checked = false;
+            }
           }
         } else {
           navigate(
@@ -361,193 +374,153 @@ function ManagerBannerEdit(props) {
     initMode();
   }, []);
 
-  const Location = React.memo(function Location() {
-    return (
-        <div className="location">
-          <ul>
-            <li>
-              <Link to={URL.MANAGER} className="home">
-                Home
-              </Link>
-            </li>
-            <li>
-              <Link to={URL.MANAGER_BANNER_LIST}>배너팝업관리</Link>
-            </li>
-            {modeInfo.mode === CODE.MODE_CREATE && (
-                <li>배너등록</li>
-
-            )}
-            {modeInfo.mode === CODE.MODE_MODIFY && (
-                <li>배너수정</li>
-            )}
-          </ul>
-        </div>
-    );
-  });
 
   return (
-      <div className="container">
+      <div id="container" className="container layout cms">
+        <ManagerTop/>
+        <div className="inner">
+          {modeInfo.mode === CODE.MODE_CREATE && (
+              <h2 className="pageTitle"><p>배너 등록</p></h2>
+          )}
 
-        <div className="c_wrap">
-          <Location/>
-          <div className="layout">
-            <EgovLeftNav></EgovLeftNav>
-
-            <div className="contents BOARD_CREATE_REG" id="contents">
-              {modeInfo.mode === CODE.MODE_CREATE && (
-                  <h2 className="tit_2">배너 등록</h2>
-              )}
-
-              {modeInfo.mode === CODE.MODE_MODIFY && (
-                  <h2 className="tit_2">배너 수정</h2>
-              )}
-
-              <div className="board_view2">
-                <dl>
-                  <dt>
-                    <label htmlFor="cdNm">배너제목</label>
-                    <span className="req">필수</span>
-                  </dt>
-                  <dd>
-                    <Form.Control
-                        size="sm"
-                        type="text"
-                        id="bnrPopupTtl"
-                        placeholder=""
-                        required="required"
-                        value={bnrPopupDetail.bnrPopupTtl}
-                        onChange={(e) =>
-                            setBnrPopupDetail({...bnrPopupDetail, bnrPopupTtl: e.target.value})
-                        }
-                        ref={(el) => (checkRef.current[0] = el)}
-                    />
-                  </dd>
-                </dl>
-                <dl>
-                  <dt>
-                    <label htmlFor="rmrkCn">배너형식</label>
-                  </dt>
-                  <dd>
-                    <Form.Check
-                      inline
-                      type="radio"
-                      label="이미지형식"
-                      id="1"
-                      name="bnrPopupFrm"
-                      value="images"
-                      onChange={(e) =>
-                          setBnrPopupDetail({...bnrPopupDetail, bnrPopupFrm: e.target.value})
-                      }
-                      ref={(el) => (checkRef.current[0] = el)}
-                    />
-                    
-                  </dd>
-                </dl>
-                <dl>
-                  <dt>
-                    <label htmlFor="etcMttr1">파일선택</label>
-                    <span className="req">필수</span>
-                  </dt>
-                  <dd>
-                    <Form.Group controlId="formFile">
-                      <Form.Control type="file"
-                        onChange={handleFileChange}
+          {modeInfo.mode === CODE.MODE_MODIFY && (
+              <h2 className="pageTitle"><p>배너 수정</p></h2>
+          )}
+          <div className="contBox infoWrap customContBox">
+            <ul className="inputWrap">
+              <li className="inputBox type1 width1">
+                <label className="title essential" htmlFor="cdNm"><small>배너제목</small></label>
+                <div className="input">
+                  <input type="text"
+                         id="bnrPopupTtl"
+                         placeholder=""
+                         required="required"
+                         value={bnrPopupDetail.bnrPopupTtl || ""}
+                         onChange={(e) =>
+                             setBnrPopupDetail({...bnrPopupDetail, bnrPopupTtl: e.target.value})
+                         }
+                         ref={(el) => (checkRef.current[0] = el)}
+                  />
+                </div>
+              </li>
+              <li className="inputBox type1 width1">
+                <p className="title essential">배너형식</p>
+                <ul>
+                  <li className="checkBox">
+                    <label>
+                      <input type="radio"
+                             id="bnrPopupFrm1"
+                             name="bnrPopupFrm"
+                             value="images"
+                             onChange={(e) =>
+                                 setBnrPopupDetail({...bnrPopupDetail, bnrPopupFrm: e.target.value})
+                             }
+                             ref={(el) => (checkRef.current[0] = el)}
                       />
-                    </Form.Group>
-                    {bnrPopupDetail != null && bnrPopupDetail.tblComFiles != null && bnrPopupDetail.tblComFiles.length > 0 && (
-                        <ul>
-                          {bnrPopupDetail.tblComFiles.map((file, index) => (
-                              <li key={index}>
-                                {file.atchFileNm} - {(file.atchFileSz / 1024).toFixed(2)} KB
+                      <small>이미지형식</small>
+                    </label>
+                  </li>
+                </ul>
+              </li>
+              <li className="inputBox type1 width3 file">
+                <p className="title essential">파일선택</p>
+                <div className="input">
+                  <p className="file_name" id="fileNamePTag"></p>
+                  <label>
+                    <small className="text btn">파일 선택</small>
+                    <input type="file"
+                           name="formFile"
+                           id="formFile"
+                           onChange={handleFileChange}
+                    />
+                  </label>
+                </div>
+                <span className="warningText">gif,png,jpg 파일 / 권장 사이즈 : 500px * 500px / 용량 : 10M 이하</span>
+              </li>
 
-                                <button
+              <li className="inputBox type1 width2">
+                <p className="title">파일삭제</p>
+                <div className="input">
+                {bnrPopupDetail != null && bnrPopupDetail.tblComFiles != null && bnrPopupDetail.tblComFiles.length > 0 && (
+                    <>
+                      {bnrPopupDetail.tblComFiles.map((file, index) => (
+                          <p className="file_name">{file.atchFileNm} - {(file.atchFileSz / 1024).toFixed(2)} KB
+                            <button type="button" className="clickBtn gray"
                                     onClick={() => setFileDel(file.atchFileSn)}  // 삭제 버튼 클릭 시 처리할 함수
                                     style={{marginLeft: '10px', color: 'red'}}
-                                >
-                                  삭제
-                                </button>
-                              </li>
-                          ))}
-                        </ul>
-                    )}
-                  </dd>
-                </dl>
-                <dl>
-                  <dt>
-                    <label htmlFor="etcMttr2">배너링크</label>
-                  </dt>
-                  <dd>
-                    <Form.Control
-                        size="sm"
-                        type="text"
-                        id="bnrPopupUrlAddr"
-                        placeholder=""
-                        value={bnrPopupDetail.bnrPopupUrlAddr}
-                        onChange={(e) =>
-                            setBnrPopupDetail({...bnrPopupDetail, bnrPopupUrlAddr: e.target.value})
-                        }
-                        ref={(el) => (checkRef.current[0] = el)}
+                            >
+                              삭제
+                            </button>
+                          </p>
+                      ))}
+                    </>
+                )}
+                </div>
+                <span className="warningText"></span>
+              </li>
+              <li className="inputBox type1 width3">
+                <label className="title essential" htmlFor="bnrPopupUrlAddr"><small>배너링크</small></label>
+                <div className="input">
+                  <input type="text"
+                         id="bnrPopupUrlAddr"
+                         placeholder=""
+                         value={bnrPopupDetail.bnrPopupUrlAddr}
+                         onChange={(e) =>
+                             setBnrPopupDetail({...bnrPopupDetail, bnrPopupUrlAddr: e.target.value})
+                         }
+                         ref={(el) => (checkRef.current[0] = el)}
+                  />
+                </div>
+              </li>
+              <li className="inputBox type1 width3">
+                <p className="title essential">분류</p>
+                <div className="itemBox">
+                  <select className="selectGroup"
+                          id="npagYn"
+                          value={bnrPopupDetail.npagYn}
+                          onChange={(e) =>
+                              setBnrPopupDetail({...bnrPopupDetail, npagYn: e.target.value})
+                          }
+                  >
+                    <option value="Y">새창</option>
+                    <option value="N">현재창</option>
+                  </select>
+                </div>
+              </li>
+              <li className="toggleBox width3">
+                <div className="box">
+                  <p className="title essential">사용여부</p>
+                  <div className="toggleSwithWrap">
+                    <input type="checkbox"
+                           id="useYn"
+                           onChange={(e) =>
+                               setBnrPopupDetail({...bnrPopupDetail, useYn: e.target.checked ? "Y" : "N"})
+                           }
+                           ref={(el) => (checkRef.current[0] = el)}
                     />
-                    <Form.Select
-                        size="sm"
-                        id="npagYn"
-                        value={bnrPopupDetail.npagYn}
-                        onChange={(e) =>
-                            setBnrPopupDetail({...bnrPopupDetail, npagYn: e.target.value})
-                        }
-                    >
-                      <option value="Y">새창</option>
-                      <option value="N">현재창</option>
-                    </Form.Select>
-                  </dd>
-                </dl>
-                <dl>
-                  <dt>
-                    <label htmlFor="etcMttr3">사용여부</label>
-                  </dt>
-                  <dd>
-                    <Form.Select
-                        size="sm"
-                        id="useYn"
-                        value={bnrPopupDetail.useYn}
-                        onChange={(e) =>
-                            setBnrPopupDetail({...bnrPopupDetail, useYn: e.target.value})
-                        }
-                        ref={(el) => (checkRef.current[0] = el)}
-                    >
-                      {dataListToOptionHtml(comCdGroupList, "cdGroup", "ACTVTN_YN")}
-                    </Form.Select>
-                  </dd>
-                </dl>
-                <div className="board_btn_area">
-                  <div className="left_col btn1">
-                    <BTButton variant="primary"
-                              onClick={saveBtnEvent}
-                    >
-                      저장
-                    </BTButton>
-                    {modeInfo.mode === CODE.MODE_MODIFY && (
-                        <BTButton variant="danger"
-                                  onClick={delBtnEvent}
-                        >
-                          삭제
-                        </BTButton>
-                    )}
-                  </div>
-
-                  <div className="right_col btn1">
-                    <Link to={URL.MANAGER_BANNER_LIST}
-                    >
-                      <BTButton variant="secondary">목록</BTButton>
-                    </Link>
+                    <label htmlFor="useYn" className="toggleSwitch">
+                      <span className="toggleButton"></span>
+                    </label>
                   </div>
                 </div>
+              </li>
+            </ul>
+            <div className="buttonBox">
+              <div className="leftBox">
+                <button type="button" className="clickBtn point" onClick={saveBtnEvent}><span>저장</span></button>
+                <button type="button" className="clickBtn gray" onClick={delBtnEvent}><span>삭제</span></button>
               </div>
+              <NavLink
+                  to={URL.MANAGER_BANNER_LIST}
+              >
+                <button type="button" className="clickBtn black"><span>목록</span></button>
+              </NavLink>
             </div>
           </div>
         </div>
       </div>
-  );
+  )
+      ;
 }
 
 export default ManagerBannerEdit;

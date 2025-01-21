@@ -37,7 +37,7 @@ header .sitemapBtn {display: none;}
 header .sitemapBtn {width: 32px; height: 32px; background: url(@/assets/images/ico_sitemapBtn.svg) no-repeat center / contain; cursor: pointer;}
 header .title {display: flex; justify-content: space-between; border-top: 1px solid #DDDDDD; border-bottom: 1px solid #ddd; font-weight: 700; height: 3.5rem; align-items: center; box-sizing: border-box; font-size: 1.35rem; padding: .9rem 1.35rem; color: var(--mainColor2)}
 header nav {padding: .9rem; position: relative;}
-header nav .bg {content: ""; position: absolute; left: 50%; transform: translateX(-50%); top: 0; background: var(--mainColor); border-radius: .9rem; transition: .5s ease; z-index: -1;}
+header nav .bg {content: ""; position: absolute; left: 50%; top: 0; background: var(--mainColor); border-radius: .9rem; transition: .5s ease; z-index: -1;}
 header nav .bg.hover {background: #04819B15; opacity: 0;}
 header nav .dep {display: flex; flex-direction: column; gap: 4px;}
 header nav .dep li a {display: flex; align-items: center; width: 100%; gap: .5rem; padding: .8rem; border-radius: .8rem; box-sizing: border-box; color: #999999; font-weight: 600; font-size: .9rem;}
@@ -301,4 +301,8 @@ header .title .icon:hover {background-image: url(@/assets/images/ico_header_arro
 .customContBox{
 	flex-direction : column !important;
 	align-items: initial !important;
+}
+
+#fileNamePTag{
+	padding-right: 5rem;
 }
