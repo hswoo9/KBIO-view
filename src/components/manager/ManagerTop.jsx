@@ -1,5 +1,5 @@
-import { Link, NavLink, useNavigate } from "react-router-dom";
-
+import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
+import React, { useState, useEffect, useCallback } from "react";
 import * as EgovNet from "@/api/egovFetch";
 
 import URL from "@/constants/url";
@@ -9,7 +9,7 @@ import { getSessionItem, setSessionItem } from "@/utils/storage";
 import Swal from "sweetalert2";
 
 function ManagerTop() {
-
+  const location = useLocation();
   const sessionUser = getSessionItem("loginUser");
   const sessionUserId = sessionUser?.id;
   const sessionUserName = sessionUser?.name;
@@ -42,6 +42,12 @@ function ManagerTop() {
       }
     });
   };
+
+  useEffect(() => {
+    if(location.pathname.split("/")[1] === "manager"){
+      import('../../css/manager/admin.css');
+    }
+  }, [location.pathname]);
 
   return (
       <div className="commonTop">
