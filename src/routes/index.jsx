@@ -122,7 +122,7 @@ import EgovAdminPasswordUpdate from "@/pages/admin/manager/EgovAdminPasswordUpda
 import EgovAdminMemberList from "@/pages/admin/members/EgovAdminMemberList";
 import EgovAdminMemberEdit from "@/pages/admin/members/EgovAdminMemberEdit";
 //마이페이지 기능 추가
-import EgovMypageEdit from "@/pages/mypage/EgovMypageEdit";
+import MemberSignUp from "@/pages/mypage/MemberSignUp";
 import EgovTermsAgreement from '@/pages/mypage/EgovTermsAgreement';
 import EgovIdentityVerification from '@/pages/mypage/EgovIdentityVerification';
 import MemberSignupChoice from '@/pages/mypage/MemberSignupChoice';
