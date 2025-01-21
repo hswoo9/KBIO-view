@@ -216,6 +216,7 @@ function Index(props) {
                 setSaveMode({mode:"insert"});
                 setMenuDetail({});
                 document.getElementById("upperMenuList").value = "";
+                document.getElementById("actvtnYn").value = "N";
                 setUpperMenuList2(makerMenuOption([]));
                 setUpperMenuList3(makerMenuOption([]));
                 setSearchDto({
@@ -302,13 +303,15 @@ function Index(props) {
                 (resp) => {
                     let upperMenus = [];
                     let dataList = [];
+                    let menuHtml = [];
                     menuList.push(
                         { value: "", label: "데이터가 없습니다."}
                     );
-
+                    let expandedArr = [];
                     resp.result.menus.forEach(function (item, index) {
                         item.value = item.menuSn;
                         item.label = item.menuNm;
+                        expandedArr.push(item.menuSn);
                         if(item.childTblMenu != null){
                             item.childTblMenu.forEach(function (subItem, subIndex) {
                                 subItem.value = subItem.menuSn;
@@ -317,10 +320,12 @@ function Index(props) {
                                     subItem.childTblMenu.forEach(function (subSubItem, subSubIndex) {
                                         subSubItem.value = subSubItem.menuSn;
                                         subSubItem.label = subSubItem.menuNm;
+                                        expandedArr.push(subSubItem.menuSn);
                                         if(subSubItem.childTblMenu != null){
                                             subSubItem.childTblMenu.forEach(function (subSubSubItem, subSubSubIndex){
                                                 subSubSubItem.value = subSubSubItem.menuSn;
                                                 subSubSubItem.label = subSubSubItem.menuNm;
+                                                expandedArr.push(subSubSubItem.menuSn);
                                             });
                                             if(subSubItem.childTblMenu.length > 0){
                                                 subSubItem.children = subSubItem.childTblMenu;
@@ -331,12 +336,16 @@ function Index(props) {
                                         subItem.children = subItem.childTblMenu;
                                     }
                                 }
+                                expandedArr.push(subItem.menuSn);
                             });
                             item.children = item.childTblMenu;
                         }
+
+
                     });
                     setUpperMenuList(makerMenuOption(resp.result.menus));
                     setMenuList(resp.result.menus);
+                    setExpanded(expandedArr);
                 }
             )
         }
@@ -385,6 +394,14 @@ function Index(props) {
                 requestOptions,
                 (resp) => {
                     if(resp.result.menu != null){
+                        if(resp.result.menu.actvtnYn != null){
+                            if(resp.result.menu.actvtnYn == "Y"){
+                                document.getElementById("actvtnYn").checked = true;
+                            }else{
+                                document.getElementById("actvtnYn").checked = false;
+                            }
+                        }
+
                         setSaveMode({mode: "update"});
                         if(resp.result.menu.menuSnPath.indexOf("|") > -1){
                             if(resp.result.menu.upperMenuSn == 0){
@@ -446,135 +463,103 @@ function Index(props) {
         getMenuList(searchDto);
     }, []);
 
-
-
-  const location = useLocation();
-    
-  const Location = React.memo(function Location() {
-    return (
-        <div className="location">
-            <ul>
-                <li>
-                    <Link to={URL.MANAGER} className="home">
-                        Home
-                    </Link>
-                </li>
-                <li>
-                    <Link to={URL.MANAGER_MENU_MANAGEMENT}>메뉴관리</Link>
-                </li>
-                <li>메뉴관리</li>
-            </ul>
-        </div>
-    );
-  });
-
-
     return (
         <div id="container" className="container layout cms">
         <ManagerTop/>
             <div className="inner">
-                <div className="contents BOARD_CREATE_LIST" id="contents">
-                    <div className="leftDiv">
+                <h2 className="pageTitle"><p>메뉴 관리</p></h2>
+                <div className="contBox">
+                    <div className="box listBox">
+                        <div className="topTitle">메뉴목록</div>
                         <CheckboxTree
                             nodes={menuList}
                             /*checked={checked}
                             onCheck={onCheck}*/
                             expanded={expanded}
                             onExpand={onExpand}
-
                             onClick={menuOnClick}
                         >
                         </CheckboxTree>
+                        <div className="buttonBox">
+                            <div className="left">
+                                {/*<button type="button" className="btn btn2 red plusBtn"><span>최상위 메뉴 추가</span></button>
+                                <button type="button" className="btn btn2 plusBtn2"><span>하위 메뉴 추가</span></button>*/}
+                            </div>
+                            <div className="right">
+                                <button type="button" className="btn btn2 black openBtn"><span>모두 열기</span></button>
+                                <button type="button" className="btn btn2 black closeBtn"><span>모두 닫기</span></button>
+                            </div>
+                        </div>
+                        {/*<div className="buttonBox bot">
+                            <button type="button" className="btn btn2 white firstBtn"><span>맨 위로</span></button>
+                            <button type="button" className="btn btn2 white upBtn"><span>한 칸 위로</span></button>
+                            <button type="button" className="btn btn2 white downBtn"><span>한 칸 아래로</span></button>
+                            <button type="button" className="btn btn2 white lastBtn"><span>맨 아래로</span></button>
+                        </div>*/}
                     </div>
-                    <div className="rightDiv">
-                        <div className="write_div">
-                            <dl>
-                                <dd className="btnRightGroup">
-                                    <BTButton variant="secondary" size="sm"
-                                        onClick={resetMenu}
-                                    >초기화</BTButton>
-                                    <BTButton variant="primary" size="sm"
-                                        onClick={saveMenu}
-                                    >저장</BTButton>
-                                    <BTButton variant="danger" size="sm"
-                                        onClick={deleteMenuFn}
-                                    >삭제</BTButton>
-                                </dd>
-                            </dl>
-                            <dl>
-                                <dt>
-                                    <label htmlFor="bbsNm">상위메뉴</label>
-                                    <span className="req">필수</span>
-                                </dt>
-                                <dd className="customDd">
-                                    <Form.Select size="sm"
-                                         id="upperMenuList"
-                                         onChange={(e) => upperMenuChange(e, 1)}
-                                    >
-                                        <option value="">선택</option>
-                                        <option value="0">최상위</option>
-                                        {upperMenuList}
-                                    </Form.Select>
-                                    <Form.Select size="sm"
-                                        id="upperMenuList2"
-                                        onChange={(e) => upperMenuChange(e, 2)}
-                                    >
-                                        <option value="">선택</option>
-                                        {upperMenuList2}
-                                    </Form.Select>
-                                    <Form.Select size="sm"
-                                        id="upperMenuList3"
-                                        onChange={(e) => upperMenuChange(e, 3)}
-                                    >
-                                        <option value="">선택</option>
-                                        {upperMenuList3}
-                                    </Form.Select>
-                                </dd>
-                            </dl>
-                            <dl>
-                                <dt>
-                                    <label htmlFor="bbsNm">메뉴번호</label>
-                                    <span className="req">필수</span>
-                                </dt>
-                                <dd>
-                                    <Form.Control
-                                        size="sm"
-                                        type="text"
-                                        id="menuSn"
-                                        placeholder=""
-                                        disabled="disabled"
-                                        value={menuDetail.menuSn || ""}
+                    <div className="box infoBox">
+                        <div className="topTitle">메뉴정보</div>
+                        <ul className="listBox">
+                            <li className="inputBox type1">
+                                <label className="title" htmlFor="upperMenuList"><small>상위메뉴</small></label>
+                            </li>
+                            <li className="inputBox type11">
+                                <select
+                                    id="upperMenuList"
+                                    className="selectGroup width30 inlineBlock"
+                                    onChange={(e) => upperMenuChange(e, 1)}
+
+                                >
+                                    <option value="">선택</option>
+                                    <option value="0">최상위</option>
+                                    {upperMenuList}
+                                </select>
+                                <select
+                                    id="upperMenuList2"
+                                    onChange={(e) => upperMenuChange(e, 2)}
+                                    className="selectGroup width30 inlineBlock"
+                                >
+                                    <option value="">선택</option>
+                                    {upperMenuList2}
+                                </select>
+                                <select
+                                    id="upperMenuList3"
+                                    onChange={(e) => upperMenuChange(e, 3)}
+                                    className="selectGroup width30 inlineBlock"
+                                >
+                                    <option value="">선택</option>
+                                    {upperMenuList3}
+                                </select>
+                            </li>
+                            <li className="inputBox type1">
+                                <label className="title" htmlFor="menuSn"><small>메뉴번호</small></label>
+                                <div className="input">
+                                    <input type="text"
+                                           id="menuSn"
+                                           disabled="disabled"
+                                           value={menuDetail.menuSn || ""}
                                     />
-                                </dd>
-                                <dt>
-                                    <label htmlFor="bbsNm">메뉴유형</label>
-                                    <span className="req">필수</span>
-                                </dt>
-                                <dd>
-                                    <Form.Select size="sm" onChange={(e) =>
-                                            setMenuDetail({
-                                                ...menuDetail,
-                                                menuType: e.target.value,
-                                                mdfrSn: sessionUser.userSn
-                                            })
-                                        }
-                                        value={menuDetail.menuType || "n"}
+                                </div>
+                            </li>
+                            <li className="inputBox type1">
+                                <label className="title" htmlFor="menuType"><small>메뉴유형</small></label>
+                                <div className="input">
+                                    <select
                                         id="menuType"
+                                        className="selectGroup"
+                                        onChange={(e) => upperMenuChange(e, 1)}
+
                                     >
                                         <option value="n">일반</option>
                                         <option value="c">컨텐츠</option>
                                         <option value="b">게시판</option>
-                                    </Form.Select>
-                                </dd>
-                            </dl>
-                            <dl>
-                                <dt>
-                                    <label htmlFor="bbsNm">메뉴명</label>
-                                    <span className="req">필수</span>
-                                </dt>
-                                <dd>
-                                    <Form.Control
-                                        size="sm"
+                                    </select>
+                                </div>
+                            </li>
+                            <li className="inputBox type1">
+                                <label className="title" htmlFor="bbsNm"><small>메뉴명</small></label>
+                                <div className="input">
+                                    <input
                                         type="text"
                                         id="menuNm"
                                         placeholder=""
@@ -587,16 +572,12 @@ function Index(props) {
                                         }
                                         value={menuDetail.menuNm || ""}
                                     />
-                                </dd>
-                            </dl>
-                            <dl>
-                                <dt>
-                                    <label htmlFor="bbsNm">메뉴경로</label>
-                                    <span className="req">필수</span>
-                                </dt>
-                                <dd>
-                                    <Form.Control
-                                        size="sm"
+                                </div>
+                            </li>
+                            <li className="inputBox type1">
+                                <label className="title" htmlFor="menuPathNm"><small>메뉴경로</small></label>
+                                <div className="input">
+                                    <input
                                         type="text"
                                         id="menuPathNm"
                                         placeholder=""
@@ -609,16 +590,12 @@ function Index(props) {
                                         }
                                         value={menuDetail.menuPathNm || ""}
                                     />
-                                </dd>
-                            </dl>
-                            <dl>
-                                <dt>
-                                    <label htmlFor="bbsNm">메뉴순서</label>
-                                    <span className="req">필수</span>
-                                </dt>
-                                <dd>
-                                    <Form.Control
-                                        size="sm"
+                                </div>
+                            </li>
+                            <li className="inputBox type1">
+                                <label className="title" htmlFor="menuSortSeq"><small>메뉴순서</small></label>
+                                <div className="input">
+                                    <input
                                         type="text"
                                         id="menuSortSeq"
                                         placeholder=""
@@ -631,28 +608,39 @@ function Index(props) {
                                         }
                                         value={menuDetail.menuSortSeq || ""}
                                     />
-                                </dd>
-                                <dt>
-                                    <label htmlFor="bbsNm">활성여부</label>
-                                    <span className="req">필수</span>
-                                </dt>
-                                <dd>
-                                    <Form.Select size="sm"
-                                         id="actvtnYn"
-                                         onChange={(e) =>
-                                             setMenuDetail({
-                                                 ...menuDetail,
-                                                 actvtnYn: e.target.value,
-                                                 mdfrSn: sessionUser.userSn
-                                             })
-                                         }
-                                         value={menuDetail.actvtnYn || "Y"}
-                                    >
-                                        <option value="Y">사용</option>
-                                        <option value="N">미사용</option>
-                                    </Form.Select>
-                                </dd>
-                            </dl>
+                                </div>
+                            </li>
+                            <li className="toggleBox width3">
+                                <div className="box">
+                                    <p className="title">활성여부</p>
+                                    <div className="toggleSwithWrap">
+                                        <input type="checkbox"
+                                               id="actvtnYn"
+                                               onChange={(e) =>
+                                                   setMenuDetail({
+                                                       ...menuDetail,
+                                                       actvtnYn: e.target.checked ? "Y" : "N",
+                                                       mdfrSn: sessionUser.userSn
+                                                   })
+                                               }
+                                        />
+                                        <label htmlFor="actvtnYn" className="toggleSwitch">
+                                            <span className="toggleButton"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                        <div className="buttonBox">
+                            <div className="left">
+                                <button type="button" className="clickBtn" onClick={saveMenu}><span>저장</span></button>
+                                <button type="button" className="clickBtn red" onClick={deleteMenuFn}><span>삭제</span>
+                                </button>
+                            </div>
+                            <div className="right">
+                                <button type="button" className="clickBtn white" onClick={resetMenu}><span>초기화</span>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>

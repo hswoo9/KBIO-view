@@ -330,13 +330,9 @@ function ManagerLeftNew() {
       };
 
 
-
-
-
-
-      $(document).ready(function () {
+      /*$(document).ready(function () {
         $('select').niceSelect();
-      });
+      });*/
 
 
       $( document ).ready( function() {
@@ -449,15 +445,16 @@ function ManagerLeftNew() {
             <div className="bg hover"></div>
             <div className="bg active"></div>
             <ul className="dep">
-              <li className={({isActive}) => (isActive ? "active" : "")}>
+              <li>
                 <NavLink
                     to={URL.MANAGER_NORMAL_MEMBER}
+                    className={({isActive}) => (isActive ? "active" : "")}
                 >
                   <div className="icon"></div>
                   <p>회원관리</p>
                 </NavLink>
               </li>
-              <li className={({isActive}) => (isActive ? "active" : "")}>
+              <li>
                 <NavLink
                     to={URL.MANAGER_MENU_MANAGEMENT}
                 >
@@ -465,7 +462,7 @@ function ManagerLeftNew() {
                   <p>메뉴관리</p>
                 </NavLink>
               </li>
-              <li className={({isActive}) => (isActive ? "active" : "")}>
+              <li>
                 <NavLink
                     to={URL.MANAGER_BBS_LIST}
                 >
@@ -473,7 +470,7 @@ function ManagerLeftNew() {
                   <p>게시판관리</p>
                 </NavLink>
               </li>
-              <li className={({isActive}) => (isActive ? "active" : "")}>
+              <li>
                 <NavLink
                     to={URL.MANAGER_BANNER_LIST}
                 >
@@ -481,7 +478,7 @@ function ManagerLeftNew() {
                   <p>배너팝업관리</p>
                 </NavLink>
               </li>
-              <li className={({isActive}) => (isActive ? "active" : "")}>
+              <li>
                 <NavLink
                     to={URL.MANAGER_CODE_GROUP}
                 >
