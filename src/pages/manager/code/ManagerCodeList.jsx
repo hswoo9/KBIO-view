@@ -6,7 +6,7 @@ import URL from "@/constants/url";
 import CODE from "@/constants/code";
 
 import { default as EgovLeftNav } from "@/components/leftmenu/ManagerLeftCode";
-
+import ManagerTop from "@/components/manager/ManagerTop";
 import EgovPaging from "@/components/EgovPaging";
 
 import Swal from 'sweetalert2';
@@ -170,32 +170,12 @@ function ManagerCodeGroup(props) {
         getCodeList(searchCondition);
     }, []);
 
-    const Location = React.memo(function Location() {
-        return (
-            <div className="location">
-                <ul>
-                    <li>
-                        <Link to={URL.MANAGER} className="home">
-                            Home
-                        </Link>
-                    </li>
-                    <li>
-                        <Link to={URL.MANAGER_CODE_GROUP}>코드관리</Link>
-                    </li>
-                    <li>코드목록</li>
-                </ul>
-            </div>
-        );
-    });
-
-
     return (
-        <div className="container">
-            <div className="c_wrap">
-                <Location/>
+        <div id="container" className="container layout cms">
+            <ManagerTop/>
+            <div className="inner">
 
                 <div className="layout">
-                    <EgovLeftNav/>
                     <div className="contents BOARD_CREATE_LIST" id="contents">
                         <div className="condition">
                             <ul>
@@ -243,9 +223,9 @@ function ManagerCodeGroup(props) {
                                 </li>
                                 <li>
                                     <Link
-                                        to={{ pathname: URL.MANAGER_CODE_CREATE }}
+                                        to={{pathname: URL.MANAGER_CODE_CREATE}}
                                         state={{
-                                            cdGroupSn : location.state?.cdGroupSn
+                                            cdGroupSn: location.state?.cdGroupSn
                                         }}
                                         key={location.state?.cdGroupSn}
                                         className="btn btn_blue_h46 pd35"
