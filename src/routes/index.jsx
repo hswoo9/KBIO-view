@@ -4,6 +4,12 @@ import { Navigate, Routes, Route, useLocation } from "react-router-dom";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
 
+//CUSTOM
+import EgovHeaderUser from "@/components/EgovHeaderUser";
+import ManagerLeftNew from "@/components/manager/ManagerLeftNew";
+import EgovFooterUser from "@/components/EgovFooterUser";
+import EgovMainUser from "@/pages/main/EgovMainUser";
+
 //COMMON
 import EgovHeader from "@/components/EgovHeader";
 import ManagerHeader from "@/components/manager/ManagerHeader";
@@ -197,13 +203,13 @@ const SecondRoutes = () => {
 
   const requestUrl = window.location.pathname.split("/")[1];
   return (
-    <>
-      {requestUrl === "manager" ? (<ManagerHeader/>) :
-        requestUrl === "popupView" ? "" : (<EgovHeader />)
+    <div id="wrap" className={requestUrl === "manager" ? "admin" : "user"}>
+      {requestUrl === "manager" ? (<ManagerLeftNew/>) :
+        requestUrl === "popupView" ? "" : (<EgovHeaderUser />)
       }
       <Routes>
         {/* MAIN */}
-        <Route path={URL.MAIN} element={<EgovMain />} />
+        <Route path={URL.MAIN} element={<EgovMainUser />} />
 
         {/* LOGIN */}
         <Route
@@ -568,12 +574,9 @@ const SecondRoutes = () => {
       </Routes>
 
       {requestUrl === "manager" ? "" :
-          requestUrl === "popupView" ? "" : (<EgovFooter />)
+          requestUrl === "popupView" ? "" : (<EgovFooterUser />)
       }
-      <EgovInfoPopup />
-
-
-    </>
+    </div>
   );
 };
 
