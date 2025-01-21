@@ -2,20 +2,23 @@ import RootRoutes from "@/routes";
 import React from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 
-import "@/css/base.css";
-import "@/css/layout.css";
-import "@/css/component.css";
-import "@/css/page.css";
-import "@/css/response.css";
+/* 퍼블 기준 */
+/*
+import '@/css/manager/aos.css';
+import '@/css/manager/page.css';
+import '@/css/manager/pretendard.css';
+import '@/css/manager/reset.css';
+import '@/css/manager/Rubik.css';
+import '@/css/manager/swiper-bundle.min.css';
+import '@/css/manager/user.css';
+import '@/css/manager/admin.css';*/
 
 function App() {
-  return (
-    <div className="wrap">
+    return (
         <Router>
-          <RootRoutes />
+            <RootRoutes />
         </Router>
-    </div>
-  );
+    )
 }
 
 export default App;

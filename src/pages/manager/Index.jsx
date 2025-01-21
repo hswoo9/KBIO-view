@@ -5,38 +5,19 @@ import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
 
+import ManagerTop from "@/components/manager/ManagerTop";
+
 function Index(props) {
 
-  const Location = React.memo(function Location() {
-    return (
-        <div className="location">
-          <ul>
-            <li>
-              <Link to={URL.MANAGER} className="home">
-                Home
-              </Link>
-            </li>
-          </ul>
-        </div>
-    );
-  });
-
-
   return (
-    <div className="container">
-      <div className="c_wrap">
-        {/* <!-- Location --> */}
-        <Location/>
-        {/* <!--// Location --> */}
+    <div id="container" className="container layout cms">
+        <ManagerTop/>
 
-        <div className="layout">
-          {/* <!-- Navigation --> */}
-          {/* <!--// Navigation --> */}
+        <div className="inner">
+            
         </div>
-      </div>
     </div>
-  )
-      ;
+  );
 }
 
 export default Index;

@@ -1,0 +1,139 @@
+@charset "utf-8";/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, address, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strong, sub, sup, var,
+b, u, i,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header,
+nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, menu, nav, section {
+	display: block;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+table {width: 100%;}
+table caption {display: none;}
+a {
+	text-decoration: none; transition: .5s ease;
+}
+img {F
+	vertical-align: bottom;
+	max-width:100%;
+}
+.clearfix::after {
+	content: "";
+	clear: both;
+	display: table;
+}
+.hidden, .blind {
+	overflow: hidden;
+	display: inline-block;
+	position: absolute;
+	z-index: -1;
+	border: 0;
+	width: 1px;
+	height: 1px;
+	clip: rect(1px, 1px, 1px, 1px);
+	clip-path: inset(50%);
+}
+#skip > a {
+	position: fixed;
+	z-index: 999;
+	display: block;
+	width: 100%;
+	height: 40px;
+	background: rgba(0, 0, 0, .8);
+	color: #fff;
+	line-height: 40px;
+	text-align: center;
+	left: 0;
+	top: -40px;
+	cursor: pointer;
+}
+#skip > a:focus, #skip > a:active {
+	top: 0;
+}
+
+input[type="text"], button{	
+	outline: none;
+}
+select {border: none; outline: none;}
+input {border: none; outline: none;}
+input:focus {border: none; outline: none;}
+button {
+	cursor: pointer;
+	border: none;
+	padding: 0;
+	background-color: transparent;
+}
+strong, b {font-weight: 700;}
+span,strong, a {display: inline-block;}
+
+/* ios대응 */
+html {
+	-webkit-text-size-adjust: none;
+	-moz-text-size-adjust: none;
+	-ms-text-size-adjust: none;
+	-o-text-size-adjust: none;
+	/* text크기를 자동으로 조절하지 말아라 */
+}
+input, textarea, button {
+  appearance: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  border-radius: 0;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+}
+
+input {vertical-align: middle; appearance: none; margin: 0; display: inline-block;}
+input[type="checkbox"],input[type="radio"], label {cursor: pointer;}
+select {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+
+}
+select::-ms-expand {
+	display: none; 
+	/* 화살표없애기 for ie10, 11 */
+}
+address {font-style: normal;}
+
+/* iOS only */
+@supports (-webkit-touch-callout: none) { 
+  height: -webkit-fill-available;
+}
+
