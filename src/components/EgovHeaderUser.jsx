@@ -9,13 +9,14 @@ import CODE from "@/constants/code";
 import { getSessionItem, setSessionItem } from "@/utils/storage";
 import Swal from 'sweetalert2';
 
-import '@/css/manager/aos.css';
-import '@/css/manager/page.css';
-import '@/css/manager/pretendard.css';
-import '@/css/manager/reset.css';
-import '@/css/manager/Rubik.css';
+import '@/css/manager/niceSelect/nice-select.css';
 import '@/css/manager/swiper-bundle.min.css';
+import '@/css/manager/aos.css';
+import '@/css/manager/pretendard.css';
+import '@/css/manager/Rubik.css';
+import '@/css/manager/reset.css';
 import '@/css/manager/user.css';
+import '@/css/manager/page.css';
 
 import userJs from "@/js/userCustom";
 
@@ -100,7 +101,7 @@ function EgovHeader() {
       }
     };
   }, []);
-  
+
   useEffect(() => {
     userJs();
   });
@@ -112,10 +113,15 @@ function EgovHeader() {
           <div className="hTop inner">
             <div className="logBox">
               <button type="button" className="loginBtn"><span>로그인</span></button>
-              <button type="button" className="signUpBtn"><span>회원가입</span></button>
+              <NavLink
+                  to={URL.SIGNUP_CHOICE}
+              >
+                <button type="button" className="signUpBtn"><span>회원가입</span></button>
+              </NavLink>
+
             </div>
             <div className="langBox">
-              <div className="itemBox">
+            <div className="itemBox">
                 <select>
                   <option value="0">KR</option>
                   <option value="1">EN</option>
