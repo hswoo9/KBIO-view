@@ -112,13 +112,38 @@ function EgovHeader() {
         <div className="hInner">
           <div className="hTop inner">
             <div className="logBox">
+              {/* 로그아웃 : 로그인 정보 있을때 */}
+              {sessionUserId && (
+                  <>
+                    <span className="person">{sessionUserName} </span> 님이,{" "}
+                    {sessionUserSe}로 로그인하셨습니다.
+                    {sessionUserSe === "UDR" && (
+                        <NavLink
+                            to={URL.MYPAGE_MODIFY}
+                        >
+                          <button type="button" className="myPage"><span>마이페이지</span></button>
+                        </NavLink>
+                    )}
+                    <button onClick={logOutHandler} className="btn">
+                      로그아웃
+                    </button>
+                  </>
+              )}
+              {/* 로그인 : 로그인 정보 없을 때 */}
+              {!sessionUserId && (
+              <>
+              <NavLink
+                  to={URL.LOGIN}
+              >
               <button type="button" className="loginBtn"><span>로그인</span></button>
+              </NavLink>
               <NavLink
                   to={URL.SIGNUP_CHOICE}
               >
                 <button type="button" className="signUpBtn"><span>회원가입</span></button>
               </NavLink>
-
+            </>
+            )}
             </div>
             <div className="langBox">
             <div className="itemBox">
