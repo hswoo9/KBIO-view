@@ -1,12 +1,12 @@
 import React, {useState, useEffect, useRef, useCallback} from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
 import 'moment/locale/ko';
-import { default as EgovLeftNav } from "@/components/leftmenu/ManagerLeftCode";
-import EgovRadioButtonGroup from "@/components/EgovRadioButtonGroup";
+
+import ManagerTop from "@/components/manager/ManagerTop";
 import Swal from "sweetalert2";
 
 import BtTable from 'react-bootstrap/Table';
@@ -196,6 +196,13 @@ function ManagerCodeEdit(props) {
     EgovNet.requestFetch(getCdDetailURL, requestOptions, function (resp) {
       if (modeInfo.mode === CODE.MODE_MODIFY) {
         if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
+          if(resp.result.comCd.actvtnYn != null){
+            if(resp.result.comCd.actvtnYn == "Y"){
+              document.getElementById("actvtnYn").checked = true;
+            }else{
+              document.getElementById("actvtnYn").checked = false;
+            }
+          }
           setCdDetail(resp.result.comCd);
         } else {
           navigate(
@@ -213,259 +220,182 @@ function ManagerCodeEdit(props) {
     initMode();
   }, []);
 
-  const Location = React.memo(function Location() {
-    return (
-        <div className="location">
-          <ul>
-            <li>
-              <Link to={URL.MANAGER} className="home">
-                Home
-              </Link>
-            </li>
-            <li>
-              <Link to={URL.MANAGER_CODE_GROUP}>코드관리</Link>
-            </li>
-            <li>코드등록</li>
-          </ul>
-        </div>
-    );
-  });
 
   return (
-      <div className="container">
+      <div id="container" className="container layout cms">
+        <ManagerTop/>
+        <div className="inner">
+          {modeInfo.mode === CODE.MODE_CREATE && (
+            <h2 className="pageTitle"><p>코드 등록</p></h2>
+          )}
 
-        <div className="c_wrap">
-          <Location/>
-          <div className="layout">
-            <EgovLeftNav></EgovLeftNav>
+          {modeInfo.mode === CODE.MODE_MODIFY && (
+            <h2 className="pageTitle"><p>코드 수정</p></h2>
+          )}
 
-            <div className="contents BOARD_CREATE_REG" id="contents">
-              {modeInfo.mode === CODE.MODE_CREATE && (
-                  <h2 className="tit_2">코드 등록</h2>
-              )}
-
-              {modeInfo.mode === CODE.MODE_MODIFY && (
-                  <h2 className="tit_2">코드 수정</h2>
-              )}
-
-              <div className="board_view2">
-                <dl>
-                  <dt>
-                    <label htmlFor="cd">코드</label>
-                    <span className="req">필수</span>
-                  </dt>
-                  <dd>
-                    <Form.Control
-                        size="sm"
-                        type="text"
-                        id="cd"
-                        placeholder=""
-                        required="required"
-                        defaultValue={cdDetail.cd}
-                        onChange={(e) =>
-                            setCdDetail({...cdDetail, cd: e.target.value})
-                        }
-                        ref={(el) => (checkRef.current[0] = el)}
+          <div className="contBox infoWrap customContBox">
+            <ul className="inputWrap">
+              <li className="inputBox type1 width2">
+                <label className="title essential" htmlFor="cd"><small>코드</small></label>
+                <div className="input">
+                  <input type="text"
+                         id="cd"
+                         placeholder=""
+                         required="required"
+                         value={cdDetail.cd || ""}
+                         onChange={(e) =>
+                             setCdDetail({...cdDetail, cd: e.target.value})
+                         }
+                  />
+                </div>
+              </li>
+              <li className="inputBox type1 width2">
+                <label className="title essential" htmlFor="cdNm"><small>코드명</small></label>
+                <div className="input">
+                  <input type="text"
+                         id="cdNm"
+                         placeholder=""
+                         required="required"
+                         value={cdDetail.cdNm || ""}
+                         onChange={(e) =>
+                             setCdDetail({...cdDetail, cdNm: e.target.value})
+                         }
+                  />
+                </div>
+              </li>
+              <li className="inputBox type1 width3">
+                <label className="title" htmlFor="etcMttr1"><small>기타1</small></label>
+                <div className="input">
+                  <input type="text"
+                         id="etcMttr1"
+                         placeholder=""
+                         value={cdDetail.etcMttr1 || ""}
+                         onChange={(e) =>
+                             setCdDetail({...cdDetail, etcMttr1: e.target.value})
+                         }
+                         ref={(el) => (checkRef.current[0] = el)}
+                  />
+                </div>
+              </li>
+              <li className="inputBox type1 width3">
+                <label className="title" htmlFor="etcMttr2"><small>기타2</small></label>
+                <div className="input">
+                  <input type="text"
+                         id="etcMttr2"
+                         placeholder=""
+                         value={cdDetail.etcMttr2 || ""}
+                         onChange={(e) =>
+                             setCdDetail({...cdDetail, etcMttr2: e.target.value})
+                         }
+                         ref={(el) => (checkRef.current[0] = el)}
+                  />
+                </div>
+              </li>
+              <li className="inputBox type1 width3">
+                <label className="title" htmlFor="etcMttr3"><small>기타3</small></label>
+                <div className="input">
+                  <input type="text"
+                         id="etcMttr3"
+                         placeholder=""
+                         value={cdDetail.etcMttr3 || ""}
+                         onChange={(e) =>
+                             setCdDetail({...cdDetail, etcMttr3: e.target.value})
+                         }
+                         ref={(el) => (checkRef.current[0] = el)}
+                  />
+                </div>
+              </li>
+              <li className="inputBox type1 width3">
+                <label className="title" htmlFor="etcMttr4"><small>기타4</small></label>
+                <div className="input">
+                  <input type="text"
+                         id="etcMttr4"
+                         placeholder=""
+                         value={cdDetail.etcMttr4 || ""}
+                         onChange={(e) =>
+                             setCdDetail({...cdDetail, etcMttr4: e.target.value})
+                         }
+                         ref={(el) => (checkRef.current[0] = el)}
+                  />
+                </div>
+              </li>
+              <li className="inputBox type1 width3">
+                <label className="title" htmlFor="etcMttr5"><small>기타5</small></label>
+                <div className="input">
+                  <input type="text"
+                         id="etcMttr5"
+                         placeholder=""
+                         value={cdDetail.etcMttr5 || ""}
+                         onChange={(e) =>
+                             setCdDetail({...cdDetail, etcMttr5: e.target.value})
+                         }
+                         ref={(el) => (checkRef.current[0] = el)}
+                  />
+                </div>
+              </li>
+              <li className="inputBox type1 width3">
+                <label className="title" htmlFor="sortSeq"><small>정렬순서</small></label>
+                <div className="input">
+                  <input type="text"
+                         id="sortSeq"
+                         placeholder=""
+                         value={cdDetail.sortSeq || ""}
+                         onChange={(e) =>
+                             setCdDetail({...cdDetail, sortSeq: e.target.value})
+                         }
+                  />
+                  <label htmlFor="actvtnYn" className="toggleSwitch">
+                    <span className="toggleButton"></span>
+                  </label>
+                </div>
+              </li>
+              <li className="toggleBox width3">
+              <div className="box">
+                  <p className="title essential">활성여부</p>
+                  <div className="toggleSwithWrap">
+                    <input type="checkbox"
+                           id="actvtnYn"
+                           onChange={(e) =>
+                               setCdDetail({...cdDetail, actvtnYn: e.target.checked ? "Y" : "N"})
+                           }
                     />
-                  </dd>
-                </dl>
-                <dl>
-                  <dt>
-                    <label htmlFor="cdNm">코드명</label>
-                    <span className="req">필수</span>
-                  </dt>
-                  <dd>
-                    <Form.Control
-                        size="sm"
-                        type="text"
-                        id="cdNm"
-                        placeholder=""
-                        required="required"
-                        defaultValue={cdDetail.cdNm}
-                        onChange={(e) =>
-                            setCdDetail({...cdDetail, cdNm: e.target.value})
-                        }
-                        ref={(el) => (checkRef.current[0] = el)}
-                    />
-                  </dd>
-                </dl>
-                <dl>
-                  <dt>
-                    <label htmlFor="rmrkCn">비고</label>
-                  </dt>
-                  <dd>
-                    <Form.Control
-                        size="sm"
-                        type="text"
-                        id="rmrkCn"
-                        placeholder=""
-                        required="required"
-                        defaultValue={cdDetail.rmrkCn}
-                        onChange={(e) =>
-                            setCdDetail({...cdDetail, rmrkCn: e.target.value})
-                        }
-                        ref={(el) => (checkRef.current[0] = el)}
-                    />
-                  </dd>
-                </dl>
-                <dl>
-                  <dt>
-                    <label htmlFor="etcMttr1">기타1</label>
-                  </dt>
-                  <dd>
-                    <Form.Control
-                        size="sm"
-                        type="text"
-                        id="etcMttr1"
-                        placeholder=""
-                        defaultValue={cdDetail.etcMttr1}
-                        onChange={(e) =>
-                            setCdDetail({...cdDetail, etcMttr1: e.target.value})
-                        }
-                        ref={(el) => (checkRef.current[0] = el)}
-                    />
-                  </dd>
-                </dl>
-                <dl>
-                  <dt>
-                    <label htmlFor="etcMttr2">기타2</label>
-                  </dt>
-                  <dd>
-                    <Form.Control
-                        size="sm"
-                        type="text"
-                        id="etcMttr2"
-                        placeholder=""
-                        defaultValue={cdDetail.etcMttr2}
-                        onChange={(e) =>
-                            setCdDetail({...cdDetail, etcMttr2: e.target.value})
-                        }
-                        ref={(el) => (checkRef.current[0] = el)}
-                    />
-                  </dd>
-                </dl>
-                <dl>
-                  <dt>
-                    <label htmlFor="etcMttr3">기타3</label>
-                  </dt>
-                  <dd>
-                    <Form.Control
-                        size="sm"
-                        type="text"
-                        id="etcMttr3"
-                        placeholder=""
-                        defaultValue={cdDetail.etcMttr3}
-                        onChange={(e) =>
-                            setCdDetail({...cdDetail, etcMttr3: e.target.value})
-                        }
-                        ref={(el) => (checkRef.current[0] = el)}
-                    />
-                  </dd>
-                </dl>
-                <dl>
-                  <dt>
-                    <label htmlFor="etcMttr4">기타4</label>
-                  </dt>
-                  <dd>
-                    <Form.Control
-                        size="sm"
-                        type="text"
-                        id="etcMttr4"
-                        placeholder=""
-                        defaultValue={cdDetail.etcMttr4}
-                        onChange={(e) =>
-                            setCdDetail({...cdDetail, etcMttr4: e.target.value})
-                        }
-                        ref={(el) => (checkRef.current[0] = el)}
-                    />
-                  </dd>
-                </dl>
-                <dl>
-                  <dt>
-                    <label htmlFor="etcMttr5">기타5</label>
-                  </dt>
-                  <dd>
-                    <Form.Control
-                        size="sm"
-                        type="text"
-                        id="etcMttr5"
-                        placeholder=""
-                        defaultValue={cdDetail.etcMttr5}
-                        onChange={(e) =>
-                            setCdDetail({...cdDetail, etcMttr5: e.target.value})
-                        }
-                        ref={(el) => (checkRef.current[0] = el)}
-                    />
-                  </dd>
-                </dl>
-                <dl>
-                  <dt>
-                    <label htmlFor="sortSeq">정렬순서</label>
-                  </dt>
-                  <dd>
-                    <Form.Control
-                        size="sm"
-                        type="text"
-                        id="sortSeq"
-                        placeholder=""
-                        defaultValue={cdDetail.sortSeq}
-                        onChange={(e) =>
-                            setCdDetail({...cdDetail, sortSeq: e.target.value})
-                        }
-                        ref={(el) => (checkRef.current[0] = el)}
-                    />
-                  </dd>
-                </dl>
-                <dl>
-                  <dt>
-                    <label htmlFor="actvtnYn">활성여부</label>
-                    <span className="req">필수</span>
-                  </dt>
-                  <dd>
-                    <Form.Select
-                        size="sm"
-                        id="actvtnYn"
-                        onChange={(e) =>
-                            setCdDetail({...cdDetail, actvtnYn: e.target.value})
-                        }
-                        ref={(el) => (checkRef.current[0] = el)}
-                    >
-                      <option value="Y">사용</option>
-                      <option value="N">미사용</option>
-                    </Form.Select>
-                  </dd>
-                </dl>
-                {/* <!-- 버튼영역 --> */}
-                <div className="board_btn_area">
-                  <div className="left_col btn1">
-                    <BTButton variant="primary"
-                              onClick={saveBtnEvent}
-                    >
-                      저장
-                    </BTButton>
-                    {modeInfo.mode === CODE.MODE_MODIFY && (
-                        <BTButton variant="danger"
-                                  onClick={delBtnEvent}
-                        >
-                          삭제
-                        </BTButton>
-                    )}
-                  </div>
-
-                  <div className="right_col btn1">
-                    <Link to={URL.MANAGER_CODE}
-                      state={{
-                        cdGroupSn: location.state?.cdGroupSn
-                      }}
-                    >
-                      <BTButton variant="secondary">목록</BTButton>
-                    </Link>
+                    <label htmlFor="actvtnYn" className="toggleSwitch">
+                      <span className="toggleButton"></span>
+                    </label>
                   </div>
                 </div>
-                {/* <!--// 버튼영역 --> */}
-              </div>
+              </li>
 
-              {/* <!--// 본문 --> */}
+              <li className="inputBox type1">
+                <label className="title" htmlFor="rmrkCn"><small>비고</small></label>
+                <div className="input">
+                  <textarea type="text"
+                            id="rmrkCn"
+                            placeholder=""
+                            required="required"
+                            value={cdDetail.rmrkCn || ""}
+                            onChange={(e) =>
+                                setCdDetail({...cdDetail, rmrkCn: e.target.value})
+                            }
+                            ref={(el) => (checkRef.current[0] = el)}
+                  >
+                  </textarea>
+                </div>
+              </li>
+            </ul>
+            <div className="buttonBox">
+              <div className="leftBox">
+                <button type="button" className="clickBtn point" onClick={saveBtnEvent}><span>저장</span></button>
+                <button type="button" className="clickBtn gray" onClick={delBtnEvent}><span>삭제</span></button>
+              </div>
+              <NavLink
+                  to={URL.MANAGER_CODE}
+                  state={{
+                    cdGroupSn: location.state?.cdGroupSn
+                  }}
+              >
+                <button type="button" className="clickBtn black"><span>목록</span></button>
+              </NavLink>
             </div>
           </div>
         </div>

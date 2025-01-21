@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import axios from "axios";
 import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
 
-import { default as EgovLeftNav } from "@/components/leftmenu/ManagerLeftCode";
 import ManagerTop from "@/components/manager/ManagerTop";
 import EgovPaging from "@/components/EgovPaging";
 
@@ -124,34 +123,37 @@ function ManagerCodeGroup(props) {
 
                         dataList.push(
                             <tr key={item.comCdSn}>
-                                <td onClick={(e) => {e.stopPropagation()}}>
+                                <td onClick={(e) => {
+                                    e.stopPropagation()
+                                }}>
                                     {resp.paginationInfo.totalRecordCount - (resp.paginationInfo.currentPageNo - 1) * resp.paginationInfo.pageSize - index}
                                 </td>
                                 <td>{item.cd}</td>
                                 <td>{item.cdNm}</td>
                                 <td>{item.sortSeq}</td>
                                 <td>{item.actvtnYn === "Y" ? "사용" : "사용안함"}</td>
-                                <td className="btnGroupTd">
-                                    <Link 
-                                        to={{ pathname: URL.MANAGER_CODE_MODIFY }}
+                                <td>
+                                    <Link
+                                        to={{pathname: URL.MANAGER_CODE_MODIFY}}
                                         state={{
-                                            comCdSn : item.comCdSn,
+                                            comCdSn: item.comCdSn,
                                             cdGroupSn: location.state?.cdGroupSn
                                         }}
                                         key={item.comCdSn}
                                     >
-                                        <BTButton variant="primary" size="sm"
-                                        >
+                                        <button type="button">
                                             수정
-                                        </BTButton>
+                                        </button>
                                     </Link>
-                                    <BTButton variant="danger" size="sm"
-                                        onClick={() => {
-                                            delBtnEvent(item.comCdSn);
-                                        }}
+                                </td>
+                                <td>
+                                    <button type="button"
+                                      onClick={() => {
+                                          delBtnEvent(item.comCdSn);
+                                      }}
                                     >
                                         삭제
-                                    </BTButton>
+                                    </button>
                                 </td>
                             </tr>
                         );
@@ -174,76 +176,57 @@ function ManagerCodeGroup(props) {
         <div id="container" className="container layout cms">
             <ManagerTop/>
             <div className="inner">
-
-                <div className="layout">
-                    <div className="contents BOARD_CREATE_LIST" id="contents">
-                        <div className="condition">
-                            <ul>
-                                <li className="third_1 L">
-                                    <span className="lb">검색유형선택</span>
-                                    <label className="f_select" htmlFor="searchCnd">
-                                        <select
-                                            id="searchCnd"
-                                            name="searchCnd"
-                                            title="검색유형선택"
-                                        >
-                                            <option value="0">코드명</option>
-                                        </select>
-                                    </label>
-                                </li>
-                                <li className="third_2 R">
-                                    <span className="lb">검색어</span>
-                                    <span className="f_search w_400">
-                                    <input
-                                        type="text"
-                                        name=""
-                                        defaultValue={
-                                            searchCondition && searchCondition.searchWrd
-                                        }
-                                        placeholder=""
-                                        ref={wrdRef}
-                                        onChange={(e) => {
-                                            wrdRef.current.value = e.target.value;
-                                        }}
-                                    />
-                                    <button
-                                        type="button"
-                                        onClick={() => {
-                                            retrieveList({
-                                                ...searchCondition,
-                                                pageIndex: 1,
-                                                searchCnd: cndRef.current.value,
-                                                searchWrd: wrdRef.current.value,
-                                            });
-                                        }}
-                                    >
-                                      조회
-                                    </button>
-                                  </span>
-                                </li>
-                                <li>
-                                    <Link
-                                        to={{pathname: URL.MANAGER_CODE_CREATE}}
-                                        state={{
-                                            cdGroupSn: location.state?.cdGroupSn
-                                        }}
-                                        key={location.state?.cdGroupSn}
-                                        className="btn btn_blue_h46 pd35"
-                                    >
-                                        등록
-                                    </Link>
-                                </li>
-                            </ul>
+                <h2 className="pageTitle"><p>코드관리</p></h2>
+                <div className="cateWrap">
+                    <form action="">
+                        <ul className="cateList">
+                            <li className="inputBox type1">
+                                <p className="title">활성여부</p>
+                                <div className="itemBox">
+                                    <select className="selectGroup">
+                                        <option value="">전체</option>
+                                        <option value="Y">사용</option>
+                                        <option value="N">미사용</option>
+                                    </select>
+                                </div>
+                            </li>
+                            <li className="inputBox type1">
+                                <p className="title">키워드</p>
+                                <div className="itemBox">
+                                    <select className="selectGroup">
+                                        <option value="">전체</option>
+                                        <option value="cdGroup">코드</option>
+                                        <option value="cdGroup">코드명</option>
+                                    </select>
+                                </div>
+                            </li>
+                            <li className="searchBox inputBox type1">
+                                <label className="input"><input type="text" id="search" name="search"
+                                                                placeholder="검색어를 입력해주세요"/></label>
+                            </li>
+                        </ul>
+                        <div className="rightBtn">
+                            <button type="button" className="refreshBtn btn btn1 gray">
+                                <div className="icon"></div>
+                            </button>
+                            <button type="button" className="searchBtn btn btn1 point">
+                                <div className="icon"></div>
+                            </button>
                         </div>
-                        <BtTable
-                            striped bordered hover size="sm"
-                            className="btTable"
-                        >
+                    </form>
+                </div>
+                <div className="contBox board type1 customContBox">
+                    <div className="topBox"></div>
+                    <div className="tableBox type1">
+                        <table>
+                            <caption>코드목록</caption>
                             <colgroup>
                                 <col width="50px"/>
                                 <col width="200px"/>
                                 <col/>
                                 <col width="80px"/>
+                                <col/>
+                                <col/>
                                 <col/>
                             </colgroup>
                             <thead>
@@ -253,24 +236,34 @@ function ManagerCodeGroup(props) {
                                 <th>코드명</th>
                                 <th>정렬순서</th>
                                 <th>활성여부</th>
-                                <th>관리</th>
+                                <th>수정</th>
+                                <th>삭제</th>
                             </tr>
                             </thead>
                             <tbody>
                             {codeList}
                             </tbody>
-                        </BtTable>
-                        <div className="board_bot">
-                            <EgovPaging
-                                pagination={paginationInfo}
-                                moveToPage={(passedPage) => {
-                                    getCodeList({
-                                        ...searchCondition,
-                                        pageIndex: passedPage
-                                    });
-                                }}
-                            />
-                        </div>
+                        </table>
+                    </div>
+
+                    <div className="pageWrap">
+                        <EgovPaging
+                            pagination={paginationInfo}
+                            moveToPage={(passedPage) => {
+                                getCodeList({
+                                    ...searchCondition,
+                                    pageIndex: passedPage
+                                });
+                            }}
+                        />
+                        <NavLink
+                            to={{pathname: URL.MANAGER_CODE_CREATE}}
+                            state={{
+                                cdGroupSn: location.state?.cdGroupSn
+                            }}
+                        >
+                            <button type="button" className="writeBtn clickBtn"><span>등록</span></button>
+                        </NavLink>
                     </div>
                 </div>
             </div>
