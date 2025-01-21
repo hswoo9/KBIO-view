@@ -6,7 +6,7 @@ import URL from "@/constants/url";
 
 import simpleMainIng from "/assets/images/img_simple_main.png";
 import initPage from "@/js/ui";
-
+import logo from "@/assets/images/logo.svg";
 
 function EgovMainUser(props) {
   console.group("EgovMain");
@@ -27,11 +27,11 @@ function EgovMainUser(props) {
           <div className="tabBox type1" data-aos="fade-up" data-aos-duration="1500">
             <div className="bg hover"></div>
             <ul className="list">
-              <li className="active"><a href="javascript:;"><span>공지사항</span></a></li>
-              <li><a href="javascript:;"><span>Q&A</span></a></li>
-              <li><a href="javascript:;"><span>FAQ</span></a></li>
-              <li><a href="javascript:;"><span>자료실</span></a></li>
-              <li><a href="javascript:;"><span>연구자료실</span></a></li>
+              <li className="active"><a href="#"><span>공지사항</span></a></li>
+              <li><a href="#"><span>Q&A</span></a></li>
+              <li><a href="#"><span>FAQ</span></a></li>
+              <li><a href="#"><span>자료실</span></a></li>
+              <li><a href="#"><span>연구자료실</span></a></li>
             </ul>
           </div>
         </div>
@@ -43,7 +43,7 @@ function EgovMainUser(props) {
                 <div className="icon"></div>
               </div>
               <form className="box">
-                <figure className="logo"><img src="../images/logo.svg" alt="K k-Bio LabHub"/></figure>
+                <figure className="logo"><img src={logo} alt="K k-Bio LabHub"/></figure>
                 <ul className="inputWrap">
                   <li className="inputBox type2">
                     <span className="tt1">아이디</span>
@@ -77,13 +77,13 @@ function EgovMainUser(props) {
                 <div className="snsLoginBox">
                   <div className="or"><p>or</p></div>
                   <ul className="list">
-                    <li className="kakao"><a href="javascript:;">
+                    <li className="kakao"><a href="#">
                       <div className="icon"></div>
                     </a></li>
-                    <li className="google"><a href="javascript:;">
+                    <li className="google"><a href="#">
                       <div className="icon"></div>
                     </a></li>
-                    <li className="naver"><a href="javascript:;">
+                    <li className="naver"><a href="#">
                       <div className="icon"></div>
                     </a></li>
                   </ul>

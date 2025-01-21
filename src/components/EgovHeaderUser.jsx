@@ -99,8 +99,11 @@ function EgovHeader() {
         clearTimeout(logoutTimer.current);
       }
     };
-    userJs();
   }, []);
+  
+  useEffect(() => {
+    userJs();
+  });
 
   return (
       // <!-- header -->
