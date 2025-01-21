@@ -10,7 +10,6 @@ import { default as EgovLeftNav } from "@/components/leftmenu/ManagerLeftMenu";
 import CheckboxTree from 'react-checkbox-tree';
 import '@/css/ReactCheckBoxTree.css';
 import Form from 'react-bootstrap/Form';
-import 'bootstrap/dist/css/bootstrap.css';
 import BTButton from 'react-bootstrap/Button';
 import Swal from 'sweetalert2';
 
