@@ -1,3 +1,5 @@
+import { Link, NavLink } from "react-router-dom";
+
 function EgovPaging(props) {
   console.groupCollapsed("EgovPaging");
   console.log("EgovPaging [props] : ", props);
@@ -22,15 +24,13 @@ function EgovPaging(props) {
     if (totalPageCount > pageSize) {
       // 첫 페이지 이동
       const firstPageTag = (
-        <li key="fp" className="btn">
-          <button
+        <li key="fp" className="first arrow">
+          <NavLink
             onClick={() => {
               props.moveToPage(1);
             }}
-            className="first"
           >
-            처음
-          </button>
+          </NavLink>
         </li>
       );
       paginationTag.push(firstPageTag);
@@ -38,15 +38,13 @@ function EgovPaging(props) {
       // 이전 페이지 이동
       const prevPageIndex = currentPageNo - 1 > 0 ? currentPageNo - 1 : 1;
       const previousPageTag = (
-        <li key="pp" className="btn">
-          <button
+        <li key="pp"  className="prev arrow">
+          <NavLink
             onClick={() => {
               props.moveToPage(prevPageIndex);
             }}
-            className="prev"
           >
-            이전
-          </button>
+          </NavLink>
         </li>
       );
       paginationTag.push(previousPageTag);
@@ -56,8 +54,8 @@ function EgovPaging(props) {
       if (i === currentPageNo) {
         // 현재 페이지
         const currentPage = (
-          <li key={i}>
-            <button className="cur">{i}</button>
+          <li key={i} className="now">
+            <NavLink className="cur"><span>{i}</span></NavLink>
           </li>
         );
         paginationTag.push(currentPage);
@@ -65,13 +63,13 @@ function EgovPaging(props) {
         // 다른 페이지
         const otherPage = (
           <li key={i}>
-            <button
+            <NavLink
               onClick={() => {
                 props.moveToPage(i);
               }}
             >
-              {i}
-            </button>
+                <span>{i}</span>
+            </NavLink>
           </li>
         );
         paginationTag.push(otherPage);
@@ -84,28 +82,25 @@ function EgovPaging(props) {
           ? currentLastPage + 1
           : totalPageCount;
       const nextPageTag = (
-        <li key="np" className="btn">
-          <button
+        <li key="np" className="next arrow active">
+          <NavLink
             onClick={() => {
               props.moveToPage(nextPageIndex);
             }}
-            className="next"
           >
-            다음
-          </button>
+          </NavLink>
         </li>
       );
       paginationTag.push(nextPageTag);
 
       // 마지막 페이지 이동
       const lastPageTag = (
-        <li key="lp" className="btn">
-          <button
+        <li key="lp" className="last arrow active">
+          <NavLink
             onClick={() => {
               props.moveToPage(totalPageCount);
             }}
-            className="last"
-          ></button>
+          ></NavLink>
         </li>
       );
       paginationTag.push(lastPageTag);
@@ -115,9 +110,7 @@ function EgovPaging(props) {
   console.groupEnd("EgovPaging");
 
   return (
-    <div className="paging">
-      <ul>{paginationTag}</ul>
-    </div>
+    <ul className="pageList">{paginationTag}</ul>
   );
 }
 
