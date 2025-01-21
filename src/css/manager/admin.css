@@ -146,6 +146,7 @@ header .title .icon:hover {background-image: url(@/assets/images/ico_header_arro
 .container .inner .infoWrap .topTitle {font-size: 1.1rem; font-weight: 700;}
 .container .inner .infoWrap .inputWrap {display: flex; flex-wrap: wrap; gap: .9rem;}
 .container .inner .infoWrap .inputWrap li {width: 100%;}
+.container .inner .infoWrap .inputWrap li.width2 {width: calc(100% / 2 - .6rem);}
 .container .inner .infoWrap .inputWrap li.width3 {width: calc(100% / 3 - .6rem);}
 .container .inner .infoWrap .inputWrap li.toggleBox {padding-top: 1.4rem;}
 .container .inner .infoWrap .inputWrap .inputBox.type1 textarea {height: 8.8rem;}

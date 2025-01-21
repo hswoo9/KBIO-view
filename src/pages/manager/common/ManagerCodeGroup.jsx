@@ -5,7 +5,6 @@ import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
 import ManagerTop from "@/components/manager/ManagerTop";
-import { default as EgovLeftNav } from "@/components/leftmenu/ManagerLeftCode";
 
 import EgovPaging from "@/components/EgovPaging";
 
