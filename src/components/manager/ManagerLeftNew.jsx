@@ -486,6 +486,14 @@ function ManagerLeftNew() {
               </li>
               <li>
                 <NavLink
+                    to={URL.MANAGER_MENU_AUTHORITY}
+                >
+                  <div className="icon"></div>
+                  <p>메뉴권한관리</p>
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
                     to={URL.MANAGER_BBS_LIST}
                 >
                   <div className="icon"></div>

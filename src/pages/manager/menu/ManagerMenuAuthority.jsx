@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import axios from "axios";
 import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
@@ -7,18 +7,12 @@ import CODE from "@/constants/code";
 import moment from 'moment';
 import 'moment/locale/ko';
 
-import { default as EgovLeftNav } from "@/components/leftmenu/ManagerLeftMenu";
-
+import ManagerTop from "@/components/manager/ManagerTop";
 import CheckboxTree from 'react-checkbox-tree';
 import '@/css/ReactCheckBoxTree.css';
 
 import Swal from 'sweetalert2';
 import EgovPaging from "@/components/EgovPaging";
-
-/* bootstrip */
-import BtTable from 'react-bootstrap/Table';
-import BTButton from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
 
 import { getSessionItem } from "@/utils/storage";
 
@@ -127,8 +121,8 @@ function ManagerMenuAuthority(props) {
                     authorityGroup.authrtType = document.getElementById("authrtType").value;
                 }
                 if(authorityGroup.actvtnYn == null || authorityGroup.actvtnYn == ""){
-                    authorityGroup.actvtnYn = document.getElementById("actvtnYn").value;
-                }
+                    authorityGroup.actvtnYn = document.getElementById("actvtnYn").checked ? "Y" : "N";
+                }/*
                 if(
                     authorityGroup.inqAuthrt == null
                     && authorityGroup.wrtAuthrt == null
@@ -137,7 +131,7 @@ function ManagerMenuAuthority(props) {
                 ){
                     Swal.fire("선택된 게시판 권한이 없습니다.");
                     return;
-                }
+                }*/
                 if(authorityGroup.authrtGroupSn == null){
                     authorityGroup.creatrSn = sessionUser.userSn;
                 }
@@ -185,15 +179,18 @@ function ManagerMenuAuthority(props) {
 
     const fieldReset = () => {
         setSaveMode({mode:"insert"});
-        document.getElementById("inqAuthrt").checked = false;
-        document.getElementById("wrtAuthrt").checked = false;
-        document.getElementById("mdfcnAuthrt").checked = false;
-        document.getElementById("delAuthrt").checked = false;
+        document.getElementById("inqAuthrt").checked = true;
+        document.getElementById("wrtAuthrt").checked = true;
+        document.getElementById("mdfcnAuthrt").checked = true;
+        document.getElementById("delAuthrt").checked = true;
+        document.getElementById("frstCrtDt").value = "";
+        document.getElementById("mdfcnDt").value = "";
 
+        $(".dtLi").css("display", "none");
 
-        document.getElementById("saveViewDl").style.display = "none";
         setAuthorityGroup({});
         setChecked([]);
+
     }
 
     const selectAuthorityDelete = () => {
@@ -380,7 +377,16 @@ function ManagerMenuAuthority(props) {
                         }else{
                             document.getElementById("delAuthrt").checked = false;
                         }
-                        document.getElementById("saveViewDl").style.display = "table-cell";
+
+                        if(resp.result.menuAuthGroup.actvtnYn != null){
+                            if(resp.result.menuAuthGroup.actvtnYn == "Y"){
+                                document.getElementById("actvtnYn").checked = true;
+                            }else{
+                                document.getElementById("actvtnYn").checked = false;
+                            }
+                        }
+
+                        $(".dtLi").css("display", "flex");
                         //메뉴리스트
                         if(resp.result.menuAuthGroup.allowAccessMenu){
                             let menuSnArr = [];
@@ -486,6 +492,7 @@ function ManagerMenuAuthority(props) {
                     console.log(resp);
                     if(resp.result.menu != null){
                         setSaveMode({mode: "update"});
+                        resp.result.menu.mdfrSn = sessionUser.userSn;
                         setMenuDetail(resp.result.menu);
                     }
                 }
@@ -499,64 +506,33 @@ function ManagerMenuAuthority(props) {
     }, []);
 
 
-  const Location = React.memo(function Location() {
     return (
-        <div className="location">
-            <ul>
-                <li>
-                    <Link to={URL.MANAGER} className="home">
-                        Home
-                    </Link>
-                </li>
-                <li>
-                    <Link to={URL.MANAGER_MENU_MANAGEMENT}>메뉴관리</Link>
-                </li>
-                <li>메뉴권한관리</li>
-            </ul>
-        </div>
-    );
-  });
-
-
-    return (
-        <div className="container">
-            <div className="c_wrap">
-        {/* <!-- Location --> */}
-        <Location/>
-        {/* <!--// Location --> */}
-                <div className="layout">
-                    {/* <!-- Navigation --> */}
-                    {/* <!--// Navigation --> */}
-                    <EgovLeftNav/>
-                    <div className="contents BOARD_CREATE_LIST" id="contents">
-                        <div className="leftDiv">
-                            <CheckboxTree
-                                nodes={menuList}
-                                checked={checked}
-                                onCheck={onCheck}
-                                expanded={expanded}
-                                onExpand={onExpand}
-                            >
-                            </CheckboxTree>
-                        </div>
-                        <div className="rightDiv">
-                            <dl>
-                                <dd className="btnRightGroup">
-                                    <BTButton variant="secondary" size="sm"
-                                              onClick={selectAuthorityDelete}
-                                    >선택삭제</BTButton>
-                                </dd>
-                            </dl>
-                            <BtTable
-                                striped bordered hover size="sm"
-                                className="btTable"
-                            >
+        <div id="container" className="container layout cms">
+            <ManagerTop/>
+            <div className="inner">
+                <h2 className="pageTitle"><p>메뉴권한관리</p></h2>
+                <div className="contBox">
+                    <div className="box listBox maxW400">
+                        <div className="topTitle">메뉴목록</div>
+                        <CheckboxTree
+                            nodes={menuList}
+                            checked={checked}
+                            onCheck={onCheck}
+                            expanded={expanded}
+                            onExpand={onExpand}
+                        >
+                        </CheckboxTree>
+                    </div>
+                    <div className="box infoBox">
+                        <div className="topTitle">권한목록</div>
+                        <div className="tableBox type1">
+                            <table>
+                                <caption>코드목록</caption>
                                 <colgroup>
                                     <col width="50px"/>
                                     <col width="200px"/>
-                                    <col/>
-                                    <col width="80px"/>
-                                    <col/>
+                                    <col width="100px"/>
+                                    <col width="100px"/>
                                 </colgroup>
                                 <thead>
                                 <tr>
@@ -574,77 +550,74 @@ function ManagerMenuAuthority(props) {
                                 <tbody>
                                 {authorityList}
                                 </tbody>
-                            </BtTable>
-                            <div className="board_bot">
-                                <EgovPaging
-                                    pagination={paginationInfo}
-                                    moveToPage={(passedPage) => {
-                                        getAuthorityList({
-                                            ...searchDto,
-                                            pageIndex: passedPage
-                                        });
-                                    }}
-                                />
-                            </div>
+                            </table>
                         </div>
-                        <div className="rightDiv">
-                            <div className="write_div">
-                                <dl>
-                                    <dd className="btnRightGroup">
-                                        <BTButton variant="secondary" size="sm"
-                                                  onClick={resetData}
-                                        >신규등록</BTButton>
-                                        <BTButton variant="primary" size="sm"
-                                                  onClick={saveMenu}
-                                        >저장</BTButton>
-                                    </dd>
-                                </dl>
-                                <dl>
-                                    <dt>
-                                        <label htmlFor="bbsNm">권한그룹<br/>일련번호</label>
-                                        <span className="req">필수</span>
-                                    </dt>
-                                    <dd>
-                                        <Form.Control
-                                            size="sm"
-                                            type="text"
-                                            id="authrtGroupSn"
-                                            placeholder=""
-                                            disabled="disabled"
-                                            value={authorityGroup.authrtGroupSn || ""}
+                        <div className="pageWrap">
+                            <EgovPaging
+                                pagination={paginationInfo}
+                                moveToPage={(passedPage) => {
+                                    getAuthorityList({
+                                        ...searchDto,
+                                        pageIndex: passedPage
+                                    });
+                                }}
+                            />
+                            <button type="button" className="clickBtn red" onClick={selectAuthorityDelete}>
+                                <span>선택삭제</span></button>
+                        </div>
+                        <div className="customDiv">
+                            <ul className="inputWrap">
+                                <li className="inputBox type1 width2">
+                                    <label className="title essential" htmlFor="authrtGroupSn"><small>권한그룹 일련번호</small></label>
+                                    <div className="input">
+                                        <input type="text"
+                                               id="authrtGroupSn"
+                                               placeholder=""
+                                               disabled="disabled"
+                                               value={authorityGroup.authrtGroupSn || ""}
                                         />
-                                    </dd>
-                                    <dt>
-                                        <label htmlFor="bbsNm">권한그룹명</label>
-                                        <span className="req">필수</span>
-                                    </dt>
-                                    <dd>
-                                        <Form.Control
-                                            size="sm"
-                                            type="text"
-                                            id="authrtGroupNm"
-                                            placeholder=""
-                                            required="required"
-                                            onChange={(e) =>
-                                                setAuthorityGroup({
-                                                    ...authorityGroup,
-                                                    authrtGroupNm: e.target.value,
-                                                    mdfrSn: sessionUser.userSn
-                                                })
-                                            }
-                                            value={authorityGroup.authrtGroupNm || ""}
+                                    </div>
+                                </li>
+                                <li className="inputBox type1 width2">
+                                    <label className="title essential"
+                                           htmlFor="authrtGroupNm"><small>권한그룹명</small></label>
+                                    <div className="input">
+                                        <input type="text"
+                                               id="authrtGroupNm"
+                                               placeholder=""
+                                               required="required"
+                                               onChange={(e) =>
+                                                   setAuthorityGroup({
+                                                       ...authorityGroup,
+                                                       authrtGroupNm: e.target.value,
+                                                       mdfrSn: sessionUser.userSn
+                                                   })
+                                               }
+                                               value={authorityGroup.authrtGroupNm || ""}
                                         />
-                                    </dd>
-                                </dl>
-                                <dl>
-                                    <dt>
-                                        <label htmlFor="bbsNm">권한 구분</label>
-                                        <span className="req">필수</span>
-                                    </dt>
-                                    <dd>
-                                        <Form.Select
+                                    </div>
+                                </li>
+                                <li className="inputBox type1 width3">
+                                    <label className="title" htmlFor="menuType"><small>메뉴유형</small></label>
+                                    <div className="itemBox">
+                                        <select
+                                            id="menuType"
+                                            className="selectGroup"
+                                            onChange={(e) => upperMenuChange(e, 1)}
+
+                                        >
+                                            <option value="n">일반</option>
+                                            <option value="c">컨텐츠</option>
+                                            <option value="b">게시판</option>
+                                        </select>
+                                    </div>
+                                </li>
+                                <li className="inputBox type1 width3">
+                                    <label className="title" htmlFor="authrtType"><small>권한구분</small></label>
+                                    <div className="itemBox">
+                                        <select
                                             id="authrtType"
-                                            size="sm"
+                                            className="selectGroup"
                                             onChange={(e) =>
                                                 setAuthorityGroup({
                                                     ...authorityGroup,
@@ -653,118 +626,137 @@ function ManagerMenuAuthority(props) {
                                                 })
                                             }
                                             value={authorityGroup.authrtType || "USER"}
+
                                         >
                                             <option value="USER">일반사용자</option>
                                             <option value="ADMIN">관리자</option>
-                                        </Form.Select>
-                                    </dd>
-                                    <dt>
-                                        <label htmlFor="bbsNm">활성여부</label>
-                                        <span className="req">필수</span>
-                                    </dt>
-                                    <dd>
-                                        <Form.Select
-                                            size="sm"
-                                            id="actvtnYn"
-                                            onChange={(e) =>
-                                                setAuthorityGroup({
-                                                    ...authorityGroup,
-                                                    actvtnYn: e.target.value,
-                                                    mdfrSn: sessionUser.userSn
-                                                })
-                                            }
-                                            value={authorityGroup.actvtnYn || "Y"}
-                                        >
-                                            <option value="Y">사용</option>
-                                            <option value="N">미사용</option>
-                                        </Form.Select>
-                                    </dd>
-                                </dl>
-                                <dl>
-                                    <dt>
-                                        <label htmlFor="bbsNm">게시판 권한</label>
-                                        <span className="req">필수</span>
-                                    </dt>
-                                    <dd className="checkGroupDd">
-                                        <Form.Check
-                                            type="checkbox"
-                                            id="inqAuthrt"
-                                            label="읽기"
-                                            onChange={(e) =>
-                                                setAuthorityGroup({
-                                                    ...authorityGroup,
-                                                    inqAuthrt: e.target.checked ? "Y" : "N",
-                                                    mdfrSn: sessionUser.userSn
-                                                })
-                                            }
-                                        ></Form.Check>
-                                        <Form.Check
-                                            type="checkbox"
-                                            id="wrtAuthrt"
-                                            label="작성"
-                                            onChange={(e) =>
-                                                setAuthorityGroup({
-                                                    ...authorityGroup,
-                                                    wrtAuthrt: e.target.checked ? "Y" : "N",
-                                                    mdfrSn: sessionUser.userSn
-                                                })
-                                            }
-                                        ></Form.Check>
-                                        <Form.Check
-                                            type="checkbox"
-                                            id="mdfcnAuthrt"
-                                            label="수정"
-                                            onChange={(e) =>
-                                                setAuthorityGroup({
-                                                    ...authorityGroup,
-                                                    mdfcnAuthrt: e.target.checked ? "Y" : "N",
-                                                    mdfrSn: sessionUser.userSn
-                                                })
-                                            }
-                                        ></Form.Check>
-                                        <Form.Check
-                                            type="checkbox"
-                                            id="delAuthrt"
-                                            label="삭제"
-                                            onChange={(e) =>
-                                                setAuthorityGroup({
-                                                    ...authorityGroup,
-                                                    delAuthrt: e.target.checked ? "Y" : "N",
-                                                    mdfrSn: sessionUser.userSn
-                                                })
-                                            }
-                                        ></Form.Check>
-                                    </dd>
-                                </dl>
-                                <dl id="saveViewDl">
-                                    <dt>
-                                        <label htmlFor="bbsNm">최초 등록일</label>
-                                    </dt>
-                                    <dd>
-                                        <Form.Control
-                                            size="sm"
-                                            type="text"
-                                            id=""
-                                            placeholder=""
-                                            disabled="disabled"
-                                            value={moment(authorityGroup.frstCrtDt).format('YYYY-MM-DD') || ""}
+                                        </select>
+                                    </div>
+                                </li>
+                                <li className="toggleBox type1 width3 customToggleBox">
+                                    <div className="box">
+                                        <p className="title essential">활성여부</p>
+                                        <div className="toggleSwithWrap">
+                                            <input type="checkbox"
+                                                   id="actvtnYn"
+                                                   onChange={(e) =>
+                                                       setAuthorityGroup({
+                                                           ...authorityGroup,
+                                                           actvtnYn: e.target.checked ? "Y" : "N",
+                                                           mdfrSn: sessionUser.userSn
+                                                       })
+                                                   }
+                                            />
+                                            <label htmlFor="actvtnYn" className="toggleSwitch">
+                                                <span className="toggleButton"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li className="inputBox type1 width1">
+                                    <p className="title">게시판 권한</p>
+                                    <ul className="checkWrap">
+                                        <li className="checkBox">
+                                            <label>
+                                                <input
+                                                    type="checkBox"
+                                                    id="inqAuthrt"
+                                                    onChange={(e) =>
+                                                        setAuthorityGroup({
+                                                            ...authorityGroup,
+                                                            inqAuthrt: e.target.checked ? "Y" : "N",
+                                                            mdfrSn: sessionUser.userSn
+                                                        })
+                                                    }
+                                                />
+                                                <small>읽기</small>
+                                            </label>
+                                        </li>
+                                        <li className="checkBox">
+                                            <label>
+                                                <input
+                                                    type="checkBox"
+                                                    id="wrtAuthrt"
+                                                    onChange={(e) =>
+                                                        setAuthorityGroup({
+                                                            ...authorityGroup,
+                                                            wrtAuthrt: e.target.checked ? "Y" : "N",
+                                                            mdfrSn: sessionUser.userSn
+                                                        })
+                                                    }
+                                                />
+                                                <small>작성</small>
+                                            </label>
+                                        </li>
+                                        <li className="checkBox">
+                                            <label>
+                                                <input
+                                                    type="checkBox"
+                                                    id="mdfcnAuthrt"
+                                                    onChange={(e) =>
+                                                        setAuthorityGroup({
+                                                            ...authorityGroup,
+                                                            mdfcnAuthrt: e.target.checked ? "Y" : "N",
+                                                            mdfrSn: sessionUser.userSn
+                                                        })
+                                                    }
+                                                />
+                                                <small>수정</small>
+                                            </label>
+                                        </li>
+                                        <li className="checkBox">
+                                            <label>
+                                                <input
+                                                    type="checkBox"
+                                                    id="delAuthrt"
+                                                    onChange={(e) =>
+                                                        setAuthorityGroup({
+                                                            ...authorityGroup,
+                                                            delAuthrt: e.target.checked ? "Y" : "N",
+                                                            mdfrSn: sessionUser.userSn
+                                                        })
+                                                    }
+                                                />
+                                                <small>삭제</small>
+                                            </label>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li className="inputBox type1 width2 dtLi">
+                                    <p className="title">최초 등록일</p>
+                                    <div className="input">
+                                        <input type="text"
+                                               id="frstCrtDt"
+                                               placeholder=""
+                                               disabled="disabled"
+                                               value={
+                                                   authorityGroup.frstCrtDt ? moment(authorityGroup.frstCrtDt).format('YYYY-MM-DD') : ""
+                                               }
                                         />
-                                    </dd>
-                                    <dt>
-                                        <label htmlFor="bbsNm">최종 수정일</label>
-                                    </dt>
-                                    <dd>
-                                        <Form.Control
-                                            size="sm"
-                                            type="text"
-                                            id=""
-                                            placeholder=""
-                                            disabled="disabled"
-                                            value={moment(authorityGroup.mdfcnDt).format('YYYY-MM-DD') || ""}
+                                    </div>
+                                </li>
+                                <li className="inputBox type1 width2 dtLi">
+                                    <p className="title">최초 수정일</p>
+                                    <div className="input">
+                                        <input type="text"
+                                               id="mdfcnDt"
+                                               placeholder=""
+                                               disabled="disabled"
+                                               value={
+                                                    authorityGroup.mdfcnDt ? moment(authorityGroup.mdfcnDt).format('YYYY-MM-DD') : ""
+                                               }
                                         />
-                                    </dd>
-                                </dl>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div className="buttonBox">
+                            <div className="leftBox">
+                                <button type="button" className="clickBtn point" onClick={saveMenu}><span>저장</span>
+                                </button>
                             </div>
+                            <button type="button" className="clickBtn black" onClick={resetData}><span>초기화</span>
+                            </button>
                         </div>
                     </div>
                 </div>

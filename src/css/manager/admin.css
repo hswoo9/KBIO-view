@@ -306,3 +306,12 @@ header .title .icon:hover {background-image: url(@/assets/images/ico_header_arro
 #fileNamePTag{
 	padding-right: 5rem;
 }
+
+.maxW400 {
+	max-width: 400px;
+}
+.customDiv .inputWrap {display: flex; flex-wrap: wrap; gap: .9rem;}
+.customDiv .inputWrap li.width1 {width: 100%;}
+.customDiv .inputWrap li.width2 {width: calc(100% / 2 - .6rem);}
+.customDiv .inputWrap li.width3 {width: calc(100% / 3 - .6rem);}
+.customToggleBox{ flex-direction: column-reverse !important;}

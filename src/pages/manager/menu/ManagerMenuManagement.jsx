@@ -5,12 +5,9 @@ import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
 import ManagerTop from "@/components/manager/ManagerTop";
-import { default as EgovLeftNav } from "@/components/leftmenu/ManagerLeftMenu";
 
 import CheckboxTree from 'react-checkbox-tree';
 import '@/css/ReactCheckBoxTree.css';
-import Form from 'react-bootstrap/Form';
-import BTButton from 'react-bootstrap/Button';
 import Swal from 'sweetalert2';
 
 import { getSessionItem } from "@/utils/storage";
