@@ -442,13 +442,14 @@ function ManagerLeftNew() {
       }
 
     })
-    console.log(sessionUser);
-    console.log(sessionUserSn);
+
     if(sessionUser == null
     ||
         (sessionUserSn == null || sessionUserSn == "")
     ){
       logInHandler();
+    }else{
+
     }
   }, []);
   
@@ -461,7 +462,7 @@ function ManagerLeftNew() {
           <div className="sitemapBtn">
             <div className="icon"></div>
           </div>
-          <div className="title"><p>운영지원</p></div>
+          <div className="title"><p>메뉴</p></div>
           <nav className="navBox">
             <div className="bg hover"></div>
             <div className="bg active"></div>

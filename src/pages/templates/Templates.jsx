@@ -16,7 +16,7 @@ function Templates(props) {
   const fetchTemplates = async () => {
     const sessionUser = getSessionItem("loginUser");
     const response = await axios.post(
-        "http://localhost:8080/menuApi/setMenuAuthGroupUserDel.do",
+        "/backApi/menuApi/setMenuAuthGroupUserDel.do",
         JSON.stringify({
           authrtGroupUserSns : "14,15"
         }),

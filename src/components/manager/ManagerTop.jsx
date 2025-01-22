@@ -55,14 +55,23 @@ function ManagerTop() {
           <div className="bg hover"></div>
           <div className="bg active"></div>
           <ul className="dep">
-            <li><a href="#"><p>운영 지원</p></a></li>
-            <li><a href="#"><p>컨설팅 지원</p></a></li>
-            <li><a href="#"><p>회원</p></a></li>
-            <li><a href="#"><p>홈페이지</p></a></li>
-            <li><a href="#"><p>커뮤니티</p></a></li>
-            <li><a href="#"><p>관리자</p></a></li>
-            <li><a href="#"><p>통계</p></a></li>
-            <li className="active"><a href="#"><p>CMS</p></a></li>
+            <li>
+              <a href="#"
+                  onClick={() => {
+                    navigate({ pathname: URL.MANAGER_CMS }, { state: { selectMenuNm: "통계" } });
+                  }}
+              ><p>통계</p>
+              </a>
+            </li>
+            <li className="active">
+              <a href="#"
+                onClick={() => {
+                  navigate({ pathname: URL.MANAGER_CMS }, { state: { selectMenuNm: "CMS" } });
+                }}
+              >
+                <p>CMS</p>
+              </a>
+            </li>
           </ul>
         </div>
         <div className="rightBox">

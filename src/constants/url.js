@@ -148,6 +148,8 @@ const URL = {
   IDENTITY_VERIFICATION: "/mypage/identity", // 회원가입시 본인인증
   SIGNUP_CHOICE: "/mypage/signupchoice", // 회원가입시 회원방식 선택
   COMPLETE_MEMBER: "/mypage/completemember", //회원가입 신청 완료
+
+  MANAGER_CMS: "/manager/cms",
 };
 
 // eslint-disable-next-line react-refresh/only-export-components

@@ -449,6 +449,11 @@ const SecondRoutes = () => {
           path={URL.MANAGER}
           element={<MamagerIndex mode={CODE.MANAGER} />}
         />
+
+        <Route
+          path={URL.MANAGER_CMS}
+          element={<MamagerIndex />}
+        />
         <Route
           path={URL.MANAGER_NORMAL_MEMBER}
           element={<MemberNormalMember />}

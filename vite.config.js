@@ -18,6 +18,11 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/userInfo/, ""),
       }
+      "/backApi" : {
+        target: "http://localhost:8080",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/userInfo/, ""),
+      }
     }
   },
   resolve: {

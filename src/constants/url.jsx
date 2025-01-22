@@ -149,6 +149,8 @@ const URL = {
 
   RESIDENT_COMPANY_CREATE:"/manager/residentCompanyCreate", //회원관리/입주기업 /입주기업 등록
   RESIDENT_COMPANY_MODIFY:"/manager/residentCompanyModify",
+  
+  MANAGER_CMS: "/manager/cms",
 };
 
 // eslint-disable-next-line react-refresh/only-export-components

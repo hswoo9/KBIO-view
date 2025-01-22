@@ -18,7 +18,7 @@ const SnsGoogleCallback = () => {
     if (authorizationCode) {
       const googleLoginAction = async () => {
         const resp = await axios.post(
-            "http://localhost:8080/loginApi/loginAction",
+            "/backApi/loginApi/loginAction",
             JSON.stringify({code : authorizationCode, loginType : "sns", snsType : "google"}),
   {
           headers: {
