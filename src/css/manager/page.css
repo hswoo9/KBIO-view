@@ -1,0 +1,188 @@
+@charset "utf-8";
+:root {
+	--box-shadow: 0 0 16px rgba(0, 0, 0, .05);
+}
+
+@keyframes fadeIn {0% {opacity: 0;} 100% {opacity: 1;}}
+@keyframes fadeOut {0% {opacity: 1;} 100% {opacity: 0;}}
+
+/* 공통 */
+/*.container *::-webkit-scrollbar {width: 4px; height: 4px;}
+.container *::-webkit-scrollbar-thumb {background: rgba(0, 0, 0, .1); border-radius: 32px;}
+.container *::-webkit-scrollbar-track {background:  transparent;}*/
+input::placeholder {color: #BBBBBB; font-weight: 500;}
+.inputText input {width: 100%; height: 64px; border-radius: 16px; background: #fff; font-size: 16px; text-align: center; padding: 5px; box-sizing: border-box;}
+.container .linkBtn {height: 2.6rem; font-size: .9rem; background: var(--mainColor); color: #fff; border-radius: .6rem; padding: 0 .9rem; display: flex; align-items: center; justify-content: center; gap: .5rem; font-weight: 500; transition: .5s ease;}
+.container table {font-size: .9rem;}
+.container table thead th {color: #999999; font-weight: 500;}
+.container .modalCon table thead th {padding: 0 .5rem; height: auto;}
+.container table tr > * {text-align: center; vertical-align: middle; padding: .9rem .3rem; text-align: left; box-sizing: border-box; padding-left: .9rem;}
+.container .clickBtn {width: 5.5rem; height: 2.6rem; display: flex; align-items: center; justify-content: center; background: var(--mainColor); color: #fff; border-radius: .6rem; font-size: .9rem; font-weight: 600; box-sizing: border-box; transition: .5s ease;}
+.container .clickBtn.white {border: 1px solid #999; color: #999; background: #fff;}
+.container .clickBtn.black {background: var(--black);}
+.container .clickBtn.red {background: var(--mainColor2);}
+.container .clickBtn.gray {background: #999;}
+.container .toggleSwithWrap {display: flex;}
+.container .toggleSwithWrap .toggleSwitch {width: 40px; height: 24px; display: block; position: relative; border-radius: 32px; background-color: #DDDDDD; cursor: pointer; transition: all 0.2s ease-in;}
+.container .toggleSwithWrap .toggleSwitch .toggleButton {width: 20px; height: 20px; position: absolute; top: 50%; left: 2px; transform: translateY(-50%); border-radius: 50%; background: #fff; transition: all 0.2s ease-in;}
+.container .toggleSwithWrap input:checked ~ .toggleSwitch {background: var(--mainColor);}
+.container .toggleSwithWrap input:checked ~ .toggleSwitch .toggleButton {left: calc(100% - 22px); background: #fff;}
+
+
+.container .inner .titleWrap .right .linkBtn {padding: 0 .9rem; height: 2.66rem;}
+.container .inner .titleWrap .right .linkBtn .icon {width: 1.5rem; height: 1.5rem; transition: .5s ease; background-position: center; background-repeat: no-repeat; background-size: contain;}
+.container .subscript {font-size: .6rem; vertical-align: text-bottom;}
+.container .inputBox.type1 {position: relative; display: flex; flex-direction: column; gap: .5rem;}
+.container .inputBox.type1 .title {color: #999999; font-size: 14px;}
+.container .inputBox.type1 .input {position: relative;}
+.container .inputBox.type1 .input input {padding: .3rem .9rem; width: 100%; box-sizing: border-box; height: 48px; border-radius: .6rem; border:  1px solid #ddd; transition: .5s ease; font-size: .9rem; font-weight: 500; font-family: 'pretendard';}
+.container .inputBox.type1 .input input:placeholder {color:  #bbb;}
+.container .inputBox.type1 .input textarea {padding: .8rem 1rem; width: 100%; box-sizing: border-box; height: 2.8rem; outline: none; border: none; font-size: .9rem; border-radius: .66rem; border:  1px solid #ddd; transition: .5s ease;}
+.container .inputBox.type1 .input textarea::placeholder {color: #bbb;}
+.container .inputBox.type1 .input input:focus, .container .inputBox.type1 .input textarea:focus {border-color: var(--mainColor); box-shadow: 0 0 8px #04819b24;}
+.container .inputBox.type1.file {width: 100%;}
+.container .inputBox.type1.file .file_name {padding: .3rem 1rem; width: 100%; box-sizing: border-box; height: 2.8rem; font-size: .9rem; box-sizing: border-box; display: flex; align-items: center;}
+.container .inputBox.type1.file .input {height: 2.8rem; border-radius: .66rem; border: 1px solid #ddd; background: #fff;}
+.container .inputBox.type1.file input {display: none;}
+.container .inputBox.type1.email .input {display: flex; gap: 4px; align-items: center;}
+.container .inputBox.type1.email .input span {flex: none;}
+.container .inputBox.type1.email .input input, .container .inputBox.type1.email .input .itemBox {width: 100%;}
+.container .inputBox .input .btn {position: absolute; top: 50%; right: .5rem; transform: translateY(-50%); font-size: 12px; background: #999999; border-radius: 8px; color: #fff; padding: 0 .5rem; height: 1.6rem; display: flex; align-items: center; justify-content: center; transition: .5s ease; z-index: 1;}
+.container .inputBox.type2 {position: relative;}
+.container .inputBox.type2 .tt1 {position: absolute; color: #666; font-size: .8rem; font-weight: 600; top: .8rem; left: .9rem; pointer-events: none;}
+.container .inputBox.type2 .input {display: block; width: 100%; height: 4.1rem; border-radius: .9rem; background: #F6F6F6; padding: .7rem .9rem; box-sizing: border-box; padding-top: 2rem;}
+.container .inputBox.type2.noText .input {padding-bottom: 0; padding-top: 0; display: flex; align-items: center;}
+.container .inputBox.type2 .input.flexinput {display: flex; gap: .5rem; align-items: center;}
+.container .inputBox.type2 .input.flexinput > *:not(span, .btn) {width: 100%;}
+.container .inputBox.type2 .input.flexinput > span {flex: none;}
+.container .inputBox.type2 input {width: 100%; box-sizing: border-box; font-size: .9rem; background: transparent;}
+.container .inputBox.type2 .nice-select {background: transparent; border: none; padding: 0 1rem}
+.container .inputBox.type2.white .input {background: #fff;}
+.container .inputBox.type2 .input .btn {top: auto; bottom: .6rem; right: 1rem; transform: none;}
+.container .inputBox.type2 .checkWrap {height: 1.5rem;}
+.container .warningText {color: #FE5C4D; font-size: 12px; font-weight: 600; font-family: 'pretendard';}
+.container .itemBox .nice-select {border-radius: .66rem; border:  1px solid #ddd; background: #fff; font-weight: 500; font-family: 'pretendard';}
+.container .essential {position: relative;}
+.container .essential:after {content: ""; width: 12px; height: 12px; display: inline-block; background: url(@/assets/images/ico_essential.svg) no-repeat center / contain; vertical-align: middle; margin-left: .3rem;}
+
+/* 버튼  */
+.container .btn {border-radius: 12px; display: flex; align-items: center; background: var(--mainColor); transition: .5s ease;}
+.container .btn.gray {background: #999;}
+.container .btn.red {background: var(--mainColor2);}
+.container .btn.black {background: var(--black);}
+.container .btn.white {background: #fff; border: 1px solid #999; color: #999;}
+.container .btn .icon {background-repeat: no-repeat; background-position: center; background-size: contain; transition: .5s ease;}
+.container .btn1 {width: 48px; height: 48px; align-items: cener; justify-content: center;}
+.container .btn1 .icon {width: 24px; height: 24px;}
+.container .btn2 {padding: 0 16px; height: 36px; gap: 4px; color: #fff; font-size: 14px; font-weight: 600;}
+.container .btn2 .icon {width: 18px; height: 18px;}
+
+
+/* 모달 */
+.container .modalCon {display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 150;}
+.container .modalCon.open {display: block; animation: fadeIn 1s ease both;}
+.container .modalCon .bg {position: absolute; width: 100%; height: 100%; top: -100%; left: 0; background: rgba(0, 0, 0, .5); transition: .4s ease; backdrop-filter: blur(8px);}
+.container .modalCon.open .bg {top: 0 !important;}
+.container .modalCon .m-inner {width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;}
+.container .modalCon .boxWrap {position: relative; background: #fff; opacity: 0; transform: scale(.8); transition: .5s ease; max-width: 840px; width: 90%; max-height: calc(100% - 4rem); height: auto; border-radius: 1rem;}
+.container .modalCon.open .boxWrap {opacity: 1; transition-delay: .3s; transform: none;}
+.container .modalCon .boxWrap .top {position: absolute; top: 0; left: 0; width: 100%; padding: 1.35rem; padding-bottom: .9rem; display: flex; gap: 1rem; justify-content: space-between; box-sizing: border-box; z-index: 5;}
+.container .modalCon .boxWrap .top .title {font-size: 1.1rem; font-weight: 700;}
+.container .modalCon .boxWrap .top .close {flex: none; cursor: pointer;}
+.container .modalCon .boxWrap .top .close .icon {width: 24px; height: 24px; background: url(@/assets/images/ico_close.svg) no-repeat center / contain; transition: .5s ease;}
+.container .modalCon .boxWrap .box {width: 100%; height: auto; padding: 1.5rem; margin-top: 3.5rem; box-sizing: border-box; overflow-y: auto; display: flex; gap: .5rem; flex-direction: column; max-height: calc(100vh - 7.5rem);}
+.container .modalCon .boxWrap .box .bot {display: flex; flex-direction: column; gap: .9rem;}
+.container .modalCon .boxWrap .tabWrap {margin-bottom: 1.35rem;}
+.container .modalCon .boxWrap .buttonBox {display: flex; justify-content: center; gap: 8px;}
+.container .modalCon .boxWrap .clickBtn {width: 100px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 16px; background: var(--mainColor); box-sizing: border-box;}
+.container .modalCon .boxWrap .clickBtn.white {background: #fff; border: 1px solid #999999; color: #999999;}
+.container .modalCon .boxWrap .clickBtn.gray {background: #999;}
+.container .modalCon .boxWrap .clickBtn.black {background: var(--black);}
+.container .modalCon .boxWrap .clickBtn.red {background: var(--pointColor2);}
+
+/* 체크박스 */
+.container .checkWrap {display: flex; flex-wrap: wrap; gap: .6rem;}
+.container .checkBox {display: flex; align-items: center; gap: 8px;}
+.container .checkBox label {display: flex; gap: 6px; align-items: center;}
+.container .checkBox label input {position: relative; width: 18px; height: 18px; -webkit-appearance: none; background: #DDDDDD; border-radius: 50%; flex: none; transition: .5s ease;}
+.container .checkBox label input:checked {background: var(--mainColor);}
+.container .checkBox label input:before {content: ""; position: absolute; content: ''; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 100%; height: 100%; background: url(@/assets/images/ico_check_gray.svg) no-repeat center / contain;}
+.container .checkBox label input:checked:before {background-image: url(@/assets/images/ico_check_white.svg);}
+.container .checkBox label small {transition: .5s ease; font-size: .9em; position: relative; font-size: .9em; font-weight: 500;}
+.container .checkBox.type2 input {flex: none; position: relative; width: 24px; height: 24px; font-size: .9rem; -webkit-appearance: none; border: 1px solid #ddd; border-radius: 8px; transition: .5s ease;}
+.container .checkBox.type2 input::before {content: ""; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 12px; height: 12px; display: flex; justify-content: center; align-items: center; border-radius: 3px; background: #ddd;}
+.container .checkBox.type2 input:checked {border-color: var(--black);}
+.container .checkBox.type2 input:checked::before {background: var(--black)}
+.container .checkBox.type2 input + small {color: #555; transition: .5s ease; font-weight: 500; font-size: .8rem;}
+.container .checkBox.type2 input:checked + small {color: var(--black)}
+.container .checkBox.type3 input {flex: none; position: relative; width: 18px; height: 18px; font-size: .9rem; -webkit-appearance: none; border: 1px solid #ddd; border-radius: 50%; transition: .5s ease;}
+.container .checkBox.type3 input::before {content: ""; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 12px; height: 12px; display: flex; justify-content: center; align-items: center; border-radius: 50%; background: #ddd;}
+.container .checkBox.type3 input:checked {border-color: var(--black);}
+.container .checkBox.type3 input:checked::before {background: var(--black)}
+.container .checkBox.type3 input + small {color: #555; transition: .5s ease; font-weight: 500; font-size: .8rem;}
+.container .checkBox.type3 input:checked + small {color: var(--black)}
+
+/* 테이블 */
+.container .tableBox.type1 table thead {border-bottom: 2px solid;}
+.container .tableBox.type1 table thead th {height: 2rem; padding: 0 .6rem; font-size: .8rem;}
+.container .tableBox.type1 table tbody tr {border-bottom: 1px solid #DDDDDD;}
+.container .tableBox.type1 table tbody td {padding: .65rem .6rem;}
+.container .tableBox.type1 table tbody td button {padding: 0 8px; height: 24px; box-sizing: border-box; background: #fff; border-radius: 4px; border: 1px solid #999; font-size: 12px; color: #999; display: flex; align-items: center; font-weight: 600; transition: .5s ease;}
+
+
+/* 페이지 번호  */
+.container .pageWrap {display: flex; justify-content: space-between;}
+.container .pageWrap .pageList {display: flex; gap: 4px;}
+.container .pageWrap .pageList li {width: 2.2rem; height: 2.2rem;}
+.container .pageWrap .pageList li a {background: #fff; width: 100%; height: 100%; border-radius: .6rem; display: flex; align-items: center; justify-content: center; transition: .5s ease; font-size: .8rem; font-family: 'Rubik'; border: 1px solid #EEEEEE;}
+.container .pageWrap .pageList li.arrow {border-radius: .6rem; box-sizing: border-box; background: #fff;}
+.container .pageWrap .pageList li.arrow a {background: transparent; background-size: 65%; background-repeat: no-repeat; background-position: center;}
+.container .pageWrap .pageList li.first a {background-image: url(@/assets/images/ico_page_first.svg);}
+.container .pageWrap .pageList li.first.active a {background-image: url(@/assets/images/ico_page_first_active.svg);}
+.container .pageWrap .pageList li.prev a {background-image: url(@/assets/images/ico_page_prev.svg);}
+.container .pageWrap .pageList li.prev.active a {background-image: url(@/assets/images/ico_page_prev_active.svg);}
+.container .pageWrap .pageList li.next a {background-image: url(@/assets/images/ico_page_next.svg);}
+.container .pageWrap .pageList li.next.active a {background-image: url(@/assets/images/ico_page_next_active.svg);}
+.container .pageWrap .pageList li.last a {background-image: url(@/assets/images/ico_page_last.svg);}
+.container .pageWrap .pageList li.last.active a {background-image: url(@/assets/images/ico_page_last_active.svg);}
+.container .pageWrap .pageList li.now a {background: var(--mainColor); color: #fff; border-color: transparent;}
+.container .pageWrap .rightBox {display: flex; gap: .5rem;}
+
+.container .contBox {display: flex; flex-direction: column; gap: 1.35rem; width: 100%; box-sizing: border-box;}
+
+/* 게시판 */
+.board .topBox {display: flex; justify-content: space-between; gap: 1rem; align-items: center;}
+.board .topBox .resultText {font-size: .9rem; font-weight: 500;}
+.board .topBox .rightBox {display: flex; gap: .5rem;}
+.board .topBox .rightBox .downBtn .icon {background-image: url(@/assets/images/ico_download_white.svg);}
+.board .topBox .rightBox .uploadBtn .icon {background-image: url(@/assets/images/ico_upload_white.svg);}
+
+
+
+@media screen and (min-width: 1025px) {
+	.container .linkBtn:hover {box-shadow: 0 0 16px #04819b3b; background: #013fa1;}
+	.container .modalCon .boxWrap .top .close .icon:hover {background-image: url(@/assets/images/ico_close_point.svg); transform: rotate(90deg);}
+	.container .inner .titleWrap .right .linkBtn:hover {box-shadow: 3px 3px #04819b70;}
+	.container .tabWrap .list li:not(.active) a:hover {background: #e6f0ff; color: var(--mainColor); box-shadow: 0 0 16px #04819b3b;}
+	.container.panel .tabWrap .list li:not(.active) a:hover {box-shadow: none; background: #00ae9a22;}
+	.container .inputBox.type1 .input .btn:hover {background: var(--mainColor);}
+	.container .modalCon .boxWrap .box .clickBtn:hover {box-shadow: inset 0 0 15px rgba(255, 255, 255, .8);}
+	.container .modalCon .boxWrap .box .clickBtn.white:hover {background: #999; color: #fff; border-color: #fff;}
+	.container .clickBtn:hover {box-shadow: inset 0 0 15px rgba(255, 255, 255, .8);}
+	.container .clickBtn.white:hover {background: #999; color: #fff; border-color: #fff;}
+	.container .btn:hover {box-shadow: 3px 3px #04819B45, inset 2px 2px 10px rgba(255, 255, 255, .4);}
+	.container .btn.red:hover {box-shadow: 3px 3px #ff504a45, inset 2px 2px 10px rgba(255, 255, 255, .4);}
+	.container .btn.gray:hover {box-shadow: 3px 3px #99999955, inset 2px 2px 10px rgba(255, 255, 255, .4);}
+	.container .btn.black:hover {box-shadow: 3px 3px #00000045, inset 2px 2px 10px rgba(255, 255, 255, .4);}
+	.container .btn.white:hover {box-shadow: 3px 3px #99999955, inset 2px 2px 10px rgba(55, 55, 55, .3);}
+	.container .tableBox.type1 table tbody td button:hover {background: #999; color: #fff; box-shadow: 2px 2px #99999945, inset 2px 2px 6px rgba(255, 255, 255, .5); border-color: transparent;}
+	.container .inputBox.type2 .input .btn:hover {box-shadow: none; background: var(--mainColor);}
+
+	.container .pageWrap .pageList li:not(.arrow) a:hover {color: var(--mainColor); background: #04819b15;}
+	.container .pageWrap .pageList li.arrow.active:hover {background: #04819b15;}
+	.container .pageWrap .pageList li.first.active:hover a {background-image: url(@/assets/images/ico_page_first_point.svg);}
+	.container .pageWrap .pageList li.prev.active:hover a {background-image: url(@/assets/images/ico_page_prev_point.svg);}
+	.container .pageWrap .pageList li.next.active:hover a {background-image: url(@/assets/images/ico_page_next_point.svg);}
+	.container .pageWrap .pageList li.last.active:hover a {background-image: url(@/assets/images/ico_page_last_point.svg);}
+
+}

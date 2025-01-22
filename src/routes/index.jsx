@@ -4,6 +4,12 @@ import { Navigate, Routes, Route, useLocation } from "react-router-dom";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
 
+//CUSTOM
+import EgovHeaderUser from "@/components/EgovHeaderUser";
+import ManagerLeftNew from "@/components/manager/ManagerLeftNew";
+import EgovFooterUser from "@/components/EgovFooterUser";
+import EgovMainUser from "@/pages/main/EgovMainUser";
+
 //COMMON
 import EgovHeader from "@/components/EgovHeader";
 import ManagerHeader from "@/components/manager/ManagerHeader";
@@ -116,10 +122,10 @@ import EgovAdminPasswordUpdate from "@/pages/admin/manager/EgovAdminPasswordUpda
 import EgovAdminMemberList from "@/pages/admin/members/EgovAdminMemberList";
 import EgovAdminMemberEdit from "@/pages/admin/members/EgovAdminMemberEdit";
 //마이페이지 기능 추가
-import EgovMypageEdit from "@/pages/mypage/EgovMypageEdit";
+import MemberSignUp from "@/pages/mypage/MemberSignUp";
 import EgovTermsAgreement from '@/pages/mypage/EgovTermsAgreement';
 import EgovIdentityVerification from '@/pages/mypage/EgovIdentityVerification';
-import EgovSignupChoice from '@/pages/mypage/EgovSignupChoice';
+import MemberSignupChoice from '@/pages/mypage/MemberSignupChoice';
 import EgovCompleteMember from '@/pages/mypage/EgovCompleteMember';
 import * as EgovNet from "@/api/egovFetch"; // jwt토큰 위조 검사 때문에 추가
 import initPage from "@/js/ui";
@@ -197,13 +203,13 @@ const SecondRoutes = () => {
 
   const requestUrl = window.location.pathname.split("/")[1];
   return (
-    <>
-      {requestUrl === "manager" ? (<ManagerHeader/>) :
-        requestUrl === "popupView" ? "" : (<EgovHeader />)
+    <div id="wrap" className={requestUrl === "manager" ? "admin" : "user"}>
+      {requestUrl === "manager" ? (<ManagerLeftNew/>) :
+        requestUrl === "popupView" ? "" : (<EgovHeaderUser />)
       }
       <Routes>
         {/* MAIN */}
-        <Route path={URL.MAIN} element={<EgovMain />} />
+        <Route path={URL.MAIN} element={<EgovMainUser />} />
 
         {/* LOGIN */}
         <Route
@@ -418,16 +424,16 @@ const SecondRoutes = () => {
           element={<EgovMypageEdit mode={CODE.MODE_CREATE} />}
         />*/}
         <Route path={URL.COMPLETE_MEMBER} element={<EgovCompleteMember />} />
-        <Route path={URL.SIGNUP_CHOICE} element={<EgovSignupChoice />} />
+        <Route path={URL.SIGNUP_CHOICE} element={<MemberSignupChoice />} />
         <Route path={URL.TERMS_AGREEMENT} element={<EgovTermsAgreement />} />
         <Route path={URL.IDENTITY_VERIFICATION} element={<EgovIdentityVerification />} />
         <Route
             path={URL.MYPAGE_CREATE}
-            element={<EgovMypageEdit mode={CODE.MODE_CREATE} />}
+            element={<MemberSignUp mode={CODE.MODE_CREATE} />}
         />
         <Route
           path={URL.MYPAGE_MODIFY}
-          element={<EgovMypageEdit mode={CODE.MODE_MODIFY} />}
+          element={<MemberSignUp mode={CODE.MODE_MODIFY} />}
         />
         <Route
           path={URL.ADMIN_MENU}
@@ -568,12 +574,9 @@ const SecondRoutes = () => {
       </Routes>
 
       {requestUrl === "manager" ? "" :
-          requestUrl === "popupView" ? "" : (<EgovFooter />)
+          requestUrl === "popupView" ? "" : (<EgovFooterUser />)
       }
-      <EgovInfoPopup />
-
-
-    </>
+    </div>
   );
 };
 

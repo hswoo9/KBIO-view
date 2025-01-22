@@ -48,8 +48,8 @@ function EgovFindIdPswd(props) {
                     }
                 } else {
                     Swal.fire({
-                        title: "오류 발생",
-                        text: "ID 찾기 요청에 실패했습니다. 잠시 후 다시 시도해주세요.",
+                        title: "찾기 실패",
+                        text: "회원 정보가 없습니다. 다시 확인해주세요.",
                     });
                 }
             });

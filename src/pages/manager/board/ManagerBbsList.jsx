@@ -1,11 +1,11 @@
 import React, {useState, useEffect, useCallback, useRef} from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import axios from "axios";
 import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
 import 'moment/locale/ko';
-import { default as EgovLeftNav } from "@/components/leftmenu/ManagerLeftBoard";
+import ManagerTop from "@/components/manager/ManagerTop";
 
 import Swal from 'sweetalert2';
 import EgovPaging from "@/components/EgovPaging";
@@ -14,7 +14,6 @@ import EgovPaging from "@/components/EgovPaging";
 import BtTable from 'react-bootstrap/Table';
 import BTButton from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import 'bootstrap/dist/css/bootstrap.css';
 import moment from "moment/moment.js";
 
 
@@ -101,30 +100,27 @@ function ManagerBbs(props) {
     }, []);
 
     return (
-        <div className="container">
-            <div className="c_wrap">
-                <div className="location">
-                    <ul>
-                        <li>
-                            <Link to={URL.MANAGER} className="home">
-                                Home
-                            </Link>
-                        </li>
-                        <li>
-                            <Link to={URL.MANAGER_BBS_LIST}>게시판관리</Link>
-                        </li>
-                        <li>게시판관리</li>
-                    </ul>
-                </div>
-                <div className="layout">
-                    <EgovLeftNav></EgovLeftNav>
-                    <div className="contents BOARD_CREATE_LIST" id="contents">
-                        <div className="condition">
-                            <ul>
-                                <li className="third_1 L">
-                                    <span className="lb">게시판유형</span>
-                                    <label className="f_select" htmlFor="bbsType">
-                                        <select
+        <div id="container" className="container layout cms">
+            <ManagerTop/>
+            <div className="inner">
+                <h2 className="pageTitle"><p>게시판관리</p></h2>
+                <div className="cateWrap">
+                    <form action="">
+                        <ul className="cateList">
+                            <li className="inputBox type1">
+                                <p className="title">활성여부</p>
+                                <div className="itemBox">
+                                    <select className="selectGroup">
+                                        <option value="">전체</option>
+                                        <option value="Y">사용</option>
+                                        <option value="N">미사용</option>
+                                    </select>
+                                </div>
+                            </li>
+                            <li className="inputBox type1">
+                                <p className="title">키워드</p>
+                                <div className="itemBox">
+                                    <select className="selectGroup"
                                             id="bbsType"
                                             name="bbsType"
                                             title="게시판유형선택"
@@ -137,101 +133,100 @@ function ManagerBbs(props) {
                                                     bbsNm: bbsNmRef.current.value,
                                                 });
                                             }}
-                                        >
-                                            <option value="">선택</option>
-                                            <option value="0">일반</option>
-                                            <option value="1">FAQ</option>
-                                            <option value="2">QNA</option>
-                                        </select>
-                                    </label>
-                                </li>
-                                <li className="third_2 R">
-                                    <span className="lb">검색어</span>
-                                    <span className="f_search w_400">
-                                        <input
-                                            type="text"
-                                            name=""
-                                            defaultValue={
-                                                searchDto && searchDto.bbsNm
-                                            }
-                                            placeholder=""
-                                            ref={bbsNmRef}
-                                            onChange={(e) => {
-                                                setSearchDto({ ...searchDto, bbsNm: e.target.value })
-                                            }}
-                                            onKeyDown={activeEnter}
-                                        />
-                                        <button
-                                            type="button"
-                                            onClick={() => {
-                                                getBbsList({
-                                                    ...searchDto,
-                                                    pageIndex: 1,
-                                                    bbsType: bbsTypeRef.current.value,
-                                                    bbsNm: bbsNmRef.current.value,
-                                                });
-                                            }}
-                                        >
-                                          조회
-                                        </button>
-                                  </span>
-                                </li>
-                                <li>
-                                    <Link
-                                        to={URL.MANAGER_BBS_CREATE}
-                                        className="btn btn_blue_h46 pd35"
-                                        mode={CODE.MODE_CREATE}
                                     >
-                                        등록
-                                    </Link>
-                                </li>
-                            </ul>
-                        </div>
-
-                        <div className="board_list BRD006">
-                            <BtTable
-                                striped bordered hover size="sm"
-                                className="btTable"
-                            >
-                                <colgroup>
-                                    <col/>
-                                    <col width="100"/>
-                                    <col width="150"/>
-                                    <col width="150"/>
-                                    <col width="100"/>
-                                    <col width="100"/>
-                                    <col width="80"/>
-                                    <col width="100"/>
-                                </colgroup>
-                                <thead>
-                                <tr>
-                                    <th>게시판명</th>
-                                    <th>게시판유형</th>
-                                    <th>작성자공개유무</th>
-                                    <th>파일첨부가능여부</th>
-                                    <th>댓글가능여부</th>
-                                    <th>답글사용유무</th>
-                                    <th>사용여부</th>
-                                    <th>생성일</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {bbsList}
-                                </tbody>
-                            </BtTable>
-                            <div className="board_bot">
-                            <EgovPaging
-                                    pagination={paginationInfo}
-                                    moveToPage={(passedPage) => {
+                                        <option value="">전체</option>
+                                        <option value="0">일반</option>
+                                        <option value="1">FAQ</option>
+                                        <option value="2">QNA</option>
+                                    </select>
+                                </div>
+                            </li>
+                            <li className="searchBox inputBox type1">
+                                <label className="input">
+                                    <input type="text"
+                                           name=""
+                                           defaultValue={
+                                               searchDto && searchDto.bbsNm
+                                           }
+                                           placeholder=""
+                                           ref={bbsNmRef}
+                                           onChange={(e) => {
+                                               setSearchDto({...searchDto, bbsNm: e.target.value})
+                                           }}
+                                           onKeyDown={activeEnter}
+                                    />
+                                </label>
+                            </li>
+                        </ul>
+                        <div className="rightBtn">
+                            <button type="button" className="refreshBtn btn btn1 gray">
+                                <div className="icon"></div>
+                            </button>
+                            <button type="button"
+                                    className="searchBtn btn btn1 point"
+                                    onClick={() => {
                                         getBbsList({
                                             ...searchDto,
-                                            pageIndex: passedPage
+                                            pageIndex: 1,
+                                            bbsType: bbsTypeRef.current.value,
+                                            bbsNm: bbsNmRef.current.value,
                                         });
                                     }}
-                                />
-                            </div>
+                            >
+                                <div className="icon"></div>
+                            </button>
                         </div>
+                    </form>
+                </div>
+                <div className="contBox board type1 customContBox">
+                    <div className="topBox"></div>
+                    <div className="tableBox type1">
+                        <table>
+                            <caption>게시판목록</caption>
+                            <colgroup>
+                                <col/>
+                                <col width="100"/>
+                                <col width="150"/>
+                                <col width="150"/>
+                                <col width="100"/>
+                                <col width="100"/>
+                                <col width="80"/>
+                                <col width="100"/>
+                            </colgroup>
+                            <thead>
+                            <tr>
+                                <th>게시판명</th>
+                                <th>게시판유형</th>
+                                <th>작성자공개유무</th>
+                                <th>파일첨부가능여부</th>
+                                <th>댓글가능여부</th>
+                                <th>답글사용유무</th>
+                                <th>사용여부</th>
+                                <th>생성일</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {bbsList}
+                            </tbody>
+                        </table>
+                    </div>
 
+                    <div className="pageWrap">
+                        <EgovPaging
+                            pagination={paginationInfo}
+                            moveToPage={(passedPage) => {
+                                getBbsList({
+                                    ...searchDto,
+                                    pageIndex: passedPage
+                                });
+                            }}
+                        />
+                        <NavLink
+                            to={URL.MANAGER_BBS_CREATE}
+                            mode={CODE.MODE_CREATE}
+                        >
+                            <button type="button" className="writeBtn clickBtn"><span>등록</span></button>
+                        </NavLink>
                     </div>
                 </div>
             </div>

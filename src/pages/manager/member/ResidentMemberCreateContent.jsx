@@ -143,6 +143,8 @@ function ResidentMemberCreateContent(props){
         }
     };
 
+    
+
     //주소찾기 api
     const searchAddress = () => {
         if (!window.daum || !window.daum.Postcode) {

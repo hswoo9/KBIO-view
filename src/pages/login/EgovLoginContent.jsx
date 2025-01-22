@@ -8,6 +8,7 @@ import SnsNaverBt from "@/components/sns/SnsNaverBt";
 import SnsKakaoBt from "@/components/sns/SnsKakaoBt";
 import SnsGoogleBt from "@/components/sns/SnsGoogleBt.jsx";
 import Swal from "sweetalert2";
+import {getSessionItem} from "../../utils/storage.js";
 
 function EgovLoginContent(props) {
   const navigate = useNavigate();
@@ -91,11 +92,13 @@ function EgovLoginContent(props) {
         Swal.fire(resp.resultMessage);
         return;
       }else{
-        console.log(resp)
+        console.log("resp",resp)
         setSessionItem("loginUser", {userSn : resp.result.userSn, name : resp.result.userName, id : resp.result.userId, userSe : resp.result.userSe});
         // setSessionItem("userName", resp.userName);
         setSessionItem("jToken", resp.result.jToken);
-        if (saveIDFlag) setLocalItem(KEY_ID, resultVO?.id);
+        //if (saveIDFlag) setLocalItem(KEY_ID, resultVO?.id);
+        if (saveIDFlag) setLocalItem(KEY_ID, resp.result.userId);
+        Swal.fire("로그인 성공");
         navigate("/");
       }
     });
@@ -105,17 +108,10 @@ function EgovLoginContent(props) {
     <div className="contents" id="contents">
       {/* <!-- 본문 --> */}
       <div className="Plogin">
-        <h1>로그인</h1>
-        <p className="txt">
-          전자정부표준프레임워크 경량환경 홈페이지 로그인 페이지입니다.
-          <br />
-          로그인을 하시면 모든 서비스를 제한없이 이용하실 수 있습니다.
-        </p>
 
         <div className="login_box">
           <form name="" method="" action="">
             <fieldset>
-              <legend>로그인</legend>
               <span className="group">
                 <input
                   type="text"
