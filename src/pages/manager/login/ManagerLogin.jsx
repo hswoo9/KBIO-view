@@ -104,15 +104,15 @@ function ManagerLogin(props) {
         //if (saveIDFlag) setLocalItem(KEY_ID, resultVO?.id);
         if (saveIDFlag) setLocalItem(KEY_ID, resp.result.userId);
         Swal.fire("로그인 성공");
-        document.getElementsByTagName("header")[0].style.display = "block";
+        document.getElementById("commonTop").style.display = "flex";
         navigate(URL.MANAGER);
       }
     });
   };
 
   useEffect(() => {
-    if(document.getElementsByTagName("header") != null){
-      document.getElementsByTagName("header")[0].style.display = "none";
+    if(document.getElementById("commonTop") != null){
+      document.getElementById("commonTop").style.display = "none";
     }
     if(location.pathname.split("/")[1] === "manager"){
       import('../../../css/manager/admin.css');
