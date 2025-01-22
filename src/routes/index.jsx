@@ -6,7 +6,7 @@ import CODE from "@/constants/code";
 
 //CUSTOM
 import EgovHeaderUser from "@/components/EgovHeaderUser";
-import ManagerLeftNew from "@/components/manager/ManagerLeftNew";
+import ManagerTop from "@/components/manager/ManagerTop";
 import EgovFooterUser from "@/components/EgovFooterUser";
 import EgovMainUser from "@/pages/main/EgovMainUser";
 
@@ -98,6 +98,11 @@ import ManagerImagesPopup from "@/pages/manager/popup/ManagerImagesPopup";
 
 
 import ResidentCompanyCreate from "@/pages/manager/member/ResidentCompanyCreate";
+
+
+//입주지원
+import OperationalSupport from "@/pages/manager/operationalSupport/OperationalSupport";
+
 
 //ADMIN
 import EgovAdminScheduleList from "@/pages/admin/schedule/EgovAdminScheduleList";
@@ -205,7 +210,7 @@ const SecondRoutes = () => {
   const requestUrl = window.location.pathname.split("/")[1];
   return (
     <div id="wrap" className={requestUrl === "manager" ? "admin" : "user"}>
-      {requestUrl === "manager" ? (<ManagerLeftNew/>) :
+      {requestUrl === "manager" ? (<ManagerTop/>) :
         requestUrl === "popupView" ? "" : (<EgovHeaderUser />)
       }
       <Routes>
@@ -580,6 +585,7 @@ const SecondRoutes = () => {
         <Route path={URL.MANAGER_POPUP_MODIFY} element={<ManagerPopupEdit mode={CODE.MODE_MODIFY} />} />
 
         <Route path={URL.MANAGER_IMAGES_POPUP} element={<ManagerImagesPopup />} />
+        <Route path={URL.MANAGER_OPERATIONAL_SUPPORT} element={<OperationalSupport />} />
 
       </Routes>
 

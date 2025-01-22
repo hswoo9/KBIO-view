@@ -4,7 +4,7 @@ import axios from "axios";
 import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
-import ManagerTop from "@/components/manager/ManagerTop";
+import ManagerLeftNew from "@/components/manager/ManagerLeftNew";
 
 import CheckboxTree from 'react-checkbox-tree';
 import '@/css/ReactCheckBoxTree.css';
@@ -462,7 +462,7 @@ function Index(props) {
 
     return (
         <div id="container" className="container layout cms">
-        <ManagerTop/>
+            <ManagerLeftNew/>
             <div className="inner">
                 <h2 className="pageTitle"><p>메뉴 관리</p></h2>
                 <div className="contBox">

@@ -7,7 +7,7 @@ import CODE from "@/constants/code";
 import moment from 'moment';
 import 'moment/locale/ko';
 
-import ManagerTop from "@/components/manager/ManagerTop";
+import ManagerLeftNew from "@/components/manager/ManagerLeftNew";
 import CheckboxTree from 'react-checkbox-tree';
 import '@/css/ReactCheckBoxTree.css';
 
@@ -508,7 +508,7 @@ function ManagerMenuAuthority(props) {
 
     return (
         <div id="container" className="container layout cms">
-            <ManagerTop/>
+            <ManagerLeftNew/>
             <div className="inner">
                 <h2 className="pageTitle"><p>메뉴권한관리</p></h2>
                 <div className="contBox">
@@ -537,9 +537,12 @@ function ManagerMenuAuthority(props) {
                                 <thead>
                                 <tr>
                                     <th>
-                                        <input type="checkbox" name="authorityCheck"
-                                               onClick={checkGroupAllCheck}
-                                        />
+                                        <label className="customCheckBox">
+                                            <input type="checkbox"
+                                                   name="authorityCheck"
+                                                   onClick={checkGroupAllCheck}
+                                            />
+                                        </label>
                                     </th>
                                     <th>권한그룹명</th>
                                     <th>권한구분</th>

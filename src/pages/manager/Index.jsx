@@ -5,13 +5,13 @@ import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
 
-import ManagerTop from "@/components/manager/ManagerTop";
+import ManagerLeftNew from "@/components/manager/ManagerLeftNew";
 
 function Index(props) {
 
   return (
     <div id="container" className="container layout cms">
-        <ManagerTop/>
+        <ManagerLeftNew/>
 
         <div className="inner">
             

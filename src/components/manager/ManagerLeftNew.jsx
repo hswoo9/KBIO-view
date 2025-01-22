@@ -50,7 +50,7 @@ function ManagerLeftNew() {
             if ($activeItem.length) {
               if (container.hasClass('lnbBox')) {
                 // For .lnbBox, use left and bottom
-
+                console.log(container);
                 /* 상단 메뉴 */
 
                 bg.css({
@@ -129,8 +129,8 @@ function ManagerLeftNew() {
       searchBox()
 
       function profile() {
-        var profile = $('.container .commonTop .profileWrap .profile');
-        var infoWrap = $('.container .commonTop .profileWrap .infoWrap')
+        var profile = $('.container .commonTop .profileWrap .profile, #commonTop .profileWrap .profile');
+        var infoWrap = $('.container .commonTop .profileWrap .infoWrap, #commonTop .profileWrap .infoWrapp')
 
         profile.on('mouseenter focus', function() {
           infoWrap.addClass('open')
@@ -216,7 +216,7 @@ function ManagerLeftNew() {
               .addClass($select.attr('class') || '')
               .addClass($select.attr('disabled') ? 'disabled' : '')
               .attr('tabindex', $select.attr('disabled') ? null : '0')
-              .html('<span class="current"></span><ul class="list"></ul>')
+              .html('<span className="current"></span><ul className="list"></ul>')
           );
 
           var $dropdown = $select.next();
@@ -467,7 +467,7 @@ function ManagerLeftNew() {
             <div className="bg hover"></div>
             <div className="bg active"></div>
             <ul className="dep">
-              <li>
+              <li className={({isActive}) => (isActive ? "active" : "")}>
                 <NavLink
                     to={URL.MANAGER_NORMAL_MEMBER}
                     className={({isActive}) => (isActive ? "active" : "")}
@@ -476,7 +476,7 @@ function ManagerLeftNew() {
                   <p>회원관리</p>
                 </NavLink>
               </li>
-              <li>
+              <li className={({isActive}) => (isActive ? "active" : "")}>
                 <NavLink
                     to={URL.MANAGER_MENU_MANAGEMENT}
                 >
@@ -484,7 +484,7 @@ function ManagerLeftNew() {
                   <p>메뉴관리</p>
                 </NavLink>
               </li>
-              <li>
+              <li className={({isActive}) => (isActive ? "active" : "")}>
                 <NavLink
                     to={URL.MANAGER_MENU_AUTHORITY}
                 >
@@ -492,7 +492,7 @@ function ManagerLeftNew() {
                   <p>메뉴권한관리</p>
                 </NavLink>
               </li>
-              <li>
+              <li className={({isActive}) => (isActive ? "active" : "")}>
                 <NavLink
                     to={URL.MANAGER_BBS_LIST}
                 >
@@ -500,7 +500,7 @@ function ManagerLeftNew() {
                   <p>게시판관리</p>
                 </NavLink>
               </li>
-              <li>
+              <li className={({isActive}) => (isActive ? "active" : "")}>
                 <NavLink
                     to={URL.MANAGER_BANNER_LIST}
                 >
@@ -508,7 +508,7 @@ function ManagerLeftNew() {
                   <p>배너팝업관리</p>
                 </NavLink>
               </li>
-              <li>
+              <li className={({isActive}) => (isActive ? "active" : "")}>
                 <NavLink
                     to={URL.MANAGER_CODE_GROUP}
                 >

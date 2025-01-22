@@ -4,7 +4,7 @@ import axios from "axios";
 import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
-import ManagerTop from "@/components/manager/ManagerTop";
+import ManagerLeftNew from "@/components/manager/ManagerLeftNew";
 
 import EgovPaging from "@/components/EgovPaging";
 
@@ -190,7 +190,7 @@ function ManagerCodeGroup(props) {
 
     return (
         <div id="container" className="container layout cms">
-            <ManagerTop/>
+            <ManagerLeftNew/>
             <div className="inner">
                 <h2 className="pageTitle"><p>코드그룹관리</p></h2>
 

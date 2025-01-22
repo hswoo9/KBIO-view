@@ -5,7 +5,7 @@ import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
 
-import ManagerTop from "@/components/manager/ManagerTop";
+import ManagerLeftNew from "@/components/manager/ManagerLeftNew";
 import EgovPaging from "@/components/EgovPaging";
 
 import Swal from 'sweetalert2';
@@ -173,7 +173,7 @@ function ManagerCodeGroup(props) {
 
     return (
         <div id="container" className="container layout cms">
-            <ManagerTop/>
+            <ManagerLeftNew/>
             <div className="inner">
                 <h2 className="pageTitle"><p>배너관리</p></h2>
                 <div className="cateWrap">

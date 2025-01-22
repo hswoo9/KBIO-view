@@ -150,6 +150,7 @@ const URL = {
   COMPLETE_MEMBER: "/mypage/completemember", //회원가입 신청 완료
 
   MANAGER_CMS: "/manager/cms",
+  MANAGER_OPERATIONAL_SUPPORT: "/manager/operationalSupport",
 };
 
 // eslint-disable-next-line react-refresh/only-export-components

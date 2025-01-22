@@ -315,3 +315,23 @@ header .title .icon:hover {background-image: url(@/assets/images/ico_header_arro
 .customDiv .inputWrap li.width2 {width: calc(100% / 2 - .6rem);}
 .customDiv .inputWrap li.width3 {width: calc(100% / 3 - .6rem);}
 .customToggleBox{ flex-direction: column-reverse !important;}
+
+
+#commonTop {position: fixed; top: 0; left: clamp(200px, 13vw, 260px); width: calc(100% - clamp(200px, 13vw, 260px)); display: flex; justify-content: space-between; align-items: center; padding: 0 1.35rem; background: #fff; box-sizing: border-box; z-index: 40;}
+#commonTop .lnbBox {position: relative; z-index: 1;}
+#commonTop .lnbBox .bg {content: ""; position: absolute; bottom: 0; left: 0; height: 3px; background: var(--mainColor2); transition: .5s ease; z-index: -1;}
+#commonTop .lnbBox .bg.hover {background: #FF504A15; opacity: 0;}
+#commonTop .lnbBox .dep {display: flex; gap: .9rem;}
+#commonTop .lnbBox .dep li a {padding: 4px; height: 3.5rem; display: flex; justify-content: center; align-items: center; box-sizing: border-box; font-weight: 600; font-family: 'pretendard';}
+#commonTop .lnbBox .dep li.active a {color: var(--mainColor2); font-weight: 700;}
+#commonTop .rightBox {display: flex; gap: .9rem; align-items: center; font-weight: 500;}
+#commonTop .rightBox .tt1 {font-size: .8rem;}
+#commonTop .rightBox .logoutBtn {width: 93px; height: 32px; display: flex; gap: 4px; border-radius: 8px; background: var(--black); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 14px; transition: .5s ease;}
+#commonTop .rightBox .logoutBtn:hover {background: var(--mainColor);}
+#commonTop .rightBox .logoutBtn .icon {width: 16px; height: 16px; background: url(@/assets/images/ico_logout_white.svg) no-repeat center / contain;}
+#commonTop .profileWrap .infoBox .top .logoutBtn:hover {background: #fff; color: var(--black);}
+#commonTop .profileWrap .infoBox .bot button:hover {color: #fff;}
+
+.cursorClass {
+	cursor: pointer;
+}

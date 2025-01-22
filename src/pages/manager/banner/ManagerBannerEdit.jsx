@@ -6,7 +6,7 @@ import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
 import 'moment/locale/ko';
-import ManagerTop from "@/components/manager/ManagerTop";
+import ManagerLeftNew from "@/components/manager/ManagerLeftNew";
 import Swal from "sweetalert2";
 
 import BtTable from 'react-bootstrap/Table';
@@ -377,7 +377,7 @@ function ManagerBannerEdit(props) {
 
   return (
       <div id="container" className="container layout cms">
-        <ManagerTop/>
+        <ManagerLeftNew/>
         <div className="inner">
           {modeInfo.mode === CODE.MODE_CREATE && (
               <h2 className="pageTitle"><p>배너 등록</p></h2>
