@@ -479,7 +479,7 @@ function ManagerLeftNew() {
               <li>
                 <NavLink
                     to={URL.MANAGER_NORMAL_MEMBER}
-                    className={({ isActive }) => (isActive ? "activeTag" : "")}
+                    className={({isActive}) => (isActive ? "activeTag" : "")}
                 >
                   <div className="icon"></div>
                   <p>회원관리</p>
@@ -488,7 +488,7 @@ function ManagerLeftNew() {
               <li>
                 <NavLink
                     to={URL.MANAGER_MENU_MANAGEMENT}
-                    className={({ isActive }) => (isActive ? "activeTag" : "")}
+                    className={({isActive}) => (isActive ? "activeTag" : "")}
                 >
                   <div className="icon"></div>
                   <p>메뉴관리</p>
@@ -497,7 +497,7 @@ function ManagerLeftNew() {
               <li>
                 <NavLink
                     to={URL.MANAGER_MENU_AUTHORITY}
-                    className={({ isActive }) => (isActive ? "activeTag" : "")}
+                    className={({isActive}) => (isActive ? "activeTag" : "")}
                 >
                   <div className="icon"></div>
                   <p>메뉴권한관리</p>
@@ -506,7 +506,7 @@ function ManagerLeftNew() {
               <li>
                 <NavLink
                     to={URL.MANAGER_BBS_LIST}
-                    className={({ isActive }) => (isActive ? "activeTag" : "")}
+                    className={({isActive}) => (isActive ? "activeTag" : "")}
                 >
                   <div className="icon"></div>
                   <p>게시판관리</p>
@@ -515,7 +515,7 @@ function ManagerLeftNew() {
               <li>
                 <NavLink
                     to={URL.MANAGER_BANNER_LIST}
-                    className={({ isActive }) => (isActive ? "activeTag" : "")}
+                    className={({isActive}) => (isActive ? "activeTag" : "")}
                 >
                   <div className="icon"></div>
                   <p>배너팝업관리</p>
@@ -524,10 +524,19 @@ function ManagerLeftNew() {
               <li>
                 <NavLink
                     to={URL.MANAGER_CODE_GROUP}
-                    className={({ isActive }) => (isActive ? "activeTag" : "")}
+                    className={({isActive}) => (isActive ? "activeTag" : "")}
                 >
                   <div className="icon"></div>
                   <p>코드관리</p>
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                    to={URL.MANAGER_NORMAL_MEMBER}
+                    className={({isActive}) => (isActive ? "activeTag" : "")}
+                >
+                  <div className="icon"></div>
+                  <p>일반회원관리</p>
                 </NavLink>
               </li>
             </ul>
