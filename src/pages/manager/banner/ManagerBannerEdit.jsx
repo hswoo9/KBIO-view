@@ -438,7 +438,7 @@ function ManagerBannerEdit(props) {
                 <span className="warningText">gif,png,jpg 파일 / 권장 사이즈 : 500px * 500px / 용량 : 10M 이하</span>
               </li>
 
-              <li className="inputBox type1 width2">
+              <li className="inputBox type1 width2 file">
                 <p className="title">파일삭제</p>
                 <div className="input">
                 {bnrPopupDetail != null && bnrPopupDetail.tblComFiles != null && bnrPopupDetail.tblComFiles.length > 0 && (
