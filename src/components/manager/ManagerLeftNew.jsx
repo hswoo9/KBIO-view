@@ -7,13 +7,6 @@ import URL from "@/constants/url";
 import CODE from "@/constants/code";
 
 import LogoImg from "@/assets/images/logo_admin.svg";
-/*import '@/css/manager/aos.css';
-import '@/css/manager/page.css';
-import '@/css/manager/pretendard.css';
-import '@/css/manager/reset.css';
-import '@/css/manager/Rubik.css';
-import '@/css/manager/swiper-bundle.min.css';
-import '@/css/manager/admin.css';*/
 
 function ManagerLeftNew() {
 
@@ -31,6 +24,16 @@ function ManagerLeftNew() {
   };
 
   useEffect(() => {
+    const activeTag = document.getElementsByClassName('activeTag');
+    console.log(activeTag);
+    if(activeTag.length){
+      const parentTag = activeTag[0].parentElement;
+      if(parentTag){
+        parentTag.className = "active";
+      }
+    }
+
+
     $(function() {
       $('header .sitemap .bg, header .sitemap .closeBtn').on('click', function() {
         $('header .sitemap').removeClass('open')
@@ -46,11 +49,12 @@ function ManagerLeftNew() {
           const bg = container.find('.bg');
           const bgHover = container.find('.bg.hover');
           function updateBgToActive() {
+
             const $activeItem = li.filter('.active');
+
             if ($activeItem.length) {
               if (container.hasClass('lnbBox')) {
                 // For .lnbBox, use left and bottom
-                console.log(container);
                 /* 상단 메뉴 */
 
                 bg.css({
@@ -65,6 +69,7 @@ function ManagerLeftNew() {
                 bg.css({
                   width: `${$activeItem.outerWidth()}px`,
                   top: `${$activeItem.position().top}px`,
+                  left: `${$activeItem.position().left}px`,
                   height: `${$activeItem.outerHeight()}px`,
                   opacity: '1',
                 });
@@ -79,8 +84,8 @@ function ManagerLeftNew() {
               function () {
                 const liWidth = $(this).outerWidth();
                 const liHeight = $(this).outerHeight();
+                const liLeft = $(this).position().left;
                 if (container.hasClass('lnbBox')) {
-                  const liLeft = $(this).position().left;
                   const liBottom = container.outerHeight() - ($(this).position().top + liHeight);
 
                   bgHover.css({
@@ -94,6 +99,7 @@ function ManagerLeftNew() {
                   bgHover.css({
                     width: `${liWidth}px`,
                     top: `${liOffsetTop}px`,
+                    left: `${liLeft}px`,
                     height: `${liHeight}px`,
                     opacity: '1',
                   });
@@ -451,6 +457,9 @@ function ManagerLeftNew() {
     }else{
 
     }
+
+
+
   }, []);
   
 
@@ -467,50 +476,55 @@ function ManagerLeftNew() {
             <div className="bg hover"></div>
             <div className="bg active"></div>
             <ul className="dep">
-              <li className={({isActive}) => (isActive ? "active" : "")}>
+              <li>
                 <NavLink
                     to={URL.MANAGER_NORMAL_MEMBER}
-                    className={({isActive}) => (isActive ? "active" : "")}
+                    className={({ isActive }) => (isActive ? "activeTag" : "")}
                 >
                   <div className="icon"></div>
                   <p>회원관리</p>
                 </NavLink>
               </li>
-              <li className={({isActive}) => (isActive ? "active" : "")}>
+              <li>
                 <NavLink
                     to={URL.MANAGER_MENU_MANAGEMENT}
+                    className={({ isActive }) => (isActive ? "activeTag" : "")}
                 >
                   <div className="icon"></div>
                   <p>메뉴관리</p>
                 </NavLink>
               </li>
-              <li className={({isActive}) => (isActive ? "active" : "")}>
+              <li>
                 <NavLink
                     to={URL.MANAGER_MENU_AUTHORITY}
+                    className={({ isActive }) => (isActive ? "activeTag" : "")}
                 >
                   <div className="icon"></div>
                   <p>메뉴권한관리</p>
                 </NavLink>
               </li>
-              <li className={({isActive}) => (isActive ? "active" : "")}>
+              <li>
                 <NavLink
                     to={URL.MANAGER_BBS_LIST}
+                    className={({ isActive }) => (isActive ? "activeTag" : "")}
                 >
                   <div className="icon"></div>
                   <p>게시판관리</p>
                 </NavLink>
               </li>
-              <li className={({isActive}) => (isActive ? "active" : "")}>
+              <li>
                 <NavLink
                     to={URL.MANAGER_BANNER_LIST}
+                    className={({ isActive }) => (isActive ? "activeTag" : "")}
                 >
                   <div className="icon"></div>
                   <p>배너팝업관리</p>
                 </NavLink>
               </li>
-              <li className={({isActive}) => (isActive ? "active" : "")}>
+              <li>
                 <NavLink
                     to={URL.MANAGER_CODE_GROUP}
+                    className={({ isActive }) => (isActive ? "activeTag" : "")}
                 >
                   <div className="icon"></div>
                   <p>코드관리</p>
