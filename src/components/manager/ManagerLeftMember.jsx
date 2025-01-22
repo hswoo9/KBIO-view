@@ -471,7 +471,7 @@ function ManagerLeftMember() {
           <div className="sitemapBtn">
             <div className="icon"></div>
           </div>
-          <div className="title"><p>운영지원</p></div>
+          <div className="title"><p>회원관리</p></div>
           <nav className="navBox">
             <div className="bg hover"></div>
             <div className="bg active"></div>
