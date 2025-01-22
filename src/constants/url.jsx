@@ -152,6 +152,12 @@ const URL = {
   
   MANAGER_CMS: "/manager/cms",
   MANAGER_OPERATIONAL_SUPPORT: "/manager/operationalSupport",
+  MANAGER_CONSULTING_EXPERT: "/manager/expert",
+  MANAGER_MEMBER: "/manager/member",
+  MANAGER_MEMBER_ALL_MEMBER: "/manager/allMember",
+  
+  MANAGER_HOMEPAGE: "/manager/homepage",
+  MANAGER_HOMEPAGE_MAIN_VIEW: "/manager/mainView",
 };
 
 // eslint-disable-next-line react-refresh/only-export-components

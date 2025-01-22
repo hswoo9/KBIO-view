@@ -8,7 +8,7 @@ import CODE from "@/constants/code";
 
 import LogoImg from "@/assets/images/logo_admin.svg";
 
-function ManagerLeftNew() {
+function ManagerLeftMember() {
 
   const location = useLocation();
   const sessionUser = getSessionItem("loginUser");
@@ -471,81 +471,63 @@ function ManagerLeftNew() {
           <div className="sitemapBtn">
             <div className="icon"></div>
           </div>
-          <div className="title"><p>CMS</p></div>
+          <div className="title"><p>운영지원</p></div>
           <nav className="navBox">
             <div className="bg hover"></div>
             <div className="bg active"></div>
             <ul className="dep">
               <li>
                 <NavLink
-                    to={URL.MANAGER_NORMAL_MEMBER}
+                    to={URL.MANAGER_MEMBER_ALL_MEMBER}
                     className={({isActive}) => (isActive ? "activeTag" : "")}
                 >
                   <div className="icon"></div>
-                  <p>회원관리</p>
+                  <p>전체회원</p>
                 </NavLink>
               </li>
               <li>
                 <NavLink
-                    to={URL.MANAGER_MENU_MANAGEMENT}
+                    to={""}
                     className={({isActive}) => (isActive ? "activeTag" : "")}
                 >
                   <div className="icon"></div>
-                  <p>메뉴관리</p>
+                  <p>승인회원</p>
                 </NavLink>
               </li>
               <li>
                 <NavLink
-                    to={URL.MANAGER_MENU_AUTHORITY}
+                    to={""}
                     className={({isActive}) => (isActive ? "activeTag" : "")}
                 >
                   <div className="icon"></div>
-                  <p>메뉴권한관리</p>
+                  <p>승인대기</p>
                 </NavLink>
               </li>
               <li>
                 <NavLink
-                    to={URL.MANAGER_BBS_LIST}
+                    to={""}
                     className={({isActive}) => (isActive ? "activeTag" : "")}
                 >
                   <div className="icon"></div>
-                  <p>게시판관리</p>
+                  <p>승인반려</p>
                 </NavLink>
               </li>
               <li>
                 <NavLink
-                    to={URL.MANAGER_BANNER_LIST}
+                    to={""}
                     className={({isActive}) => (isActive ? "activeTag" : "")}
                 >
                   <div className="icon"></div>
-                  <p>배너관리</p>
+                  <p>이용정지</p>
                 </NavLink>
               </li>
               <li>
                 <NavLink
-                    to={URL.MANAGER_POPUP_LIST}
+                    to={""}
                     className={({isActive}) => (isActive ? "activeTag" : "")}
                 >
                   <div className="icon"></div>
-                  <p>팝업관리</p>
-                </NavLink>
-              </li>
-              <li>
-                <NavLink
-                    to={URL.MANAGER_CODE_GROUP}
-                    className={({isActive}) => (isActive ? "activeTag" : "")}
-                >
-                  <div className="icon"></div>
-                  <p>코드관리</p>
-                </NavLink>
-              </li>
-              <li>
-                <NavLink
-                    to={URL.MANAGER_NORMAL_MEMBER}
-                    className={({isActive}) => (isActive ? "activeTag" : "")}
-                >
-                  <div className="icon"></div>
-                  <p>일반회원관리</p>
+                  <p>탈퇴회원</p>
                 </NavLink>
               </li>
             </ul>
@@ -555,4 +537,4 @@ function ManagerLeftNew() {
   );
 }
 
-export default ManagerLeftNew;
+export default ManagerLeftMember;

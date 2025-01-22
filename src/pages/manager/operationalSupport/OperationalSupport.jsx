@@ -5,7 +5,7 @@ import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
 
-import ManagerLeftNew from "@/components/manager/ManagerLeftNew";
+import ManagerLeft from "@/components/manager/ManagerLeftOperationalSupport";
 import EgovPaging from "@/components/EgovPaging";
 
 import Swal from 'sweetalert2';
@@ -20,7 +20,7 @@ function OperationalSupport(props) {
 
     return (
         <div id="container" className="container layout cms">
-            <ManagerLeftNew/>
+            <ManagerLeft/>
             <div className="inner">
                 <h2 className="pageTitle"><p>입주기업 관리</p></h2>
                 <div className="cateWrap">
