@@ -10,7 +10,6 @@ import { default as EgovLeftNav } from "@/components/leftmenu/ManagerLeftBoard";
 import EgovRadioButtonGroup from "@/components/EgovRadioButtonGroup";
 import Swal from "sweetalert2";
 import Form from "react-bootstrap/Form";
-import ReactDatePicker from 'react-datepicker';
 import moment from "moment";
 import ReactQuill from 'react-quill-new';
 import '@/css/quillSnow.css';

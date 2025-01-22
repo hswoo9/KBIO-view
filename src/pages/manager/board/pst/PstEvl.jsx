@@ -15,7 +15,7 @@ const PstEvl  = ({ pstSn }) => {
     })
     const handleSubmit = () => {
         if (!pstEvl.evlArtclNo) {
-          alert('만족도를 선택해 주세요!');
+          alert('만족도를 선택해 주세요.');
           return;
         }
 

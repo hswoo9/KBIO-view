@@ -1266,6 +1266,6 @@ select::-ms-expand {
   margin-top: 30px;
 }
 
-.reply_row {
+.reply_row::before {
   content: url("@/assets/images/arrow-return-right.svg");
 }
