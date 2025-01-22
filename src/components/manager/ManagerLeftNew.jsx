@@ -518,7 +518,16 @@ function ManagerLeftNew() {
                     className={({isActive}) => (isActive ? "activeTag" : "")}
                 >
                   <div className="icon"></div>
-                  <p>배너팝업관리</p>
+                  <p>배너관리</p>
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                    to={URL.MANAGER_POPUP_LIST}
+                    className={({isActive}) => (isActive ? "activeTag" : "")}
+                >
+                  <div className="icon"></div>
+                  <p>팝업관리</p>
                 </NavLink>
               </li>
               <li>

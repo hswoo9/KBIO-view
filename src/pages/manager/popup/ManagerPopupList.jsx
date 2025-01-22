@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import axios from "axios";
 import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
 import moment from "moment/moment.js";
-import { default as EgovLeftNav } from "@/components/leftmenu/ManagerLeftBannerPopup";
-
+import ManagerLeftNew from "@/components/manager/ManagerLeftNew";
 import EgovPaging from "@/components/EgovPaging";
 
 import Swal from 'sweetalert2';
@@ -134,7 +133,7 @@ function ManagerCodeGroup(props) {
                                 <td>{item.popupWdthSz} X {item.popupVrtcSz}</td>
                                 <td>{item.npagYn === "Y" ? "새창" : "현재창"}</td>
                                 <td>{item.useYn === "Y" ? "출력" : "출력안함"}</td>
-                                <td className="btnGroupTd">
+                                <td>
                                     <Link
                                         to={{ pathname: URL.MANAGER_POPUP_MODIFY }}
                                         state={{
@@ -142,18 +141,17 @@ function ManagerCodeGroup(props) {
                                         }}
                                         key={item.bnrPopupSn}
                                     >
-                                        <BTButton variant="primary" size="sm"
-                                        >
-                                            수정
-                                        </BTButton>
+                                        <button type="button">수정</button>
                                     </Link>
-                                    <BTButton variant="danger" size="sm"
-                                              onClick={() => {
-                                                  delBtnEvent(item.bnrPopupSn);
-                                              }}
+                                </td>
+                                <td>
+                                    <button type="button"
+                                            onClick={() => {
+                                                delBtnEvent(item.bnrPopupSn);
+                                            }}
                                     >
                                         삭제
-                                    </BTButton>
+                                    </button>
                                 </td>
                             </tr>
                         );
@@ -172,97 +170,56 @@ function ManagerCodeGroup(props) {
         getBnrPopupList(searchCondition);
     }, []);
 
-    const Location = React.memo(function Location() {
-        return (
-            <div className="location">
-                <ul>
-                    <li>
-                        <Link to={URL.MANAGER} className="home">
-                            Home
-                        </Link>
-                    </li>
-                    <li>
-                        <Link to={URL.MANAGER_BANNER_LIST}>배너팝업관리</Link>
-                    </li>
-                    <li>팝업관리</li>
-                </ul>
-            </div>
-        );
-    });
-
 
     return (
-        <div className="container">
-            <div className="c_wrap">
-                <Location/>
-
-                <div className="layout">
-                    <EgovLeftNav/>
-                    <div className="contents BOARD_CREATE_LIST" id="contents">
-                        <div className="condition">
-                            <ul>
-                                <li className="third_1 L">
-                                    <span className="lb">검색유형선택</span>
-                                    <label className="f_select" htmlFor="searchCnd">
-                                        <select
-                                            id="searchCnd"
-                                            name="searchCnd"
-                                            title="검색유형선택"
-                                        >
-                                            <option value="0">팝업제목</option>
-                                        </select>
-                                    </label>
-                                </li>
-                                <li className="third_2 R">
-                                    <span className="lb">검색어</span>
-                                    <span className="f_search w_400">
-                                    <input
-                                        type="text"
-                                        name=""
-                                        defaultValue={
-                                            searchCondition && searchCondition.searchWrd
-                                        }
-                                        placeholder=""
-                                        ref={wrdRef}
-                                        onChange={(e) => {
-                                            wrdRef.current.value = e.target.value;
-                                        }}
-                                    />
-                                    <button
-                                        type="button"
-                                        onClick={() => {
-                                            retrieveList({
-                                                ...searchCondition,
-                                                pageIndex: 1,
-                                                searchCnd: cndRef.current.value,
-                                                searchWrd: wrdRef.current.value,
-                                            });
-                                        }}
-                                    >
-                                      조회
-                                    </button>
-                                  </span>
-                                </li>
-                                <li>
-                                    <Link
-                                        to={{ pathname: URL.MANAGER_POPUP_CREATE }}
-                                        className="btn btn_blue_h46 pd35"
-                                    >
-                                        등록
-                                    </Link>
-                                </li>
-                            </ul>
+        <div id="container" className="container layout cms">
+            <ManagerLeftNew/>
+            <div className="inner">
+                <h2 className="pageTitle"><p>팝업관리</p></h2>
+                <div className="cateWrap">
+                    <form action="">
+                        <ul className="cateList">
+                            <li className="inputBox type1">
+                                <p className="title">상태</p>
+                                <div className="itemBox">
+                                    <select className="selectGroup">
+                                        <option value="">전체</option>
+                                        <option value="Y">출력</option>
+                                        <option value="N">출력안함</option>
+                                    </select>
+                                </div>
+                            </li>
+                            <li className="inputBox type1">
+                                <p className="title">키워드</p>
+                                <div className="itemBox">
+                                    <select className="selectGroup">
+                                        <option value="">전체</option>
+                                        <option value="cdGroup">제목</option>
+                                    </select>
+                                </div>
+                            </li>
+                            <li className="searchBox inputBox type1">
+                                <label className="input"><input type="text" id="search" name="search"
+                                                                placeholder="검색어를 입력해주세요"/></label>
+                            </li>
+                        </ul>
+                        <div className="rightBtn">
+                            <button type="button" className="refreshBtn btn btn1 gray">
+                                <div className="icon"></div>
+                            </button>
+                            <button type="button" className="searchBtn btn btn1 point">
+                                <div className="icon"></div>
+                            </button>
                         </div>
-                        <BtTable
-                            striped bordered hover size="sm"
-                            className="btTable"
-                        >
+                    </form>
+                </div>
+
+                <div className="contBox board type1 customContBox">
+                    <div className="topBox"></div>
+                    <div className="tableBox type1">
+                        <table>
+                            <caption>팝업목록</caption>
                             <colgroup>
-                                <col width="50px"/>
-                                <col width="200px"/>
-                                <col/>
-                                <col width="80px"/>
-                                <col/>
                             </colgroup>
                             <thead>
                             <tr>
@@ -274,24 +231,30 @@ function ManagerCodeGroup(props) {
                                 <th>팝업크기</th>
                                 <th>출력방식</th>
                                 <th>상태</th>
-                                <th>관리</th>
+                                <th>수정</th>
+                                <th>삭제</th>
                             </tr>
                             </thead>
                             <tbody>
                             {bnrPopupList}
                             </tbody>
-                        </BtTable>
-                        <div className="board_bot">
-                            <EgovPaging
-                                pagination={paginationInfo}
-                                moveToPage={(passedPage) => {
-                                    getCodeList({
-                                        ...searchCondition,
-                                        pageIndex: passedPage
-                                    });
-                                }}
-                            />
-                        </div>
+                        </table>
+                    </div>
+                    <div className="pageWrap">
+                        <EgovPaging
+                            pagination={paginationInfo}
+                            moveToPage={(passedPage) => {
+                                getBnrPopupList({
+                                    ...searchCondition,
+                                    pageIndex: passedPage
+                                });
+                            }}
+                        />
+                        <NavLink
+                            to={{pathname: URL.MANAGER_POPUP_CREATE}}
+                        >
+                            <button type="button" className="writeBtn clickBtn"><span>등록</span></button>
+                        </NavLink>
                     </div>
                 </div>
             </div>
