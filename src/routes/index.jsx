@@ -19,6 +19,7 @@ import EgovError from "@/components/EgovError";
 
 import EgovMain from "@/pages/main/EgovMain";
 import EgovLogin from "@/pages/login/EgovLogin";
+import ManagerLogin from "@/pages/manager/login/ManagerLogin";
 
 import EgovFindIdPswd from "@/pages/login/EgovFindIdPswd";
 
@@ -215,6 +216,10 @@ const SecondRoutes = () => {
         <Route
           path={URL.LOGIN}
           element={<EgovLogin onChangeLogin={(user) => setLoginVO(user)} />}
+        />
+        <Route
+          path={URL.MANAGER_LOGIN}
+          element={<ManagerLogin onChangeLogin={(user) => setLoginVO(user)} />}
         />
 
         {/* Sns Naver Callback */}

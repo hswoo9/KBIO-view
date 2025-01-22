@@ -1,8 +1,8 @@
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
 import * as EgovNet from "@/api/egovFetch";
 import $ from 'jquery';
 import React, { useEffect } from "react";
-
+import { getSessionItem, setSessionItem } from "@/utils/storage";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
 
@@ -16,6 +16,20 @@ import '@/css/manager/swiper-bundle.min.css';
 import '@/css/manager/admin.css';*/
 
 function ManagerLeftNew() {
+
+  const location = useLocation();
+  const sessionUser = getSessionItem("loginUser");
+  const sessionUserId = sessionUser?.id;
+  const sessionUserName = sessionUser?.name;
+  const sessionUserSe = sessionUser?.userSe;
+  const sessionUserSn = sessionUser?.userSn;
+
+  const navigate = useNavigate();
+
+  const logInHandler = () => {
+    navigate(URL.MANAGER_LOGIN);
+  };
+
   useEffect(() => {
     $(function() {
       $('header .sitemap .bg, header .sitemap .closeBtn').on('click', function() {
@@ -428,7 +442,14 @@ function ManagerLeftNew() {
       }
 
     })
-
+    console.log(sessionUser);
+    console.log(sessionUserSn);
+    if(sessionUser == null
+    ||
+        (sessionUserSn == null || sessionUserSn == "")
+    ){
+      logInHandler();
+    }
   }, []);
   
 

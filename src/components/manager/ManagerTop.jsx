@@ -20,7 +20,7 @@ function ManagerTop() {
   const navigate = useNavigate();
 
   const logInHandler = () => {
-    navigate(URL.LOGIN);
+    navigate(URL.MANAGER_LOGIN);
   };
   const logOutHandler = () => {
     // 로그인 정보 존재할 때
@@ -38,7 +38,7 @@ function ManagerTop() {
         setSessionItem("loginUser", { userSn: "" });
         setSessionItem("jToken", null);
         Swal.fire("로그아웃되었습니다!");
-        navigate(URL.MAIN);
+        navigate(URL.MANAGER_LOGIN);
       }
     });
   };
