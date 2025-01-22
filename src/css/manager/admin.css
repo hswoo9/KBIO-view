@@ -34,7 +34,7 @@ header {position: fixed; top: 0; left: 0; bottom: 0; width: clamp(200px, 13vw, 2
 header .hInner h1 {height: 3.55rem; display: flex; align-items: center; box-sizing: border-box; padding: .3rem 1.35rem;}
 header .hInner h1 a {max-width: 141px; width: 100%;}
 header .sitemapBtn {display: none;}
-header .sitemapBtn {width: 32px; height: 32px; background: url(@/assets/images/ico_sitemapBtn.svg) no-repeat center / contain; cursor: pointer;}
+header .sitemapBtn {width: 32px; height: 32px; /*background: url(@/assets/images/ico_sitemapBtn.svg) no-repeat center / contain;*/ cursor: pointer;}
 header .title {display: flex; justify-content: space-between; border-top: 1px solid #DDDDDD; border-bottom: 1px solid #ddd; font-weight: 700; height: 3.5rem; align-items: center; box-sizing: border-box; font-size: 1.35rem; padding: .9rem 1.35rem; color: var(--mainColor2)}
 header nav {padding: .9rem; position: relative;}
 header nav .bg {content: ""; position: absolute; left: 50%; top: 0; background: var(--mainColor); border-radius: .9rem; transition: .5s ease; z-index: -1;}
