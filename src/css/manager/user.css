@@ -82,7 +82,7 @@ footer .inner .center .linkBox li a span {position: relative; z-index: 1; }
 footer .inner .center .linkBox li a span:after {content: ""; position: absolute; width: 0; height: 100%; padding: .5em .5em; border-radius: 2em; border: 1px solid #fff; top: 50%; left: 50%; transform: translate(-50%, -50%); transition: .5s ease; opacity: 0; z-index: -1;}
 footer .inner .center address {display: flex; flex-direction: column; gap: .9rem;}
 footer .inner .center address > div {display: flex; gap: .9rem;}
-footer .inner .center address .left {width: 3.5rem; flex: none; font-weight: 600;}
+footer .inner .center address .left {width: 4rem; flex: none; font-weight: 600;}
 footer .inner .center address .right {color: rgba(255, 2555, 255, .6); line-height: 1.4;}
 footer .inner .right {display: flex; flex-direction: column; gap: 1.6rem;}
 footer .inner .right .familySiteWrap .nice-select {padding: .4rem 2rem .4rem .9rem; background: #fff; color: var(--black); font-weight: 600; border-radius: 1.2rem; transition: .5s ease;}

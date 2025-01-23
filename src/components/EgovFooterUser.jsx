@@ -9,10 +9,10 @@ function EgovFooterUser() {
           <figure className="logo"><img src={logoWhite} alt="K Bio LabHub"/></figure>
           <div className="center">
             <ul className="linkBox">
-              <li><a href="javascript:;"><span>개인정보 처리방침</span></a></li>
-              <li><a href="javascript:;"><span>이용약관</span></a></li>
-              <li><a href="javascript:;"><span>이메일무단수집거부</span></a></li>
-              <li><a href="javascript:;"><span>오시는길</span></a></li>
+              <li><a href="#"><span>개인정보 처리방침</span></a></li>
+              <li><a href="#"><span>이용약관</span></a></li>
+              <li><a href="#"><span>이메일무단수집거부</span></a></li>
+              <li><a href="#"><span>오시는길</span></a></li>
             </ul>
             <address>
               <div><span className="left">주소</span><span
@@ -38,13 +38,13 @@ function EgovFooterUser() {
               </div>
             </div>
             <ul className="snsBox">
-              <li className="faceBook"><a href="javascript:;">
+              <li className="faceBook"><a href="#">
                 <div className="icon"></div>
               </a></li>
-              <li className="instagram"><a href="javascript:;">
+              <li className="instagram"><a href="#">
                 <div className="icon"></div>
               </a></li>
-              <li className="youtube"><a href="javascript:;">
+              <li className="youtube"><a href="#">
                 <div className="icon"></div>
               </a></li>
             </ul>
