@@ -73,8 +73,8 @@ function setRejectMember(props) {
             `,
             showCloseButton: true,
             showCancelButton: true,
-            confirmButtonText: "삭제",
-            cancelButtonText: "취소"
+            confirmButtonText: "예",
+            cancelButtonText: "아니오"
         }).then((result) => {
             if (result.isConfirmed) {
                 const requestOptions = {
@@ -84,7 +84,7 @@ function setRejectMember(props) {
                     },
                     body: JSON.stringify({
                         ...memberDetail,
-                        zip: "N",
+                        zip: "Y",
                         userSn: userSn
                     }),
                 };
