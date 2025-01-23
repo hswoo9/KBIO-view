@@ -487,7 +487,7 @@ function ManagerLeftMember() {
               </li>
               <li>
                 <NavLink
-                    to={""}
+                    to={URL.MANAGER_APPROVAL_MEMBER}
                     className={({isActive}) => (isActive ? "activeTag" : "")}
                 >
                   <div className="icon"></div>

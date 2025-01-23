@@ -65,6 +65,7 @@ import EgovAdminMenuList from "@/pages/admin/menu/EgovAdminMenuList";
 //MANAGER
 import MamagerIndex from "@/pages/manager/Index";
 import MemberNormalMember from "@/pages/manager/member/ManagerNormalMember";
+import MemberApprovalMember from "@/pages/manager/member/ManagerApprovalMember";
 import MemberResidentMember from "@/pages/manager/member/ManagerResidentMember";
 import MemberRelatedMember from "@/pages/manager/member/ManagerRelatedMember";
 import MemberNonResidentMember from "@/pages/manager/member/ManagerNonResidentMember";
@@ -82,6 +83,7 @@ import ManagerPstDetail from "@/pages/manager/board/pst/ManagerPstDetail";
 import ManagerBbsPstEdit from "@/pages/manager/board/pst/ManagerPstEdit";
 
 import ManagerNormalMemberEdit from "@/pages/manager/member/ManagerNormalMemberEdit";
+import ManagerApprovalMemberEdit from "@/pages/manager/member/ManagerApprovalMemberEdit";
 
 import ManagerCodeGroup from "@/pages/manager/common/ManagerCodeGroup";
 import ManagerCodeGroupEdit from "@/pages/manager/common/ManagerCodeGroupEdit";
@@ -474,6 +476,10 @@ const SecondRoutes = () => {
           element={<MemberNormalMember />}
         />
         <Route
+            path={URL.MANAGER_APPROVAL_MEMBER}
+            element={<MemberApprovalMember />}
+        />
+        <Route
             path={URL.MANAGER_RELATED_COMPANY}
             element={<MemberRelatedMember />}
         />
@@ -580,6 +586,11 @@ const SecondRoutes = () => {
         <Route
           path={URL.MANAGER_NORMAL_MEMBER_MODIFY}
           element={<ManagerNormalMemberEdit mode={CODE.MODE_MODIFY}/>}
+        />
+
+        <Route
+            path={URL.MANAGER_APPROVAL_MEMBER_MODIFY}
+            element={<ManagerApprovalMemberEdit mode={CODE.MODE_MODIFY}/>}
         />
 
         <Route

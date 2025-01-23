@@ -93,6 +93,7 @@ const URL = {
   //관리자 페이지
   MANAGER: "/manager/main",
   MANAGER_NORMAL_MEMBER: "/manager/normalMember",
+  MANAGER_APPROVAL_MEMBER: "/manager/approvalMember",
   MANAGER_RESIDENT_COMPANY: "/manager/residentMember",
   MANAGER_RELATED_COMPANY: "/manager/relatedMember",
   MANAGER_NONRESIDENT_COMPANY: "/manager/nonresidentMember",
@@ -135,6 +136,8 @@ const URL = {
 
   MANAGER_NORMAL_MEMBER_MODIFY: "/manager/normal/member/modfiy",
   MANAGER_NORMAL_MEMBER_CREATE: "/manager/normal/member/create",
+
+  MANAGER_APPROVAL_MEMBER_MODIFY: "/manager/approval/member/modfiy",
 
   MANAGER_BBS_AUTHORITY_MANAGEMENT:"/manager/bbsAuthorityManagement",
 
