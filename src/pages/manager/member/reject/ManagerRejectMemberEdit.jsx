@@ -74,7 +74,6 @@ function setRejectMember(props) {
             showCloseButton: true,
             showCancelButton: true,
             confirmButtonText: "삭제",
-            confirmButtonText: "삭제",
             cancelButtonText: "취소"
         }).then((result) => {
             if (result.isConfirmed) {
