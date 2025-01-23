@@ -505,11 +505,29 @@ function ManagerLeftNew() {
               </li>
               <li>
                 <NavLink
+                    to={URL.MANAGER_ACCESS_LIST}
+                    className={({isActive}) => (isActive ? "activeTag" : "")}
+                >
+                  <div className="icon"></div>
+                  <p>접근관리</p>
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
                     to={URL.MANAGER_BBS_LIST}
                     className={({isActive}) => (isActive ? "activeTag" : "")}
                 >
                   <div className="icon"></div>
                   <p>게시판관리</p>
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                    to={URL.MANAGER_BBS_LIST2}
+                    className={({isActive}) => (isActive ? "activeTag" : "")}
+                >
+                  <div className="icon"></div>
+                  <p>게시글관리</p>
                 </NavLink>
               </li>
               <li>

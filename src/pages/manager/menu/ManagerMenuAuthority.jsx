@@ -318,7 +318,9 @@ function ManagerMenuAuthority(props) {
                                 onClick={(e) => {authorityClick(item.authrtGroupSn)}}
                             >
                                 <td onClick={(e) => {e.stopPropagation()}}>
-                                    <input type="checkbox" name="authorityCheck" value={item.authrtGroupSn}/>
+                                    <label className="checkBox type2">
+                                        <input type="checkbox" name="authorityCheck" className="customCheckBox" value={item.authrtGroupSn}/>
+                                    </label>
                                 </td>
                                 <td>{item.authrtGroupNm}</td>
                                 <td>{item.authrtType}</td>
@@ -537,9 +539,10 @@ function ManagerMenuAuthority(props) {
                                 <thead>
                                 <tr>
                                     <th>
-                                        <label className="customCheckBox">
+                                        <label className="checkBox type2">
                                             <input type="checkbox"
                                                    name="authorityCheck"
+                                                   className="customCheckBox"
                                                    onClick={checkGroupAllCheck}
                                             />
                                         </label>

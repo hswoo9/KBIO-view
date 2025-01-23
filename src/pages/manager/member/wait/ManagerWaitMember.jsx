@@ -6,7 +6,7 @@ import URL from "@/constants/url";
 import CODE from "@/constants/code";
 import 'moment/locale/ko';
 
-import ManagerLeftNew from "@/components/manager/ManagerLeftNew";
+import ManagerLeft from "@/components/manager/ManagerLeftMember";
 import Swal from 'sweetalert2';
 import EgovPaging from "@/components/EgovPaging";
 
@@ -17,7 +17,7 @@ import Form from 'react-bootstrap/Form';
 import { getSessionItem } from "@/utils/storage";
 import moment from "moment/moment.js";
 
-function NormalMemberList(props) {
+function WaitMemberList(props) {
     const navigate = useNavigate();
     const location = useLocation();
     const [searchDto, setSearchDto] = useState(
@@ -33,7 +33,7 @@ function NormalMemberList(props) {
     const [paginationInfo, setPaginationInfo] = useState({});
     const userTypeRef = useRef();
     const userNmRef = useRef();
-    const [normalMemberList, setAuthorityList] = useState([]);
+    const [waitMemberList, setAuthorityList] = useState([]);
     const [saveEvent, setSaveEvent] = useState({});
 
     useEffect(() => {
@@ -47,19 +47,24 @@ function NormalMemberList(props) {
     const activeEnter = (e) => {
         if (e.key === "Enter") {
             e.preventDefault();
-            getnormalMemberList(searchDto);
+            getwaitMemberList(searchDto);
         }
     };
 
-    const setNormalMemberDel = (userSn) => {
-        const setNormalMemberUrl = "/memberApi/setNormalMemberDel";
+    const setWaitMemberApproval = (userSn) => {
+        const setWaitMemberApprovalUrl = "/memberApi/setWaitMemberApproval";
 
         Swal.fire({
-            title: "삭제하시겠습니까?",
+            title: `<span style="font-size: 14px; line-height: 0.8;">
+                    승인 시 해당 계정은 홈페이지 접속 및 서비스<br>
+                    를 이용할 수 있습니다.<br>
+                    해당 회원의 계정을 승인하시겠습니까?
+                </span>
+            `,
             showCloseButton: true,
             showCancelButton: true,
-            confirmButtonText: "삭제",
-            cancelButtonText: "취소"
+            confirmButtonText: "예",
+            cancelButtonText: "아니오"
         }).then((result) => {
             if(result.isConfirmed) {
                 const requestOptions = {
@@ -68,16 +73,14 @@ function NormalMemberList(props) {
                         "Content-type": "application/json",
                     },
                     body: JSON.stringify({
-                        ...memberDetail,
-                        zip: "N",
                         userSn: userSn
                     }),
                 };
 
-                EgovNet.requestFetch(setNormalMemberUrl, requestOptions, (resp) => {
+                EgovNet.requestFetch(setWaitMemberApprovalUrl, requestOptions, (resp) => {
                     if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
-                        Swal.fire("삭제되었습니다.");
-                        navigate(URL.MANAGER_NORMAL_MEMBER);
+                        Swal.fire("승인되었습니다.");
+                        getwaitMemberList(searchDto);
                     } else {
                         alert("ERR : " + resp.resultMessage);
                     }
@@ -88,9 +91,48 @@ function NormalMemberList(props) {
         });
     };
 
-    const getnormalMemberList = useCallback(
+    const setWaitMemberReject = (userSn) => {
+        const setWaitMemberRejectUrl = "/memberApi/setWaitMemberReject";
+
+        Swal.fire({
+            title: `<span style="font-size: 14px; line-height: 0.8;">
+                    거절 시 해당 계정은 홈페이지 접속 및 서비스<br>
+                    를 이용할 수 없습니다.<br>
+                    해당 회원의 계정을 거절하시겠습니까?
+                </span>
+            `,
+            showCloseButton: true,
+            showCancelButton: true,
+            confirmButtonText: "예",
+            cancelButtonText: "아니오"
+        }).then((result) => {
+            if(result.isConfirmed) {
+                const requestOptions = {
+                    method: "POST",
+                    headers: {
+                        "Content-type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        userSn: userSn
+                    }),
+                };
+
+                EgovNet.requestFetch(setWaitMemberRejectUrl, requestOptions, (resp) => {
+                    if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
+                        Swal.fire("거절되었습니다.");
+                        getwaitMemberList(searchDto);
+                    } else {
+                        alert("ERR : " + resp.resultMessage);
+                    }
+                });
+            } else {
+            }
+        });
+    };
+
+    const getwaitMemberList = useCallback(
         (searchDto) => {
-            const normalMemberListURL = "/memberApi/getNormalMemberList.do";
+            const waitMemberListURL = "/memberApi/getWaitMemberList.do";
             const requestOptions = {
                 method: "POST",
                 headers: {
@@ -100,7 +142,7 @@ function NormalMemberList(props) {
             };
 
             EgovNet.requestFetch(
-                normalMemberListURL,
+                waitMemberListURL,
                 requestOptions,
                 (resp) => {
                     setPaginationInfo(resp.paginationInfo);
@@ -111,37 +153,57 @@ function NormalMemberList(props) {
                         </tr>
                     );
 
-                    resp.result.getNormalMemberList.forEach(function (item, index) {
+                    resp.result.getWaitMemberList.forEach(function (item, index) {
                         if (index === 0) dataList = [];
+
+                        const totalItems = resp.result.getWaitMemberList.length;
+                        const itemNumber = totalItems - index;
 
                         dataList.push(
                             <tr key={item.userSn}>
-                                <td>{item.userNm}</td>
+                                <td>{itemNumber}</td>
                                 <td>{item.userType}</td>
-                                <td>{item.emplyrId}</td>
-                                <td>{item.mbtlnum}</td>
-                                <td>{item.replyPosblYn}</td>
-                                <td>{item.answerPosblYn}</td>
                                 <td>
                                     <Link
-                                        to={{pathname: URL.MANAGER_NORMAL_MEMBER_MODIFY}}
+                                        to={{ pathname: URL.MANAGER_WAIT_MEMBER_MODIFY }}
                                         state={{
                                             userSn: item.userSn
                                         }}
+                                        style={{ cursor: 'pointer', textDecoration: 'underline' }}
                                     >
-                                        <button type="button">
-                                            수정
-                                        </button>
+                                        {item.emplyrId}
                                     </Link>
                                 </td>
-                                <td>
-                                    <button type="button"
+                                <td>{item.userNm}</td>
+                                <td>{item.companyNm}</td>
+                                <td>{item.socialType}</td>
+                                <td>{item.registDt}</td>
+                                <td style={{
+                                    padding: '6px 0',
+                                    verticalAlign: 'middle',
+                                    textAlign: 'center'
+                                }}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                        <button
+                                            type="button"
+                                            className="btn btn1 blue"
+                                            style={{ marginRight: '4px' }}
                                             onClick={() => {
-                                                setNormalMemberDel(item.userSn);
+                                                setWaitMemberApproval(item.userSn);
                                             }}
-                                    >
-                                        삭제
-                                    </button>
+                                        >
+                                            승인
+                                        </button>
+                                        <button
+                                            type="button"
+                                            className="btn btn1 red"
+                                            onClick={() => {
+                                                setWaitMemberReject(item.userSn);
+                                            }}
+                                        >
+                                            거절
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                         );
@@ -153,29 +215,29 @@ function NormalMemberList(props) {
                 }
             );
         },
-        [normalMemberList, searchDto]
+        [waitMemberList, searchDto]
     );
 
     useEffect(() => {
-        getnormalMemberList(searchDto);
+        getwaitMemberList(searchDto);
     }, []);
 
     return (
         <div id="container" className="container layout cms">
-            <ManagerLeftNew/>
+            <ManagerLeft/>
             <div className="inner">
                 <h2 className="pageTitle"><p>회원관리</p></h2>
                 <div className="cateWrap">
                     <form action="">
                         <ul className="cateList">
                             <li className="inputBox type1">
-                                <p className="title">회원유형</p>
+                                <p className="title">회원분류</p>
                                 <div className="itemBox">
                                     <select
                                         className="selectGroup"
                                         ref={userTypeRef}
                                         onChange={(e) => {
-                                            getnormalMemberList({
+                                            getwaitMemberList({
                                                 ...searchDto,
                                                 pageIndex: 1,
                                                 userType: userTypeRef.current.value,
@@ -183,12 +245,25 @@ function NormalMemberList(props) {
                                             });
                                         }}
                                     >
-                                        <option value="">선택</option>
-                                        <option value="0">일반회원</option>
+                                        <option value="">전체</option>
                                         <option value="1">입주기업</option>
                                         <option value="2">유관기관</option>
                                         <option value="3">비입주기업</option>
                                         <option value="4">컨설턴트</option>
+                                    </select>
+                                </div>
+                            </li>
+
+                            <li className="inputBox type1">
+                                <p className="title">키워드</p>
+                                <div className="itemBox">
+                                    <select
+                                        className="selectGroup"
+                                    >
+                                        <option value="">전체</option>
+                                        <option value="">아이디</option>
+                                        <option value="">성명</option>
+                                        <option value="">기업명</option>
                                     </select>
                                 </div>
                             </li>
@@ -223,7 +298,7 @@ function NormalMemberList(props) {
                                         userType: "",
                                         userNm: "",
                                     });
-                                    getnormalMemberList({});
+                                    getwaitMemberList({});
                                 }}
                             >
                                 <div className="icon"></div>
@@ -233,7 +308,7 @@ function NormalMemberList(props) {
                                 className="searchBtn btn btn1 point"
                                 onClick={(e) => {
                                     e.preventDefault();
-                                    getnormalMemberList({
+                                    getwaitMemberList({
                                         ...searchDto,
                                         pageIndex: 1,
                                         userType: userTypeRef.current.value,
@@ -248,34 +323,43 @@ function NormalMemberList(props) {
                 </div>
 
                 <div className="contBox board type1 customContBox">
-                    <div className="topBox"></div>
+                    <div className="topBox">
+                        <p className="resultText"><span className="red">12,345</span>건의 회원 정보가 조회되었습니다.</p>
+                        <div className="rightBox">
+                            <button type="button" className="btn btn2 downBtn red">
+                                <div className="icon"></div>
+                                <span>엑셀 다운로드</span></button>
+                        </div>
+                    </div>
                     <div className="tableBox type1">
                         <table>
                             <caption>회원목록</caption>
                             <colgroup>
-                                <col width="150px"/>
-                                <col width="120px"/>
+                                <col width="50px"/>
+                                <col width="100px"/>
                                 <col width="130px"/>
+                                <col width="100px"/>
                                 <col width="150px"/>
                                 <col width="100px"/>
-                                <col width="100px"/>
-                                <col width="80px"/>
-                                <col width="80px"/>
+                                <col width="150px"/>
+                                <col width="180px"/>
+                                {/*<col width="80px"/>
+                                <col width="80px"/>*/}
                             </colgroup>
                             <thead>
                             <tr>
-                                <th>회원명</th>
-                                <th>회원유형</th>
-                                <th>회원ID</th>
-                                <th>휴대전화번호</th>
-                                <th>메일수신</th>
-                                <th>SMS수신</th>
-                                <th>수정</th>
-                                <th>삭제</th>
+                                <th>번호</th>
+                                <th>회원분류</th>
+                                <th>아이디</th>
+                                <th>성명</th>
+                                <th>기업명</th>
+                                <th>소셜구분</th>
+                                <th>가입일</th>
+                                <th colSpan="2" style={{textAlign: 'center'}}>승인여부</th>
                             </tr>
                             </thead>
                             <tbody>
-                            {normalMemberList}
+                            {waitMemberList}
                             </tbody>
                         </table>
                     </div>
@@ -283,17 +367,17 @@ function NormalMemberList(props) {
                         <EgovPaging
                             pagination={paginationInfo}
                             moveToPage={(passedPage) => {
-                                getnormalMemberList({
+                                getwaitMemberList({
                                     ...searchDto,
                                     pageIndex: passedPage,
                                 });
                             }}
                         />
-                        <NavLink to={URL.MANAGER_NORMAL_MEMBER_CREATE}>
+                        {/*<NavLink to={URL.MANAGER_NORMAL_MEMBER_CREATE}>
                             <button type="button" className="writeBtn clickBtn">
                                 <span>등록</span>
                             </button>
-                        </NavLink>
+                        </NavLink>*/}
                     </div>
                 </div>
             </div>
@@ -301,4 +385,4 @@ function NormalMemberList(props) {
     );
 }
 
-export default NormalMemberList;
+export default WaitMemberList;

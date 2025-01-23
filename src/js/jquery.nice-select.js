@@ -60,7 +60,7 @@
         .addClass($select.attr('class') || '')
         .addClass($select.attr('disabled') ? 'disabled' : '')
         .attr('tabindex', $select.attr('disabled') ? null : '0')
-        .html('<span className="current"></span><ul className="list"></ul>')
+        .html('<span class="current"></span><ul class="list"></ul>')
       );
         
       var $dropdown = $select.next();

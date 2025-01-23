@@ -106,7 +106,12 @@ const URL = {
 
   //관리자 페이지
   MANAGER: "/manager/main",
-  MANAGER_NORMAL_MEMBER: "/manager/normalMember",
+  MANAGER_NORMAL_MEMBER: "/manager/all/normalMember",
+  MANAGER_APPROVAL_MEMBER: "/manager/approval/approvalMember",
+  MANAGER_REJECT_MEMBER: "/manager/reject/rejetcMember",
+  MANAGER_CANCEL_MEMBER: "/manager/cancel/cancelMember",
+  MANAGER_STOP_MEMBER: "/manager/stop/stopMember",
+  MANAGER_WAIT_MEMBER: "/manager/wait/waitMember",
   MANAGER_RESIDENT_COMPANY: "/manager/residentCompany",
   MANAGER_RELATED_COMPANY: "/manager/relatedMember",
   MANAGER_NONRESIDENT_COMPANY: "/manager/nonresidentMember",
@@ -144,6 +149,11 @@ const URL = {
 
   MANAGER_NORMAL_MEMBER_MODIFY: "/manager/normal/member/modify",
   MANAGER_NORMAL_MEMBER_CREATE: "/manager/normal/member/create",
+  MANAGER_APPROVAL_MEMBER_MODIFY: "/manager/approval/member/modfiy",
+  MANAGER_CANCEL_MEMBER_MODIFY: "/manager/cancel/member/modfiy",
+  MANAGER_REJECT_MEMBER_MODIFY: "/manager/reject/member/modfiy",
+  MANAGER_STOP_MEMBER_MODIFY: "/manager/stop/member/modfiy",
+  MANAGER_WAIT_MEMBER_MODIFY: "/manager/wait/member/modfiy",
 
   MANAGER_BBS_AUTHORITY_MANAGEMENT:"/manager/bbsAuthorityManagement",
 
@@ -156,11 +166,20 @@ const URL = {
   MANAGER_RESIDENT_MEMBER : "/manager/residentMember",
 
   MANAGER_CONSULTING_EXPERT: "/manager/expert",
+  MANAGER_CONSULTING_MATCHING: "/manager/matching",
   MANAGER_MEMBER: "/manager/member",
   MANAGER_MEMBER_ALL_MEMBER: "/manager/allMember",
   
   MANAGER_HOMEPAGE: "/manager/homepage",
   MANAGER_HOMEPAGE_MAIN_VIEW: "/manager/mainView",
+
+  MANAGER_ACCESS_LIST: "/manager/access/list",
+  MANAGER_ACCESS_CREATE: "/manager/access/create",
+  MANAGER_ACCESS_MODIFY: "/manager/access/modify",
+
+  MANAGER_STATISTICS: "/manager/statistics",
+  MANAGER_STATISTICS_USER: "/manager/statistics/user",
+
 };
 
 // eslint-disable-next-line react-refresh/only-export-components

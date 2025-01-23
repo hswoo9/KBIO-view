@@ -478,7 +478,7 @@ function ManagerLeftMember() {
             <ul className="dep">
               <li>
                 <NavLink
-                    to={URL.MANAGER_MEMBER_ALL_MEMBER}
+                    to={URL.MANAGER_NORMAL_MEMBER}
                     className={({isActive}) => (isActive ? "activeTag" : "")}
                 >
                   <div className="icon"></div>
@@ -487,7 +487,7 @@ function ManagerLeftMember() {
               </li>
               <li>
                 <NavLink
-                    to={""}
+                    to={URL.MANAGER_APPROVAL_MEMBER}
                     className={({isActive}) => (isActive ? "activeTag" : "")}
                 >
                   <div className="icon"></div>
@@ -496,7 +496,7 @@ function ManagerLeftMember() {
               </li>
               <li>
                 <NavLink
-                    to={""}
+                    to={URL.MANAGER_WAIT_MEMBER}
                     className={({isActive}) => (isActive ? "activeTag" : "")}
                 >
                   <div className="icon"></div>
@@ -505,7 +505,7 @@ function ManagerLeftMember() {
               </li>
               <li>
                 <NavLink
-                    to={""}
+                    to={URL.MANAGER_REJECT_MEMBER}
                     className={({isActive}) => (isActive ? "activeTag" : "")}
                 >
                   <div className="icon"></div>
@@ -514,7 +514,7 @@ function ManagerLeftMember() {
               </li>
               <li>
                 <NavLink
-                    to={""}
+                    to={URL.MANAGER_STOP_MEMBER}
                     className={({isActive}) => (isActive ? "activeTag" : "")}
                 >
                   <div className="icon"></div>
@@ -523,7 +523,7 @@ function ManagerLeftMember() {
               </li>
               <li>
                 <NavLink
-                    to={""}
+                    to={URL.MANAGER_CANCEL_MEMBER}
                     className={({isActive}) => (isActive ? "activeTag" : "")}
                 >
                   <div className="icon"></div>

@@ -124,7 +124,7 @@ function ManagerTop() {
             <li>
               <a
                  onClick={() => {
-                   navigate({pathname: URL.MANAGER_MEMBER_ALL_MEMBER}, {state: {selectMenuNm: "회원"}});
+                   navigate({pathname: URL.MANAGER_NORMAL_MEMBER}, {state: {selectMenuNm: "회원"}});
                  }}
                  className="cursorClass"
               ><p>회원</p>
@@ -139,28 +139,21 @@ function ManagerTop() {
               ><p>홈페이지</p>
               </a>
             </li>
+            {/*
+            게시글 관리로 쓰면 될듯
             <li>
               <a
                  onClick={() => {
-                   navigate({pathname: URL.MANAGER_CMS}, {state: {selectMenuNm: "커뮤니티"}});
+                   navigate({pathname: URL.MANAGER_COMMUNITY}, {state: {selectMenuNm: "커뮤니티"}});
                  }}
                  className="cursorClass"
               ><p>커뮤니티</p>
               </a>
-            </li>
+            </li>*/}
             <li>
               <a
                  onClick={() => {
-                   navigate({pathname: URL.MANAGER_CMS}, {state: {selectMenuNm: "관리자"}});
-                 }}
-                 className="cursorClass"
-              ><p>관리자</p>
-              </a>
-            </li>
-            <li>
-              <a
-                 onClick={() => {
-                   navigate({pathname: URL.MANAGER_CMS}, {state: {selectMenuNm: "통계"}});
+                   navigate({pathname: URL.MANAGER_STATISTICS_USER}, {state: {selectMenuNm: "통계"}});
                  }}
                  className="cursorClass"
               ><p>통계</p>
