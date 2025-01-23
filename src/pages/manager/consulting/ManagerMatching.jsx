@@ -13,7 +13,7 @@ import Swal from 'sweetalert2';
 /* bootstrip */
 import { getSessionItem } from "@/utils/storage";
 
-function ManagerExpert(props) {
+function ManagerMatching(props) {
 
     const [searchCondition, setSearchCondition] = useState(
         location.state?.searchCondition || {
@@ -40,7 +40,7 @@ function ManagerExpert(props) {
         <div id="container" className="container layout cms">
             <ManagerLeft/>
             <div className="inner">
-                <h2 className="pageTitle"><p>전문가관리</p></h2>
+                <h2 className="pageTitle"><p>간편상담</p></h2>
                 <div className="cateWrap">
                     <form action="">
                         <ul className="cateList">
@@ -55,12 +55,13 @@ function ManagerExpert(props) {
                                 </div>
                             </li>
                             <li className="inputBox type1">
-                                <p className="title">컨설팅 활동</p>
+                                <p className="title">상태</p>
                                 <div className="itemBox">
                                     <select className="selectGroup">
                                         <option value="">전체</option>
-                                        <option value="1">공개</option>
-                                        <option value="2">비공개</option>
+                                        <option value="1">답변대기</option>
+                                        <option value="2">답변완료</option>
+                                        <option value="3">처리완료</option>
                                     </select>
                                 </div>
                             </li>
@@ -69,9 +70,10 @@ function ManagerExpert(props) {
                                 <div className="itemBox">
                                     <select className="selectGroup">
                                         <option value="">전체</option>
-                                        <option value="1">성명</option>
+                                        <option value="1">컨설턴트</option>
                                         <option value="2">소속</option>
-                                        <option value="3">직위</option>
+                                        <option value="3">제목</option>
+                                        <option value="4">신청자</option>
                                     </select>
                                 </div>
                             </li>
@@ -106,13 +108,13 @@ function ManagerExpert(props) {
                             <tr>
                                 <th>번호</th>
                                 <th>자문분야</th>
-                                <th>성명</th>
+                                <th>컨설턴트</th>
                                 <th>소속</th>
-                                <th>직위</th>
-                                <th>경력</th>
-                                <th>컨설팅 활동</th>
-                                <th>컨설팅의뢰</th>
-                                <th>간편상담</th>
+                                <th>제목</th>
+                                <th>신청자</th>
+                                <th>신청일</th>
+                                <th>상태</th>
+                                <th>만족도</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -134,4 +136,4 @@ function ManagerExpert(props) {
     );
 }
 
-export default ManagerExpert;
+export default ManagerMatching;

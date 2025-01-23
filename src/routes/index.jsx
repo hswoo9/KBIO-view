@@ -116,7 +116,7 @@ import OperationalSupport from "@/pages/manager/operationalSupport/OperationalSu
 
 //컨설팅지원
 import ManagerExpert from "@/pages/manager/consulting/ManagerExpert";
-
+import ManagerMatching from "@/pages/manager/consulting/ManagerMatching";
 //회원관리
 import ManagerAllMember from "@/pages/manager/member/all/ManagerNormalMember";
 
@@ -125,6 +125,9 @@ import ManagerMainView from "@/pages/manager/homepage/ManagerMainView";
 
 import ManagerAccessList from "@/pages/manager/access/ManagerAccessList";
 import ManagerAccessEdit from "@/pages/manager/access/ManagerAccessEdit";
+
+
+
 
 
 
@@ -652,6 +655,7 @@ const SecondRoutes = () => {
         <Route path={URL.MANAGER_IMAGES_POPUP} element={<ManagerImagesPopup />} />
         <Route path={URL.MANAGER_OPERATIONAL_SUPPORT} element={<OperationalSupport />} />
         <Route path={URL.MANAGER_CONSULTING_EXPERT} element={<ManagerExpert />} />
+        <Route path={URL.MANAGER_CONSULTING_MATCHING} element={<ManagerMatching />} />
         <Route path={URL.MANAGER_MEMBER} element={<ManagerAllMember />} />
         <Route path={URL.MANAGER_MEMBER_ALL_MEMBER} element={<ManagerAllMember />} />
 

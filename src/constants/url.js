@@ -163,6 +163,7 @@ const URL = {
   MANAGER_CMS: "/manager/cms",
   MANAGER_OPERATIONAL_SUPPORT: "/manager/operationalSupport",
   MANAGER_CONSULTING_EXPERT: "/manager/expert",
+  MANAGER_CONSULTING_MATCHING: "/manager/matching",
   MANAGER_MEMBER: "/manager/member",
   MANAGER_MEMBER_ALL_MEMBER: "/manager/allMember",
 
