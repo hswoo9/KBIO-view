@@ -35,16 +35,7 @@ function Index(props) {
     return (
         <div id="container" className="container layout cms">
             <ManagerLeftNew/>
-            <div className="inner">
-                {/*<Location/>*/}
-
-                <div className="layout">
-                    {/* <!-- layout --> */}
-                    {/*<EgovLeftNav/>*/}
-                    <ResidentCompanyList/>
-                {/* <!--// layout --> */}
-                </div>
-            </div>
+               <ResidentCompanyList/>
         </div>
     )
         ;

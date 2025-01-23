@@ -102,6 +102,7 @@ import ResidentCompanyCreate from "@/pages/manager/member/ResidentCompanyCreate"
 
 //입주지원
 import OperationalSupport from "@/pages/manager/operationalSupport/OperationalSupport";
+import OperationalResidentMember from "@/pages/manager/operationalSupport/OperationalResidentMember";
 
 //컨설팅지원
 import ManagerExpert from "@/pages/manager/consulting/ManagerExpert";
@@ -595,7 +596,10 @@ const SecondRoutes = () => {
         <Route path={URL.MANAGER_POPUP_MODIFY} element={<ManagerPopupEdit mode={CODE.MODE_MODIFY} />} />
 
         <Route path={URL.MANAGER_IMAGES_POPUP} element={<ManagerImagesPopup />} />
+
         <Route path={URL.MANAGER_OPERATIONAL_SUPPORT} element={<OperationalSupport />} />
+        <Route path={URL.MANAGER_RESIDENT_MEMBER} element={<OperationalResidentMember />} />
+
         <Route path={URL.MANAGER_CONSULTING_EXPERT} element={<ManagerExpert />} />
         <Route path={URL.MANAGER_MEMBER} element={<ManagerAllMember />} />
         <Route path={URL.MANAGER_MEMBER_ALL_MEMBER} element={<ManagerAllMember />} />

@@ -1,5 +1,5 @@
-import {useState, useEffect, useRef, useCallback} from "react";
-import {useNavigate, NavLink, useLocation} from "react-router-dom";
+import React, {useState, useEffect, useRef, useCallback} from "react";
+import {useNavigate, NavLink, useLocation, Link} from "react-router-dom";
 
 import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
@@ -16,6 +16,9 @@ function ResidentMemberCreateContent(props){
     const navigate = useNavigate();
     const [residentDetail, setResidentDetail] = useState({});
     const [searchDto, setSearchDto] = useState({mvnEntSn : location.state?.mvnEntSn});
+    const [acceptFileTypes, setAcceptFileTypes] = useState('jpg,jpeg,png,gif,bmp,tiff,tif,webp,svg,ico,heic,avif');
+    const [selectedFiles, setSelectedFiles] = useState([]);
+    const [imgFile, setImgFile] = useState("");
 
 
     const initMode = () => {
@@ -79,6 +82,45 @@ function ResidentMemberCreateContent(props){
 
     }
 
+    const handleFileChange = (e) => {
+
+        if(residentDetail.tblComFiles != null && residentDetail.tblComFiles.length > 0){
+            Swal.fire("기존 파일 삭제 후 첨부가 가능합니다.");
+            e.target.value = null;
+            return false;
+        }
+
+        const allowedExtensions = acceptFileTypes.split(',');
+        if(e.target.files.length > 0){
+            const fileExtension = e.target.files[0].name.split(".").pop().toLowerCase();
+            if(allowedExtensions.includes(fileExtension)){
+                let fileName = e.target.files[0].name;
+                if(fileName.length > 30){
+                    fileName = fileName.slice(0, 30) + "...";
+                }
+                document.getElementById("fileNamePTag").textContent = fileName;
+                setSelectedFiles(Array.from(e.target.files));
+                const file = e.target.files[0];
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onloadend = () => {
+                    setImgFile(reader.result);
+                }
+
+            }else{
+                Swal.fire({
+                    title: "허용되지 않은 확장자입니다.",
+                    text: `허용 확장자: ` + acceptFileTypes
+                });
+                e.target.value = null;
+            }
+        }else{
+            Swal.fire(
+                `선택된 파일이 없습니다.`
+            );
+        }
+    };
+
     useEffect(() => {
         initMode();
         const script = document.createElement("script");
@@ -97,9 +139,14 @@ function ResidentMemberCreateContent(props){
         };
     }, []);
 
+    useEffect(() => {
+    }, [selectedFiles]);
+
     //사업자번호 상태 확인
     const kbioauth = async () => {
-        const businessNumber = `${residentDetail.brno1}-${residentDetail.brno2}-${residentDetail.brno3}`;
+        //const businessNumber = `${residentDetail.brno1}-${residentDetail.brno2}-${residentDetail.brno3}`;
+        const businessNumber = `${residentDetail.brno}`;
+
         const businessNo = `${residentDetail.brno1}${residentDetail.brno2}${residentDetail.brno3}`;
 
         console.log(businessNumber);
@@ -250,285 +297,321 @@ function ResidentMemberCreateContent(props){
 
 
     return(
-        <div className="contents" style={{width:"100%"}} id="contents">
-            <div className="top_tit">
-                <h2 className="tit_2">입주기업등록</h2>
-            </div>
+        <div className="inner">
+                <h2 className="pageTitle">
+                    <p>입주기업관리</p>
+                </h2>
             
-            <div className="board_view2">
-                {/* 기업정보 섹션 */}
-                <div style={{borderTop: "1px solid #ddd", paddingTop: "20px", marginTop: "20px"}}>
-                    <h3 style={{fontSize: "18px", fontWeight: "bold", marginBottom: "10px"}}>기업정보</h3>
-            {/* 사업자 등록번호 */}
-            <dl style={{borderTop:"1px solid #dde2e5"}}>
-                <dt>
-                    <label htmlFor="brno">사업자 등록번호</label>
-                    <span className="req">필수</span>
-                </dt>
-                <dd>
-                    <input
-                        className="f_input2 w_full"
-                        type="text"
-                        name="brno1"
-                        maxLength="3"
-                        value={residentDetail.brno1 || ""}
-                        style={{width: "100px", marginRight: "5px"}}
-                        onChange={(e) =>
-                            setResidentDetail({ ...residentDetail, brno1: e.target.value })
-                        }
-                    />
-                    <span style={{
-                        marginLeft: '10px',
-                        marginRight: '10px',
-                        marginTop: '10px',
-                        fontSize: '13px',
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                    }}>-</span>
-                    <input
-                        className="f_input2 w_full"
-                        type="text"
-                        name="brno2"
-                        maxLength="2"
-                        value={residentDetail.brno2 || ""}
-                        style={{width: "70px", margin: "0 5px"}}
-                        onChange={(e) =>
-                            setResidentDetail({ ...residentDetail, brno2: e.target.value })
-                        }
-                    />
-                    <span style={{
-                        marginLeft: '10px',
-                        marginRight: '10px',
-                        fontSize: '13px',
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                    }}>-</span>
-                    <input
-                        className="f_input2 w_full"
-                        type="text"
-                        name="brno3"
-                        maxLength="5"
-                        value={residentDetail.brno3 || ""}
-                        style={{width: "130px", marginLeft: "5px"}}
-                        onChange={(e) =>
-                            setResidentDetail({ ...residentDetail, brno3: e.target.value })
-                        }
-                    />
-                    <button
-                        className="btn btn_skyblue_h46"
-                        type="button"
-                        onClick={kbioauth}
-                        style={{marginLeft: "10px"}}
-                    >
-                        사업자번호 인증
-                    </button>
-                    <span id="confirmText"
-                        style={{display:"none", fontSize:"13px", marginTop:"10px", marginLeft:"10px"}}
-                    >
-                        * 인증되었습니다.
-                    </span>
-                </dd>
-            </dl>
-
-            {/* 기업명 */}
-            <dl>
-                <dt>
-                    <label htmlFor="mvnEntNm">기업명</label>
-                    <span className="req">필수</span>
-                </dt>
-                <dd>
-                    <input
-                        className="f_input2 w_full"
-                        type="text"
-                        name="mvnEntNm"
-                        value={residentDetail.mvnEntNm || ""}
-                        style={{width: "80%", marginRight: "5px"}}
-                        onChange={(e) =>
-                            setResidentDetail({ ...residentDetail, mvnEntNm: e.target.value })
-                        }
-                    />
-                </dd>
-            </dl>
-
-            {/* 대표자 */}
-            <dl>
-                <dt>
-                    <label htmlFor="rpsvNm">대표자</label>
-                    <span className="req">필수</span>
-                </dt>
-                <dd>
-                    <input
-                        className="f_input2 w_full"
-                        type="text"
-                        name="rpsvNm"
-                        value={residentDetail.rpsvNm || ""}
-                        style={{width: "80%", marginRight: "5px"}}
-                        onChange={(e) =>
-                            setResidentDetail({ ...residentDetail, rpsvNm: e.target.value })
-                        }
-                    />
-                </dd>
-            </dl>
-
-            {/* 산업 */}
-            <dl>
-                <dt>
-                    <label htmlFor="clsNm">산업</label>
-                    <span className="req">필수</span>
-                </dt>
-                <dd>
-                    <input
-                        className="f_input2 w_full"
-                        type="text"
-                        name="clsNm"
-                        value={residentDetail.clsNm || ""}
-                        style={{width: "80%", marginRight: "5px"}}
-                        onChange={(e) =>
-                            setResidentDetail({ ...residentDetail, clsNm: e.target.value })
-                        }
-                    />
-                </dd>
-            </dl>
-
-            {/* 주소 */}
-            <dl>
-                <dt>
-                    <label htmlFor="entAddr">주소</label>
-                    <span className="req">필수</span>
-                </dt>
-                <dd>
-                <div>
-                    <input
-                        className="f_input2 w_full"
-                        type="text"
-                        name="zip"
-                        title="우편번호 입력"
-                        id="zip"
-                        value={residentDetail.zip || ""}
-                        onChange={(e) =>
-                            setResidentDetail({
-                                ...residentDetail,
-                                zip: e.target.value,
-                            })
-                        }
-                        style={{width: "50%"}}
-                        required
-                        readOnly
-                    />
-                    <button
-                        className="btn btn_skyblue_h46"
-                        type="button"
-                        onClick={searchAddress}
-                        style={{marginLeft: "10px"}}
-                    >
-                        주소검색
-                    </button>
-                </div>
-            </dd>
-
-                    <dd style={{marginTop: "10px"}}>
-                        {/* 주소 */}
-                        <input
-                            className="f_input2 w_full"
-                            type="text"
-                            name="entAddr"
-                            title="검색된 주소"
-                            id="entAddr"
-                            value={residentDetail.entAddr || ""}
-                            onChange={(e) =>
-                                setResidentDetail({
-                                    ...residentDetail,
-                                    entAddr: e.target.value,
-                                })
-                            }
-                            style={{width: "100%"}}
-                            readOnly
-                        />
-                    </dd>
-
-                    <dd style={{marginTop: "10px"}}>
-                        {/* 3번: 상세주소 입력 필드 */}
-                        <input
-                            className="f_input2 w_full"
-                            type="text"
-                            name="entDaddr"
-                            title="상세주소 입력"
-                            id="entDaddr"
-                            value={residentDetail.entDaddr || ""}
-                            onChange={(e) =>
-                                setResidentDetail({
-                                    ...residentDetail,
-                                    entDaddr: e.target.value,
-                                })
-                            }
-                            style={{width: "100%"}}
-                            required
-                        />
-                    </dd>
-            </dl>
-
-            {/* 대표번호 */}
-            <dl>
-                <dt>
-                    <label htmlFor="entTelno">대표번호</label>
-                    <span className="req">필수</span>
-                </dt>
-                <dd>
-                    <input
-                        className="f_input2 w_full"
-                        type="text"
-                        name="entTelno"
-                        maxLength="11"
-                        value={residentDetail.entTelno || ""}
-                        style={{width: "80%", marginRight: "5px"}}
-                        onChange={(e) => {
-                            const inputValue = e.target.value;
-                            if (/^\d*$/.test(inputValue)) { // 숫자만 허용
-                                setResidentDetail({ ...residentDetail, entTelno: inputValue });
-                            }
-                        }}
-                    />
-                </dd>
-            </dl>
-
-            {/* 기업메일 */}
-            <dl>
-                <dt>
-                    <label htmlFor="bzentyEmlAddr">기업메일</label>
-                </dt>
-                <dd>
-                    <input
-                        className="f_input2 w_full"
-                        type="text"
-                        name="bzentyEmlAddr"
-                        value={residentDetail.bzentyEmlAddr || ""}
-                        style={{width: "80%", marginRight: "5px"}}
-                        onChange={(e) =>
-                            setResidentDetail({ ...residentDetail, bzentyEmlAddr: e.target.value })
-                        }
-                    />
-                </dd>
-            </dl>
-                </div>
+            <div className="contBox infoWrap customContBox">
+                <div className="topTitle">입주기업 정보</div>
+                <ul className="inputWrap">
+                    {/* 기업분류 */}
+                    <li className="inputBox type1 width3">
+                        <label className="title essential" htmlFor="mvnEntType"><small>분류</small></label>
+                        <div className="itemBox">
+                            <select className="selectGroup">
+                                <option value="0">전체</option>
+                                <option value="1">예시1</option>
+                                <option value="2">예시2</option>
+                                <option value="3">예시3</option>
+                                <option value="4">예시4</option>
+                                <option value="5">예시5</option>
+                            </select>
+                        </div>
+                    </li>
+                    {/*기업명*/}
+                    <li className="inputBox type1 width3">
+                        <label className="title essential" htmlFor="mvnEntNm"><small>기업명</small></label>
+                        <div className="input">
+                            <input
+                                type="text"
+                                name="mvnEntNm"
+                                id="mvnEntNm"
+                                defaultValue={residentDetail.mvnEntNm || ""}
+                                onChange={(e) =>
+                                    setResidentDetail({ ...residentDetail, mvnEntNm: e.target.value })
+                                }
+                            />
+                        </div>
+                    </li>
+                    {/*로고*/}
+                    <li className="inputBox type1 width3 file">
+                        <p className="title essential">파일선택</p>
+                        <div className="input">
+                            <p className="file_name" id="fileNamePTag"></p>
+                            <label>
+                            <small className="text btn">파일 선택</small>
+                            <input
+                                type="file"
+                                name="logo"
+                                id="logo"
+                                onChange={handleFileChange}
+                            />
+                            </label>
+                        </div>
+                        <span className="warningText">gif,png,jpg 파일 / 권장 사이즈 : 500px * 500px / 용량 : 10M 이하</span>
+                    </li>
+                    {/*대표자명*/}
+                    <li className="inputBox type1 width3">
+                        <label className="title essential" htmlFor="rpsvNm"><small>대표자</small></label>
+                        <div className="input">
+                            <input
+                                type="text"
+                                name="rpsvNm"
+                                id="rpsvNm"
+                                defaultValue={residentDetail.rpsvNm || ""}
+                                onChange={(e) =>
+                                    setResidentDetail({ ...residentDetail, rpsvNm: e.target.value })
+                                }
+                            />
+                        </div>
+                    </li>
+                    {/*기업대표전화*/}
+                    <li className="inputBox type1 width3">
+                        <label className="title essential" htmlFor="entTelno"><small>대표번호</small></label>
+                        <div className="input">
+                            <input
+                                type="text"
+                                name="entTelno"
+                                id="entTelno"
+                                maxLength="11"
+                                value={residentDetail.entTelno || ""}
+                                onChange={(e) => {
+                                    const inputValue = e.target.value;
+                                    if (/^\d*$/.test(inputValue)) { // 숫자만 허용
+                                        setResidentDetail({ ...residentDetail, entTelno: inputValue });
+                                    }
+                                }}
+                            />
+                        </div>
+                    </li>
+                    {/*기업대표메일*/}
+                    <li className="inputBox type1 email width3">
+                        <label className="title essential" htmlFor="bzentyEmlAddr"><small>대표이메일</small></label>
+                        <div className="input">
+                            <input
+                                type="text"
+                                name="bzentyEmlAddr"
+                                id="bzentyEmlAddr"
+                                defaultValue={residentDetail.bzentyEmlAddr || ""}
+                                onChange={(e) =>
+                                    setResidentDetail({ ...residentDetail, bzentyEmlAddr: e.target.value })
+                                }
+                            />
+                            <span>@</span>
+                            <div className="itemBox">
+                                <select className="selectGroup">
+                                    <option value="0">naver.com</option>
+                                    <option value="1">gmail.com</option>
+                                </select>
+                            </div>
+                        </div>
+                    </li>
+                    {/*기업 홈페이지*/}
+                    <li className="inputBox type1 email width3">
+                        <label className="title essential" htmlFor="hmpgAddr"><small>홈페이지</small></label>
+                        <div className="input">
+                            <input
+                                type="text"
+                                name="hmpgAddr"
+                                id="hmpgAddr"
+                                defaultValue={residentDetail.hmpgAddr || ""}
+                                onChange={(e) =>
+                                    setResidentDetail({ ...residentDetail, hmpgAddr: e.target.value })
+                                }
+                            >
+                            </input>
+                        </div>
+                    </li>
+                    {/* 업종 */}
+                    <li className="inputBox type1 width3">
+                        <label className="title essential" htmlFor="clsNm"><small>업종</small></label>
+                        <div className="itemBox">
+                            <select className="selectGroup">
+                                <option value="0">전체</option>
+                                <option value="1">예시1</option>
+                                <option value="2">예시2</option>
+                                <option value="3">예시3</option>
+                                <option value="4">예시4</option>
+                                <option value="5">예시5</option>
+                            </select>
+                        </div>
+                    </li>
+                    {/* 사업자 등록번호 */}
+                    <li className="inputBox type1 email width3">
+                        <label className="title essential" htmlFor="hmpgAddr"><small>사업자등록번호</small></label>
+                        <div className="input">
+                            <small className="text btn" onClick={kbioauth}>기업인증</small>
+                            <input
+                                type="type"
+                                name="brno"
+                                id="brno"
+                                defaultValue={residentDetail.brno || ""}
+                                onChange={(e) =>
+                                    setResidentDetail({ ...residentDetail, brno: e.target.value })
+                                }
+                            >
+                            </input>
+                        </div>
+                        <span className="warningText" id="confirmText" style={{display:"none"}}>*인증되었습니다.</span>
+                    </li>
+                    {/* 주소 */}
+                    <li className="inputBox type1 email width3">
+                        <label className="title essential" htmlFor="entAddr"><small>주소</small></label>
+                        <div className="input">
+                            <small className="text btn" onClick={searchAddress}>주소 검색</small>
+                            <input
+                                type="hidden"
+                                name="zip"
+                                id="zip"
+                                title="우편번호 입력"
+                                value={residentDetail.zip || ""}
+                                onChange={(e) =>
+                                    setResidentDetail({
+                                        ...residentDetail,
+                                        zip: e.target.value,
+                                    })
+                                }
+                                required
+                            />
+                            <input
+                                type="text"
+                                name="entAddr"
+                                id="entAddr"
+                                title="검색된 주소"
+                                value={residentDetail.entAddr || ""}
+                                onChange={(e) =>
+                                    setResidentDetail({
+                                        ...residentDetail,
+                                        entAddr: e.target.value,
+                                    })
+                                }
+                                readOnly
+                            >
+                            </input>
+                        </div>
+                    </li>
+                    {/* 상세주소 */}
+                    <li className="inputBox type1 email width3">
+                        <label className="title essential" htmlFor="entDaddr"><small>상세주소</small></label>
+                        <div className="input">
+                            <input
+                                type="text"
+                                name="entDaddr"
+                                id="entDaddr"
+                                value={residentDetail.entDaddr || ""}
+                                onChange={(e) =>
+                                    setResidentDetail({ ...residentDetail, entDaddr: e.target.value })
+                                }
+                            >
+                            </input>
+                        </div>
+                    </li>
+                    {/* 참여기관 */}
+                    <li className="inputBox type1 email width3">
+                        <label className="title essential" htmlFor=""><small>참여기관 (BI)</small></label>
+                        <div className="input">
+                            <input
+                                type="text"
+                            >
+                            </input>
+                        </div>
+                    </li>
+                    {/* 기업소개 */}
+                    <li className="inputBox type1">
+                        <label className="title essential" htmlFor=""><small>기업소개</small></label>
+                        <div className="input">
+                            <textarea
+                                type="text"
+                            >
+                            </textarea>
+                        </div>
+                    </li>
+                    {/* 주요이력 */}
+                    <li className="inputBox type1">
+                        <label className="title essential" htmlFor=""><small>주요이력</small></label>
+                        <div className="input">
+                            <textarea
+                                type="text"
+                            >
+                            </textarea>
+                        </div>
+                    </li>
+                    {/*증빙자료*/}
+                    <li className="inputBox type1 width3 file">
+                        <p className="title essential">증빙자료</p>
+                        <div className="input">
+                            <p className="file_name" id="fileNamePTag"></p>
+                            <label>
+                            <small className="text btn">파일 선택</small>
+                            <input
+                                type="file"
+                                onChange={handleFileChange}
+                            />
+                            </label>
+                        </div>
+                        <span className="warningText">첨부파일은 PDF,HWP,Docx, xls,PPT형식만 가능하며 최대 10MB까지만 지원</span>
+                    </li>
+                    {/* 공개여부 */}
+                    <li className="toggleBox width3">
+                        <div className="box">
+                            <p className="title essential">공개여부</p>
+                            <div className="toggleSwithWrap">
+                                <input type="checkbox" id="actvtnYn" hidden/>
+                                <label htmlFor="actvtnYn" className="toggleSwitch">
+                                    <span className="toggleButton"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <span className="warningText">
+                            On : 기관소개 메뉴에 기관 정보가 노출됩니다.
+                            <br/>
+                            Off : 기관소개 메뉴에 기관 정보가 노출되지 않습니다.
+                        </span>
+                    </li>
+                    {/* 산하직원 가입여부 */}
+                    <li className="toggleBox width3">
+                        <div className="box">
+                            <p className="title essential">산하직원 가입여부</p>
+                            <div className="toggleSwithWrap">
+                                <input type="checkbox" id="joinYn" hidden/>
+                                <label htmlFor="joinYn" className="toggleSwitch">
+                                    <span className="toggleButton"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <span className="warningText">
+                            On : 회원가입시 직원들이 해당 기업을 선택가능하도록 노출됩니다.
+                            <br/>
+                            Off : 회원가입시 직원들이 해당 기업을 선택하지 못하도록 비활성화 처리됩니다.
+                        </span>
+                    </li>
+                </ul>
                 
                 {/* <!--// 버튼영역 --> */}
-                <div className="board_btn_area" style={{ display: "flex", justifyContent: "center", gap: "10px", marginTop:"20px" }}>
+                <div className="buttonBox">
+                    <div className="leftBox">
                     <button
-                        className="btn btn_skyblue_h46 w_100"
-                        style={{width: '10%', color:"#fff", backgroundColor:"#169bd5"}}
+                        type="button" className="clickBtn point"
                         onClick={()=>updateResident()}
                     >
-                        등록
+                        저장
                     </button>
-                    <NavLink
-                        to={URL.MANAGER_RESIDENT_COMPANY}
-                        className="btn btn_skyblue_h46 w_100"
-                        style={{width: "10%"}}
+                        <button
+                            type="button"
+                            className="clickBtn gray"
+                        >
+                            <span>삭제</span>
+                        </button>
+                    </div>
+                    <Link
+                        to={URL.MANAGER_OPERATIONAL_SUPPORT}
                     >
-                        목록
-                    </NavLink>
+                        <button type="button" className="clickBtn black">
+                            <span>목록</span>
+                        </button>
+                    </Link>
+
                 </div>
                 {/* <!--// 버튼영역 --> */}
                 

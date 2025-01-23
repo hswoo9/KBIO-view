@@ -93,7 +93,7 @@ const URL = {
   //관리자 페이지
   MANAGER: "/manager/main",
   MANAGER_NORMAL_MEMBER: "/manager/normalMember",
-  MANAGER_RESIDENT_COMPANY: "/manager/residentMember",
+  MANAGER_RESIDENT_COMPANY: "/manager/residentCompany",
   MANAGER_RELATED_COMPANY: "/manager/relatedMember",
   MANAGER_NONRESIDENT_COMPANY: "/manager/nonresidentMember",
   MANAGER_CONSULTENT: "/manager/consultent",
@@ -151,6 +151,7 @@ const URL = {
 
   MANAGER_CMS: "/manager/cms",
   MANAGER_OPERATIONAL_SUPPORT: "/manager/operationalSupport",
+  MANAGER_RESIDENT_MEMBER : "/manager/residentMember",
   MANAGER_CONSULTING_EXPERT: "/manager/expert",
   MANAGER_MEMBER: "/manager/member",
   MANAGER_MEMBER_ALL_MEMBER: "/manager/allMember",
