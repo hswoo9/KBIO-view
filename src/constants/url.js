@@ -160,6 +160,10 @@ const URL = {
 
   MANAGER_HOMEPAGE: "/manager/homepage",
   MANAGER_HOMEPAGE_MAIN_VIEW: "/manager/mainView",
+
+  MANAGER_ACCESS_LIST: "/manager/access/list",
+  MANAGER_ACCESS_CREATE: "/manager/access/create",
+  MANAGER_ACCESS_MODIFY: "/manager/access/modify",
 };
 
 // eslint-disable-next-line react-refresh/only-export-components

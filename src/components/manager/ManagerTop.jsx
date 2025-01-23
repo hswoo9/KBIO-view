@@ -139,24 +139,17 @@ function ManagerTop() {
               ><p>홈페이지</p>
               </a>
             </li>
+            {/*
+            게시글 관리로 쓰면 될듯
             <li>
               <a
                  onClick={() => {
-                   navigate({pathname: URL.MANAGER_CMS}, {state: {selectMenuNm: "커뮤니티"}});
+                   navigate({pathname: URL.MANAGER_COMMUNITY}, {state: {selectMenuNm: "커뮤니티"}});
                  }}
                  className="cursorClass"
               ><p>커뮤니티</p>
               </a>
-            </li>
-            <li>
-              <a
-                 onClick={() => {
-                   navigate({pathname: URL.MANAGER_CMS}, {state: {selectMenuNm: "관리자"}});
-                 }}
-                 className="cursorClass"
-              ><p>관리자</p>
-              </a>
-            </li>
+            </li>*/}
             <li>
               <a
                  onClick={() => {

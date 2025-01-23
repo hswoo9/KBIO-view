@@ -374,7 +374,6 @@ function setBbs(props) {
                 <label className="title essential" htmlFor="atchFileKndNm"><small>첨부가능 확장자</small></label>
                 <div className="input">
                   <input type="text"
-                         placeholder=""
                          required="required"
                          name="atchFileKndNm"
                          title=""

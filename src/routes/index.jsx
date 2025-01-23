@@ -114,6 +114,9 @@ import ManagerAllMember from "@/pages/manager/member/ManagerNormalMember";
 //홈페이지관리
 import ManagerMainView from "@/pages/manager/homepage/ManagerMainView";
 
+import ManagerAccessList from "@/pages/manager/access/ManagerAccessList";
+import ManagerAccessEdit from "@/pages/manager/access/ManagerAccessEdit";
+
 
 
 //ADMIN
@@ -613,6 +616,10 @@ const SecondRoutes = () => {
 
         <Route path={URL.MANAGER_HOMEPAGE} element={<ManagerMainView />} />
         <Route path={URL.MANAGER_HOMEPAGE_MAIN_VIEW} element={<ManagerMainView />} />
+        
+        <Route path={URL.MANAGER_ACCESS_LIST} element={<ManagerAccessList />} />
+        <Route path={URL.MANAGER_ACCESS_CREATE} element={<ManagerAccessEdit mode={CODE.MODE_CREATE} />} />
+        <Route path={URL.MANAGER_ACCESS_MODIFY} element={<ManagerAccessEdit mode={CODE.MODE_MODIFY} />} />
 
       </Routes>
 
