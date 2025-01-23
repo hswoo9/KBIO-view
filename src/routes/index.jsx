@@ -90,7 +90,6 @@ import ManagerBbsPstEdit from "@/pages/manager/board/pst/ManagerPstEdit";
 import ManagerNormalMemberEdit from "@/pages/manager/member/all/ManagerNormalMemberEdit";
 import ManagerApprovalMemberEdit from "@/pages/manager/member/approval/ManagerApprovalMemberEdit";
 import ManagerRejectMemberEdit from "@/pages/manager/member/reject/ManagerRejectMemberEdit";
-import ManagerCancelMemberEdit from "@/pages/manager/member/cancel/ManagerCancelMemberEdit";
 import ManagerStopMemberEdit from "@/pages/manager/member/stop/ManagerStopMemberEdit";
 import ManagerWaitMemberEdit from "@/pages/manager/member/wait/ManagerWaitMemberEdit";
 
@@ -627,10 +626,7 @@ const SecondRoutes = () => {
             path={URL.MANAGER_APPROVAL_MEMBER_MODIFY}
             element={<ManagerApprovalMemberEdit mode={CODE.MODE_MODIFY}/>}
         />
-        <Route
-            path={URL.MANAGER_CANCEL_MEMBER_MODIFY}
-            element={<ManagerCancelMemberEdit mode={CODE.MODE_MODIFY}/>}
-        />
+        
         <Route
             path={URL.MANAGER_REJECT_MEMBER_MODIFY}
             element={<ManagerRejectMemberEdit mode={CODE.MODE_MODIFY}/>}

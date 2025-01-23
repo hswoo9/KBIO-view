@@ -142,7 +142,6 @@ const URL = {
   MANAGER_NORMAL_MEMBER_CREATE: "/manager/normal/member/create",
 
   MANAGER_APPROVAL_MEMBER_MODIFY: "/manager/approval/member/modfiy",
-  MANAGER_CANCEL_MEMBER_MODIFY: "/manager/cancel/member/modfiy",
   MANAGER_REJECT_MEMBER_MODIFY: "/manager/reject/member/modfiy",
   MANAGER_STOP_MEMBER_MODIFY: "/manager/stop/member/modfiy",
   MANAGER_WAIT_MEMBER_MODIFY: "/manager/wait/member/modfiy",
