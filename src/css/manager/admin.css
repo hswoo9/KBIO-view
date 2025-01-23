@@ -341,3 +341,19 @@ header .title .icon:hover {background-image: url(@/assets/images/ico_header_arro
 .customCheckWrap {
 	flex-wrap: initial !important;
 }
+
+.customCheckBox{
+	flex: none;
+	position: relative;
+	width: 24px;
+	height: 24px;
+	font-size: .9rem;
+	-webkit-appearance: none;
+	border: 1px solid #ddd;
+	border-radius: 8px;
+	transition: .5s ease;
+}
+
+.customCheckBox:checked {
+	border-color: var(--black);
+}
