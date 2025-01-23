@@ -153,7 +153,7 @@ function ManagerTop() {
             <li>
               <a
                  onClick={() => {
-                   navigate({pathname: URL.MANAGER_CMS}, {state: {selectMenuNm: "통계"}});
+                   navigate({pathname: URL.MANAGER_STATISTICS_USER}, {state: {selectMenuNm: "통계"}});
                  }}
                  className="cursorClass"
               ><p>통계</p>

@@ -127,6 +127,9 @@ import ManagerAccessList from "@/pages/manager/access/ManagerAccessList";
 import ManagerAccessEdit from "@/pages/manager/access/ManagerAccessEdit";
 
 
+//통계
+import ManagerStatisticsUser from "@/pages/manager/statistics/ManagerStatisticsUser";
+
 
 
 
@@ -665,6 +668,9 @@ const SecondRoutes = () => {
         <Route path={URL.MANAGER_ACCESS_LIST} element={<ManagerAccessList />} />
         <Route path={URL.MANAGER_ACCESS_CREATE} element={<ManagerAccessEdit mode={CODE.MODE_CREATE} />} />
         <Route path={URL.MANAGER_ACCESS_MODIFY} element={<ManagerAccessEdit mode={CODE.MODE_MODIFY} />} />
+
+        <Route path={URL.MANAGER_STATISTICS} element={<ManagerStatisticsUser />} />
+        <Route path={URL.MANAGER_STATISTICS_USER} element={<ManagerStatisticsUser />} />
 
       </Routes>
 

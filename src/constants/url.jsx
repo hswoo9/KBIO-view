@@ -173,6 +173,10 @@ const URL = {
   MANAGER_ACCESS_LIST: "/manager/access/list",
   MANAGER_ACCESS_CREATE: "/manager/access/create",
   MANAGER_ACCESS_MODIFY: "/manager/access/modify",
+
+  MANAGER_STATISTICS: "/manager/statistics",
+  MANAGER_STATISTICS_USER: "/manager/statistics/user",
+
 };
 
 // eslint-disable-next-line react-refresh/only-export-components
