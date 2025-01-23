@@ -5,7 +5,7 @@ import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
 import 'moment/locale/ko';
-import ManagerLeftNew from "@/components/manager/ManagerLeftNew";
+import ManagerLeft from "@/components/manager/ManagerLeftMember";
 import EgovRadioButtonGroup from "@/components/EgovRadioButtonGroup";
 import Swal from "sweetalert2";
 
@@ -206,7 +206,7 @@ function setWaitMember(props) {
 
     return (
         <div id="container" className="container layout cms">
-            <ManagerLeftNew/>
+            <ManagerLeft/>
             <div className="inner">
 
                 <div className="contBox infoWrap customContBox">

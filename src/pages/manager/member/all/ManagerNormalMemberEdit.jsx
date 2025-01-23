@@ -5,7 +5,7 @@ import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
 import 'moment/locale/ko';
-import ManagerLeftNew from "@/components/manager/ManagerLeftNew";
+import ManagerLeft from "@/components/manager/ManagerLeftMember";
 import EgovRadioButtonGroup from "@/components/EgovRadioButtonGroup";
 import Swal from "sweetalert2";
 
@@ -268,7 +268,7 @@ function setNormalMember(props) {
 
     return (
         <div id="container" className="container layout cms">
-            <ManagerLeftNew/>
+            <ManagerLeft/>
             <div className="inner">
                 <h2 className="pageTitle">
                     <p>{modeInfo.mode === CODE.MODE_CREATE ? "회원 등록" : "회원 수정"}</p>
