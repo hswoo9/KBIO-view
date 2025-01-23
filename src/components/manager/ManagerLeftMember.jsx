@@ -496,7 +496,7 @@ function ManagerLeftMember() {
               </li>
               <li>
                 <NavLink
-                    to={""}
+                    to={URL.MANAGER_WAIT_MEMBER}
                     className={({isActive}) => (isActive ? "activeTag" : "")}
                 >
                   <div className="icon"></div>
@@ -505,7 +505,7 @@ function ManagerLeftMember() {
               </li>
               <li>
                 <NavLink
-                    to={""}
+                    to={URL.MANAGER_REJECT_MEMBER}
                     className={({isActive}) => (isActive ? "activeTag" : "")}
                 >
                   <div className="icon"></div>
@@ -514,7 +514,7 @@ function ManagerLeftMember() {
               </li>
               <li>
                 <NavLink
-                    to={""}
+                    to={URL.MANAGER_STOP_MEMBER}
                     className={({isActive}) => (isActive ? "activeTag" : "")}
                 >
                   <div className="icon"></div>
@@ -523,7 +523,7 @@ function ManagerLeftMember() {
               </li>
               <li>
                 <NavLink
-                    to={""}
+                    to={URL.MANAGER_CANCEL_MEMBER}
                     className={({isActive}) => (isActive ? "activeTag" : "")}
                 >
                   <div className="icon"></div>

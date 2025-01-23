@@ -64,8 +64,13 @@ import EgovAdminMenuList from "@/pages/admin/menu/EgovAdminMenuList";
 
 //MANAGER
 import MamagerIndex from "@/pages/manager/Index";
-import MemberNormalMember from "@/pages/manager/member/ManagerNormalMember";
-import MemberApprovalMember from "@/pages/manager/member/ManagerApprovalMember";
+import ManagerNormalMember from "@/pages/manager/member/all/ManagerNormalMember";
+import ManagerApprovalMember from "@/pages/manager/member/approval/ManagerApprovalMember";
+import ManagerRejectMember from "@/pages/manager/member/reject/ManagerRejectMember";
+import ManagerCancelMember from "@/pages/manager/member/cancel/ManagerCancelMember";
+import ManagerStopMember from "@/pages/manager/member/stop/ManagerStopMember";
+import ManagerWaitMember from "@/pages/manager/member/wait/ManagerWaitMember";
+
 import MemberResidentMember from "@/pages/manager/member/ManagerResidentMember";
 import MemberRelatedMember from "@/pages/manager/member/ManagerRelatedMember";
 import MemberNonResidentMember from "@/pages/manager/member/ManagerNonResidentMember";
@@ -82,8 +87,12 @@ import ManagerBbsPstList from "@/pages/manager/board/pst/ManagerPstList";
 import ManagerPstDetail from "@/pages/manager/board/pst/ManagerPstDetail";
 import ManagerBbsPstEdit from "@/pages/manager/board/pst/ManagerPstEdit";
 
-import ManagerNormalMemberEdit from "@/pages/manager/member/ManagerNormalMemberEdit";
-import ManagerApprovalMemberEdit from "@/pages/manager/member/ManagerApprovalMemberEdit";
+import ManagerNormalMemberEdit from "@/pages/manager/member/all/ManagerNormalMemberEdit";
+import ManagerApprovalMemberEdit from "@/pages/manager/member/approval/ManagerApprovalMemberEdit";
+import ManagerRejectMemberEdit from "@/pages/manager/member/reject/ManagerRejectMemberEdit";
+import ManagerCancelMemberEdit from "@/pages/manager/member/cancel/ManagerCancelMemberEdit";
+import ManagerStopMemberEdit from "@/pages/manager/member/stop/ManagerStopMemberEdit";
+import ManagerWaitMemberEdit from "@/pages/manager/member/wait/ManagerWaitMemberEdit";
 
 import ManagerCodeGroup from "@/pages/manager/common/ManagerCodeGroup";
 import ManagerCodeGroupEdit from "@/pages/manager/common/ManagerCodeGroupEdit";
@@ -109,7 +118,7 @@ import OperationalSupport from "@/pages/manager/operationalSupport/OperationalSu
 import ManagerExpert from "@/pages/manager/consulting/ManagerExpert";
 
 //회원관리
-import ManagerAllMember from "@/pages/manager/member/ManagerNormalMember";
+import ManagerAllMember from "@/pages/manager/member/all/ManagerNormalMember";
 
 //홈페이지관리
 import ManagerMainView from "@/pages/manager/homepage/ManagerMainView";
@@ -476,11 +485,27 @@ const SecondRoutes = () => {
         />
         <Route
           path={URL.MANAGER_NORMAL_MEMBER}
-          element={<MemberNormalMember />}
+          element={<ManagerNormalMember />}
         />
         <Route
             path={URL.MANAGER_APPROVAL_MEMBER}
-            element={<MemberApprovalMember />}
+            element={<ManagerApprovalMember />}
+        />
+        <Route
+            path={URL.MANAGER_REJECT_MEMBER}
+            element={<ManagerRejectMember />}
+        />
+        <Route
+            path={URL.MANAGER_STOP_MEMBER}
+            element={<ManagerStopMember />}
+        />
+        <Route
+            path={URL.MANAGER_WAIT_MEMBER}
+            element={<ManagerWaitMember />}
+        />
+        <Route
+            path={URL.MANAGER_CANCEL_MEMBER}
+            element={<ManagerCancelMember />}
         />
         <Route
             path={URL.MANAGER_RELATED_COMPANY}
@@ -594,6 +619,22 @@ const SecondRoutes = () => {
         <Route
             path={URL.MANAGER_APPROVAL_MEMBER_MODIFY}
             element={<ManagerApprovalMemberEdit mode={CODE.MODE_MODIFY}/>}
+        />
+        <Route
+            path={URL.MANAGER_CANCEL_MEMBER_MODIFY}
+            element={<ManagerCancelMemberEdit mode={CODE.MODE_MODIFY}/>}
+        />
+        <Route
+            path={URL.MANAGER_REJECT_MEMBER_MODIFY}
+            element={<ManagerRejectMemberEdit mode={CODE.MODE_MODIFY}/>}
+        />
+        <Route
+            path={URL.MANAGER_STOP_MEMBER_MODIFY}
+            element={<ManagerStopMemberEdit mode={CODE.MODE_MODIFY}/>}
+        />
+        <Route
+            path={URL.MANAGER_WAIT_MEMBER_MODIFY}
+            element={<ManagerWaitMemberEdit mode={CODE.MODE_MODIFY}/>}
         />
 
         <Route

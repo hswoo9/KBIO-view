@@ -92,8 +92,12 @@ const URL = {
 
   //관리자 페이지
   MANAGER: "/manager/main",
-  MANAGER_NORMAL_MEMBER: "/manager/normalMember",
-  MANAGER_APPROVAL_MEMBER: "/manager/approvalMember",
+  MANAGER_NORMAL_MEMBER: "/manager/all/normalMember",
+  MANAGER_APPROVAL_MEMBER: "/manager/approval/approvalMember",
+  MANAGER_REJECT_MEMBER: "/manager/reject/rejetcMember",
+  MANAGER_CANCEL_MEMBER: "/manager/cancel/cancelMember",
+  MANAGER_STOP_MEMBER: "/manager/stop/stopMember",
+  MANAGER_WAIT_MEMBER: "/manager/wait/waitMember",
   MANAGER_RESIDENT_COMPANY: "/manager/residentMember",
   MANAGER_RELATED_COMPANY: "/manager/relatedMember",
   MANAGER_NONRESIDENT_COMPANY: "/manager/nonresidentMember",
@@ -138,6 +142,10 @@ const URL = {
   MANAGER_NORMAL_MEMBER_CREATE: "/manager/normal/member/create",
 
   MANAGER_APPROVAL_MEMBER_MODIFY: "/manager/approval/member/modfiy",
+  MANAGER_CANCEL_MEMBER_MODIFY: "/manager/cancel/member/modfiy",
+  MANAGER_REJECT_MEMBER_MODIFY: "/manager/reject/member/modfiy",
+  MANAGER_STOP_MEMBER_MODIFY: "/manager/stop/member/modfiy",
+  MANAGER_WAIT_MEMBER_MODIFY: "/manager/wait/member/modfiy",
 
   MANAGER_BBS_AUTHORITY_MANAGEMENT:"/manager/bbsAuthorityManagement",
 
