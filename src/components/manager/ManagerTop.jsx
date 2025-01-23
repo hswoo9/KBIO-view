@@ -124,7 +124,7 @@ function ManagerTop() {
             <li>
               <a
                  onClick={() => {
-                   navigate({pathname: URL.MANAGER_MEMBER_ALL_MEMBER}, {state: {selectMenuNm: "회원"}});
+                   navigate({pathname: URL.MANAGER_NORMAL_MEMBER}, {state: {selectMenuNm: "회원"}});
                  }}
                  className="cursorClass"
               ><p>회원</p>

@@ -276,6 +276,7 @@ function setNormalMember(props) {
                                         })
                                     }
                                     ref={(el) => (checkRef.current[1] = el)}
+                                    readOnly={modeInfo.mode === CODE.MODE_MODIFY}
                                 />
                             </div>
                         </li>

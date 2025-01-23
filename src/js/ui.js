@@ -4,7 +4,7 @@ export default function initPage() {
   const sessionUser = sessionStorage.getItem("loginUser");
   const sessionUserId = JSON.parse(sessionUser)?.id;
 
-  if (sessionUserId === "admin") {
+  /*if (sessionUserId === "admin") {
     // Mobile 서브메뉴 항목 클릭시 메뉴 닫기
     document.querySelectorAll(".all_menu.Mobile .submenu a").forEach((el) => {
       el.removeEventListener("click", handleSubmenuClick);
@@ -16,7 +16,7 @@ export default function initPage() {
     const last_submenu = nodes[nodes.length - 1];
     last_submenu.removeEventListener("click", handleLastSubmenuClick);
     last_submenu.addEventListener("click", handleLastSubmenuClick);
-  }
+  }*/
 
   if (init) return;
   init = true;

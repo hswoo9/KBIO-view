@@ -1,12 +1,12 @@
 
 import React, { useState, useEffect, useRef } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
 import 'moment/locale/ko';
-import { default as EgovLeftNav } from "@/components/leftmenu/ManagerLeftBoard";
+import ManagerLeftNew from "@/components/manager/ManagerLeftNew";
 import EgovRadioButtonGroup from "@/components/EgovRadioButtonGroup";
 import Swal from "sweetalert2";
 import {getSessionItem} from "../../../utils/storage.js";
@@ -16,9 +16,6 @@ function setBbs(props) {
   const navigate = useNavigate();
   const location = useLocation();
   const checkRef = useRef([]);
-  // const bbsNmRef = useRef([]);
-  // const atchFileKndNmRef = useRef([]);
-  // const rmrkCnRef = useRef([]);
 
   const bbsTypeOptions = [
     { value: "", label: "선택" },
@@ -43,6 +40,9 @@ function setBbs(props) {
 
   const [modeInfo, setModeInfo] = useState({ mode: props.mode });
   const [bbsDetail, setBbsDetail] = useState({});
+  useEffect(() => {
+    console.log(bbsDetail);
+  }, [bbsDetail])
 
   const initMode = () => {
     setModeInfo({
@@ -81,11 +81,28 @@ function setBbs(props) {
 
     EgovNet.requestFetch(getBbsURL, requestOptions, function (resp) {
       if (modeInfo.mode === CODE.MODE_MODIFY) {
-        setBbsDetail(resp.result.bbs);
-        setBbsDetail({
-          ...bbsDetail,
-          mdfrSn: sessionUser.userSn
-        })
+        resp.result.bbs.mdfrSn = sessionUser.userSn;
+        let bbsData = resp.result.bbs;
+        /*if(bbsData.actvtnYn)*/
+        if(bbsData.pstCtgryYn != null){
+          document.getElementById("pstCtgryYn").checked = bbsData.pstCtgryYn == "Y" ? true : false;
+        }
+        if(bbsData.wrtrRlsYn != null){
+          document.getElementById("wrtrRlsYn").checked = bbsData.wrtrRlsYn == "Y" ? true : false;
+        }
+        if(bbsData.atchFileYn != null){
+          document.getElementById("atchFileYn").checked = bbsData.atchFileYn == "Y" ? true : false;
+        }
+        if(bbsData.actvtnYn != null){
+          document.getElementById("actvtnYn").checked = bbsData.actvtnYn == "Y" ? true : false;
+        }
+        if(bbsData.cmntPsbltyYn != null){
+          document.getElementById("cmntPsbltyYn").checked = bbsData.cmntPsbltyYn == "Y" ? true : false;
+        }
+        if(bbsData.replyPsbltyYn != null){
+          document.getElementById("replyPsbltyYn").checked = bbsData.replyPsbltyYn == "Y" ? true : false;
+        }
+        setBbsDetail(bbsData);
       }
     });
   };
@@ -192,269 +209,260 @@ function setBbs(props) {
   }, []);
 
   return (
-      <div className="container">
-        <style>{`
-          .layout dt {
-            width: 200px !important;
-          }
-        `}</style>
-        <div className="c_wrap">
-          <div className="location">
-            <ul>
-              <li>
-                <Link to={URL.MANAGER} className="home">
-                  Home
-                </Link>
+      <div id="container" className="container layout cms">
+        <ManagerLeftNew/>
+        <div className="inner">
+          {modeInfo.mode === CODE.MODE_CREATE && (
+              <h2 className="pageTitle"><p>게시판 생성</p></h2>
+          )}
+
+          {modeInfo.mode === CODE.MODE_MODIFY && (
+              <h2 className="pageTitle"><p>게시판 수정</p></h2>
+          )}
+          <div className="contBox infoWrap customContBox">
+            <ul className="inputWrap">
+              <li className="inputBox type1 width1">
+                <label className="title essential" htmlFor="bbsNm"><small>게시판명</small></label>
+                <div className="input">
+                  <input type="text"
+                         id="bbsNm"
+                         placeholder=""
+                         value={bbsDetail.bbsNm || ""}
+                         onChange={(e) =>
+                             setBbsDetail({...bbsDetail, bbsNm: e.target.value})
+                         }
+                         ref={(el) => (checkRef.current[0] = el)}
+                  />
+                </div>
               </li>
-              <li>
-                <Link to={URL.MANAGER_BBS_LIST}>게시판관리</Link>
-              </li>
-              <li>게시판생성</li>
-            </ul>
-          </div>
-
-          <div className="layout">
-            <EgovLeftNav></EgovLeftNav>
-
-            <div className="contents BOARD_CREATE_REG" id="contents">
-              {modeInfo.mode === CODE.MODE_CREATE && (
-                  <h2 className="tit_2">게시판 생성</h2>
-              )}
-
-              {modeInfo.mode === CODE.MODE_MODIFY && (
-                  <h2 className="tit_2">게시판 수정</h2>
-              )}
-
-              <div className="board_view2">
-                <dl>
-                  <dt>
-                    <label htmlFor="bbsNm">게시판명</label>
-                    <span className="req">필수</span>
-                  </dt>
-                  <dd>
-                    <input
-                        className="f_input2 w_full"
-                        type="text"
-                        name="bbsNm"
-                        title=""
-                        id="bbsNm"
-                        placeholder=""
-                        defaultValue={bbsDetail.bbsNm}
-                        onChange={(e) =>
-                            setBbsDetail({...bbsDetail, bbsNm: e.target.value})
-                        }
-                        ref={(el) => (checkRef.current[0] = el)}
-                    />
-                  </dd>
-                </dl>
-                <dl>
-                  <dt>
-                    게시판유형<span className="req">필수</span>
-                  </dt>
-                  <dd>
-                    {/* 수정/조회 일때 변경 불가 */}
-                    {modeInfo.mode === CODE.MODE_CREATE && (
-                        <label className="f_select w_130" htmlFor="bbsType">
-                          <select
-                              id="bbsType"
-                              name="bbsType"
-                              title="게시판유형선택"
-                              onChange={(e) =>
-                                  setBbsDetail({
-                                    ...bbsDetail,
-                                    bbsType: e.target.value,
-                                  })
-                              }
-                              value={bbsDetail.bbsType}
-                          >
-                            {bbsTypeOptions.map((option) => {
-                              return (
-                                  <option value={option.value} key={option.value}>
-                                    {option.label}
-                                  </option>
-                              );
-                            })}
-                          </select>
-                        </label>
-                    )}
-                    {modeInfo.mode === CODE.MODE_MODIFY && (
-                        <span>
+              <li className="inputBox type1 width1">
+                <label className="title" htmlFor="bbsType"><small>게시판유형</small></label>
+                <div className="itemBox">
+                  {/*{modeInfo.mode === CODE.MODE_CREATE && (
+                      <label className="f_select w_130" htmlFor="bbsType">
+                        <select
+                            id="bbsType"
+                            name="bbsType"
+                            title="게시판유형선택"
+                            onChange={(e) =>
+                                setBbsDetail({
+                                  ...bbsDetail,
+                                  bbsType: e.target.value,
+                                })
+                            }
+                            value={bbsDetail.bbsType}
+                        >
+                          {bbsTypeOptions.map((option) => {
+                            return (
+                                <option value={option.value} key={option.value}>
+                                  {option.label}
+                                </option>
+                            );
+                          })}
+                        </select>
+                      </label>
+                  )}
+                  {modeInfo.mode === CODE.MODE_MODIFY && (
+                      <span>
                       {bbsDetail.bbsType &&
                           getSelectedLabel(
                               bbsTypeOptions,
                               bbsDetail.bbsType
                           )}
                     </span>
-                    )}
-                  </dd>
-                </dl>
-                <dl>
-                  <dt>
-                    카테고리사용유무<span className="req">필수</span>
-                  </dt>
-                  <dd>
-                    <EgovRadioButtonGroup
-                        name="pstCtgryYn"
-                        radioGroup={activeRadioGroup}
-                        setValue={bbsDetail.pstCtgryYn}
-                        setter={(v) =>
-                            setBbsDetail({...bbsDetail, pstCtgryYn: v})
-                        }
+                  )}*/}
+                  <select
+                      id="bbsType"
+                      name="bbsType"
+                      className="selectGroup"
+                      title="게시판유형선택"
+                      onChange={(e) =>
+                          setBbsDetail({
+                            ...bbsDetail,
+                            bbsType: e.target.value,
+                          })
+                      }
+                      value={bbsDetail.bbsType || ""}
+                  >
+                    {bbsTypeOptions.map((option) => {
+                      return (
+                          <option value={option.value} key={option.value}>
+                            {option.label}
+                          </option>
+                      );
+                    })}
+                  </select>
+                </div>
+              </li>
+              <li className="toggleBox type1 width4 customToggleBox">
+                <div className="box">
+                  <p className="title essential">카테고리 사용여부</p>
+                  <div className="toggleSwithWrap">
+                    <input type="checkbox"
+                           id="pstCtgryYn"
+                           onChange={(e) =>
+                               setBbsDetail({
+                                 ...bbsDetail,
+                                 pstCtgryYn: e.target.checked ? "Y" : "N",
+                               })
+                           }
                     />
-                  </dd>
-                </dl>
-                <dl>
-                  <dt>
-                    작성자공개유무<span className="req">필수</span>
-                  </dt>
-                  <dd>
-                    <EgovRadioButtonGroup
-                        name="wrtrRlsYn"
-                        radioGroup={wrtrRlsYnRadioGroup}
-                        setValue={bbsDetail.wrtrRlsYn}
-                        setter={(v) =>
-                            setBbsDetail({...bbsDetail, wrtrRlsYn: v})
-                        }
-                    />
-                  </dd>
-                </dl>
-                <dl>
-                  <dt>
-                    파일첨부가능여부<span className="req">필수</span>
-                  </dt>
-                  <dd>
-                    <EgovRadioButtonGroup
-                        name="atchFileYn"
-                        radioGroup={accessRadioGroup}
-                        setValue={bbsDetail.atchFileYn}
-                        setter={(v) =>
-                            setBbsDetail({...bbsDetail, atchFileYn: v})
-                        }
-                    />
-                  </dd>
-                </dl>
-                <dl>
-                  <dt>
-                    <label htmlFor="atchFileKndNm">
-                      파일첨부가능 확장자
+                    <label htmlFor="pstCtgryYn" className="toggleSwitch">
+                      <span className="toggleButton"></span>
                     </label>
-                  </dt>
-                  <dd>
-                    <input
-                        className="f_input2 w_full"
-                        type="text"
-                        name="atchFileKndNm"
-                        title=""
-                        id="atchFileKndNm"
-                        placeholder="쉼표(,)로 분리"
-                        defaultValue={bbsDetail.atchFileKndNm}
-                        onChange={(e) =>
-                            setBbsDetail({...bbsDetail, atchFileKndNm: e.target.value})
-                        }
-                        ref={(el) => (checkRef.current[1] = el)}
-                    />
-                  </dd>
-                </dl>
-                <dl>
-                  <dt>
-                    댓글가능여부<span className="req">필수</span>
-                  </dt>
-                  <dd>
-                    <EgovRadioButtonGroup
-                        name="cmntPsbltyYn"
-                        radioGroup={accessRadioGroup}
-                        setValue={bbsDetail.cmntPsbltyYn}
-                        setter={(v) =>
-                            setBbsDetail({...bbsDetail, cmntPsbltyYn: v})
-                        }
-                    />
-                  </dd>
-                </dl>
-
-                <dl>
-                  <dt>
-                    답글사용유무<span className="req">필수</span>
-                  </dt>
-                  <dd>
-                    <EgovRadioButtonGroup
-                        name="cmntPsbltyYn"
-                        radioGroup={activeRadioGroup}
-                        setValue={bbsDetail.replyPsbltyYn}
-                        setter={(v) =>
-                            setBbsDetail({...bbsDetail, replyPsbltyYn: v})
-                        }
-                    />
-                  </dd>
-                </dl>
-                <dl>
-                  <dt>
-                    <label htmlFor="atchFileKndNm">
-                      비고
-                    </label>
-                  </dt>
-                  <dd>
-                    <input
-                        className="f_input2 w_full"
-                        type="text"
-                        name="rmrkCn"
-                        title=""
-                        id="rmrkCn"
-                        placeholder=""
-                        defaultValue={bbsDetail.rmrkCn}
-                        onChange={(e) =>
-                            setBbsDetail({...bbsDetail, rmrkCn: e.target.value})
-                        }
-                        ref={(el) => (checkRef.current[2] = el)}
-                    />
-                  </dd>
-                </dl>
-                <dl>
-                  <dt>
-                    사용여부<span className="req">필수</span>
-                  </dt>
-                  <dd>
-                    <EgovRadioButtonGroup
-                        name="actvtnYn"
-                        radioGroup={activeRadioGroup}
-                        setValue={bbsDetail.actvtnYn}
-                        setter={(v) =>
-                            setBbsDetail({...bbsDetail, actvtnYn: v})
-                        }
-                    />
-                  </dd>
-                </dl>
-
-                {/* <!-- 버튼영역 --> */}
-                <div className="board_btn_area">
-                  <div className="left_col btn1">
-                    <button
-                        className="btn btn_skyblue_h46 w_100"
-                        onClick={() => setBbs()}
-                    >
-                      저장
-                    </button>
-                    {modeInfo.mode === CODE.MODE_MODIFY && (
-                        <button
-                            className="btn btn_skyblue_h46 w_100"
-                            onClick={() => {
-                              setBbsDel(bbsDetail.bbsSn);
-                            }}
-                        >
-                          삭제
-                        </button>
-                    )}
-                  </div>
-
-                  <div className="right_col btn1">
-                    <Link to={URL.MANAGER_BBS_LIST} className="btn btn_blue_h46 w_100">
-                      목록
-                    </Link>
                   </div>
                 </div>
-                {/* <!--// 버튼영역 --> */}
-              </div>
+              </li>
+              <li className="toggleBox type1 width4 customToggleBox">
+                <div className="box">
+                  <p className="title essential">작성자공개 사용여부</p>
+                  <div className="toggleSwithWrap">
+                    <input type="checkbox"
+                           id="wrtrRlsYn"
+                           onChange={(e) =>
+                               setBbsDetail({
+                                 ...bbsDetail,
+                                 wrtrRlsYn: e.target.checked ? "Y" : "N",
+                               })
+                           }
+                    />
+                    <label htmlFor="wrtrRlsYn" className="toggleSwitch">
+                      <span className="toggleButton"></span>
+                    </label>
+                  </div>
+                </div>
+              </li>
+              <li className="toggleBox type1 width4 customToggleBox">
+                <div className="box">
+                  <p className="title essential">파일첨부 가능여부</p>
+                  <div className="toggleSwithWrap">
+                    <input type="checkbox"
+                           id="atchFileYn"
+                           onChange={(e) =>
+                               setBbsDetail({
+                                 ...bbsDetail,
+                                 atchFileYn: e.target.checked ? "Y" : "N",
+                               })
+                           }
+                    />
+                    <label htmlFor="atchFileYn" className="toggleSwitch">
+                      <span className="toggleButton"></span>
+                    </label>
+                  </div>
+                </div>
+              </li>
+              <li className="toggleBox type1 width4 customToggleBox">
+                <div className="box">
+                  <p className="title essential">사용여부</p>
+                  <div className="toggleSwithWrap">
+                    <input type="checkbox"
+                           id="actvtnYn"
+                           onChange={(e) =>
+                               setBbsDetail({
+                                 ...bbsDetail,
+                                 actvtnYn: e.target.checked ? "Y" : "N",
+                               })
+                           }
+                    />
+                    <label htmlFor="actvtnYn" className="toggleSwitch">
+                      <span className="toggleButton"></span>
+                    </label>
+                  </div>
+                </div>
+              </li>
+              <li className="inputBox type1 width3">
+                <label className="title essential" htmlFor="atchFileKndNm"><small>첨부가능 확장자</small></label>
+                <div className="input">
+                  <input type="text"
+                         placeholder=""
+                         required="required"
+                         name="atchFileKndNm"
+                         title=""
+                         id="atchFileKndNm"
+                         placeholder="쉼표(,)로 분리"
+                         value={bbsDetail.atchFileKndNm || ""}
+                         onChange={(e) =>
+                             setBbsDetail({...bbsDetail, atchFileKndNm: e.target.value})
+                         }
+                         ref={(el) => (checkRef.current[1] = el)}
+                  />
+                </div>
+              </li>
 
-              {/* <!--// 본문 --> */}
+              <li className="toggleBox type1 width3 customToggleBox">
+                <div className="box">
+                  <p className="title essential">댓글가능여부</p>
+                  <div className="toggleSwithWrap">
+                    <input type="checkbox"
+                           id="cmntPsbltyYn"
+                           onChange={(e) =>
+                               setBbsDetail({
+                                 ...bbsDetail,
+                                 cmntPsbltyYn: e.target.checked ? "Y" : "N",
+                               })
+                           }
+                    />
+                    <label htmlFor="cmntPsbltyYn" className="toggleSwitch">
+                      <span className="toggleButton"></span>
+                    </label>
+                  </div>
+                </div>
+              </li>
+              <li className="toggleBox type1 width3 customToggleBox">
+                <div className="box">
+                  <p className="title essential">답글사용여부</p>
+                  <div className="toggleSwithWrap">
+                    <input type="checkbox"
+                           id="replyPsbltyYn"
+                           onChange={(e) =>
+                               setBbsDetail({
+                                 ...bbsDetail,
+                                 replyPsbltyYn: e.target.checked ? "Y" : "N",
+                               })
+                           }
+                    />
+                    <label htmlFor="replyPsbltyYn" className="toggleSwitch">
+                      <span className="toggleButton"></span>
+                    </label>
+                  </div>
+                </div>
+              </li>
+              <li className="inputBox type1 width1">
+                <label className="title essential" htmlFor="rmrkCn"><small>비고</small></label>
+                <div className="input">
+                  <input type="text"
+                         name="rmrkCn"
+                         title=""
+                         id="rmrkCn"
+                         placeholder=""
+                         defaultValue={bbsDetail.rmrkCn}
+                         onChange={(e) =>
+                             setBbsDetail({...bbsDetail, rmrkCn: e.target.value})
+                         }
+                         ref={(el) => (checkRef.current[2] = el)}
+                  />
+                </div>
+              </li>
+            </ul>
+            <div className="buttonBox">
+              <div className="leftBox">
+                <button type="button" className="clickBtn point" onClick={() => setBbs()}><span>저장</span></button>
+                {modeInfo.mode === CODE.MODE_MODIFY && (
+                    <button
+                        className="clickBtn gray"
+                        onClick={() => {
+                          setBbsDel(bbsDetail.bbsSn);
+                        }}
+                    >
+                      <span>삭제</span>
+                    </button>
+                )}
+              </div>
+              <NavLink
+                  to={URL.MANAGER_BBS_LIST}
+              >
+                <button type="button" className="clickBtn black"><span>목록</span></button>
+              </NavLink>
             </div>
           </div>
         </div>
