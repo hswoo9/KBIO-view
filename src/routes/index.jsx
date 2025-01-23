@@ -107,7 +107,7 @@ import OperationalSupport from "@/pages/manager/operationalSupport/OperationalSu
 import ManagerExpert from "@/pages/manager/consulting/ManagerExpert";
 
 //회원관리
-import ManagerAllMember from "@/pages/manager/member/ManagerAllMember";
+import ManagerAllMember from "@/pages/manager/member/ManagerNormalMember";
 
 //홈페이지관리
 import ManagerMainView from "@/pages/manager/homepage/ManagerMainView";

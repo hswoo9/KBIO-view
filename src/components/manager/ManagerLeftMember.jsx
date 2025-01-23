@@ -478,7 +478,7 @@ function ManagerLeftMember() {
             <ul className="dep">
               <li>
                 <NavLink
-                    to={URL.MANAGER_MEMBER_ALL_MEMBER}
+                    to={URL.MANAGER_NORMAL_MEMBER}
                     className={({isActive}) => (isActive ? "activeTag" : "")}
                 >
                   <div className="icon"></div>
