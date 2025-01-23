@@ -68,7 +68,7 @@ function setApprovalMember(props) {
             title: `<span style="font-size: 14px; line-height: 0.8;">
                     계정이 이용정지 될 경우 해당 회원은 홈페이지<br>
                     접속 및 서비스 이용이 불가합니다.<br>
-                    해당 회우너의 계정을 정지 하시겠습니까?
+                    해당 회원의 계정을 정지 하시겠습니까?
                 </span>
             `,
             showCloseButton: true,
