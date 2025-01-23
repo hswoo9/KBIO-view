@@ -169,6 +169,7 @@ const URL = {
   
   MANAGER_HOMEPAGE: "/manager/homepage",
   MANAGER_HOMEPAGE_MAIN_VIEW: "/manager/mainView",
+  MANAGER_HOMEPAGE_ORGANIZATION_CHART_LIST: "/manager/organizationChart/list",
   
   MANAGER_ACCESS_LIST: "/manager/access/list",
   MANAGER_ACCESS_CREATE: "/manager/access/create",

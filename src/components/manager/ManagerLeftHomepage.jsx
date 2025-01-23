@@ -514,7 +514,7 @@ function ManagerLeftHomepage() {
               </li>
               <li>
                 <NavLink
-                    to={""}
+                    to={URL.MANAGER_HOMEPAGE_ORGANIZATION_CHART_LIST}
                     className={({isActive}) => (isActive ? "activeTag" : "")}
                 >
                   <div className="icon"></div>
