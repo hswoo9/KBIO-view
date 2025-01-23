@@ -3,7 +3,7 @@ import {Link, NavLink, useLocation} from "react-router-dom";
 
 import URL from "@/constants/url";
 
-import { default as EgovLeftNav } from "@/components/leftmenu/ManagerLeftMember";
+import ManagerLeftNew from "@/components/manager/ManagerLeftNew";
 import ResidentCompanyList from "./ResidentCompanyList.jsx";
 
 
@@ -33,13 +33,14 @@ function Index(props) {
 
 
     return (
-        <div className="container">
-            <div className="c_wrap">
-                <Location/>
+        <div id="container" className="container layout cms">
+            <ManagerLeftNew/>
+            <div className="inner">
+                {/*<Location/>*/}
 
                 <div className="layout">
                     {/* <!-- layout --> */}
-                    <EgovLeftNav/>
+                    {/*<EgovLeftNav/>*/}
                     <ResidentCompanyList/>
                 {/* <!--// layout --> */}
                 </div>

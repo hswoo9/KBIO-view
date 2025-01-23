@@ -516,6 +516,14 @@ function ManagerLeftNew() {
                   <p>코드관리</p>
                 </NavLink>
               </li>
+              <li className={({isActive}) => (isActive ? "active" : "")}>
+                <NavLink
+                    to={URL.MANAGER_RESIDENT_COMPANY}
+                >
+                  <div className="icon"></div>
+                  <p>입주기업 관리</p>
+                </NavLink>
+              </li>
             </ul>
           </nav>
         </div>
