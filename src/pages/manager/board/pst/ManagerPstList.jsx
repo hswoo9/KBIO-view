@@ -137,7 +137,7 @@ function ManagerPst(props) {
                     <form action="">
                         <ul className="cateList">
                             <li className="inputBox type1">
-                                <p className="title">활성여부</p>
+                                <p className="title">검색유형</p>
                                 <div className="itemBox">
                                     <select className="selectGroup"
                                             id="bbsType"
@@ -232,8 +232,7 @@ function ManagerPst(props) {
                             }}
                         />
                         <NavLink
-                            o={URL.MANAGER_PST_CREATE}
-                            className="btn btn_blue_h46 pd35"
+                            to={URL.MANAGER_PST_CREATE}
                             state={{bbsSn: searchDto.bbsSn}}
                             mode={CODE.MODE_CREATE}
                         >
