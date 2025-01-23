@@ -5,7 +5,7 @@ import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
 import 'moment/locale/ko';
-import { default as EgovLeftNav } from "@/components/leftmenu/ManagerLeftMember";
+import ManagerLeftNew from "@/components/manager/ManagerLeftNew";
 import EgovRadioButtonGroup from "@/components/EgovRadioButtonGroup";
 import Swal from "sweetalert2";
 
@@ -19,13 +19,13 @@ function setNormalMember(props) {
     const checkRef = useRef([]);
 
     const mberSttusRadioGroup = [
-        { value: "P", label: "가능" },
-        { value: "A", label: "대기" },
-        { value: "D", label: "탈퇴" },
+        {value: "P", label: "가능"},
+        {value: "A", label: "대기"},
+        {value: "D", label: "탈퇴"},
     ];
-    const [searchDto, setSearchDto] = useState({userSn : location.state?.userSn});
+    const [searchDto, setSearchDto] = useState({userSn: location.state?.userSn});
 
-    const [modeInfo, setModeInfo] = useState({ mode: props.mode });
+    const [modeInfo, setModeInfo] = useState({mode: props.mode});
     const [memberDetail, setMemberDetail] = useState({});
 
     const initMode = () => {
@@ -82,7 +82,7 @@ function setNormalMember(props) {
                     "Content-type": "application/json",
                 },
                 body: JSON.stringify({
-                    memberId : checkId
+                    memberId: checkId
                 })
             };
             EgovNet.requestFetch(checkIdURL, reqOptions, function (resp) {
@@ -121,51 +121,51 @@ function setNormalMember(props) {
             alert("회원ID은 필수 값입니다.");
             return;
         }
-            /*if (!memberDetail.mbtlnum) {
-                alert("휴대전화는 필수 값입니다.");
-                return;
+        /*if (!memberDetail.mbtlnum) {
+            alert("휴대전화는 필수 값입니다.");
+            return;
+        }
+
+        if (!memberDetail.userType) {
+            alert("회원 유형은 필수 값입니다.");
+            return;
+        }*/
+
+
+        for (let key in memberDetail) {
+            formData.append(key, memberDetail[key]);
+        }
+
+        Swal.fire({
+            title: "저장하시겠습니까?",
+            showCloseButton: true,
+            showCancelButton: true,
+            confirmButtonText: "저장",
+            cancelButtonText: "취소",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                requestOptions = {
+                    method: "POST",
+                    headers: {
+                        "Content-type": "application/json",
+                    },
+                    body: JSON.stringify(memberDetail),
+                };
+
+                EgovNet.requestFetch(modeInfo.editURL, requestOptions, (resp) => {
+                    if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
+                        Swal.fire("등록되었습니다.");
+                        navigate(URL.MANAGER_NORMAL_MEMBER);
+                    } else {
+                        navigate(
+                            {pathname: URL.ERROR},
+                            {state: {msg: resp.resultMessage}}
+                        );
+                    }
+                });
+            } else {
+                // 취소
             }
-
-            if (!memberDetail.userType) {
-                alert("회원 유형은 필수 값입니다.");
-                return;
-            }*/
-
-
-            for (let key in memberDetail) {
-                formData.append(key, memberDetail[key]);
-            }
-
-            Swal.fire({
-                title: "저장하시겠습니까?",
-                showCloseButton: true,
-                showCancelButton: true,
-                confirmButtonText: "저장",
-                cancelButtonText: "취소",
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    requestOptions = {
-                        method: "POST",
-                        headers: {
-                            "Content-type": "application/json",
-                        },
-                        body: JSON.stringify(memberDetail),
-                    };
-
-                    EgovNet.requestFetch(modeInfo.editURL, requestOptions, (resp) => {
-                        if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
-                            Swal.fire("등록되었습니다.");
-                            navigate(URL.MANAGER_NORMAL_MEMBER);
-                        } else {
-                            navigate(
-                                { pathname: URL.ERROR },
-                                { state: { msg: resp.resultMessage } }
-                            );
-                        }
-                    });
-                } else {
-                    // 취소
-                }
         });
     };
 
@@ -179,7 +179,7 @@ function setNormalMember(props) {
             confirmButtonText: "삭제",
             cancelButtonText: "취소"
         }).then((result) => {
-            if(result.isConfirmed) {
+            if (result.isConfirmed) {
                 const requestOptions = {
                     method: "POST",
                     headers: {
@@ -219,188 +219,128 @@ function setNormalMember(props) {
     console.groupEnd("EgovAdminMemberEdit");
 
     return (
-        <div className="container">
-            <div className="c_wrap">
-                {/* <!-- Location --> */}
-                <div className="location">
-                    <ul>
-                        <li>
-                            <Link to={URL.MAIN} className="home">
-                                Home
-                            </Link>
-                        </li>
-                        <li>
-                            <Link to={URL.MANAGER_NORMAL_MEMBER}>회원관리</Link>
-                        </li>
-                        <li>{modeInfo.mode === CODE.MODE_CREATE ? "회원 생성" : "회원 수정"}</li>
-                    </ul>
-                </div>
-                {/* <!--// Location --> */}
+        <div id="container" className="container layout cms">
+            <ManagerLeftNew/>
+            <div className="inner">
+                <h2 className="pageTitle">
+                    <p>{modeInfo.mode === CODE.MODE_CREATE ? "회원 등록" : "회원 수정"}</p>
+                </h2>
 
-                <div className="layout">
-                    {/* <!-- Navigation --> */}
-                    <EgovLeftNav></EgovLeftNav>
-                    {/* <!--// Navigation --> */}
-
-                    <div className="contents MEMBER_CREATE_REG" id="contents">
-                        <h2 className="tit_2">{modeInfo.mode === CODE.MODE_CREATE ? "회원 생성" : "회원 수정"}</h2>
-
-                        <div className="board_view2">
-                            <dl>
-                                <dt>
-                                    <label htmlFor="emplyrId">회원ID</label>
-                                    <span className="req">필수</span>
-                                </dt>
-                                <dd>
-                                    <input
-                                        className="f_input2 w_full"
-                                        type="text"
-                                        name="emplyrId"
-                                        title=""
-                                        id="emplyrId"
-                                        placeholder=""
-                                        defaultValue={memberDetail.emplyrId}
-                                        onChange={(e) =>
-                                            setMemberDetail({
-                                                ...memberDetail,
-                                                emplyrId: e.target.value,
-                                            })
-                                        }
-                                        ref={(el) => (checkRef.current[0] = el)}
-                                        readOnly={modeInfo.mode === CODE.MODE_MODIFY}
-                                        style={{ width: '300px', marginRight: '5px' }}
-                                    />
-                                    {modeInfo.mode === CODE.MODE_CREATE && (
-                                        <button
-                                            className="btn btn_skyblue_h46"
-                                            onClick={() => {
-                                                checkIdDplct();
-                                            }}
-                                        >
-                                            중복확인
-                                        </button>
-                                    )}
-                                    {memberDetail.checkIdResult && (
-                                        <div
-                                            style={{
-                                                marginTop: '10px',
-                                                color: memberDetail.checkIdResultColor,
-                                                fontSize: '16px',
-                                            }}
-                                        >
-                                            {memberDetail.checkIdResult}
-                                        </div>
-                                    )}
-                                </dd>
-                            </dl>
-                            <dl>
-                                <dt>
-                                    <label htmlFor="password">회원암호</label>
-                                    <span className="req">필수</span>
-                                </dt>
-                                <dd>
-                                    <input
-                                        className="f_input2 w_full"
-                                        type="password"
-                                        name="password"
-                                        title=""
-                                        id="password"
-                                        placeholder=""
-                                        defaultValue={memberDetail.password}
-                                        onChange={(e) =>
-                                            setMemberDetail({
-                                                ...memberDetail,
-                                                password: e.target.value,
-                                            })
-                                        }
-                                        ref={(el) => (checkRef.current[1] = el)}
-                                        required
-                                    />
-                                </dd>
-                            </dl>
-                            <dl>
-                                <dt>
-                                    <label htmlFor="bbsNm">회원명</label>
-                                    <span className="req">필수</span>
-                                </dt>
-                                <dd>
-                                    <input
-                                        className="f_input2 w_full"
-                                        type="text"
-                                        name="mberNm"
-                                        title=""
-                                        id="mberNm"
-                                        placeholder=""
-                                        defaultValue={memberDetail.userNm}
-                                        onChange={(e) =>
-                                            setMemberDetail({
-                                                ...memberDetail,
-                                                userNm: e.target.value,
-                                            })
-                                        }
-                                        ref={(el) => (checkRef.current[2] = el)}
-                                        readOnly={modeInfo.mode === CODE.MODE_MODIFY}
-                                    />
-                                </dd>
-                            </dl>
-                            <dl>
-                                <dt>
-                                    회원 권한<span className="req">필수</span>
-                                </dt>
-                                <dd>
-                                    <label className="f_select w_200" htmlFor="groupId">
-                                        <select
-                                            id="groupId"
-                                            name="groupId"
-                                            title="회원권한유형선택"
-                                            onChange={(e) =>
-                                                setMemberDetail({
-                                                    ...memberDetail,
-                                                    groupId: e.target.value,
-                                                })
-                                            }
-                                            value={memberDetail.groupId}
-                                        >
-                                            {/* Options can be added here */}
-                                        </select>
-                                    </label>
-                                </dd>
-                            </dl>
-
-                            {/* <!-- 버튼영역 --> */}
-                            <div className="board_btn_area">
-                                <div className="left_col btn1">
+                <div className="contBox infoWrap customContBox">
+                    <ul className="inputWrap">
+                        <li className="inputBox type1 width1">
+                            <label className="title essential" htmlFor="emplyrId"><small>회원ID</small></label>
+                            <div className="input">
+                                <input
+                                    type="text"
+                                    name="emplyrId"
+                                    id="emplyrId"
+                                    defaultValue={memberDetail.emplyrId}
+                                    onChange={(e) =>
+                                        setMemberDetail({
+                                            ...memberDetail,
+                                            emplyrId: e.target.value,
+                                        })
+                                    }
+                                    ref={(el) => (checkRef.current[0] = el)}
+                                    readOnly={modeInfo.mode === CODE.MODE_MODIFY}
+                                />
+                                {modeInfo.mode === CODE.MODE_CREATE && (
                                     <button
-                                        className="btn btn_skyblue_h46 w_100"
-                                        onClick={() => setNormalMember()}
+                                        className="clickBtn point"
+                                        onClick={() => checkIdDplct()}
                                     >
-                                        저장
+                                        <span>중복확인</span>
                                     </button>
-                                    {modeInfo.mode === CODE.MODE_MODIFY && (
-                                        <button
-                                            className="btn btn_skyblue_h46 w_100"
-                                            onClick={() => {
-                                                setNormalMemberDel(memberDetail.userSn);
-                                            }}
-                                        >
-                                            삭제
-                                        </button>
-                                    )}
-                                </div>
-
-                                <div className="right_col btn1">
-                                    <Link
-                                        to={URL.MANAGER_NORMAL_MEMBER}
-                                        className="btn btn_blue_h46 w_100"
-                                    >
-                                        목록
-                                    </Link>
-                                </div>
+                                )}
+                                {memberDetail.checkIdResult && (
+                                    <p className="warningText" style={{color: memberDetail.checkIdResultColor}}>
+                                        {memberDetail.checkIdResult}
+                                    </p>
+                                )}
                             </div>
-                            {/* <!--// 버튼영역 --> */}
-                        </div>
+                        </li>
 
-                        {/* <!--// 본문 --> */}
+                        <li className="inputBox type1 width1">
+                            <label className="title essential" htmlFor="password"><small>회원암호</small></label>
+                            <div className="input">
+                                <input
+                                    type="password"
+                                    name="password"
+                                    id="password"
+                                    defaultValue={memberDetail.password}
+                                    onChange={(e) =>
+                                        setMemberDetail({
+                                            ...memberDetail,
+                                            password: e.target.value,
+                                        })
+                                    }
+                                    ref={(el) => (checkRef.current[1] = el)}
+                                />
+                            </div>
+                        </li>
+
+                        <li className="inputBox type1 width1">
+                            <label className="title essential" htmlFor="mberNm"><small>회원명</small></label>
+                            <div className="input">
+                                <input
+                                    type="text"
+                                    name="mberNm"
+                                    id="mberNm"
+                                    defaultValue={memberDetail.userNm}
+                                    onChange={(e) =>
+                                        setMemberDetail({
+                                            ...memberDetail,
+                                            userNm: e.target.value,
+                                        })
+                                    }
+                                    ref={(el) => (checkRef.current[2] = el)}
+                                    readOnly={modeInfo.mode === CODE.MODE_MODIFY}
+                                />
+                            </div>
+                        </li>
+
+                        <li className="inputBox type1 width1">
+                            <p className="title essential">회원 권한</p>
+                            <div className="itemBox">
+                                <select
+                                    className="selectGroup"
+                                    id="groupId"
+                                    name="groupId"
+                                    onChange={(e) =>
+                                        setMemberDetail({
+                                            ...memberDetail,
+                                            groupId: e.target.value,
+                                        })
+                                    }
+                                    value={memberDetail.groupId}
+                                >
+                                    {/* Options can be added here */}
+                                </select>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <div className="buttonBox">
+                        <div className="leftBox">
+                            <button type="button" className="clickBtn point" onClick={() => setNormalMember()}>
+                                <span>저장</span>
+                            </button>
+                            {modeInfo.mode === CODE.MODE_MODIFY && (
+                                <button
+                                    type="button"
+                                    className="clickBtn gray"
+                                    onClick={() => setNormalMemberDel(memberDetail.userSn)}
+                                >
+                                    <span>삭제</span>
+                                </button>
+                            )}
+                        </div>
+                        <Link to={URL.MANAGER_NORMAL_MEMBER}>
+                            <button type="button" className="clickBtn black">
+                                <span>목록</span>
+                            </button>
+                        </Link>
                     </div>
                 </div>
             </div>

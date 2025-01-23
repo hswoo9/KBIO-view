@@ -8,7 +8,7 @@ import CODE from "@/constants/code";
 
 import LogoImg from "@/assets/images/logo_admin.svg";
 
-function ManagerLeftNew() {
+function ManagerLeftHomepage() {
 
   const location = useLocation();
   const sessionUser = getSessionItem("loginUser");
@@ -471,59 +471,23 @@ function ManagerLeftNew() {
           <div className="sitemapBtn">
             <div className="icon"></div>
           </div>
-          <div className="title"><p>CMS</p></div>
+          <div className="title"><p>홈페이지 관리</p></div>
           <nav className="navBox">
             <div className="bg hover"></div>
             <div className="bg active"></div>
             <ul className="dep">
               <li>
                 <NavLink
-                    to={URL.MANAGER_NORMAL_MEMBER}
+                    to={URL.MANAGER_HOMEPAGE_MAIN_VIEW}
                     className={({isActive}) => (isActive ? "activeTag" : "")}
                 >
                   <div className="icon"></div>
-                  <p>회원관리</p>
+                  <p>메인비주얼관리</p>
                 </NavLink>
               </li>
               <li>
                 <NavLink
-                    to={URL.MANAGER_MENU_MANAGEMENT}
-                    className={({isActive}) => (isActive ? "activeTag" : "")}
-                >
-                  <div className="icon"></div>
-                  <p>메뉴관리</p>
-                </NavLink>
-              </li>
-              <li>
-                <NavLink
-                    to={URL.MANAGER_MENU_AUTHORITY}
-                    className={({isActive}) => (isActive ? "activeTag" : "")}
-                >
-                  <div className="icon"></div>
-                  <p>메뉴권한관리</p>
-                </NavLink>
-              </li>
-              <li>
-                <NavLink
-                    to={URL.MANAGER_BBS_LIST}
-                    className={({isActive}) => (isActive ? "activeTag" : "")}
-                >
-                  <div className="icon"></div>
-                  <p>게시판관리</p>
-                </NavLink>
-              </li>
-              <li>
-                <NavLink
-                    to={URL.MANAGER_BANNER_LIST}
-                    className={({isActive}) => (isActive ? "activeTag" : "")}
-                >
-                  <div className="icon"></div>
-                  <p>배너관리</p>
-                </NavLink>
-              </li>
-              <li>
-                <NavLink
-                    to={URL.MANAGER_POPUP_LIST}
+                    to={""}
                     className={({isActive}) => (isActive ? "activeTag" : "")}
                 >
                   <div className="icon"></div>
@@ -532,28 +496,47 @@ function ManagerLeftNew() {
               </li>
               <li>
                 <NavLink
-                    to={URL.MANAGER_CODE_GROUP}
+                    to={""}
                     className={({isActive}) => (isActive ? "activeTag" : "")}
                 >
                   <div className="icon"></div>
-                  <p>코드관리</p>
+                  <p>팝업존관리</p>
                 </NavLink>
               </li>
               <li>
                 <NavLink
-                    to={URL.MANAGER_NORMAL_MEMBER}
+                    to={""}
                     className={({isActive}) => (isActive ? "activeTag" : "")}
                 >
                   <div className="icon"></div>
-                  <p>일반회원관리</p>
+                  <p>배너관리</p>
                 </NavLink>
               </li>
-              <li className={({isActive}) => (isActive ? "active" : "")}>
+              <li>
                 <NavLink
-                    to={URL.MANAGER_RESIDENT_COMPANY}
+                    to={""}
+                    className={({isActive}) => (isActive ? "activeTag" : "")}
                 >
                   <div className="icon"></div>
-                  <p>입주기업 관리</p>
+                  <p>조직도관리</p>
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                    to={""}
+                    className={({isActive}) => (isActive ? "activeTag" : "")}
+                >
+                  <div className="icon"></div>
+                  <p>개인정보처리방침</p>
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                    to={""}
+                    className={({isActive}) => (isActive ? "activeTag" : "")}
+                >
+                  <div className="icon"></div>
+                  <p>이용약관</p>
                 </NavLink>
               </li>
             </ul>
@@ -563,4 +546,4 @@ function ManagerLeftNew() {
   );
 }
 
-export default ManagerLeftNew;
+export default ManagerLeftHomepage;

@@ -106,25 +106,25 @@ function ManagerTop() {
             <li>
               <a
                  onClick={() => {
-                   navigate({pathname: URL.MANAGER_OPERATIONAL_SUPPORT}, {state: {selectMenuNm: "운영 지원"}});
+                   navigate({pathname: URL.MANAGER_OPERATIONAL_SUPPORT}, {state: {selectMenuNm: "운영지원"}});
                  }}
                  className="cursorClass"
-              ><p>운영 지원</p>
+              ><p>운영지원</p>
               </a>
             </li>
             <li>
               <a
                  onClick={() => {
-                   navigate({pathname: URL.MANAGER_CMS}, {state: {selectMenuNm: "컨설팅 지원"}});
+                   navigate({pathname: URL.MANAGER_CONSULTING_EXPERT}, {state: {selectMenuNm: "컨설팅지원"}});
                  }}
                  className="cursorClass"
-              ><p>컨설팅 지원</p>
+              ><p>컨설팅지원</p>
               </a>
             </li>
             <li>
               <a
                  onClick={() => {
-                   navigate({pathname: URL.MANAGER_CMS}, {state: {selectMenuNm: "회원"}});
+                   navigate({pathname: URL.MANAGER_MEMBER_ALL_MEMBER}, {state: {selectMenuNm: "회원"}});
                  }}
                  className="cursorClass"
               ><p>회원</p>
@@ -133,7 +133,7 @@ function ManagerTop() {
             <li>
               <a
                  onClick={() => {
-                   navigate({pathname: URL.MANAGER_CMS}, {state: {selectMenuNm: "홈페이지"}});
+                   navigate({pathname: URL.MANAGER_HOMEPAGE_MAIN_VIEW}, {state: {selectMenuNm: "홈페이지"}});
                  }}
                  className="cursorClass"
               ><p>홈페이지</p>

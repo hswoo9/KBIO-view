@@ -1,12 +1,13 @@
 import React, {useState, useEffect, useRef, useCallback} from "react";
 import $ from 'jquery';
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
 import 'moment/locale/ko';
-import { default as EgovLeftNav } from "@/components/leftmenu/ManagerLeftBannerPopup";
+import ManagerLeftNew from "@/components/manager/ManagerLeftNew";
+
 import EgovRadioButtonGroup from "@/components/EgovRadioButtonGroup";
 import Swal from "sweetalert2";
 import moment from "moment/moment.js";
@@ -291,8 +292,18 @@ function ManagerCodeEdit(props) {
             if(resp.result.tblBnrPopup.youtubeYn == "Y"){
               $("#youtubeYn").prop("checked", true);
             }
-
           }
+
+          if(resp.result.tblBnrPopup.useYn != null){
+            if(resp.result.tblBnrPopup.useYn == "Y"){
+              document.getElementById("useYn").checked = true;
+            }else{
+              document.getElementById("useYn").checked = false;
+            }
+          }
+
+
+
         } else {
           navigate(
               { pathname: URL.ERROR },
@@ -390,6 +401,11 @@ function ManagerCodeEdit(props) {
     if(e.target.files.length > 0){
       const fileExtension = e.target.files[0].name.split(".").pop().toLowerCase();
       if(allowedExtensions.includes(fileExtension)){
+        let fileName = e.target.files[0].name;
+        if(fileName.length > 30){
+          fileName = fileName.slice(0, 30) + "...";
+        }
+        document.getElementById("fileNamePTag").textContent = fileName;
         setSelectedFiles(Array.from(e.target.files));
         const file = e.target.files[0];
         const reader = new FileReader();
@@ -428,310 +444,274 @@ function ManagerCodeEdit(props) {
     //navigate({ pathname: URL.MANAGER_IMAGES_POPUP }, { state: imgFile});
   }
 
-  const Location = React.memo(function Location() {
-    return (
-        <div className="location">
-          <ul>
-            <li>
-              <Link to={URL.MANAGER} className="home">
-                Home
-              </Link>
-            </li>
-            <li>
-              <Link to={URL.MANAGER_BANNER_POPUP}>배너팝업관리</Link>
-            </li>
-            <li>팝업등록</li>
-          </ul>
-        </div>
-    );
-  });
-
-
   return (
-      <div className="container">
+      <div id="container" className="container layout cms">
+        <ManagerLeftNew/>
+        <div className="inner">
+          {modeInfo.mode === CODE.MODE_CREATE && (
+              <h2 className="pageTitle"><p>팝업 등록</p></h2>
+          )}
 
-        <div className="c_wrap">
-          <Location/>
-          <div className="layout">
-            <EgovLeftNav></EgovLeftNav>
-
-            <div className="contents BOARD_CREATE_REG" id="contents">
-              {modeInfo.mode === CODE.MODE_CREATE && (
-                  <h2 className="tit_2">팝업 등록</h2>
-              )}
-
-              {modeInfo.mode === CODE.MODE_MODIFY && (
-                  <h2 className="tit_2">팝업 수정</h2>
-              )}
-
-              <div className="board_view2">
-                <dl>
-                  <dt>
-                    <label htmlFor="cd">시작일시</label>
-                    <span className="req">필수</span>
-                  </dt>
-                  <dd>
-                    <input type="datetime-local"
-                           id="popupBgngDt"
-                           onChange={dateCheck}
-                           value={bnrPopupDetail.popupBgngDt}
+          {modeInfo.mode === CODE.MODE_MODIFY && (
+              <h2 className="pageTitle"><p>팝업 수정</p></h2>
+          )}
+          <div className="contBox infoWrap customContBox">
+            <ul className="inputWrap">
+              <li className="inputBox type1 width1">
+                <label className="title essential" htmlFor="bnrPopupTtl"><small>팝업창 제목</small></label>
+                <div className="input">
+                  <input type="text"
+                         id="bnrPopupTtl"
+                         placeholder=""
+                         required="required"
+                         value={bnrPopupDetail.bnrPopupTtl}
+                         onChange={(e) =>
+                             setBnrPopupDetail({...bnrPopupDetail, bnrPopupTtl: e.target.value})
+                         }
+                         ref={(el) => (checkRef.current[0] = el)}
+                  />
+                </div>
+              </li>
+              <li className="inputBox type1 width3">
+                <label className="title essential" htmlFor="bnrPopupTtl"><small>시작일시</small></label>
+                <div className="input">
+                  <input type="datetime-local"
+                         id="popupBgngDt"
+                         onChange={dateCheck}
+                         value={bnrPopupDetail.popupBgngDt}
+                  />
+                </div>
+              </li>
+              <li className="inputBox type1 width3">
+                <label className="title essential" htmlFor="bnrPopupTtl"><small>종료일시</small></label>
+                <div className="input">
+                  <input type="datetime-local"
+                         id="popupEndDt"
+                         onChange={dateCheck}
+                         value={bnrPopupDetail.popupEndDt}
+                  />
+                </div>
+              </li>
+              <li className="toggleBox width3">
+                <div className="box">
+                  <p className="title">사용여부</p>
+                  <div className="toggleSwithWrap">
+                    <input type="checkbox"
+                           id="useYn"
+                           onChange={(e) =>
+                               setBnrPopupDetail({
+                                 ...bnrPopupDetail,
+                                 useYn: e.target.checked ? "Y" : "N"
+                               })
+                           }
                     />
-                  </dd>
-                </dl>
-                <dl>
-                  <dt>
-                    <label htmlFor="cd">종료일시</label>
-                    <span className="req">필수</span>
-                  </dt>
-                  <dd>
-                    <input type="datetime-local"
-                           id="popupEndDt"
-                           onChange={dateCheck}
-                           value={bnrPopupDetail.popupEndDt}
-                    />
-                  </dd>
-                </dl>
-                <dl>
-                  <dt>
-                    <label htmlFor="cdNm">사용여부</label>
-                    <span className="req">필수</span>
-                  </dt>
-                  <dd>
-                    <Form.Select
-                        size="sm"
-                        id="useYn"
-                        value={bnrPopupDetail.useYn}
-                        onChange={(e) =>
-                            setBnrPopupDetail({...bnrPopupDetail, useYn: e.target.value})
-                        }
-                    >
-                      {dataListToOptionHtml(comCdGroupList, "cdGroup", "ACTVTN_YN")}
-                    </Form.Select>
-                  </dd>
-                </dl>
-                <dl>
-                  <dt>
-                    <label htmlFor="rmrkCn">팝업형식</label>
-                    <span className="req">필수</span>
-                  </dt>
-                  <dd>
-                    <Form.Check
-                        inline
-                        type="radio"
-                        label="레이어형식"
-                        id="layerRadio"
-                        name="bnrPopupFrm"
-                        value="layer"
-                        onChange={(e) =>
-                            setBnrPopupDetail({...bnrPopupDetail, bnrPopupFrm: e.target.value})
-                        }
-                        ref={(el) => (checkRef.current[0] = el)}
-                    />
-                    <Form.Check
-                        inline
-                        type="radio"
-                        label="팝업형식"
-                        id="popupRadio"
-                        name="bnrPopupFrm"
-                        value="popup"
-                        onChange={(e) =>
-                            setBnrPopupDetail({...bnrPopupDetail, bnrPopupFrm: e.target.value})
-                        }
-                        ref={(el) => (checkRef.current[0] = el)}
-                    />
-                  </dd>
-                </dl>
-                <dl>
-                  <dt>
-                    <label htmlFor="rmrkCn">팝업창 크기</label>
-                  </dt>
-                  <dd>
-                    <label htmlFor="popupWdthSz">가로</label>
-                      <Form.Control
-                          size="sm"
-                          type="text"
-                          id="popupWdthSz"
-                          placeholder=""
-                          value={bnrPopupDetail.popupWdthSz}
-                          onChange={(e) =>
-                              setBnrPopupDetail({...bnrPopupDetail, popupWdthSz: e.target.value})
-                          }
-                          ref={(el) => (checkRef.current[0] = el)}
-                      />
-                    <label htmlFor="popupVrtcSz" className="mr-l20">세로</label>
-                    <Form.Control
-                        size="sm"
-                        type="text"
-                        id="popupVrtcSz"
-                        placeholder=""
-                        value={bnrPopupDetail.popupVrtcSz}
-                        onChange={(e) =>
-                            setBnrPopupDetail({...bnrPopupDetail, popupVrtcSz: e.target.value})
-                        }
-                        ref={(el) => (checkRef.current[0] = el)}
-                    />
-                  </dd>
-                </dl>
-                <dl>
-                  <dt>
-                    <label htmlFor="rmrkCn">팝업창 위치</label>
-                  </dt>
-                  <dd>
-                    <label htmlFor="popupPstnUpend">위쪽여백</label>
-                    <Form.Control
-                        size="sm"
-                        type="text"
-                        id="popupPstnUpend"
-                        placeholder=""
-                        value={bnrPopupDetail.popupPstnUpend}
-                        onChange={(e) =>
-                            setBnrPopupDetail({...bnrPopupDetail, popupPstnUpend: e.target.value})
-                        }
-                        ref={(el) => (checkRef.current[0] = el)}
-                    />
-                    <label htmlFor="popupPstnWdth" className="mr-l20">아래여백</label>
-                    <Form.Control
-                        size="sm"
-                        type="text"
-                        id="popupPstnWdth"
-                        placeholder=""
-                        value={bnrPopupDetail.popupPstnWdth}
-                        onChange={(e) =>
-                            setBnrPopupDetail({...bnrPopupDetail, popupPstnWdth: e.target.value})
-                        }
-                        ref={(el) => (checkRef.current[0] = el)}
-                    />
-                  </dd>
-                </dl>
-                <dl>
-                  <dt>
-                    <label htmlFor="bnrPopupUrlAddr">링크주소</label>
-                  </dt>
-                  <dd>
-                    <Form.Control
-                        size="sm"
-                        type="text"
-                        id="bnrPopupUrlAddr"
-                        placeholder=""
-                        value={bnrPopupDetail.bnrPopupUrlAddr}
-                        onChange={(e) =>
-                            setBnrPopupDetail({...bnrPopupDetail, bnrPopupUrlAddr: e.target.value})
-                        }
-                        ref={(el) => (checkRef.current[0] = el)}
-                    />
-                    <Form.Check
-                        type="checkbox"
-                        label="유튜브 영상"
-                        id="youtubeYn"
-                        onChange={(e) =>
-                            setBnrPopupDetail({
-                              ...bnrPopupDetail,
-                              youtubeYn: e.target.checked ? "Y" : "N"
-                            })
-                        }
-                    />
-                    <Form.Select
-                        size="sm"
-                        id="npagYn"
-                        value={bnrPopupDetail.npagYn}
-                        onChange={(e) =>
-                            setBnrPopupDetail({...bnrPopupDetail, npagYn: e.target.value})
-                        }
-                    >
-                      <option value="Y">새창</option>
-                      <option value="N">현재창</option>
-                    </Form.Select>
-                  </dd>
-                </dl>
-                <dl>
-                  <dt>
-                    <label htmlFor="bnrPopupTtl">팝업창 제목</label>
-                    <span className="req">필수</span>
-                  </dt>
-                  <dd>
-                    <Form.Control
-                        size="sm"
-                        type="text"
-                        id="bnrPopupTtl"
-                        placeholder=""
-                        required="required"
-                        value={bnrPopupDetail.bnrPopupTtl}
-                        onChange={(e) =>
-                            setBnrPopupDetail({...bnrPopupDetail, bnrPopupTtl: e.target.value})
-                        }
-                        ref={(el) => (checkRef.current[0] = el)}
-                    />
-                  </dd>
-                </dl>
-                <dl>
-                  <dt>
-                    <label htmlFor="templateImg">파일선택</label>
-                    <span className="req">필수</span>
-                    <BTButton variant="secondary"
-                        onClick={sampleImgView}
-                    >
-                      미리보기
-                    </BTButton>
-                  </dt>
-                  <dd>
-
-                    <Form.Group controlId="templateImg">
-                      <Form.Control type="file"
-                        onChange={handleFileChange}
-                      />
-                    </Form.Group>
-
-                    {bnrPopupDetail != null && bnrPopupDetail.tblComFiles != null && bnrPopupDetail.tblComFiles.length > 0 && (
-                        <ul>
-                          {bnrPopupDetail.tblComFiles.map((file, index) => (
-                              <li key={index}>
-                                {file.atchFileNm} - {(file.atchFileSz / 1024).toFixed(2)} KB
-
-                                <button
-                                    onClick={() => setFileDel(file.atchFileSn)}  // 삭제 버튼 클릭 시 처리할 함수
-                                    style={{marginLeft: '10px', color: 'red'}}
-                                >
-                                  삭제
-                                </button>
-                              </li>
-                          ))}
-                        </ul>
-                    )}
-
-                    {imgFile != "" && imgFile != null && (<img src={imgFile} id="templatesImgTag"/>)}
-                  </dd>
-                </dl>
-                {/* <!-- 버튼영역 --> */}
-                <div className="board_btn_area">
-                  <div className="left_col btn1">
-                    <BTButton variant="primary"
-                              onClick={saveBtnEvent}
-                    >
-                      저장
-                    </BTButton>
-                    {modeInfo.mode === CODE.MODE_MODIFY && (
-                        <BTButton variant="danger"
-                                  onClick={delBtnEvent}
-                        >
-                          삭제
-                        </BTButton>
-                    )}
-                  </div>
-
-                  <div className="right_col btn1">
-                    <Link to={URL.MANAGER_CODE}
-                          state={{
-                            cdGroupSn: location.state?.cdGroupSn
-                          }}
-                    >
-                      <BTButton variant="secondary">목록</BTButton>
-                    </Link>
+                    <label htmlFor="useYn" className="toggleSwitch">
+                      <span className="toggleButton"></span>
+                    </label>
                   </div>
                 </div>
-                {/* <!--// 버튼영역 --> */}
-              </div>
+              </li>
+              <li className="inputBox type1 width1">
+                <p className="title essential">팝업형식</p>
+                <ul className="checkWrap customCheckWrap">
+                  <li className="checkBox">
+                    <label>
+                      <input type="radio"
+                             id="layerRadio"
+                             name="bnrPopupFrm"
+                             value="layer"
+                             onChange={(e) =>
+                                 setBnrPopupDetail({...bnrPopupDetail, bnrPopupFrm: e.target.value})
+                             }
+                             ref={(el) => (checkRef.current[0] = el)}
+                      />
+                      <small>레이어형식</small>
+                    </label>
+                  </li>
+                  <li className="checkBox">
+                    <label>
+                      <input type="radio"
+                             id="popupRadio"
+                             name="bnrPopupFrm"
+                             value="popup"
+                             onChange={(e) =>
+                                 setBnrPopupDetail({...bnrPopupDetail, bnrPopupFrm: e.target.value})
+                             }
+                             ref={(el) => (checkRef.current[0] = el)}
+                      />
+                      <small>팝업형식</small>
+                    </label>
+                  </li>
+                </ul>
+              </li>
+              <li className="inputBox type1 width4">
+                <label className="title essential" htmlFor="popupWdthSz"><small>넓이</small></label>
+                <div className="input">
+                  <input type="text"
+                         id="popupWdthSz"
+                         placeholder=""
+                         value={bnrPopupDetail.popupWdthSz}
+                         onChange={(e) =>
+                             setBnrPopupDetail({...bnrPopupDetail, popupWdthSz: e.target.value})
+                         }
+                         ref={(el) => (checkRef.current[0] = el)}
+                  />
+                </div>
+              </li>
+              <li className="inputBox type1 width4">
+                <label className="title essential" htmlFor="popupVrtcSz"><small>높이</small></label>
+                <div className="input">
+                  <input type="text"
+                         id="popupVrtcSz"
+                         placeholder=""
+                         value={bnrPopupDetail.popupVrtcSz}
+                         onChange={(e) =>
+                             setBnrPopupDetail({...bnrPopupDetail, popupVrtcSz: e.target.value})
+                         }
+                         ref={(el) => (checkRef.current[0] = el)}
+                  />
+                </div>
+              </li>
+              <li className="inputBox type1 width4">
+                <label className="title essential" htmlFor="popupPstnUpend"><small>팝업 위쪽여백</small></label>
+                <div className="input">
+                  <input type="text"
+                         id="popupPstnUpend"
+                         placeholder=""
+                         value={bnrPopupDetail.popupPstnUpend}
+                         onChange={(e) =>
+                             setBnrPopupDetail({...bnrPopupDetail, popupPstnUpend: e.target.value})
+                         }
+                         ref={(el) => (checkRef.current[0] = el)}
+                  />
+                </div>
+              </li>
+              <li className="inputBox type1 width4">
+                <label className="title essential" htmlFor="popupPstnWdth"><small>팝업 왼쪽여백</small></label>
+                <div className="input">
+                  <input type="text"
+                         id="popupPstnWdth"
+                         placeholder=""
+                         value={bnrPopupDetail.popupPstnWdth}
+                         onChange={(e) =>
+                             setBnrPopupDetail({...bnrPopupDetail, popupPstnWdth: e.target.value})
+                         }
+                         ref={(el) => (checkRef.current[0] = el)}
+                  />
+                </div>
+              </li>
 
-              {/* <!--// 본문 --> */}
+              <li className="inputBox type1 width3 file">
+                <p className="title essential">파일선택</p>
+                <div className="input">
+                  <p className="file_name" id="fileNamePTag"></p>
+                  <label>
+                    <small className="text btn">파일 선택</small>
+                    <input type="file"
+                           id="templateImg"
+                           onChange={handleFileChange}
+                    />
+                  </label>
+                </div>
+                <span className="warningText">gif,png,jpg 파일 / 권장 사이즈 : 500px * 500px / 용량 : 10M 이하</span>
+              </li>
+              <li className="inputBox type1 width2 file">
+                <p className="title">파일삭제</p>
+                <div className="input">
+                  {bnrPopupDetail != null && bnrPopupDetail.tblComFiles != null && bnrPopupDetail.tblComFiles.length > 0 && (
+                      <>
+                        {bnrPopupDetail.tblComFiles.map((file, index) => (
+                            <p className="file_name">{file.atchFileNm} - {(file.atchFileSz / 1024).toFixed(2)} KB
+                              <button type="button" className="clickBtn gray"
+                                      onClick={() => setFileDel(file.atchFileSn)}
+                                      style={{marginLeft: '10px', color: 'red'}}
+                              >
+                                삭제
+                              </button>
+                            </p>
+                        ))}
+                      </>
+                  )}
+                  {/*{imgFile != "" && imgFile != null && (<img src={imgFile} id="templatesImgTag"/>)}*/}
+                </div>
+                <span className="warningText"></span>
+              </li>
+              <li className="inputBox type1 width1">
+                <label className="title essential" htmlFor="bnrPopupUrlAddr"><small>링크주소</small></label>
+                <div className="input">
+                  <input type="text"
+                         id="bnrPopupUrlAddr"
+                         placeholder=""
+                         value={bnrPopupDetail.bnrPopupUrlAddr}
+                         onChange={(e) =>
+                             setBnrPopupDetail({...bnrPopupDetail, bnrPopupUrlAddr: e.target.value})
+                         }
+                         ref={(el) => (checkRef.current[0] = el)}
+                  />
+                </div>
+              </li>
+              <li className="toggleBox width3">
+                <div className="box">
+                  <p className="title">유튜브 영상</p>
+                  <div className="toggleSwithWrap">
+                    <input type="checkbox"
+                           id="youtubeYn"
+                           onChange={(e) =>
+                               setBnrPopupDetail({
+                                 ...bnrPopupDetail,
+                                 youtubeYn: e.target.checked ? "Y" : "N"
+                               })
+                           }
+                    />
+                    <label htmlFor="youtubeYn" className="toggleSwitch">
+                      <span className="toggleButton"></span>
+                    </label>
+                  </div>
+                </div>
+              </li>
+              <li className="inputBox type1 width3">
+                <p className="title essential">분류</p>
+                <div className="itemBox">
+                  <select className="selectGroup"
+                          id="npagYn"
+                          value={bnrPopupDetail.npagYn || "Y"}
+                          onChange={(e) =>
+                              setBnrPopupDetail({...bnrPopupDetail, npagYn: e.target.value})
+                          }
+                  >
+                    <option value="Y">새창</option>
+                    <option value="N">현재창</option>
+                  </select>
+                </div>
+              </li>
+
+
+              <li className="inputBox type1 width1">
+                <label className="title" htmlFor="bnrPopupCn"><small>내용</small></label>
+                <div className="input">
+                  <textarea type="text"
+                            id="bnrPopupCn"
+                            title="내용"
+                            value={bnrPopupDetail.bnrPopupCn || ""}
+                            onChange={(e) =>
+                                setBnrPopupDetail({...bnrPopupDetail, bnrPopupCn: e.target.value})
+                            }
+                            ref={(el) => (checkRef.current[0] = el)}
+                  >
+                  </textarea>
+                </div>
+              </li>
+            </ul>
+            <div className="buttonBox">
+              <div className="leftBox">
+                <button type="button" className="clickBtn point" onClick={saveBtnEvent}><span>저장</span></button>
+                <button type="button" className="clickBtn gray" onClick={delBtnEvent}><span>삭제</span></button>
+              </div>
+              <NavLink
+                  to={URL.MANAGER_POPUP_LIST}
+              >
+                <button type="button" className="clickBtn black"><span>목록</span></button>
+              </NavLink>
             </div>
           </div>
         </div>

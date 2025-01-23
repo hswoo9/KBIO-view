@@ -314,6 +314,8 @@ header .title .icon:hover {background-image: url(@/assets/images/ico_header_arro
 .customDiv .inputWrap li.width1 {width: 100%;}
 .customDiv .inputWrap li.width2 {width: calc(100% / 2 - .6rem);}
 .customDiv .inputWrap li.width3 {width: calc(100% / 3 - .6rem);}
+.customDiv .inputWrap li.width4 {width: calc(100% / 4 - .6rem);}
+.customContBox .inputWrap li.width4 {width: calc(100% / 4 - .7rem) !important;}
 .customToggleBox{ flex-direction: column-reverse !important;}
 
 
@@ -334,4 +336,8 @@ header .title .icon:hover {background-image: url(@/assets/images/ico_header_arro
 
 .cursorClass {
 	cursor: pointer;
+}
+
+.customCheckWrap {
+	flex-wrap: initial !important;
 }
