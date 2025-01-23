@@ -364,7 +364,9 @@ function ManagerCodeGroupEdit(props) {
             <div className="buttonBox">
               <div className="leftBox">
                 <button type="button" className="clickBtn point" onClick={saveBtnEvent}><span>저장</span></button>
-                <button type="button" className="clickBtn gray" onClick={delBtnEvent}><span>삭제</span></button>
+                {modeInfo.mode === CODE.MODE_MODIFY && (
+                    <button type="button" className="clickBtn gray" onClick={delBtnEvent}><span>삭제</span></button>
+                )}
               </div>
               <NavLink
                   to={URL.MANAGER_CODE_GROUP}

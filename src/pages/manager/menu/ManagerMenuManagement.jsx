@@ -631,8 +631,11 @@ function Index(props) {
                         <div className="buttonBox">
                             <div className="left">
                                 <button type="button" className="clickBtn" onClick={saveMenu}><span>저장</span></button>
-                                <button type="button" className="clickBtn red" onClick={deleteMenuFn}><span>삭제</span>
-                                </button>
+                                {menuDetail.menuSn && (
+                                    <button type="button" className="clickBtn red" onClick={deleteMenuFn}>
+                                        <span>삭제</span>
+                                    </button>
+                                )}
                             </div>
                             <div className="right">
                                 <button type="button" className="clickBtn white" onClick={resetMenu}><span>초기화</span>
