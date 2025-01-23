@@ -39,6 +39,19 @@ function ManagerPst(props) {
         }
     };
 
+    const modelOpenEvent = (e) => {
+        console.log(e);
+        document.getElementById('modalDiv').classList.add("open");
+        document.getElementsByTagName('html')[0].style.overFlow = 'hidden';
+        document.getElementsByTagName('body')[0].style.overFlow = 'hidden';
+    }
+
+    const modelCloseEvent = (e) => {
+        document.getElementById('modalDiv').classList.remove("open");
+        document.getElementsByTagName('html')[0].style.overFlow = 'visible';
+        document.getElementsByTagName('body')[0].style.overFlow = 'visible';
+    }
+
     const getPstList = useCallback(
         (searchDto) => {
             const pstListURL = "/pstApi/getPstList.do";
@@ -111,6 +124,9 @@ function ManagerPst(props) {
                                 )}
                                 <td>{moment(item.frstCrtDt).format('YYYY-MM-DD')}</td>
                                 <td>{item.actvtnYn === "Y" ? "사용" : "미사용"}</td>
+                                <td>
+                                    <button type="button" onClick={modelOpenEvent}><span>보기</span></button>
+                                </td>
                             </tr>
                         );
                     });
@@ -127,6 +143,8 @@ function ManagerPst(props) {
     useEffect(() => {
         getPstList(searchDto);
     }, []);
+
+
 
     return (
         <div id="container" className="container layout cms">
@@ -214,6 +232,7 @@ function ManagerPst(props) {
                                 )}
                                 <th>등록일</th>
                                 <th>사용여부</th>
+                                <th>만족도</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -243,6 +262,72 @@ function ManagerPst(props) {
                         >
                             <button type="button" className="clickBtn black"><span>게시판 목록</span></button>
                         </NavLink>
+                    </div>
+                </div>
+            </div>
+            <div className="programModal modalCon" id="modalDiv">
+                <div className="bg"></div>
+                <div className="m-inner">
+                    <div className="boxWrap">
+                        <div className="top">
+                            <h2 className="title">만족도</h2>
+                            <div className="close" onClick={modelCloseEvent}>
+                                <div className="icon"></div>
+                            </div>
+                        </div>
+                        <div className="box">
+                            <div className="tableBox type1">
+                                <table>
+                                    <caption>만족도</caption>
+                                    <colgroup>
+                                        <col width="20%"/>
+                                        <col width="20%"/>
+                                        <col width="15%"/>
+                                        <col width="20%"/>
+                                        <col width="25%"/>
+                                    </colgroup>
+                                    <thead>
+                                    <tr>
+                                        <th className="th1"><p>매우 그렇다</p></th>
+                                        <th className="th2"><p>대체로 그렇다</p></th>
+                                        <th className="th2"><p>보통이다</p></th>
+                                        <th className="th2"><p>대체로 그렇지 않다</p></th>
+                                        <th className="th2"><p>전혀 그렇지 않다</p></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td><p>1123</p></td>
+                                        <td><p>33</p></td>
+                                        <td><p>245</p></td>
+                                        <td><p>45</p></td>
+                                        <td><p>5</p></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div className="tableBox type1">
+                                <table>
+                                    <caption>만족도의견</caption>
+                                    <thead>
+                                    <tr>
+                                        <th className="th1"><p>번호</p></th>
+                                        <th className="th2"><p>의견</p></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td><p>1</p></td>
+                                        <td><p>기타의견 내용입니다.</p></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div className="pageWrap">
+
+                            </div>
+
+                        </div>
                     </div>
                 </div>
             </div>
