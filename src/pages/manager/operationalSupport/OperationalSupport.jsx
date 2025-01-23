@@ -71,7 +71,16 @@ function OperationalSupport(props) {
                                 <td>
                                     {item.bzstatNm}
                                 </td>
-                                <td>{item.mvnEntNm}</td>
+                                <td>
+                                <Link to={{pathname: URL.RESIDENT_COMPANY_MODIFY}}
+                                      state={{
+                                          mvnEntSn: item.mvnEntSn,
+                                          mode:CODE.MODE_MODIFY
+                                      }}
+                                >
+                                {item.mvnEntNm}
+                                </Link>
+                                </td>
                                 <td>{item.rpsvNm}</td>
                                 <td>{formatTelNo(item.entTelno)}</td>
                                 <td>{item.clsNm}</td>

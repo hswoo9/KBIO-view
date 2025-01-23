@@ -40,6 +40,46 @@ function OperationalResidentMember(props) {
                         </li>
                     </ul>
                 </div>
+                {/*본문리스트영역*/}
+                <div className="contBox board type2 customContBox">
+                    <div className="topBox">
+                        <p className="resultText"><span className="red">12,345</span>건의 입주기업 정보가 조회되었습니다.</p>
+                    </div>
+                    <div className="tableBox type1">
+                        <table>
+                            <caption>게시판</caption>
+                            <thead>
+                            <tr>
+                                <th className="th1"><p>번호</p></th>
+                                <th className="th2"><p>아이디</p></th>
+                                <th className="th2"><p>성명</p></th>
+                                <th className="th3"><p>휴대전화번호</p></th>
+                                <th className="th4"><p>이메일</p></th>
+                                <th className="th5"><p>등록일</p></th>
+                                <th className="th6"><p>삭제</p></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+                    {/*페이징, 버튼 영역*/}
+                    <div className="pageWrap">
+                        <EgovPaging
+                        />
+                        <Link
+                            to={URL.MANAGER_OPERATIONAL_SUPPORT}
+                        >
+                            <button type="button" className="clickBtn black"><span>목록</span></button>
+                        </Link>
+                        <NavLink
+                            to={""}
+                        >
+                            <button type="button" className="writeBtn clickBtn"><span>등록</span></button>
+                        </NavLink>
+                    </div>
+                </div>
 
 
             </div>

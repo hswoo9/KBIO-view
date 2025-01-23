@@ -62,16 +62,7 @@ function ResidentMemberCreateContent(props){
 
         EgovNet.requestFetch(getRcURL, requestOptions, function (resp){
             if(modeInfo.mode === CODE.MODE_MODIFY){
-
-                const brno = resp.result.rc.brno;
-                const { brno1, brno2, brno3 } = splitBrno(brno);
-                const updatedRc = {
-                    ...resp.result.rc,
-                    brno1,
-                    brno2,
-                    brno3,
-                };
-                setResidentDetail(updatedRc);
+                setResidentDetail(resp.result.rc);
 
 
                 console.log("resp.result.rc",resp.result.rc);
