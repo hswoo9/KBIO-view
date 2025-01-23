@@ -6,6 +6,7 @@ export default defineConfig({
   plugins: [react()],
   base: "/",
   server: {
+    host : "0.0.0.0",
     port: 3000,
     proxy: {
       "/naver" : {
@@ -23,7 +24,8 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/backApi/, ""),
       }
-    }
+    },
+    plugins : [react()],
   },
   resolve: {
     alias: [{ find: "@", replacement: "/src" }],
