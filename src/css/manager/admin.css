@@ -30,7 +30,7 @@ input {font-size: .9rem;}
 
 
 
-header {position: fixed; top: 0; left: 0; bottom: 0; width: clamp(200px, 13vw, 260px); z-index: 90; height: auto; box-sizing: border-box; box-shadow: 0 0 16px rgba(0, 0, 0, .05); background: #fff;}
+header {position: fixed; top: 0; left: 0; bottom: 0; width: clamp(170px, 13vw, 200px); z-index: 90; height: auto; box-sizing: border-box; box-shadow: 0 0 16px rgba(0, 0, 0, .05); background: #fff;}
 header .hInner h1 {height: 3.55rem; display: flex; align-items: center; box-sizing: border-box; padding: .3rem 1.35rem;}
 header .hInner h1 a {max-width: 141px; width: 100%;}
 header .sitemapBtn {display: none;}
@@ -93,8 +93,8 @@ header .sitemap .sitemapBox .botBanner .textBox .moreBtn {width: 92px; height: 3
 header .sitemap .sitemapBox .botBanner .imgBox {max-width: 256px; width: 70%; margin-left: auto; margin-top: -30px;}
 header .sitemap .sitemapBox .botBanner .imgBox img {vertical-align: bottom;}
 
-.container {margin-left: clamp(200px, 13vw, 260px); position: relative; width: calc(100% - clamp(200px, 13vw, 260px)); padding: 0;}
-.container .commonTop {position: fixed; top: 0; left: clamp(200px, 13vw, 260px); width: calc(100% - clamp(200px, 13vw, 260px)); display: flex; justify-content: space-between; align-items: center; padding: 0 1.35rem; background: #fff; box-sizing: border-box; z-index: 40;}
+.container {margin-left: clamp(170px, 13vw, 200px); position: relative; width: calc(100% - clamp(170px, 13vw, 200px)); padding: 0;}
+.container .commonTop {position: fixed; top: 0; left: clamp(170px, 13vw, 200px); width: calc(100% - clamp(170px, 13vw, 200px)); display: flex; justify-content: space-between; align-items: center; padding: 0 1.35rem; background: #fff; box-sizing: border-box; z-index: 40;}
 .container .commonTop .lnbBox {position: relative; z-index: 1;}
 .container .commonTop .lnbBox .bg {content: ""; position: absolute; bottom: 0; left: 0; height: 3px; background: var(--mainColor2); transition: .5s ease; z-index: -1;}
 .container .commonTop .lnbBox .bg.hover {background: #FF504A15; opacity: 0;}
@@ -319,7 +319,7 @@ header .sitemap .sitemapBox .botBanner .imgBox img {vertical-align: bottom;}
 .customToggleBox{ flex-direction: column-reverse !important;}
 
 
-#commonTop {position: fixed; top: 0; left: clamp(200px, 13vw, 260px); width: calc(100% - clamp(200px, 13vw, 260px)); display: flex; justify-content: space-between; align-items: center; padding: 0 1.35rem; background: #fff; box-sizing: border-box; z-index: 40;}
+#commonTop {position: fixed; top: 0; left: clamp(170px, 13vw, 200px); width: calc(100% - clamp(170px, 13vw, 200px)); display: flex; justify-content: space-between; align-items: center; padding: 0 1.35rem; background: #fff; box-sizing: border-box; z-index: 40;}
 #commonTop .lnbBox {position: relative; z-index: 1;}
 #commonTop .lnbBox .bg {content: ""; position: absolute; bottom: 0; left: 0; height: 3px; background: var(--mainColor2); transition: .5s ease; z-index: -1;}
 #commonTop .lnbBox .bg.hover {background: #FF504A15; opacity: 0;}
