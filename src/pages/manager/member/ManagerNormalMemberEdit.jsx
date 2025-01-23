@@ -206,6 +206,56 @@ function setNormalMember(props) {
         });
     };
 
+    const pwdReset = () => {
+        Swal.fire({
+            title: `<span style="font-size: 14px; line-height: 0.8;">
+                    회원의 비밀번호를 초기화를 할 경우<br>
+                    <strong>qwer12!@</strong><br>
+                    로 초기화 됩니다.<br>
+                    해당 회원의 비밀번호를 초기화 하시겠습니까?
+                </span>
+            `,
+            showCloseButton: true,
+            showCancelButton: true,
+            confirmButtonText: "예",
+            cancelButtonText: "아니오"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const resetPwdUrl = "/memberApi/resetMemberPassword";
+                const requestOptions = {
+                    method: "POST",
+                    headers: {
+                        "Content-type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        ...memberDetail,
+                        password: "qwer12!@"
+                    }),
+                };
+
+                EgovNet.requestFetch(resetPwdUrl, requestOptions, (resp) => {
+                    if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
+                        Swal.fire({
+                            title: "비밀번호가 초기화되었습니다.",
+                            icon: "success",
+                            confirmButtonText: "확인"
+                        })
+                        setMemberDetail({
+                            ...memberDetail,
+                            password: "qwer12!@"
+                        });
+                    } else {
+                        Swal.fire({
+                            title: "오류가 발생했습니다.",
+                            text: resp.resultMessage,
+                            icon: "error",
+                            confirmButtonText: "확인"
+                        });
+                    }
+                });
+            }
+        });
+    };
     const getSelectedLabel = (objArray, findLabel = "") => {
         let foundValueLabelObj = objArray.find((o) => o["value"] === findLabel);
         return foundValueLabelObj["label"];
@@ -229,102 +279,158 @@ function setNormalMember(props) {
                 <div className="contBox infoWrap customContBox">
                     <ul className="inputWrap">
                         <li className="inputBox type1 width1">
-                            <label className="title essential" htmlFor="emplyrId"><small>회원ID</small></label>
+                            <label className="title"><small>회원상태</small></label>
                             <div className="input">
                                 <input
                                     type="text"
-                                    name="emplyrId"
-                                    id="emplyrId"
-                                    defaultValue={memberDetail.emplyrId}
-                                    onChange={(e) =>
-                                        setMemberDetail({
-                                            ...memberDetail,
-                                            emplyrId: e.target.value,
-                                        })
-                                    }
-                                    ref={(el) => (checkRef.current[0] = el)}
-                                    readOnly={modeInfo.mode === CODE.MODE_MODIFY}
+                                    value={memberDetail.mberSttus || ''}
+                                    readOnly
                                 />
-                                {modeInfo.mode === CODE.MODE_CREATE && (
-                                    <button
-                                        className="clickBtn point"
-                                        onClick={() => checkIdDplct()}
-                                    >
-                                        <span>중복확인</span>
-                                    </button>
-                                )}
-                                {memberDetail.checkIdResult && (
-                                    <p className="warningText" style={{color: memberDetail.checkIdResultColor}}>
-                                        {memberDetail.checkIdResult}
-                                    </p>
-                                )}
                             </div>
                         </li>
 
                         <li className="inputBox type1 width1">
-                            <label className="title essential" htmlFor="password"><small>회원암호</small></label>
+                            <label className="title"><small>회원분류</small></label>
+                            <div className="input">
+                                <input
+                                    type="text"
+                                    value={memberDetail.userType || ''}
+                                    readOnly
+                                />
+                            </div>
+                        </li>
+
+                        <li className="inputBox type1 width1">
+                            <label className="title"><small>아이디</small></label>
+                            <div className="input">
+                                <input
+                                    type="text"
+                                    value={memberDetail.emplyrId || ''}
+                                    readOnly
+                                />
+                            </div>
+                        </li>
+
+                        <li className="inputBox type1 width1">
+                            <label className="title"><small>비밀번호</small></label>
                             <div className="input">
                                 <input
                                     type="password"
-                                    name="password"
-                                    id="password"
-                                    defaultValue={memberDetail.password}
-                                    onChange={(e) =>
-                                        setMemberDetail({
-                                            ...memberDetail,
-                                            password: e.target.value,
-                                        })
-                                    }
-                                    ref={(el) => (checkRef.current[1] = el)}
-                                    readOnly={modeInfo.mode === CODE.MODE_MODIFY}
+                                    value={memberDetail.password || ''}
+                                    readOnly
                                 />
+                                <button type="button" className="pwdBtn btn" onClick={(e) => {
+                                    pwdReset();
+                                }}>
+                                    <span>비밀번호 초기화</span>
+                                </button>
                             </div>
                         </li>
 
                         <li className="inputBox type1 width1">
-                            <label className="title essential" htmlFor="mberNm"><small>회원명</small></label>
+                            <label className="title"><small>성명</small></label>
                             <div className="input">
                                 <input
                                     type="text"
-                                    name="mberNm"
-                                    id="mberNm"
-                                    defaultValue={memberDetail.userNm}
-                                    onChange={(e) =>
-                                        setMemberDetail({
-                                            ...memberDetail,
-                                            userNm: e.target.value,
-                                        })
-                                    }
-                                    ref={(el) => (checkRef.current[2] = el)}
-                                    readOnly={modeInfo.mode === CODE.MODE_MODIFY}
+                                    value={memberDetail.userNm || ''}
+                                    readOnly
                                 />
                             </div>
                         </li>
 
                         <li className="inputBox type1 width1">
-                            <p className="title essential">회원 권한</p>
-                            <div className="itemBox">
-                                <select
-                                    className="selectGroup"
-                                    id="groupId"
-                                    name="groupId"
-                                    onChange={(e) =>
-                                        setMemberDetail({
-                                            ...memberDetail,
-                                            groupId: e.target.value,
-                                        })
-                                    }
-                                    value={memberDetail.groupId}
-                                >
-                                    {/* Options can be added here */}
-                                </select>
+                            <label className="title"><small>휴대폰</small></label>
+                            <div className="input">
+                                <input
+                                    type="text"
+                                    value={memberDetail.mbtlnum || ''}
+                                    readOnly
+                                />
+                            </div>
+                        </li>
+
+                        <li className="inputBox type1 width1">
+                            <label className="title"><small>이메일</small></label>
+                            <div className="input">
+                                <input
+                                    type="text"
+                                    value={memberDetail.email || ''}
+                                    readOnly
+                                />
+                            </div>
+                        </li>
+
+                        <li className="inputBox type1 width1">
+                            <label className="title"><small>주소</small></label>
+                            <div className="input">
+                                <input
+                                    type="text"
+                                    value={memberDetail.adres || ''}
+                                    readOnly
+                                />
+                            </div>
+                        </li>
+
+                        <li className="inputBox type1 width1">
+                            <label className="title"><small>메일수신</small></label>
+                            <div className="input">
+                                <input
+                                    type="text"
+                                    value={memberDetail.emailRecptnAt || ''}
+                                    readOnly
+                                />
+                            </div>
+                        </li>
+
+                        <li className="inputBox type1 width1">
+                            <label className="title"><small>문자수신</small></label>
+                            <div className="input">
+                                <input
+                                    type="text"
+                                    value={memberDetail.smsRecptnAt || ''}
+                                    readOnly
+                                />
+                            </div>
+                        </li>
+
+                        <div style={{display: 'flex', gap: '20px', width: '100%'}}>
+                            <li className="inputBox type1" style={{width: '50%'}}>
+                                <label className="title"><small>가입일</small></label>
+                                <div className="input">
+                                    <input
+                                        type="text"
+                                        value={memberDetail.sbscrbDe || ''}
+                                        readOnly
+                                    />
+                                </div>
+                            </li>
+                            <li className="inputBox type1" style={{width: '50%'}}>
+                                <label className="title"><small>최근접속일시</small></label>
+                                <div className="input">
+                                    <input
+                                        type="text"
+                                        value={memberDetail.lastLoginDt || ''}
+                                        readOnly
+                                    />
+                                </div>
+                            </li>
+                        </div>
+
+                        <li className="inputBox type1 width1">
+                            <label className="title"><small>소셜구분</small></label>
+                            <div className="input">
+                                <input
+                                    type="text"
+                                    value={memberDetail.socialType || ''}
+                                    readOnly
+                                />
                             </div>
                         </li>
                     </ul>
 
                     <div className="buttonBox">
                         <div className="leftBox">
-                            <button type="button" className="clickBtn point" onClick={() => setNormalMember()}>
+                            {/*<button type="button" className="clickBtn point" onClick={() => setNormalMember()}>
                                 <span>저장</span>
                             </button>
                             {modeInfo.mode === CODE.MODE_MODIFY && (
@@ -335,7 +441,7 @@ function setNormalMember(props) {
                                 >
                                     <span>삭제</span>
                                 </button>
-                            )}
+                            )}*/}
                         </div>
                         <Link to={URL.MANAGER_NORMAL_MEMBER}>
                             <button type="button" className="clickBtn black">
