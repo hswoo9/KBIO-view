@@ -30,7 +30,19 @@ function ApprovalMemberList(props) {
             userNm: "",
         }
     );
-    const [paginationInfo, setPaginationInfo] = useState({});
+    const [paginationInfo, setPaginationInfo] = useState({
+        currentPageNo: 1,
+        firstPageNo: 1,
+        firstPageNoOnPageList: 1,
+        firstRecordIndex: 0,
+        lastPageNo: 1,
+        lastPageNoOnPageList: 1,
+        lastRecordIndex: 10,
+        pageSize: 10,
+        recordCountPerPage: 10,
+        totalPageCount: 15,
+        totalRecordCount: 158
+    });
     const userTypeRef = useRef();
     const userNmRef = useRef();
     const [approvalMemberList, setAuthorityList] = useState([]);
@@ -281,7 +293,8 @@ function ApprovalMemberList(props) {
 
                 <div className="contBox board type1 customContBox">
                     <div className="topBox">
-                        <p className="resultText"><span className="red">12,345</span>건의 회원 정보가 조회되었습니다.</p>
+                        <p className="resultText">전체 : <span className="red">1234</span>건 페이지 : <span
+                            className="red">1/400</span></p>
                         <div className="rightBox">
                             <button type="button" className="btn btn2 downBtn red">
                                 <div className="icon"></div>
