@@ -11,34 +11,96 @@ import EgovPaging from "@/components/EgovPaging";
 import Swal from 'sweetalert2';
 
 import { getSessionItem } from "@/utils/storage";
+import moment from "moment";
 
 function ManagerAccessList(props) {
-    const location = useLocation();
-    console.log(location);
     const sessionUser = getSessionItem("loginUser");
-    const [searchCondition, setSearchCondition] = useState(
-        location.state?.searchCondition || {
+    const location = useLocation();
+    const [searchDto, setSearchDto] = useState(
+        location.state?.searchDto || {
             pageIndex: 1,
-            searchCnd: "0",
-            searchWrd: "",
+            searchType: "",
+            searchVal: "",
+            actvtnYn : "",
         }
     );
-
     const [paginationInfo, setPaginationInfo] = useState({});
+    const [mngrAcsIpList, setMngrAcsIpList] = useState([]);
 
-    const cndRef = useRef();
-    const wrdRef = useRef();
+    const searchTypeRef = useRef();
+    const searchValRef = useRef();
+    const actvtnYnRef = useRef();
 
-    const [saveEvent, setSaveEvent] = useState({});
-    useEffect(() => {
-        if(saveEvent.save){
-            if(saveEvent.mode == "delete"){
-                delCdGroupData(saveEvent);
-            }
+    const getMngrAcsIpList = useCallback(
+        (searchDto) => {
+            const pstListURL = "/mngrAcsIpApi/getMngrAcsIpList.do";
+            const requestOptions = {
+                method: "POST",
+                headers: {
+                    "Content-type": "application/json",
+                },
+                body: JSON.stringify(searchDto)
+            };
+            EgovNet.requestFetch(
+                pstListURL,
+                requestOptions,
+                (resp) => {
+                    setPaginationInfo(resp.paginationInfo);
+                    let dataList = [];
+                    dataList.push(
+                        <tr>
+                            <td colSpan="5">검색된 결과가 없습니다.</td>
+                        </tr>
+                    );
+
+                    resp.result.mngrAcsIpList.forEach(function (item, index) {
+                        if (index === 0) dataList = []; // 목록 초기화
+                        dataList.push(
+                            <tr key={item.mngrAcsSn}>
+                                <td>
+                                    {resp.paginationInfo.totalRecordCount - (resp.paginationInfo.currentPageNo - 1) * resp.paginationInfo.pageSize - index}
+                                </td>
+                                <td style={{textAlign: "left", paddingLeft: "15px"}}>
+                                    <NavLink to={URL.MANAGER_ACCESS_MODIFY}
+                                          mode={CODE.MODE_MODIFY}
+                                          state={{mngrAcsSn: item.mngrAcsSn}}
+                                    >
+                                        {item.ipAddr}
+                                    </NavLink>
+                                </td>
+                                <td>
+                                    <NavLink
+                                        to={URL.MANAGER_ACCESS_MODIFY}
+                                             mode={CODE.MODE_MODIFY}
+                                             state={{mngrAcsSn: item.mngrAcsSn}}
+                                    >
+                                        {item.plcusNm}
+                                    </NavLink>
+                                </td>
+                                <td>{moment(item.frstCrtDt).format('YYYY-MM-DD')}</td>
+                                <td>{item.actvtnYn === "Y" ? "사용" : "미사용"}</td>
+                            </tr>
+                        );
+                    });
+                    setMngrAcsIpList(dataList);
+                },
+                function (resp) {
+                    console.log("err response : ", resp);
+                }
+            )
+        },
+        [mngrAcsIpList, searchDto]
+    );
+
+    const activeEnter = (e) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            getMngrAcsIpList(searchDto);
         }
-    }, [saveEvent]);
+    };
 
     useEffect(() => {
+        getMngrAcsIpList(searchDto);
     }, []);
 
     return (
@@ -52,7 +114,16 @@ function ManagerAccessList(props) {
                             <li className="inputBox type1">
                                 <p className="title">활성여부</p>
                                 <div className="itemBox">
-                                    <select className="selectGroup">
+                                    <select
+                                        className="selectGroup"
+                                        id="actvtnYn"
+                                        name="actvtnYn"
+                                        title="검색유형"
+                                        ref={actvtnYnRef}
+                                        onChange={(e) => {
+                                            setSearchDto({...searchDto, actvtnYn: e.target.value})
+                                        }}
+                                    >
                                         <option value="">전체</option>
                                         <option value="Y">사용</option>
                                         <option value="N">미사용</option>
@@ -62,7 +133,16 @@ function ManagerAccessList(props) {
                             <li className="inputBox type1">
                                 <p className="title">키워드</p>
                                 <div className="itemBox">
-                                    <select className="selectGroup">
+                                    <select
+                                        className="selectGroup"
+                                        id="searchType"
+                                        name="searchType"
+                                        title="검색유형"
+                                        ref={searchTypeRef}
+                                        onChange={(e) => {
+                                            setSearchDto({...searchDto, searchType: e.target.value})
+                                        }}
+                                    >
                                         <option value="">전체</option>
                                         <option value="1">IP</option>
                                         <option value="2">사용처</option>
@@ -70,8 +150,20 @@ function ManagerAccessList(props) {
                                 </div>
                             </li>
                             <li className="searchBox inputBox type1">
-                                <label className="input"><input type="text" id="search" name="search"
-                                                                placeholder="검색어를 입력해주세요"/></label>
+                                <label className="input">
+                                    <input
+                                        name=""
+                                        defaultValue={
+                                            searchDto && searchDto.searchVal
+                                        }
+                                        ref={searchValRef}
+                                        onChange={(e) => {
+                                            setSearchDto({...searchDto, searchVal: e.target.value})
+                                        }}
+                                        onKeyDown={activeEnter}
+                                        placeholder="검색어를 입력해주세요"
+                                    />
+                                </label>
                             </li>
                         </ul>
                         <div className="rightBtn">
@@ -92,11 +184,9 @@ function ManagerAccessList(props) {
                             <colgroup>
                                 <col width="50px"/>
                                 <col width="200px"/>
-                                <col/>
+                                <col width="200px"/>
+                                <col width="120px"/>
                                 <col width="80px"/>
-                                <col/>
-                                <col/>
-                                <col/>
                             </colgroup>
                             <thead>
                             <tr>
@@ -108,6 +198,7 @@ function ManagerAccessList(props) {
                             </tr>
                             </thead>
                             <tbody>
+                            {mngrAcsIpList}
                             </tbody>
                         </table>
                     </div>
@@ -116,12 +207,15 @@ function ManagerAccessList(props) {
                         <EgovPaging
                             pagination={paginationInfo}
                             moveToPage={(passedPage) => {
-
+                                getMngrAcsIpList({
+                                    ...searchDto,
+                                    pageIndex: passedPage
+                                });
                             }}
                         />
                         <NavLink
                             to={{pathname: URL.MANAGER_ACCESS_CREATE}}
-
+                            mode={CODE.MODE_CREATE}
                         >
                             <button type="button" className="writeBtn clickBtn"><span>등록</span></button>
                         </NavLink>

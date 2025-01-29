@@ -14,15 +14,33 @@ import BTButton from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { getSessionItem } from "@/utils/storage";
 
-function ManagerCodeEdit(props) {
+function ManagerAccessEdit(props) {
+
+  const sessionUser = getSessionItem("loginUser");
   const navigate = useNavigate();
   const location = useLocation();
-  const checkRef = useRef([]);
-  const sessionUser = getSessionItem("loginUser");
 
+  const [mngrAcsIpDetail, setMngrAcsIpDetail] = useState({});
   const [modeInfo, setModeInfo] = useState({ mode: props.mode });
 
   const saveBtnEvent = () => {
+    const ipRegex = /^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+
+    if (!mngrAcsIpDetail.ipAddr) {
+      Swal.fire("IP는 필수 값입니다.");
+      return;
+    }
+
+    if (!ipRegex.test(mngrAcsIpDetail.ipAddr)) {
+      Swal.fire("IP 형식에 맞지 않습니다.");
+      return;
+    }
+
+    if (!mngrAcsIpDetail.plcusNm) {
+      Swal.fire("사용처는 필수 값입니다.");
+      return;
+    }
+
     Swal.fire({
       title: "저장하시겠습니까?",
       showCloseButton: true,
@@ -31,8 +49,27 @@ function ManagerCodeEdit(props) {
       cancelButtonText: "취소"
     }).then((result) => {
       if(result.isConfirmed) {
-        navigate({ pathname: URL.MANAGER_ACCESS_LIST });
+        let requestOptions = {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify(mngrAcsIpDetail),
+        };
+
+        EgovNet.requestFetch(modeInfo.editURL, requestOptions, (resp) => {
+          if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
+            Swal.fire("등록되었습니다.");
+            navigate(URL.MANAGER_ACCESS_LIST);
+          } else {
+            navigate(
+                { pathname: URL.ERROR },
+                { state: { msg: resp.resultMessage } }
+            );
+          }
+        });
       } else {
+        //취소
       }
     });
   }
@@ -46,7 +83,22 @@ function ManagerCodeEdit(props) {
       cancelButtonText: "취소"
     }).then((result) => {
       if(result.isConfirmed) {
-        navigate({ pathname: URL.MANAGER_ACCESS_LIST });
+        const requestOptions = {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify({mngrAcsSn : mngrAcsIpDetail.mngrAcsSn}),
+        };
+
+        EgovNet.requestFetch("/mngrAcsIpApi/setMngrAcsIpDel", requestOptions, (resp) => {
+          if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
+            Swal.fire("삭제되었습니다.");
+            navigate(URL.MANAGER_ACCESS_LIST);
+          } else {
+            alert("ERR : " + resp.resultMessage);
+          }
+        });
       } else {
         //취소
       }
@@ -59,17 +111,50 @@ function ManagerCodeEdit(props) {
         setModeInfo({
           ...modeInfo,
           modeTitle: "등록",
+          editURL: `/mngrAcsIpApi/setMngrAcsIp`,
         });
         break;
       case CODE.MODE_MODIFY:
         setModeInfo({
           ...modeInfo,
           modeTitle: "수정",
+          editURL: `/mngrAcsIpApi/setMngrAcsIp`,
         });
         break;
       default:
         navigate({ pathname: URL.ERROR }, { state: { msg: "" } });
     }
+    getMngrAcsIp()
+  };
+
+  const getMngrAcsIp = () => {
+    if (modeInfo.mode === CODE.MODE_CREATE) {
+      // 조회/등록이면 조회 안함
+      setMngrAcsIpDetail({
+        creatrSn: sessionUser.userSn,
+      });
+      return;
+    }
+
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({mngrAcsSn : location.state?.mngrAcsSn})
+    };
+
+    EgovNet.requestFetch("/mngrAcsIpApi/getMngrAcsIp", requestOptions, function (resp) {
+      if (modeInfo.mode === CODE.MODE_MODIFY) {
+        let bbsData = resp.result.mngrAcsIp;
+        bbsData.mdfrSn = sessionUser.userSn
+        if(bbsData.actvtnYn == "Y"){
+          document.getElementById("actvtnYn").checked = true;
+        }
+
+        setMngrAcsIpDetail(bbsData);
+      }
+    });
   };
 
   useEffect(() => {
@@ -92,22 +177,38 @@ function ManagerCodeEdit(props) {
           <div className="contBox infoWrap customContBox">
             <ul className="inputWrap">
               <li className="inputBox type1 width1">
-                <label className="title essential" htmlFor="ip"><small>IP</small></label>
+                <label className="title essential" htmlFor="ipAddr">
+                  <small>IP</small>
+                </label>
                 <div className="input">
                   <input type="text"
-                         id="ip"
+                         id="ipAddr"
+                         value={mngrAcsIpDetail.ipAddr || ""}
                          placeholder=""
-                         required="required"
+                         onChange={(e) =>
+                             setMngrAcsIpDetail({
+                               ...mngrAcsIpDetail,
+                               ipAddr: e.target.value
+                             })}
                   />
                 </div>
               </li>
               <li className="inputBox type1 width1">
-                <label className="title essential" htmlFor="whereToUse"><small>사용처</small></label>
+                <label className="title essential" htmlFor="plcusNm">
+                  <small>사용처</small>
+                </label>
                 <div className="input">
                   <input type="text"
-                         id="whereToUse"
+                         id="plcusNm"
+                         value={mngrAcsIpDetail.plcusNm || ""}
                          placeholder=""
                          required="required"
+                         onChange={(e) =>
+                             setMngrAcsIpDetail({
+                               ...mngrAcsIpDetail,
+                               plcusNm: e.target.value
+                             })
+                         }
                   />
                 </div>
               </li>
@@ -117,6 +218,12 @@ function ManagerCodeEdit(props) {
                   <div className="toggleSwithWrap">
                     <input type="checkbox"
                            id="actvtnYn"
+                           onChange={(e) =>
+                               setMngrAcsIpDetail({
+                                 ...mngrAcsIpDetail,
+                                 actvtnYn: e.target.checked ? "Y" : "N",
+                               })
+                           }
                     />
                     <label htmlFor="actvtnYn" className="toggleSwitch">
                       <span className="toggleButton"></span>
@@ -144,4 +251,4 @@ function ManagerCodeEdit(props) {
   );
 }
 
-export default ManagerCodeEdit;
+export default ManagerAccessEdit;
