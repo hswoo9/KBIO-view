@@ -167,6 +167,8 @@ import * as EgovNet from "@/api/egovFetch"; // jwt토큰 위조 검사 때문에
 import initPage from "@/js/ui";
 import SnsGoogleCallback from "../components/sns/SnsGoogleCallback.jsx";
 
+
+import MessageTest from "@/pages/templates/messageTest.jsx";
 const RootRoutes = () => {
   //useLocation객체를 이용하여 정규표현식을 사용한 /admin/~ 으로 시작하는 경로와 비교에 사용(아래 1줄) */}
   const location = useLocation();
@@ -239,443 +241,443 @@ const SecondRoutes = () => {
 
   const requestUrl = window.location.pathname.split("/")[1];
   return (
-    <div id="wrap" className={requestUrl === "manager" ? "admin" : "user"}>
-      {requestUrl === "manager" ? (<ManagerTop/>) :
-        requestUrl === "popupView" ? "" : (<EgovHeaderUser />)
-      }
-      <Routes>
-        {/* MAIN */}
-        <Route path={URL.MAIN} element={<EgovMainUser />} />
+      <div id="wrap" className={requestUrl === "manager" ? "admin" : "user"}>
+        {requestUrl === "manager" ? (<ManagerTop/>) :
+            requestUrl === "popupView" ? "" : (<EgovHeaderUser/>)
+        }
+        <Routes>
+          {/* MAIN */}
+          <Route path={URL.MAIN} element={<EgovMainUser/>}/>
 
-        {/* LOGIN */}
-        <Route
-          path={URL.LOGIN}
-          element={<EgovLogin onChangeLogin={(user) => setLoginVO(user)} />}
-        />
-        <Route
-          path={URL.MANAGER_LOGIN}
-          element={<ManagerLogin onChangeLogin={(user) => setLoginVO(user)} />}
-        />
+          {/* LOGIN */}
+          <Route
+              path={URL.LOGIN}
+              element={<EgovLogin onChangeLogin={(user) => setLoginVO(user)}/>}
+          />
+          <Route
+              path={URL.MANAGER_LOGIN}
+              element={<ManagerLogin onChangeLogin={(user) => setLoginVO(user)}/>}
+          />
 
-        {/* Sns Naver Callback */}
-        <Route
-          path={URL.SNS_NAVER_CB}
-          element={
-            <SnsNaverCallback onChangeLogin={(user) => setLoginVO(user)} />
-          }
-        />
-        {/* Sns Kakao Callback */}
-        <Route
-          path={URL.SNS_KAKAO_CB}
-          element={
-            <SnsKakaoCallback onChangeLogin={(user) => setLoginVO(user)} />
-          }
-        />
+          {/* Sns Naver Callback */}
+          <Route
+              path={URL.SNS_NAVER_CB}
+              element={
+                <SnsNaverCallback onChangeLogin={(user) => setLoginVO(user)}/>
+              }
+          />
+          {/* Sns Kakao Callback */}
+          <Route
+              path={URL.SNS_KAKAO_CB}
+              element={
+                <SnsKakaoCallback onChangeLogin={(user) => setLoginVO(user)}/>
+              }
+          />
 
-        {/* Sns GOOGLE Callback */}
-        <Route
-            path={URL.SMS_GOOGLE_CB}
-            element={
-              <SnsGoogleCallback onChangeLogin={(user) => setLoginVO(user)} />
-            }
-        />
-
-
-        {/* ERROR */}
-        <Route path={URL.ERROR} element={<EgovError />} />
-
-        {/* ABOUT */}
-        <Route path={URL.ABOUT} element={<Navigate to={URL.ABOUT_SITE} />} />
-        <Route path={URL.ABOUT_SITE} element={<EgovAboutSite />} />
-        <Route path={URL.ABOUT_HISTORY} element={<EgovAboutHistory />} />
-        <Route
-          path={URL.ABOUT_ORGANIZATION}
-          element={<EgovAboutOrganization />}
-        />
-        <Route path={URL.ABOUT_LOCATION} element={<EgovAboutLocation />} />
-
-        {/* INTRO */}
-        <Route path={URL.INTRO} element={<Navigate to={URL.INTRO_WORKS} />} />
-        <Route path={URL.INTRO_WORKS} element={<EgovIntroWork />} />
-        <Route path={URL.INTRO_SERVICE} element={<EgovIntroService />} />
+          {/* Sns GOOGLE Callback */}
+          <Route
+              path={URL.SMS_GOOGLE_CB}
+              element={
+                <SnsGoogleCallback onChangeLogin={(user) => setLoginVO(user)}/>
+              }
+          />
 
 
+          {/* ERROR */}
+          <Route path={URL.ERROR} element={<EgovError/>}/>
 
-        {/* SUPPORT */}
-        <Route
-          path={URL.SUPPORT}
-          element={<Navigate to={URL.SUPPORT_DOWNLOAD} />}
-        />
+          {/* ABOUT */}
+          <Route path={URL.ABOUT} element={<Navigate to={URL.ABOUT_SITE}/>}/>
+          <Route path={URL.ABOUT_SITE} element={<EgovAboutSite/>}/>
+          <Route path={URL.ABOUT_HISTORY} element={<EgovAboutHistory/>}/>
+          <Route
+              path={URL.ABOUT_ORGANIZATION}
+              element={<EgovAboutOrganization/>}
+          />
+          <Route path={URL.ABOUT_LOCATION} element={<EgovAboutLocation/>}/>
 
-        <Route
-          path={URL.SUPPORT_DOWNLOAD}
-          element={<EgovSupportDownloadList />}
-        />
-        <Route
-          path={URL.SUPPORT_DOWNLOAD_DETAIL}
-          element={<EgovSupportDownloadDetail />}
-        />
-        <Route
-          path={URL.SUPPORT_DOWNLOAD_CREATE}
-          element={<EgovSupportDownloadCreate />}
-        />
-
-        <Route path={URL.SUPPORT_QNA} element={<EgovSupportQnaList />} />
-        <Route
-          path={URL.SUPPORT_QNA_DETAIL}
-          element={<EgovSupportQnaDetail />}
-        />
-
-        <Route path={URL.SUPPORT_APPLY} element={<EgovSupportApply />} />
-
-        {/* INFORM */}
-        <Route path={URL.INFORM} element={<Navigate to={URL.INFORM_DAILY} />} />
-
-        <Route path={URL.INFORM_DAILY} element={<EgovDailyList />} />
-        <Route path={URL.INFORM_DAILY_DETAIL} element={<EgovDailyDetail />} />
-        <Route path={URL.INFORM_WEEKLY} element={<EgovWeeklyList />} />
-        <Route path={URL.INFORM_WEEKLY_DETAIL} element={<EgovDailyDetail />} />
-
-        <Route path={URL.INFORM_NOTICE} element={<EgovNoticeList />} />
-        <Route path={URL.INFORM_NOTICE_DETAIL} element={<EgovNoticeDetail />} />
-        <Route
-          path={URL.INFORM_NOTICE_CREATE}
-          element={<EgovNoticeEdit mode={CODE.MODE_CREATE} />}
-        />
-        <Route
-          path={URL.INFORM_NOTICE_MODIFY}
-          element={<EgovNoticeEdit mode={CODE.MODE_MODIFY} />}
-        />
-        <Route
-          path={URL.INFORM_NOTICE_REPLY}
-          element={<EgovNoticeEdit mode={CODE.MODE_REPLY} />}
-        />
-
-        <Route path={URL.INFORM_GALLERY} element={<EgovGalleryList />} />
-        <Route
-          path={URL.INFORM_GALLERY_DETAIL}
-          element={<EgovGalleryDetail />}
-        />
-        <Route
-          path={URL.INFORM_GALLERY_CREATE}
-          element={<EgovGalleryEdit mode={CODE.MODE_CREATE} />}
-        />
-        <Route
-          path={URL.INFORM_GALLERY_MODIFY}
-          element={<EgovGalleryEdit mode={CODE.MODE_MODIFY} />}
-        />
-        <Route
-          path={URL.INFORM_GALLERY_REPLY}
-          element={<EgovGalleryEdit mode={CODE.MODE_REPLY} />}
-        />
-
-        {/* TEMPLATES */}
-        <Route path={URL.TEMPLATES} element={<Templates />} />
+          {/* INTRO */}
+          <Route path={URL.INTRO} element={<Navigate to={URL.INTRO_WORKS}/>}/>
+          <Route path={URL.INTRO_WORKS} element={<EgovIntroWork/>}/>
+          <Route path={URL.INTRO_SERVICE} element={<EgovIntroService/>}/>
 
 
-        {/* ADMIN */}
-        <Route
-          path={URL.ADMIN}
-          element={<Navigate to={URL.ADMIN_SCHEDULE} />}
-        />
-        <Route path={URL.ADMIN_SCHEDULE} element={<EgovAdminScheduleList />} />
-        <Route
-          path={URL.ADMIN_SCHEDULE_DETAIL}
-          element={<EgovAdminScheduleDetail />}
-        />
-        <Route
-          path={URL.ADMIN_SCHEDULE_CREATE}
-          element={<EgovAdminScheduleEdit mode={CODE.MODE_CREATE} />}
-        />
-        <Route
-          path={URL.ADMIN_SCHEDULE_MODIFY}
-          element={<EgovAdminScheduleEdit mode={CODE.MODE_MODIFY} />}
-        />
+          {/* SUPPORT */}
+          <Route
+              path={URL.SUPPORT}
+              element={<Navigate to={URL.SUPPORT_DOWNLOAD}/>}
+          />
 
-        <Route path={URL.ADMIN_BOARD} element={<EgovAdminBoardList />} />
-        <Route
-          path={URL.ADMIN_BOARD_CREATE}
-          element={<EgovAdminBoardEdit mode={CODE.MODE_CREATE} />}
-        />
-        <Route
-          path={URL.ADMIN_BOARD_MODIFY}
-          element={<EgovAdminBoardEdit mode={CODE.MODE_MODIFY} />}
-        />
+          <Route
+              path={URL.SUPPORT_DOWNLOAD}
+              element={<EgovSupportDownloadList/>}
+          />
+          <Route
+              path={URL.SUPPORT_DOWNLOAD_DETAIL}
+              element={<EgovSupportDownloadDetail/>}
+          />
+          <Route
+              path={URL.SUPPORT_DOWNLOAD_CREATE}
+              element={<EgovSupportDownloadCreate/>}
+          />
 
-        <Route path={URL.ADMIN_USAGE} element={<EgovAdminUsageList />} />
-        <Route
-          path={URL.ADMIN_USAGE_CREATE}
-          element={<EgovAdminUsageEdit mode={CODE.MODE_CREATE} />}
-        />
-        <Route
-          path={URL.ADMIN_USAGE_MODIFY}
-          element={<EgovAdminUsageEdit mode={CODE.MODE_MODIFY} />}
-        />
+          <Route path={URL.SUPPORT_QNA} element={<EgovSupportQnaList/>}/>
+          <Route
+              path={URL.SUPPORT_QNA_DETAIL}
+              element={<EgovSupportQnaDetail/>}
+          />
 
-        <Route path={URL.ADMIN_NOTICE} element={<EgovAdminNoticeList />} />
-        <Route
-          path={URL.ADMIN_NOTICE_DETAIL}
-          element={<EgovAdminNoticeDetail />}
-        />
-        <Route
-          path={URL.ADMIN_NOTICE_CREATE}
-          element={<EgovAdminNoticeEdit mode={CODE.MODE_CREATE} />}
-        />
-        <Route
-          path={URL.ADMIN_NOTICE_MODIFY}
-          element={<EgovAdminNoticeEdit mode={CODE.MODE_MODIFY} />}
-        />
-        <Route
-          path={URL.ADMIN_NOTICE_REPLY}
-          element={<EgovAdminNoticeEdit mode={CODE.MODE_REPLY} />}
-        />
+          <Route path={URL.SUPPORT_APPLY} element={<EgovSupportApply/>}/>
 
-        <Route path={URL.ADMIN_GALLERY} element={<EgovAdminGalleryList />} />
-        <Route
-          path={URL.ADMIN_GALLERY_DETAIL}
-          element={<EgovAdminGalleryDetail />}
-        />
-        <Route
-          path={URL.ADMIN_GALLERY_CREATE}
-          element={<EgovAdminGalleryEdit mode={CODE.MODE_CREATE} />}
-        />
-        <Route
-          path={URL.ADMIN_GALLERY_MODIFY}
-          element={<EgovAdminGalleryEdit mode={CODE.MODE_MODIFY} />}
-        />
-        <Route
-          path={URL.ADMIN_GALLERY_REPLY}
-          element={<EgovAdminGalleryEdit mode={CODE.MODE_REPLY} />}
-        />
-        {/* 사이트관리자 암호 바꾸기 기능 */}
-        <Route path={URL.ADMIN_MANAGER} element={<EgovAdminPasswordUpdate />} />
-        <Route path={URL.ADMIN_MEMBERS} element={<EgovAdminMemberList />} />
-        <Route
-          path={URL.ADMIN_MEMBERS_CREATE}
-          element={<EgovAdminMemberEdit mode={CODE.MODE_CREATE} />}
-        />
-        <Route
-          path={URL.ADMIN_MEMBERS_MODIFY}
-          element={<EgovAdminMemberEdit mode={CODE.MODE_MODIFY} />}
-        />
-        {/* MYPAGE */}
-        {/*<Route
+          {/* INFORM */}
+          <Route path={URL.INFORM} element={<Navigate to={URL.INFORM_DAILY}/>}/>
+
+          <Route path={URL.INFORM_DAILY} element={<EgovDailyList/>}/>
+          <Route path={URL.INFORM_DAILY_DETAIL} element={<EgovDailyDetail/>}/>
+          <Route path={URL.INFORM_WEEKLY} element={<EgovWeeklyList/>}/>
+          <Route path={URL.INFORM_WEEKLY_DETAIL} element={<EgovDailyDetail/>}/>
+
+          <Route path={URL.INFORM_NOTICE} element={<EgovNoticeList/>}/>
+          <Route path={URL.INFORM_NOTICE_DETAIL} element={<EgovNoticeDetail/>}/>
+          <Route
+              path={URL.INFORM_NOTICE_CREATE}
+              element={<EgovNoticeEdit mode={CODE.MODE_CREATE}/>}
+          />
+          <Route
+              path={URL.INFORM_NOTICE_MODIFY}
+              element={<EgovNoticeEdit mode={CODE.MODE_MODIFY}/>}
+          />
+          <Route
+              path={URL.INFORM_NOTICE_REPLY}
+              element={<EgovNoticeEdit mode={CODE.MODE_REPLY}/>}
+          />
+
+          <Route path={URL.INFORM_GALLERY} element={<EgovGalleryList/>}/>
+          <Route
+              path={URL.INFORM_GALLERY_DETAIL}
+              element={<EgovGalleryDetail/>}
+          />
+          <Route
+              path={URL.INFORM_GALLERY_CREATE}
+              element={<EgovGalleryEdit mode={CODE.MODE_CREATE}/>}
+          />
+          <Route
+              path={URL.INFORM_GALLERY_MODIFY}
+              element={<EgovGalleryEdit mode={CODE.MODE_MODIFY}/>}
+          />
+          <Route
+              path={URL.INFORM_GALLERY_REPLY}
+              element={<EgovGalleryEdit mode={CODE.MODE_REPLY}/>}
+          />
+
+          {/* TEMPLATES */}
+          <Route path={URL.TEMPLATES} element={<Templates/>}/>
+
+
+          {/* ADMIN */}
+          <Route
+              path={URL.ADMIN}
+              element={<Navigate to={URL.ADMIN_SCHEDULE}/>}
+          />
+          <Route path={URL.ADMIN_SCHEDULE} element={<EgovAdminScheduleList/>}/>
+          <Route
+              path={URL.ADMIN_SCHEDULE_DETAIL}
+              element={<EgovAdminScheduleDetail/>}
+          />
+          <Route
+              path={URL.ADMIN_SCHEDULE_CREATE}
+              element={<EgovAdminScheduleEdit mode={CODE.MODE_CREATE}/>}
+          />
+          <Route
+              path={URL.ADMIN_SCHEDULE_MODIFY}
+              element={<EgovAdminScheduleEdit mode={CODE.MODE_MODIFY}/>}
+          />
+
+          <Route path={URL.ADMIN_BOARD} element={<EgovAdminBoardList/>}/>
+          <Route
+              path={URL.ADMIN_BOARD_CREATE}
+              element={<EgovAdminBoardEdit mode={CODE.MODE_CREATE}/>}
+          />
+          <Route
+              path={URL.ADMIN_BOARD_MODIFY}
+              element={<EgovAdminBoardEdit mode={CODE.MODE_MODIFY}/>}
+          />
+
+          <Route path={URL.ADMIN_USAGE} element={<EgovAdminUsageList/>}/>
+          <Route
+              path={URL.ADMIN_USAGE_CREATE}
+              element={<EgovAdminUsageEdit mode={CODE.MODE_CREATE}/>}
+          />
+          <Route
+              path={URL.ADMIN_USAGE_MODIFY}
+              element={<EgovAdminUsageEdit mode={CODE.MODE_MODIFY}/>}
+          />
+
+          <Route path={URL.ADMIN_NOTICE} element={<EgovAdminNoticeList/>}/>
+          <Route
+              path={URL.ADMIN_NOTICE_DETAIL}
+              element={<EgovAdminNoticeDetail/>}
+          />
+          <Route
+              path={URL.ADMIN_NOTICE_CREATE}
+              element={<EgovAdminNoticeEdit mode={CODE.MODE_CREATE}/>}
+          />
+          <Route
+              path={URL.ADMIN_NOTICE_MODIFY}
+              element={<EgovAdminNoticeEdit mode={CODE.MODE_MODIFY}/>}
+          />
+          <Route
+              path={URL.ADMIN_NOTICE_REPLY}
+              element={<EgovAdminNoticeEdit mode={CODE.MODE_REPLY}/>}
+          />
+
+          <Route path={URL.ADMIN_GALLERY} element={<EgovAdminGalleryList/>}/>
+          <Route
+              path={URL.ADMIN_GALLERY_DETAIL}
+              element={<EgovAdminGalleryDetail/>}
+          />
+          <Route
+              path={URL.ADMIN_GALLERY_CREATE}
+              element={<EgovAdminGalleryEdit mode={CODE.MODE_CREATE}/>}
+          />
+          <Route
+              path={URL.ADMIN_GALLERY_MODIFY}
+              element={<EgovAdminGalleryEdit mode={CODE.MODE_MODIFY}/>}
+          />
+          <Route
+              path={URL.ADMIN_GALLERY_REPLY}
+              element={<EgovAdminGalleryEdit mode={CODE.MODE_REPLY}/>}
+          />
+          {/* 사이트관리자 암호 바꾸기 기능 */}
+          <Route path={URL.ADMIN_MANAGER} element={<EgovAdminPasswordUpdate/>}/>
+          <Route path={URL.ADMIN_MEMBERS} element={<EgovAdminMemberList/>}/>
+          <Route
+              path={URL.ADMIN_MEMBERS_CREATE}
+              element={<EgovAdminMemberEdit mode={CODE.MODE_CREATE}/>}
+          />
+          <Route
+              path={URL.ADMIN_MEMBERS_MODIFY}
+              element={<EgovAdminMemberEdit mode={CODE.MODE_MODIFY}/>}
+          />
+          {/* MYPAGE */}
+          {/*<Route
           path={URL.MYPAGE_CREATE}
           element={<EgovMypageEdit mode={CODE.MODE_CREATE} />}
         />*/}
-        <Route path={URL.COMPLETE_MEMBER} element={<EgovCompleteMember />} />
-        <Route path={URL.SIGNUP_CHOICE} element={<MemberSignupChoice />} />
-        <Route path={URL.TERMS_AGREEMENT} element={<EgovTermsAgreement />} />
-        <Route path={URL.IDENTITY_VERIFICATION} element={<EgovIdentityVerification />} />
-        <Route
-            path={URL.MYPAGE_CREATE}
-            element={<MemberSignUp mode={CODE.MODE_CREATE} />}
-        />
-        <Route
-          path={URL.MYPAGE_MODIFY}
-          element={<MemberSignUp mode={CODE.MODE_MODIFY} />}
-        />
-        <Route
-          path={URL.ADMIN_MENU}
-          element={<EgovAdminMenuList mode={CODE.ADMIN_MENU} />}
-        />
+          <Route path={URL.COMPLETE_MEMBER} element={<EgovCompleteMember/>}/>
+          <Route path={URL.SIGNUP_CHOICE} element={<MemberSignupChoice/>}/>
+          <Route path={URL.TERMS_AGREEMENT} element={<EgovTermsAgreement/>}/>
+          <Route path={URL.IDENTITY_VERIFICATION} element={<EgovIdentityVerification/>}/>
+          <Route
+              path={URL.MYPAGE_CREATE}
+              element={<MemberSignUp mode={CODE.MODE_CREATE}/>}
+          />
+          <Route
+              path={URL.MYPAGE_MODIFY}
+              element={<MemberSignUp mode={CODE.MODE_MODIFY}/>}
+          />
+          <Route
+              path={URL.ADMIN_MENU}
+              element={<EgovAdminMenuList mode={CODE.ADMIN_MENU}/>}
+          />
 
-        <Route
-          path={URL.MANAGER}
-          element={<MamagerIndex mode={CODE.MANAGER} />}
-        />
+          <Route
+              path={URL.MANAGER}
+              element={<MamagerIndex mode={CODE.MANAGER}/>}
+          />
 
-        <Route
-          path={URL.MANAGER_CMS}
-          element={<MamagerIndex />}
-        />
-        <Route
-          path={URL.MANAGER_NORMAL_MEMBER}
-          element={<ManagerNormalMember />}
-        />
-        <Route
-            path={URL.MANAGER_APPROVAL_MEMBER}
-            element={<ManagerApprovalMember />}
-        />
-        <Route
-            path={URL.MANAGER_REJECT_MEMBER}
-            element={<ManagerRejectMember />}
-        />
-        <Route
-            path={URL.MANAGER_STOP_MEMBER}
-            element={<ManagerStopMember />}
-        />
-        <Route
-            path={URL.MANAGER_WAIT_MEMBER}
-            element={<ManagerWaitMember />}
-        />
-        <Route
-            path={URL.MANAGER_CANCEL_MEMBER}
-            element={<ManagerCancelMember />}
-        />
-        <Route
-            path={URL.MANAGER_RELATED_COMPANY}
-            element={<MemberRelatedMember />}
-        />
-        <Route
-            path={URL.MANAGER_NONRESIDENT_COMPANY}
-            element={<MemberNonResidentMember />}
-        />
-        <Route
-            path={URL.MANAGER_CONSULTENT}
-            element={<MemberConsultentMember />}
-        />
-        <Route
-          path={URL.MANAGER_RESIDENT_COMPANY}
-          element={<MemberResidentMember />}
-        />
+          <Route
+              path={URL.MANAGER_CMS}
+              element={<MamagerIndex/>}
+          />
+          <Route
+              path={URL.MANAGER_NORMAL_MEMBER}
+              element={<ManagerNormalMember/>}
+          />
+          <Route
+              path={URL.MANAGER_APPROVAL_MEMBER}
+              element={<ManagerApprovalMember/>}
+          />
+          <Route
+              path={URL.MANAGER_REJECT_MEMBER}
+              element={<ManagerRejectMember/>}
+          />
+          <Route
+              path={URL.MANAGER_STOP_MEMBER}
+              element={<ManagerStopMember/>}
+          />
+          <Route
+              path={URL.MANAGER_WAIT_MEMBER}
+              element={<ManagerWaitMember/>}
+          />
+          <Route
+              path={URL.MANAGER_CANCEL_MEMBER}
+              element={<ManagerCancelMember/>}
+          />
+          <Route
+              path={URL.MANAGER_RELATED_COMPANY}
+              element={<MemberRelatedMember/>}
+          />
+          <Route
+              path={URL.MANAGER_NONRESIDENT_COMPANY}
+              element={<MemberNonResidentMember/>}
+          />
+          <Route
+              path={URL.MANAGER_CONSULTENT}
+              element={<MemberConsultentMember/>}
+          />
+          <Route
+              path={URL.MANAGER_RESIDENT_COMPANY}
+              element={<MemberResidentMember/>}
+          />
 
-        <Route
-            path={URL.MANAGER_MENU_MANAGEMENT}
-            element={<ManagerMenuManagement />}
-        />
-        <Route
-            path={URL.MANAGER_MENU_AUTHORITY}
-            element={<ManagerMenuAuthority />}
-        />
+          <Route
+              path={URL.MANAGER_MENU_MANAGEMENT}
+              element={<ManagerMenuManagement/>}
+          />
+          <Route
+              path={URL.MANAGER_MENU_AUTHORITY}
+              element={<ManagerMenuAuthority/>}
+          />
 
-        <Route
-            path={URL.MANAGER_BBS_LIST}
-            element={<ManagerBbsList />}
-        />
+          <Route
+              path={URL.MANAGER_BBS_LIST}
+              element={<ManagerBbsList/>}
+          />
 
-        <Route
-            path={URL.MANAGER_BBS_CREATE}
-            element={<ManagerBbsEdit mode={CODE.MODE_CREATE}/>}
-        />
+          <Route
+              path={URL.MANAGER_BBS_CREATE}
+              element={<ManagerBbsEdit mode={CODE.MODE_CREATE}/>}
+          />
 
-        <Route
-            path={URL.MANAGER_BBS_MODIFY}
-            element={<ManagerBbsEdit mode={CODE.MODE_MODIFY}/>}
-        />
+          <Route
+              path={URL.MANAGER_BBS_MODIFY}
+              element={<ManagerBbsEdit mode={CODE.MODE_MODIFY}/>}
+          />
 
-        <Route
-            path={URL.MANAGER_BBS_LIST2}
-            element={<ManagerBbsList2 />}
-        />
+          <Route
+              path={URL.MANAGER_BBS_LIST2}
+              element={<ManagerBbsList2/>}
+          />
 
-        <Route
-            path={URL.MANAGER_PST_LIST}
-            element={<ManagerBbsPstList />}
-        />
+          <Route
+              path={URL.MANAGER_PST_LIST}
+              element={<ManagerBbsPstList/>}
+          />
 
-        <Route
-            path={URL.MANAGER_PST_DETAIL}
-            element={<ManagerPstDetail mode={CODE.MODE_READ}/>}
-        />
+          <Route
+              path={URL.MANAGER_PST_DETAIL}
+              element={<ManagerPstDetail mode={CODE.MODE_READ}/>}
+          />
 
-        <Route
-            path={URL.MANAGER_PST_CREATE}
-            element={<ManagerBbsPstEdit mode={CODE.MODE_CREATE}/>}
-        />
+          <Route
+              path={URL.MANAGER_PST_CREATE}
+              element={<ManagerBbsPstEdit mode={CODE.MODE_CREATE}/>}
+          />
 
-        <Route
-            path={URL.MANAGER_PST_MODIFY}
-            element={<ManagerBbsPstEdit mode={CODE.MODE_MODIFY}/>}
-        />
+          <Route
+              path={URL.MANAGER_PST_MODIFY}
+              element={<ManagerBbsPstEdit mode={CODE.MODE_MODIFY}/>}
+          />
 
-        <Route
-            path={URL.FIND_ID_PSWD}
-            element={<EgovFindIdPswd />}
-        />
-        <Route
-            path={URL.MANAGER_CODE_GROUP}
-            element={<ManagerCodeGroup />}
-        />
-        <Route
-            path={URL.MANAGER_CODE_GROUP_CREATE}
-            element={<ManagerCodeGroupEdit mode={CODE.MODE_CREATE}/>}
-        />
+          <Route
+              path={URL.FIND_ID_PSWD}
+              element={<EgovFindIdPswd/>}
+          />
+          <Route
+              path={URL.MANAGER_CODE_GROUP}
+              element={<ManagerCodeGroup/>}
+          />
+          <Route
+              path={URL.MANAGER_CODE_GROUP_CREATE}
+              element={<ManagerCodeGroupEdit mode={CODE.MODE_CREATE}/>}
+          />
 
-        <Route
-            path={URL.MANAGER_CODE_GROUP_MODIFY}
-            element={<ManagerCodeGroupEdit mode={CODE.MODE_MODIFY}/>}
-        />
+          <Route
+              path={URL.MANAGER_CODE_GROUP_MODIFY}
+              element={<ManagerCodeGroupEdit mode={CODE.MODE_MODIFY}/>}
+          />
 
-        <Route
-            path={URL.RESIDENT_COMPANY_CREATE}
-            element={<ResidentCompanyCreate mode={CODE.MODE_CREATE}/>}
-        />
+          <Route
+              path={URL.RESIDENT_COMPANY_CREATE}
+              element={<ResidentCompanyCreate mode={CODE.MODE_CREATE}/>}
+          />
 
-        <Route
-            path={URL.RESIDENT_COMPANY_MODIFY}
-            element={<ResidentCompanyCreate mode={CODE.MODE_MODIFY}/>}
-        />
+          <Route
+              path={URL.RESIDENT_COMPANY_MODIFY}
+              element={<ResidentCompanyCreate mode={CODE.MODE_MODIFY}/>}
+          />
 
-        <Route path={URL.MANAGER_CODE} element={<ManagerCodeList />} />
-        <Route
-            path={URL.MANAGER_CODE_CREATE}
-            element={<ManagerCodeEdit mode={CODE.MODE_CREATE} />}
-        />
-        <Route
-            path={URL.MANAGER_CODE_MODIFY}
-            element={<ManagerCodeEdit mode={CODE.MODE_MODIFY} />}
-        />
+          <Route path={URL.MANAGER_CODE} element={<ManagerCodeList/>}/>
+          <Route
+              path={URL.MANAGER_CODE_CREATE}
+              element={<ManagerCodeEdit mode={CODE.MODE_CREATE}/>}
+          />
+          <Route
+              path={URL.MANAGER_CODE_MODIFY}
+              element={<ManagerCodeEdit mode={CODE.MODE_MODIFY}/>}
+          />
 
-        <Route
-          path={URL.MANAGER_NORMAL_MEMBER_MODIFY}
-          element={<ManagerNormalMemberEdit mode={CODE.MODE_MODIFY}/>}
-        />
+          <Route
+              path={URL.MANAGER_NORMAL_MEMBER_MODIFY}
+              element={<ManagerNormalMemberEdit mode={CODE.MODE_MODIFY}/>}
+          />
 
-        <Route
-            path={URL.MANAGER_APPROVAL_MEMBER_MODIFY}
-            element={<ManagerApprovalMemberEdit mode={CODE.MODE_MODIFY}/>}
-        />
-        
-        <Route
-            path={URL.MANAGER_REJECT_MEMBER_MODIFY}
-            element={<ManagerRejectMemberEdit mode={CODE.MODE_MODIFY}/>}
-        />
-        <Route
-            path={URL.MANAGER_STOP_MEMBER_MODIFY}
-            element={<ManagerStopMemberEdit mode={CODE.MODE_MODIFY}/>}
-        />
-        <Route
-            path={URL.MANAGER_WAIT_MEMBER_MODIFY}
-            element={<ManagerWaitMemberEdit mode={CODE.MODE_MODIFY}/>}
-        />
+          <Route
+              path={URL.MANAGER_APPROVAL_MEMBER_MODIFY}
+              element={<ManagerApprovalMemberEdit mode={CODE.MODE_MODIFY}/>}
+          />
 
-        <Route
-            path={URL.MANAGER_NORMAL_MEMBER_CREATE}
-            element={<ManagerNormalMemberEdit mode={CODE.MODE_CREATE}/>}
-        />
+          <Route
+              path={URL.MANAGER_REJECT_MEMBER_MODIFY}
+              element={<ManagerRejectMemberEdit mode={CODE.MODE_MODIFY}/>}
+          />
+          <Route
+              path={URL.MANAGER_STOP_MEMBER_MODIFY}
+              element={<ManagerStopMemberEdit mode={CODE.MODE_MODIFY}/>}
+          />
+          <Route
+              path={URL.MANAGER_WAIT_MEMBER_MODIFY}
+              element={<ManagerWaitMemberEdit mode={CODE.MODE_MODIFY}/>}
+          />
 
-        <Route path={URL.MANAGER_BANNER_LIST} element={<ManagerBannerList />} />
-        <Route path={URL.MANAGER_BANNER_CREATE} element={<ManagerBannerEdit mode={CODE.MODE_CREATE} />} />
-        <Route path={URL.MANAGER_BANNER_MODIFY} element={<ManagerBannerEdit mode={CODE.MODE_MODIFY} />} />
-        <Route path={URL.MANAGER_POPUP_LIST} element={<ManagerPopupList />} />
-        <Route path={URL.MANAGER_POPUP_CREATE} element={<ManagerPopupEdit mode={CODE.MODE_CREATE} />} />
-        <Route path={URL.MANAGER_POPUP_MODIFY} element={<ManagerPopupEdit mode={CODE.MODE_MODIFY} />} />
+          <Route
+              path={URL.MANAGER_NORMAL_MEMBER_CREATE}
+              element={<ManagerNormalMemberEdit mode={CODE.MODE_CREATE}/>}
+          />
 
-        <Route path={URL.MANAGER_IMAGES_POPUP} element={<ManagerImagesPopup />} />
-        <Route path={URL.MANAGER_OPERATIONAL_SUPPORT} element={<OperationalSupport />} />
-        <Route path={URL.MANAGER_CONSULTING_EXPERT} element={<ManagerExpert />} />
-        <Route path={URL.MANAGER_CONSULTING_MATCHING} element={<ManagerMatching />} />
-        <Route path={URL.MANAGER_MEMBER} element={<ManagerAllMember />} />
-        <Route path={URL.MANAGER_MEMBER_ALL_MEMBER} element={<ManagerAllMember />} />
+          <Route path={URL.MANAGER_BANNER_LIST} element={<ManagerBannerList/>}/>
+          <Route path={URL.MANAGER_BANNER_CREATE} element={<ManagerBannerEdit mode={CODE.MODE_CREATE}/>}/>
+          <Route path={URL.MANAGER_BANNER_MODIFY} element={<ManagerBannerEdit mode={CODE.MODE_MODIFY}/>}/>
+          <Route path={URL.MANAGER_POPUP_LIST} element={<ManagerPopupList/>}/>
+          <Route path={URL.MANAGER_POPUP_CREATE} element={<ManagerPopupEdit mode={CODE.MODE_CREATE}/>}/>
+          <Route path={URL.MANAGER_POPUP_MODIFY} element={<ManagerPopupEdit mode={CODE.MODE_MODIFY}/>}/>
 
-        <Route path={URL.MANAGER_HOMEPAGE} element={<ManagerMainView />} />
-        <Route path={URL.MANAGER_HOMEPAGE_MAIN_VIEW} element={<ManagerMainView />} />
-        <Route path={URL.MANAGER_HOMEPAGE_ORGANIZATION_CHART_LIST} element={<ManagerOrganizationChartList />} />
-        
-        <Route path={URL.MANAGER_ACCESS_LIST} element={<ManagerAccessList />} />
-        <Route path={URL.MANAGER_ACCESS_CREATE} element={<ManagerAccessEdit mode={CODE.MODE_CREATE} />} />
-        <Route path={URL.MANAGER_ACCESS_MODIFY} element={<ManagerAccessEdit mode={CODE.MODE_MODIFY} />} />
+          <Route path={URL.MANAGER_IMAGES_POPUP} element={<ManagerImagesPopup/>}/>
+          <Route path={URL.MANAGER_OPERATIONAL_SUPPORT} element={<OperationalSupport/>}/>
+          <Route path={URL.MANAGER_CONSULTING_EXPERT} element={<ManagerExpert/>}/>
+          <Route path={URL.MANAGER_CONSULTING_MATCHING} element={<ManagerMatching/>}/>
+          <Route path={URL.MANAGER_MEMBER} element={<ManagerAllMember/>}/>
+          <Route path={URL.MANAGER_MEMBER_ALL_MEMBER} element={<ManagerAllMember/>}/>
 
-        <Route path={URL.MANAGER_STATISTICS} element={<ManagerStatisticsUser />} />
-        <Route path={URL.MANAGER_STATISTICS_USER} element={<ManagerStatisticsUser />} />
+          <Route path={URL.MANAGER_HOMEPAGE} element={<ManagerMainView/>}/>
+          <Route path={URL.MANAGER_HOMEPAGE_MAIN_VIEW} element={<ManagerMainView/>}/>
+          <Route path={URL.MANAGER_HOMEPAGE_ORGANIZATION_CHART_LIST} element={<ManagerOrganizationChartList/>}/>
 
-      </Routes>
+          <Route path={URL.MANAGER_ACCESS_LIST} element={<ManagerAccessList/>}/>
+          <Route path={URL.MANAGER_ACCESS_CREATE} element={<ManagerAccessEdit mode={CODE.MODE_CREATE}/>}/>
+          <Route path={URL.MANAGER_ACCESS_MODIFY} element={<ManagerAccessEdit mode={CODE.MODE_MODIFY}/>}/>
 
-      {requestUrl === "manager" ? "" :
-          requestUrl === "popupView" ? "" : (<EgovFooterUser />)
-      }
-    </div>
+          <Route path={URL.MANAGER_STATISTICS} element={<ManagerStatisticsUser/>}/>
+          <Route path={URL.MANAGER_STATISTICS_USER} element={<ManagerStatisticsUser/>}/>
+
+          <Route path={URL.MessageTest} element={<MessageTest/>}/>
+        </Routes>
+
+        {requestUrl === "manager" ? "" :
+            requestUrl === "popupView" ? "" : (<EgovFooterUser/>)
+        }
+      </div>
   );
 };
 

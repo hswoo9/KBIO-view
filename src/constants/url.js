@@ -176,6 +176,8 @@ const URL = {
 
   MANAGER_STATISTICS: "/manager/statistics",
   MANAGER_STATISTICS_USER: "/manager/statistics/user",
+
+  MessageTest: "/messageTest"
 };
 
 // eslint-disable-next-line react-refresh/only-export-components

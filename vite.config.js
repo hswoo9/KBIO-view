@@ -3,6 +3,9 @@ import react from "@vitejs/plugin-react-swc";
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  define: {
+    global: 'window',  // global을 window로 정의
+  },
   plugins: [react()],
   base: "/",
   server: {
@@ -25,7 +28,6 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/backApi/, ""),
       }
     },
-    plugins : [react()],
   },
   resolve: {
     alias: [{ find: "@", replacement: "/src" }],
