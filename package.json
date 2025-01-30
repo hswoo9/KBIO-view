@@ -10,6 +10,8 @@
     "bootstrap": "^5.3.3",
     "ci": "^2.3.0",
     "egovframe-template-simple-react": "file:",
+    "exceljs": "^4.4.0",
+    "file-saver": "^2.0.5",
     "jquery": "^3.7.1",
     "jwt-decode": "^4.0.0",
     "moment": "^2.30.1",

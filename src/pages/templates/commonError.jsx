@@ -1,6 +1,5 @@
 import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
 import '@/css/commonError.css';
-import URL from "@/constants/url";
 
 const commonError = (props) => {
     const location = useLocation();
@@ -14,7 +13,13 @@ const commonError = (props) => {
                 <p className="error-description">
                     관리자에게 문의해주세요.
                 </p>
-                <Link to="/" className="go-home-button">메인으로</Link>
+                <button
+                    className="go-home-button"
+                    onClick={(e) => {
+                        window.location.href = "/";
+                    }}>
+                    메인으로
+                </button>
             </div>
         </div>
     );
