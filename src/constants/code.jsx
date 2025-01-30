@@ -1,6 +1,6 @@
 const CODE = {
     RCV_SUCCESS             : "200", // 성공
-    
+    RCV_ERROR_AUTH_IP       : "401", // 미허용아이피 오류
     RCV_ERROR_AUTH          : "403", // 인증 오류
     RCV_ERROR_DELETE        : "700", // 삭제 오류
     RCV_ERROR_SAVE          : "800", // 저장 오류

@@ -1,0 +1,116 @@
+@charset "utf-8";
+/* 전체 페이지 배경 */
+.error-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f7f7f7;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(to right, #f06, #48c6ef);
+    animation: backgroundAnimation 10s infinite alternate;
+}
+
+/* 에러 컨텐츠 영역 */
+.error-content {
+    text-align: center;
+    padding: 40px 30px;
+    background-color: #fff;
+    border-radius: 20px;
+    box-shadow: 0 6px 30px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 500px;
+    position: relative;
+    animation: contentFadeIn 1s ease-out;
+}
+
+/* 아이콘 */
+.error-icon {
+    font-size: 80px;
+    color: #ff6347;
+    margin-bottom: 20px;
+    animation: bounceIcon 1s infinite;
+}
+
+/* 404 코드 스타일 */
+.error-code {
+    font-size: 120px;
+    font-weight: bold;
+    color: #ff6347;
+    margin: 0;
+    letter-spacing: 10px;
+}
+
+/* 에러 메시지 스타일 (강조) */
+.error-message {
+    font-size: 28px; /* 글자 크기를 키워 강조 */
+    color: #e74c3c; /* 에러 강조를 위해 붉은색 */
+    margin: 10px 0;
+    font-weight: bold; /* 볼드 처리로 강조 */
+    text-transform: uppercase; /* 대문자로 강조 */
+    letter-spacing: 2px; /* 글자 간격을 늘려서 더 눈에 띄게 */
+}
+
+/* 에러 설명 스타일 (강조) */
+.error-description {
+    font-size: 20px;
+    color: #34495e; /* 좀 더 진한 색상으로 강조 */
+    margin: 10px 0;
+    font-weight: 500; /* 보통 굵기로 강조 */
+    line-height: 1.6;
+    animation: descriptionFadeIn 1.5s ease-out; /* 페이드 인 애니메이션 추가 */
+}
+
+/* 홈으로 가는 버튼 */
+.go-home-button {
+    margin-top: 20px;
+    padding: 12px 24px;
+    background-color: #ff6347;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 50px;
+    text-transform: uppercase;
+    transition: transform 0.3s, background-color 0.3s;
+}
+
+/* 버튼 hover 스타일 */
+.go-home-button:hover {
+    background-color: #ff4500;
+    transform: scale(1.1);
+}
+
+/* 아이콘 애니메이션 */
+@keyframes bounceIcon {
+    0% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-15px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+/* 내용 페이드 인 애니메이션 */
+@keyframes contentFadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 에러 설명 페이드 인 애니메이션 */
+@keyframes descriptionFadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}

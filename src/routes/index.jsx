@@ -17,6 +17,8 @@ import EgovFooter from "@/components/EgovFooter";
 import EgovInfoPopup from "@/components/EgovInfoPopup";
 import EgovError from "@/components/EgovError";
 
+import CommonError from "@/pages/templates/commonError.jsx";
+
 import EgovMain from "@/pages/main/EgovMain";
 import EgovLogin from "@/pages/login/EgovLogin";
 import ManagerLogin from "@/pages/manager/login/ManagerLogin";
@@ -242,9 +244,12 @@ const SecondRoutes = () => {
   const requestUrl = window.location.pathname.split("/")[1];
   return (
       <div id="wrap" className={requestUrl === "manager" ? "admin" : "user"}>
-        {requestUrl === "manager" ? (<ManagerTop/>) :
-            requestUrl === "popupView" ? "" : (<EgovHeaderUser/>)
+        {
+          requestUrl === "manager" ? (<ManagerTop/>) :
+          requestUrl === "popupView" ? "" :
+          requestUrl === "commonError" ? "" : (<EgovHeaderUser/>)
         }
+
         <Routes>
           {/* MAIN */}
           <Route path={URL.MAIN} element={<EgovMainUser/>}/>
@@ -672,10 +677,14 @@ const SecondRoutes = () => {
           <Route path={URL.MANAGER_STATISTICS_USER} element={<ManagerStatisticsUser/>}/>
 
           <Route path={URL.MessageTest} element={<MessageTest/>}/>
+
+          <Route path={URL.COMMON_ERROR} element={<CommonError/>}/>
         </Routes>
 
-        {requestUrl === "manager" ? "" :
-            requestUrl === "popupView" ? "" : (<EgovFooterUser/>)
+        {
+          requestUrl === "manager" ? "" :
+          requestUrl === "popupView" ? "" :
+          requestUrl === "commonError" ? "" :  (<EgovFooterUser/>)
         }
       </div>
   );
