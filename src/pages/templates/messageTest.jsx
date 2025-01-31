@@ -1,28 +1,28 @@
 import React, {useEffect, useRef, useState} from "react";
-import SockJS from "sockjs-client";
 import { default as EgovLeftNav } from "@/components/leftmenu/EgovLeftNavTemplates";
-
+import {useWebSocket, sendMessageFn} from "../../utils/WebSocketProvider.jsx";
 const WebSocketNotification = () => {
-  const [notifications, setNotifications] = useState([]);
-  const sock = new SockJS("http://localhost:8080/ws");
-  const userSnRef = useRef("");
-  const titleRef = useRef("");
-  const contentRef = useRef("");
-  const privateTitleRef = useRef("");
-  const privateContentRef = useRef("");
-  const sendMessageFn = (sendType) => {
-    sock.send(JSON.stringify({
-      sendType : sendType,
-      userSn : userSnRef.current.value,
-      title : sendType == "all" ? titleRef.current.value : privateTitleRef.current.value,
-      content : sendType == "all" ? contentRef.current.value : privateContentRef.current.value
-    }));
-  }
+    const { socket, isConnected } = useWebSocket();
+    const userSnRef = useRef("");
+    const titleRef = useRef("");
+    const contentRef = useRef("");
+    const privateTitleRef = useRef("");
+    const privateContentRef = useRef("");
 
-  sock.addEventListener("message", e => {
-    const notification = JSON.parse(e.data);
-    setNotifications((prev) => [...prev, notification]);
-  });
+    const sendNotification = (sendType) => {
+        if (isConnected) {
+            sendMessageFn(
+                socket,
+                sendType,
+                userSnRef.current.value,
+                privateTitleRef.current.value,
+                privateContentRef.current.value
+            );  // 연결된 상태에서만 메시지 전송
+        } else {
+            console.log("WebSocket 연결이 열려 있지 않습니다.");
+        }
+    };
+
 
   return (
       <div className="container">
@@ -53,7 +53,7 @@ const WebSocketNotification = () => {
                   }}
               />
               <button
-                  onClick={() => sendMessageFn("all")}
+                  onClick={() =>  sendNotification("all")}
                   style={{border: "1px solid black"}}>
                 전체알림 보내기
               </button>
@@ -88,19 +88,12 @@ const WebSocketNotification = () => {
               />
 
               <button
-                  onClick={() => sendMessageFn("private")}
+                  onClick={() => sendNotification("private")}
                   style={{border: "1px solid black"}}>
                 개인알림 보내기
               </button>
             </div>
             <h2>Notifications:</h2>
-            <ul>
-              {notifications.map((notification, index) => (
-                  <li key={index}>
-                    <strong>{notification.title}</strong>: {notification.content}
-                  </li>
-              ))}
-            </ul>
           </div>
         </div>
       </div>
