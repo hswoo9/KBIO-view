@@ -4,6 +4,40 @@ import {useNavigate} from "react-router-dom";
 import URL from "@/constants/url";
 import { saveAs } from "file-saver";
 import * as ExcelJS from "exceljs";
+import axios from "axios";
+import Swal from "sweetalert2";
+
+/**
+ * 파일 다운로드
+ * @param atchFileSn
+ * @param atchFileNm
+ * @returns {Promise<void>}
+ */
+export const fileDownLoad = async (atchFileSn, atchFileNm) => {
+    const response = await axios.post(`${window.location.protocol}//${window.location.hostname}:8080/commonApi/getFileDownLoad`, {
+        atchFileSn : atchFileSn
+    }, {
+        responseType : 'blob'
+    });
+
+    if (response.status != 200) {
+        Swal.fire({
+            title: "파일 다운로드 오류",
+            text: "관리자에게 문의해주세요.",
+        });
+        return;
+    }
+
+    const blob = await response.data;
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", atchFileNm);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+}
 
 /**
  * 관리자 아이피 체크

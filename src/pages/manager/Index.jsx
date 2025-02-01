@@ -6,7 +6,7 @@ import URL from "@/constants/url";
 import CODE from "@/constants/code";
 
 import ManagerLeftNew from "@/components/manager/ManagerLeftNew";
-import {mngrAcsIpChk} from "../../components/CommonComponents.jsx";
+import {mngrAcsIpChk} from "@/components/CommonComponents.jsx";
 
 function Index(props) {
     // mngrAcsIpChk(useNavigate())

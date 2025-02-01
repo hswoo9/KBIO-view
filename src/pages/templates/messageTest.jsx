@@ -33,67 +33,46 @@ const WebSocketNotification = () => {
             {/* <!--// Navigation --> */}
 
             <h1>WebSocket 알림</h1>
-            <div>
-              <input
-                  type="text"
-                  style={{border: "1px solid black"}}
-                  id="title"
-                  ref={titleRef}
-                  onChange={(e) => {
-                    titleRef.current.value = e.target.value;
-                  }}
-              />
-              <input
-                  type="text"
-                  style={{border: "1px solid black"}}
-                  id="content"
-                  ref={contentRef}
-                  onChange={(e) => {
-                    contentRef.current.value = e.target.value;
-                  }}
-              />
-              <button
-                  onClick={() =>  sendNotification("all")}
-                  style={{border: "1px solid black"}}>
-                전체알림 보내기
-              </button>
-            </div>
-            <div>
-              <input
-                  type="text"
-                  style={{border: "1px solid black"}}
-                  id="userSn"
-                  ref={userSnRef}
-                  onChange={(e) => {
-                    userSnRef.current.value = e.target.value;
-                  }}
-              />
-              <input
-                  type="text"
-                  style={{border: "1px solid black"}}
-                  id="title"
-                  ref={privateTitleRef}
-                  onChange={(e) => {
-                    privateTitleRef.current.value = e.target.value;
-                  }}
-              />
-              <input
-                  type="text"
-                  style={{border : "1px solid black"}}
-                  id="content"
-                  ref={privateContentRef}
-                  onChange={(e) => {
-                    privateContentRef.current.value = e.target.value;
-                  }}
-              />
-
-              <button
-                  onClick={() => sendNotification("private")}
-                  style={{border: "1px solid black"}}>
-                개인알림 보내기
-              </button>
-            </div>
-            <h2>Notifications:</h2>
+              <div>
+                  <input
+                      type="text"
+                      style={{border: "1px solid black"}}
+                      id="userSn"
+                      ref={userSnRef}
+                      onChange={(e) => {
+                          userSnRef.current.value = e.target.value;
+                      }}
+                  />
+                  <input
+                      type="text"
+                      style={{border: "1px solid black"}}
+                      id="title"
+                      ref={privateTitleRef}
+                      onChange={(e) => {
+                          privateTitleRef.current.value = e.target.value;
+                      }}
+                  />
+                  <input
+                      type="text"
+                      style={{border: "1px solid black"}}
+                      id="content"
+                      ref={privateContentRef}
+                      onChange={(e) => {
+                          privateContentRef.current.value = e.target.value;
+                      }}
+                  />
+                  <button
+                      onClick={() => sendNotification("all")}
+                      style={{border: "1px solid black"}}>
+                      전체알림 보내기
+                  </button>
+                  <button
+                      onClick={() => sendNotification("private")}
+                      style={{border: "1px solid black"}}>
+                      개인알림 보내기
+                  </button>
+              </div>
+              <h2>Notifications:</h2>
           </div>
         </div>
       </div>

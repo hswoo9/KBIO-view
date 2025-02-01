@@ -10,7 +10,7 @@ export const WebSocketProvider = ({ children }) => {
 
   useEffect(() => {
     // WebSocket 객체 생성
-    const socketInstance = new SockJS(`http://${window.location.hostname}:8080/ws`);
+    const socketInstance = new SockJS(`${window.location.protocol}//${window.location.hostname}:8080/ws`);
 
     // WebSocket 연결이 열리면 상태 업데이트
     socketInstance.onopen = () => {
