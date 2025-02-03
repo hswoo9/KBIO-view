@@ -34,11 +34,11 @@ function EgovFindIdPswd(props) {
             // 서버 응답 처리
             await EgovNet.requestFetch(checkIdURL, reqOptions, function (response) {
                 if (response.resultCode === 200) {
-                    const memberId = response.result.memberId;
-                    if (memberId) {
+                    const userId = response.result.userId;
+                    if (userId) {
                         Swal.fire({
                             title: "ID 찾기 성공",
-                            text: `회원님의 ID는 '${memberId}'입니다.`,
+                            text: `회원님의 ID는 '${userId}'입니다.`,
                         });
                     } else {
                         Swal.fire({
