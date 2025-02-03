@@ -25,7 +25,9 @@ function Index(props) {
     );
 
     useEffect(() => {
-        getMenu(searchDto);
+        if(searchDto.menuSn != null){
+            getMenu(searchDto);
+        }
     }, [searchDto]);
 
     const [searchMenu, setSearchMenu] = useState({});
@@ -46,7 +48,9 @@ function Index(props) {
 
     const [deleteMenu, setDeleteMenu] = useState({});
     useEffect(() => {
-        setMenuDel(deleteMenu);
+        if(deleteMenu.actionYn != null){
+            setMenuDel(deleteMenu);
+        }
     }, [deleteMenu]);
 
     const [checked, setChecked] = useState([]);
@@ -242,7 +246,8 @@ function Index(props) {
                 let deleteMenu = [];
                 deleteMenu.push(menuDetail.menuSn);
                 setDeleteMenu({
-                    menuSns : deleteMenu.join(",")
+                    menuSns : deleteMenu.join(","),
+                    actionYn : "Y"
                 });
             } else {
             }
