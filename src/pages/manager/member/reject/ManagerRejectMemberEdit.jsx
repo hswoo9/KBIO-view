@@ -167,9 +167,6 @@ function setRejectMember(props) {
         <div id="container" className="container layout cms">
             <ManagerLeft/>
             <div className="inner">
-                <h2 className="pageTitle">
-                    <p>{modeInfo.mode === CODE.MODE_CREATE ? "회원 등록" : "회원 수정"}</p>
-                </h2>
 
                 <div className="contBox infoWrap customContBox">
                     <ul className="inputWrap">
