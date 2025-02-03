@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import SockJS from 'sockjs-client';
+import Swal from "sweetalert2";
 
 const WebSocketContext = createContext();
 
@@ -31,10 +32,10 @@ export const WebSocketProvider = ({ children }) => {
       alert(
           "알림왔습니다.\n" +
           "제목 : " +
-          notification.title +
+          notification.msgTtl +
           "\n" +
           "내용 : " +
-          notification.content
+          notification.msgCn
       );
     };
 
@@ -61,13 +62,28 @@ export const useWebSocket = () => {
   return useContext(WebSocketContext);
 };
 
-export const sendMessageFn = (sock, sendType, userSn, title, content) => {
+/**
+ *
+ * @param sock
+ * @param sendType = 발송타입 (all = 전체, private = 개인)
+ * @param dsptchUserSn = 발신사용자일련번호
+ * @param rcptnUserSn = 수신사용자일련번호(sendType 이 private 일때 필수
+ * @param title = 제목
+ * @param content = 내용
+ */
+export const sendMessageFn = (sock, sendType, dsptchUserSn, rcptnUserSn, msgTtl, msgCn) => {
   if (sock && sock.readyState === WebSocket.OPEN) {
+    if(sendType == "private" && (rcptnUserSn == null || rcptnUserSn == "")){
+      Swal.fire("수신자를 입력해주세요.");
+      return;
+    }
+
     sock.send(JSON.stringify({
       sendType,
-      userSn,
-      title,
-      content
+      dsptchUserSn,
+      rcptnUserSn,
+      msgTtl,
+      msgCn
     }));
   } else {
     console.log('WebSocket 연결이 열려 있지 않습니다.');
