@@ -1,9 +1,8 @@
 import React, {useEffect, useRef, useState} from "react";
 import { default as EgovLeftNav } from "@/components/leftmenu/EgovLeftNavTemplates";
 import {useWebSocket, sendMessageFn} from "../../utils/WebSocketProvider.jsx";
-import {getComCdList, getMenu} from "../../components/CommonComponents.jsx";
+import {getComCdList, getLeftMenu, getMenu} from "../../components/CommonComponents.jsx";
 import {getSessionItem} from "../../utils/storage.js";
-import moment from "moment/moment.js";
 
 const WebSocketNotification = () => {
     const sessionUser = getSessionItem("loginUser");
@@ -13,9 +12,6 @@ const WebSocketNotification = () => {
     const contentRef = useRef("");
     const privateTitleRef = useRef("");
     const privateContentRef = useRef("");
-    useEffect(() => {
-        // getMenu();
-    }, []);
 
     const sendNotification = (sendType) => {
         if (isConnected) {
