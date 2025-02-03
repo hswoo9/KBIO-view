@@ -487,7 +487,7 @@ function ManagerLeftOperationalSupport() {
               </li>
               <li>
                 <NavLink
-                    to={""}
+                    to={URL.MANAGER_CONSULTING_MATCHING}
                     className={({isActive}) => (isActive ? "activeTag" : "")}
                 >
                   <div className="icon"></div>
@@ -496,7 +496,7 @@ function ManagerLeftOperationalSupport() {
               </li>
               <li>
                 <NavLink
-                    to={""}
+                    to={URL.MANAGER_CONSULTING_MATCHING}
                     className={({isActive}) => (isActive ? "activeTag" : "")}
                 >
                   <div className="icon"></div>

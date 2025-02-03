@@ -100,7 +100,7 @@ const URL = {
   MANAGER_CANCEL_MEMBER: "/manager/cancel/cancelMember",
   MANAGER_STOP_MEMBER: "/manager/stop/stopMember",
   MANAGER_WAIT_MEMBER: "/manager/wait/waitMember",
-  MANAGER_RESIDENT_COMPANY: "/manager/residentMember",
+  MANAGER_RESIDENT_COMPANY: "/manager/residentCompany",
   MANAGER_RELATED_COMPANY: "/manager/relatedMember",
   MANAGER_NONRESIDENT_COMPANY: "/manager/nonresidentMember",
   MANAGER_CONSULTENT: "/manager/consultent",
@@ -163,6 +163,7 @@ const URL = {
 
   MANAGER_CMS: "/manager/cms",
   MANAGER_OPERATIONAL_SUPPORT: "/manager/operationalSupport",
+  MANAGER_RESIDENT_MEMBER : "/manager/residentMember",
   MANAGER_CONSULTING_EXPERT: "/manager/expert",
   MANAGER_CONSULTING_MATCHING: "/manager/matching",
   MANAGER_MEMBER: "/manager/member",

@@ -16,7 +16,126 @@ import BTButton from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { getSessionItem } from "@/utils/storage";
 
+import moment from "moment/moment.js";
+
 function OperationalSupport(props) {
+
+    const [searchDto, setSearchDto] = useState(
+        location.state?.searchDto || {
+            pageIndex: 1,
+            brno: "",
+            mvnEntNm : "",
+            rpsvNm : "",
+        }
+    );
+
+    const [selectedOption, setSelectedOption] = useState("mvnEntNm");
+    const [paginationInfo, setPaginationInfo] = useState({});
+    const [rcList, setAuthorityList] = useState([]);
+    const [activeTab, setActiveTab] = useState(1);
+
+    const handleSearch = () => {
+        setSearchDto({ ...searchDto, pageIndex: 1 });
+        getRcList(searchDto);
+    };
+
+    const getRcList = useCallback(
+        (searchDto)=>{
+
+
+            const rcListUrl = "/mvnEntApi/getMvnEntList.do";
+            const requestOptions = {
+                method: "POST",
+                headers: {
+                    "Content-type": "application/json",
+                },
+                body: JSON.stringify(searchDto)
+            };
+            EgovNet.requestFetch(
+                rcListUrl,
+                requestOptions,
+                (resp) => {
+                    setPaginationInfo(resp.paginationInfo);
+                    let dataList = [];
+                    rcList.push(
+                        <tr>
+                            <td colSpan="5">검색된 결과가 없습니다.</td>
+                        </tr>
+                    );
+
+                    resp.result.rcList.forEach(function (item,index){
+                        if(index === 0) dataList = [];
+
+                        dataList.push(
+                            <tr key={item.mvnEntSn}>
+                                <td>{index + 1}</td>
+                                <td>
+                                    {item.bzstatNm}
+                                </td>
+                                <td>
+                                <Link to={{pathname: URL.RESIDENT_COMPANY_MODIFY}}
+                                      state={{
+                                          mvnEntSn: item.mvnEntSn,
+                                          mode:CODE.MODE_MODIFY
+                                      }}
+                                >
+                                {item.mvnEntNm}
+                                </Link>
+                                </td>
+                                <td>{item.rpsvNm}</td>
+                                <td>{formatTelNo(item.entTelno)}</td>
+                                <td>{item.clsNm}</td>
+                                <td>{item.actvtnYn === "Y" ? "공개" : "비공개"}</td>
+                                <td>
+                                    <button type="button" className="settingBtn"><span>관리자 설정</span></button>
+                                </td>
+                                <td>
+                                    <Link to={URL.MANAGER_RESIDENT_MEMBER}>
+                                    <button type="button" className="listBtn"><span>직원 목록</span></button>
+                                    </Link>
+                                </td>
+                            </tr>
+                        );
+                    });
+                    setAuthorityList(dataList);
+
+                },
+                function (resp) {
+                    console.log("err response : ", resp);
+                }
+            )
+        },
+        [rcList, searchDto]
+    );
+
+    useEffect(()=>{
+        getRcList(searchDto);
+    }, []);
+
+    function formatTelNo(telNo) {
+        if (!telNo || telNo.length < 12) {
+            console.error("Invalid brno length or undefined value.");
+            return telNo;
+        }
+
+        return `${telNo.slice(0, 2)}-${telNo.slice(3, 7)}-${telNo.slice(7)}`;
+    }
+
+    const activeEnter = (e) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            getRcList(searchDto);
+        }
+    };
+
+    const handleKeywordSearch = () => {
+
+        setSearchDto((prev) => {
+            const updatedSearchDto = { ...prev, [selectedOption]: prev[selectedOption] || "" , pageIndex: 1  };
+            getRcList(updatedSearchDto); // 여기서 검색 실행
+            return updatedSearchDto;
+        });
+    };
 
     return (
         <div id="container" className="container layout cms">
@@ -44,37 +163,50 @@ function OperationalSupport(props) {
                                 <div className="itemBox">
                                     <select className="selectGroup">
                                         <option value="0">전체</option>
-                                        <option value="1">예시1</option>
-                                        <option value="2">예시2</option>
-                                        <option value="3">예시3</option>
-                                        <option value="4">예시4</option>
-                                        <option value="5">예시5</option>
+                                        <option value="1">공개</option>
+                                        <option value="2">비공개</option>
                                     </select>
                                 </div>
                             </li>
                             <li className="inputBox type1">
                                 <p className="title">키워드</p>
                                 <div className="itemBox">
-                                    <select className="selectGroup">
+                                    <select className="selectGroup" onChange={(e) => {
+                                        const value = e.target.value;
+                                        setSelectedOption(value === "1" ? "mvnEntNm" : "rpsvNm");
+                                    }}>
                                         <option value="0">전체</option>
-                                        <option value="1">예시1</option>
-                                        <option value="2">예시2</option>
-                                        <option value="3">예시3</option>
-                                        <option value="4">예시4</option>
-                                        <option value="5">예시5</option>
+                                        <option value="1">기업명</option>
+                                        <option value="2">대표자</option>
                                     </select>
                                 </div>
                             </li>
                             <li className="searchBox inputBox type1">
-                                <label className="input"><input type="text" id="search" name="search"
-                                                                placeholder="검색어를 입력해주세요"/></label>
+                                <label className="input">
+                                    <input
+                                        type="text"
+                                        value={searchDto[selectedOption] || ""}
+                                        name="search"
+                                        onChange={(e) => {
+                                            setSearchDto({ ...searchDto, [selectedOption]: e.target.value });
+                                        }}
+                                        placeholder="검색어를 입력해주세요"
+                                        onKeyDown={activeEnter}
+                                    />
+                                </label>
                             </li>
                         </ul>
                         <div className="rightBtn">
-                            <button type="button" className="refreshBtn btn btn1 gray">
+                            <button
+                                type="button"
+                                className="refreshBtn btn btn1 gray"
+                                onClick={(e)=>{
+                                    e.preventDefault();
+                                }}
+                            >
                                 <div className="icon"></div>
                             </button>
-                            <button type="button" className="searchBtn btn btn1 point">
+                            <button type="button" className="searchBtn btn btn1 point" onClick= {handleKeywordSearch}>
                                 <div className="icon"></div>
                             </button>
                         </div>
@@ -82,7 +214,7 @@ function OperationalSupport(props) {
                 </div>
                 <div className="contBox board type1 customContBox">
                     <div className="topBox">
-                        <p className="resultText"><span className="red">12,345</span>건의 입주기업 정보가 조회되었습니다.</p>
+                        <p className="resultText"><span className="red">{paginationInfo.totalRecordCount}</span>건의 입주기업 정보가 조회되었습니다.</p>
                         <div className="rightBox">
                             <button type="button" className="btn btn2 downBtn red">
                                 <div className="icon"></div>
@@ -109,177 +241,29 @@ function OperationalSupport(props) {
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <td><p>10</p></td>
-                                <td><p>분류1</p></td>
-                                <td><p>서울바이오</p></td>
-                                <td><p>김철수</p></td>
-                                <td><p>032-123-1235</p></td>
-                                <td><p>바이오</p></td>
-                                <td><p>공개</p></td>
-                                <td>
-                                    <button type="button" className="settingBtn"><span>관리자 설정</span></button>
-                                </td>
-                                <td>
-                                    <button type="button" className="listBtn"><span>직원 목록</span></button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><p>9</p></td>
-                                <td><p>분류1</p></td>
-                                <td><p>서울바이오</p></td>
-                                <td><p>김철수</p></td>
-                                <td><p>032-123-1235</p></td>
-                                <td><p>바이오</p></td>
-                                <td><p>공개</p></td>
-                                <td>
-                                    <button type="button" className="settingBtn"><span>관리자 설정</span></button>
-                                </td>
-                                <td>
-                                    <button type="button" className="listBtn"><span>직원 목록</span></button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><p>8</p></td>
-                                <td><p>분류1</p></td>
-                                <td><p>서울바이오</p></td>
-                                <td><p>김철수</p></td>
-                                <td><p>032-123-1235</p></td>
-                                <td><p>바이오</p></td>
-                                <td><p>공개</p></td>
-                                <td>
-                                    <button type="button" className="settingBtn"><span>관리자 설정</span></button>
-                                </td>
-                                <td>
-                                    <button type="button" className="listBtn"><span>직원 목록</span></button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><p>7</p></td>
-                                <td><p>분류1</p></td>
-                                <td><p>서울바이오</p></td>
-                                <td><p>김철수</p></td>
-                                <td><p>032-123-1235</p></td>
-                                <td><p>바이오</p></td>
-                                <td><p>공개</p></td>
-                                <td>
-                                    <button type="button" className="settingBtn"><span>관리자 설정</span></button>
-                                </td>
-                                <td>
-                                    <button type="button" className="listBtn"><span>직원 목록</span></button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><p>6</p></td>
-                                <td><p>분류1</p></td>
-                                <td><p>서울바이오</p></td>
-                                <td><p>김철수</p></td>
-                                <td><p>032-123-1235</p></td>
-                                <td><p>바이오</p></td>
-                                <td><p>공개</p></td>
-                                <td>
-                                    <button type="button" className="settingBtn"><span>관리자 설정</span></button>
-                                </td>
-                                <td>
-                                    <button type="button" className="listBtn"><span>직원 목록</span></button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><p>5</p></td>
-                                <td><p>분류1</p></td>
-                                <td><p>서울바이오</p></td>
-                                <td><p>김철수</p></td>
-                                <td><p>032-123-1235</p></td>
-                                <td><p>바이오</p></td>
-                                <td><p>공개</p></td>
-                                <td>
-                                    <button type="button" className="settingBtn"><span>관리자 설정</span></button>
-                                </td>
-                                <td>
-                                    <button type="button" className="listBtn"><span>직원 목록</span></button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><p>4</p></td>
-                                <td><p>분류1</p></td>
-                                <td><p>서울바이오</p></td>
-                                <td><p>김철수</p></td>
-                                <td><p>032-123-1235</p></td>
-                                <td><p>바이오</p></td>
-                                <td><p>공개</p></td>
-                                <td>
-                                    <button type="button" className="settingBtn"><span>관리자 설정</span></button>
-                                </td>
-                                <td>
-                                    <button type="button" className="listBtn"><span>직원 목록</span></button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><p>3</p></td>
-                                <td><p>분류1</p></td>
-                                <td><p>서울바이오</p></td>
-                                <td><p>김철수</p></td>
-                                <td><p>032-123-1235</p></td>
-                                <td><p>바이오</p></td>
-                                <td><p>공개</p></td>
-                                <td>
-                                    <button type="button" className="settingBtn"><span>관리자 설정</span></button>
-                                </td>
-                                <td>
-                                    <button type="button" className="listBtn"><span>직원 목록</span></button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><p>2</p></td>
-                                <td><p>분류1</p></td>
-                                <td><p>서울바이오</p></td>
-                                <td><p>김철수</p></td>
-                                <td><p>032-123-1235</p></td>
-                                <td><p>바이오</p></td>
-                                <td><p>공개</p></td>
-                                <td>
-                                    <button type="button" className="settingBtn"><span>관리자 설정</span></button>
-                                </td>
-                                <td>
-                                    <button type="button" className="listBtn"><span>직원 목록</span></button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><p>1</p></td>
-                                <td><p>분류1</p></td>
-                                <td><p>서울바이오</p></td>
-                                <td><p>김철수</p></td>
-                                <td><p>032-123-1235</p></td>
-                                <td><p>바이오</p></td>
-                                <td><p>공개</p></td>
-                                <td>
-                                    <button type="button" className="settingBtn"><span>관리자 설정</span></button>
-                                </td>
-                                <td>
-                                    <button type="button" className="listBtn"><span>직원 목록</span></button>
-                                </td>
-                            </tr>
+                            {rcList}
                             </tbody>
                         </table>
                     </div>
                     <div className="pageWrap">
-                        <ul className="pageList">
-                            <li className="first arrow"><a href="#"></a></li>
-                            <li className="prev arrow"><a href="#"></a></li>
-                            <li className="now"><a href="#"><span>1</span></a></li>
-                            <li><a href="#"><span>2</span></a></li>
-                            <li><a href="#"><span>3</span></a></li>
-                            <li><a href="#"><span>4</span></a></li>
-                            <li><a href="#"><span>5</span></a></li>
-                            <li><a href="#"><span>6</span></a></li>
-                            <li><a href="#"><span>7</span></a></li>
-                            <li><a href="#"><span>8</span></a></li>
-                            <li><a href="#"><span>9</span></a></li>
-                            <li><a href="#"><span>10</span></a></li>
-                            <li className="next arrow active"><a href="#"></a></li>
-                            <li className="last arrow active"><a href="#"></a></li>
-                        </ul>
+                        <EgovPaging
+                            pagination={paginationInfo}
+                            moveToPage={(passedPage) =>{
+                                getRcList({
+                                   ...searchDto,
+                                   pageIndex: passedPage
+                                });
+                            }
+                        }
+                        />
+                        <NavLink
+                            to={URL.RESIDENT_COMPANY_CREATE}
+                            state={{
+                                mode:CODE.MODE_CREATE
+                            }}
+                        >
                         <button type="button" className="writeBtn clickBtn"><span>등록</span></button>
+                        </NavLink>
                     </div>
                 </div>
             </div>
