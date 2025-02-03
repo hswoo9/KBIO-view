@@ -31,23 +31,35 @@ function ResidentMemberCreateContent(props){
         getRc(searchDto);
     };
 
-    function splitBrno(brno) {
-        if (!brno || brno.length < 10) {
-            console.error("Invalid brno length or undefined value.");
-            return { brno1: "", brno2: "", brno3: "" }; // 기본값 반환
-        }
 
-        return {
-            brno1: brno.slice(0, 3), // 앞 3자리
-            brno2: brno.slice(3, 5), // 중간 2자리
-            brno3: brno.slice(5),    // 마지막 5자리
-        };
+    //이메일 도메인 구분
+    const [selectedDomain, setSelectedDomain] = useState(""); // 선택된 이메일 도메인
+    const [isCustom, setIsCustom] = useState(false); // 직접 입력 여부
+
+    const splitEmail = (email) =>{
+        if (!email || !email.includes("@")) return "";
+        return email.split("@")[0];
     }
 
+    const handleSelectChange = (e) => {
+        const value = e.target.value;
+        if (value === "custom") {
+            setIsCustom(true);
+            setSelectedDomain("");
+        } else {
+            setIsCustom(false);
+            setSelectedDomain(value);
+        }
+    };
+
+    //수정 시 데이터 조회
     const getRc = (searchDto) =>{
         console.log("state : ",searchDto);
+        console.log("mode : ",modeInfo.mode);
+        
+        // 등록 시 조회 안함
         if (modeInfo.mode === CODE.MODE_CREATE) {
-            console.log("residentDetail",residentDetail);
+            
             return;
         }
 
@@ -131,14 +143,28 @@ function ResidentMemberCreateContent(props){
     }, []);
 
     useEffect(() => {
+        if (residentDetail?.bzentyEmlAddr) {
+            const email = residentDetail.bzentyEmlAddr;
+            const domain = email.split("@")[1] || "";
+
+            if (["naver.com", "gmail.com"].includes(domain)) {
+                setSelectedDomain(domain);
+                setIsCustom(false);
+            } else {
+                setSelectedDomain(domain);
+                setIsCustom(true);
+            }
+        }
+    }, [residentDetail]);
+
+    useEffect(() => {
     }, [selectedFiles]);
+
 
     //사업자번호 상태 확인
     const kbioauth = async () => {
         //const businessNumber = `${residentDetail.brno1}-${residentDetail.brno2}-${residentDetail.brno3}`;
         const businessNumber = `${residentDetail.brno}`;
-
-        const businessNo = `${residentDetail.brno1}${residentDetail.brno2}${residentDetail.brno3}`;
 
         console.log(businessNumber);
 
@@ -162,7 +188,7 @@ function ResidentMemberCreateContent(props){
 
             if (businessStatus === '01') {
                 alert("사업자가 정상적으로 운영 중입니다.");
-                setResidentDetail({...residentDetail, brno: businessNo});
+                setResidentDetail({...residentDetail, brno: businessNumber});
                 document.getElementById("confirmText").style.display = "block";
             } else if (businessStatus === '02') {
                 alert("사업자가 휴업 중입니다.");
@@ -203,12 +229,25 @@ function ResidentMemberCreateContent(props){
         }).open();
     };
 
+    const [emailAddr, setEmailAddr] = useState("");
+
+    useEffect(() => {
+        if (residentDetail.bzentyEmlAddr1 && selectedDomain) {
+            const newEmail = `${residentDetail.bzentyEmlAddr1}@${selectedDomain}`;
+            setEmailAddr(newEmail);
+            setResidentDetail(prev => ({
+                ...prev,
+                bzentyEmlAddr: newEmail
+            }));
+        }
+    }, [residentDetail.bzentyEmlAddr1, selectedDomain]);
+
 
     //등록and수정
     const updateResident = () => {
         let requestOptions = {};
 
-        if (!residentDetail.brno1 || !residentDetail.brno2 || !residentDetail.brno3) {
+        if (!residentDetail.brno) {
             alert("사업자번호는 필수 값입니다.");
             return false;
         }
@@ -224,10 +263,14 @@ function ResidentMemberCreateContent(props){
             alert("대표자명은 필수 값입니다.");
             return false;
         }
-        if (!residentDetail.clsNm) {
-            alert("산업은 필수 값입니다.");
+        if (!emailAddr || emailAddr.trim() === "") {
+            alert("이메일 주소를 입력해주세요.");
             return false;
         }
+        /*if (!residentDetail.clsNm) {
+            alert("산업은 필수 값입니다.");
+            return false;
+        }*/
         if (!residentDetail.zip || !residentDetail.entAddr) {
             alert("주소는 필수 값입니다.");
             return false;
@@ -241,8 +284,9 @@ function ResidentMemberCreateContent(props){
             return false;
         }
 
-        const brno = `${residentDetail.brno1}${residentDetail.brno2}${residentDetail.brno3}`;
-        setResidentDetail({...residentDetail, brno: brno});
+
+
+        setResidentDetail({...residentDetail});
 
         const formData = new FormData();
 
@@ -269,7 +313,7 @@ function ResidentMemberCreateContent(props){
                 EgovNet.requestFetch(modeInfo.editURL, requestOptions, (resp) => {
                     if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
                         Swal.fire("등록되었습니다.");
-                        navigate(URL.MANAGER_RESIDENT_COMPANY);
+                        navigate(URL.MANAGER_OPERATIONAL_SUPPORT);
                     } else {
                         navigate(
                             { pathname: URL.ERROR },
@@ -366,6 +410,7 @@ function ResidentMemberCreateContent(props){
                                 name="entTelno"
                                 id="entTelno"
                                 maxLength="11"
+                                placeholder="숫자만 입력"
                                 value={residentDetail.entTelno || ""}
                                 onChange={(e) => {
                                     const inputValue = e.target.value;
@@ -378,23 +423,42 @@ function ResidentMemberCreateContent(props){
                     </li>
                     {/*기업대표메일*/}
                     <li className="inputBox type1 email width3">
-                        <label className="title essential" htmlFor="bzentyEmlAddr"><small>대표이메일</small></label>
+                        <label className="title essential" htmlFor="bzentyEmlId1"><small>대표이메일</small></label>
                         <div className="input">
                             <input
                                 type="text"
-                                name="bzentyEmlAddr"
-                                id="bzentyEmlAddr"
-                                defaultValue={residentDetail.bzentyEmlAddr || ""}
+                                name="bzentyEmlAddr1"
+                                id="bzentyEmlAddr1"
+                                defaultValue={splitEmail(residentDetail.bzentyEmlAddr || "")}
                                 onChange={(e) =>
-                                    setResidentDetail({ ...residentDetail, bzentyEmlAddr: e.target.value })
+                                    setResidentDetail({ ...residentDetail, bzentyEmlAddr1: e.target.value })
                                 }
                             />
                             <span>@</span>
                             <div className="itemBox">
-                                <select className="selectGroup">
-                                    <option value="0">naver.com</option>
-                                    <option value="1">gmail.com</option>
-                                </select>
+                                {isCustom ? (
+                                    // 직접 입력 시 input으로 변경
+                                    <input
+                                        type="text"
+                                        placeholder="도메인 입력"
+                                        value={selectedDomain}
+                                        onChange={(e) => setSelectedDomain(e.target.value)}
+                                        onBlur={() => {
+                                            if (!selectedDomain) {
+                                                setIsCustom(false); // 입력 없이 벗어나면 다시 select로 변경
+                                            }
+                                        }}
+                                    />
+                                ) : (
+                                    // 기본 select 박스
+                                    <select className="selectGroup" onChange={handleSelectChange} value={selectedDomain}>
+                                        <option value="">선택하세요</option>
+                                        <option value="naver.com">naver.com</option>
+                                        <option value="gmail.com">gmail.com</option>
+                                        <option value="custom">직접 입력</option>
+                                    </select>
+                                )}
+
                             </div>
                         </div>
                     </li>
@@ -430,13 +494,14 @@ function ResidentMemberCreateContent(props){
                     </li>
                     {/* 사업자 등록번호 */}
                     <li className="inputBox type1 email width3">
-                        <label className="title essential" htmlFor="hmpgAddr"><small>사업자등록번호</small></label>
+                        <label className="title essential" htmlFor="brno"><small>사업자등록번호</small></label>
                         <div className="input">
                             <small className="text btn" onClick={kbioauth}>기업인증</small>
                             <input
                                 type="type"
                                 name="brno"
                                 id="brno"
+                                placeholder="숫자만 입력"
                                 defaultValue={residentDetail.brno || ""}
                                 onChange={(e) =>
                                     setResidentDetail({ ...residentDetail, brno: e.target.value })

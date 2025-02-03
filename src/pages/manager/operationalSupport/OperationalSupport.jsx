@@ -201,7 +201,7 @@ function OperationalSupport(props) {
                 </div>
                 <div className="contBox board type1 customContBox">
                     <div className="topBox">
-                        <p className="resultText"><span className="red">12,345</span>건의 입주기업 정보가 조회되었습니다.</p>
+                        <p className="resultText"><span className="red">{paginationInfo.totalRecordCount}</span>건의 입주기업 정보가 조회되었습니다.</p>
                         <div className="rightBox">
                             <button type="button" className="btn btn2 downBtn red">
                                 <div className="icon"></div>
@@ -245,7 +245,9 @@ function OperationalSupport(props) {
                         />
                         <NavLink
                             to={URL.RESIDENT_COMPANY_CREATE}
-                            mode={CODE.MODE_CREATE}
+                            state={{
+                                mode:CODE.MODE_CREATE
+                            }}
                         >
                         <button type="button" className="writeBtn clickBtn"><span>등록</span></button>
                         </NavLink>
