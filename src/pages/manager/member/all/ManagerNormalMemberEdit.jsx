@@ -63,148 +63,6 @@ function setNormalMember(props) {
         });
     };
 
-    const checkIdDplct = () => {
-        return new Promise((resolve) => {
-            let checkId = memberDetail["emplyrId"];
-            if (checkId === null || checkId === undefined) {
-                alert("회원ID를 입력해 주세요");
-                return false;
-            }
-            const regex = /^[a-zA-Z0-9]{6,12}$/;
-            if (!regex.test(checkId)) {
-                alert("회원ID는 6~12자의 영문 대소문자와 숫자만 사용 가능합니다.");
-                return false;
-            }
-            const checkIdURL = `/memberApi/checkMemberId.do`;
-            const reqOptions = {
-                method: "POST",
-                headers: {
-                    "Content-type": "application/json",
-                },
-                body: JSON.stringify({
-                    memberId: checkId
-                })
-            };
-            EgovNet.requestFetch(checkIdURL, reqOptions, function (resp) {
-                if (resp.resultCode === 400 && resp.result.usedCnt > 0
-                ) {
-                    setMemberDetail({
-                        ...memberDetail,
-                        checkIdResult: "중복된 아이디입니다.",
-                        checkIdResultColor: "red",
-                        mberId: checkId,
-                    });
-                    resolve(resp.result.usedCnt);
-                } else {
-                    setMemberDetail({
-                        ...memberDetail,
-                        checkIdResult: "사용 가능한 아이디입니다.",
-                        checkIdResultColor: "green",
-                        mberId: checkId,
-                    });
-                    resolve(0);
-                }
-            });
-        });
-    };
-
-    const setNormalMember = () => {
-        let requestOptions = {};
-        const formData = new FormData();
-
-        if (memberDetail.checkIdResultColor === "red") {
-            alert("아이디 중복이 확인되었습니다. 다른 아이디를 사용해주세요.");
-            return;
-        }
-
-        if (!memberDetail.emplyrId) {
-            alert("회원ID은 필수 값입니다.");
-            return;
-        }
-        /*if (!memberDetail.mbtlnum) {
-            alert("휴대전화는 필수 값입니다.");
-            return;
-        }
-
-        if (!memberDetail.userType) {
-            alert("회원 유형은 필수 값입니다.");
-            return;
-        }*/
-
-
-        for (let key in memberDetail) {
-            formData.append(key, memberDetail[key]);
-        }
-
-        Swal.fire({
-            title: "저장하시겠습니까?",
-            showCloseButton: true,
-            showCancelButton: true,
-            confirmButtonText: "저장",
-            cancelButtonText: "취소",
-        }).then((result) => {
-            if (result.isConfirmed) {
-                requestOptions = {
-                    method: "POST",
-                    headers: {
-                        "Content-type": "application/json",
-                    },
-                    body: JSON.stringify(memberDetail),
-                };
-
-                EgovNet.requestFetch(modeInfo.editURL, requestOptions, (resp) => {
-                    if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
-                        Swal.fire("등록되었습니다.");
-                        navigate(URL.MANAGER_NORMAL_MEMBER);
-                    } else {
-                        navigate(
-                            {pathname: URL.ERROR},
-                            {state: {msg: resp.resultMessage}}
-                        );
-                    }
-                });
-            } else {
-                // 취소
-            }
-        });
-    };
-
-    const setNormalMemberDel = (userSn) => {
-        const setNormalMemberUrl = "/memberApi/setNormalMemberDel";
-
-        Swal.fire({
-            title: "삭제하시겠습니까?",
-            showCloseButton: true,
-            showCancelButton: true,
-            confirmButtonText: "삭제",
-            cancelButtonText: "취소"
-        }).then((result) => {
-            if (result.isConfirmed) {
-                const requestOptions = {
-                    method: "POST",
-                    headers: {
-                        "Content-type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        ...memberDetail,
-                        zip: "N",
-                        userSn: userSn
-                    }),
-                };
-
-                EgovNet.requestFetch(setNormalMemberUrl, requestOptions, (resp) => {
-                    if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
-                        Swal.fire("삭제되었습니다.");
-                        navigate(URL.MANAGER_NORMAL_MEMBER);
-                    } else {
-                        alert("ERR : " + resp.resultMessage);
-                    }
-                });
-            } else {
-                //취소
-            }
-        });
-    };
 
     const pwdReset = () => {
         Swal.fire({
@@ -281,7 +139,13 @@ function setNormalMember(props) {
                             <div className="input">
                                 <input
                                     type="text"
-                                    value={memberDetail.mberSttus || ''}
+                                    value={
+                                        memberDetail.actvtnYn === 'Y' ? '정상회원' :
+                                        memberDetail.actvtnYn === 'W' ? '대기회원' :
+                                        memberDetail.actvtnYn === 'R' ? '반려회원' :
+                                        memberDetail.actvtnYn === 'C' ? '정지회원' :
+                                        memberDetail.actvtnYn === 'S' ? '탈퇴회원' : ''
+                                    }
                                     readOnly
                                 />
                             </div>
@@ -292,7 +156,7 @@ function setNormalMember(props) {
                             <div className="input">
                                 <input
                                     type="text"
-                                    value={memberDetail.userType || ''}
+                                    value={memberDetail.mbrType || ''}
                                     readOnly
                                 />
                             </div>
@@ -303,7 +167,7 @@ function setNormalMember(props) {
                             <div className="input">
                                 <input
                                     type="text"
-                                    value={memberDetail.emplyrId || ''}
+                                    value={memberDetail.userId || ''}
                                     readOnly
                                 />
                             </div>
@@ -314,7 +178,7 @@ function setNormalMember(props) {
                             <div className="input">
                                 <input
                                     type="password"
-                                    value={memberDetail.password || ''}
+                                    value={memberDetail.userPw || ''}
                                     readOnly
                                 />
                                 <button type="button" className="pwdBtn btn" onClick={(e) => {
@@ -330,7 +194,7 @@ function setNormalMember(props) {
                             <div className="input">
                                 <input
                                     type="text"
-                                    value={memberDetail.userNm || ''}
+                                    value={memberDetail.kornFlnm || ''}
                                     readOnly
                                 />
                             </div>
@@ -341,7 +205,7 @@ function setNormalMember(props) {
                             <div className="input">
                                 <input
                                     type="text"
-                                    value={memberDetail.mbtlnum || ''}
+                                    value={memberDetail.mblTelno || ''}
                                     readOnly
                                 />
                             </div>
@@ -363,7 +227,7 @@ function setNormalMember(props) {
                             <div className="input">
                                 <input
                                     type="text"
-                                    value={memberDetail.adres || ''}
+                                    value={`${memberDetail.addr || ''} ${memberDetail.daddr || ''}`} // addr과 daddr을 합쳐서 표시
                                     readOnly
                                 />
                             </div>
@@ -374,7 +238,7 @@ function setNormalMember(props) {
                             <div className="input">
                                 <input
                                     type="text"
-                                    value={memberDetail.emailRecptnAt || ''}
+                                    value={memberDetail.emlRcptnAgreYn === 'Y' ? '수신동의' : memberDetail.emlRcptnAgreYn === 'N' ? '수신거절' : ''}
                                     readOnly
                                 />
                             </div>
@@ -385,7 +249,7 @@ function setNormalMember(props) {
                             <div className="input">
                                 <input
                                     type="text"
-                                    value={memberDetail.smsRecptnAt || ''}
+                                    value={memberDetail.smsRcptnAgreYn  === 'Y' ? '수신동의' : memberDetail.smsRcptnAgreYn === 'N' ? '수신거절' : ''}
                                     readOnly
                                 />
                             </div>
@@ -397,7 +261,7 @@ function setNormalMember(props) {
                                 <div className="input">
                                     <input
                                         type="text"
-                                        value={memberDetail.sbscrbDe || ''}
+                                        value={memberDetail.frstCrtDt ? new Date(memberDetail.frstCrtDt).toLocaleDateString() : ''} // 연월일만 표시
                                         readOnly
                                     />
                                 </div>

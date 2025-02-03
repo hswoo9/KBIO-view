@@ -174,7 +174,7 @@ function WaitMemberList(props) {
                         dataList.push(
                             <tr key={item.userSn}>
                                 <td>{itemNumber}</td>
-                                <td>{item.userType}</td>
+                                <td>{item.mbrType}</td>
                                 <td>
                                     <Link
                                         to={{ pathname: URL.MANAGER_WAIT_MEMBER_MODIFY }}
@@ -183,13 +183,13 @@ function WaitMemberList(props) {
                                         }}
                                         style={{ cursor: 'pointer', textDecoration: 'underline' }}
                                     >
-                                        {item.emplyrId}
+                                        {item.userId}
                                     </Link>
                                 </td>
-                                <td>{item.userNm}</td>
+                                <td>{item.kornFlnm}</td>
                                 <td>{item.companyNm}</td>
                                 <td>{item.socialType}</td>
-                                <td>{item.registDt}</td>
+                                <td>{new Date(item.frstCrtDt).toISOString().split("T")[0]}</td>
                                 <td style={{
                                     padding: '6px 0',
                                     verticalAlign: 'middle',
@@ -199,7 +199,7 @@ function WaitMemberList(props) {
                                         <button
                                             type="button"
                                             className="btn btn1 blue"
-                                            style={{ marginRight: '4px' }}
+                                            style={{ marginLeft: '40px' }}
                                             onClick={() => {
                                                 setWaitMemberApproval(item.userSn);
                                             }}
@@ -209,6 +209,7 @@ function WaitMemberList(props) {
                                         <button
                                             type="button"
                                             className="btn btn1 red"
+                                            style={{ marginRight: '40px' }}
                                             onClick={() => {
                                                 setWaitMemberReject(item.userSn);
                                             }}
