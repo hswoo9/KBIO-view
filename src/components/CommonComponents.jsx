@@ -8,30 +8,89 @@ import axios from "axios";
 import Swal from "sweetalert2";
 
 /**
- * 사용자 메뉴 조회
+ * 사용자 메뉴조회
+ * @param upperMenuSn 상위메뉴 일련번호
+ * @param menuSeq 메뉴 뎁스
+ * @returns {Promise<unknown>}
+ * 조회 예시
+ * const [menuList, setMenuList] = useState([]);
+ *
+ * useEffect(() => {
+ *     getMenu().then((data) => {
+ *         setMenuList(data);
+ *     })
+ * }, []);
  */
-export const getMenu = () => {
+export const getMenu = async (upperMenuSn, menuSeq) => {
     const requestOptions = {
         method: "POST",
         headers: {
             "Content-type": "application/json",
         },
-        body: JSON.stringify({ menuDept : "" })
+        body: JSON.stringify({
+            upperMenuSn : upperMenuSn,
+            menuSeq : menuSeq,
+        })
     };
-    EgovNet.requestFetch(
-        "/commonApi/getMenu.do",
-        requestOptions,
-        (resp) => {
+
+    return new Promise((resolve, reject) => {
+        EgovNet.requestFetch(
+            "/commonApi/getMenu.do",
+            requestOptions,
+            (resp) => {
+                resolve(resp.result.menuList);
+            },
+            (error) => {
+                console.log("err response : ", error);
+                reject(error);
+            }
+        );
+    });
+};
+
+/**
+ * 사용자 left 메뉴 조회
+ * @param menuSn = 현재 메뉴 일련번호
+ * @returns {Promise<unknown>}
+ * 조회 예시
+ * const [leftMenuList, setLeftMenuList] = useState([]);
+ *
+ * useEffect(() => {
+ *     getLeftMenu(1).then((data) => {
+ *         setLeftMenuList(data);
+ *     })
+ * }, []);
+ */
+export const getLeftMenu = async (menuSn) => {
+    const requestOptions = {
+        method: "POST",
+        headers: {
+            "Content-type": "application/json",
         },
-        function (resp) {
-            console.log("err response : ", resp);
-        }
-    )
+        body: JSON.stringify({
+            menuSn : menuSn,
+        })
+    };
+
+    return new Promise((resolve, reject) => {
+        EgovNet.requestFetch(
+            "/commonApi/getLeftMenu.do",
+            requestOptions,
+            (resp) => {
+                resolve(resp.result.leftMenuList);
+            },
+            (error) => {
+                console.log("err response : ", error);
+                reject(error); // 에러 시 reject
+            }
+        );
+    });
 };
 
 /**
  * 공통코드 조회
  * @param cdGroupSn = 코드그룹 일련번호
+ * @returns {Promise<unknown>}
  * 조회 예시
  * const [comCdList, setComCdList] = useState([]);
  *
