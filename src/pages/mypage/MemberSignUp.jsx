@@ -38,6 +38,9 @@ function MemberSignUp(props) {
     creatrSn: '',           // 생성자 일련번호
     mdfrSn: '',             // 수정자 일련번호
     email: '',              // 이메일
+    emailPrefix: '',        // 이메일 아이디
+    emailDomain: '',        // 이메일 도메인
+    emailProvider: '',      // 이메일 제공자
   });
 
   useEffect(() => {
@@ -640,6 +643,7 @@ function MemberSignUp(props) {
                       onChange={(e) => setMemberDetail({
                         ...memberDetail,
                         emailPrefix: e.target.value,
+                        email: `${e.target.value}@${memberDetail.emailDomain}` 
                       })}
                       ref={(el) => (checkRef.current[5] = el)}
                       style={{width: '50%'}}
@@ -656,8 +660,9 @@ function MemberSignUp(props) {
                       onChange={(e) => setMemberDetail({
                         ...memberDetail,
                         emailDomain: e.target.value,
+                        email: `${memberDetail.emailPrefix}@${e.target.value}`
                       })}
-                      disabled={memberDetail.emailProvider && memberDetail.emailProvider !== "direct"} // Read-only if not direct input
+                      disabled={memberDetail.emailProvider && memberDetail.emailProvider !== "direct"}
                       style={{width: '30%'}}
                   />
 
@@ -667,10 +672,14 @@ function MemberSignUp(props) {
                       id="email-provider"
                       onChange={(e) => {
                         const provider = e.target.value;
+                        const newEmailDomain = provider === "direct" ? "" : provider;
+                        const newEmail = `${memberDetail.emailPrefix}@${newEmailDomain}`;
+
                         setMemberDetail({
                           ...memberDetail,
                           emailProvider: provider,
-                          emailDomain: provider === "direct" ? "" : provider, // Set domain to selected value
+                          emailDomain: newEmailDomain,
+                          email: newEmail
                         });
                       }}
                       value={memberDetail.emailProvider}
@@ -793,7 +802,7 @@ function MemberSignUp(props) {
                     <li className="inputBox type2 business_num">
                       <span className="tt1">사업자 등록번호</span>
                       <div className="flexinput input" style={{paddingRight: "7rem"}}>
-                      <label>
+                        <label>
                           <input
                               type="text"
                               name="business_registration_number1"
