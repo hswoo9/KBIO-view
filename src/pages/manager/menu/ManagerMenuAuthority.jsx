@@ -603,22 +603,7 @@ function ManagerMenuAuthority(props) {
                                         />
                                     </div>
                                 </li>
-                                <li className="inputBox type1 width3">
-                                    <label className="title" htmlFor="menuType"><small>메뉴유형</small></label>
-                                    <div className="itemBox">
-                                        <select
-                                            id="menuType"
-                                            className="selectGroup"
-                                            onChange={(e) => upperMenuChange(e, 1)}
-
-                                        >
-                                            <option value="n">일반</option>
-                                            <option value="c">컨텐츠</option>
-                                            <option value="b">게시판</option>
-                                        </select>
-                                    </div>
-                                </li>
-                                <li className="inputBox type1 width3">
+                                <li className="inputBox type1 width2">
                                     <label className="title" htmlFor="authrtType"><small>권한구분</small></label>
                                     <div className="itemBox">
                                         <select
@@ -639,7 +624,7 @@ function ManagerMenuAuthority(props) {
                                         </select>
                                     </div>
                                 </li>
-                                <li className="toggleBox type1 width3 customToggleBox">
+                                <li className="toggleBox type1 width2 customToggleBox">
                                     <div className="box">
                                         <p className="title essential">활성여부</p>
                                         <div className="toggleSwithWrap">

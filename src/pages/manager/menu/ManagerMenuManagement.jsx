@@ -39,7 +39,9 @@ function Index(props) {
 
     const [saveMenuData, setSaveMenuData] = useState({});
     useEffect(() => {
-        setMenu(saveMenuData);
+        if(saveMenuData.btnType != null){
+            setMenu(saveMenuData);
+        }
     }, [saveMenuData]);
 
     const [deleteMenu, setDeleteMenu] = useState({});
@@ -161,40 +163,44 @@ function Index(props) {
             cancelButtonText: "취소"
         }).then((result) => {
             if(result.isConfirmed) {
-                if(saveMode.mode === "insert"){
-                    if(menuDetail.creatrSn == null){
-                        setMenuDetail({
-                            ...menuDetail,
-                            creatrSn: sessionUser.userSn,
-                        })
-                    }
-
-                    if(menuDetail.menuNm == null || menuDetail.menuNm == ""){
-                        Swal.fire("메뉴명이 없습니다.");
-                        return;
-                    }
-                    if(menuDetail.menuType == null || menuDetail.menuType == ""){
-                        menuDetail.menuType = "n";
-                    }
-                    if(menuDetail.menuPathNm == null || menuDetail.menuPathNm == ""){
-                        Swal.fire("메뉴경로가 없습니다.");
-                        return;
-                    }
-
-                    if(menuDetail.menuSortSeq == null || menuDetail.menuSortSeq == ""){
-                        Swal.fire("메뉴순서가 없습니다.");
-                        return;
-                    }
-                    if(menuDetail.actvtnYn == null || menuDetail.actvtnYn == ""){
-                        setMenuDetail({
-                            ...menuDetail,
-                            actvtnYn: "Y"
-                        })
-                    }
-                    setSaveMenuData(menuDetail);
-                }else{
-                    setMenu(menuDetail);
+                if(menuDetail.creatrSn == null){
+                    setMenuDetail({
+                        ...menuDetail,
+                        creatrSn: sessionUser.userSn,
+                    })
                 }
+
+                if(menuDetail.menuNm == null || menuDetail.menuNm == ""){
+                    Swal.fire("메뉴명이 없습니다.");
+                    return;
+                }
+                if(menuDetail.menuType == null || menuDetail.menuType == ""){
+                    menuDetail.menuType = "n";
+                }
+                if(menuDetail.menuPathNm == null || menuDetail.menuPathNm == ""){
+                    Swal.fire("메뉴경로가 없습니다.");
+                    return;
+                }
+
+                if(menuDetail.menuSortSeq == null || menuDetail.menuSortSeq == ""){
+                    Swal.fire("메뉴순서가 없습니다.");
+                    return;
+                }
+                if(menuDetail.actvtnYn == null || menuDetail.actvtnYn == ""){
+                    setMenuDetail({
+                        ...menuDetail,
+                        actvtnYn: "Y"
+                    })
+                }
+
+                if(menuDetail.aplcnNtnLtr == null || menuDetail.aplcnNtnLtr == ""){
+                    setMenuDetail({
+                        ...menuDetail,
+                        aplcnNtnLtr: "KR"
+                    })
+                }
+                menuDetail.btnType = "save";
+                setSaveMenuData(menuDetail);
             } else {
                 //취소
             }
