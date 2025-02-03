@@ -29,6 +29,7 @@ function OperationalSupport(props) {
         }
     );
 
+    const [selectedOption, setSelectedOption] = useState("mvnEntNm");
     const [paginationInfo, setPaginationInfo] = useState({});
     const [rcList, setAuthorityList] = useState([]);
     const [activeTab, setActiveTab] = useState(1);
@@ -127,6 +128,15 @@ function OperationalSupport(props) {
         }
     };
 
+    const handleKeywordSearch = () => {
+
+        setSearchDto((prev) => {
+            const updatedSearchDto = { ...prev, [selectedOption]: prev[selectedOption] || "" , pageIndex: 1  };
+            getRcList(updatedSearchDto); // 여기서 검색 실행
+            return updatedSearchDto;
+        });
+    };
+
     return (
         <div id="container" className="container layout cms">
             <ManagerLeft/>
@@ -161,7 +171,10 @@ function OperationalSupport(props) {
                             <li className="inputBox type1">
                                 <p className="title">키워드</p>
                                 <div className="itemBox">
-                                    <select className="selectGroup">
+                                    <select className="selectGroup" onChange={(e) => {
+                                        const value = e.target.value;
+                                        setSelectedOption(value === "1" ? "mvnEntNm" : "rpsvNm");
+                                    }}>
                                         <option value="0">전체</option>
                                         <option value="1">기업명</option>
                                         <option value="2">대표자</option>
@@ -172,10 +185,10 @@ function OperationalSupport(props) {
                                 <label className="input">
                                     <input
                                         type="text"
-                                        defaultValue={searchDto && searchDto.mvnEntNm}
+                                        value={searchDto[selectedOption] || ""}
                                         name="search"
-                                        onChange={(e)=>{
-                                            searchDto({...searchDto, mvnEntNm: e.target.value});
+                                        onChange={(e) => {
+                                            setSearchDto({ ...searchDto, [selectedOption]: e.target.value });
                                         }}
                                         placeholder="검색어를 입력해주세요"
                                         onKeyDown={activeEnter}
@@ -193,7 +206,7 @@ function OperationalSupport(props) {
                             >
                                 <div className="icon"></div>
                             </button>
-                            <button type="button" className="searchBtn btn btn1 point">
+                            <button type="button" className="searchBtn btn btn1 point" onClick= {handleKeywordSearch}>
                                 <div className="icon"></div>
                             </button>
                         </div>
