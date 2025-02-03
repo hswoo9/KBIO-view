@@ -174,14 +174,21 @@ function WaitMemberList(props) {
                         dataList.push(
                             <tr key={item.userSn}>
                                 <td>{itemNumber}</td>
-                                <td>{item.mbrType}</td>
+                                <td>
+                                    {item.mbrType === 9 ? '관리자' :
+                                     item.mbrType === 1 ? '입주기업' :
+                                     item.mbrType === 2 ? '컨설턴트' :
+                                     item.mbrType === 3 ? '유관기관' :
+                                     item.mbrType === 4 ? '비입주기업' :
+                                     '테스트'}
+                                </td>
                                 <td>
                                     <Link
-                                        to={{ pathname: URL.MANAGER_WAIT_MEMBER_MODIFY }}
+                                        to={{pathname: URL.MANAGER_WAIT_MEMBER_MODIFY}}
                                         state={{
                                             userSn: item.userSn
                                         }}
-                                        style={{ cursor: 'pointer', textDecoration: 'underline' }}
+                                        style={{cursor: 'pointer', textDecoration: 'underline'}}
                                     >
                                         {item.userId}
                                     </Link>
