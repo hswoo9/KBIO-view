@@ -150,7 +150,13 @@ function NormalMemberList(props) {
                                 <td></td>
                                 <td>{new Date(item.frstCrtDt).toISOString().split("T")[0]}</td>
                                 <td></td>
-                                <td>{item.actvtnYn}</td>
+                                <td>
+                                    {item.actvtnYn === 'Y' ? '정상회원' :
+                                    item.actvtnYn === 'W' ? '대기회원' :
+                                    item.actvtnYn === 'R' ? '반려회원' :
+                                    item.actvtnYn === 'C' ? '정지회원' :
+                                    item.actvtnYn === 'S' ? '탈퇴회원' : ''}
+                                </td>
                                 {/*<td>{item.replyPosblYn}</td>
                                 <td>{item.answerPosblYn}</td>
                                 <td>

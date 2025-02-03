@@ -96,11 +96,12 @@ function CancelMemberList(props) {
                         dataList.push(
                             <tr key={item.userSn}>
                                 <td>{itemNumber}</td>
+                                <td>{item.mbrType}</td>
+                                <td>{item.userId}</td>
+                                <td>{item.kornFlnm}</td>
                                 <td></td>
-                                <td>{item.emplyrId}</td>
-                                <td>{item.userNm}</td>
-                                <td>{item.userType}</td>
                                 <td></td>
+                                <td>{new Date(item.frstCrtDt).toISOString().split("T")[0]}</td>
                                 <td></td>
                                 <td>{item.answerPosblYn}</td>
                             </tr>
