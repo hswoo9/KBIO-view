@@ -18,14 +18,14 @@ function ManagerBbs(props) {
     const [searchDto, setSearchDto] = useState(
         location.state?.searchDto || {
             pageIndex: 1,
-            bbsType: "",
+            bbsTypeNm: "",
             searchWrd: "",
             bbsNm : "",
             actvtnYn : "",
         }
     );
     const [paginationInfo, setPaginationInfo] = useState({});
-    const bbsTypeRef = useRef();
+    const bbsTypeNmRef = useRef();
     const bbsNmRef = useRef();
     const [bbsList, setBbsList] = useState([]);
 
@@ -72,7 +72,7 @@ function ManagerBbs(props) {
                                     {/*    {item.bbsNm}*/}
                                     {/*</Link>*/}
                                 </td>
-                                <td>{item.bbsType == "0" ? "일반" : item.bbsType == "1" ? "faQ" : "QnA"}</td>
+                                <td>{item.bbsTypeNm == "0" ? "일반" : item.bbsTypeNm == "1" ? "faQ" : "QnA"}</td>
                                 <td>{item.actvtnYn === "Y" ? "사용" : "미사용"}</td>
                                 <td>{moment(item.frstCrtDt).format('YYYY-MM-DD')}</td>
                                 <td>
@@ -114,15 +114,15 @@ function ManagerBbs(props) {
                                 <p className="title">게시판유형</p>
                                 <div className="itemBox">
                                     <select className="selectGroup"
-                                            id="bbsType"
-                                            name="bbsType"
+                                            id="bbsTypeNm"
+                                            name="bbsTypeNm"
                                             title="게시판유형선택"
-                                            ref={bbsTypeRef}
+                                            ref={bbsTypeNmRef}
                                             onChange={(e) => {
                                                 getBbsList({
                                                     ...searchDto,
                                                     pageIndex: 1,
-                                                    bbsType: bbsTypeRef.current.value,
+                                                    bbsTypeNm: bbsTypeNmRef.current.value,
                                                     bbsNm: bbsNmRef.current.value,
                                                 });
                                             }}
@@ -161,7 +161,7 @@ function ManagerBbs(props) {
                                         getBbsList({
                                             ...searchDto,
                                             pageIndex: 1,
-                                            bbsType: bbsTypeRef.current.value,
+                                            bbsTypeNm: bbsTypeNmRef.current.value,
                                             bbsNm: bbsNmRef.current.value,
                                         });
                                     }}

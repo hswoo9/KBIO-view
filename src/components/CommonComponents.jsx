@@ -8,6 +8,30 @@ import axios from "axios";
 import Swal from "sweetalert2";
 
 /**
+ * 공통코드 조회
+ * @param cdGroupSn = 코드그룹 일련번호
+ */
+export const getComCdList = (cdGroupSn) => {
+    const requestOptions = {
+        method: "POST",
+        headers: {
+            "Content-type": "application/json",
+        },
+        body: JSON.stringify({cdGroupSn : cdGroupSn})
+    };
+    EgovNet.requestFetch(
+        "/codeApi/getComCdList.do",
+        requestOptions,
+        (resp) => {
+            console.log(resp)
+        },
+        function (resp) {
+            console.log("err response : ", resp);
+        }
+    )
+}
+
+/**
  * 파일 다운로드
  * @param atchFileSn
  * @param atchFileNm

@@ -51,11 +51,11 @@ function ManagerCodeEdit(props) {
       cancelButtonText: "취소"
     }).then((result) => {
       if(result.isConfirmed) {
-        if(cdDetail.cd == null){
+        if(cdDetail.comCd == null){
           Swal.fire("코드가 없습니다.");
           return;
         }
-        if(cdDetail.cdNm == null){
+        if(cdDetail.comCdNm == null){
           Swal.fire("코드명이 없습니다.");
           return;
         }
@@ -236,29 +236,29 @@ function ManagerCodeEdit(props) {
           <div className="contBox infoWrap customContBox">
             <ul className="inputWrap">
               <li className="inputBox type1 width2">
-                <label className="title essential" htmlFor="cd"><small>코드</small></label>
+                <label className="title essential" htmlFor="comCd"><small>코드</small></label>
                 <div className="input">
                   <input type="text"
-                         id="cd"
+                         id="comCd"
                          placeholder=""
                          required="required"
-                         value={cdDetail.cd || ""}
+                         value={cdDetail.comCd || ""}
                          onChange={(e) =>
-                             setCdDetail({...cdDetail, cd: e.target.value})
+                             setCdDetail({...cdDetail, comCd: e.target.value})
                          }
                   />
                 </div>
               </li>
               <li className="inputBox type1 width2">
-                <label className="title essential" htmlFor="cdNm"><small>코드명</small></label>
+                <label className="title essential" htmlFor="comCdNm"><small>코드명</small></label>
                 <div className="input">
                   <input type="text"
-                         id="cdNm"
+                         id="comCdNm"
                          placeholder=""
                          required="required"
-                         value={cdDetail.cdNm || ""}
+                         value={cdDetail.comCdNm || ""}
                          onChange={(e) =>
-                             setCdDetail({...cdDetail, cdNm: e.target.value})
+                             setCdDetail({...cdDetail, comCdNm: e.target.value})
                          }
                   />
                 </div>

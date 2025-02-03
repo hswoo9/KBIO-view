@@ -92,13 +92,13 @@ function ManagerPst(props) {
                             pstSn = item.pstSn;
                         }
 
-                        if(pstSn == item.orgnlPstSn){
+                        if(pstSn == item.upPstSn){
                             rlsYnFlag = true;
                         }
 
-                        if(item.orgnlPstSn != null) {  // 답글
+                        if(item.upPstSn != null) {  // 답글
                             reTag = "<span style='color:#5b72ff ' class='reply_row'>[RE]</span>"
-                            if (resp.result.pstList.find(v => v.pstSn == item.orgnlPstSn).rlsYn == "N") {
+                            if (resp.result.pstList.find(v => v.pstSn == item.upPstSn).rlsYn == "N") {
                                 rlsYnFlag = true;
                             }
                         }
@@ -158,8 +158,8 @@ function ManagerPst(props) {
                                 <p className="title">검색유형</p>
                                 <div className="itemBox">
                                     <select className="selectGroup"
-                                            id="bbsType"
-                                            name="bbsType"
+                                            id="bbsTypeNm"
+                                            name="bbsTypeNm"
                                             title="검색유형"
                                             ref={searchTypeRef}
                                             onChange={(e) => {
