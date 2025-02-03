@@ -630,79 +630,79 @@ function MemberSignUp(props) {
                 </div>
               </li>
 
-
               <li className="inputBox type2">
                 <span className="tt1">이메일</span>
-                <div className="input flexinput">
-                  {/* 이메일 아이디 */}
+                <div className="input flexinput" style={{display: 'flex', alignItems: 'center'}}>
                   <input
                       type="text"
-                      name="email-prefix"
-                      id="email-prefix"
+                      name="emailPrefix"
+                      id="emailPrefix"
+                      placeholder="이메일 아이디 입력"
                       value={memberDetail.emailPrefix}
                       onChange={(e) => setMemberDetail({
                         ...memberDetail,
                         emailPrefix: e.target.value,
-                        email: `${e.target.value}@${memberDetail.emailDomain}` 
+                        email: `${e.target.value}@${memberDetail.emailDomain}` // 이메일 업데이트
                       })}
-                      ref={(el) => (checkRef.current[5] = el)}
-                      style={{width: '50%'}}
+                      style={{flex: 1,  padding: '5px'}} // 인라인 스타일
                   />
+                  <span style={{margin: '0 5px'}}>@</span>
+                  <div className="itemBox" style={{flex: 1}}>
+                    {memberDetail.emailProvider === "direct" ? (
+                        <input
+                            type="text"
+                            placeholder="도메인 입력"
+                            value={memberDetail.emailDomain}
+                            onChange={(e) => setMemberDetail({
+                              ...memberDetail,
+                              emailDomain: e.target.value,
+                              email: `${memberDetail.emailPrefix}@${e.target.value}`
+                            })}
+                            onBlur={() => {
+                              if (!memberDetail.emailDomain) {
+                                setMemberDetail({...memberDetail, emailProvider: ""});
+                              }
+                            }}
+                            style={{flex: 1, padding: '5px'}}
+                        />
+                    ) : (
+                        <select
+                            className="selectGroup"
+                            onChange={(e) => {
+                              const provider = e.target.value;
+                              const newEmailDomain = provider === "direct" ? "" : provider; // 선택한 도메인
+                              const newEmail = `${memberDetail.emailPrefix}@${newEmailDomain}`; // 새로운 이메일 생성
 
-                  <span>@</span>
-
-                  {/* 도메인 입력 */}
-                  <input
-                      type="text"
-                      name="email-domain"
-                      id="email-domain"
-                      value={memberDetail.emailDomain}
-                      onChange={(e) => setMemberDetail({
-                        ...memberDetail,
-                        emailDomain: e.target.value,
-                        email: `${memberDetail.emailPrefix}@${e.target.value}`
-                      })}
-                      disabled={memberDetail.emailProvider && memberDetail.emailProvider !== "direct"}
-                      style={{width: '30%'}}
-                  />
-
-                  {/* 도메인 선택 */}
-                  <select
-                      name="email-provider"
-                      id="email-provider"
-                      onChange={(e) => {
-                        const provider = e.target.value;
-                        const newEmailDomain = provider === "direct" ? "" : provider;
-                        const newEmail = `${memberDetail.emailPrefix}@${newEmailDomain}`;
-
-                        setMemberDetail({
-                          ...memberDetail,
-                          emailProvider: provider,
-                          emailDomain: newEmailDomain,
-                          email: newEmail
-                        });
-                      }}
-                      value={memberDetail.emailProvider}
-                      style={{
-                        width: '120px',
-                        border: 'none',
-                        backgroundColor: 'transparent',
-                        cursor: 'pointer',
-                        appearance: 'none',
-                        outline: 'none',
-                        fontSize: '14px'
-                      }}
-                  >
-                    <option value="direct">직접입력</option>
-                    <option value="naver.com">네이버</option>
-                    <option value="daum.net">다음</option>
-                    <option value="gmail.com">구글</option>
-                    <option value="hotmail.com">핫메일</option>
-                    <option value="nate.com">네이트</option>
-                    <option value="hanmail.net">한메일</option>
-                  </select>
+                              setMemberDetail((prevDetail) => ({
+                                ...prevDetail,
+                                emailProvider: provider,
+                                emailDomain: newEmailDomain,
+                                email: newEmail
+                              }));
+                            }}
+                            value={memberDetail.emailProvider}
+                            style={{
+                              padding: '5px',
+                              flex: 1,
+                              appearance: 'none',
+                              background: 'none',
+                              width: '70%',
+                            }}
+                        >
+                          <option value="">선택하세요</option>
+                          <option value="naver.com">naver.com</option>
+                          <option value="gmail.com">gmail.com</option>
+                          <option value="daum.net">daum.net</option>
+                          <option value="hotmail.com">hotmail.com</option>
+                          <option value="nate.com">nate.com</option>
+                          <option value="hanmail.net">hanmail.net</option>
+                          <option value="direct">직접 입력</option>
+                        </select>
+                    )}
+                  </div>
                 </div>
               </li>
+
 
               <li className="inputBox type2">
                 <span className="tt1">비밀번호</span>
