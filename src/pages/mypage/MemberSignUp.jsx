@@ -288,7 +288,7 @@ function MemberSignUp(props) {
           "Content-type": "application/json",
         },
         body: JSON.stringify({
-          memberId : checkId
+          userId : checkId
         })
       };
       EgovNet.requestFetch(checkIdURL, reqOptions, function (resp) {
@@ -468,7 +468,9 @@ function MemberSignUp(props) {
         headers: {
           "Content-type": "application/json",
         },
-        body: JSON.stringify(memberDetail),
+        body: JSON.stringify({
+          ...memberDetail,
+        }),
       };
 
       EgovNet.requestFetch(insertMemURL, reqOptions, function (resp) {
@@ -762,23 +764,23 @@ function MemberSignUp(props) {
               <div className="tabBox type1">
                 <div className="bg hover"></div>
                 <ul className="list">
-                  <li className={memberDetail.memberType === "입주기업" ? "active" : ""}>
-                    <a href="javascript:;" onClick={() => setMemberDetail({...memberDetail, memberType: "입주기업"})}>
+                  <li className={memberDetail.mbrType === "입주기업" ? "active" : ""}>
+                    <a href="javascript:;" onClick={() => setMemberDetail({...memberDetail, mbrType: 1,})}>
                       <span>입주기업</span>
                     </a>
                   </li>
-                  <li className={memberDetail.memberType === "유관기관" ? "active" : ""}>
-                    <a href="javascript:;" onClick={() => setMemberDetail({...memberDetail, memberType: "유관기관"})}>
+                  <li className={memberDetail.mbrType === "유관기관" ? "active" : ""}>
+                    <a href="javascript:;" onClick={() => setMemberDetail({...memberDetail, mbrType: 3,})}>
                       <span>유관기관</span>
                     </a>
                   </li>
-                  <li className={memberDetail.memberType === "비입주기업" ? "active" : ""}>
-                    <a href="javascript:;" onClick={() => setMemberDetail({...memberDetail, memberType: "비입주기업"})}>
+                  <li className={memberDetail.mbrType === "비입주기업" ? "active" : ""}>
+                    <a href="javascript:;" onClick={() => setMemberDetail({...memberDetail, mbrType: 4,})}>
                       <span>비입주기업</span>
                     </a>
                   </li>
-                  <li className={memberDetail.memberType === "컨설턴트" ? "active" : ""}>
-                    <a href="javascript:;" onClick={() => setMemberDetail({...memberDetail, memberType: "컨설턴트"})}>
+                  <li className={memberDetail.mbrType === "컨설턴트" ? "active" : ""}>
+                    <a href="javascript:;" onClick={() => setMemberDetail({...memberDetail, mbrType: 2,})}>
                       <span>컨설턴트</span>
                     </a>
                   </li>
@@ -786,7 +788,7 @@ function MemberSignUp(props) {
               </div>
 
               {/* 입주기업 / 유관기관 폼 */}
-              {(memberDetail.memberType === "입주기업" || memberDetail.memberType === "유관기관") && (
+              {(memberDetail.mbrType === 1 || memberDetail.mbrType === 3) && (
                   <ul className="inputWrap">
                     <li className="inputBox type2 business_num">
                       <span className="tt1">사업자 등록번호</span>
@@ -923,7 +925,7 @@ function MemberSignUp(props) {
                   </ul>
               )}
 
-              {memberDetail.memberType === "비입주기업" && (
+              {memberDetail.mbrType === 4 && (
                   <ul className="inputWrap">
                     <li className="inputBox type2 business_num">
                       <span className="tt1">사업자 등록번호</span>
@@ -1063,7 +1065,7 @@ function MemberSignUp(props) {
                   </ul>
               )}
 
-              {memberDetail.memberType === "컨설턴트" && (
+              {memberDetail.mbrType === 2 && (
                   <ul className="inputWrap">
                     <li className="inputBox type2">
                       <span className="tt1">사진</span>
