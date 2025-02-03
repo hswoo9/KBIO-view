@@ -142,6 +142,7 @@ const URL = {
 
   MANAGER_MENU_MANAGEMENT: "/manager/menuManagement",
   MANAGER_MENU_AUTHORITY: "/manager/menuAuthority",
+  MANAGER_AUTHORITY_GROUP_USERS: "/manager/groupUsers",
 
   MANAGER_BBS_LIST2:"/manager/bbs/pst/bbsList",
   MANAGER_PST_LIST:"/manager/bbs/pst/list",
