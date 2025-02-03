@@ -8,6 +8,65 @@ import axios from "axios";
 import Swal from "sweetalert2";
 
 /**
+ * 사용자 메뉴 조회
+ */
+export const getMenu = () => {
+    const requestOptions = {
+        method: "POST",
+        headers: {
+            "Content-type": "application/json",
+        },
+        body: JSON.stringify({ menuDept : "" })
+    };
+    EgovNet.requestFetch(
+        "/commonApi/getMenu.do",
+        requestOptions,
+        (resp) => {
+        },
+        function (resp) {
+            console.log("err response : ", resp);
+        }
+    )
+};
+
+/**
+ * 공통코드 조회
+ * @param cdGroupSn = 코드그룹 일련번호
+ * 조회 예시
+ * const [comCdList, setComCdList] = useState([]);
+ *
+ * useEffect(() => {
+ *     getComCdList(1, setComCdList).then((data) => {
+ *         setComCdList(data);
+ *     })
+ * }, []);
+ */
+export const getComCdList = async (cdGroupSn) => {
+    const requestOptions = {
+        method: "POST",
+        headers: {
+            "Content-type": "application/json",
+        },
+        body: JSON.stringify({ cdGroupSn: cdGroupSn })
+    };
+
+    return new Promise((resolve, reject) => {
+        EgovNet.requestFetch(
+            "/codeApi/getComCdList.do",
+            requestOptions,
+            (resp) => {
+                resolve(resp.result.comCdList); // 성공 시 데이터를 resolve
+            },
+            (error) => {
+                console.log("err response : ", error);
+                reject(error); // 에러 시 reject
+            }
+        );
+    });
+};
+
+
+/**
  * 파일 다운로드
  * @param atchFileSn
  * @param atchFileNm

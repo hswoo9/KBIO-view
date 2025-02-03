@@ -132,7 +132,7 @@ function NormalMemberList(props) {
                         dataList.push(
                             <tr key={item.userSn}>
                                 <td>{itemNumber}</td>
-                                <td></td>
+                                <td>{item.mbrType}</td>
                                 <td>
                                     <Link
                                         to={{pathname: URL.MANAGER_NORMAL_MEMBER_MODIFY}}
@@ -141,13 +141,22 @@ function NormalMemberList(props) {
                                         }}
                                         style={{cursor: 'pointer', textDecoration: 'underline'}}
                                     >
-                                        {item.emplyrId}
+                                        {item.userId}
                                     </Link>
                                 </td>
 
-                                <td>{item.userNm}</td>
+                                <td>{item.kornFlnm}</td>
                                 <td>{item.userType}</td>
                                 <td></td>
+                                <td>{new Date(item.frstCrtDt).toISOString().split("T")[0]}</td>
+                                <td></td>
+                                <td>
+                                    {item.actvtnYn === 'Y' ? '정상회원' :
+                                    item.actvtnYn === 'W' ? '대기회원' :
+                                    item.actvtnYn === 'R' ? '반려회원' :
+                                    item.actvtnYn === 'C' ? '정지회원' :
+                                    item.actvtnYn === 'S' ? '탈퇴회원' : ''}
+                                </td>
                                 {/*<td>{item.replyPosblYn}</td>
                                 <td>{item.answerPosblYn}</td>
                                 <td>

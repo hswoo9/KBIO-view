@@ -83,7 +83,7 @@ function setWaitMember(props) {
                     },
                     body: JSON.stringify({
                         ...memberDetail,
-                        zip: "Y",
+                        actvtnYn: "Y",
                         userSn: userSn
                     }),
                 };
@@ -216,7 +216,13 @@ function setWaitMember(props) {
                             <div className="input">
                                 <input
                                     type="text"
-                                    value={memberDetail.mberSttus || ''}
+                                    value={
+                                        memberDetail.actvtnYn === 'Y' ? '정상회원' :
+                                        memberDetail.actvtnYn === 'W' ? '대기회원' :
+                                        memberDetail.actvtnYn === 'R' ? '반려회원' :
+                                        memberDetail.actvtnYn === 'C' ? '정지회원' :
+                                        memberDetail.actvtnYn === 'S' ? '탈퇴회원' : ''
+                                    }
                                     readOnly
                                 />
                             </div>
@@ -227,7 +233,7 @@ function setWaitMember(props) {
                             <div className="input">
                                 <input
                                     type="text"
-                                    value={memberDetail.userType || ''}
+                                    value={memberDetail.mbrType || ''}
                                     readOnly
                                 />
                             </div>
@@ -238,7 +244,7 @@ function setWaitMember(props) {
                             <div className="input">
                                 <input
                                     type="text"
-                                    value={memberDetail.emplyrId || ''}
+                                    value={memberDetail.userId || ''}
                                     readOnly
                                 />
                             </div>
@@ -249,7 +255,7 @@ function setWaitMember(props) {
                             <div className="input">
                                 <input
                                     type="password"
-                                    value={memberDetail.password || ''}
+                                    value={memberDetail.userPw || ''}
                                     readOnly
                                 />
                                 <button type="button" className="pwdBtn btn" onClick={(e) => {
@@ -265,7 +271,7 @@ function setWaitMember(props) {
                             <div className="input">
                                 <input
                                     type="text"
-                                    value={memberDetail.userNm || ''}
+                                    value={memberDetail.kornFlnm || ''}
                                     readOnly
                                 />
                             </div>
@@ -276,7 +282,7 @@ function setWaitMember(props) {
                             <div className="input">
                                 <input
                                     type="text"
-                                    value={memberDetail.mbtlnum || ''}
+                                    value={memberDetail.mblTelno || ''}
                                     readOnly
                                 />
                             </div>
@@ -298,7 +304,7 @@ function setWaitMember(props) {
                             <div className="input">
                                 <input
                                     type="text"
-                                    value={memberDetail.adres || ''}
+                                    value={`${memberDetail.addr || ''} ${memberDetail.daddr || ''}`} // addr과 daddr을 합쳐서 표시
                                     readOnly
                                 />
                             </div>
@@ -309,7 +315,7 @@ function setWaitMember(props) {
                             <div className="input">
                                 <input
                                     type="text"
-                                    value={memberDetail.emailRecptnAt || ''}
+                                    value={memberDetail.emlRcptnAgreYn === 'Y' ? '수신동의' : memberDetail.emlRcptnAgreYn === 'N' ? '수신거절' : ''}
                                     readOnly
                                 />
                             </div>
@@ -320,7 +326,7 @@ function setWaitMember(props) {
                             <div className="input">
                                 <input
                                     type="text"
-                                    value={memberDetail.smsRecptnAt || ''}
+                                    value={memberDetail.smsRcptnAgreYn  === 'Y' ? '수신동의' : memberDetail.smsRcptnAgreYn === 'N' ? '수신거절' : ''}
                                     readOnly
                                 />
                             </div>
@@ -332,7 +338,7 @@ function setWaitMember(props) {
                                 <div className="input">
                                     <input
                                         type="text"
-                                        value={memberDetail.sbscrbDe || ''}
+                                        value={memberDetail.frstCrtDt ? new Date(memberDetail.frstCrtDt).toLocaleDateString() : ''} // 연월일만 표시
                                         readOnly
                                     />
                                 </div>

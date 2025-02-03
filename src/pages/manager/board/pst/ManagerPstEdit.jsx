@@ -24,7 +24,7 @@ function setPst(props) {
     bbsSn : location.state?.bbsSn,
     pstSn : location.state?.pstSn
   });
-  const orgnlPstSn = location.state?.orgnlPstSn || null;
+  const upPstSn = location.state?.upPstSn || null;
   const pstGroup = location.state?.pstGroup || null;
 
   const [startDate, setStartDate] = useState(new Date());
@@ -111,7 +111,7 @@ function setPst(props) {
       // 조회/등록이면 조회 안함
       setPstDetail({
         bbsSn : searchDto.bbsSn,
-        otsdLink : "",
+        linkUrlAddr : "",
         upendNtcYn : "N",
         rlsYn : "N",
         actvtnYn : "Y",
@@ -220,8 +220,8 @@ function setPst(props) {
       }
     }
 
-    if(orgnlPstSn != null){
-      formData.append("orgnlPstSn", orgnlPstSn);
+    if(upPstSn != null){
+      formData.append("upPstSn", upPstSn);
     }
 
     if(pstGroup != null){
@@ -359,7 +359,7 @@ function setPst(props) {
               )}
 
               <div className="board_view2">
-                {orgnlPstSn == null && pstDetail.orgnlPstSn == null && (
+                {upPstSn == null && pstDetail.upPstSn == null && (
                     <dl>
                       <dt>
                         <label htmlFor="bbsNm">공지(기간)</label>
@@ -486,12 +486,12 @@ function setPst(props) {
                     <input
                         className="f_input2 w_full"
                         type="text"
-                        name="otsdLink"
+                        name="linkUrlAddr"
                         title=""
-                        id="otsdLink"
-                        defaultValue={pstDetail.otsdLink}
+                        id="linkUrlAddr"
+                        defaultValue={pstDetail.linkUrlAddr}
                         onChange={(e) =>
-                            setPstDetail({...pstDetail, otsdLink: e.target.value})
+                            setPstDetail({...pstDetail, linkUrlAddr: e.target.value})
                         }
                     />
                   </dd>
@@ -511,7 +511,7 @@ function setPst(props) {
                     />
                   </dd>
                 </dl>
-                {bbsDetail.wrtrRlsYn == "Y" && orgnlPstSn == null && pstDetail.orgnlPstSn == null && (
+                {bbsDetail.wrtrRlsYn == "Y" && upPstSn == null && pstDetail.upPstSn == null && (
                 <dl>
                   <dt>
                     <label htmlFor="pstTtl">공개여부</label>

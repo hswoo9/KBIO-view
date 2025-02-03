@@ -17,7 +17,7 @@ function setBbs(props) {
   const location = useLocation();
   const checkRef = useRef([]);
 
-  const bbsTypeOptions = [
+  const bbsTypeNmOptions = [
     { value: "", label: "선택" },
     { value: "0", label: "일반" },
     { value: "1", label: "FaQ" },
@@ -63,7 +63,7 @@ function setBbs(props) {
         wrtrRlsYn: "N",
         atchFileYn : "N",
         cmntPsbltyYn : "N",
-        replyPsbltyYn : "N",
+        ansPsbltyYn : "N",
         actvtnYn : "Y",
         creatrSn: sessionUser.userSn,
       });
@@ -99,8 +99,8 @@ function setBbs(props) {
         if(bbsData.cmntPsbltyYn != null){
           document.getElementById("cmntPsbltyYn").checked = bbsData.cmntPsbltyYn == "Y" ? true : false;
         }
-        if(bbsData.replyPsbltyYn != null){
-          document.getElementById("replyPsbltyYn").checked = bbsData.replyPsbltyYn == "Y" ? true : false;
+        if(bbsData.ansPsbltyYn != null){
+          document.getElementById("ansPsbltyYn").checked = bbsData.ansPsbltyYn == "Y" ? true : false;
         }
         setBbsDetail(bbsData);
       }
@@ -113,7 +113,7 @@ function setBbs(props) {
       Swal.fire("게시판명은 필수 값입니다.");
       return;
     }
-    if (!bbsDetail.bbsType) {
+    if (!bbsDetail.bbsTypeNm) {
       Swal.fire("게시판 유형은 필수 값입니다.");
       return;
     }
@@ -236,7 +236,7 @@ function setBbs(props) {
                 </div>
               </li>
               <li className="inputBox type1 width1">
-                <label className="title" htmlFor="bbsType"><small>게시판유형</small></label>
+                <label className="title" htmlFor="bbsTypeNm"><small>게시판유형</small></label>
                 <div className="itemBox">
                   {/*{modeInfo.mode === CODE.MODE_CREATE && (
                       <label className="f_select w_130" htmlFor="bbsType">
@@ -272,19 +272,19 @@ function setBbs(props) {
                     </span>
                   )}*/}
                   <select
-                      id="bbsType"
-                      name="bbsType"
+                      id="bbsTypeNm"
+                      name="bbsTypeNm"
                       className="selectGroup"
                       title="게시판유형선택"
                       onChange={(e) =>
                           setBbsDetail({
                             ...bbsDetail,
-                            bbsType: e.target.value,
+                            bbsTypeNm: e.target.value,
                           })
                       }
-                      value={bbsDetail.bbsType || ""}
+                      value={bbsDetail.bbsTypeNm || ""}
                   >
-                    {bbsTypeOptions.map((option) => {
+                    {bbsTypeNmOptions.map((option) => {
                       return (
                           <option value={option.value} key={option.value}>
                             {option.label}
@@ -412,15 +412,15 @@ function setBbs(props) {
                   <p className="title essential">답글사용여부</p>
                   <div className="toggleSwithWrap">
                     <input type="checkbox"
-                           id="replyPsbltyYn"
+                           id="ansPsbltyYn"
                            onChange={(e) =>
                                setBbsDetail({
                                  ...bbsDetail,
-                                 replyPsbltyYn: e.target.checked ? "Y" : "N",
+                                 ansPsbltyYn: e.target.checked ? "Y" : "N",
                                })
                            }
                     />
-                    <label htmlFor="replyPsbltyYn" className="toggleSwitch">
+                    <label htmlFor="ansPsbltyYn" className="toggleSwitch">
                       <span className="toggleButton"></span>
                     </label>
                   </div>

@@ -343,7 +343,7 @@ function setPst(props) {
                     <label htmlFor="pstTtl">외부링크</label>
                   </dt>
                   <dd>
-                    {pstDetail.otsdLink}
+                    {pstDetail.linkUrlAddr}
                   </dd>
                 </dl>
 
@@ -531,14 +531,14 @@ function setPst(props) {
               {/* <!-- 버튼영역 --> */}
               <div className="board_btn_area">
                 <div className="left_col btn1">
-                  {bbsDetail.replyPsbltyYn == "Y" && (
+                  {bbsDetail.ansPsbltyYn == "Y" && (
                       <Link
                           to={URL.MANAGER_PST_CREATE}
                           className="btn btn_blue_h46 pd35"
                           state={{
                             bbsSn: pstDetail.bbsSn,
                             pstGroup: pstDetail.pstGroup,
-                            orgnlPstSn: pstDetail.pstSn,
+                            upPstSn: pstDetail.pstSn,
                           }}
                       >
                         답변

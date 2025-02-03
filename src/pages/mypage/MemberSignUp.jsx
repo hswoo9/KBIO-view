@@ -9,9 +9,6 @@ import axios from "axios";
 import { setSessionItem } from "@/utils/storage";
 
 function MemberSignUp(props) {
-  console.group("EgovMypageEdit");
-  console.log("[Start] EgovMypageEdit ------------------------------");
-  console.log("EgovMypageEdit [props] : ", props);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -26,20 +23,21 @@ function MemberSignUp(props) {
   const [image, setImage] = useState("");
 
   const [memberDetail, setMemberDetail] = useState({
-    memberType: "",
-    postcode: '',
-    address: '',
-    searchAddress: '',
-    detailAddress: '',
-    emailReceive: true,
-    smsReceive: true,
-    nonEmailPrefix: '',
-    nonEmailDomain: '',
-    nonEmailProvider: '',
-    nonpostcode: '',
-    nonaddress: '',
-    nonsearchAddress: '',
-    nondetailAddress: '',
+    mbrType: '',            // 회원 구분
+    zip: '',                // 우편번호
+    userPw: '',             // 비밀번호
+    userId: '',             // 사용자 ID
+    kornFlnm: '',           // 한글 성명
+    addr: '',               // 주소
+    daddr: '',              // 상세 주소
+    joinYmd: '',            // 가입일
+    emlRcptnAgreYn: '',     // 이메일 수신 동의 여부
+    smsRcptnAgreYn: '',     // SMS 수신 동의 여부
+    infoRlsYn: '',          // 정보 공개 여부
+    actvtnYn: "W",          // 활성 여부
+    creatrSn: '',           // 생성자 일련번호
+    mdfrSn: '',             // 수정자 일련번호
+    email: '',              // 이메일
   });
 
   useEffect(() => {
@@ -85,11 +83,12 @@ function MemberSignUp(props) {
     new window.daum.Postcode({
       oncomplete: function (data) {
         const fullAddress = data.address;
+        const zipCode = data.zonecode;
         setMemberDetail({
           ...memberDetail,
-          postcode: fullAddress,
-          address: fullAddress,
-          searchAddress: fullAddress,
+          zip: zipCode,
+          addr: fullAddress,
+          searchAddress: '',
         });
       },
     }).open();
@@ -98,14 +97,12 @@ function MemberSignUp(props) {
   const handleBusinessNumberChange = (e, part) => {
     const value = e.target.value;
 
-    // 사업자 등록번호가 변경되면 모든 관련 값을 초기화
     setMemberDetail({
       ...memberDetail,
       bizRegNum1: part === 'bizRegNum1' ? value : memberDetail.bizRegNum1,
       bizRegNum2: part === 'bizRegNum2' ? value : memberDetail.bizRegNum2,
       bizRegNum3: part === 'bizRegNum3' ? value : memberDetail.bizRegNum3,
 
-      // 입력 필드가 바뀔 때마다 관련 값들 초기화
       mvnEntNm: "",         // 사업자명 초기화
       rpsvNm: "",           // 대표자명 초기화
       clsNm: "",            // 산업명 초기화
@@ -274,7 +271,7 @@ function MemberSignUp(props) {
   };
   const checkIdDplct = () => {
     return new Promise((resolve) => {
-      let checkId = memberDetail["mberId"];
+      let checkId = memberDetail["userId"];
       if (checkId === null || checkId === undefined) {
         alert("회원ID를 입력해 주세요");
         return false;
@@ -291,7 +288,7 @@ function MemberSignUp(props) {
           "Content-type": "application/json",
         },
         body: JSON.stringify({
-          memberId : checkId
+          userId : checkId
         })
       };
       EgovNet.requestFetch(checkIdURL, reqOptions, function (resp) {
@@ -301,7 +298,7 @@ function MemberSignUp(props) {
             ...memberDetail,
             checkIdResult: "중복된 아이디입니다.",
             checkIdResultColor: "red",
-            mberId: checkId,
+            userId: checkId,
           });
           resolve(resp.result.usedCnt);
         } else {
@@ -309,7 +306,7 @@ function MemberSignUp(props) {
             ...memberDetail,
             checkIdResult: "사용 가능한 아이디입니다.",
             checkIdResultColor: "green",
-            mberId: checkId,
+            userId: checkId,
           });
           resolve(0);
         }
@@ -325,66 +322,51 @@ function MemberSignUp(props) {
         form.append(key, formData[key]);
       });
 
-      // 회원 ID 필수 값 확인
-      if (form.get("mberId") === null || form.get("mberId") === "") {
+      if (!form.get("userId")) {
         alert("회원ID는 필수 값입니다.");
-        return resolve(false); //
+        return resolve(false);
       }
 
-      // 아이디 중복 체크
       checkIdDplct().then((res) => {
-        if (res > 0) { // 중복된 아이디
+        if (res > 0) {
           alert("중복된 아이디입니다. 다른 아이디를 사용해주세요.");
           return resolve(false);
         }
 
-        // 비밀번호 필수 값 확인
-        if (form.get("password") === null || form.get("password") === "") {
-          alert("암호는 필수 값입니다.");
+        if (!form.get("userPw")) {
+          alert("비밀번호는 필수 값입니다.");
           return resolve(false);
         }
 
-        // 비밀번호 형식 확인
         const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?/~_`|-]).{8,20}$/;
-        if (!passwordRegex.test(form.get("password"))) {
-          alert("암호는 영문자, 숫자, 특수문자 조합으로 8~20자리 이내여야 합니다.");
+        if (!passwordRegex.test(form.get("userPw"))) {
+          alert("비밀번호는 영문자, 숫자, 특수문자 조합으로 8~20자리 이내여야 합니다.");
           return resolve(false);
         }
 
-        // 비밀번호 확인 필수 값 확인
-        if (form.get("password_chk") === null || form.get("password_chk") === "") {
-          alert("비밀번호 확인은 필수 값입니다.");
-          return resolve(false);
-        }
-
-        // 비밀번호와 비밀번호 확인 일치 여부 확인
-        if (form.get("password") !== form.get("password_chk")) {
+        if (form.get("password_chk") !== form.get("userPw")) {
           alert("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
           return resolve(false);
         }
 
-        // 회원명 필수 값 확인
-        if (form.get("mberNm") === null || form.get("mberNm") === "") {
-          alert("회원명은 필수 값입니다.");
+        if (!form.get("kornFlnm")) {
+          alert("성명은 필수 값입니다.");
           return resolve(false);
         }
 
-        // 회원명 형식 확인
         const mberNmRegex = /^[a-zA-Zㄱ-ㅎ가-힣]+$/;
-        if (!mberNmRegex.test(form.get("mberNm"))) {
-          alert("회원명은 한글 또는 영문자만 사용 가능합니다.");
+        if (!mberNmRegex.test(form.get("kornFlnm"))) {
+          alert("성명은 한글 또는 영문자만 사용 가능합니다.");
           return resolve(false);
         }
 
-        // 전화번호 필수 값 확인
-        if (form.get("phonenum") === null || form.get("phonenum") === "") {
+        if (!form.get("mblTelno")) {
           alert("전화번호는 필수 값입니다.");
           return resolve(false);
         }
 
-        // 전화번호 형식 확인
         const phonenumRegex = /^[0-9\-]+$/;
-        if (!phonenumRegex.test(form.get("phonenum"))) {
+        if (!phonenumRegex.test(form.get("mblTelno"))) {
           alert("전화번호는 숫자와 하이픈(-)만 포함할 수 있습니다.");
           return resolve(false);
         }
@@ -486,7 +468,9 @@ function MemberSignUp(props) {
         headers: {
           "Content-type": "application/json",
         },
-        body: JSON.stringify(memberDetail),
+        body: JSON.stringify({
+          ...memberDetail,
+        }),
       };
 
       EgovNet.requestFetch(insertMemURL, reqOptions, function (resp) {
@@ -585,17 +569,12 @@ function MemberSignUp(props) {
                 <label className="input">
                   <input
                       type="text"
-                      name="mberNm"
+                      name="kornFlnm"
                       title=""
-                      id="mberNm"
+                      id="kornFlnm"
                       placeholder=""
-                      defaultValue={memberDetail.mberNm}
-                      onChange={(e) =>
-                          setMemberDetail({
-                            ...memberDetail,
-                            mberNm: e.target.value,
-                          })
-                      }
+                      value={memberDetail.kornFlnm}
+                      onChange={(e) => setMemberDetail({...memberDetail, kornFlnm: e.target.value})}
                       ref={(el) => (checkRef.current[3] = el)}
                   />
                 </label>
@@ -606,17 +585,12 @@ function MemberSignUp(props) {
                 <label className="input">
                   <input
                       type="text"
-                      name="phonenum"
+                      name="mblTelno"
                       title=""
-                      id="phonenum"
+                      id="mblTelno"
                       placeholder=""
-                      defaultValue={memberDetail.phonenum}
-                      onChange={(e) =>
-                          setMemberDetail({
-                            ...memberDetail,
-                            phonenum: e.target.value,
-                          })
-                      }
+                      value={memberDetail.mblTelno}
+                      onChange={(e) => setMemberDetail({...memberDetail, mblTelno: e.target.value})}
                       ref={(el) => (checkRef.current[4] = el)}
                   />
                 </label>
@@ -628,38 +602,31 @@ function MemberSignUp(props) {
                   <div style={{display: 'flex', alignItems: 'center', marginBottom: '4px'}}>
                     <input
                         type="text"
-                        name="mberId"
-                        id="mberId"
+                        name="userId"
+                        id="userId"
                         placeholder="아이디는 6~12자 영문, 숫자만 가능합니다."
                         title="아이디"
-                        value={memberDetail.mberId || ""}
-                        onChange={(e) => setMemberDetail({...memberDetail, mberId: e.target.value})}
+                        value={memberDetail.userId}
+                        onChange={(e) => setMemberDetail({...memberDetail, userId: e.target.value})}
                         style={{flex: 1}}
                     />
                     <button
                         type="button"
                         className="btn btn_skyblue_h46"
-                        onClick={(e) => {
-                          checkIdDplct();
-                        }}
+                        onClick={checkIdDplct}
                         disabled={signupType === "kakao" || signupType === "naver" || signupType === "google"}
                     >
                       중복확인
                     </button>
                   </div>
                   {memberDetail.checkIdResult && (
-                      <div
-                          style={{
-                            color: memberDetail.checkIdResultColor,
-                            marginTop: '10px',
-                            fontSize: '12px'
-                          }}
-                      >
+                      <div style={{color: memberDetail.checkIdResultColor, marginTop: '10px', fontSize: '12px'}}>
                         {memberDetail.checkIdResult}
                       </div>
                   )}
                 </div>
               </li>
+
 
               <li className="inputBox type2">
                 <span className="tt1">이메일</span>
@@ -690,7 +657,7 @@ function MemberSignUp(props) {
                         ...memberDetail,
                         emailDomain: e.target.value,
                       })}
-                      disabled={memberDetail.emailProvider && memberDetail.emailProvider !== "direct"}
+                      disabled={memberDetail.emailProvider && memberDetail.emailProvider !== "direct"} // Read-only if not direct input
                       style={{width: '30%'}}
                   />
 
@@ -703,7 +670,7 @@ function MemberSignUp(props) {
                         setMemberDetail({
                           ...memberDetail,
                           emailProvider: provider,
-                          emailDomain: provider === "direct" ? "" : provider,
+                          emailDomain: provider === "direct" ? "" : provider, // Set domain to selected value
                         });
                       }}
                       value={memberDetail.emailProvider}
@@ -727,17 +694,18 @@ function MemberSignUp(props) {
                   </select>
                 </div>
               </li>
+
               <li className="inputBox type2">
                 <span className="tt1">비밀번호</span>
                 <label className="input">
                   <input
                       type="password"
-                      name="password"
-                      id="password"
+                      name="userPw"
+                      id="userPw"
                       placeholder="영문자, 숫자, 특수문자 조합으로 8~20자 이내만 가능합니다."
                       title="비밀번호"
-                      value={memberDetail.password || ""}
-                      onChange={(e) => setMemberDetail({...memberDetail, password: e.target.value})}
+                      value={memberDetail.userPw}
+                      onChange={(e) => setMemberDetail({...memberDetail, userPw: e.target.value})}
                   />
                 </label>
               </li>
@@ -764,11 +732,11 @@ function MemberSignUp(props) {
                 <label className="input" style={{paddingRight: "6rem"}}>
                   <input
                       type="text"
-                      name="searchAddress"
-                      id="searchAddress"
+                      name="addr"
+                      id="addr"
                       readOnly
                       title="주소"
-                      value={memberDetail.postcode || ""}
+                      value={memberDetail.addr}
                   />
                   <button type="button" className="addressBtn btn" onClick={searchAddress}>
                     <span>주소검색</span>
@@ -781,12 +749,12 @@ function MemberSignUp(props) {
                 <label className="input" style={{paddingRight: "6rem"}}>
                   <input
                       type="text"
-                      name="detailAddress"
-                      id="detailAddress"
+                      name="daddr"
+                      id="daddr"
                       placeholder="상세주소를 입력해주세요"
                       title="상세주소"
-                      value={memberDetail.detailAddress || ""}
-                      onChange={(e) => setMemberDetail({...memberDetail, detailAddress: e.target.value})}
+                      value={memberDetail.daddr}
+                      onChange={(e) => setMemberDetail({...memberDetail, daddr: e.target.value})}
                   />
                 </label>
               </li>
@@ -796,23 +764,23 @@ function MemberSignUp(props) {
               <div className="tabBox type1">
                 <div className="bg hover"></div>
                 <ul className="list">
-                  <li className={memberDetail.memberType === "입주기업" ? "active" : ""}>
-                    <a href="javascript:;" onClick={() => setMemberDetail({...memberDetail, memberType: "입주기업"})}>
+                  <li className={memberDetail.mbrType === "입주기업" ? "active" : ""}>
+                    <a href="javascript:;" onClick={() => setMemberDetail({...memberDetail, mbrType: 1,})}>
                       <span>입주기업</span>
                     </a>
                   </li>
-                  <li className={memberDetail.memberType === "유관기관" ? "active" : ""}>
-                    <a href="javascript:;" onClick={() => setMemberDetail({...memberDetail, memberType: "유관기관"})}>
+                  <li className={memberDetail.mbrType === "유관기관" ? "active" : ""}>
+                    <a href="javascript:;" onClick={() => setMemberDetail({...memberDetail, mbrType: 3,})}>
                       <span>유관기관</span>
                     </a>
                   </li>
-                  <li className={memberDetail.memberType === "비입주기업" ? "active" : ""}>
-                    <a href="javascript:;" onClick={() => setMemberDetail({...memberDetail, memberType: "비입주기업"})}>
+                  <li className={memberDetail.mbrType === "비입주기업" ? "active" : ""}>
+                    <a href="javascript:;" onClick={() => setMemberDetail({...memberDetail, mbrType: 4,})}>
                       <span>비입주기업</span>
                     </a>
                   </li>
-                  <li className={memberDetail.memberType === "컨설턴트" ? "active" : ""}>
-                    <a href="javascript:;" onClick={() => setMemberDetail({...memberDetail, memberType: "컨설턴트"})}>
+                  <li className={memberDetail.mbrType === "컨설턴트" ? "active" : ""}>
+                    <a href="javascript:;" onClick={() => setMemberDetail({...memberDetail, mbrType: 2,})}>
                       <span>컨설턴트</span>
                     </a>
                   </li>
@@ -820,12 +788,12 @@ function MemberSignUp(props) {
               </div>
 
               {/* 입주기업 / 유관기관 폼 */}
-              {(memberDetail.memberType === "입주기업" || memberDetail.memberType === "유관기관") && (
+              {(memberDetail.mbrType === 1 || memberDetail.mbrType === 3) && (
                   <ul className="inputWrap">
                     <li className="inputBox type2 business_num">
                       <span className="tt1">사업자 등록번호</span>
                       <div className="flexinput input" style={{paddingRight: "7rem"}}>
-                        <label>
+                      <label>
                           <input
                               type="text"
                               name="business_registration_number1"
@@ -957,7 +925,7 @@ function MemberSignUp(props) {
                   </ul>
               )}
 
-              {memberDetail.memberType === "비입주기업" && (
+              {memberDetail.mbrType === 4 && (
                   <ul className="inputWrap">
                     <li className="inputBox type2 business_num">
                       <span className="tt1">사업자 등록번호</span>
@@ -1097,7 +1065,7 @@ function MemberSignUp(props) {
                   </ul>
               )}
 
-              {memberDetail.memberType === "컨설턴트" && (
+              {memberDetail.mbrType === 2 && (
                   <ul className="inputWrap">
                     <li className="inputBox type2">
                       <span className="tt1">사진</span>
@@ -1126,7 +1094,6 @@ function MemberSignUp(props) {
                                   justifyContent: "center",
                                   color: "#999"
                                 }}>
-                                  <span>사진 없음</span>
                                 </div>
                             )}
                           </div>
@@ -1137,14 +1104,15 @@ function MemberSignUp(props) {
                             <p style={{color: "#666", fontSize: "14px", marginBottom: "12px"}}>
                               - 사진 권장 사이즈: 500px * 500px / 10M 이하 / gif, png, jpg(jpeg)
                             </p>
-                            <input
-                                type="file"
-                                name="consultantPhoto"
-                                id="consultantPhoto"
-                                accept="image/*"
-                                onChange={handleImageChange}
-                                style={{width: "100%"}}
-                            />
+                            <label style={{display: "block", marginTop: "12px"}}>
+                              <small className="text btn">파일 선택</small>
+                              <input type="file"
+                                     name="formFile"
+                                     id="formFile"
+                                     onChange={handleImageChange}
+                                     style={{display: "none"}} // 파일 선택 input 숨김
+                              />
+                            </label>
                           </div>
                         </div>
                       </div>
@@ -1299,8 +1267,8 @@ function MemberSignUp(props) {
                           type="radio"
                           id="receive_mail_yes"
                           name="receive_mail"
-                          checked={memberDetail.emailReceive === 1}
-                          onChange={() => setMemberDetail({...memberDetail, emailReceive: 1})}
+                          checked={memberDetail.emlRcptnAgreYn === "Y"}
+                          onChange={() => setMemberDetail({...memberDetail, emlRcptnAgreYn: "Y"})}
                       />
                       <small>수신</small>
                     </label>
@@ -1309,8 +1277,8 @@ function MemberSignUp(props) {
                           type="radio"
                           id="receive_mail_no"
                           name="receive_mail"
-                          checked={memberDetail.emailReceive === 2}
-                          onChange={() => setMemberDetail({...memberDetail, emailReceive: 2})}
+                          checked={memberDetail.emlRcptnAgreYn === "N"}
+                          onChange={() => setMemberDetail({...memberDetail, emlRcptnAgreYn: "N"})}
                       />
                       <small>수신안함</small>
                     </label>
@@ -1327,8 +1295,8 @@ function MemberSignUp(props) {
                           type="radio"
                           id="receive_sms_yes"
                           name="receive_sms"
-                          checked={memberDetail.smsReceive === 1}
-                          onChange={() => setMemberDetail({...memberDetail, smsReceive: 1})}
+                          checked={memberDetail.smsRcptnAgreYn === "Y"}
+                          onChange={() => setMemberDetail({...memberDetail, smsRcptnAgreYn: "Y"})}
                       />
                       <small>수신</small>
                     </label>
@@ -1337,8 +1305,8 @@ function MemberSignUp(props) {
                           type="radio"
                           id="receive_sms_no"
                           name="receive_sms"
-                          checked={memberDetail.smsReceive === 2}
-                          onChange={() => setMemberDetail({...memberDetail, smsReceive: 2})}
+                          checked={memberDetail.smsRcptnAgreYn === "N"}
+                          onChange={() => setMemberDetail({...memberDetail, smsRcptnAgreYn: "N"})}
                       />
                       <small>수신안함</small>
                     </label>

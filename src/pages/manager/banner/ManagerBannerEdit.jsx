@@ -318,7 +318,7 @@ function ManagerBannerEdit(props) {
             if(v.comCdList != null){
               v.comCdList.forEach(function (item, index){
                 returnList.push(
-                    <option key={item.comCdSn} value={item.cd}>{item.cdNm}</option>
+                    <option key={item.comCdSn} value={item.comCd}>{item.comCdNm}</option>
                 )
               })
             }
@@ -389,7 +389,7 @@ function ManagerBannerEdit(props) {
           <div className="contBox infoWrap customContBox">
             <ul className="inputWrap">
               <li className="inputBox type1 width1">
-                <label className="title essential" htmlFor="cdNm"><small>배너제목</small></label>
+                <label className="title essential" htmlFor="comCdNm"><small>배너제목</small></label>
                 <div className="input">
                   <input type="text"
                          id="bnrPopupTtl"

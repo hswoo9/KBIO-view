@@ -128,8 +128,8 @@ function ManagerCodeGroup(props) {
                                 }}>
                                     {resp.paginationInfo.totalRecordCount - (resp.paginationInfo.currentPageNo - 1) * resp.paginationInfo.pageSize - index}
                                 </td>
-                                <td>{item.cd}</td>
-                                <td>{item.cdNm}</td>
+                                <td>{item.comCd}</td>
+                                <td>{item.comCdNm}</td>
                                 <td>{item.sortSeq}</td>
                                 <td>{item.actvtnYn === "Y" ? "사용" : "사용안함"}</td>
                                 <td>

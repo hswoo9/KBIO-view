@@ -357,7 +357,7 @@ function ManagerCodeEdit(props) {
             if(v.comCdList != null){
               v.comCdList.forEach(function (item, index){
                 returnList.push(
-                    <option key={item.comCdSn} value={item.cd}>{item.cdNm}</option>
+                    <option key={item.comCdSn} value={item.comCd}>{item.comCdNm}</option>
                 )
               })
             }
