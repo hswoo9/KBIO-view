@@ -9,6 +9,8 @@ const URL = {
   SMS_GOOGLE_CB: "/login/google/callback", //Sns Google Callback
   ERROR: "/error", //로그인
 
+  COMMON_ERROR : "/commonError",
+
   FIND_ID_PSWD:"/findIdPswd", //아이디 비번찾기
 
   //ABOUT
@@ -177,6 +179,8 @@ const URL = {
 
   MANAGER_STATISTICS: "/manager/statistics",
   MANAGER_STATISTICS_USER: "/manager/statistics/user",
+
+  MessageTest: "/messageTest"
 };
 
 // eslint-disable-next-line react-refresh/only-export-components

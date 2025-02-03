@@ -13,8 +13,11 @@ import ReactDatePicker from 'react-datepicker';
 import moment from "moment";
 import ReactQuill from 'react-quill-new';
 import '@/css/quillSnow.css';
+import '@/css/manager/managerPstDetail.css';
 import PstEvl  from "./PstEvl.jsx";
 import {getSessionItem} from "../../../../utils/storage.js";
+import ManagerLeftNew from "@/components/manager/ManagerLeftNew";
+import {fileDownLoad} from "@/components/CommonComponents.jsx";
 
 function setPst(props) {
   const sessionUser = getSessionItem("loginUser");
@@ -270,191 +273,7 @@ function setPst(props) {
 
   return (
       <div className="container">
-        <style>{`
-          .layout dt {
-            width: 200px !important;
-          }
-          
-          .comment_section {
-            margin-top: 30px;
-            padding: 20px;
-            background-color: #f9f9f9;
-            border-radius: 8px;
-          }
-        
-          .comment_title {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 15px;
-            color: #333;
-          }
-        
-          .comments_list {
-            margin-bottom: 20px;
-          }
-        
-          .comment_item {
-            background-color: #fff;
-            padding: 12px;
-            margin-bottom: 10px;
-            border-radius: 5px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-          }
-        
-          .comment_content p {
-            margin: 0;
-            font-size: 14px;
-            color: #444;
-          }
-        
-          .comment_footer {
-            margin-top: 10px;
-            text-align: right;
-          }
-        
-          .comment_date {
-            font-size: 12px;
-            color: #aaa;
-          }
-        
-          .no_comments {
-            color: #888;
-          }
-        
-          .comment_form {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-          }
-        
-          .comment_input {
-            width: 100%;
-            padding: 10px;
-            font-size: 14px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            resize: vertical;
-          }
-        
-          .comment_submit {
-            align-self: flex-end;
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-          }
-        
-          .comment_submit:hover {
-            background-color: #0056b3;
-          }
-           .survey-container {
-            border: 1px solid #ccc;
-            padding: 20px;
-            border-radius: 5px;
-            margin: 20px auto;
-            font-family: Arial, sans-serif;
-            }
-            
-            h3 {
-            font-size: 16px;
-            margin-bottom: 15px;
-            }
-            
-            .rating-options {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 15px;
-            }
-            
-            label {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            font-size: 14px;
-            }
-            
-            textarea.comment-box {
-            width: 90%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 14px;
-            resize: none;
-            }
-            
-            .submit-button {
-            background-color: #e91e63;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            padding: 10px 20px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: background-color 0.3s;
-            }
-            
-            .submit-button:hover {
-            background-color: #c2185b;
-            }
-            .comment_item {
-            padding: 10px;
-            border-bottom: 1px solid #ddd;
-            margin-bottom: 10px;
-            }
-            
-            .comment_content p {
-            margin: 0;
-            font-size: 14px;
-            color: #444;
-            }
-            
-            .comment_footer {
-            margin-top: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            }
-            
-            .comment_date {
-            font-size: 12px;
-            color: #888;
-            }
-            
-            .comment_actions {
-            display: flex;
-            gap: 5px;
-            }
-            
-            .comment_action_btn {
-            padding: 5px 10px;
-            font-size: 12px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            }
-            
-            .reply_btn {
-            background-color: #007bff;
-            color: #fff;
-            }
-            
-            .edit_btn {
-            background-color: #ffc107;
-            color: #fff;
-            }
-            
-            .delete_btn {
-            background-color: #dc3545;
-            color: #fff;
-            }
-            
-            .comment_action_btn:hover {
-            opacity: 0.8;
-            }
-        `}</style>
+        <ManagerLeftNew/>
         <div className="c_wrap">
           <div className="location">
             <ul>
@@ -511,7 +330,7 @@ function setPst(props) {
                             <ul>
                               {pstDetail.pstFiles.map((file, index) => (
                                   <li key={index}>
-                                    {file.atchFileNm} - {(file.atchFileSz / 1024).toFixed(2)} KB
+                                    <span onClick={() =>  fileDownLoad(file.atchFileSn, file.atchFileNm)}>{file.atchFileNm} - {(file.atchFileSz / 1024).toFixed(2)} KB</span>
                                   </li>
                               ))}
                             </ul>

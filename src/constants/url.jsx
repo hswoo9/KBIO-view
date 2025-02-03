@@ -6,6 +6,8 @@ const URL = {
   MANAGER_LOGIN: "/egovframe-template-simple-react/manager/login", //로그인
   ERROR: "/egovframe-template-simple-react/error", //로그인
 
+  COMMON_ERROR : "/commonError",
+
   FIND_ID_PSWD:"/egovframe-template-simple-react/findIdPswd", //아이디 비번찾기
 
   //ABOUT
@@ -181,6 +183,7 @@ const URL = {
   MANAGER_STATISTICS: "/manager/statistics",
   MANAGER_STATISTICS_USER: "/manager/statistics/user",
 
+  MessageTest: "/messageTest",
 };
 
 // eslint-disable-next-line react-refresh/only-export-components
