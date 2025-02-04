@@ -6,7 +6,7 @@ import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
 import 'moment/locale/ko';
-import { default as EgovLeftNav } from "@/components/leftmenu/ManagerLeftBoard";
+import ManagerLeftNew from "@/components/manager/ManagerLeftNew";
 import EgovRadioButtonGroup from "@/components/EgovRadioButtonGroup";
 import Swal from "sweetalert2";
 import Form from "react-bootstrap/Form";
@@ -31,6 +31,9 @@ function setPst(props) {
   const [endDate, setEndDate] = useState(new Date());
   const [modeInfo, setModeInfo] = useState({ mode: props.mode });
   const [pstDetail, setPstDetail] = useState({});
+  useEffect(() => {
+    console.log(pstDetail);
+  }, [pstDetail])
   const [isDatePickerEnabled, setIsDatePickerEnabled] = useState(false);
   const [acceptFileTypes, setAcceptFileTypes] = useState('');
   const [fileList, setFileList] = useState([]);
@@ -41,7 +44,12 @@ function setPst(props) {
     { value: "N", label: "공개" },
   ];
 
+  const isFirstRender = useRef(true);
   const handleChange = (value) => {
+    if(isFirstRender.current){
+      isFirstRender.current = false;
+      return;
+    }
     setPstDetail({...pstDetail, pstCn: value});
   };
 
@@ -86,7 +94,7 @@ function setPst(props) {
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
-    accept: acceptFileTypes, // accept 값은 `acceptFileTypes` 상태에 따라 동적으로 변경됩니다.
+    /*accept: acceptFileTypes, // accept 값은 `acceptFileTypes` 상태에 따라 동적으로 변경됩니다.*/
     multiple: true, // 멀티파일 허용
   });
 
@@ -141,21 +149,26 @@ function setPst(props) {
 
         resp.result.pst.mdfrSn = sessionUser.userSn
         setPstDetail(resp.result.pst);
+        console.log(resp.result.pst);
         if(resp.result.pst.upendNtcYn == "Y"){
-          setStartDate(
-              new Date(
-                  resp.result.pst.ntcBgngDt.substring(0, 4),
-                  resp.result.pst.ntcBgngDt.substring(4, 6) - 1,
-                  resp.result.pst.ntcBgngDt.substring(6, 8)
-              )
-          )
-          setEndDate(
-              new Date(
-                  resp.result.pst.ntcEndDate.substring(0, 4),
-                  resp.result.pst.ntcEndDate.substring(4, 6) - 1,
-                  resp.result.pst.ntcEndDate.substring(6, 8)
-              )
-          )
+          if(resp.result.pst.ntcBgngDt != null){
+            setStartDate(
+                new Date(
+                    resp.result.pst.ntcBgngDt.substring(0, 4),
+                    resp.result.pst.ntcBgngDt.substring(4, 6) - 1,
+                    resp.result.pst.ntcBgngDt.substring(6, 8)
+                )
+            )
+          }
+          if(resp.result.pst.ntcEndDate != null){
+            setEndDate(
+                new Date(
+                    resp.result.pst.ntcEndDate.substring(0, 4),
+                    resp.result.pst.ntcEndDate.substring(4, 6) - 1,
+                    resp.result.pst.ntcEndDate.substring(6, 8)
+                )
+            )
+          }
           setIsDatePickerEnabled(true);
         }
       }
@@ -317,269 +330,231 @@ function setPst(props) {
   }, []);
 
   return (
-      <div className="container">
-        <style>{`
-          .layout dt {
-            width: 200px !important;
-          }
-        `}</style>
-        <div className="c_wrap">
-          <div className="location">
-            <ul>
-              <li>
-                <Link to={URL.MANAGER} className="home">
-                  Home
-                </Link>
-              </li>
-              <li>
-                <Link
-                    to={URL.MANAGER_PST_LIST}
-                    state={{
-                      bbsSn: bbsDetail.bbsSn,
-                      atchFileYn : bbsDetail.atchFileYn
-                    }}
-                >
-                  게시글관리
-                </Link>
-              </li>
-              <li>게시글생성</li>
-            </ul>
-          </div>
+      <div id="container" className="container layout cms">
+        <ManagerLeftNew/>
+        <div className="inner">
+          {modeInfo.mode === CODE.MODE_CREATE && (
+              <h2 className="pageTitle"><p>게시글 생성</p></h2>
+          )}
 
-          <div className="layout">
-            <EgovLeftNav></EgovLeftNav>
+          {modeInfo.mode === CODE.MODE_MODIFY && (
+              <h2 className="pageTitle"><p>게시글 수정</p></h2>
+          )}
 
-            <div className="contents BOARD_CREATE_REG" id="contents">
-              {modeInfo.mode === CODE.MODE_CREATE && (
-                  <h2 className="tit_2">게시글 생성</h2>
-              )}
-
-              {modeInfo.mode === CODE.MODE_MODIFY && (
-                  <h2 className="tit_2">게시글 수정</h2>
-              )}
-
-              <div className="board_view2">
-                {upPstSn == null && pstDetail.upPstSn == null && (
-                    <dl>
-                      <dt>
-                        <label htmlFor="bbsNm">공지(기간)</label>
-                        <span className="req">필수</span>
-                      </dt>
-                      <dd className="pstUpendNtcDd">
-                        <Form.Check
-                            type="checkbox"
-                            id="upendNtcYn"
-                            label="공지"
-                            checked={pstDetail.upendNtcYn == "Y"}
-                            onChange={(e) => {
-                              setPstDetail({
-                                ...pstDetail,
-                                upendNtcYn: e.target.checked ? "Y" : "N",
-                                ntcBgngDt: e.target.checked ? moment(startDate).format('YYYYMMDD') : null,
-                                ntcEndDate: e.target.checked ? moment(endDate).format('YYYYMMDD') : null
-                              })
-                              setIsDatePickerEnabled(e.target.checked);
-                            }}
-                        ></Form.Check>
-                        <input type="date"
-                               name="ntcBgngDt"
-                               onChange={(date) => setStartDate(date)}
-                               disabled={!isDatePickerEnabled} // 활성화 여부 결정
-                        />~
-                        <input type="date"
-                               name="ntcEndDate"
-                               onChange={(date) => setEndDate(date)}
-                               disabled={!isDatePickerEnabled} // 활성화 여부 결정
-                        />
-                      </dd>
-                    </dl>
-                )}
-                <dl>
-                  <dt>
-                    <label htmlFor="pstTtl">제목</label>
-                    <span className="req">필수</span>
-                  </dt>
-                  <dd>
-                    <input
-                        className="f_input2 w_full"
-                        type="text"
-                        name="pstTtl"
-                        title=""
-                        id="pstTtl"
-                        defaultValue={pstDetail.pstTtl}
-                        onChange={(e) =>
-                            setPstDetail({...pstDetail, pstTtl: e.target.value})
-                        }
-                    />
-                  </dd>
-                </dl>
-
-                <dl>
-                  <dt>
-                    <label htmlFor="pstTtl">작성일</label>
-                    <span className="req">필수</span>
-                  </dt>
-                  <dd>
-                    {moment(pstDetail.frstCrtDt).format('YYYY-MM-DD')}
-                  </dd>
-                </dl>
-                {bbsDetail.atchFileYn == "Y" && (
-                    <dl>
-                      <dt>
-                        <label htmlFor="pstTtl">첨부파일</label>
-                      </dt>
-                      <dd>
-                        <div
-                            {...getRootProps({
-                              style: {
-                                border: "2px dashed #cccccc",
-                                padding: "20px",
-                                textAlign: "center",
-                                cursor: "pointer",
-                              },
-                            })}
-                        >
-                          <input {...getInputProps()} />
-                          <p>파일을 이곳에 드롭하거나 클릭하여 업로드하세요</p>
+          <div className="contBox infoWrap customContBox">
+            <ul className="inputWrap">
+              {upPstSn == null && pstDetail.upPstSn == null && (
+                  <>
+                    <li className="toggleBox width3">
+                      <div className="box">
+                        <p className="title essential">공지(기간)</p>
+                        <div className="toggleSwithWrap">
+                          <input type="checkbox"
+                                 id="upendNtcYn"
+                                 checked={pstDetail.upendNtcYn == "Y"}
+                                 onChange={(e) => {
+                                   setPstDetail({
+                                     ...pstDetail,
+                                     upendNtcYn: e.target.checked ? "Y" : "N",
+                                     ntcBgngDt: !e.target.checked ? null : pstDetail.ntcBgngDt,
+                                     ntcEndDate: !e.target.checked ? null : pstDetail.ntcEndDate,
+                                   })
+                                   setIsDatePickerEnabled(e.target.checked);
+                                 }}
+                          />
+                          <label htmlFor="upendNtcYn" className="toggleSwitch">
+                            <span className="toggleButton"></span>
+                          </label>
                         </div>
+                      </div>
+                    </li>
+                    <li className="inputBox type1 width3">
+                      <label className="title" htmlFor="ntcBgngDt"><small>공지시작일</small></label>
+                      <div className="input">
+                        <input type="date"
+                               id="ntcBgngDt"
+                               name="ntcBgngDt"
+                               defaultValue={pstDetail.upendNtcYn == "Y" ? moment(pstDetail.ntcBgngDt).format('YYYY-MM-DD') : "" }
+                               onChange={(e) =>
+                                   setPstDetail({...pstDetail, ntcBgngDt: moment(e.target.value).format('YYYYMMDD')})
+                               }
+                               disabled={!isDatePickerEnabled}
+                        />
+                      </div>
+                    </li>
+                    <li className="inputBox type1 width3">
+                      <label className="title" htmlFor="ntcEndDate"><small>공지종료일</small></label>
+                      <div className="input">
+                        <input type="date"
+                               id="ntcEndDate"
+                               name="ntcEndDate"
+                               defaultValue={pstDetail.upendNtcYn == "Y" ? moment(pstDetail.ntcEndDate).format('YYYY-MM-DD') : "" }
+                               onChange={(e) =>
+                                   setPstDetail({...pstDetail, ntcEndDate: moment(e.target.value).format('YYYYMMDD')})
+                               }
+                               disabled={!isDatePickerEnabled}
 
-                        {pstDetail != null && pstDetail.pstFiles != null &&pstDetail.pstFiles.length > 0 && (
-                            <ul>
-                              {pstDetail.pstFiles.map((file, index) => (
-                                  <li key={index}>
-                                    {file.atchFileNm} - {(file.atchFileSz / 1024).toFixed(2)} KB
-
-                                    <button
-                                        onClick={() => setFileDel(file.atchFileSn)}  // 삭제 버튼 클릭 시 처리할 함수
-                                        style={{marginLeft: '10px', color: 'red'}}
-                                    >
-                                      삭제
-                                    </button>
-                                  </li>
-                              ))}
-                            </ul>
-                        )}
-                        {fileList.length > 0 && (
-                            <ul>
-                              {fileList.map((file, index) => (
-                                  <li key={index}>
-                                  {file.name} - {(file.size / 1024).toFixed(2)} KB
-
-                                    <button
-                                        onClick={() => handleDeleteFile(index)}  // 삭제 버튼 클릭 시 처리할 함수
-                                        style={{marginLeft: '10px', color: 'red'}}
-                                    >
-                                      삭제
-                                    </button>
-                                  </li>
-                              ))}
-                            </ul>
-                        )}
-                      </dd>
-                    </dl>
-                )}
-                <dl>
-                  <dt>
-                    <label htmlFor="pstTtl">외부링크</label>
-                  </dt>
-                  <dd>
-                    <input
-                        className="f_input2 w_full"
-                        type="text"
-                        name="linkUrlAddr"
-                        title=""
-                        id="linkUrlAddr"
-                        defaultValue={pstDetail.linkUrlAddr}
-                        onChange={(e) =>
-                            setPstDetail({...pstDetail, linkUrlAddr: e.target.value})
-                        }
-                    />
-                  </dd>
-                </dl>
-
-                <dl>
-                  <dt>
-                    <label htmlFor="pstCn">
-                      내용
-                    </label>
-                    <span className="req">필수</span>
-                  </dt>
-                  <dd>
-                    <ReactQuill
-                        value={pstDetail.pstCn}
-                        onChange={handleChange}
-                    />
-                  </dd>
-                </dl>
-                {bbsDetail.wrtrRlsYn == "Y" && upPstSn == null && pstDetail.upPstSn == null && (
-                <dl>
-                  <dt>
-                    <label htmlFor="pstTtl">공개여부</label>
-                    <span className="req">필수</span>
-                  </dt>
-                  <dd>
-                    <EgovRadioButtonGroup
-                        name="rlsYn"
-                        radioGroup={rlsYnRadioGroup}
-                        setValue={pstDetail.rlsYn}
-                        setter={(v) =>
-                            setPstDetail({...pstDetail, rlsYn: v})
-                        }
-                    />
-                    <input
-                        className="f_input2 w_full"
-                        type="password"
-                        name="prvtPswd"
-                        title=""
-                        id="prvtPswd"
-                        placeholder="비밀번호"
-                        defaultValue={pstDetail.prvtPswd}
-                        onChange={(e) =>
-                            setPstDetail({...pstDetail, prvtPswd: e.target.value})
-                        }
-                        disabled={pstDetail.rlsYn == "N"} // 활성화 여부 결정
-                    />
-                  </dd>
-                </dl>
-                )}
-                {/* <!-- 버튼영역 --> */}
-                <div className="board_btn_area">
-                  <div className="left_col btn1">
-                    <button
-                        className="btn btn_skyblue_h46 w_100"
-                        onClick={() => setPstData()}
+                        />
+                      </div>
+                    </li>
+                  </>
+              )}
+              <li className="inputBox type1 width1">
+                <label className="title essential" htmlFor="pstTtl"><small>제목</small></label>
+                <div className="input">
+                  <input type="text"
+                         name="pstTtl"
+                         title=""
+                         id="pstTtl"
+                         defaultValue={pstDetail.pstTtl}
+                         onChange={(e) =>
+                             setPstDetail({...pstDetail, pstTtl: e.target.value})
+                         }
+                  />
+                </div>
+              </li>
+              <li className="inputBox type1 width1">
+                <label className="title essential"><small>작성일</small></label>
+                <div className="input">{moment(pstDetail.frstCrtDt).format('YYYY-MM-DD')}</div>
+              </li>
+              {bbsDetail.atchFileYn == "Y" && (
+                  <li className="inputBox type1 width1 file">
+                    <p className="title essential">첨부파일</p>
+                    <div
+                        {...getRootProps({
+                          style: {
+                            border: "2px dashed #cccccc",
+                            padding: "20px",
+                            textAlign: "center",
+                            cursor: "pointer",
+                          },
+                        })}
                     >
-                      저장
-                    </button>
-                    {modeInfo.mode === CODE.MODE_MODIFY && (
-                        <button
-                            className="btn btn_skyblue_h46 w_100"
+                      <input {...getInputProps()} />
+                      <p>파일을 이곳에 드롭하거나 클릭하여 업로드하세요</p>
+                    </div>
+                    {pstDetail != null && pstDetail.pstFiles != null && pstDetail.pstFiles.length > 0 && (
+                        <ul>
+                          {pstDetail.pstFiles.map((file, index) => (
+                              <li key={index}>
+                                {file.atchFileNm} - {(file.atchFileSz / 1024).toFixed(2)} KB
+
+                                <button
+                                    onClick={() => setFileDel(file.atchFileSn)}  // 삭제 버튼 클릭 시 처리할 함수
+                                    style={{marginLeft: '10px', color: 'red'}}
+                                >
+                                  삭제
+                                </button>
+                              </li>
+                          ))}
+                        </ul>
+                    )}
+                    {fileList.length > 0 && (
+                        <ul>
+                          {fileList.map((file, index) => (
+                              <li key={index}>
+                                {file.name} - {(file.size / 1024).toFixed(2)} KB
+
+                                <button
+                                    onClick={() => handleDeleteFile(index)}  // 삭제 버튼 클릭 시 처리할 함수
+                                    style={{marginLeft: '10px', color: 'red'}}
+                                >
+                                  삭제
+                                </button>
+                              </li>
+                          ))}
+                        </ul>
+                    )}
+                    <span className="warningText"></span>
+                  </li>
+              )}
+              <li className="inputBox type1 width1">
+                <label className="title" htmlFor="linkUrlAddr"><small>외부링크</small></label>
+                <div className="input">
+                  <input type="text"
+                         name="linkUrlAddr"
+                         title=""
+                         id="linkUrlAddr"
+                         defaultValue={pstDetail.linkUrlAddr}
+                         onChange={(e) =>
+                             setPstDetail({...pstDetail, linkUrlAddr: e.target.value})
+                         }
+                  />
+                </div>
+              </li>
+              <li className="inputBox type1 width1">
+                <label className="title essential"><small>내용</small></label>
+                <div>
+                  <ReactQuill
+                      value={pstDetail.pstCn}
+                      onChange={handleChange}
+                  />
+                </div>
+              </li>
+              {bbsDetail.wrtrRlsYn == "Y" && upPstSn == null && pstDetail.upPstSn == null && (
+                  <>
+                    <li className="inputBox type1 width2">
+                      <label className="title" htmlFor="rlsYn"><small>공개여부</small></label>
+                      <div className="itemBox">
+                        <select
+                            id="rlsYn"
+                            className="selectGroup"
+                            onChange={(e) =>
+                                setPstDetail({
+                                  ...pstDetail,
+                                  rlsYn: e.target.value,
+                                })
+                            }
+                            value={pstDetail.rlsYn || "Y"}
+                        >
+                          <option value="Y">비공개</option>
+                          <option value="N">공개</option>
+                        </select>
+                      </div>
+                    </li>
+                    <li className="inputBox type1 width2">
+                      <label className="title essential" htmlFor="prvtPswd"><small>비밀번호</small></label>
+                      <div className="input">
+                        <form>
+                          <input type="password"
+                                 name="prvtPswd"
+                                 title=""
+                                 id="prvtPswd"
+                                 placeholder="비밀번호"
+                                 autoComplete="off"
+                                 defaultValue={pstDetail.prvtPswd}
+                                 onChange={(e) =>
+                                     setPstDetail({...pstDetail, prvtPswd: e.target.value})
+                                 }
+                                 disabled={pstDetail.rlsYn == "N"}
+                          />
+                        </form>
+                      </div>
+                    </li>
+                  </>
+              )}
+            </ul>
+            <div className="buttonBox">
+              <div className="leftBox">
+                <button type="button" className="clickBtn point" onClick={() => setPstData()}><span>저장</span></button>
+                {modeInfo.mode === CODE.MODE_MODIFY && (
+                    <button type="button" className="clickBtn gray"
                             onClick={() => {
                               setPstDel(pstDetail.pstSn);
                             }}
-                        >
-                          삭제
-                        </button>
-                    )}
-                  </div>
-
-                  <div className="right_col btn1">
-                    <Link
-                        to={URL.MANAGER_PST_LIST}
-                        className="btn btn_blue_h46 w_100"
-                        state={{
-                          bbsSn: bbsDetail.bbsSn,
-                          atchFileYn : bbsDetail.atchFileYn
-                        }}
-                    >
-                      목록
-                    </Link>
-                  </div>
-                </div>
-                {/* <!--// 버튼영역 --> */}
+                    ><span>삭제</span></button>
+                )}
               </div>
-
-              {/* <!--// 본문 --> */}
+              <Link
+                  to={URL.MANAGER_PST_LIST}
+                  className="btn btn_blue_h46 w_100"
+                  state={{
+                    bbsSn: bbsDetail.bbsSn,
+                    atchFileYn: bbsDetail.atchFileYn
+                  }}
+              >
+                <button type="button" className="clickBtn black"><span>목록</span></button>
+              </Link>
             </div>
           </div>
         </div>
