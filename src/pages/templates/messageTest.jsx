@@ -19,7 +19,7 @@ const WebSocketNotification = () => {
                 socket,
                 sendType,
                 sessionUser.userSn,
-                userSnRef.current.value,
+                Number(userSnRef.current.value),
                 privateTitleRef.current.value,
                 privateContentRef.current.value,
             );  // 연결된 상태에서만 메시지 전송
