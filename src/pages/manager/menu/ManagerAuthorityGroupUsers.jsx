@@ -380,6 +380,7 @@ function ManagerAuthorityGroupUsers(props) {
                                                        defaultValue={moment(item.authrtGrntDt).format('YYYY-MM-DD')}
                                                        onChange={(e) => {
                                                            item.authrtGrntDt = e.target.value + "T00:00:00";
+                                                           item.mdfrSn = sessionUser.userSn;
                                                            setSaveData(item);
                                                        }}
                                                 />
