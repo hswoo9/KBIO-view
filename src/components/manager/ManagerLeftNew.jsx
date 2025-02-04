@@ -476,7 +476,7 @@ function ManagerLeftNew() {
             <div className="bg hover"></div>
             <div className="bg active"></div>
             <ul className="dep">
-              <li>
+              {/*<li>
                 <NavLink
                     to={URL.MANAGER_NORMAL_MEMBER}
                     className={({isActive}) => (isActive ? "activeTag" : "")}
@@ -484,7 +484,7 @@ function ManagerLeftNew() {
                   <div className="icon"></div>
                   <p>회원관리</p>
                 </NavLink>
-              </li>
+              </li>*/}
               <li>
                 <NavLink
                     to={URL.MANAGER_MENU_MANAGEMENT}
@@ -566,7 +566,7 @@ function ManagerLeftNew() {
                   <p>코드관리</p>
                 </NavLink>
               </li>
-              <li>
+              {/*<li>
                 <NavLink
                     to={URL.MANAGER_NORMAL_MEMBER}
                     className={({isActive}) => (isActive ? "activeTag" : "")}
@@ -574,7 +574,7 @@ function ManagerLeftNew() {
                   <div className="icon"></div>
                   <p>일반회원관리</p>
                 </NavLink>
-              </li>
+              </li>*/}
             </ul>
           </nav>
         </div>
