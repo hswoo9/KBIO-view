@@ -32,17 +32,12 @@ function EgovMainUser(props) {
       const element = e.currentTarget;
       const parentElement = element.parentElement;
       if(parentElement && hoverRef.current){
-        const elementRect = element.getBoundingClientRect();
         const parentRect = parentElement.getBoundingClientRect();
-        const left = parentRect.left - elementRect.left;
-        console.log("elementRect : " + elementRect.left);
-        console.log("parentRect : " + parentRect.left);
-        const top = elementRect.top - parentRect.top;
-        console.log(top);
+        console.log(parentRect.left);
         hoverRef.current.style.width = `${parentRect.width}px`;
         hoverRef.current.style.height = `${parentRect.height}px`;
-        hoverRef.current.style.left = `${left}px`;
-        hoverRef.current.style.top = `${top}px`;
+        hoverRef.current.style.left = `${parentRect.left - 30}px`;
+        hoverRef.current.style.top = `0px`;
         hoverRef.current.style.opacity = `1`;
       }
 
