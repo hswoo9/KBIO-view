@@ -6,14 +6,14 @@ import {getSessionItem} from "./storage.js";
 const WebSocketContext = createContext();
 
 export const WebSocketProvider = ({ children }) => {
-  const sessionUser = getSessionItem("loginUser");
+  const sessionUserSn = getSessionItem("loginUser") == null ? null : getSessionItem("loginUser").userSn;
   const [socket, setSocket] = useState(null);  // WebSocket 상태
   const [isConnected, setIsConnected] = useState(false); // 연결 상태
   const [notifications, setNotifications] = useState([]);
   const connectWebSocket = () => {
-    if (!sessionUser.userSn) return;
+    if (!sessionUserSn) return;
 
-    const socketInstance = new SockJS(`${window.location.protocol}//${window.location.hostname}:8080/ws?userSn=${sessionUser?.userSn}`);
+    const socketInstance = new SockJS(`${window.location.protocol}//${window.location.hostname}:8080/ws?userSn=${sessionUserSn}`);
 
     socketInstance.onopen = () => {
       console.log('WebSocket 연결됨');
