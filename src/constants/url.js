@@ -1,7 +1,7 @@
 const URL = {
   //COMMON
   MAIN: "/", //메인페이지
-
+  POPUP : "/popup",
   LOGIN: "/login", //로그인
   MANAGER_LOGIN: "/manager/login", //로그인
   SNS_NAVER_CB: "/login/naver/callback", //Sns Naver Callback

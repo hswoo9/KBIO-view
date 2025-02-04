@@ -101,6 +101,7 @@ function ManagerLogin(props) {
         setSessionItem("loginUser", {userSn : resp.result.userSn, name : resp.result.userName, id : resp.result.userId, userSe : resp.result.userSe});
         // setSessionItem("userName", resp.userName);
         setSessionItem("jToken", resp.result.jToken);
+        setSessionItem("userSn", resp.result.userSn);
         //if (saveIDFlag) setLocalItem(KEY_ID, resultVO?.id);
         if (saveIDFlag) setLocalItem(KEY_ID, resp.result.userId);
         Swal.fire("로그인 성공");

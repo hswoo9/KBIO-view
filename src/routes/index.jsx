@@ -16,7 +16,7 @@ import ManagerHeader from "@/components/manager/ManagerHeader";
 import EgovFooter from "@/components/EgovFooter";
 import EgovInfoPopup from "@/components/EgovInfoPopup";
 import EgovError from "@/components/EgovError";
-
+import CommonPopup from "@/components/CommonPopup.jsx";
 import CommonError from "@/pages/templates/commonError.jsx";
 
 import EgovMain from "@/pages/main/EgovMain";
@@ -251,7 +251,7 @@ const SecondRoutes = () => {
         <div id="wrap" className={requestUrl === "manager" ? "admin" : "user"}>
           {
             requestUrl === "manager" ? (<ManagerTop/>) :
-            requestUrl === "popupView" ? "" :
+            requestUrl === "popup" ? "" :
             requestUrl === "commonError" ? "" : (<EgovHeaderUser/>)
           }
 
@@ -259,7 +259,7 @@ const SecondRoutes = () => {
             <Routes>
               {/* MAIN */}
               <Route path={URL.MAIN} element={<EgovMainUser/>}/>
-
+              <Route path={URL.POPUP} element={<CommonPopup/>}/>
               {/* LOGIN */}
               <Route
                   path={URL.LOGIN}
@@ -699,7 +699,7 @@ const SecondRoutes = () => {
 
           {
             requestUrl === "manager" ? "" :
-            requestUrl === "popupView" ? "" :
+            requestUrl === "popup" ? "" :
             requestUrl === "commonError" ? "" :  (<EgovFooterUser/>)
           }
         </div>

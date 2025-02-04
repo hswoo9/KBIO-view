@@ -136,11 +136,15 @@ function ManagerMenuAuthority(props) {
                     authorityGroup.creatrSn = sessionUser.userSn;
                 }
                 //메뉴 체크 리스트
-                if(checked.length > 0){
+                const treeEl = document.getElementById("checkBoxTree");
+                const checkedGroup = treeEl.querySelectorAll("input[type='checkbox']:checked");
+
+                if(checkedGroup.length > 0){
                     let allowAccessMenu = [];
-                    checked.forEach(function(item, index){
+
+                    checkedGroup.forEach(function(item, index){
                         let pushData = {
-                            menuSn : item
+                            menuSn : String(item.id.split('-')[1])
                         };
                         allowAccessMenu.push(pushData);
                     });
@@ -517,6 +521,7 @@ function ManagerMenuAuthority(props) {
                     <div className="box listBox maxW400">
                         <div className="topTitle">메뉴목록</div>
                         <CheckboxTree
+                            id="checkBoxTree"
                             nodes={menuList}
                             checked={checked}
                             onCheck={onCheck}
