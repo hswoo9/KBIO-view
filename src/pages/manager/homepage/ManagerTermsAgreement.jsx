@@ -50,7 +50,7 @@ function ManagerTermsList(props) {
                     <form action="">
                         <ul className="cateList">
                             <li className="inputBox type1">
-                                <p className="title">부서</p>
+                                <p className="title">사용여부</p>
                                 <div className="itemBox">
                                     <select className="selectGroup">
                                         <option value="">전체</option>
@@ -90,23 +90,19 @@ function ManagerTermsList(props) {
                         <table>
                             <caption>조직도목록</caption>
                             <colgroup>
-                                <col width="50px"/>
-                                <col width="200px"/>
-                                <col/>
                                 <col width="80px"/>
-                                <col/>
-                                <col/>
-                                <col/>
+                                <col width="600px"/>
+                                <col width="200px"/>
+                                <col width="250px"/>
+                                <col width="150px"/>
                             </colgroup>
                             <thead>
                             <tr>
                                 <th>번호</th>
-                                <th>부서</th>
-                                <th>이름</th>
-                                <th>직책</th>
-                                <th>전화번호</th>
-                                <th>이메일</th>
+                                <th>제목</th>
+                                <th>등록자</th>
                                 <th>등록일</th>
+                                <th>사용여부</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -122,7 +118,7 @@ function ManagerTermsList(props) {
                             }}
                         />
                         <NavLink
-                            to={""}
+                            to={{pathname: URL.MANAGER_HOMEPAGE_TERMS_CREATE}}
                         >
                             <button type="button" className="writeBtn clickBtn"><span>등록</span></button>
                         </NavLink>

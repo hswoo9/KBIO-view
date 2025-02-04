@@ -129,7 +129,9 @@ import ManagerAllMember from "@/pages/manager/member/all/ManagerNormalMember";
 import ManagerMainView from "@/pages/manager/homepage/ManagerMainView";
 import ManagerOrganizationChartList from "@/pages/manager/homepage/ManagerOrganizationChartList";
 import ManagerPrivacyPolicy from "@/pages/manager/homepage/ManagerPrivacyPolicy";
-import ManagerTermsAgreement from "@/pages/manager/homepage/ManagerTermsAgreement"
+import ManagerPrivacyPolicyEdit from "@/pages/manager/homepage/ManagerPrivacyPolicyEdit";
+import ManagerTermsAgreement from "@/pages/manager/homepage/ManagerTermsAgreement";
+import ManagerTermsAgreementEdit from "@/pages/manager/homepage/ManagerTermsAgreementEdit";
 
 import ManagerAccessList from "@/pages/manager/access/ManagerAccessList";
 import ManagerAccessEdit from "@/pages/manager/access/ManagerAccessEdit";
@@ -669,7 +671,7 @@ const SecondRoutes = () => {
               <Route path={URL.MANAGER_POPUP_LIST} element={<ManagerPopupList/>}/>
               <Route path={URL.MANAGER_POPUP_CREATE} element={<ManagerPopupEdit mode={CODE.MODE_CREATE}/>}/>
               <Route path={URL.MANAGER_POPUP_MODIFY} element={<ManagerPopupEdit mode={CODE.MODE_MODIFY}/>}/>
-
+              
               <Route path={URL.MANAGER_IMAGES_POPUP} element={<ManagerImagesPopup/>}/>
               <Route path={URL.MANAGER_OPERATIONAL_SUPPORT} element={<OperationalSupport/>}/>
               <Route path={URL.MANAGER_CONSULTING_EXPERT} element={<ManagerExpert/>}/>
@@ -687,6 +689,10 @@ const SecondRoutes = () => {
               <Route path={URL.MANAGER_HOMEPAGE_ORGANIZATION_CHART_LIST} element={<ManagerOrganizationChartList/>}/>
               <Route path={URL.MANAGER_HOMEPAGE_PRIVACY_POLICY} element={<ManagerPrivacyPolicy/>}/>
               <Route path={URL.MANAGER_HOMEPAGE_TERMS_AGREEMENT} element={<ManagerTermsAgreement/>}/>
+              <Route path={URL.MANAGER_HOMEPAGE_TERMS_CREATE} element={<ManagerTermsAgreementEdit mode={CODE.MODE_CREATE}/>}/>
+              <Route path={URL.MANAGER_HOMEPAGE_TERMS_MODIFY} element={<ManagerTermsAgreementEdit mode={CODE.MODE_MODIFY}/>}/>
+              <Route path={URL.MANAGER_HOMEPAGE_PRIVACY_CREATE} element={<ManagerPrivacyPolicyEdit mode={CODE.MODE_CREATE}/>}/>
+              <Route path={URL.MANAGER_HOMEPAGE_PRIVACY_MODIFY} element={<ManagerPrivacyPolicyEdit mode={CODE.MODE_MODIFY}/>}/>
 
               <Route path={URL.MANAGER_ACCESS_LIST} element={<ManagerAccessList/>}/>
               <Route path={URL.MANAGER_ACCESS_CREATE} element={<ManagerAccessEdit mode={CODE.MODE_CREATE}/>}/>
