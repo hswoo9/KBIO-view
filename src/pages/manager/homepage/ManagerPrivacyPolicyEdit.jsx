@@ -19,6 +19,7 @@ function ManagerPrivacyPolicyEdit(props) {
     const location = useLocation();
     const checkRef = useRef([]);
     const sessionUser = getSessionItem("loginUser");
+    const sessionUserName = sessionUser?.name;
 
     const [privacyPolicyDetail, setPrivacyPolicyDetail] = useState({
         policyTitle: '',
@@ -51,60 +52,77 @@ function ManagerPrivacyPolicyEdit(props) {
                 {modeInfo.mode === CODE.MODE_MODIFY && (
                     <h2 className="pageTitle"><p>개인정보처리방침 수정</p></h2>
                 )}
-            <div className="contBox infoWrap customContBox">
-                <ul className="inputWrap">
-                    <li className="inputBox type1 width1">
-                        <label className="title essential" htmlFor="policyTitle"><small>제목</small></label>
-                        <div className="input">
-                            <input type="text"
-                                   id="policyTitle"
-                                   value={privacyPolicyDetail.policyTitle || ""}
-                                   onChange={(e) => setPrivacyPolicyDetail({ ...privacyPolicyDetail, policyTitle: e.target.value })}
-                                   required
-                            />
-                        </div>
-                    </li>
-                    <li className="inputBox type1 width3">
-                        <label className="title" htmlFor="policyContent"><small>내용</small></label>
-                        <div className="input">
-                            <textarea
-                                id="policyContent"
-                                value={privacyPolicyDetail.policyContent || ""}
-                                onChange={(e) => setPrivacyPolicyDetail({ ...privacyPolicyDetail, policyContent: e.target.value })}
-                            />
-                        </div>
-                    </li>
-                    <li className="toggleBox width3">
-                        <div className="box">
-                            <p className="title essential">사용여부</p>
-                            <div className="toggleSwithWrap">
-                                <input type="checkbox"
-                                       id="useYn"
-                                       checked={privacyPolicyDetail.useYn === "Y"}
-                                       onChange={(e) => setPrivacyPolicyDetail({ ...privacyPolicyDetail, useYn: e.target.checked ? "Y" : "N" })}
+                <div className="contBox infoWrap customContBox">
+                    <ul className="inputWrap">
+                        <li className="inputBox type1 width1">
+                            <label className="title essential" htmlFor="registrar"><small>등록자</small></label>
+                            <div className="input">
+                                <input type="text"
+                                       id="registrar"
+                                       value={sessionUserName || ""}
+                                       readOnly
                                 />
-                                <label htmlFor="useYn" className="toggleSwitch">
-                                    <span className="toggleButton"></span>
-                                </label>
                             </div>
-                        </div>
-                    </li>
-                </ul>
-                <div className="buttonBox">
-                    <div className="leftBox">
-                        <button type="button" className="clickBtn point" onClick={""}><span>저장</span></button>
-                        {modeInfo.mode === CODE.MODE_MODIFY && (
-                            <button type="button" className="clickBtn gray" onClick={""}><span>삭제</span>
+                        </li>
+                        <li className="inputBox type1 width1">
+                            <label className="title essential" htmlFor="policyTitle"><small>제목</small></label>
+                            <div className="input">
+                                <input type="text"
+                                       id="policyTitle"
+                                       value={privacyPolicyDetail.policyTitle || ""}
+                                       onChange={(e) => setPrivacyPolicyDetail({
+                                           ...privacyPolicyDetail,
+                                           policyTitle: e.target.value
+                                       })}
+                                       required
+                                />
+                            </div>
+                        </li>
+                        <li className="inputBox type1 width1">
+                            <label className="title" htmlFor="policyContent"><small>내용</small></label>
+                            <div className="input">
+                                <textarea
+                                    id="policyContent"
+                                    value={privacyPolicyDetail.policyContent || ""}
+                                    onChange={(e) => setPrivacyPolicyDetail({
+                                        ...privacyPolicyDetail,
+                                        policyContent: e.target.value
+                                    })}
+                                />
+                            </div>
+                        </li>
+                        <li className="toggleBox width3">
+                            <div className="box">
+                                <p className="title essential">사용여부</p>
+                                <div className="toggleSwithWrap">
+                                    <input type="checkbox"
+                                           id="useYn"
+                                           checked={privacyPolicyDetail.useYn === "Y"}
+                                           onChange={(e) => setPrivacyPolicyDetail({
+                                               ...privacyPolicyDetail,
+                                               useYn: e.target.checked ? "Y" : "N"
+                                           })}
+                                    />
+                                    <label htmlFor="useYn" className="toggleSwitch">
+                                        <span className="toggleButton"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                    <div className="buttonBox">
+                        <div className="leftBox">
+                            <button type="button" className="clickBtn point" onClick={handleSave}><span>등록</span>
                             </button>
-                        )}
+                            {modeInfo.mode === CODE.MODE_MODIFY && (
+                                <button type="button" className="clickBtn gray" onClick={""}><span>삭제</span></button>
+                            )}
+                        </div>
+                        <NavLink to={URL.MANAGER_HOMEPAGE_PRIVACY_POLICY}>
+                            <button type="button" className="clickBtn black"><span>목록</span></button>
+                        </NavLink>
                     </div>
-                    <NavLink
-                        to={URL.MANAGER_HOMEPAGE_PRIVACY_POLICY}
-                    >
-                        <button type="button" className="clickBtn black"><span>목록</span></button>
-                    </NavLink>
                 </div>
-            </div>
             </div>
         </div>
     );

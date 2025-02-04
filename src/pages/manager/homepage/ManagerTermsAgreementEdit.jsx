@@ -19,6 +19,7 @@ function ManagerTermsAgreementEdit(props) {
     const location = useLocation();
     const checkRef = useRef([]);
     const sessionUser = getSessionItem("loginUser");
+    const sessionUserName = sessionUser?.name;
 
     const [termsAgreementDetail, setTermsAgreementDetail] = useState({
         termsTitle: '',
@@ -54,23 +55,39 @@ function ManagerTermsAgreementEdit(props) {
                 <div className="contBox infoWrap customContBox">
                     <ul className="inputWrap">
                         <li className="inputBox type1 width1">
+                            <label className="title essential" htmlFor="registrar"><small>등록자</small></label>
+                            <div className="input">
+                                <input type="text"
+                                       id="registrar"
+                                       value={sessionUserName || ""}
+                                       readOnly
+                                />
+                            </div>
+                        </li>
+                        <li className="inputBox type1 width1">
                             <label className="title essential" htmlFor="termsTitle"><small>제목</small></label>
                             <div className="input">
                                 <input type="text"
                                        id="termsTitle"
                                        value={termsAgreementDetail.termsTitle || ""}
-                                       onChange={(e) => setTermsAgreementDetail({ ...termsAgreementDetail, termsTitle: e.target.value })}
+                                       onChange={(e) => setTermsAgreementDetail({
+                                           ...termsAgreementDetail,
+                                           termsTitle: e.target.value
+                                       })}
                                        required
                                 />
                             </div>
                         </li>
-                        <li className="inputBox type1 width3">
+                        <li className="inputBox type1 width1">
                             <label className="title" htmlFor="termsContent"><small>내용</small></label>
                             <div className="input">
                             <textarea
                                 id="termsContent"
                                 value={termsAgreementDetail.termsContent || ""}
-                                onChange={(e) => setTermsAgreementDetail({ ...termsAgreementDetail, termsContent: e.target.value })}
+                                onChange={(e) => setTermsAgreementDetail({
+                                    ...termsAgreementDetail,
+                                    termsContent: e.target.value
+                                })}
                             />
                             </div>
                         </li>
@@ -81,7 +98,10 @@ function ManagerTermsAgreementEdit(props) {
                                     <input type="checkbox"
                                            id="useYn"
                                            checked={termsAgreementDetail.useYn === "Y"}
-                                           onChange={(e) => setTermsAgreementDetail({ ...termsAgreementDetail, useYn: e.target.checked ? "Y" : "N" })}
+                                           onChange={(e) => setTermsAgreementDetail({
+                                               ...termsAgreementDetail,
+                                               useYn: e.target.checked ? "Y" : "N"
+                                           })}
                                     />
                                     <label htmlFor="useYn" className="toggleSwitch">
                                         <span className="toggleButton"></span>
