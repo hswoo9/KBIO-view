@@ -18,6 +18,7 @@ import { getSessionItem } from "@/utils/storage";
 import moment from "moment/moment.js";
 
 function NormalMemberList(props) {
+    const userStatusRef = useRef();
     const navigate = useNavigate();
     const location = useLocation();
     const [searchDto, setSearchDto] = useState(
@@ -240,13 +241,20 @@ function NormalMemberList(props) {
                                 <div className="itemBox">
                                     <select
                                         className="selectGroup"
+                                        ref={userStatusRef}
+                                        onChange={(e) => {
+                                            setSearchDto({
+                                                ...searchDto,
+                                                actvtnYn: userStatusRef.current.value, // 선택된 값으로 상태 업데이트
+                                            });
+                                        }}
                                     >
                                         <option value="">전체</option>
-                                        <option value="">승인</option>
-                                        <option value="">승인대기</option>
-                                        <option value="">승인반려</option>
-                                        <option value="">이용정지</option>
-                                        <option value="">탈퇴</option>
+                                        <option value="Y">승인</option>
+                                        <option value="W">승인대기</option>
+                                        <option value="R">승인반려</option>
+                                        <option value="C">이용정지</option>
+                                        <option value="S">탈퇴</option>
                                     </select>
                                 </div>
                             </li>
@@ -309,6 +317,7 @@ function NormalMemberList(props) {
                                         pageIndex: 1,
                                         userType: userTypeRef.current.value,
                                         userNm: userNmRef.current.value,
+                                        actvtnYn: userStatusRef.current.value,
                                     });
                                 }}
                             >
