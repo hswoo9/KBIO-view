@@ -773,7 +773,7 @@ function MemberSignUp(props) {
                 <div className="bg hover"></div>
                 <ul className="list">
                   <li className={memberDetail.mbrType === "입주기업" ? "active" : ""}>
-                    <a href="javascript:;" onClick={() => {
+                    <a href="#" onClick={() => {
                       setMemberDetail({
                         ...memberDetail,
                         mbrType: 1,
@@ -793,7 +793,7 @@ function MemberSignUp(props) {
                     </a>
                   </li>
                   <li className={memberDetail.mbrType === "유관기관" ? "active" : ""}>
-                    <a href="javascript:;" onClick={() => {
+                    <a href="#" onClick={() => {
                       setMemberDetail({
                         ...memberDetail,
                         mbrType: 3,
@@ -813,7 +813,7 @@ function MemberSignUp(props) {
                     </a>
                   </li>
                   <li className={memberDetail.mbrType === "비입주기업" ? "active" : ""}>
-                    <a href="javascript:;" onClick={() => {
+                    <a href="#" onClick={() => {
                       setMemberDetail({
                         ...memberDetail,
                         mbrType: 4,
@@ -833,7 +833,7 @@ function MemberSignUp(props) {
                     </a>
                   </li>
                   <li className={memberDetail.mbrType === "컨설턴트" ? "active" : ""}>
-                    <a href="javascript:;" onClick={() => setMemberDetail({...memberDetail, mbrType: 2,})}>
+                    <a href="#" onClick={() => setMemberDetail({...memberDetail, mbrType: 2,})}>
                       <span>컨설턴트</span>
                     </a>
                   </li>

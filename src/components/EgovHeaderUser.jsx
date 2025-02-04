@@ -156,14 +156,14 @@ function EgovHeader() {
           </div>
           <div className="hBot inner">
             <div className="top">
-              <h1><a href="javascript:;"><img src={logoWhite} alt="images"/><span className="hidden">K BIO LabHub</span></a>
+              <h1><a href="#"><img src={logoWhite} alt="images"/><span className="hidden">K BIO LabHub</span></a>
               </h1>
               <nav className="navBox">
                 <ul className="dep">
-                  <li><a href="javascript:;"><p>기관소개</p></a></li>
-                  <li><a href="javascript:;"><p>컨설팅</p></a></li>
-                  <li><a href="javascript:;"><p>커뮤니티</p></a></li>
-                  <li><a href="javascript:;"><p>k-BioLabHub</p></a></li>
+                  <li><a href="#"><p>기관소개</p></a></li>
+                  <li><a href="#"><p>컨설팅</p></a></li>
+                  <li><a href="#"><p>커뮤니티</p></a></li>
+                  <li><a href="#"><p>k-BioLabHub</p></a></li>
                 </ul>
               </nav>
               <div className="rightBox">
