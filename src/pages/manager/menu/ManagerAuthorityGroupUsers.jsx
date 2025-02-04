@@ -26,6 +26,15 @@ function ManagerAuthorityGroupUsers(props) {
         mode : "insert"
     });
 
+    const [saveData, setSaveData] = useState({});
+    useEffect(() => {
+        console.log("=-=-=-=-=-=-=-=-=");
+        console.log(saveData);
+        if(saveData.authrtGroupUserSn != null){
+            setMenuAuthGroupUserSave(saveData);
+        }
+    }, [saveData]);
+
     const [authorityList, setAuthorityList] = useState([]);
     const [authorityGroupUserList, setAuthorityGroupUserList] = useState([]);
 
@@ -92,7 +101,12 @@ function ManagerAuthorityGroupUsers(props) {
 
     const [authrtGroupUserSns, setAuthrtGroupUserSns] = useState({});
     useEffect(() => {
-        setMenuAuthGroupUserDel(authrtGroupUserSns);
+        console.log("----------------------------");
+        console.log("?");
+        console.log(authrtGroupUserSns);
+        if(authrtGroupUserSns.authrtGroupUserSns != null && authrtGroupUserSns.authrtGroupUserSns.length > 0){
+            setMenuAuthGroupUserDel(authrtGroupUserSns);
+        }
     }, [authrtGroupUserSns]);
 
     const [groupUserCheckGroup, setGroupUserCheckGroup] = useState([]);
@@ -102,6 +116,26 @@ function ManagerAuthorityGroupUsers(props) {
             authrtGroupUserSns : groupUserCheckGroup
         });
     }, [groupUserCheckGroup]);
+
+    const setMenuAuthGroupUserSave = useCallback(
+        (saveData) => {
+            const requestURL = "/menuApi/setMenuAuthGroupUserByOne";
+            const requestOptions = {
+                method: "POST",
+                headers: {
+                    "Content-type": "application/json",
+                },
+                body: JSON.stringify(saveData)
+            };
+            EgovNet.requestFetch(
+                requestURL,
+                requestOptions,
+                (resp) => {
+                    getAuthorityGroupUserList(selectAuthoritySn);
+                }
+            )
+        }
+    );
 
     const setMenuAuthGroupUserDel = useCallback(
         (authrtGroupUserSns) => {
@@ -198,6 +232,7 @@ function ManagerAuthorityGroupUsers(props) {
                         (resp) => {
                             if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
                                 getAuthorityGroupUserList(selectAuthoritySn);
+                                modelCloseEvent();
                             } else {
                                 navigate(
                                     { pathname: URL.ERROR },
@@ -343,6 +378,10 @@ function ManagerAuthorityGroupUsers(props) {
                                             <div className="customInput">
                                                 <input type="date"
                                                        defaultValue={moment(item.authrtGrntDt).format('YYYY-MM-DD')}
+                                                       onChange={(e) => {
+                                                           item.authrtGrntDt = e.target.value + "T00:00:00";
+                                                           setSaveData(item);
+                                                       }}
                                                 />
                                             </div>
                                         </td>
