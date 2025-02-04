@@ -1,7 +1,7 @@
 import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import * as EgovNet from "@/api/egovFetch";
-
+import {getMenu} from "@/components/CommonComponents";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
 
@@ -44,7 +44,28 @@ function ManagerTop() {
   };
 
   useEffect(() => {
-    if(location.pathname.split("/")[1] === "manager"){
+    getMenu(0, 0).then((data) => {
+      console.log(data);
+      if(data.length > 0){
+        let topMenuList = [];
+        data.forEach(function(item, index) {
+          topmenuList.push(
+              <li>
+                <a
+                    onClick={() => {
+                      navigate({pathname: item.menuPathNm}, {state: {selectMenuNm: item.menuNm}});
+                    }}
+                    className="cursorClass"
+                ><p>{item.menuNm}</p>
+                </a>
+              </li>
+          )
+        });
+      }
+    })
+
+
+    if (location.pathname.split("/")[1] === "manager") {
       import('../../css/manager/admin.css');
 
       const fileName = "user.css";
@@ -78,7 +99,7 @@ function ManagerTop() {
 
   const handleLogout = () => {
     Swal.fire('30분 이상 액션이 없어<br/>자동 로그아웃 처리됩니다.');
-    navigate("/");
+    navigate("/loginApi/logoutAction");
   };
 
   useEffect(() => {
@@ -102,7 +123,7 @@ function ManagerTop() {
         <div className="lnbBox">
           <div className="bg hover"></div>
           <div className="bg active"></div>
-          <ul className="dep">
+          <ul className="dep" id="topMenuUl">
             <li>
               <a
                  onClick={() => {
