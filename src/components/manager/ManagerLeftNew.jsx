@@ -505,6 +505,15 @@ function ManagerLeftNew() {
               </li>
               <li>
                 <NavLink
+                    to={URL.MANAGER_AUTHORITY_GROUP_USERS}
+                    className={({isActive}) => (isActive ? "activeTag" : "")}
+                >
+                  <div className="icon"></div>
+                  <p>권한사용자관리</p>
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
                     to={URL.MANAGER_ACCESS_LIST}
                     className={({isActive}) => (isActive ? "activeTag" : "")}
                 >

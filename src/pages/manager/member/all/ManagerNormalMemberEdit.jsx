@@ -38,6 +38,14 @@ function setNormalMember(props) {
         getNormalMember(searchDto);
     };
 
+    const memberTypeLabel =
+        memberDetail.mbrType === 9 ? '관리자' :
+        memberDetail.mbrType === 1 ? '입주기업' :
+        memberDetail.mbrType === 2 ? '컨설턴트' :
+        memberDetail.mbrType === 3 ? '유관기관' :
+        memberDetail.mbrType === 4 ? '비입주기업' :
+        '테스트';
+
     const getNormalMember = (serachDto) => {
         if (modeInfo.mode === CODE.MODE_CREATE) {
             // 조회/등록이면 초기값 지정
@@ -156,7 +164,7 @@ function setNormalMember(props) {
                             <div className="input">
                                 <input
                                     type="text"
-                                    value={memberDetail.mbrType || ''}
+                                    value={memberTypeLabel}
                                     readOnly
                                 />
                             </div>
