@@ -523,7 +523,7 @@ function ManagerLeftHomepage() {
               </li>
               <li>
                 <NavLink
-                    to={""}
+                    to={URL.MANAGER_HOMEPAGE_PRIVACY_POLICY}
                     className={({isActive}) => (isActive ? "activeTag" : "")}
                 >
                   <div className="icon"></div>
@@ -532,7 +532,7 @@ function ManagerLeftHomepage() {
               </li>
               <li>
                 <NavLink
-                    to={""}
+                    to={URL.MANAGER_HOMEPAGE_TERMS_AGREEMENT}
                     className={({isActive}) => (isActive ? "activeTag" : "")}
                 >
                   <div className="icon"></div>
