@@ -7,19 +7,31 @@ import URL from "@/constants/url";
 import simpleMainIng from "/assets/images/img_simple_main.png";
 import initPage from "@/js/ui";
 import logo from "@/assets/images/logo.svg";
+import {getPopUpList} from "../../components/MainComponents.jsx";
 
 function EgovMainUser(props) {
-  console.group("EgovMain");
-  console.log("[Start] EgovMain ------------------------------");
-  console.log("EgovMain [props] : ", props);
-
   const location = useLocation();
-  console.log("EgovMain [location] : ", location);
+  const [popUpList, setPopUpList] = useState([]);
 
-  
+  useEffect(() => {
+    getPopUpList().then((data) => {
+      setPopUpList(data);
+    })
+  }, []);
 
-  console.log("------------------------------EgovMain [End]");
-  console.groupEnd("EgovMainUser");
+
+  useEffect(() => {
+    popUpList.forEach((popUp, i) => {
+      window.open(
+          `/popup?bnrPopupSn=${popUp.bnrPopupSn}`, // 여기에 원하는 URL 입력
+          `${popUp.bnrPopupSn}`,
+          `width=${popUp.popupWdthSz},
+          height=${popUp.popupVrtcSz},
+          left=${popUp.popupPstnWdth},
+          top=${popUp.popupPstnUpend}`
+      );
+    })
+  }, [popUpList]);
 
   return (
       <div id="container" className="container layout">
