@@ -235,7 +235,8 @@ function OperationalSupport(props) {
                                 <span>엑셀 다운로드</span></button>
                             <button type="button" className="btn btn2 uploadBtn black">
                                 <div className="icon"></div>
-                                <span>엑셀 업로드</span></button>
+                                <span>엑셀 업로드</span>
+                            </button>
                         </div>
                     </div>
                     <div className="tableBox type1">

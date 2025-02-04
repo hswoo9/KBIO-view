@@ -163,9 +163,12 @@ const URL = {
   RESIDENT_COMPANY_MODIFY:"/manager/residentCompanyModify",
   
   MANAGER_CMS: "/manager/cms",
-
-  MANAGER_OPERATIONAL_SUPPORT: "/manager/operationalSupport",
-  MANAGER_RESIDENT_MEMBER : "/manager/residentMember",
+  
+  //운영지원
+  MANAGER_OPERATIONAL_SUPPORT: "/manager/operationalSupport", //운영지원/입주기업관리
+  MANAGER_RESIDENT_MEMBER : "/manager/residentMember", //운영지원/입주기업관리/직원목록
+  MANAGER_RELATED_ORGANIZATION : "/manager/relatedOrganization", //운영지원/유관기관관리
+  MANAGER_DIFFICULTIES : "/manager/difficulties", //운영지원/애로사항관리
 
   MANAGER_CONSULTING_EXPERT: "/manager/expert",
   MANAGER_CONSULTING_MATCHING: "/manager/matching",
