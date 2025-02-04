@@ -1,10 +1,24 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import React, {useState, useEffect, useRef, useCallback} from "react";
+import $ from 'jquery';
+import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
+import axios from "axios";
+import * as EgovNet from "@/api/egovFetch";
+import URL from "@/constants/url";
+import CODE from "@/constants/code";
+import 'moment/locale/ko';
 import ManagerLeftNew from "@/components/manager/ManagerLeftHomepage";
+import Swal from "sweetalert2";
 
-const ManagerPrivacyPolicyEdit = () => {
+import BtTable from 'react-bootstrap/Table';
+import BTButton from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import { getSessionItem } from "@/utils/storage";
+
+function ManagerPrivacyPolicyEdit(props) {
     const navigate = useNavigate();
     const location = useLocation();
+    const checkRef = useRef([]);
+    const sessionUser = getSessionItem("loginUser");
 
     const [privacyPolicyDetail, setPrivacyPolicyDetail] = useState({
         policyTitle: '',
@@ -12,20 +26,31 @@ const ManagerPrivacyPolicyEdit = () => {
         useYn: 'Y',
     });
 
-    useEffect(() => {
-        // 개인정보 처리 방침 데이터 가져오기 (백엔드 구현 전 UI만 구성)
-        // getPrivacyPolicyData();
-    }, []);
+    const [modeInfo, setModeInfo] = useState({ mode: props.mode });
+
 
     const handleSave = () => {
-        // 저장 버튼 클릭 시 처리 (백엔드 구현 전 UI만 구성)
+
         console.log("저장 버튼 클릭");
     };
+
+
+
+    useEffect(() => {
+        setModeInfo({ mode: props.mode });
+    }, [props.mode]);
 
     return (
         <div id="container" className="container layout cms">
             <ManagerLeftNew />
-            <h2 className="pageTitle"><p>개인정보 처리 방침 수정</p></h2>
+            <div className="inner">
+                {modeInfo.mode === CODE.MODE_CREATE && (
+                    <h2 className="pageTitle"><p>개인정보처리방침 등록</p></h2>
+                )}
+
+                {modeInfo.mode === CODE.MODE_MODIFY && (
+                    <h2 className="pageTitle"><p>개인정보처리방침 수정</p></h2>
+                )}
             <div className="contBox infoWrap customContBox">
                 <ul className="inputWrap">
                     <li className="inputBox type1 width1">
@@ -66,12 +91,23 @@ const ManagerPrivacyPolicyEdit = () => {
                     </li>
                 </ul>
                 <div className="buttonBox">
-                    <button type="button" className="clickBtn point" onClick={handleSave}><span>저장</span></button>
-                    <button type="button" className="clickBtn gray" onClick={() => navigate(URL.MANAGER_PRIVACY_POLICY_LIST)}><span>목록</span></button>
+                    <div className="leftBox">
+                        <button type="button" className="clickBtn point" onClick={""}><span>저장</span></button>
+                        {modeInfo.mode === CODE.MODE_MODIFY && (
+                            <button type="button" className="clickBtn gray" onClick={""}><span>삭제</span>
+                            </button>
+                        )}
+                    </div>
+                    <NavLink
+                        to={URL.MANAGER_HOMEPAGE_PRIVACY_POLICY}
+                    >
+                        <button type="button" className="clickBtn black"><span>목록</span></button>
+                    </NavLink>
                 </div>
+            </div>
             </div>
         </div>
     );
 };
 
-export default ManagerPrivacyPolicyEdit; 
+export default ManagerPrivacyPolicyEdit;
