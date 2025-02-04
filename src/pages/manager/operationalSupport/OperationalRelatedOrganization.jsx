@@ -10,6 +10,20 @@ import EgovPaging from "@/components/EgovPaging";
 
 function OperationalRelatedOrganization(props){
 
+    const [paginationInfo, setPaginationInfo] = useState({
+        currentPageNo: 1,
+        firstPageNo: 1,
+        firstPageNoOnPageList: 1,
+        firstRecordIndex: 0,
+        lastPageNo: 1,
+        lastPageNoOnPageList: 1,
+        lastRecordIndex: 10,
+        pageSize: 10,
+        recordCountPerPage: 10,
+        totalPageCount: 15,
+        totalRecordCount: 158
+    });
+
     return (
         <div id="container" className="container layout cms">
             <ManagerLeft/>
@@ -109,14 +123,14 @@ function OperationalRelatedOrganization(props){
                     </div>
                     <div className="pageWrap">
                         <EgovPaging
-                            pagination={""}
-                            moveToPage={""}
+                            pagination={paginationInfo}
+                            moveToPage={(passedPage) => {
+
+                            }}
                         />
-                        <NavLink
-                            to={""}
-                        >
+                        {/**NavLink**/}
                             <button type="button" className="writeBtn clickBtn"><span>등록</span></button>
-                        </NavLink>
+                        {/**NavLink**/}
                     </div>
                 </div>
             </div>
