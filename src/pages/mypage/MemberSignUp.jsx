@@ -144,8 +144,6 @@ function MemberSignUp(props) {
 
           if (businessData) {
 
-            const fullAddress = `${businessData.entAddr || ""} ${businessData.entDaddr || ""}`.trim();
-
             setMemberDetail({
               ...memberDetail,
               mvnEntNm: businessData.mvnEntNm,
@@ -153,7 +151,8 @@ function MemberSignUp(props) {
               clsNm: businessData.clsNm,
               entTelno: businessData.entTelno,
               bzentyEmlAddr: businessData.bzentyEmlAddr,
-              address: fullAddress,
+              address: businessData.entAddr,
+              daddress: businessData.entDaddr,
 
             });
           } else {
@@ -774,17 +773,62 @@ function MemberSignUp(props) {
                 <div className="bg hover"></div>
                 <ul className="list">
                   <li className={memberDetail.mbrType === "입주기업" ? "active" : ""}>
-                    <a href="javascript:;" onClick={() => setMemberDetail({...memberDetail, mbrType: 1,})}>
+                    <a href="javascript:;" onClick={() => {
+                      setMemberDetail({
+                        ...memberDetail,
+                        mbrType: 1,
+                        bizRegNum1: '',
+                        bizRegNum2: '',
+                        bizRegNum3: '',
+                        mvnEntNm: '',
+                        rpsvNm: '',
+                        clsNm: '',
+                        entTelno: '',
+                        bzentyEmlAddr: '',
+                        address: '',
+                        daddress: '',
+                      });
+                    }}>
                       <span>입주기업</span>
                     </a>
                   </li>
                   <li className={memberDetail.mbrType === "유관기관" ? "active" : ""}>
-                    <a href="javascript:;" onClick={() => setMemberDetail({...memberDetail, mbrType: 3,})}>
+                    <a href="javascript:;" onClick={() => {
+                      setMemberDetail({
+                        ...memberDetail,
+                        mbrType: 3,
+                        bizRegNum1: '',
+                        bizRegNum2: '',
+                        bizRegNum3: '',
+                        mvnEntNm: '',
+                        rpsvNm: '',
+                        clsNm: '',
+                        entTelno: '',
+                        bzentyEmlAddr: '',
+                        address: '',
+                        daddress: '',
+                      });
+                    }}>
                       <span>유관기관</span>
                     </a>
                   </li>
                   <li className={memberDetail.mbrType === "비입주기업" ? "active" : ""}>
-                    <a href="javascript:;" onClick={() => setMemberDetail({...memberDetail, mbrType: 4,})}>
+                    <a href="javascript:;" onClick={() => {
+                      setMemberDetail({
+                        ...memberDetail,
+                        mbrType: 4,
+                        bizRegNum1: '',
+                        bizRegNum2: '',
+                        bizRegNum3: '',
+                        mvnEntNm: '',
+                        rpsvNm: '',
+                        clsNm: '',
+                        entTelno: '',
+                        bzentyEmlAddr: '',
+                        address: '',
+                        daddress: '',
+                      });
+                    }}>
                       <span>비입주기업</span>
                     </a>
                   </li>
@@ -799,7 +843,7 @@ function MemberSignUp(props) {
               {/* 입주기업 / 유관기관 폼 */}
               {(memberDetail.mbrType === 1 || memberDetail.mbrType === 3) && (
                   <ul className="inputWrap">
-                    <li className="inputBox type2 business_num">
+                  <li className="inputBox type2 business_num">
                       <span className="tt1">사업자 등록번호</span>
                       <div className="flexinput input" style={{paddingRight: "7rem"}}>
                         <label>
@@ -926,7 +970,7 @@ function MemberSignUp(props) {
                             name="business_entDaddr"
                             id="business_entDaddr"
                             title="주소"
-                            value={memberDetail.entDaddr || ""}
+                            value={memberDetail.daddress || ""}
                             readOnly
                         />
                       </label>

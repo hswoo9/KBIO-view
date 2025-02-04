@@ -357,3 +357,16 @@ header .sitemap .sitemapBox .botBanner .imgBox img {vertical-align: bottom;}
 .customCheckBox:checked {
 	border-color: var(--black);
 }
+
+.customInput input {
+	padding: .3rem .9rem;
+	width: 100%;
+	box-sizing: border-box;
+	height: 35px;
+	border-radius: .6rem;
+	border: 1px solid #ddd;
+	transition: .5s ease;
+	font-size: .9rem;
+	font-weight: 500;
+	font-family: 'pretendard';
+}

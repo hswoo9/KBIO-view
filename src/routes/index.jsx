@@ -80,6 +80,7 @@ import MemberConsultentMember from "@/pages/manager/member/ManagerConsultentMemb
 
 import ManagerMenuManagement from "@/pages/manager/menu/ManagerMenuManagement";
 import ManagerMenuAuthority from "@/pages/manager/menu/ManagerMenuAuthority";
+import ManagerAuthorityGroupUsers from "@/pages/manager/menu/ManagerAuthorityGroupUsers";
 
 import ManagerBbsList from "@/pages/manager/board/ManagerBbsList";
 import ManagerBbsEdit from "@/pages/manager/board/ManagerBbsEdit";
@@ -546,6 +547,10 @@ const SecondRoutes = () => {
               <Route
                   path={URL.MANAGER_MENU_AUTHORITY}
                   element={<ManagerMenuAuthority/>}
+              />
+              <Route
+                  path={URL.MANAGER_AUTHORITY_GROUP_USERS}
+                  element={<ManagerAuthorityGroupUsers/>}
               />
 
               <Route

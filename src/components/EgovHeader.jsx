@@ -72,7 +72,7 @@ function EgovHeader() {
 
   const handleLogout = () => {
     Swal.fire('30분 이상 액션이 없어<br/>자동 로그아웃 처리됩니다.');
-    navigate("/");
+    logOutHandler();
   };
 
   useEffect(() => {

@@ -1,11 +1,11 @@
 import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import * as EgovNet from "@/api/egovFetch";
-
+import {getMenu, getMenuByUserSn } from "@/components/CommonComponents";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
 
-import { getSessionItem, setSessionItem } from "@/utils/storage";
+import { getSessionItem, setSessionItem, removeSessionItem } from "@/utils/storage";
 import Swal from "sweetalert2";
 
 function ManagerTop() {
@@ -15,9 +15,12 @@ function ManagerTop() {
   const sessionUserName = sessionUser?.name;
   const sessionUserSe = sessionUser?.userSe;
   const sessionUserSn = sessionUser?.userSn;
+  const userSn = getSessionItem("userSn");
 
-
+  console.log(" userSn => " + userSn);
   const navigate = useNavigate();
+
+  const [topMenuList, setTopMenuList] = useState([]);
 
   const logInHandler = () => {
     navigate(URL.MANAGER_LOGIN);
@@ -35,8 +38,9 @@ function ManagerTop() {
 
     EgovNet.requestFetch(logOutUrl, requestOptions, function (resp) {
       if(resp.resultCode == "200"){
-        setSessionItem("loginUser", { userSn: "" });
-        setSessionItem("jToken", null);
+        removeSessionItem("loginUser");
+        removeSessionItem("jToken");
+        removeSessionItem("userSn");
         Swal.fire("로그아웃되었습니다!");
         navigate(URL.MANAGER_LOGIN);
       }
@@ -44,7 +48,42 @@ function ManagerTop() {
   };
 
   useEffect(() => {
-    if(location.pathname.split("/")[1] === "manager"){
+    getMenuByUserSn(0, 0, String(userSn)).then((data) => {
+      console.log(data);
+      let datas = [];
+      if(data.length > 0){
+
+        data.forEach(function(item, index) {
+          datas.push(
+              <li key={item.menuSn}>
+                <a
+                    onClick={() => {
+                      navigate({pathname: item.menuPathNm}, {state: {selectMenuNm: item.menuNm}});
+                    }}
+                    className="cursorClass"
+                ><p>{item.menuNm}</p>
+                </a>
+              </li>
+          )
+        });
+        datas.push(
+            <li className="active" key="cmsMenu">
+              <a
+                  onClick={() => {
+                    navigate({pathname: URL.MANAGER_CMS}, {state: {selectMenuNm: "CMS"}});
+                  }}
+                  className="cursorClass"
+              >
+                <p>CMS</p>
+              </a>
+            </li>
+        )
+      }
+      setTopMenuList(datas);
+    })
+
+
+    if (location.pathname.split("/")[1] === "manager") {
       import('../../css/manager/admin.css');
 
       const fileName = "user.css";
@@ -78,7 +117,7 @@ function ManagerTop() {
 
   const handleLogout = () => {
     Swal.fire('30분 이상 액션이 없어<br/>자동 로그아웃 처리됩니다.');
-    navigate("/");
+    logOutHandler();
   };
 
   useEffect(() => {
@@ -103,7 +142,8 @@ function ManagerTop() {
           <div className="bg hover"></div>
           <div className="bg active"></div>
           <ul className="dep">
-            <li>
+            {topMenuList}
+            {/*<li>
               <a
                  onClick={() => {
                    navigate({pathname: URL.MANAGER_OPERATIONAL_SUPPORT}, {state: {selectMenuNm: "운영지원"}});
@@ -139,7 +179,7 @@ function ManagerTop() {
               ><p>홈페이지</p>
               </a>
             </li>
-            {/*
+
             게시글 관리로 쓰면 될듯
             <li>
               <a
@@ -149,7 +189,7 @@ function ManagerTop() {
                  className="cursorClass"
               ><p>커뮤니티</p>
               </a>
-            </li>*/}
+            </li>
             <li>
               <a
                  onClick={() => {
@@ -168,7 +208,7 @@ function ManagerTop() {
               >
                 <p>CMS</p>
               </a>
-            </li>
+            </li>*/}
           </ul>
         </div>
         <div className="rightBox">

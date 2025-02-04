@@ -129,7 +129,8 @@ const URL = {
 
   MANAGER_MENU_MANAGEMENT: "/manager/menuManagement",
   MANAGER_MENU_AUTHORITY: "/manager/menuAuthority",
-
+  MANAGER_AUTHORITY_GROUP_USERS: "/manager/groupUsers",
+  
   MANAGER_BBS_LIST:"/manager/bbs/list",
   MANAGER_BBS_CREATE: "/manager/bbs/create",
   MANAGER_BBS_MODIFY: "/manager/bbs/modify",
