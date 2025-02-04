@@ -10,9 +10,9 @@ export const WebSocketProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);  // WebSocket 상태
   const [isConnected, setIsConnected] = useState(false); // 연결 상태
   const [notifications, setNotifications] = useState([]);
-  const RECONNECT_INTERVAL = 5000; // 5초 후 재연결
-
   const connectWebSocket = () => {
+    if (!sessionUser.userSn) return;
+
     const socketInstance = new SockJS(`${window.location.protocol}//${window.location.hostname}:8080/ws?userSn=${sessionUser?.userSn}`);
 
     socketInstance.onopen = () => {
@@ -21,7 +21,6 @@ export const WebSocketProvider = ({ children }) => {
     };
 
     socketInstance.onclose = () => {
-      console.log('WebSocket 연결 종료됨');
       setIsConnected(false);
       connectWebSocket();
     };

@@ -8,8 +8,6 @@ const WebSocketNotification = () => {
     const sessionUser = getSessionItem("loginUser");
     const { socket, isConnected } = useWebSocket();
     const userSnRef = useRef("");
-    const titleRef = useRef("");
-    const contentRef = useRef("");
     const privateTitleRef = useRef("");
     const privateContentRef = useRef("");
 
