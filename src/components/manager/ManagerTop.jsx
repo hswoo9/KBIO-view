@@ -16,8 +16,6 @@ function ManagerTop() {
   const sessionUserSe = sessionUser?.userSe;
   const sessionUserSn = sessionUser?.userSn;
   const userSn = getSessionItem("userSn");
-
-  console.log(" userSn => " + userSn);
   const navigate = useNavigate();
 
   const [topMenuList, setTopMenuList] = useState([]);
@@ -48,8 +46,7 @@ function ManagerTop() {
   };
 
   useEffect(() => {
-    getMenuByUserSn(0, 0, String(userSn)).then((data) => {
-      console.log(data);
+    /*getMenuByUserSn(0, 0, String(userSn)).then((data) => {
       let datas = [];
       if(data.length > 0){
 
@@ -58,7 +55,7 @@ function ManagerTop() {
               <li key={item.menuSn}>
                 <a
                     onClick={() => {
-                      navigate({pathname: item.menuPathNm}, {state: {selectMenuNm: item.menuNm}});
+                      navigate({pathname: item.menuPathNm}, {state: {selectMenuNm: item.menuNm, upperMenuSn: item.menuSn}});
                     }}
                     className="cursorClass"
                 ><p>{item.menuNm}</p>
@@ -67,7 +64,7 @@ function ManagerTop() {
           )
         });
         datas.push(
-            <li className="active" key="cmsMenu">
+            <li key="cmsMenu">
               <a
                   onClick={() => {
                     navigate({pathname: URL.MANAGER_CMS}, {state: {selectMenuNm: "CMS"}});
@@ -80,7 +77,7 @@ function ManagerTop() {
         )
       }
       setTopMenuList(datas);
-    })
+    })*/
 
 
     if (location.pathname.split("/")[1] === "manager") {
@@ -142,8 +139,7 @@ function ManagerTop() {
           <div className="bg hover"></div>
           <div className="bg active"></div>
           <ul className="dep">
-            {topMenuList}
-            {/*<li>
+            <li>
               <a
                  onClick={() => {
                    navigate({pathname: URL.MANAGER_OPERATIONAL_SUPPORT}, {state: {selectMenuNm: "운영지원"}});
@@ -180,7 +176,7 @@ function ManagerTop() {
               </a>
             </li>
 
-            게시글 관리로 쓰면 될듯
+            {/*게시글 관리로 쓰면 될듯
             <li>
               <a
                  onClick={() => {
@@ -189,7 +185,7 @@ function ManagerTop() {
                  className="cursorClass"
               ><p>커뮤니티</p>
               </a>
-            </li>
+            </li>*/}
             <li>
               <a
                  onClick={() => {
@@ -208,7 +204,7 @@ function ManagerTop() {
               >
                 <p>CMS</p>
               </a>
-            </li>*/}
+            </li>
           </ul>
         </div>
         <div className="rightBox">
