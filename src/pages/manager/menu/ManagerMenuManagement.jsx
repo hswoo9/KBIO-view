@@ -453,12 +453,8 @@ function Index(props) {
                                         }
                                     });
                                     setUpperMenuList3(makerMenuOption(filterMenuList2));
-
-
                                 }
-
                             }
-
                         }
                         setMenuDetail(resp.result.menu);
                     }
@@ -466,8 +462,41 @@ function Index(props) {
             )
         }
     );
+    
+    const [bbsList, setBbsList] = useState([]);
+    const getBbsList = useCallback(
+        (searchDto) => {
+            const bbsListURL = "/bbsApi/getBbsAllList.do";
+            const requestOptions = {
+                method: "POST",
+                headers: {
+                    "Content-type": "application/json",
+                },
+                body: JSON.stringify(searchDto)
+            };
+            EgovNet.requestFetch(
+                bbsListURL,
+                requestOptions,
+                (resp) => {
+                    let dataList = [];
+                    resp.result.bbsList.forEach(function (item, index) {
+                        if (index === 0) dataList = [];
+                        dataList.push(
+                            <option key={item.bbsSn} value={item.bbsSn}>{item.bbsNm}</option>
+                        );
+                    });
+                    setBbsList(dataList);
+                },
+                function (resp) {
+                    console.log("err response : ", resp);
+                }
+            )
+        },
+        [bbsList, searchDto]
+    );
 
     useEffect(() => {
+        getBbsList(searchDto);
         getMenuList(searchDto);
     }, []);
 
@@ -481,8 +510,6 @@ function Index(props) {
                         <div className="topTitle">메뉴목록</div>
                         <CheckboxTree
                             nodes={menuList}
-                            /*checked={checked}
-                            onCheck={onCheck}*/
                             expanded={expanded}
                             onExpand={onExpand}
                             onClick={menuOnClick}
@@ -490,20 +517,12 @@ function Index(props) {
                         </CheckboxTree>
                         <div className="buttonBox">
                             <div className="left">
-                                {/*<button type="button" className="btn btn2 red plusBtn"><span>최상위 메뉴 추가</span></button>
-                                <button type="button" className="btn btn2 plusBtn2"><span>하위 메뉴 추가</span></button>*/}
                             </div>
                             <div className="right">
                                 <button type="button" className="btn btn2 black openBtn"><span>모두 열기</span></button>
                                 <button type="button" className="btn btn2 black closeBtn"><span>모두 닫기</span></button>
                             </div>
                         </div>
-                        {/*<div className="buttonBox bot">
-                            <button type="button" className="btn btn2 white firstBtn"><span>맨 위로</span></button>
-                            <button type="button" className="btn btn2 white upBtn"><span>한 칸 위로</span></button>
-                            <button type="button" className="btn btn2 white downBtn"><span>한 칸 아래로</span></button>
-                            <button type="button" className="btn btn2 white lastBtn"><span>맨 아래로</span></button>
-                        </div>*/}
                     </div>
                     <div className="box infoBox">
                         <div className="topTitle">메뉴정보</div>
@@ -516,7 +535,6 @@ function Index(props) {
                                     id="upperMenuList"
                                     className="selectGroup width30 inlineBlock"
                                     onChange={(e) => upperMenuChange(e, 1)}
-
                                 >
                                     <option value="">선택</option>
                                     <option value="0">최상위</option>
@@ -555,12 +573,37 @@ function Index(props) {
                                     <select
                                         id="menuType"
                                         className="selectGroup"
-                                        onChange={(e) => upperMenuChange(e, 1)}
-
+                                        onChange={(e) =>
+                                            setMenuDetail({
+                                                ...menuDetail,
+                                                menuType: e.target.value,
+                                            })
+                                        }
+                                        value={menuDetail.menuType || ""}
                                     >
+                                        <option value="">선택</option>
                                         <option value="n">일반</option>
                                         <option value="c">컨텐츠</option>
                                         <option value="b">게시판</option>
+                                    </select>
+                                </div>
+                            </li>
+                            <li className="inputBox type1" id="boardListLi">
+                                <label className="title" htmlFor="bbsSn"><small>게시판목록</small></label>
+                                <div className="input">
+                                    <select
+                                        id="bbsSn"
+                                        className="selectGroup"
+                                        onChange={(e) =>
+                                            setMenuDetail({
+                                                ...menuDetail,
+                                                bbsSn: e.target.value,
+                                            })
+                                        }
+                                        value={menuDetail.bbsSn || ""}
+                                    >
+                                        <option value="">선택</option>
+                                        {bbsList}
                                     </select>
                                 </div>
                             </li>
