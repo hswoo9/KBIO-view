@@ -29,7 +29,7 @@ function OperationalSupport(props) {
         }
     );
 
-    const [selectedOption, setSelectedOption] = useState("mvnEntNm");
+    const [selectedOption, setSelectedOption] = useState("");
     const [paginationInfo, setPaginationInfo] = useState({});
     const [rcList, setAuthorityList] = useState([]);
     const [activeTab, setActiveTab] = useState(1);
@@ -173,7 +173,15 @@ function OperationalSupport(props) {
                                 <div className="itemBox">
                                     <select className="selectGroup" onChange={(e) => {
                                         const value = e.target.value;
-                                        setSelectedOption(value === "1" ? "mvnEntNm" : "rpsvNm");
+                                        const optionMap = {
+                                            "0":"",
+                                            "1": "mvnEntNm",
+                                            "2": "rpsvNm",
+                                            //추가되면 아래로 더 추가
+                                        };
+
+                                        setSelectedOption(optionMap[value] || "");
+                                        setSearchDto(prev => ({ ...prev, [optionMap[value] || ""]: "" }));
                                     }}>
                                         <option value="0">전체</option>
                                         <option value="1">기업명</option>
@@ -202,6 +210,12 @@ function OperationalSupport(props) {
                                 className="refreshBtn btn btn1 gray"
                                 onClick={(e)=>{
                                     e.preventDefault();
+                                    getRcList({
+                                        ...searchDto,
+                                        pageIndex: 1,
+                                        mvnEntNm : "",
+                                        rpsvNm : "",
+                                    });
                                 }}
                             >
                                 <div className="icon"></div>
