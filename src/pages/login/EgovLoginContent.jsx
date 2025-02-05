@@ -14,6 +14,8 @@ function EgovLoginContent(props) {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const sessionUser = getSessionItem("loginUser");
+
   const [userInfo, setUserInfo] = useState({
     id: "",
     password: "default",
@@ -96,6 +98,7 @@ function EgovLoginContent(props) {
         setSessionItem("loginUser", {userSn : resp.result.userSn, name : resp.result.userName, id : resp.result.userId, userSe : resp.result.userSe});
         // setSessionItem("userName", resp.userName);
         setSessionItem("jToken", resp.result.jToken);
+        setSessionItem("userSn", resp.result.userSn);
         //if (saveIDFlag) setLocalItem(KEY_ID, resultVO?.id);
         if (saveIDFlag) setLocalItem(KEY_ID, resp.result.userId);
         Swal.fire("로그인 성공");
@@ -104,6 +107,12 @@ function EgovLoginContent(props) {
     });
   };
 
+  useEffect(() => {
+    if( sessionUser !== null){
+      navigate("/");
+    }
+
+  }, []);
   return (
     <div className="contents" id="contents">
       {/* <!-- 본문 --> */}
