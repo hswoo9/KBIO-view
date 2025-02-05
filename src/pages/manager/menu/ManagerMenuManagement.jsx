@@ -59,7 +59,15 @@ function Index(props) {
     const [upperMenuList2, setUpperMenuList2] = useState([]);
     const [upperMenuList3, setUpperMenuList3] = useState([]);
 
+    const [expandedArr, setExpandedArr] = useState([]);
     const [expanded, setExpanded] = useState(['Documents']);
+    const allOpenEvent = () => {
+        setExpanded(expandedArr);
+    }
+    const allCloseEvent = () => {
+        setExpanded(['Documents']);
+    }
+
 
     const onCheck = (value) => {
         setChecked(value);
@@ -354,6 +362,7 @@ function Index(props) {
                     setUpperMenuList(makerMenuOption(resp.result.menus));
                     setMenuList(resp.result.menus);
                     setExpanded(expandedArr);
+                    setExpandedArr(expandedArr);
                 }
             )
         }
@@ -519,8 +528,8 @@ function Index(props) {
                             <div className="left">
                             </div>
                             <div className="right">
-                                <button type="button" className="btn btn2 black openBtn"><span>모두 열기</span></button>
-                                <button type="button" className="btn btn2 black closeBtn"><span>모두 닫기</span></button>
+                                <button type="button" className="btn btn2 black openBtn" onClick={allOpenEvent}><span>모두 열기</span></button>
+                                <button type="button" className="btn btn2 black closeBtn" onClick={allCloseEvent}><span>모두 닫기</span></button>
                             </div>
                         </div>
                     </div>

@@ -14,6 +14,7 @@ import CommonEditor from "@/components/CommonEditor";
 function Index(props) {
     const sessionUser = getSessionItem("loginUser");
     const [contsCn, setContsCn] = useState("");
+    const [expandedArr, setExpandedArr] = useState([]);
     const [expanded, setExpanded] = useState(['Documents']);
     const [menuList, setMenuList] = useState([]);
     const [menuContent, setMenuContent] = useState({});
@@ -21,6 +22,12 @@ function Index(props) {
     const [searchDto, setSearchDto] = useState({});
 
     const onExpand = (value) => {setExpanded(value);};
+    const allOpenEvent = () => {
+        setExpanded(expandedArr);
+    }
+    const allCloseEvent = () => {
+        setExpanded(['Documents']);
+    }
     const menuOnClick = (e) => {
         setSearchDto({menuSn : e.value});
         setMenuContent({menuSn: e.value});
@@ -213,6 +220,7 @@ function Index(props) {
                     });
                     setMenuList(resp.result.menus);
                     setExpanded(expandedArr);
+                    setExpandedArr(expandedArr);
                 }
             )
         }
@@ -241,8 +249,8 @@ function Index(props) {
                             <div className="left">
                             </div>
                             <div className="right">
-                                <button type="button" className="btn btn2 black openBtn"><span>모두 열기</span></button>
-                                <button type="button" className="btn btn2 black closeBtn"><span>모두 닫기</span></button>
+                                <button type="button" className="btn btn2 black openBtn" onClick={allOpenEvent}><span>모두 열기</span></button>
+                                <button type="button" className="btn btn2 black closeBtn" onClick={allCloseEvent}><span>모두 닫기</span></button>
                             </div>
                         </div>
                     </div>
