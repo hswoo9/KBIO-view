@@ -20,26 +20,124 @@ function ManagerPrivacyPolicyEdit(props) {
     const checkRef = useRef([]);
     const sessionUser = getSessionItem("loginUser");
     const sessionUserName = sessionUser?.name;
+    const sessionUserSn = sessionUser?.userSn;
 
-    const [privacyPolicyDetail, setPrivacyPolicyDetail] = useState({
-        policyTitle: '',
-        policyContent: '',
-        useYn: 'Y',
-    });
+    const [searchDto, setSearchDto] = useState(
+        {
+            search: "",
+        }
+    );
+
+
+    const [privacyPolicyDetail, setPrivacyPolicyDetail] = useState({});
+
+    useEffect(() => {
+        console.log(privacyPolicyDetail);
+    }, [privacyPolicyDetail]);
 
     const [modeInfo, setModeInfo] = useState({ mode: props.mode });
 
-
-    const handleSave = () => {
-
-        console.log("저장 버튼 클릭");
-    };
-
-
+    const [saveEvent, setSaveEvent] = useState({});
+    useEffect(() => {
+        if(saveEvent.save){
+            if(saveEvent.mode == "save"){
+                savePrivacyPolicyData(privacyPolicyDetail);
+            }
+            if(saveEvent.mode == "delete"){
+                delPrivacyPolicyData(privacyPolicyDetail);
+            }
+        }
+    }, [saveEvent]);
 
     useEffect(() => {
         setModeInfo({ mode: props.mode });
     }, [props.mode]);
+
+
+    const handleSave = () => {
+        Swal.fire({
+            title: "저장하시겠습니까?",
+            showCloseButton: true,
+            showCancelButton: true,
+            confirmButtonText: "저장",
+            cancelButtonText: "취소"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                if (!privacyPolicyDetail.utztnTrmsTtl) {
+                    Swal.fire("제목이 없습니다.");
+                    return;
+                }
+
+                if (!privacyPolicyDetail.utztnTrmsCn) {
+                    Swal.fire("내용이 없습니다.");
+                    return;
+                }
+
+                setSaveEvent({
+                    ...saveEvent,
+                    save: true,
+                    mode: "save"
+                });
+            } else {
+            }
+        });
+    };
+
+    const delBtnEvent = () => {
+        Swal.fire({
+            title: "삭제하시겠습니까?",
+            showCloseButton: true,
+            showCancelButton: true,
+            confirmButtonText: "삭제",
+            cancelButtonText: "취소"
+        }).then((result) => {
+            if(result.isConfirmed) {
+                setSaveEvent({
+                    ...saveEvent,
+                    save: true,
+                    mode: "delete"
+                });
+            } else {
+            }
+        });
+    }
+
+    const savePrivacyPolicyData = useCallback(
+        (privacyPolicyDetail) => {
+            const formData = new FormData();
+            for (let key in privacyPolicyDetail) {
+                if (privacyPolicyDetail[key] != null) {
+                    formData.append(key, privacyPolicyDetail[key]);
+                }
+            }
+
+            formData.append("creatrSn", sessionUserSn || "");
+            formData.append("creatr", sessionUserName || "");
+            formData.append("utztnTrmsKnd", "1");
+
+            const menuListURL = "/utztnApi/setPrivacyPolicy";
+            const requestOptions = {
+                method: "POST",
+                body: formData
+            };
+
+            EgovNet.requestFetch(
+                menuListURL,
+                requestOptions,
+                (resp) => {
+                    if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
+                        navigate({ pathname: URL.MANAGER_HOMEPAGE_PRIVACY_POLICY });
+                    } else {
+                        navigate(
+                            { pathname: URL.ERROR },
+                            { state: { msg: resp.resultMessage } }
+                        );
+                    }
+                }
+            );
+        }
+    );
+
 
     return (
         <div id="container" className="container layout cms">
@@ -58,7 +156,7 @@ function ManagerPrivacyPolicyEdit(props) {
                             <label className="title essential" htmlFor="registrar"><small>등록자</small></label>
                             <div className="input">
                                 <input type="text"
-                                       id="registrar"
+                                       id="creatr"
                                        value={sessionUserName || ""}
                                        readOnly
                                 />
@@ -69,10 +167,10 @@ function ManagerPrivacyPolicyEdit(props) {
                             <div className="input">
                                 <input type="text"
                                        id="policyTitle"
-                                       value={privacyPolicyDetail.policyTitle || ""}
+                                       value={privacyPolicyDetail.utztnTrmsTtl || ""}
                                        onChange={(e) => setPrivacyPolicyDetail({
                                            ...privacyPolicyDetail,
-                                           policyTitle: e.target.value
+                                           utztnTrmsTtl: e.target.value
                                        })}
                                        required
                                 />
@@ -83,10 +181,10 @@ function ManagerPrivacyPolicyEdit(props) {
                             <div className="input">
                                 <textarea
                                     id="policyContent"
-                                    value={privacyPolicyDetail.policyContent || ""}
+                                    value={privacyPolicyDetail.utztnTrmsCn || ""}
                                     onChange={(e) => setPrivacyPolicyDetail({
                                         ...privacyPolicyDetail,
-                                        policyContent: e.target.value
+                                        utztnTrmsCn: e.target.value
                                     })}
                                 />
                             </div>
@@ -110,16 +208,17 @@ function ManagerPrivacyPolicyEdit(props) {
                             </div>
                         </li>
                     </ul>
-                    <div className="buttonBox">
+                    <div className="buttonBox" style={{ display: 'flex', justifyContent: 'flex-end' }}>
                         <div className="leftBox">
-                            <button type="button" className="clickBtn point" onClick={handleSave}><span>등록</span>
-                            </button>
+                            <button type="button" className="clickBtn point" onClick={handleSave}><span>저장</span></button>
                             {modeInfo.mode === CODE.MODE_MODIFY && (
-                                <button type="button" className="clickBtn gray" onClick={""}><span>삭제</span></button>
+                                <button type="button" className="clickBtn gray" onClick={delBtnEvent}><span>삭제</span></button>
                             )}
                         </div>
                         <NavLink to={URL.MANAGER_HOMEPAGE_PRIVACY_POLICY}>
-                            <button type="button" className="clickBtn black"><span>목록</span></button>
+                            <button type="button" className="clickBtn black" style={{ marginLeft: '10px' }}>
+                                <span>목록</span>
+                            </button>
                         </NavLink>
                     </div>
                 </div>

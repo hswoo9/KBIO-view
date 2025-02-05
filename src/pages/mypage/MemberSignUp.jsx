@@ -493,39 +493,7 @@ function MemberSignUp(props) {
       });
     });
   };
-
-
-
-
-  const deleteMember = () => {
-    if (formObjValidator(checkRef)) {
-      const deleteMypageURL = `/mypage/delete`; // /${uniqId} 제거 서버단에서 토큰 값 사용.
-      const requestOptions = {
-        method: "PUT",
-        headers: {
-          "Content-type": "application/json",
-        },
-        body: JSON.stringify({ ...memberDetail }),
-      };
-
-      EgovNet.requestFetch(deleteMypageURL, requestOptions, (resp) => {
-        console.log("====>>> member delete= ", resp);
-        if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
-          setSessionItem("loginUser", { userSn: "" });
-          setSessionItem("jToken", null);
-          // PC와 Mobile 열린메뉴 닫기
-          document.querySelector(".all_menu.WEB").classList.add("closed");
-          document.querySelector(".btnAllMenu").classList.remove("active");
-          document.querySelector(".btnAllMenu").title = "전체메뉴 닫힘";
-          document.querySelector(".all_menu.Mobile").classList.add("closed");
-          alert("회원이 탈퇴되었습니다. 로그아웃 됩니다.");
-          navigate(URL.MAIN, { replace: true });
-        } else {
-          alert("ERR : " + resp.resultMessage);
-        }
-      });
-    }
-  };
+  
 
   useEffect(() => {
     initMode();

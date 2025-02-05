@@ -1,4 +1,4 @@
-import React, { memo, useState } from "react";
+import React, { memo, useState, useEffect } from "react";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import translations from 'ckeditor5/translations/ko.js';
@@ -12,7 +12,7 @@ const CommonEditor = memo(({ value, onChange}) => {
 
     const customUploadAdapter = (loader) => {
         return {
-            upload(){
+            upload : async () => {
                 return new Promise ((resolve, reject) => {
                    const formData = new FormData();
                    loader.file.then( (file) => {
@@ -45,7 +45,7 @@ const CommonEditor = memo(({ value, onChange}) => {
         }
     }
 
-    useState(() => {
+    useEffect(() => {
         import('@ckeditor/ckeditor5-react').then((module) => {
             setEditorLoaded(true);
         });
