@@ -44,6 +44,9 @@ function setPst(props) {
 
   /** 대댓글, 수정 */
   const [pstSubCmnt, setPstSubCmnt] = useState(initialCommentState); // 현재 활성화된 답글 입력창 ID
+  useEffect(() => {
+    console.log(pstSubCmnt);
+  }, [pstSubCmnt])
   /** 댓글 */
   const [pstCmnt, setPstCmnt] = useState(initialCommentState)
 
@@ -161,8 +164,9 @@ function setPst(props) {
   }
 
   const handleSubmit = (type) => {
-    let pstCmntSubmit = type === "sub" ? pstSubCmnt : pstCmnt;
 
+    let pstCmntSubmit = type === "sub" ? pstSubCmnt : pstCmnt;
+    console.log(pstCmntSubmit);
     if (!pstCmntSubmit.cmntCn) {
       alert("댓글을 입력해주세요.");
       return;
@@ -201,11 +205,12 @@ function setPst(props) {
     });
   };
 
-  const handleCmnt = (pstCmntSn, cmntGrp) => {
+  const handleCmnt = (pstCmntSn, cmntGrp, pstSn) => {
     setPstSubCmnt({
       ...initialCommentState,
       upPstCmntSn : pstCmntSn,
       cmntGrp : cmntGrp,
+      pstSn: pstSn,
     })
     setPstCmntInput((prev) => (prev === pstCmntSn ? null : pstCmntSn));
   };
@@ -354,7 +359,7 @@ function setPst(props) {
                                         {/* Reply button */}
                                         <button
                                             className="comment_action_btn reply_btn"
-                                            onClick={() => handleCmnt(v.pstCmntSn, v.cmntGrp)}
+                                            onClick={() => handleCmnt(v.pstCmntSn, v.cmntGrp, v.pstSn)}
                                         >
                                           답글
                                         </button>
@@ -457,30 +462,28 @@ function setPst(props) {
               <div className="buttonBox">
                 <div className="left">
                   {bbsDetail.ansPsbltyYn == "Y" && (
-                      <button type="button" className="clickBtn">
-                        <Link
-                            to={URL.MANAGER_PST_CREATE}
-                            state={{
-                              bbsSn: pstDetail.bbsSn,
-                              pstGroup: pstDetail.pstGroup,
-                              upPstSn: pstDetail.pstSn,
-                            }}
-                        >
-                          답변
-                        </Link>
-                      </button>
-                  )}
-                  <button type="button" className="clickBtn">
                       <Link
-                          to={URL.MANAGER_PST_MODIFY}
-                          mode={CODE.MODE_MODIFY}
+                          to={URL.MANAGER_PST_CREATE}
                           state={{
-                            pstSn: pstDetail.pstSn,
+                            bbsSn: pstDetail.bbsSn,
+                            pstGroup: pstDetail.pstGroup,
+                            upPstSn: pstDetail.pstSn,
                           }}
                       >
-                        수정
+                        <button type="button" className="clickBtn">
+                          <span>답변</span>
+                        </button>
                       </Link>
-                  </button>
+                  )}
+                  <Link
+                      to={URL.MANAGER_PST_MODIFY}
+                      mode={CODE.MODE_MODIFY}
+                      state={{
+                        pstSn: pstDetail.pstSn,
+                      }}
+                  >
+                    <button type="button" className="clickBtn"><span>수정</span></button>
+                  </Link>
                   <button type="button" className="clickBtn red"
                           onClick={() => {
                             setPstDel(pstDetail.pstSn);
@@ -490,17 +493,15 @@ function setPst(props) {
                   </button>
                 </div>
                 <div className="right">
-                  <button type="button" className="clickBtn white">
-                    <Link
-                        to={URL.MANAGER_PST_LIST}
-                        state={{
-                          bbsSn: bbsDetail.bbsSn,
-                          atchFileYn: bbsDetail.atchFileYn
-                        }}
-                    >
-                      목록
-                    </Link>
-                  </button>
+                  <Link
+                      to={URL.MANAGER_PST_LIST}
+                      state={{
+                        bbsSn: bbsDetail.bbsSn,
+                        atchFileYn: bbsDetail.atchFileYn
+                      }}
+                  >
+                  <button type="button" className="clickBtn white"><span>목록</span></button>
+                </Link>
                 </div>
               </div>
             </div>
