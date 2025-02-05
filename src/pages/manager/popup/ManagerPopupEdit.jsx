@@ -338,7 +338,7 @@ function ManagerCodeEdit(props) {
         EgovNet.requestFetch("/commonApi/setFileDel", requestOptions, (resp) => {
           if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
             Swal.fire("삭제되었습니다.");
-            setBnrPopupDetail({ ...bnrPopupDetail, tblComFile: [] });  // 상태 업데이트
+            setBnrPopupDetail({ ...bnrPopupDetail, tblComFile: null });  // 상태 업데이트
           } else {
           }
         });
