@@ -12,7 +12,7 @@ const CommonEditor = memo(({ value, onChange}) => {
 
     const customUploadAdapter = (loader) => {
         return {
-            upload(){
+            upload : async () => {
                 return new Promise ((resolve, reject) => {
                    const formData = new FormData();
                    loader.file.then( (file) => {
