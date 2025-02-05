@@ -1,7 +1,10 @@
 const URL = {
-  //COMMON
   MAIN: "/egovframe-template-simple-react", //메인페이지
+
+  //COMMON
   POPUP : "/popup",
+  CONTENT_VIEW : "/content/view",
+  
   LOGIN: "/egovframe-template-simple-react/login", //로그인
   MANAGER_LOGIN: "/egovframe-template-simple-react/manager/login", //로그인
   ERROR: "/egovframe-template-simple-react/error", //로그인

@@ -11,18 +11,15 @@ import EgovFooterUser from "@/components/EgovFooterUser";
 import EgovMainUser from "@/pages/main/EgovMainUser";
 
 //COMMON
-import EgovHeader from "@/components/EgovHeader";
-import ManagerHeader from "@/components/manager/ManagerHeader";
-import EgovFooter from "@/components/EgovFooter";
-import EgovInfoPopup from "@/components/EgovInfoPopup";
-import EgovError from "@/components/EgovError";
-import CommonPopup from "@/components/CommonPopup.jsx";
-import CommonError from "@/pages/templates/commonError.jsx";
+import CommonPopup from "@/pages/common/popup/commonPopup";
+import ContentView from "@/pages/common/content/view";
+import CommonError from "@/pages/common/error/commonError";
 
 import EgovMain from "@/pages/main/EgovMain";
 import EgovLogin from "@/pages/login/EgovLogin";
 import ManagerLogin from "@/pages/manager/login/ManagerLogin";
 
+import EgovError from "@/components/EgovError";
 import EgovFindIdPswd from "@/pages/login/EgovFindIdPswd";
 
 //SNS
@@ -267,7 +264,11 @@ const SecondRoutes = () => {
             <Routes>
               {/* MAIN */}
               <Route path={URL.MAIN} element={<EgovMainUser/>}/>
+
+              {/* COMMON */}
+              <Route path={URL.CONTENT_VIEW} element={<ContentView/>}/>
               <Route path={URL.POPUP} element={<CommonPopup/>}/>
+
               {/* LOGIN */}
               <Route
                   path={URL.LOGIN}
