@@ -110,7 +110,7 @@ function ManagerTermsAgreementEdit(props) {
                             </div>
                         </li>
                     </ul>
-                    <div className="buttonBox">
+                    <div className="buttonBox" style={{display: 'flex', justifyContent: 'flex-end'}}>
                         <div className="leftBox">
                             <button type="button" className="clickBtn point" onClick={""}><span>저장</span></button>
                             {modeInfo.mode === CODE.MODE_MODIFY && (
@@ -121,7 +121,7 @@ function ManagerTermsAgreementEdit(props) {
                         <NavLink
                             to={URL.MANAGER_HOMEPAGE_TERMS_AGREEMENT}
                         >
-                            <button type="button" className="clickBtn black"><span>목록</span></button>
+                            <button type="button" className="clickBtn black"  style={{marginLeft: '10px'}}><span>목록</span></button>
                         </NavLink>
                     </div>
                 </div>
