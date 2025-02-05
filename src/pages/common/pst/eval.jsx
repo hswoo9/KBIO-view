@@ -1,12 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {getSessionItem} from "../../../../utils/storage.js";
+import {getSessionItem} from "../../../utils/storage.js";
 import * as EgovNet from "@/api/egovFetch";
 import Swal from "sweetalert2";
 import moment from "moment/moment.js";
 import CODE from "@/constants/code";
-import $ from 'jquery';
 
-const PstEvl  = ({ pstSn }) => {
+const CommonPstEval  = ({ pstSn }) => {
     const sessionUser = getSessionItem("loginUser");
     const [pstEvl, setPstEvl] = useState({
         evlYmd : moment(new Date()).format('YYYYMMDD'),
@@ -191,4 +190,4 @@ const PstEvl  = ({ pstSn }) => {
   );
 };
 
-export default PstEvl ;
+export default CommonPstEval ;

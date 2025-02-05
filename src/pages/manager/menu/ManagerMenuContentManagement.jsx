@@ -8,12 +8,10 @@ import '@/css/ReactCheckBoxTree.css';
 import Swal from 'sweetalert2';
 
 import { getSessionItem } from "@/utils/storage";
-import ReactQuill from "react-quill-new";
 import CommonEditor from "@/components/CommonEditor";
 
 function Index(props) {
     const sessionUser = getSessionItem("loginUser");
-    const [contsCn, setContsCn] = useState("");
     const [expanded, setExpanded] = useState(['Documents']);
     const [menuList, setMenuList] = useState([]);
     const [menuContent, setMenuContent] = useState({});
@@ -26,8 +24,13 @@ function Index(props) {
         setMenuContent({menuSn: e.value});
     };
 
+    const isFirstRender = useRef(true);
     const handleChange = (value) => {
-        setContsCn(value);
+        if(isFirstRender.current){
+            isFirstRender.current = false;
+            return;
+        }
+        setMenuContent({...menuContent, contsCn: value});
     };
 
     const setMenuContentDel = (contsSn) => {
@@ -50,6 +53,7 @@ function Index(props) {
                 EgovNet.requestFetch("/menuApi/setMenuContentDel", requestOptions, (resp) => {
                     if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
                         Swal.fire("삭제되었습니다.");
+                        isFirstRender.current = true;
                         setSelMenuName("")
                         setMenuContent({});
                         setSearchDto({});
@@ -70,7 +74,7 @@ function Index(props) {
             return;
         }
 
-        if (!contsCn) {
+        if (!menuContent.contsCn) {
             Swal.fire("내용을 입력해주세요.");
             return;
         }
@@ -103,9 +107,6 @@ function Index(props) {
                         formData.append(key, menuContent[key]);
                     }
                 }
-
-                formData.append("contsCn", contsCn);
-
 
                 const requestOptions = {
                     method: "POST",
@@ -146,7 +147,6 @@ function Index(props) {
                         ...menuContent,
                         ...resp.result.menu.content,
                     });
-                    console.log(resp.result.menu.content)
                 }
             )
         }
@@ -221,6 +221,10 @@ function Index(props) {
     useEffect(() => {
         getMenuList(searchDto);
     }, []);
+
+    useEffect(() => {
+    }, [menuContent]);
+
 
     return (
         <div id="container" className="container layout cms">

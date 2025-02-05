@@ -1,7 +1,7 @@
 import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import * as EgovNet from "@/api/egovFetch";
-import {getMenu, getMenuByUserSn } from "@/components/CommonComponents";
+import {getMenu } from "@/components/CommonComponents";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
 

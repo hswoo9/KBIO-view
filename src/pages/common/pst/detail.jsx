@@ -1,25 +1,18 @@
 import React, {useState, useEffect, useRef, useMemo, useCallback} from "react";
-import { useDropzone } from 'react-dropzone';
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import {Link, useNavigate, useLocation, NavLink} from "react-router-dom";
 import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
 import 'moment/locale/ko';
-import { default as EgovLeftNav } from "@/components/leftmenu/ManagerLeftBoard";
-import EgovRadioButtonGroup from "@/components/EgovRadioButtonGroup";
 import Swal from "sweetalert2";
-import Form from "react-bootstrap/Form";
-import ReactDatePicker from 'react-datepicker';
 import moment from "moment";
-import ReactQuill from 'react-quill-new';
 import '@/css/quillSnow.css';
 import '@/css/manager/managerPstDetail.css';
-import Eval  from "../../../common/pst/eval.jsx";
 import { getSessionItem, setSessionItem } from "@/utils/storage";
-import ManagerLeftNew from "@/components/manager/ManagerLeftNew";
 import {fileDownLoad} from "@/components/CommonComponents.jsx";
+import CommonPstEval from "./eval.jsx";
 
-function setPst(props) {
+function commonPstDetail(props) {
   const sessionUser = getSessionItem("loginUser");
   const navigate = useNavigate();
   const location = useLocation();
@@ -29,9 +22,9 @@ function setPst(props) {
     pstSn : location.state?.pstSn
   });
 
-  const [pstDetail, setPstDetail] = useState({});
+  const [pst, setPst] = useState({});
   const [pstPrevNext, setPstPrevNext] = useState([]);
-  const [bbsDetail, setBbsDetail] = useState({});
+  const [bbs, setBbs] = useState({});
 
 
   /** 댓글 */
@@ -44,9 +37,6 @@ function setPst(props) {
 
   /** 대댓글, 수정 */
   const [pstSubCmnt, setPstSubCmnt] = useState(initialCommentState); // 현재 활성화된 답글 입력창 ID
-  useEffect(() => {
-    console.log(pstSubCmnt);
-  }, [pstSubCmnt])
   /** 댓글 */
   const [pstCmnt, setPstCmnt] = useState(initialCommentState)
 
@@ -64,8 +54,8 @@ function setPst(props) {
     };
 
     EgovNet.requestFetch(getPstURL, requestOptions, function (resp) {
-      setBbsDetail(resp.result.bbs);
-      setPstDetail(resp.result.pst);
+      setBbs(resp.result.bbs);
+      setPst(resp.result.pst);
       setPstPrevNext(resp.result.pstPrevNext);
 
       const cmntList = resp.result.pst.pstCmnt || [];
@@ -87,7 +77,7 @@ function setPst(props) {
           headers: {
             "Content-type": "application/json",
           },
-          body: JSON.stringify({pstSn: pstDetail.pstSn}),
+          body: JSON.stringify({pstSn: pst.pstSn}),
         };
 
         EgovNet.requestFetch(
@@ -100,8 +90,8 @@ function setPst(props) {
                 replyRow: cmnt.cmntStp > 0,
               }));
               setPstCmntList(updatedCmnts);
-              setPstCmnt({...pstCmnt, pstSn: pstDetail.pstSn});
-              setPstSubCmnt({...initialCommentState, pstSn: pstDetail.pstSn});
+              setPstCmnt({...pstCmnt, pstSn: pst.pstSn});
+              setPstSubCmnt({...initialCommentState, pstSn: pst.pstSn});
 
               const actionBtns = document.querySelectorAll(".comment_action_btn");
               actionBtns.forEach((btn) => {
@@ -139,10 +129,9 @@ function setPst(props) {
           if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
             Swal.fire("삭제되었습니다.");
             navigate(
-              { pathname : URL.MANAGER_PST_LIST},
+              { pathname : URL.COMMON_PST_LIST},
               { state: {
-                  bbsSn: bbsDetail.bbsSn,
-                  atchFileYn: bbsDetail.atchFileYn,
+                  bbsSn: bbs.bbsSn,
                 }
               }
             );
@@ -164,9 +153,8 @@ function setPst(props) {
   }
 
   const handleSubmit = (type) => {
-
     let pstCmntSubmit = type === "sub" ? pstSubCmnt : pstCmnt;
-    console.log(pstCmntSubmit);
+
     if (!pstCmntSubmit.cmntCn) {
       alert("댓글을 입력해주세요.");
       return;
@@ -226,7 +214,7 @@ function setPst(props) {
   };
 
   const handleEditCancel = () => {
-    setPstSubCmnt({...initialCommentState, pstSn: pstDetail.pstSn});
+    setPstSubCmnt({...initialCommentState, pstSn: pst.pstSn});
     const actionBtns = document.querySelectorAll(".comment_action_btn");
     actionBtns.forEach((btn) => {
       btn.style.display = "block";
@@ -278,27 +266,26 @@ function setPst(props) {
 
   return (
       <div id="container" className="container layout cms">
-        <ManagerLeftNew/>
         <div className="inner">
-          <h2 className="pageTitle"><p>게시글 상세보기</p></h2>
+          <h2 className="pageTitle">{bbs.bbsNm}</h2>
           <div className="contBox">
             <div className="box infoBox">
               <ul className="listBox">
                 <li className="inputBox type1 width1">
                   <label className="title"><small>제목</small></label>
-                  <div className="input">{pstDetail.pstTtl}</div>
+                  <div className="input">{pst.pstTtl}</div>
                 </li>
                 <li className="inputBox type1 width1">
                   <label className="title"><small>작성일</small></label>
-                  <div className="input">{moment(pstDetail.frstCrtDt).format('YYYY-MM-DD')}</div>
+                  <div className="input">{moment(pst.frstCrtDt).format('YYYY-MM-DD')}</div>
                 </li>
-                {bbsDetail.atchFileYn == "Y" && (
+                {bbs.atchFileYn == "Y" && (
                     <li className="inputBox type1 width1">
                       <label className="title"><small>첨부파일</small></label>
                       <div className="input">
-                        {pstDetail.pstFiles.length > 0 && (
+                        {pst.pstFiles.length > 0 && (
                             <ul>
-                              {pstDetail.pstFiles.map((file, index) => (
+                              {pst.pstFiles.map((file, index) => (
                                   <li key={index}>
                                     <span
                                         onClick={() => fileDownLoad(file.atchFileSn, file.atchFileNm)}>{file.atchFileNm} - {(file.atchFileSz / 1024).toFixed(2)} KB</span>
@@ -311,182 +298,188 @@ function setPst(props) {
                 )}
                 <li className="inputBox type1 width1">
                   <label className="title"><small>외부링크</small></label>
-                  <div className="input">{pstDetail.linkUrlAddr}</div>
+                  <div className="input">
+                    <NavLink to={pst.linkUrlAddr} target={"_blank"}>
+                      {pst.linkUrlAddr}
+                    </NavLink>
+                  </div>
                 </li>
                 <li className="inputBox type1 width1">
                   <label className="title"><small>내용</small></label>
-                  <div className="input" dangerouslySetInnerHTML={{__html: pstDetail.pstCn}}></div>
+                  <div className="input" dangerouslySetInnerHTML={{__html: pst.pstCn}}></div>
                 </li>
 
-                {bbsDetail.cmntPsbltyYn == "Y" && (
+                {bbs.cmntPsbltyYn == "Y" && (
                     <li>
                       <div className="comment_section">
-                      <h3 className="comment_title">댓글</h3>
-                      <div className="comments_list">
-                        {pstCmntList ? (
-                            <ul>
-                              {pstCmntList.map((v, i) => (
-                                  <li key={i} id={v.pstCmntSn} className="comment_item"
-                                      style={v.cmntStp > 0 ? {marginLeft: `${v.cmntStp * 20}px`} : {}}>
-                                    <div className="comment_content">
-                                      {/* 댓글 내용 */}
-                                      {pstSubCmnt.pstCmntSn === v.pstCmntSn ? (
-                                          <input
-                                              type="text"
-                                              placeholder="댓글을 작성하세요"
-                                              className="comment_input"
-                                              id={"cmntCn" + v.pstCmntSn}
-                                              value={pstSubCmnt.cmntCn} // 상태에서 값 가져오기
-                                              onChange={(e) => setPstSubCmnt({
-                                                ...pstSubCmnt,
-                                                cmntCn: e.target.value
-                                              })}
-                                              onKeyDown={(e) =>
-                                                  activeEnter(e, "sub")
-                                              }
-                                          />
-                                      ) : (
-                                          <p className={v.cmntStp > 0 ? 'reply_row' : ''} id={'cmntCn' + v.pstCmntSn}>
-                                            {v.cmntCn}
-                                          </p>
-                                      )}
-                                    </div>
-                                    <div className="comment_footer">
+                        <h3 className="comment_title">댓글</h3>
+                        <div className="comments_list">
+                          {pstCmntList ? (
+                              <ul>
+                                {pstCmntList.map((v, i) => (
+                                    <li key={i} id={v.pstCmntSn} className="comment_item"
+                                        style={v.cmntStp > 0 ? {marginLeft: `${v.cmntStp * 20}px`} : {}}>
+                                      <div className="comment_content">
+                                        {/* 댓글 내용 */}
+                                        {pstSubCmnt.pstCmntSn === v.pstCmntSn ? (
+                                            <input
+                                                type="text"
+                                                placeholder="댓글을 작성하세요"
+                                                className="comment_input"
+                                                id={"cmntCn" + v.pstCmntSn}
+                                                value={pstSubCmnt.cmntCn} // 상태에서 값 가져오기
+                                                onChange={(e) => setPstSubCmnt({
+                                                  ...pstSubCmnt,
+                                                  cmntCn: e.target.value
+                                                })}
+                                                onKeyDown={(e) =>
+                                                    activeEnter(e, "sub")
+                                                }
+                                            />
+                                        ) : (
+                                            <p className={v.cmntStp > 0 ? 'reply_row' : ''} id={'cmntCn' + v.pstCmntSn}>
+                                              {v.cmntCn}
+                                            </p>
+                                        )}
+                                      </div>
+                                      <div className="comment_footer">
                                   <span className="comment_date">
                                     {moment(v.frstCrtDt).format('YYYY-MM-DD HH:mm')}
                                   </span>
-                                      <div className="comment_actions">
-                                        {/* Reply button */}
-                                        <button
-                                            className="comment_action_btn reply_btn"
-                                            onClick={() => handleCmnt(v.pstCmntSn, v.cmntGrp, v.pstSn)}
-                                        >
-                                          답글
-                                        </button>
-
-                                        {v.creatrSn === sessionUser.userSn && (
-                                            <>
-                                              {/* 저장 및 취소 버튼 */}
-                                              {pstSubCmnt.pstCmntSn === v.pstCmntSn ? (
-                                                  <>
-                                                    <button
-                                                        id={`save_btn_${v.pstCmntSn}`}
-                                                        className="comment_action_btn reply_btn"
-                                                        onClick={() => handleSubmit("sub")}
-                                                    >
-                                                      저장
-                                                    </button>
-                                                    <button
-                                                        id={`editCancel_btn_${v.pstCmntSn}`}
-                                                        className="comment_action_btn delete_btn"
-                                                        onClick={() => handleEditCancel()}
-                                                    >
-                                                      취소
-                                                    </button>
-                                                  </>
-                                              ) : null}
-
-                                              {/* 댓글 수정 및 삭제 버튼 */}
-                                              <button
-                                                  className="comment_action_btn edit_btn"
-                                                  onClick={() => handleEdit(v.pstCmntSn)}
-                                              >
-                                                수정
-                                              </button>
-                                              <button
-                                                  className="comment_action_btn delete_btn"
-                                                  onClick={() => handleDelete(v.pstCmntSn)}
-                                              >
-                                                삭제
-                                              </button>
-                                            </>
-                                        )}
-                                      </div>
-                                    </div>
-                                    {pstCmntInput === v.pstCmntSn && (
-                                        <div className="comment_form" style={{marginTop: "10px"}}>
-                                          <input
-                                              type="text"
-                                              placeholder="댓글을 작성하세요"
-                                              className="comment_input"
-                                              id={"subCmntCn" + v.pstCmntSn}
-                                              onChange={(e) =>
-                                                  setPstSubCmnt({...pstSubCmnt, cmntCn: e.target.value})
-                                              }
-                                              onKeyDown={(e) =>
-                                                  activeEnter(e, "sub")
-                                              }
-                                          ></input>
+                                        <div className="comment_actions">
+                                          {/* Reply button */}
                                           <button
-                                              className="comment_submit"
-                                              onClick={() => handleSubmit('sub')}>
-                                            댓글 작성
+                                              className="comment_action_btn reply_btn"
+                                              onClick={() => handleCmnt(v.pstCmntSn, v.cmntGrp, v.pstSn)}
+                                          >
+                                            답글
                                           </button>
+
+                                          {v.creatrSn === sessionUser.userSn && (
+                                              <>
+                                                {/* 저장 및 취소 버튼 */}
+                                                {pstSubCmnt.pstCmntSn === v.pstCmntSn ? (
+                                                    <>
+                                                      <button
+                                                          id={`save_btn_${v.pstCmntSn}`}
+                                                          className="comment_action_btn reply_btn"
+                                                          onClick={() => handleSubmit("sub")}
+                                                      >
+                                                        저장
+                                                      </button>
+                                                      <button
+                                                          id={`editCancel_btn_${v.pstCmntSn}`}
+                                                          className="comment_action_btn delete_btn"
+                                                          onClick={() => handleEditCancel()}
+                                                      >
+                                                        취소
+                                                      </button>
+                                                    </>
+                                                ) : null}
+
+                                                {/* 댓글 수정 및 삭제 버튼 */}
+                                                <button
+                                                    className="comment_action_btn edit_btn"
+                                                    onClick={() => handleEdit(v.pstCmntSn)}
+                                                >
+                                                  수정
+                                                </button>
+                                                <button
+                                                    className="comment_action_btn delete_btn"
+                                                    onClick={() => handleDelete(v.pstCmntSn)}
+                                                >
+                                                  삭제
+                                                </button>
+                                              </>
+                                          )}
                                         </div>
-                                    )}
+                                      </div>
+                                      {pstCmntInput === v.pstCmntSn && (
+                                          <div className="comment_form" style={{marginTop: "10px"}}>
+                                            <input
+                                                type="text"
+                                                placeholder="댓글을 작성하세요"
+                                                className="comment_input"
+                                                id={"subCmntCn" + v.pstCmntSn}
+                                                onChange={(e) =>
+                                                    setPstSubCmnt({...pstSubCmnt, cmntCn: e.target.value})
+                                                }
+                                                onKeyDown={(e) =>
+                                                    activeEnter(e, "sub")
+                                                }
+                                            ></input>
+                                            <button
+                                                className="comment_submit"
+                                                onClick={() => handleSubmit('sub')}>
+                                              댓글 작성
+                                            </button>
+                                          </div>
+                                      )}
 
-                                  </li>
+                                    </li>
 
 
-                              ))}
-                            </ul>
-                        ) : (
-                            <p className="no_comments">댓글이 없습니다.</p>
-                        )}
+                                ))}
+                              </ul>
+                          ) : (
+                              <p className="no_comments">댓글이 없습니다.</p>
+                          )}
 
+                        </div>
+                        <div className="comment_form">
+                          <input
+                              type="text"
+                              placeholder="댓글을 작성하세요"
+                              className="comment_input"
+                              id="cmntCn"
+                              onChange={(e) =>
+                                  setPstCmnt({...pstCmnt, cmntCn: e.target.value})
+                              }
+                              onKeyDown={(e) =>
+                                  activeEnter(e, "new")
+                              }
+                          ></input>
+                          <button
+                              className="comment_submit"
+                              onClick={() => handleSubmit("new")}>
+                            댓글 작성
+                          </button>
+                        </div>
                       </div>
-                      <div className="comment_form">
-                        <input
-                            type="text"
-                            placeholder="댓글을 작성하세요"
-                            className="comment_input"
-                            id="cmntCn"
-                            onChange={(e) =>
-                                setPstCmnt({...pstCmnt, cmntCn: e.target.value})
-                            }
-                            onKeyDown={(e) =>
-                                activeEnter(e, "new")
-                            }
-                        ></input>
-                        <button
-                            className="comment_submit"
-                            onClick={() => handleSubmit("new")}>
-                          댓글 작성
-                        </button>
-                      </div>
-                    </div>
                     </li>
                 )}
 
               </ul>
               <div className="buttonBox">
                 <div className="left">
-                  {bbsDetail.ansPsbltyYn == "Y" && (
+                  {bbs.ansPsbltyYn == "Y" && (
                       <Link
-                          to={URL.MANAGER_PST_CREATE}
+                          to={URL.COMMON_PST_CREATE}
                           state={{
-                            bbsSn: pstDetail.bbsSn,
-                            pstGroup: pstDetail.pstGroup,
-                            upPstSn: pstDetail.pstSn,
+                            bbsSn: pst.bbsSn,
+                            pstGroup: pst.pstGroup,
+                            upPstSn: pst.pstSn,
                           }}
                       >
                         <button type="button" className="clickBtn">
-                          <span>답변</span>
+                          답변
                         </button>
                       </Link>
                   )}
                   <Link
-                      to={URL.MANAGER_PST_MODIFY}
+                      to={URL.COMMON_PST_MODIFY}
                       mode={CODE.MODE_MODIFY}
                       state={{
-                        pstSn: pstDetail.pstSn,
+                        pstSn: pst.pstSn,
                       }}
                   >
-                    <button type="button" className="clickBtn"><span>수정</span></button>
+                    <button type="button" className="clickBtn">
+                      수정
+                    </button>
                   </Link>
                   <button type="button" className="clickBtn red"
                           onClick={() => {
-                            setPstDel(pstDetail.pstSn);
+                            setPstDel(pst.pstSn);
                           }}
                   >
                     <span>삭제</span>
@@ -494,14 +487,15 @@ function setPst(props) {
                 </div>
                 <div className="right">
                   <Link
-                      to={URL.MANAGER_PST_LIST}
+                      to={URL.COMMON_PST_LIST}
                       state={{
-                        bbsSn: bbsDetail.bbsSn,
-                        atchFileYn: bbsDetail.atchFileYn
+                        bbsSn: bbs.bbsSn,
                       }}
                   >
-                  <button type="button" className="clickBtn white"><span>목록</span></button>
-                </Link>
+                    <button type="button" className="clickBtn white">
+                      목록
+                    </button>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -545,8 +539,9 @@ function setPst(props) {
             </div>
           </div>
         </div>
+        <CommonPstEval pstSn={pst.pstSn}/>
       </div>
   );
 }
 
-export default setPst;
+export default commonPstDetail;

@@ -2,8 +2,12 @@ const URL = {
   MAIN: "/", //메인페이지
 
   //COMMON
-  POPUP : "/popup",
-  CONTENT_VIEW : "/content/view",
+  COMMON_POPUP : "/popup",
+  COMMON_CONTENT_VIEW : "/content/view",
+  COMMON_PST_LIST : "/pst/list",
+  COMMON_PST_DETAIL : "/pst/detail",
+  COMMON_PST_CREATE: "/pst/create",
+  COMMON_PST_MODIFY: "/pst/modify",
 
   LOGIN: "/login", //로그인
   MANAGER_LOGIN: "/manager/login", //로그인

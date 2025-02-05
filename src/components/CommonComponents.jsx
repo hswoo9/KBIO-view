@@ -21,34 +21,7 @@ import Swal from "sweetalert2";
  *     })
  * }, []);
  */
-export const getMenu = async (upperMenuSn, menuSeq) => {
-    const requestOptions = {
-        method: "POST",
-        headers: {
-            "Content-type": "application/json",
-        },
-        body: JSON.stringify({
-            upperMenuSn : upperMenuSn,
-            menuSeq : menuSeq,
-        })
-    };
-
-    return new Promise((resolve, reject) => {
-        EgovNet.requestFetch(
-            "/commonApi/getMenu.do",
-            requestOptions,
-            (resp) => {
-                resolve(resp.result.menuList);
-            },
-            (error) => {
-                console.log("err response : ", error);
-                reject(error);
-            }
-        );
-    });
-};
-
-export const getMenuByUserSn = async (upperMenuSn, menuSeq, userSn) => {
+export const getMenu = async (upperMenuSn, menuSeq, userSn) => {
     const requestOptions = {
         method: "POST",
         headers: {
@@ -75,6 +48,34 @@ export const getMenuByUserSn = async (upperMenuSn, menuSeq, userSn) => {
         );
     });
 };
+
+// export const getMenuByUserSn = async (upperMenuSn, menuSeq, userSn) => {
+//     const requestOptions = {
+//         method: "POST",
+//         headers: {
+//             "Content-type": "application/json",
+//         },
+//         body: JSON.stringify({
+//             upperMenuSn : upperMenuSn,
+//             menuSeq : menuSeq,
+//             userSn : userSn
+//         })
+//     };
+//
+//     return new Promise((resolve, reject) => {
+//         EgovNet.requestFetch(
+//             "/commonApi/getMenu.do",
+//             requestOptions,
+//             (resp) => {
+//                 resolve(resp.result.menuList);
+//             },
+//             (error) => {
+//                 console.log("err response : ", error);
+//                 reject(error);
+//             }
+//         );
+//     });
+// };
 
 /**
  * 사용자 left 메뉴 조회

@@ -11,9 +11,12 @@ import EgovFooterUser from "@/components/EgovFooterUser";
 import EgovMainUser from "@/pages/main/EgovMainUser";
 
 //COMMON
-import CommonPopup from "@/pages/common/popup/commonPopup";
-import ContentView from "@/pages/common/content/view";
 import CommonError from "@/pages/common/error/commonError";
+import CommonPopup from "@/pages/common/popup/commonPopup";
+import CommonContentView from "@/pages/common/content/view";
+import CommonPstList from "@/pages/common/pst/list";
+import CommonPstDetail from "@/pages/common/pst/detail";
+import CommonPstEdit from "@/pages/common/pst/edit";
 
 import EgovMain from "@/pages/main/EgovMain";
 import EgovLogin from "@/pages/login/EgovLogin";
@@ -266,8 +269,12 @@ const SecondRoutes = () => {
               <Route path={URL.MAIN} element={<EgovMainUser/>}/>
 
               {/* COMMON */}
-              <Route path={URL.CONTENT_VIEW} element={<ContentView/>}/>
-              <Route path={URL.POPUP} element={<CommonPopup/>}/>
+              <Route path={URL.COMMON_CONTENT_VIEW} element={<CommonContentView/>}/>
+              <Route path={URL.COMMON_POPUP} element={<CommonPopup/>}/>
+              <Route path={URL.COMMON_PST_LIST} element={<CommonPstList/>}/>
+              <Route path={URL.COMMON_PST_DETAIL} element={<CommonPstDetail mode={CODE.MODE_READ}/>}/>
+              <Route path={URL.COMMON_PST_CREATE} element={<CommonPstEdit mode={CODE.MODE_CREATE}/>}/>
+              <Route path={URL.COMMON_PST_MODIFY} element={<CommonPstEdit mode={CODE.MODE_MODIFY}/>}/>
 
               {/* LOGIN */}
               <Route

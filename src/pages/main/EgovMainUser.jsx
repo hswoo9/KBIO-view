@@ -3,7 +3,7 @@ import { Link, useLocation, NavLink } from "react-router-dom";
 
 import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
-import {getMenu, getMenuByUserSn } from "@/components/CommonComponents";
+import {getMenu } from "@/components/CommonComponents";
 import { getSessionItem, setSessionItem, removeSessionItem } from "@/utils/storage";
 
 import simpleMainIng from "/assets/images/img_simple_main.png";
@@ -68,9 +68,7 @@ function EgovMainUser(props) {
       setPopUpList(data);
     });
 
-    /* 메뉴리스트 조회 */
-    getMenuByUserSn(null, null, String(userSn)).then((data) => {
-      console.log(data);
+    getMenu(null, null, userSn).then((data) => {
       let dataList = [];
       if(data != null){
         data.forEach(function(item, index){
