@@ -314,7 +314,8 @@ function setPst(props) {
                 </li>
 
                 {bbsDetail.cmntPsbltyYn == "Y" && (
-                    <div className="comment_section">
+                    <li>
+                      <div className="comment_section">
                       <h3 className="comment_title">댓글</h3>
                       <div className="comments_list">
                         {pstCmntList ? (
@@ -449,6 +450,7 @@ function setPst(props) {
                         </button>
                       </div>
                     </div>
+                    </li>
                 )}
 
               </ul>
