@@ -191,7 +191,7 @@ function ManagerBbs(props) {
                                 <col width="100"/>
                                 <col width="100"/>
                                 <col width="80"/>
-                                <col width="100"/>
+                                <col width="120"/>
                             </colgroup>
                             <thead>
                             <tr>
