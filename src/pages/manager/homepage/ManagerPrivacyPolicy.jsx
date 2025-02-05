@@ -10,21 +10,31 @@ import EgovPaging from "@/components/EgovPaging";
 
 import Swal from 'sweetalert2';
 
+/* bootstrip */
+import BtTable from 'react-bootstrap/Table';
+import BTButton from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
 import { getSessionItem } from "@/utils/storage";
+import moment from "moment/moment.js";
 
 function ManagerPrivacyList(props) {
+    const searchWrdRef = useRef();
     const location = useLocation();
-    console.log(location);
     const sessionUser = getSessionItem("loginUser");
-    const [searchCondition, setSearchCondition] = useState(
-        location.state?.searchCondition || {
+    const useYnRef = useRef();
+    const [searchDto, setSearchDto] = useState(
+        location.state?.searchDto || {
             pageIndex: 1,
             searchCnd: "0",
             searchWrd: "",
+            useYn: "",
+            utztnTrmsKnd: 1,
         }
     );
 
     const [paginationInfo, setPaginationInfo] = useState({});
+
+    const [privacyPolicyList, setprivacyPolicyList] = useState([]);
 
     const cndRef = useRef();
     const wrdRef = useRef();
@@ -38,7 +48,76 @@ function ManagerPrivacyList(props) {
         }
     }, [saveEvent]);
 
+    const activeEnter = (e) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            getprivacyPolicyList(searchDto);
+        }
+    };
+
+    const getprivacyPolicyList = useCallback(
+        (searchDto) => {
+            const privacyPolicyListURL = "/utztnApi/getPrivacyPolicyList.do";
+            const requestOptions = {
+                method: "POST",
+                headers: {
+                    "Content-type": "application/json",
+                },
+                body: JSON.stringify(searchDto)
+            };
+            EgovNet.requestFetch(
+                privacyPolicyListURL,
+                requestOptions,
+                (resp) => {
+                    console.log("Response:", resp);
+                    console.log("Data List:", resp.result?.getPrivacyPolicyList);
+                    setPaginationInfo(resp.paginationInfo);
+                    let dataList = [];
+                    dataList.push(
+                        <tr key="no-data">
+                            <td colSpan="6">검색된 결과가 없습니다.</td>
+                        </tr>
+                    );
+
+                    resp.result.getPrivacyPolicyList.forEach(function (item, index) {
+                        if (index === 0) dataList = [];
+
+                        const totalItems = resp.result.getPrivacyPolicyList.length;
+                        const itemNumber = totalItems - index;
+
+                        dataList.push(
+                            <tr key={item.utztnTrmsSn}>
+                                <td>{itemNumber}</td>
+                                <td>
+                                    <Link
+                                        to={{pathname: URL.MANAGER_HOMEPAGE_PRIVACY_MODIFY}}
+                                        state={{
+                                            utztnTrmsSn: item.utztnTrmsSn
+                                        }}
+                                        key={item.utztnTrmsSn}
+                                        style={{cursor: 'pointer', textDecoration: 'underline'}}
+                                    >
+                                        {item.utztnTrmsTtl}
+                                    </Link>
+                                </td>
+                                <td>{item.creatr}</td>
+                                <td>{item.frstCrtDt}</td>
+                                <td>{item.useYn === "Y" ? "사용중" : "사용안함"}</td>
+                            </tr>
+                        );
+                    });
+                    setprivacyPolicyList(dataList);
+                },
+                function (resp) {
+                    console.log("err response : ", resp);
+                }
+            )
+        },
+        [privacyPolicyList, searchDto]
+    );
+
     useEffect(() => {
+        getprivacyPolicyList(searchDto);
     }, []);
 
     return (
@@ -52,7 +131,21 @@ function ManagerPrivacyList(props) {
                             <li className="inputBox type1">
                                 <p className="title">사용여부</p>
                                 <div className="itemBox">
-                                    <select className="selectGroup">
+                                    <select className="selectGroup"
+                                            ref={useYnRef}
+                                            onChange={(e) => {
+                                                setSearchDto({
+                                                    ...searchDto,
+                                                    pageIndex: 1,
+                                                    useYn: e.target.value,
+                                                });
+                                                getprivacyPolicyList({
+                                                    ...searchDto,
+                                                    pageIndex: 1,
+                                                    useYn: e.target.value,
+                                                });
+                                            }}
+                                    >
                                         <option value="">전체</option>
                                         <option value="Y">사용</option>
                                         <option value="N">미사용</option>
@@ -69,7 +162,15 @@ function ManagerPrivacyList(props) {
                             <button type="button" className="refreshBtn btn btn1 gray">
                                 <div className="icon"></div>
                             </button>
-                            <button type="button" className="searchBtn btn btn1 point">
+                            <button type="button" className="searchBtn btn btn1 point"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        getprivacyPolicyList({
+                                            ...searchDto,
+                                            pageIndex: 1,
+                                            useYn: e.target.value,
+                                        });
+                                    }}>
                                 <div className="icon"></div>
                             </button>
                         </div>
@@ -106,6 +207,7 @@ function ManagerPrivacyList(props) {
                             </tr>
                             </thead>
                             <tbody>
+                            {privacyPolicyList}
                             </tbody>
                         </table>
                     </div>
@@ -114,7 +216,10 @@ function ManagerPrivacyList(props) {
                         <EgovPaging
                             pagination={paginationInfo}
                             moveToPage={(passedPage) => {
-
+                                privacyPolicyList({
+                                    ...searchDto,
+                                    pageIndex: passedPage,
+                                });
                             }}
                         />
                         <NavLink
