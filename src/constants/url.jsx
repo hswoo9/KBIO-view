@@ -141,6 +141,7 @@ const URL = {
   /* 배너팝업관리 종료 */
 
   MANAGER_MENU_MANAGEMENT: "/manager/menuManagement",
+  MANAGER_MENU_CONTENT_MANAGEMENT: "/manager/menuContentManagement",
   MANAGER_MENU_AUTHORITY: "/manager/menuAuthority",
   MANAGER_AUTHORITY_GROUP_USERS: "/manager/groupUsers",
 

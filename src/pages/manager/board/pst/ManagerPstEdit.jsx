@@ -219,11 +219,11 @@ function setPst(props) {
     }
 
     if (!pstDetail.pstTtl) {
-      Swal.fire("제목은 필수 값입니다.");
+      Swal.fire("제목을 입력해주세요.");
       return;
     }
     if (!pstDetail.pstCn) {
-      Swal.fire("내용은 필수 값입니다.");
+      Swal.fire("내용을 입력해주세요.");
       return;
     }
 

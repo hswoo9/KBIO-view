@@ -496,6 +496,15 @@ function ManagerLeftNew() {
               </li>
               <li>
                 <NavLink
+                    to={URL.MANAGER_MENU_CONTENT_MANAGEMENT}
+                    className={({isActive}) => (isActive ? "activeTag" : "")}
+                >
+                  <div className="icon"></div>
+                  <p>메뉴컨텐츠관리</p>
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
                     to={URL.MANAGER_MENU_AUTHORITY}
                     className={({isActive}) => (isActive ? "activeTag" : "")}
                 >
