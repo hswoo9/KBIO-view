@@ -3,7 +3,7 @@ import {NavLink, useLocation, useNavigate} from "react-router-dom";
 import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
-import { getLocalItem, setLocalItem, setSessionItem } from "@/utils/storage";
+import { getSessionItem, getLocalItem, setLocalItem, setSessionItem } from "@/utils/storage";
 import Swal from "sweetalert2";
 import loginBg from "@/assets/images/login_bg.jpg";
 import loginLogo from "@/assets/images/login_logo.svg";
@@ -11,9 +11,9 @@ import loginLogo from "@/assets/images/login_logo.svg";
 
 function ManagerLogin(props) {
   const location = useLocation();
-
   const navigate = useNavigate();
 
+  const sessionUser = getSessionItem("loginUser");
 
   const [userInfo, setUserInfo] = useState({
     id: "",
@@ -120,6 +120,12 @@ function ManagerLogin(props) {
     }
   }, [location.pathname]);
 
+  useEffect(() => {
+    if( sessionUser !== null){
+      document.getElementById("commonTop").style.display = "flex";
+      navigate(URL.MANAGER);
+    }
+  }, []);
   return (
       <div id="container" className="container login">
         <div className="leftWrap">

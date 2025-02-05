@@ -28,6 +28,7 @@ function ManagerPrivacyPolicyEdit(props) {
         }
     );
 
+    const [modeInfo, setModeInfo] = useState({ mode: props.mode });
 
     const [privacyPolicyDetail, setPrivacyPolicyDetail] = useState({});
 
@@ -35,7 +36,10 @@ function ManagerPrivacyPolicyEdit(props) {
         console.log(privacyPolicyDetail);
     }, [privacyPolicyDetail]);
 
-    const [modeInfo, setModeInfo] = useState({ mode: props.mode });
+    const [comCdGroupList, setComCdGroupList] = useState([]);
+    useEffect(() => {
+        console.log(comCdGroupList);
+    }, [comCdGroupList]);
 
     const [saveEvent, setSaveEvent] = useState({});
     useEffect(() => {
@@ -49,9 +53,36 @@ function ManagerPrivacyPolicyEdit(props) {
         }
     }, [saveEvent]);
 
-    useEffect(() => {
-        setModeInfo({ mode: props.mode });
-    }, [props.mode]);
+
+    const delPrivacyPolicyData = useCallback(
+        (privacyPolicyDetail) => {
+            console.log(privacyPolicyDetail);
+            const privacyPolicyURL = "/utztnApi/setPrivacyPolicyDel";
+            const requestOptions = {
+                method: "POST",
+                headers: {
+                    "Content-type": "application/json",
+                },
+                body: JSON.stringify(privacyPolicyDetail)
+            };
+            EgovNet.requestFetch(
+                privacyPolicyURL,
+                requestOptions,
+                (resp) => {
+
+                    if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
+                        navigate({ pathname: URL.MANAGER_HOMEPAGE_PRIVACY_POLICY });
+                    } else {
+                        navigate(
+                            { pathname: URL.ERROR },
+                            { state: { msg: resp.resultMessage } }
+                        );
+                    }
+
+                }
+            )
+        }
+    );
 
 
     const handleSave = () => {
@@ -110,10 +141,12 @@ function ManagerPrivacyPolicyEdit(props) {
                     formData.append(key, privacyPolicyDetail[key]);
                 }
             }
-
-            formData.append("creatrSn", sessionUserSn || "");
-            formData.append("creatr", sessionUserName || "");
+            
             formData.append("utztnTrmsKnd", "1");
+            if (modeInfo.mode === CODE.MODE_CREATE) {
+                formData.append("creatrSn", sessionUserSn || "");
+                formData.append("creatr", sessionUserName || "");
+            }
 
             const menuListURL = "/utztnApi/setPrivacyPolicy";
             const requestOptions = {
@@ -135,9 +168,69 @@ function ManagerPrivacyPolicyEdit(props) {
                     }
                 }
             );
-        }
+        },
     );
 
+    const initMode = () => {
+        switch (props.mode){
+            case CODE.MODE_CREATE:
+                setModeInfo({
+                    ...modeInfo,
+                    modeTitle: "등록",
+                });
+                break;
+            case CODE.MODE_MODIFY:
+                setModeInfo({
+                    ...modeInfo,
+                    modeTitle: "수정",
+                });
+                break;
+            default:
+                navigate({ pathname: URL.ERROR }, { state: { msg: "" } });
+        }
+        getPrivacyPolicyData();
+    };
+
+    const getPrivacyPolicyData = () => {
+
+        const getPrivacyPolicyURL = `/utztnApi/getPrivacyPolicy`;
+
+        const requestOptions = {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json",
+            },
+            body: JSON.stringify({utztnTrmsSn : location.state?.utztnTrmsSn})
+        };
+
+        EgovNet.requestFetch(getPrivacyPolicyURL, requestOptions, function (resp) {
+            console.log(resp);
+            if (modeInfo.mode === CODE.MODE_MODIFY) {
+                if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
+                    resp.result.tblUtztnTrms.mdfrSn = sessionUser.userSn;
+                    setPrivacyPolicyDetail(resp.result.tblUtztnTrms);
+                    if(resp.result.tblUtztnTrms.useYn != null){
+                        if(resp.result.tblUtztnTrms.useYn == "Y"){
+                            document.getElementById("useYn").checked = true;
+                        }else{
+                            document.getElementById("useYn").checked = false;
+                        }
+                    }
+                } else {
+                    navigate(
+                        { pathname: URL.ERROR },
+                        { state: { msg: resp.resultMessage } }
+                    );
+                }
+
+            }
+        });
+
+    };
+
+    useEffect(() => {
+        initMode();
+    }, []);
 
     return (
         <div id="container" className="container layout cms">
@@ -208,15 +301,17 @@ function ManagerPrivacyPolicyEdit(props) {
                             </div>
                         </li>
                     </ul>
-                    <div className="buttonBox" style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                    <div className="buttonBox" style={{display: 'flex', justifyContent: 'flex-end'}}>
                         <div className="leftBox">
-                            <button type="button" className="clickBtn point" onClick={handleSave}><span>저장</span></button>
+                            <button type="button" className="clickBtn point" onClick={handleSave}><span>저장</span>
+                            </button>
                             {modeInfo.mode === CODE.MODE_MODIFY && (
-                                <button type="button" className="clickBtn gray" onClick={delBtnEvent}><span>삭제</span></button>
+                                <button type="button" className="clickBtn gray" onClick={delBtnEvent}><span>삭제</span>
+                                </button>
                             )}
                         </div>
                         <NavLink to={URL.MANAGER_HOMEPAGE_PRIVACY_POLICY}>
-                            <button type="button" className="clickBtn black" style={{ marginLeft: '10px' }}>
+                            <button type="button" className="clickBtn black" style={{marginLeft: '10px'}}>
                                 <span>목록</span>
                             </button>
                         </NavLink>

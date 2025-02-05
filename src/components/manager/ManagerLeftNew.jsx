@@ -466,8 +466,8 @@ function ManagerLeftNew() {
   return (
       <header>
         <div className="hInner">
-          <h1><a href="#" onClick={e => e.preventDefault}><img src={LogoImg} alt="images"/><span
-              className="hidden">K BIO LabHub</span></a></h1>
+          <h1><NavLink to={URL.MANAGER}><img src={LogoImg} alt="images"/><span
+              className="hidden">K BIO LabHub</span></NavLink></h1>
           <div className="sitemapBtn">
             <div className="icon"></div>
           </div>

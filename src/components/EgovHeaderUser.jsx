@@ -6,7 +6,7 @@ import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
 
-import { getSessionItem, setSessionItem } from "@/utils/storage";
+import { getSessionItem, setSessionItem, removeSessionItem } from "@/utils/storage";
 import Swal from 'sweetalert2';
 
 import '@/css/manager/niceSelect/nice-select.css';
@@ -56,8 +56,9 @@ function EgovHeader() {
 
     EgovNet.requestFetch(logOutUrl, requestOptions, function (resp) {
       if(resp.resultCode == "200"){
-        setSessionItem("loginUser", { userSn: "" });
-        setSessionItem("jToken", null);
+        removeSessionItem("loginUser");
+        removeSessionItem("jToken");
+        removeSessionItem("userSn");
         Swal.fire("로그아웃되었습니다!");
         navigate(URL.MAIN);
       }

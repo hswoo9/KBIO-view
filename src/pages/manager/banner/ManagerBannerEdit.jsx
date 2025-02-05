@@ -58,8 +58,7 @@ function ManagerBannerEdit(props) {
 
   const handleFileChange = (e) => {
     document.getElementById("fileNamePTag").textContent = "";
-    console.log(bnrPopupDetail.tblComFiles);
-    if(bnrPopupDetail.tblComFiles != null && bnrPopupDetail.tblComFiles.length > 0){
+    if(bnrPopupDetail.tblComFile != null){
       Swal.fire("기존 파일 삭제 후 첨부가 가능합니다.");
       e.target.value = null;
       return false;
@@ -99,12 +98,13 @@ function ManagerBannerEdit(props) {
       cancelButtonText: "취소"
     }).then((result) => {
       if(result.isConfirmed) {
+        console.log(bnrPopupDetail);
         if(bnrPopupDetail.bnrPopupTtl == null){
           Swal.fire("배너제목이 없습니다.");
           return;
         }
         if($("#formFile").val() == null || $("#formFile").val() == ""
-        && (bnrPopupDetail.tblComFiles == null || bnrPopupDetail.tblComFiles == "" || bnrPopupDetail.tblComFiles.length == 0)
+        && (bnrPopupDetail.tblComFile == null || bnrPopupDetail.tblComFile == "")
         ){
           Swal.fire("첨부된 파일이 없습니다.");
           return;
@@ -144,7 +144,7 @@ function ManagerBannerEdit(props) {
       (bnrPopupDetail) => {
         const formData = new FormData();
         for (let key in bnrPopupDetail) {
-          if(bnrPopupDetail[key] != null && key != "tblComFiles"){
+          if(bnrPopupDetail[key] != null && key != "tblComFile"){
             formData.append(key, bnrPopupDetail[key]);
           }
         }
@@ -359,7 +359,7 @@ function ManagerBannerEdit(props) {
         EgovNet.requestFetch("/commonApi/setFileDel", requestOptions, (resp) => {
           if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
             Swal.fire("삭제되었습니다.");
-            setBnrPopupDetail({ ...bnrPopupDetail, tblComFiles: [] });  // 상태 업데이트
+            setBnrPopupDetail({ ...bnrPopupDetail, tblComFile: null });  // 상태 업데이트
           } else {
           }
         });
@@ -441,18 +441,16 @@ function ManagerBannerEdit(props) {
               <li className="inputBox type1 width2 file">
                 <p className="title">파일삭제</p>
                 <div className="input">
-                {bnrPopupDetail != null && bnrPopupDetail.tblComFiles != null && bnrPopupDetail.tblComFiles.length > 0 && (
+                {bnrPopupDetail != null && bnrPopupDetail.tblComFile != null && (
                     <>
-                      {bnrPopupDetail.tblComFiles.map((file, index) => (
-                          <p className="file_name">{file.atchFileNm} - {(file.atchFileSz / 1024).toFixed(2)} KB
-                            <button type="button" className="clickBtn gray"
-                                    onClick={() => setFileDel(file.atchFileSn)}  // 삭제 버튼 클릭 시 처리할 함수
-                                    style={{marginLeft: '10px', color: 'red'}}
-                            >
-                              삭제
-                            </button>
-                          </p>
-                      ))}
+                      <p className="file_name">{bnrPopupDetail.tblComFile.atchFileNm} - {(bnrPopupDetail.tblComFile.atchFileSz / 1024).toFixed(2)} KB
+                        <button type="button" className="clickBtn gray"
+                                onClick={() => setFileDel(bnrPopupDetail.tblComFile.atchFileSn)}  // 삭제 버튼 클릭 시 처리할 함수
+                                style={{marginLeft: '10px', color: 'red'}}
+                        >
+                          삭제
+                        </button>
+                      </p>
                     </>
                 )}
                 </div>
