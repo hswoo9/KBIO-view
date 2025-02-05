@@ -35,10 +35,19 @@ function CommonPopup(props) {
         []
     );
 
+    const handleClose = () => {
+        window.close();
+    };
+
+    const handleCloseForToday = () => {
+        const expireTime = Date.now() + 24 * 60 * 60 * 1000;
+        // const expireTime = Date.now() + 60 * 1000;
+        localStorage.setItem(bnrPopup.bnrPopupSn, expireTime);
+        window.close();
+    };
+
     const clickHandler = (bnrPopupUrlAddr) => {
-        window.open(
-            bnrPopupUrlAddr, // 여기에 원하는 URL 입력
-        );
+        window.open(bnrPopupUrlAddr);
     }
 
     useEffect(() => {
@@ -48,12 +57,15 @@ function CommonPopup(props) {
         <>
             <img
                 src={`http://133.186.250.158${bnrPopup.tblComFile.atchFilePathNm}/${bnrPopup.tblComFile.strgFileNm}.${bnrPopup.tblComFile.atchFileExtnNm}`}
-                id="templatesImgTag"
                 alt={bnrPopup.tblComFile.atchFileNm}
                 onClick={(e) => {
                     clickHandler(`${bnrPopup.bnrPopupUrlAddr}`)
                 }}
             />
+            <div style={{textAlign: "right"}}>
+                <button onClick={handleCloseForToday}>오늘 하루 열지 않음</button>
+                <button onClick={handleClose}>닫기</button>
+            </div>
         </>
     );
 }
