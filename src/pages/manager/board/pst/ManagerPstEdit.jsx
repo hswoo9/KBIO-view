@@ -1,7 +1,7 @@
 
 import React, {useState, useEffect, useRef, useMemo, useCallback} from "react";
 import { useDropzone } from 'react-dropzone';
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
@@ -11,11 +11,12 @@ import EgovRadioButtonGroup from "@/components/EgovRadioButtonGroup";
 import Swal from "sweetalert2";
 import Form from "react-bootstrap/Form";
 import moment from "moment";
-import ReactQuill from 'react-quill-new';
-import '@/css/quillSnow.css';
 import {getSessionItem} from "../../../../utils/storage.js";
 
+import CommonEditor from "@/components/CommonEditor";
+
 function setPst(props) {
+
   const sessionUser = getSessionItem("loginUser");
   const navigate = useNavigate();
   const location = useLocation();
@@ -485,7 +486,7 @@ function setPst(props) {
               <li className="inputBox type1 width1">
                 <label className="title essential"><small>내용</small></label>
                 <div>
-                  <ReactQuill
+                  <CommonEditor
                       value={pstDetail.pstCn}
                       onChange={handleChange}
                   />
@@ -545,7 +546,7 @@ function setPst(props) {
                     ><span>삭제</span></button>
                 )}
               </div>
-              <Link
+              <NavLink
                   to={URL.MANAGER_PST_LIST}
                   className="btn btn_blue_h46 w_100"
                   state={{
@@ -554,7 +555,7 @@ function setPst(props) {
                   }}
               >
                 <button type="button" className="clickBtn black"><span>목록</span></button>
-              </Link>
+              </NavLink>
             </div>
           </div>
         </div>
