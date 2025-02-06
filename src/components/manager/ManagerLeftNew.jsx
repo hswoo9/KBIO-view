@@ -6,8 +6,6 @@ import { getSessionItem, setSessionItem } from "@/utils/storage";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
 
-import LogoImg from "@/assets/images/logo_admin.svg";
-
 function ManagerLeftNew() {
 
   const location = useLocation();
@@ -43,7 +41,7 @@ function ManagerLeftNew() {
       function header() {
 
         // 메뉴 효과
-        $('.navBox, .lnbBox').each(function () {
+        $('.leftHeader .navBox, .lnbBox').each(function () {
           const container = $(this);
           const li = container.find('li');
           const bg = container.find('.bg');
@@ -65,11 +63,9 @@ function ManagerLeftNew() {
                 });
               } else {
                 // For .navBox, use top
-
                 bg.css({
                   width: `${$activeItem.outerWidth()}px`,
                   top: `${$activeItem.position().top}px`,
-                  left: `${$activeItem.position().left}px`,
                   height: `${$activeItem.outerHeight()}px`,
                   opacity: '1',
                 });
@@ -99,7 +95,6 @@ function ManagerLeftNew() {
                   bgHover.css({
                     width: `${liWidth}px`,
                     top: `${liOffsetTop}px`,
-                    left: `${liLeft}px`,
                     height: `${liHeight}px`,
                     opacity: '1',
                   });
@@ -465,12 +460,7 @@ function ManagerLeftNew() {
 
   return (
       <header>
-        <div className="hInner">
-          <h1><NavLink to={URL.MANAGER}><img src={LogoImg} alt="images"/><span
-              className="hidden">K BIO LabHub</span></NavLink></h1>
-          <div className="sitemapBtn">
-            <div className="icon"></div>
-          </div>
+        <div className="hInner leftHeader">
           <div className="title"><p>CMS</p></div>
           <nav className="navBox">
             <div className="bg hover"></div>
