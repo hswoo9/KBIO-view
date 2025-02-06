@@ -183,12 +183,24 @@ function ManagerMenuAuthority(props) {
 
     const fieldReset = () => {
         setSaveMode({mode:"insert"});
-        document.getElementById("inqAuthrt").checked = true;
-        document.getElementById("wrtAuthrt").checked = true;
-        document.getElementById("mdfcnAuthrt").checked = true;
-        document.getElementById("delAuthrt").checked = true;
-        document.getElementById("frstCrtDt").value = "";
-        document.getElementById("mdfcnDt").value = "";
+        if(document.getElementById("inqAuthrt") != null){
+            document.getElementById("inqAuthrt").checked = true;
+        }
+        if(document.getElementById("wrtAuthrt") != null){
+            document.getElementById("wrtAuthrt").checked = true;
+        }
+        if(document.getElementById("mdfcnAuthrt") != null){
+            document.getElementById("mdfcnAuthrt").checked = true;
+        }
+        if(document.getElementById("delAuthrt") != null){
+            document.getElementById("delAuthrt").checked = true;
+        }
+        if(document.getElementById("frstCrtDt") != null){
+            document.getElementById("frstCrtDt").value = "";
+        }
+        if(document.getElementById("mdfcnDt") != null){
+            document.getElementById("mdfcnDt").value = "";
+        }
 
         $(".dtLi").css("display", "none");
 

@@ -178,6 +178,8 @@ export default function userJs() {
     modalOpen('.admin .board.type2 .tableBox table .deletBtn', '.deletModal');
     modalOpen('.admin .cms .inner .contBox .infoBox .program', '.programModal');
     modalOpen('.user header .loginBtn', '.loginModal')
+    modalOpen('.user header .idBtn', '.findId')
+    modalOpen('.user header .pwBtn', '.findPwd')
 
 
     // 모달 닫기  ------------------------------------------------------------

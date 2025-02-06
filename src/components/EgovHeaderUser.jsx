@@ -61,6 +61,8 @@ function EgovHeader() {
   const sessionUserName = sessionUser?.name;
   const sessionUserSe = sessionUser?.userSe;
   const sessionUserSn = sessionUser?.userSn;
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
 
   const [userInfo, setUserInfo] = useState({
     id: "",
@@ -83,6 +85,114 @@ function EgovHeader() {
   const handleSaveIDFlag = () => {
     setLocalItem(KEY_SAVE_ID_FLAG, !saveIDFlag);
     setSaveIDFlag(!saveIDFlag);
+  };
+
+  const handleFindPassword = async () => {
+
+    const id = document.querySelector('input[name="pwdid"]').value;
+    const name = document.querySelector('input[name="pwdname"]').value;
+    const email = document.querySelector('input[name="pwdemail"]').value;
+
+    if (!id || !name || !email) {
+      Swal.fire({
+        title: "입력 오류",
+        text: "아이디, 이름, 이메일을 모두 입력해주세요.",
+      });
+      return;
+    }
+
+    try {
+      const findPasswordURL = "/memberApi/findPassword.do";
+      const reqOptions = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id, name, email }),
+      };
+
+      // 서버 응답 처리
+      await EgovNet.requestFetch(findPasswordURL, reqOptions, function (response) {
+        if (response.resultCode === 200) {
+          Swal.fire({
+            title: "비밀번호 찾기 성공",
+            text: "임시 비밀번호가 이메일로 전송되었습니다.",
+          }).then(() => {
+            const modal = document.querySelector('.findPwd.modalCon');
+            if (modal) {
+              modal.style.display = 'none';
+            }
+          });
+        } else {
+          Swal.fire({
+            title: "찾기 실패",
+            text: "일치하는 회원 정보가 없습니다. 다시 확인해주세요.",
+          });
+        }
+      });
+    } catch (error) {
+      console.error("비밀번호 찾기 요청 실패:", error);
+      Swal.fire({
+        title: "오류 발생",
+        text: "서버와 통신 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.",
+      });
+    }
+  };
+
+  const handleFindId = async () => {
+    // 유효성 검사: 이름과 이메일 입력 확인
+    if (!name || !email) {
+      Swal.fire({
+        title: "입력 오류",
+        text: "이름과 이메일을 모두 입력해주세요.",
+      });
+      return;
+    }
+
+    try {
+      const checkIdURL = "/memberApi/findId.do";
+      const reqOptions = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name, email }),
+      };
+
+      // 서버 응답 처리
+      await EgovNet.requestFetch(checkIdURL, reqOptions, function (response) {
+        if (response.resultCode === 200) {
+          const userId = response.result.userId;
+          if (userId) {
+            Swal.fire({
+              title: "ID 찾기 성공",
+              text: `회원님의 ID는 '${userId}'입니다.`,})
+              .then(() => {
+                const modal = document.querySelector('.findId.modalCon');
+                if (modal) {
+                  modal.style.display = 'none';
+                }
+            });
+          } else {
+            Swal.fire({
+              title: "찾기 실패",
+              text: "회원 정보가 없습니다. 다시 확인해주세요.",
+            });
+          }
+        } else {
+          Swal.fire({
+            title: "찾기 실패",
+            text: "회원 정보가 없습니다. 다시 확인해주세요.",
+          });
+        }
+      });
+    } catch (error) {
+      console.error("ID 찾기 요청 실패:", error);
+      Swal.fire({
+        title: "오류 발생",
+        text: "서버와 통신 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.",
+      });
+    }
   };
 
   useEffect(() => {
@@ -454,6 +564,103 @@ function EgovHeader() {
                     </a></li>
                   </ul>
                 </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div className="findId modalCon">
+          <div className="bg"></div>
+          <div className="m-inner">
+            <div className="boxWrap">
+              <div className="close">
+                <div className="icon"></div>
+              </div>
+              <form className="box">
+                <figure className="logo"><img src={logo} alt="K k-Bio LabHub"/></figure>
+                <ul className="inputWrap">
+                  <li className="inputBox type2">
+                    <span className="tt1">이름</span>
+                    <label className="input">
+                      <input
+                          type="text"
+                          name="name"
+                          title="이름"
+                          placeholder="이름"
+                          value={name}
+                          onChange={(e) => setName(e.target.value)}
+                      />
+                    </label>
+                  </li>
+                  <li className="inputBox type2">
+                    <span className="tt1">이메일</span>
+                    <label className="input">
+                      <input
+                          type="text"
+                          name="email"
+                          title="이메일"
+                          placeholder="이메일"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                      />
+                    </label>
+                  </li>
+                </ul>
+                <button type="button" className="loginBtn" onClick={handleFindId}><span>아이디 찾기</span></button>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div className="findPwd modalCon">
+          <div className="bg"></div>
+          <div className="m-inner">
+            <div className="boxWrap">
+              <div className="close">
+                <div className="icon"></div>
+              </div>
+              <form className="box">
+                <figure className="logo"><img src={logo} alt="K k-Bio LabHub"/></figure>
+                <ul className="inputWrap">
+                  <li className="inputBox type2">
+                    <span className="tt1">아이디</span>
+                    <label className="input">
+                      <input
+                          type="text"
+                          name="pwdid"
+                          title="아이디"
+                          placeholder="아이디"
+                      />
+                    </label>
+                  </li>
+                  <li className="inputBox type2">
+                    <span className="tt1">이름</span>
+                    <label className="input">
+                      <input
+                          type="text"
+                          name="pwdname"
+                          title="이름"
+                          placeholder="이름"
+                      />
+                    </label>
+                  </li>
+                  <li className="inputBox type2">
+                    <span className="tt1">이메일</span>
+                    <label className="input">
+                      <input
+                          type="text"
+                          name="pwdemail"
+                          title="이메일"
+                          placeholder="이메일"
+                      />
+                    </label>
+                  </li>
+                </ul>
+                <ul className="list">
+                  <li style={{fontSize: '0.7rem', color: 'rgba(0, 0, 0, 0.6)'}}>
+                    비밀번호의 경우 가입된 이메일로 임시비밀번호가 발송됩니다.<br/>
+                    <br/>SNS회원은 가입한 홈페이지에서 아이디 및 비밀번호 찾기를 진행 바랍니다.
+                  </li>
+                </ul>
+                <button type="button" className="loginBtn" onClick={handleFindPassword}><span>비밀번호 찾기</span></button>
               </form>
             </div>
           </div>

@@ -14,7 +14,6 @@ function Index(props) {
   return (
     <div id="container" className="container layout cms">
         <ManagerLeftNew/>
-
         <div className="inner">
             
         </div>

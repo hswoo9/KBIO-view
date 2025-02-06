@@ -4,7 +4,7 @@ import * as EgovNet from "@/api/egovFetch";
 import {getMenu } from "@/components/CommonComponents";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
-
+import LogoImg from "@/assets/images/logo_admin.svg";
 import { getSessionItem, setSessionItem, removeSessionItem } from "@/utils/storage";
 import Swal from "sweetalert2";
 
@@ -136,48 +136,51 @@ function ManagerTop() {
 
   return (
       <div className="commonTop" id="commonTop">
-        <div className="lnbBox">
-          <div className="bg hover"></div>
-          <div className="bg active"></div>
-          <ul className="dep">
-            <li>
-              <a
-                 onClick={() => {
-                   navigate({pathname: URL.MANAGER_OPERATIONAL_SUPPORT}, {state: {selectMenuNm: "운영지원"}});
-                 }}
-                 className="cursorClass"
-              ><p>운영지원</p>
-              </a>
-            </li>
-            <li>
-              <a
-                 onClick={() => {
-                   navigate({pathname: URL.MANAGER_CONSULTING_EXPERT}, {state: {selectMenuNm: "컨설팅지원"}});
-                 }}
-                 className="cursorClass"
-              ><p>컨설팅지원</p>
-              </a>
-            </li>
-            <li>
-              <a
-                 onClick={() => {
-                   navigate({pathname: URL.MANAGER_NORMAL_MEMBER}, {state: {selectMenuNm: "회원"}});
-                 }}
-                 className="cursorClass"
-              ><p>회원</p>
-              </a>
-            </li>
-            <li>
-              <a
-                 onClick={() => {
-                   navigate({pathname: URL.MANAGER_HOMEPAGE_MAIN_VIEW}, {state: {selectMenuNm: "홈페이지"}});
-                 }}
-                 className="cursorClass"
-              ><p>홈페이지</p>
-              </a>
-            </li>
+        <h1><NavLink to={URL.MANAGER}><img src={LogoImg} alt="images"/><span
+            className="hidden">K BIO LabHub</span></NavLink></h1>
+        <div className="navBox">
+          <div className="lnbBox">
+            <div className="bg hover"></div>
+            <div className="bg active"></div>
+            <ul className="dep">
+              <li>
+                <a
+                    onClick={() => {
+                      navigate({pathname: URL.MANAGER_OPERATIONAL_SUPPORT}, {state: {selectMenuNm: "운영지원"}});
+                    }}
+                    className="cursorClass"
+                ><p>운영지원</p>
+                </a>
+              </li>
+              <li>
+                <a
+                    onClick={() => {
+                      navigate({pathname: URL.MANAGER_CONSULTING_EXPERT}, {state: {selectMenuNm: "컨설팅지원"}});
+                    }}
+                    className="cursorClass"
+                ><p>컨설팅지원</p>
+                </a>
+              </li>
+              <li>
+                <a
+                    onClick={() => {
+                      navigate({pathname: URL.MANAGER_NORMAL_MEMBER}, {state: {selectMenuNm: "회원"}});
+                    }}
+                    className="cursorClass"
+                ><p>회원</p>
+                </a>
+              </li>
+              <li>
+                <a
+                    onClick={() => {
+                      navigate({pathname: URL.MANAGER_HOMEPAGE_MAIN_VIEW}, {state: {selectMenuNm: "홈페이지"}});
+                    }}
+                    className="cursorClass"
+                ><p>홈페이지</p>
+                </a>
+              </li>
 
-            {/*게시글 관리로 쓰면 될듯
+              {/*게시글 관리로 쓰면 될듯
             <li>
               <a
                  onClick={() => {
@@ -187,36 +190,37 @@ function ManagerTop() {
               ><p>커뮤니티</p>
               </a>
             </li>*/}
-            <li>
-              <a
-                 onClick={() => {
-                   navigate({pathname: URL.MANAGER_STATISTICS_USER}, {state: {selectMenuNm: "통계"}});
-                 }}
-                 className="cursorClass"
-              ><p>통계</p>
-              </a>
-            </li>
-            <li className="active">
-              <a
-                 onClick={() => {
-                   navigate({pathname: URL.MANAGER_CMS}, {state: {selectMenuNm: "CMS"}});
-                 }}
-                 className="cursorClass"
-              >
-                <p>CMS</p>
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div className="rightBox">
-          <p className="tt1">{sessionUserName}님, 안녕하세요</p>
-          <button type="button" className="logoutBtn" onClick={logOutHandler}><span>로그아웃</span>
-            <div className="icon"></div>
-          </button>
+              <li>
+                <a
+                    onClick={() => {
+                      navigate({pathname: URL.MANAGER_STATISTICS_USER}, {state: {selectMenuNm: "통계"}});
+                    }}
+                    className="cursorClass"
+                ><p>통계</p>
+                </a>
+              </li>
+              <li className="active">
+                <a
+                    onClick={() => {
+                      navigate({pathname: URL.MANAGER_MENU_MANAGEMENT}, {state: {selectMenuNm: "CMS"}});
+                    }}
+                    className="cursorClass"
+                >
+                  <p>CMS</p>
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div className="rightBox">
+            <p className="tt1">{sessionUserName}님, 안녕하세요</p>
+            <button type="button" className="logoutBtn" onClick={logOutHandler}><span>로그아웃</span>
+              <div className="icon"></div>
+            </button>
+          </div>
         </div>
       </div>
   );
-  
+
 }
 
 export default ManagerTop;

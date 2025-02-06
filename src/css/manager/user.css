@@ -136,6 +136,177 @@ footer .inner .right .snsBox .youtube .icon {background-image: url(@/assets/imag
 .user .loginModal.modalCon .boxWrap .box .snsLoginBox .list li.kakao .icon {background-image: url(@/assets/images/ico_logo_kakao.svg);}
 .user .loginModal.modalCon .boxWrap .box .snsLoginBox .list li.google .icon {background-image: url(@/assets/images/ico_logo_google.svg); border: 1px solid #ddd;}
 .user .loginModal.modalCon .boxWrap .box .snsLoginBox .list li.naver .icon {background-image: url(@/assets/images/ico_logo_naver.svg);}
+.user .findId.modalCon .boxWrap,
+.user .findPwd.modalCon .boxWrap {
+	overflow: visible;
+	max-width: 420px;
+}
+
+.user .findId.modalCon .boxWrap .close,
+.user .findPwd.modalCon .boxWrap .close {
+	position: absolute;
+	top: -2rem;
+	right: 0;
+	z-index: 10;
+	width: 24px;
+	height: 24px;
+	cursor: pointer;
+}
+
+.user .findId.modalCon .boxWrap .close .icon,
+.user .findPwd.modalCon .boxWrap .close .icon {
+	height: 100%;
+	background: url(@/assets/images/ico_close_white.svg) no-repeat center / contain;
+}
+
+.user .findId.modalCon .boxWrap .box,
+.user .findPwd.modalCon .boxWrap .box {
+	margin-top: 0;
+	max-height: calc(100vh - 4rem);
+	gap: .9rem;
+}
+
+.user .findId.modalCon .boxWrap .box .logo,
+.user .findPwd.modalCon .boxWrap .box .logo {
+	max-width: 140px;
+	width: 60%;
+	margin: 0 auto;
+	margin-bottom: .3rem;
+}
+
+.user .findId.modalCon .boxWrap .box .logo img,
+.user .findPwd.modalCon .boxWrap .box .logo img {
+	width: 100%;
+	object-fit: contain;
+}
+
+.user .findId.modalCon .boxWrap .box .inputWrap,
+.user .findPwd.modalCon .boxWrap .box .inputWrap {
+	display: flex;
+	flex-direction: column;
+	gap: .9rem;
+}
+
+.user .findId.modalCon .boxWrap .box .checkBox.type2 input[type="checkbox"]::before,
+.user .findPwd.modalCon .boxWrap .box .checkBox.type2 input[type="checkbox"]::before {
+	background: #fff;
+}
+
+.user .findId.modalCon .boxWrap .box .checkBox.type2 input[type="checkbox"]:checked::before,
+.user .findPwd.modalCon .boxWrap .box .checkBox.type2 input[type="checkbox"]:checked::before {
+	background: var(--black);
+}
+
+.user .findId.modalCon .boxWrap .box .checkBox.type2 input[type="checkbox"] + small,
+.user .findPwd.modalCon .boxWrap .box .checkBox.type2 input[type="checkbox"] + small {
+	color: #111;
+}
+
+.user .findId.modalCon .boxWrap .box .loginBtn,
+.user .findPwd.modalCon .boxWrap .box .loginBtn {
+	width: 100%;
+	height: 3rem;
+	flex: none;
+	border-radius: .5rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: var(--black);
+	color: #fff;
+	font-size: 1.1rem;
+	font-weight: 600;
+	transition: .5s ease;
+}
+
+.user .findId.modalCon .boxWrap .box .botBtnBox,
+.user .findPwd.modalCon .boxWrap .box .botBtnBox {
+	display: flex;
+	gap: 1rem;
+	justify-content: center;
+}
+
+.user .findId.modalCon .boxWrap .box .botBtnBox li,
+.user .findPwd.modalCon .boxWrap .box .botBtnBox li {
+	position: relative;
+}
+
+.user .findId.modalCon .boxWrap .box .botBtnBox li button,
+.user .findPwd.modalCon .boxWrap .box .botBtnBox li button {
+	font-size: .9rem;
+	font-weight: 500;
+	transition: .5s ease;
+}
+
+.user .findId.modalCon .boxWrap .box .botBtnBox li:not(:last-child):after,
+.user .findPwd.modalCon .boxWrap .box .botBtnBox li:not(:last-child):after {
+	content: "";
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	right: -.5rem;
+	width: 1px;
+	height: .9rem;
+	background: #ddd;
+}
+
+.user .findId.modalCon .boxWrap .box .snsLoginBox,
+.user .findPwd.modalCon .boxWrap .box .snsLoginBox {
+	display: flex;
+	flex-direction: column;
+	gap: .9rem;
+}
+
+.user .findId.modalCon .boxWrap .box .snsLoginBox .or,
+.user .findPwd.modalCon .boxWrap .box .snsLoginBox .or {
+	position: relative;
+	height: 1.6rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.user .findId.modalCon .boxWrap .box .snsLoginBox .or p,
+.user .findPwd.modalCon .boxWrap .box .snsLoginBox .or p {
+	background: #fff;
+	padding: 0 1rem;
+	color: #bbb;
+	position: relative;
+	z-index: 1;
+	font-size: .9rem;
+	font-weight: 600;
+}
+
+.user .findId.modalCon .boxWrap .box .snsLoginBox .or:after,
+.user .findPwd.modalCon .boxWrap .box .snsLoginBox .or:after {
+	content: "";
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 100%;
+	height: 1px;
+	border-top: 1px solid #bbb;
+}
+
+.user .findId.modalCon .boxWrap .box .snsLoginBox .list,
+.user .findPwd.modalCon .boxWrap .box .snsLoginBox .list {
+	display: flex;
+	gap: .9rem;
+	justify-content: center;
+}
+
+.user .findId.modalCon .boxWrap .box .snsLoginBox .list .icon,
+.user .findPwd.modalCon .boxWrap .box .snsLoginBox .list .icon {
+	width: 2.4rem;
+	height: 2.4rem;
+	border-radius: 50%;
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center;
+	box-sizing: border-box;
+	transition: .5s ease;
+}
+
 .user .inner .authenBox {max-width: 530px; width: 100%; margin: 0 auto;}
 .user .inner .authenBox .selectBox {display: flex; gap: 20%; margin-bottom: 2.2rem; justify-content: center;}
 .user .inner .authenBox .selectBox button {display: flex; flex-direction: column; align-items: center; gap: .9rem;}
@@ -203,6 +374,31 @@ footer .inner .right .snsBox .youtube .icon {background-image: url(@/assets/imag
 	.user .loginModal.modalCon .boxWrap .box .snsLoginBox .list li.kakao .icon:hover {box-shadow: 3px 3px #fae10080;}
 	.user .loginModal.modalCon .boxWrap .box .snsLoginBox .list li.google .icon:hover {box-shadow: 3px 3px #99999940;}
 	.user .loginModal.modalCon .boxWrap .box .snsLoginBox .list li.naver .icon:hover {box-shadow: 3px 3px #3aae3650;}
+	/* Hover Styles for findId and findPwd */
+	.user .findId.modalCon .boxWrap .box .loginBtn:hover,
+	.user .findPwd.modalCon .boxWrap .box .loginBtn:hover {
+		background: var(--mainColor);
+	}
+
+	.user .findId.modalCon .boxWrap .box .botBtnBox li button:hover,
+	.user .findPwd.modalCon .boxWrap .box .botBtnBox li button:hover {
+		color: var(--mainColor);
+	}
+
+	.user .findId.modalCon .boxWrap .box .snsLoginBox .list li.kakao .icon:hover,
+	.user .findPwd.modalCon .boxWrap .box .snsLoginBox .list li.kakao .icon:hover {
+		box-shadow: 3px 3px #fae10080;
+	}
+
+	.user .findId.modalCon .boxWrap .box .snsLoginBox .list li.google .icon:hover,
+	.user .findPwd.modalCon .boxWrap .box .snsLoginBox .list li.google .icon:hover {
+		box-shadow: 3px 3px #99999940;
+	}
+
+	.user .findId.modalCon .boxWrap .box .snsLoginBox .list li.naver .icon:hover,
+	.user .findPwd.modalCon .boxWrap .box .snsLoginBox .list li.naver .icon:hover {
+		box-shadow: 3px 3px #3aae3650;
+	}
 	.user .inner .authenBox .selectBox button:hover .imgBox img {animation: imgHover 2s cubic-bezier(0.16,-0.04, 0.81, 0.98) both infinite;}
 	.join .inner .boxWrap .box02 .buttonBox li.naver button:hover {box-shadow: inset 3px 3px 8px rgba(255, 255, 255, .8), 3px 3px #3aae3650;}
 	.join .inner .boxWrap .box02 .buttonBox li.kakao button:hover {box-shadow: inset 3px 3px 8px rgba(255, 255, 255, .8), 3px 3px #fae10080;}
