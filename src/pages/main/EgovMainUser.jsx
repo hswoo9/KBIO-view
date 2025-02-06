@@ -9,7 +9,7 @@ import { getSessionItem, setSessionItem, removeSessionItem } from "@/utils/stora
 import simpleMainIng from "/assets/images/img_simple_main.png";
 import initPage from "@/js/ui";
 import logo from "@/assets/images/logo.svg";
-import {getPopUpList} from "../../components/MainComponents.jsx";
+import {getBnrPopupList} from "../../components/MainComponents.jsx";
 
 function EgovMainUser(props) {
   const location = useLocation();
@@ -47,7 +47,8 @@ function EgovMainUser(props) {
   /* 팝업관련 */
   const [popUpList, setPopUpList] = useState([]);
   useEffect(() => {
-    popUpList.forEach((popUp, i) => {
+    popUpList.forEach((e, i) => {
+      const popUp = e.tblBnrPopup;
       if(!localStorage.getItem(popUp.bnrPopupSn) || Date.now() > localStorage.getItem(popUp.bnrPopupSn)){
         window.open(
             `/popup?bnrPopupSn=${popUp.bnrPopupSn}`, // 여기에 원하는 URL 입력
@@ -64,7 +65,7 @@ function EgovMainUser(props) {
   }, [popUpList]);
 
   useEffect(() => {
-    getPopUpList().then((data) => {
+    getBnrPopupList("popup").then((data) => {
       setPopUpList(data);
     });
 

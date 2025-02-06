@@ -21,21 +21,21 @@ import Swal from "sweetalert2";
  *     })
  * }, []);
  */
-export const getPopUpList = async () => {
+export const getBnrPopupList = async (bnrPopupKnd) => {
     const requestOptions = {
         method: "POST",
         headers: {
             "Content-type": "application/json",
         },
-        body: ''
+        body: JSON.stringify({bnrPopupKnd : bnrPopupKnd})
     };
 
     return new Promise((resolve, reject) => {
         EgovNet.requestFetch(
-            "/mainApi/getPopUpList",
+            "/mainApi/getBnrPopupList.do",
             requestOptions,
             (resp) => {
-                resolve(resp.result.popupList);
+                resolve(resp.result.bnrPopupList);
             },
             (error) => {
                 console.log("err response : ", error);

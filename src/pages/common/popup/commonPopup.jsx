@@ -46,10 +46,6 @@ function CommonPopup(props) {
         window.close();
     };
 
-    const clickHandler = (bnrPopupUrlAddr) => {
-        window.open(bnrPopupUrlAddr);
-    }
-
     useEffect(() => {
         getPopupFile();
     }, []);
@@ -59,7 +55,7 @@ function CommonPopup(props) {
                 src={`http://133.186.250.158${bnrPopup.tblComFile.atchFilePathNm}/${bnrPopup.tblComFile.strgFileNm}.${bnrPopup.tblComFile.atchFileExtnNm}`}
                 alt={bnrPopup.tblComFile.atchFileNm}
                 onClick={(e) => {
-                    clickHandler(`${bnrPopup.bnrPopupUrlAddr}`)
+                    window.open(`${bnrPopup.bnrPopupUrlAddr}`)
                 }}
             />
             <div style={{textAlign: "right"}}>
