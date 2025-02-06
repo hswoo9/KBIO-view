@@ -55,7 +55,7 @@ header .leftHeader nav .dep li.active .dep2 {display: flex;}
 header .leftHeader nav .dep2 li.active .dep3 {display: flex;}
 header .leftHeader nav .dep li.active > a {opacity: 1;}
 header .leftHeader .messageBtn {display: none;}
-header .leftHeader .messageBtn .icon {width: 32px; height: 32px; background: url(@/assets/images/ico_message.svg) no-repeat center / contain;}
+header .leftHeader .messageBtn .icon {width: 32px; height: 32px; /*background: url(@/assets/images/ico_message.svg) no-repeat center / contain;*/}
 header .leftHeader .bottom {display: none;}
 
 header .leftHeader .sitemap {position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 100; display: none;}
@@ -66,7 +66,7 @@ header .leftHeader .sitemap.open .bg {animation: sitemapMove .5s cubic-bezier(0.
 header .leftHeader .sitemap .sitemapBox {width: 80%; background: #fff; height: 100%; position: relative; border-radius: 0 16px 16px 0; overflow: hidden; padding: 24px; padding-bottom: 0; display: flex; flex-direction: column; justify-content: space-between; overflow-y: auto; box-sizing: border-box;}
 header .leftHeader .sitemap.open .sitemapBox  {animation: sitemapMove .5s .1s cubic-bezier(0.52, 0.05, 0.4, 0.93) both;}
 header .leftHeader .sitemap .closeBtn {position: absolute; top: 24px; right: 24px; z-index: 10;}
-header .leftHeader .sitemap .closeBtn .icon {width: 24px; height: 24px; background: url(@/assets/images/ico_sitemap_close.svg) no-repeat center / cover;}
+header .leftHeader .sitemap .closeBtn .icon {width: 24px; height: 24px; /*background: url(@/assets/images/ico_sitemap_close.svg) no-repeat center / cover;*/}
 header .leftHeader .sitemap .sitemapBox .topBox {display: flex; flex-direction: column; gap: 24px; position: relative;}
 header .leftHeader .sitemap.open .sitemapBox .topBox {animation: upMove 1s .3s ease both;}
 header .leftHeader .sitemap .sitemapBox .profileBox {display: flex; gap: 12px; align-items: center;}
@@ -75,7 +75,7 @@ header .leftHeader .sitemap .sitemapBox .profileBox .imgBox img {width: 100%; he
 header .leftHeader .sitemap .sitemapBox .profileBox .textBox {display: flex; flex-direction: column; gap: 4px;}
 header .leftHeader .sitemap .sitemapBox .profileBox .textBox .tt1 {font-size: 16px; color: #777;}
 header .leftHeader .sitemap .sitemapBox .profileBox .textBox .bot {display: flex; font-size: 20px;}
-header .leftHeader .sitemap .sitemapBox .profileBox .textBox .bot .moreBtn .icon {width: 24px; height: 24px; background: url(@/assets/images/ico_mypage_more_blue.svg) no-repeat center / contain;}
+header .leftHeader .sitemap .sitemapBox .profileBox .textBox .bot .moreBtn .icon {width: 24px; height: 24px; /*background: url(@/assets/images/ico_mypage_more_blue.svg) no-repeat center / contain;*/}
 header .leftHeader .sitemap .sitemapBox .menu {padding: 12px 0; display: flex; flex-direction: column;}
 header .leftHeader .sitemap.open .sitemapBox .menu {animation: upMove 1s .4s ease both;}
 header .leftHeader .sitemap .sitemapBox .menu li a {padding: 12px 8px; font-size: 16px; font-weight: 500;}
@@ -104,7 +104,7 @@ header .commonTop .rightBox .tt1 {font-size: .8rem;}
 header .commonTop .rightBox .logoutBtn {width: 93px; height: 32px; display: flex; gap: 4px; border-radius: 8px; background: var(--black); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 14px; transition: .5s ease;}
 header .commonTop .rightBox .logoutBtn:hover {background: var(--mainColor);}
 header .commonTop .rightBox .logoutBtn .icon {width: 16px; height: 16px; background: url(@/assets/images/ico_logout_white.svg) no-repeat center / contain;}
-header .title .icon:hover {background-image: url(@/assets/images/ico_header_arrow_blue.svg);}
+/*header .title .icon:hover {background-image: url(@/assets/images/ico_header_arrow_blue.svg);}*/
 header .commonTop .profileWrap .infoBox .top .logoutBtn:hover {background: #fff; color: var(--black);}
 header .commonTop .profileWrap .infoBox .bot button:hover {color: #fff;}
 
