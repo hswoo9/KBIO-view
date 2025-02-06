@@ -19,9 +19,16 @@ function commonPstDetail(props) {
 
   const [searchDto, setSearchDto] = useState({
     bbsSn : location.state?.bbsSn,
-    pstSn : location.state?.pstSn
+    pstSn : location.state?.pstSn,
+    userSn : sessionUser.userSn
   });
 
+  const [authrt, setAuthrt] = useState({
+    inqAuthrt : "N",
+    wrtAuthrt : "N",
+    mdfcnAuthrt : "N",
+    delAuthrt : "N",
+  })
   const [pst, setPst] = useState({});
   const [pstPrevNext, setPstPrevNext] = useState([]);
   const [bbs, setBbs] = useState({});
@@ -44,7 +51,7 @@ function commonPstDetail(props) {
   const [pstCmntInput, setPstCmntInput] = useState(null);
   const [pstCmntList, setPstCmntList] = useState([]);
   const getPst = (searchDto) => {
-    const getPstURL = `/pstApi/getPst`;
+    const getPstURL = `/pstApi/getPst.do`;
     const requestOptions = {
       method: "POST",
       headers: {
@@ -54,6 +61,7 @@ function commonPstDetail(props) {
     };
 
     EgovNet.requestFetch(getPstURL, requestOptions, function (resp) {
+      setAuthrt(resp.result.authrt)
       setBbs(resp.result.bbs);
       setPst(resp.result.pst);
       setPstPrevNext(resp.result.pstPrevNext);
@@ -466,24 +474,28 @@ function commonPstDetail(props) {
                         </button>
                       </Link>
                   )}
-                  <Link
-                      to={URL.COMMON_PST_MODIFY}
-                      mode={CODE.MODE_MODIFY}
-                      state={{
-                        pstSn: pst.pstSn,
-                      }}
-                  >
-                    <button type="button" className="clickBtn">
-                      수정
-                    </button>
-                  </Link>
-                  <button type="button" className="clickBtn red"
-                          onClick={() => {
-                            setPstDel(pst.pstSn);
+                  {authrt.mdfcnAuthrt == "Y" && (
+                      <Link
+                          to={URL.COMMON_PST_MODIFY}
+                          mode={CODE.MODE_MODIFY}
+                          state={{
+                            pstSn: pst.pstSn,
                           }}
-                  >
-                    <span>삭제</span>
-                  </button>
+                      >
+                        <button type="button" className="clickBtn">
+                          수정
+                        </button>
+                      </Link>
+                  )}
+                  {authrt.delAuthrt == "Y" && (
+                      <button type="button" className="clickBtn red"
+                              onClick={() => {
+                                setPstDel(pst.pstSn);
+                              }}
+                      >
+                        <span>삭제</span>
+                      </button>
+                  )}
                 </div>
                 <div className="right">
                   <Link

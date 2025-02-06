@@ -23,10 +23,16 @@ function commonPstList(props) {
             bbsSn : location.state?.bbsSn,
             searchType: "",
             searchVal : "",
-            actvtnYn : "",
+            userSn : sessionUser.userSn
         }
     );
 
+    const [authrt, setAuthrt] = useState({
+        inqAuthrt : "N",
+        wrtAuthrt : "N",
+        mdfcnAuthrt : "N",
+        delAuthrt : "N",
+    })
     const [bbs, setBbs] = useState({});
     const [pstList, setPstList] = useState([]);
     const [paginationInfo, setPaginationInfo] = useState({});
@@ -58,6 +64,7 @@ function commonPstList(props) {
                 pstListURL,
                 requestOptions,
                 (resp) => {
+                    setAuthrt(resp.result.authrt)
                     setBbs(resp.result.bbs);
                     let dataList = [];
                     dataList.push(
@@ -103,8 +110,8 @@ function commonPstList(props) {
                                         resp.paginationInfo.totalRecordCount - (resp.paginationInfo.currentPageNo - 1) * resp.paginationInfo.pageSize - index}
                                 </td>
                                 <td style={{textAlign: "left", paddingLeft: "15px"}}>
-                                    <a onClick={(e) => {
-                                        pstDetailHandler(item)
+                                    <a onClick={() => {
+                                        resp.result.authrt.inqAuthrt == "Y" ? pstDetailHandler(item) : Swal.fire("읽기 권한이 없습니다.")
                                     }}
                                     style={{cursor:"pointer"}}>
                                         {reTag ? <span dangerouslySetInnerHTML={{__html: reTag}} style={{marginRight: "5px"}}></span> : ""}
@@ -151,13 +158,13 @@ function commonPstList(props) {
         }
     };
 
-    const modalOpenEvent = (e) => {
+    const modalOpenEvent = () => {
         document.getElementById('modalDiv').classList.add("open");
         document.getElementsByTagName('html')[0].style.overFlow = 'hidden';
         document.getElementsByTagName('body')[0].style.overFlow = 'hidden';
     }
 
-    const modalCloseEvent = (e) => {
+    const modalCloseEvent = () => {
         document.getElementById('modalDiv').classList.remove("open");
         document.getElementsByTagName('html')[0].style.overFlow = 'visible';
         document.getElementsByTagName('body')[0].style.overFlow = 'visible';
@@ -282,13 +289,15 @@ function commonPstList(props) {
                                 });
                             }}
                         />
-                        <NavLink
-                            to={URL.COMMON_PST_CREATE}
-                            state={{bbsSn: bbs.bbsSn}}
-                            mode={CODE.MODE_CREATE}
-                        >
-                            <button type="button" className="writeBtn clickBtn"><span>등록</span></button>
-                        </NavLink>
+                        {authrt.wrtAuthrt == "Y" && (
+                            <NavLink
+                                to={URL.COMMON_PST_CREATE}
+                                state={{bbsSn: bbs.bbsSn}}
+                                mode={CODE.MODE_CREATE}
+                            >
+                                <button type="button" className="writeBtn clickBtn"><span>등록</span></button>
+                            </NavLink>
+                        )}
                     </div>
                 </div>
             </div>

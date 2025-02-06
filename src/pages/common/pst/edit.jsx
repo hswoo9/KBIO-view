@@ -112,7 +112,7 @@ function setCommonPst(props) {
       return;
     }
 
-    const getPstURL = `/pstApi/getPst`;
+    const getPstURL = `/pstApi/getPst.do`;
     const requestOptions = {
       method: "POST",
       headers: {

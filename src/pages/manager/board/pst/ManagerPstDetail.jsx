@@ -54,7 +54,7 @@ function setPst(props) {
   const [pstCmntInput, setPstCmntInput] = useState(null);
   const [pstCmntList, setPstCmntList] = useState([]);
   const getPst = (searchDto) => {
-    const getPstURL = `/pstApi/getPst`;
+    const getPstURL = `/pstApi/getPst.do`;
     const requestOptions = {
       method: "POST",
       headers: {
