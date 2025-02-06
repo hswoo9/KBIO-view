@@ -28,7 +28,7 @@ function ManagerTermsList(props) {
             searchCnd: "0",
             searchWrd: "",
             useYn: "",
-            utztnTrmsKnd: 1,
+            utztnTrmsKnd: 2,
         }
     );
 
@@ -122,7 +122,21 @@ function ManagerTermsList(props) {
                             <li className="inputBox type1">
                                 <p className="title">사용여부</p>
                                 <div className="itemBox">
-                                    <select className="selectGroup">
+                                    <select className="selectGroup"
+                                            ref={useYnRef}
+                                            onChange={(e) => {
+                                                setSearchDto({
+                                                    ...searchDto,
+                                                    pageIndex: 1,
+                                                    useYn: e.target.value,
+                                                });
+                                                gettermsAgreementList({
+                                                    ...searchDto,
+                                                    pageIndex: 1,
+                                                    useYn: e.target.value,
+                                                });
+                                            }}
+                                    >
                                         <option value="">전체</option>
                                         <option value="Y">사용</option>
                                         <option value="N">미사용</option>
@@ -185,7 +199,10 @@ function ManagerTermsList(props) {
                         <EgovPaging
                             pagination={paginationInfo}
                             moveToPage={(passedPage) => {
-
+                                termsAgreementList({
+                                    ...searchDto,
+                                    pageIndex: passedPage,
+                                });
                             }}
                         />
                         <NavLink

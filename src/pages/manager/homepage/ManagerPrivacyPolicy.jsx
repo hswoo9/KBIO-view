@@ -39,15 +39,6 @@ function ManagerPrivacyList(props) {
     const cndRef = useRef();
     const wrdRef = useRef();
 
-    const [saveEvent, setSaveEvent] = useState({});
-    useEffect(() => {
-        if(saveEvent.save){
-            if(saveEvent.mode == "delete"){
-                delCdGroupData(saveEvent);
-            }
-        }
-    }, [saveEvent]);
-
     const activeEnter = (e) => {
         if (e.key === "Enter") {
             e.preventDefault();
