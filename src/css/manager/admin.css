@@ -211,6 +211,7 @@ header .commonTop .profileWrap .infoBox .bot button:hover {color: #fff;}
 
 
 /* 홈 */
+.container.home { width: 100% !important;}
 .home header .leftHeader {display: none;}
 .home .container {margin-left: 0; width: 100%;}
 .home .inner {max-width: 1600px; flex-direction: row; gap: 24px;}

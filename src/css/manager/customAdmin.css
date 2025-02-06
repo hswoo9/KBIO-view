@@ -240,11 +240,6 @@ header nav .dep li:nth-child(5).active a .icon {background-image: url(@/assets/i
     font-family: 'pretendard';
 }
 
-.mainSelectGroup {padding: 0; background: transparent; width: 90px; align-items: center; border: none; border-radius: 0;}
-.mainSelectGroup .current {font-size: 22px; font-weight: 700;}
-.mainSelectGroup:after {top: 50%; transform: translateY(-50%); right: 0;}
-
-
 
 
 
@@ -281,7 +276,9 @@ header nav .dep li:nth-child(5).active a .icon {background-image: url(@/assets/i
     width: auto; color: #333;display: flex;
     justify-content: space-between;
     width: 100%;
-    border-radius: 0;}
+    border-radius: 0;
+    background: url(@/assets/images/ico_select_arrow.svg) calc(100% - 5px) center no-repeat;
+}
 .mainSelectGroup:after {
     content: '';
     display: block;
@@ -358,7 +355,7 @@ header nav .dep li:nth-child(5).active a .icon {background-image: url(@/assets/i
 .mainSelectGroup .list::-webkit-scrollbar {width: 4px; height: 4px;}
 .mainSelectGroup .list::-webkit-scrollbar-thumb {background: rgba(0, 0, 0, .1); border-radius: 32px;}
 .mainSelectGroup .list::-webkit-scrollbar-track {background:  transparent;}
-.mainSelectGroup .option {
+.mainSelectGroup option {
     box-sizing: border-box;
     cursor: pointer;
     font-weight: 400;
@@ -372,11 +369,11 @@ header nav .dep li:nth-child(5).active a .icon {background-image: url(@/assets/i
     -webkit-transition: all 0.2s;
     transition: all 0.2s;
     font-size: .9em;}
-.mainSelectGroup .option:hover, .mainSelectGroup .option.focus, .mainSelectGroup .option.selected.focus {
+.mainSelectGroup option:hover, .mainSelectGroup option.focus, .mainSelectGroup option.selected.focus {
     background-color: #f6f6f6; }
-.mainSelectGroup .option.selected {
+.mainSelectGroup option.selected {
     font-weight: 600; }
-.mainSelectGroup .option.disabled {
+.mainSelectGroup option.disabled {
     background-color: transparent;
     color: #999;
     cursor: default; }
@@ -386,3 +383,8 @@ header nav .dep li:nth-child(5).active a .icon {background-image: url(@/assets/i
 
 .no-csspointerevents .mainSelectGroup.open .list {
     display: block; }
+.mainSelectGroup {padding: 0; width: 90px; align-items: center; border: none; border-radius: 0;font-size: 22px; font-weight: 700;}
+.mainSelectGroup .current {font-size: 22px; font-weight: 700;}
+.mainSelectGroup:after {top: 50%; transform: translateY(-50%); right: 0;}
+
+.mainSelectGroup option.focus, .mainSelectGroup option.selected.focus {background: #04819B15 !important; color: var(--mainColor);}
