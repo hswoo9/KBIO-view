@@ -87,12 +87,14 @@ function OperationalSupport(props) {
                                 <td>{item.clsNm}</td>
                                 <td>{item.actvtnYn === "Y" ? "공개" : "비공개"}</td>
                                 <td>
-                                    <Link to={URL.MANAGER_RESIDENT_MANAGER}>
+                                    <Link to={URL.MANAGER_RESIDENT_MANAGER}
+                                          state={{mvnEntSn: item.mvnEntSn}}>
                                     <button type="button" className="settingBtn"><span>관리자 설정</span></button>
                                     </Link>
                                 </td>
                                 <td>
-                                    <Link to={URL.MANAGER_RESIDENT_MEMBER}>
+                                    <Link to={URL.MANAGER_RESIDENT_MEMBER}
+                                          state={{mvnEntSn: item.mvnEntSn}}>
                                     <button type="button" className="listBtn"><span>직원 목록</span></button>
                                     </Link>
                                 </td>

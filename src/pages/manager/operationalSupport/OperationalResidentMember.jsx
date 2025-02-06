@@ -10,7 +10,81 @@ import EgovPaging from "@/components/EgovPaging";
 import OperationalSupport from "./OperationalSupport.jsx";
 
 function OperationalResidentMember(props) {
+    const location = useLocation();
+    const [residentMemberList, setAuthorityList] = useState([]);
+    const [searchDto, setSearchDto] = useState(
+        {mvnEntSn : location.state?.mvnEntSn});
+    const [paginationInfo, setPaginationInfo] = useState({
+        currentPageNo: 1,
+        firstPageNo: 1,
+        firstPageNoOnPageList: 1,
+        firstRecordIndex: 0,
+        lastPageNo: 1,
+        lastPageNoOnPageList: 1,
+        lastRecordIndex: 10,
+        pageSize: 10,
+        recordCountPerPage: 10,
+        totalPageCount: 15,
+        totalRecordCount: 158
+    });
 
+    const getResidentMemberList = useCallback(
+        (searchDto) =>{
+            const getUrl = "/mvnEntApi/getresidentMemberList.do";
+            const requestOptions = {
+                method: "POST",
+                headers: {
+                    "Content-type": "application/json",
+                },
+                body: JSON.stringify(searchDto)
+            };
+            EgovNet.requestFetch(
+                getUrl,
+                requestOptions,
+                (resp) => {
+                    setPaginationInfo(resp.paginationInfo);
+                    let dataList = [];
+                    dataList.push(
+                        <tr>
+                            <td colSpan="7">검색된 결과가 없습니다.</td>
+                        </tr>
+                    );
+
+                    resp.result.getResidentMemberList.forEach(function (item,index){
+                        if(index === 0) dataList = [];
+
+                        dataList.push(
+                            <tr key={item.userSn}>
+                                <td>{index + 1}</td>
+                                <td>{item.userId}</td>
+                                <td>{item.kornFlnm}</td>
+                                <td>{item.mblTelno}</td>
+                                <td>{item.email}</td>
+                                <td>{new Date(item.frstCrtDt).toISOString().split("T")[0]}</td>
+                                <td>
+                                    <button type="button">
+                                        삭제
+                                    </button>
+                                </td>
+                            </tr>
+                        );
+                    });
+                    setAuthorityList(dataList);
+
+                },
+                function (resp) {
+                    console.log("err response : ", resp);
+                }
+            )
+
+        },
+        [residentMemberList, searchDto]
+    );
+
+    useEffect(() => {
+        console.log("state : ",searchDto);
+        getResidentMemberList(searchDto);
+    },[]);
 
     return (
         <div id="container" className="container layout cms">
@@ -60,7 +134,7 @@ function OperationalResidentMember(props) {
                             </tr>
                             </thead>
                             <tbody>
-
+                            {residentMemberList}
                             </tbody>
                         </table>
                     </div>
@@ -73,11 +147,6 @@ function OperationalResidentMember(props) {
                         >
                             <button type="button" className="clickBtn black"><span>목록</span></button>
                         </Link>
-                        <NavLink
-                            to={""}
-                        >
-                            <button type="button" className="writeBtn clickBtn"><span>등록</span></button>
-                        </NavLink>
                     </div>
                 </div>
 
