@@ -1,0 +1,161 @@
+@charset "utf-8";
+header nav .dep li:nth-child(4) a .icon {background-image: url(@/assets/images/ico_nav_icon03.svg);}
+header nav .dep li:nth-child(4).active a .icon {background-image: url(@/assets/images/ico_nav_icon03_white.svg);}
+header nav .dep li:nth-child(5) a .icon {background-image: url(@/assets/images/ico_nav_icon03.svg);}
+header nav .dep li:nth-child(5).active a .icon {background-image: url(@/assets/images/ico_nav_icon03_white.svg);}
+.container .inner .infoWrap .inputWrap li.width2 {width: calc(100% / 2 - .6rem);}
+
+/* select */
+.selectGroup {
+    -webkit-tap-highlight-color: transparent;
+    background-color: transparent;
+    border-radius: 5px;
+    box-sizing: border-box;
+    clear: both;
+    cursor: pointer;
+    display: block;
+    float: left;
+    font-family: inherit;
+    font-size: .9em;
+    font-weight: normal;
+    padding: .8em 1em;
+    outline: none;
+    position: relative;
+    text-align: left !important;
+    -webkit-transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    white-space: nowrap;
+    width: auto; color: #333;display: flex;
+    justify-content: space-between;
+    width: 100%;
+    border-radius: 0;
+    background: url(@/assets/images/ico_select_arrow.svg) calc(100% - 5px) center no-repeat;
+}
+
+.container .inputBox.type11 {
+    position: relative;
+    display: flex;
+    justify-content: space-around;
+    gap: .5rem;
+}
+
+.listBox .selectGroup {
+    border-radius: .66rem;
+    border:  1px solid #ddd;
+    font-weight: 500;
+    font-family: 'pretendard';
+}
+
+.selectGroup .option {
+    box-sizing: border-box;
+    cursor: pointer;
+    font-weight: 400;
+    line-height: 2rem;
+    list-style: none;
+    min-height: 2rem;
+    outline: none;
+    padding-left: 1.2em;
+    padding-right: 1.2em;
+    text-align: left;
+    -webkit-transition: all 0.2s;
+    transition: all 0.2s;
+    font-size: .9em;}
+.selectGroup .option:hover, .selectGroup .option.focus, .selectGroup .option.selected.focus {
+    background-color: #f6f6f6; }
+.selectGroup .option.selected {
+    font-weight: 600; }
+.selectGroup .option.disabled {
+    background-color: transparent;
+    color: #999;
+    cursor: default; }
+
+.width30 {
+    width: 30% !important;
+}
+
+.inlineBlock {
+    display: inline-block !important;
+}
+
+.container .itemBox .selectGroup {border-radius: .66rem; border:  1px solid #ddd; background-color: #fff; font-weight: 500; font-family: 'pretendard';}
+
+
+.react-checkbox-tree {border-radius: .8rem; padding: .9rem; display: flex; flex-direction: column; gap: .8rem; background: #F7F7F7; min-height: 595px;}
+.rct-title{font-size: 14px !important;}
+
+.customContBox{
+    flex-direction : column !important;
+    align-items: initial !important;
+}
+
+#fileNamePTag{
+    padding-right: 5rem;
+}
+
+.maxW400 {
+    max-width: 400px;
+}
+.customDiv .inputWrap {display: flex; flex-wrap: wrap; gap: .9rem;}
+.customDiv .inputWrap li.width1 {width: 100%;}
+.customDiv .inputWrap li.width2 {width: calc(100% / 2 - .6rem);}
+.customDiv .inputWrap li.width3 {width: calc(100% / 3 - .6rem);}
+.customDiv .inputWrap li.width4 {width: calc(100% / 4 - .6rem);}
+.customContBox .inputWrap li.width4 {width: calc(100% / 4 - .7rem) !important;}
+.customToggleBox{ flex-direction: column-reverse !important;}
+
+
+#commonTop {position: fixed; top: 0; left: clamp(170px, 13vw, 200px); width: calc(100% - clamp(170px, 13vw, 200px)); display: flex; justify-content: space-between; align-items: center; padding: 0 1.35rem; background: #fff; box-sizing: border-box; z-index: 40;}
+#commonTop .lnbBox {position: relative; z-index: 1;}
+#commonTop .lnbBox .bg {content: ""; position: absolute; bottom: 0; left: 0; height: 3px; background: var(--mainColor2); transition: .5s ease; z-index: -1;}
+#commonTop .lnbBox .bg.hover {background: #FF504A15; opacity: 0;}
+#commonTop .lnbBox .dep {display: flex; gap: .9rem;}
+#commonTop .lnbBox .dep li a {padding: 4px; height: 3.5rem; display: flex; justify-content: center; align-items: center; box-sizing: border-box; font-weight: 600; font-family: 'pretendard';}
+#commonTop .lnbBox .dep li.active a {color: var(--mainColor2); font-weight: 700;}
+#commonTop .rightBox {display: flex; gap: .9rem; align-items: center; font-weight: 500;}
+#commonTop .rightBox .tt1 {font-size: .8rem;}
+#commonTop .rightBox .logoutBtn {width: 93px; height: 32px; display: flex; gap: 4px; border-radius: 8px; background: var(--black); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 14px; transition: .5s ease;}
+#commonTop .rightBox .logoutBtn:hover {background: var(--mainColor);}
+#commonTop .rightBox .logoutBtn .icon {width: 16px; height: 16px; background: url(@/assets/images/ico_logout_white.svg) no-repeat center / contain;}
+#commonTop .profileWrap .infoBox .top .logoutBtn:hover {background: #fff; color: var(--black);}
+#commonTop .profileWrap .infoBox .bot button:hover {color: #fff;}
+
+.cursorClass {
+    cursor: pointer;
+}
+
+.customCheckWrap {
+    flex-wrap: initial !important;
+}
+
+.customCheckBox{
+    flex: none;
+    position: relative;
+    width: 24px;
+    height: 24px;
+    font-size: .9rem;
+    -webkit-appearance: none;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    transition: .5s ease;
+}
+
+.customCheckBox:checked {
+    border-color: var(--black);
+}
+
+.customInput input {
+    padding: .3rem .9rem;
+    width: 100%;
+    box-sizing: border-box;
+    height: 35px;
+    border-radius: .6rem;
+    border: 1px solid #ddd;
+    transition: .5s ease;
+    font-size: .9rem;
+    font-weight: 500;
+    font-family: 'pretendard';
+}

@@ -82,6 +82,7 @@ function ManagerTop() {
 
     if (location.pathname.split("/")[1] === "manager") {
       import('../../css/manager/admin.css');
+      import('../../css/manager/customAdmin.css');
 
       const fileName = "user.css";
       const styleTags = document.querySelectorAll("style");
