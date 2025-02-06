@@ -6,7 +6,7 @@ import URL from "@/constants/url";
 import CODE from "@/constants/code";
 import 'moment/locale/ko';
 import ManagerLeftNew from "@/components/manager/ManagerLeftNew";
-
+import { getComCdList } from "@/components/CommonComponents";
 import Swal from 'sweetalert2';
 import EgovPaging from "@/components/EgovPaging";
 
@@ -32,6 +32,11 @@ function ManagerPst(props) {
     const searchTypeRef = useRef();
     const searchValRef = useRef();
 
+    const [pstEvlData, setPstEvlData] = useState({});
+    useEffect(() => {
+        console.log(pstEvlData);
+    }, [pstEvlData]);
+    const [comCdList, setComCdList] = useState([]);
     const activeEnter = (e) => {
         if (e.key === "Enter") {
             e.preventDefault();
@@ -40,16 +45,86 @@ function ManagerPst(props) {
     };
 
     const modelOpenEvent = (e) => {
-        console.log(e);
+        getPstEvl(e.currentTarget.closest("tr").getAttribute("fk"));
         document.getElementById('modalDiv').classList.add("open");
         document.getElementsByTagName('html')[0].style.overFlow = 'hidden';
         document.getElementsByTagName('body')[0].style.overFlow = 'hidden';
     }
 
     const modelCloseEvent = (e) => {
+        setPstEvlData({});
         document.getElementById('modalDiv').classList.remove("open");
         document.getElementsByTagName('html')[0].style.overFlow = 'visible';
         document.getElementsByTagName('body')[0].style.overFlow = 'visible';
+    }
+
+    const getPstEvl = useCallback(
+        (pstSn) => {
+            const requestURL = "/pstApi/getPstEvlList.do";
+            const requestOptions = {
+                method: "POST",
+                headers: {
+                    "Content-type": "application/json",
+                },
+                body: JSON.stringify({pstSn : pstSn})
+            };
+            EgovNet.requestFetch(
+                requestURL,
+                requestOptions,
+                (resp) => {
+
+                    if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
+                        console.log(resp.result.pstEvlList);
+                        if(resp.result.pstEvlList != null){
+                            let data = {};
+                            let impvOpnnCnList = [];
+                            let countHtml = [];
+                            let pstEvlList = resp.result.pstEvlList;
+                            if(comCdList != null && comCdList.length > 0){
+                                comCdList.forEach(function(item, index){
+                                    let count = 0;
+
+                                    pstEvlList.forEach(function(subItem, subIndex){
+                                       if(item.comCdSn == subItem.comCdSn){
+                                        count++;
+                                       }
+
+                                    });
+                                    countHtml.push(
+                                        <td key={item.comCdSn}><p>{count}</p></td>
+                                    )
+                                });
+
+                                pstEvlList.forEach(function(item, index){
+                                    impvOpnnCnList.push(
+                                        <tr key={item.pstEvlSn}>
+                                            <td><p>{pstEvlList.length - index}</p></td>
+                                            <td><p>{item.impvOpnnCn}</p></td>
+                                        </tr>
+                                    )
+                                });
+                                data.countHtml = countHtml;
+                                data.impvOpnnCnList = impvOpnnCnList;
+                            }
+                            setPstEvlData(data);
+                        }
+                    } else {
+                    }
+                }
+            )
+        }
+    )
+
+    const getComCdListToHtml = (dataList) => {
+        let htmlData = [];
+        if(dataList != null && dataList.length > 0){
+            dataList.forEach(function(item, index) {
+                htmlData.push(
+                    <th className="th1" key={item.comCdSn}><p>{item.comCdNm}</p></th>
+                )
+            });
+        }
+        return htmlData;
     }
 
     const getPstList = useCallback(
@@ -104,7 +179,7 @@ function ManagerPst(props) {
                         }
 
                         dataList.push(
-                            <tr key={item.pstSn}>
+                            <tr key={item.pstSn} fk={item.pstSn}>
                                 <td>
                                     {item.upendNtcYn == "Y" ?
                                         "공지" :
@@ -141,6 +216,9 @@ function ManagerPst(props) {
     );
 
     useEffect(() => {
+        getComCdList(2).then((data) => {
+            setComCdList(data);
+        });
         getPstList(searchDto);
     }, []);
 
@@ -289,21 +367,14 @@ function ManagerPst(props) {
                                     </colgroup>
                                     <thead>
                                     <tr>
-                                        <th className="th1"><p>매우 그렇다</p></th>
-                                        <th className="th2"><p>대체로 그렇다</p></th>
-                                        <th className="th2"><p>보통이다</p></th>
-                                        <th className="th2"><p>대체로 그렇지 않다</p></th>
-                                        <th className="th2"><p>전혀 그렇지 않다</p></th>
+                                        {getComCdListToHtml(comCdList)}
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <td><p>1123</p></td>
-                                        <td><p>33</p></td>
-                                        <td><p>245</p></td>
-                                        <td><p>45</p></td>
-                                        <td><p>5</p></td>
-                                    </tr>
+                                    {pstEvlData.countHtml != null && (
+                                        pstEvlData.countHtml
+                                    )}
+
                                     </tbody>
                                 </table>
                             </div>
@@ -317,10 +388,9 @@ function ManagerPst(props) {
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <td><p>1</p></td>
-                                        <td><p>기타의견 내용입니다.</p></td>
-                                    </tr>
+                                    {pstEvlData.impvOpnnCnList != null && (
+                                        pstEvlData.impvOpnnCnList
+                                    )}
                                     </tbody>
                                 </table>
                             </div>
