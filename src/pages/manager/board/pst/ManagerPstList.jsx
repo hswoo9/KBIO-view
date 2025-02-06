@@ -36,7 +36,13 @@ function ManagerPst(props) {
     useEffect(() => {
         console.log(pstEvlData);
     }, [pstEvlData]);
+
     const [comCdList, setComCdList] = useState([]);
+    useEffect(() => {
+        console.log(" setComCdList START ");
+        console.log(comCdList)
+    }, [comCdList]);
+
     const activeEnter = (e) => {
         if (e.key === "Enter") {
             e.preventDefault();
@@ -52,7 +58,7 @@ function ManagerPst(props) {
     }
 
     const modelCloseEvent = (e) => {
-        setPstEvlData({});
+        /*setPstEvlData({});*/
         document.getElementById('modalDiv').classList.remove("open");
         document.getElementsByTagName('html')[0].style.overFlow = 'visible';
         document.getElementsByTagName('body')[0].style.overFlow = 'visible';
@@ -371,10 +377,11 @@ function ManagerPst(props) {
                                     </tr>
                                     </thead>
                                     <tbody>
+                                    <tr>
                                     {pstEvlData.countHtml != null && (
                                         pstEvlData.countHtml
                                     )}
-
+                                    </tr>
                                     </tbody>
                                 </table>
                             </div>
