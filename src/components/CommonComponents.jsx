@@ -6,6 +6,8 @@ import { saveAs } from "file-saver";
 import * as ExcelJS from "exceljs";
 import axios from "axios";
 import Swal from "sweetalert2";
+import * as XLSX from "xlsx";
+import {useRef} from "react";
 
 /**
  * 사용자 메뉴조회
@@ -48,34 +50,6 @@ export const getMenu = async (upperMenuSn, menuSeq, userSn) => {
         );
     });
 };
-
-// export const getMenuByUserSn = async (upperMenuSn, menuSeq, userSn) => {
-//     const requestOptions = {
-//         method: "POST",
-//         headers: {
-//             "Content-type": "application/json",
-//         },
-//         body: JSON.stringify({
-//             upperMenuSn : upperMenuSn,
-//             menuSeq : menuSeq,
-//             userSn : userSn
-//         })
-//     };
-//
-//     return new Promise((resolve, reject) => {
-//         EgovNet.requestFetch(
-//             "/commonApi/getMenu.do",
-//             requestOptions,
-//             (resp) => {
-//                 resolve(resp.result.menuList);
-//             },
-//             (error) => {
-//                 console.log("err response : ", error);
-//                 reject(error);
-//             }
-//         );
-//     });
-// };
 
 /**
  * 사용자 left 메뉴 조회
@@ -324,3 +298,47 @@ export const excelExport = async (exportFileName, sheetDatas) => {
     const buffer = await workbook.xlsx.writeBuffer();
     saveAs(new Blob([buffer]), exportFileName + '.xlsx');
 }
+
+/**
+ * 엑셀 파일
+ * @param file
+ * @returns {Promise<unknown>}
+ */
+export const fileUpload = async (file) => {
+    return new Promise((resolve, reject) => {
+        if (!file) {
+            Swal.fire("파일을 선택해주세요.");
+            return;
+        }else if (!["xlsx", "xls"].includes(file.name.split(".").pop().toLowerCase())) {
+            Swal.fire("엑셀 파일(.xlsx, .xls)만 업로드 가능합니다.");
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.readAsArrayBuffer(file);
+
+        reader.onload = (e) => {
+            try {
+                let workbookDataList = []
+                const bufferArray = e.target.result;
+                const workbook = XLSX.read(bufferArray, { type: "buffer" });
+                workbook.SheetNames.forEach((e, i) =>{
+                    let sheetData = {}
+                    const sheetName = workbook.SheetNames[i]; // 첫 번째 시트 가져오기
+                    const worksheet = workbook.Sheets[sheetName];
+                    const jsonData = XLSX.utils.sheet_to_json(worksheet, { raw: false }); // JSON 형태로 변환
+                    sheetData["sheet" + i] = jsonData
+                    workbookDataList.push(sheetData)
+                })
+
+                resolve(workbookDataList);
+            } catch (error) {
+                Swal.fire("파일을 읽는 중 오류가 발생했습니다.");
+            }
+        };
+
+        reader.onerror = (error) => {
+            reject(error);
+        };
+    });
+};
