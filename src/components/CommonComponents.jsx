@@ -161,29 +161,60 @@ export const getComCdList = async (cdGroupSn) => {
  * @returns {Promise<void>}
  */
 export const fileDownLoad = async (atchFileSn, atchFileNm) => {
-    const response = await axios.post(`${window.location.protocol}//${window.location.hostname}:8080/commonApi/getFileDownLoad`, {
-        atchFileSn : atchFileSn
-    }, {
-        responseType : 'blob'
-    });
+    try {
+        const response = await axios.post(`${window.location.protocol}//${window.location.hostname}:8080/commonApi/getFileDownLoad`, {
+            atchFileSn : atchFileSn
+        }, {
+            responseType : 'blob'
+        });
 
-    if (response.status != 200) {
+        const blob = await response.data;
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", atchFileNm);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+    }catch (e) {
         Swal.fire({
-            title: "파일 다운로드 오류",
+            title: "다운로드 오류",
             text: "관리자에게 문의해주세요.",
         });
-        return;
     }
+}
 
-    const blob = await response.data;
-    const url = window.URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.setAttribute("download", atchFileNm);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    window.URL.revokeObjectURL(url);
+/**
+ * 파일 압축 다운로드
+ * @param psnTblSn = 소유테이블_기본키
+ * @param zipFileName = 다운로드 받을 압축파일명
+ * @returns {Promise<void>}
+ */
+export const fileZipDownLoad = async (psnTblSn, zipFileName) => {
+    try {
+        const response = await axios.post(`${window.location.protocol}//${window.location.hostname}:8080/commonApi/getFileZipDownLoad.do`, {
+            psnTblSn : psnTblSn,
+            zipFileName : zipFileName
+        }, {
+            responseType : 'blob'
+        });
+
+        const blob = await response.data;
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", zipFileName + ".zip");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+    }catch (e) {
+        Swal.fire({
+            title: "다운로드 오류",
+            text: "관리자에게 문의해주세요.",
+        });
+    }
 }
 
 /**
