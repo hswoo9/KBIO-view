@@ -117,6 +117,11 @@ function EgovHeader() {
           Swal.fire({
             title: "비밀번호 찾기 성공",
             text: "임시 비밀번호가 이메일로 전송되었습니다.",
+          }).then(() => {
+            const modal = document.querySelector('.findPwd.modalCon');
+            if (modal) {
+              modal.style.display = 'none';
+            }
           });
         } else {
           Swal.fire({
@@ -161,7 +166,12 @@ function EgovHeader() {
           if (userId) {
             Swal.fire({
               title: "ID 찾기 성공",
-              text: `회원님의 ID는 '${userId}'입니다.`,
+              text: `회원님의 ID는 '${userId}'입니다.`,})
+              .then(() => {
+                const modal = document.querySelector('.findId.modalCon');
+                if (modal) {
+                  modal.style.display = 'none';
+                }
             });
           } else {
             Swal.fire({
