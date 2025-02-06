@@ -146,6 +146,15 @@ function ManagerTop() {
               <li>
                 <a
                     onClick={() => {
+                      navigate({pathname: URL.MANAGER}, {state: {selectMenuNm: "홈"}});
+                    }}
+                    className="cursorClass"
+                ><p>홈</p>
+                </a>
+              </li>
+              <li>
+                <a
+                    onClick={() => {
                       navigate({pathname: URL.MANAGER_OPERATIONAL_SUPPORT}, {state: {selectMenuNm: "운영지원"}});
                     }}
                     className="cursorClass"
@@ -199,7 +208,7 @@ function ManagerTop() {
                 ><p>통계</p>
                 </a>
               </li>
-              <li className="active">
+              <li>
                 <a
                     onClick={() => {
                       navigate({pathname: URL.MANAGER_MENU_MANAGEMENT}, {state: {selectMenuNm: "CMS"}});

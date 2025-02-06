@@ -72,8 +72,9 @@ header .hInner .sitemap .sitemapBox .botBanner .imgBox img {vertical-align: bott
 
 
 
-.container{margin-left: 0px !important;}
+.container{margin-left: 0 !important;}
 .container .inner{margin-left: 200px !important;}
+.home .inner{margin-left: 0 !important;}
 
 header nav .dep li:nth-child(4) a .icon {background-image: url(@/assets/images/ico_nav_icon03.svg);}
 header nav .dep li:nth-child(4).active a .icon {background-image: url(@/assets/images/ico_nav_icon03_white.svg);}
@@ -238,3 +239,150 @@ header nav .dep li:nth-child(5).active a .icon {background-image: url(@/assets/i
     font-weight: 500;
     font-family: 'pretendard';
 }
+
+.mainSelectGroup {padding: 0; background: transparent; width: 90px; align-items: center; border: none; border-radius: 0;}
+.mainSelectGroup .current {font-size: 22px; font-weight: 700;}
+.mainSelectGroup:after {top: 50%; transform: translateY(-50%); right: 0;}
+
+
+
+
+
+
+
+
+
+
+
+
+.mainSelectGroup {
+    -webkit-tap-highlight-color: transparent;
+    background-color: transparent;
+    border-radius: 5px;
+    box-sizing: border-box;
+    clear: both;
+    cursor: pointer;
+    display: block;
+    float: left;
+    font-family: inherit;
+    font-size: .9em;
+    font-weight: normal;
+    padding: .8em 1em;
+    outline: none;
+    position: relative;
+    text-align: left !important;
+    -webkit-transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    white-space: nowrap;
+    width: auto; color: #333;display: flex;
+    justify-content: space-between;
+    width: 100%;
+    border-radius: 0;}
+.mainSelectGroup:after {
+    content: '';
+    display: block;
+    width: 1.35em; height: 1.35em; background: url(@/assets/images/ico_select_arrow.svg) no-repeat center / contain;
+    pointer-events: none;
+    position: absolute;
+    right: 12px;
+    top: 24%;
+    -webkit-transition: all 0.15s ease-in-out;
+    transition: all 0.15s ease-in-out;}
+.mainSelectGroup.open:after {
+    -webkit-transform: rotateX(-180deg);
+    -ms-transform: rotateX(-180deg);
+    transform: rotateX(-180deg); }
+.mainSelectGroup.open .list {
+    opacity: 1;
+    pointer-events: auto;
+    -webkit-transform: scale(1);
+    -ms-transform: scale(1);
+    transform: scale(1); }
+.mainSelectGroup.disabled {
+    opacity: .3;
+    pointer-events: none; }
+.mainSelectGroup.disabled:after {
+    border-color: #cccccc; }
+.mainSelectGroup.wide {
+    width: 100%; }
+.mainSelectGroup.wide .list {
+    left: 0 !important;
+    right: 0 !important; }
+.mainSelectGroup.right {
+    float: right; }
+.mainSelectGroup.right .list {
+    left: auto;
+    right: 0; }
+.mainSelectGroup.small {
+    font-size: 12px;
+    height: 36px;
+    line-height: 34px; }
+.mainSelectGroup.small:after {
+    height: 4px;
+    width: 4px; }
+.mainSelectGroup.small .option {
+    line-height: 34px;
+    min-height: 34px; }
+.mainSelectGroup .list {
+    max-height: 9em; overflow-y: auto;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 0 1px rgba(68, 68, 68, 0.11);
+    box-sizing: border-box;
+    margin-top: 4px;
+    opacity: 0;
+    padding: 0;
+    pointer-events: none;
+    position: absolute;
+    top: calc(100% - 2px);
+    left: 0;
+    -webkit-transform-origin: 50% 0;
+    -ms-transform-origin: 50% 0;
+    transform-origin: 50% 0;
+    -webkit-transform: scale(0.75) translateY(-21px);
+    -ms-transform: scale(0.75) translateY(-21px);
+    transform: scale(0.75) translateY(-21px);
+    -webkit-transition: all 0.2s cubic-bezier(0.5, 0, 0, 1.25), opacity 0.15s ease-out;
+    transition: all 0.2s cubic-bezier(0.5, 0, 0, 1.25), opacity 0.15s ease-out;
+    z-index: 9; width: 100%;
+    border-radius: 0 0 10px 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, .1);
+    color: #333;}
+.mainSelectGroup .list:hover .option:not(:hover) {
+    background-color: transparent !important; }
+
+.mainSelectGroup .list::-webkit-scrollbar {width: 4px; height: 4px;}
+.mainSelectGroup .list::-webkit-scrollbar-thumb {background: rgba(0, 0, 0, .1); border-radius: 32px;}
+.mainSelectGroup .list::-webkit-scrollbar-track {background:  transparent;}
+.mainSelectGroup .option {
+    box-sizing: border-box;
+    cursor: pointer;
+    font-weight: 400;
+    line-height: 2rem;
+    list-style: none;
+    min-height: 2rem;
+    outline: none;
+    padding-left: 1.2em;
+    padding-right: 1.2em;
+    text-align: left;
+    -webkit-transition: all 0.2s;
+    transition: all 0.2s;
+    font-size: .9em;}
+.mainSelectGroup .option:hover, .mainSelectGroup .option.focus, .mainSelectGroup .option.selected.focus {
+    background-color: #f6f6f6; }
+.mainSelectGroup .option.selected {
+    font-weight: 600; }
+.mainSelectGroup .option.disabled {
+    background-color: transparent;
+    color: #999;
+    cursor: default; }
+
+.no-csspointerevents .mainSelectGroup .list {
+    display: none; }
+
+.no-csspointerevents .mainSelectGroup.open .list {
+    display: block; }
