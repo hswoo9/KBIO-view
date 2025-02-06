@@ -30,7 +30,9 @@ function ManagerPrivacyPolicyEdit(props) {
 
     const [modeInfo, setModeInfo] = useState({ mode: props.mode });
 
-    const [privacyPolicyDetail, setPrivacyPolicyDetail] = useState({});
+    const [privacyPolicyDetail, setPrivacyPolicyDetail] = useState({
+        useYn: "Y",
+    });
 
     useEffect(() => {
         console.log(privacyPolicyDetail);
@@ -141,7 +143,7 @@ function ManagerPrivacyPolicyEdit(props) {
                     formData.append(key, privacyPolicyDetail[key]);
                 }
             }
-            
+
             formData.append("utztnTrmsKnd", "1");
             if (modeInfo.mode === CODE.MODE_CREATE) {
                 formData.append("creatrSn", sessionUserSn || "");

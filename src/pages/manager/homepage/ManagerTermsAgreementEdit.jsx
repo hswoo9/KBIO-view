@@ -20,22 +20,121 @@ function ManagerTermsAgreementEdit(props) {
     const checkRef = useRef([]);
     const sessionUser = getSessionItem("loginUser");
     const sessionUserName = sessionUser?.name;
+    const sessionUserSn = sessionUser?.userSn;
 
     const [termsAgreementDetail, setTermsAgreementDetail] = useState({
-        termsTitle: '',
-        termsContent: '',
-        useYn: 'Y',
+        useYn: "Y",
     });
 
     const [modeInfo, setModeInfo] = useState({ mode: props.mode });
 
+    const [searchDto, setSearchDto] = useState(
+        {
+            search: "",
+        }
+    );
+
+    useEffect(() => {
+        console.log(termsAgreementDetail);
+    }, [termsAgreementDetail]);
+
+    const [saveEvent, setSaveEvent] = useState({});
+    useEffect(() => {
+        if(saveEvent.save){
+            if(saveEvent.mode == "save"){
+                saveTermsAgreementData(termsAgreementDetail);
+            }
+            if(saveEvent.mode == "delete"){
+                delTermsAgreementData(termsAgreementDetail);
+            }
+        }
+    }, [saveEvent]);
 
     const handleSave = () => {
+        Swal.fire({
+            title: "저장하시겠습니까?",
+            showCloseButton: true,
+            showCancelButton: true,
+            confirmButtonText: "저장",
+            cancelButtonText: "취소"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                if (!termsAgreementDetail.utztnTrmsTtl) {
+                    Swal.fire("제목이 없습니다.");
+                    return;
+                }
 
-        console.log("저장 버튼 클릭");
+                if (!termsAgreementDetail.utztnTrmsCn) {
+                    Swal.fire("내용이 없습니다.");
+                    return;
+                }
+
+                setSaveEvent({
+                    ...saveEvent,
+                    save: true,
+                    mode: "save"
+                });
+            } else {
+            }
+        });
     };
 
+    const delBtnEvent = () => {
+        Swal.fire({
+            title: "삭제하시겠습니까?",
+            showCloseButton: true,
+            showCancelButton: true,
+            confirmButtonText: "삭제",
+            cancelButtonText: "취소"
+        }).then((result) => {
+            if(result.isConfirmed) {
+                setSaveEvent({
+                    ...saveEvent,
+                    save: true,
+                    mode: "delete"
+                });
+            } else {
+            }
+        });
+    }
 
+    const saveTermsAgreementData = useCallback(
+        (termsAgreementDetail) => {
+            const formData = new FormData();
+            for (let key in termsAgreementDetail) {
+                if (termsAgreementDetail[key] != null) {
+                    formData.append(key, termsAgreementDetail[key]);
+                }
+            }
+
+            formData.append("utztnTrmsKnd", "2");
+            if (modeInfo.mode === CODE.MODE_CREATE) {
+                formData.append("creatrSn", sessionUserSn || "");
+                formData.append("creatr", sessionUserName || "");
+            }
+
+            const menuListURL = "/utztnApi/setTermsAgreement";
+            const requestOptions = {
+                method: "POST",
+                body: formData
+            };
+
+            EgovNet.requestFetch(
+                menuListURL,
+                requestOptions,
+                (resp) => {
+                    if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
+                        navigate({ pathname: URL.MANAGER_HOMEPAGE_TERMS_AGREEMENT });
+                    } else {
+                        navigate(
+                            { pathname: URL.ERROR },
+                            { state: { msg: resp.resultMessage } }
+                        );
+                    }
+                }
+            );
+        },
+    );
 
     useEffect(() => {
         setModeInfo({ mode: props.mode });
@@ -69,10 +168,10 @@ function ManagerTermsAgreementEdit(props) {
                             <div className="input">
                                 <input type="text"
                                        id="termsTitle"
-                                       value={termsAgreementDetail.termsTitle || ""}
+                                       value={termsAgreementDetail.utztnTrmsTtl || ""}
                                        onChange={(e) => setTermsAgreementDetail({
                                            ...termsAgreementDetail,
-                                           termsTitle: e.target.value
+                                           utztnTrmsTtl: e.target.value
                                        })}
                                        required
                                 />
@@ -83,10 +182,10 @@ function ManagerTermsAgreementEdit(props) {
                             <div className="input">
                             <textarea
                                 id="termsContent"
-                                value={termsAgreementDetail.termsContent || ""}
+                                value={termsAgreementDetail.utztnTrmsCn || ""}
                                 onChange={(e) => setTermsAgreementDetail({
                                     ...termsAgreementDetail,
-                                    termsContent: e.target.value
+                                    utztnTrmsCn: e.target.value
                                 })}
                             />
                             </div>
@@ -112,16 +211,17 @@ function ManagerTermsAgreementEdit(props) {
                     </ul>
                     <div className="buttonBox" style={{display: 'flex', justifyContent: 'flex-end'}}>
                         <div className="leftBox">
-                            <button type="button" className="clickBtn point" onClick={""}><span>저장</span></button>
+                            <button type="button" className="clickBtn point" onClick={handleSave}><span>저장</span>
+                            </button>
                             {modeInfo.mode === CODE.MODE_MODIFY && (
-                                <button type="button" className="clickBtn gray" onClick={""}><span>삭제</span>
+                                <button type="button" className="clickBtn gray" onClick={delBtnEvent}><span>삭제</span>
                                 </button>
                             )}
                         </div>
-                        <NavLink
-                            to={URL.MANAGER_HOMEPAGE_TERMS_AGREEMENT}
-                        >
-                            <button type="button" className="clickBtn black"  style={{marginLeft: '10px'}}><span>목록</span></button>
+                        <NavLink to={URL.MANAGER_HOMEPAGE_TERMS_AGREEMENT}>
+                            <button type="button" className="clickBtn black" style={{marginLeft: '10px'}}>
+                                <span>목록</span>
+                            </button>
                         </NavLink>
                     </div>
                 </div>

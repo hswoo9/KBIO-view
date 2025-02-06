@@ -10,35 +10,105 @@ import EgovPaging from "@/components/EgovPaging";
 
 import Swal from 'sweetalert2';
 
+/* bootstrip */
+import BtTable from 'react-bootstrap/Table';
+import BTButton from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
 import { getSessionItem } from "@/utils/storage";
+import moment from "moment/moment.js";
 
 function ManagerTermsList(props) {
+    const searchWrdRef = useRef();
     const location = useLocation();
-    console.log(location);
     const sessionUser = getSessionItem("loginUser");
-    const [searchCondition, setSearchCondition] = useState(
-        location.state?.searchCondition || {
+    const useYnRef = useRef();
+    const [searchDto, setSearchDto] = useState(
+        location.state?.searchDto || {
             pageIndex: 1,
             searchCnd: "0",
             searchWrd: "",
+            useYn: "",
+            utztnTrmsKnd: 1,
         }
     );
 
     const [paginationInfo, setPaginationInfo] = useState({});
 
+    const [termsAgreementList, settermsAgreementList] = useState([]);
+
     const cndRef = useRef();
     const wrdRef = useRef();
 
-    const [saveEvent, setSaveEvent] = useState({});
-    useEffect(() => {
-        if(saveEvent.save){
-            if(saveEvent.mode == "delete"){
-                delCdGroupData(saveEvent);
-            }
+    const activeEnter = (e) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            gettermsAgreementList(searchDto);
         }
-    }, [saveEvent]);
+    };
+
+    const gettermsAgreementList = useCallback(
+        (searchDto) => {
+            const termsAgreementListURL = "/utztnApi/getTermsAgreementList.do";
+            const requestOptions = {
+                method: "POST",
+                headers: {
+                    "Content-type": "application/json",
+                },
+                body: JSON.stringify(searchDto)
+            };
+            EgovNet.requestFetch(
+                termsAgreementListURL,
+                requestOptions,
+                (resp) => {
+                    console.log("Response:", resp);
+                    console.log("Data List:", resp.result?.getTermsAgreementList);
+                    setPaginationInfo(resp.paginationInfo);
+                    let dataList = [];
+                    dataList.push(
+                        <tr key="no-data">
+                            <td colSpan="6">검색된 결과가 없습니다.</td>
+                        </tr>
+                    );
+
+                    resp.result.getTermsAgreementList.forEach(function (item, index) {
+                        if (index === 0) dataList = [];
+
+                        const totalItems = resp.result.getTermsAgreementList.length;
+                        const itemNumber = totalItems - index;
+
+                        dataList.push(
+                            <tr key={item.utztnTrmsSn}>
+                                <td>{itemNumber}</td>
+                                <td>
+                                    <Link
+                                        to={{pathname: URL.MANAGER_HOMEPAGE_TERMS_MODIFY}}
+                                        state={{
+                                            utztnTrmsSn: item.utztnTrmsSn
+                                        }}
+                                        key={item.utztnTrmsSn}
+                                        style={{cursor: 'pointer', textDecoration: 'underline'}}
+                                    >
+                                        {item.utztnTrmsTtl}
+                                    </Link>
+                                </td>
+                                <td>{item.creatr}</td>
+                                <td>{new Date(item.frstCrtDt).toISOString().split("T")[0]}</td>
+                                <td>{item.useYn === "Y" ? "사용중" : "사용안함"}</td>
+                            </tr>
+                        );
+                    });
+                    settermsAgreementList(dataList);
+                },
+                function (resp) {
+                    console.log("err response : ", resp);
+                }
+            )
+        },
+        [termsAgreementList, searchDto]
+    );
 
     useEffect(() => {
+        gettermsAgreementList(searchDto);
     }, []);
 
     return (
@@ -106,6 +176,7 @@ function ManagerTermsList(props) {
                             </tr>
                             </thead>
                             <tbody>
+                            {termsAgreementList}
                             </tbody>
                         </table>
                     </div>
