@@ -146,6 +146,7 @@ function MemberSignUp(props) {
 
             setMemberDetail({
               ...memberDetail,
+              mvnEntSn: businessData.mvnEntSn,
               mvnEntNm: businessData.mvnEntNm,
               rpsvNm: businessData.rpsvNm,
               clsNm: businessData.clsNm,
