@@ -136,9 +136,97 @@ function ManagerTermsAgreementEdit(props) {
         },
     );
 
+    const delTermsAgreementData = useCallback(
+        (termsAgreementDetail) => {
+            console.log(termsAgreementDetail);
+            const termsAgreementURL = "/utztnApi/setTermsAgreementDel";
+            const requestOptions = {
+                method: "POST",
+                headers: {
+                    "Content-type": "application/json",
+                },
+                body: JSON.stringify(termsAgreementDetail)
+            };
+            EgovNet.requestFetch(
+                termsAgreementURL,
+                requestOptions,
+                (resp) => {
+
+                    if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
+                        navigate({ pathname: URL.MANAGER_HOMEPAGE_TERMS_AGREEMENT });
+                    } else {
+                        navigate(
+                            { pathname: URL.ERROR },
+                            { state: { msg: resp.resultMessage } }
+                        );
+                    }
+
+                }
+            )
+        }
+    );
+
+    const initMode = () => {
+        switch (props.mode){
+            case CODE.MODE_CREATE:
+                setModeInfo({
+                    ...modeInfo,
+                    modeTitle: "등록",
+                });
+                break;
+            case CODE.MODE_MODIFY:
+                setModeInfo({
+                    ...modeInfo,
+                    modeTitle: "수정",
+                });
+                break;
+            default:
+                navigate({ pathname: URL.ERROR }, { state: { msg: "" } });
+        }
+        getTermsAgreemetData();
+    };
+
+    const getTermsAgreemetData = () => {
+
+        const getTermsAgreemetURL = `/utztnApi/getTermsAgreemet`;
+
+        const requestOptions = {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json",
+            },
+            body: JSON.stringify({utztnTrmsSn : location.state?.utztnTrmsSn})
+        };
+
+        EgovNet.requestFetch(getTermsAgreemetURL, requestOptions, function (resp) {
+            console.log(resp);
+            if (modeInfo.mode === CODE.MODE_MODIFY) {
+                if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
+                    resp.result.tblUtztnTrms.mdfrSn = sessionUser.userSn;
+                    setTermsAgreementDetail(resp.result.tblUtztnTrms);
+                    if(resp.result.tblUtztnTrms.useYn != null){
+                        if(resp.result.tblUtztnTrms.useYn == "Y"){
+                            document.getElementById("useYn").checked = true;
+                        }else{
+                            document.getElementById("useYn").checked = false;
+                        }
+                    }
+                } else {
+                    navigate(
+                        { pathname: URL.ERROR },
+                        { state: { msg: resp.resultMessage } }
+                    );
+                }
+
+            }
+        });
+
+    };
+
     useEffect(() => {
-        setModeInfo({ mode: props.mode });
-    }, [props.mode]);
+        initMode();
+    }, []);
+    
 
     return (
         <div id="container" className="container layout cms">
