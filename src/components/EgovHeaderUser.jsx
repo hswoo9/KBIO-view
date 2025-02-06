@@ -148,6 +148,8 @@ function EgovHeader() {
         //if (saveIDFlag) setLocalItem(KEY_ID, resultVO?.id);
         if (saveIDFlag) setLocalItem(KEY_ID, resp.result.userId);
         Swal.fire("로그인 성공");
+        $('#id').val("");
+        $('#password').val("");
         $('.modalCon').removeClass('open');
         $('html, body').css('overflow', 'visible');
         navigate("/");
@@ -418,7 +420,6 @@ function EgovHeader() {
                   <label className="checkBox type2 f_chk" ref={checkRef}>
                     <input
                         type="checkbox"
-                        id="login_state"
                         name="login_state"
                         id="saveid"
                         onChange={handleSaveIDFlag}
