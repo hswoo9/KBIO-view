@@ -8,6 +8,8 @@ import 'moment/locale/ko';
 import ManagerLeft from "@/components/manager/ManagerLeftMember";
 import EgovRadioButtonGroup from "@/components/EgovRadioButtonGroup";
 import Swal from "sweetalert2";
+import base64 from 'base64-js';
+
 
 function setApprovalMember(props) {
 
@@ -54,8 +56,11 @@ function setApprovalMember(props) {
 
         EgovNet.requestFetch(getApprovalMemberURL, requestOptions, function (resp) {
             if (modeInfo.mode === CODE.MODE_MODIFY) {
-                setMemberDetail(resp.result.member);
-                console.log(memberDetail)
+                const decodedPhoneNumber = decodePhoneNumber(resp.result.member.mblTelno);
+                setMemberDetail({
+                    ...resp.result.member,
+                    mblTelno: decodedPhoneNumber, // 디코딩된 전화번호로 업데이트
+                });
             }
         });
     };
@@ -68,6 +73,10 @@ function setApprovalMember(props) {
         memberDetail.mbrType === 4 ? '비입주기업' :
         '테스트';
 
+    const decodePhoneNumber = (encodedPhoneNumber) => {
+        const decodedBytes = base64.toByteArray(encodedPhoneNumber);
+        return new TextDecoder().decode(decodedBytes);
+    };
     const setApprovalMemberDel = (userSn) => {
         const setApprovalMemberUrl = "/memberApi/setApprovalMemberDel";
 
