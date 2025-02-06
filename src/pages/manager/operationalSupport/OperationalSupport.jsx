@@ -87,7 +87,9 @@ function OperationalSupport(props) {
                                 <td>{item.clsNm}</td>
                                 <td>{item.actvtnYn === "Y" ? "공개" : "비공개"}</td>
                                 <td>
+                                    <Link to={URL.MANAGER_RESIDENT_MANAGER}>
                                     <button type="button" className="settingBtn"><span>관리자 설정</span></button>
+                                    </Link>
                                 </td>
                                 <td>
                                     <Link to={URL.MANAGER_RESIDENT_MEMBER}>

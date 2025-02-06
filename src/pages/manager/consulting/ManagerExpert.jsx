@@ -15,14 +15,15 @@ import { getSessionItem } from "@/utils/storage";
 
 function ManagerExpert(props) {
 
-    const [searchCondition, setSearchCondition] = useState(
-        location.state?.searchCondition || {
+    const [searchDto, setSearchDto] = useState(
+        location.state?.searchDto || {
             pageIndex: 1,
-            searchCnd: "0",
-            searchWrd: "",
+            actvtnYn: "",
+            kornFlnm: "",
+            companyName: "",
+            mbrType: "2",
         }
     );
-
     const [paginationInfo, setPaginationInfo] = useState({
         currentPageNo: 1,
         firstPageNo: 1,
@@ -36,6 +37,72 @@ function ManagerExpert(props) {
         totalPageCount: 15,
         totalRecordCount: 158
     });
+
+    const [consultMemberList, setAuthorityList] = useState([]);
+
+    const getConsultMemberList = useCallback(
+        (searchDto) => {
+            const consultMemberListUrl = "/memberApi/getNormalMemberList.do"; //임시로 회원조회 url을 사용하나 나중에 join된 걸 불러와야할듯
+            const requestOptions = {
+                method: "POST",
+                headers: {
+                    "Content-type": "application/json",
+                },
+                body: JSON.stringify(searchDto),
+            };
+
+            EgovNet.requestFetch(
+                consultMemberListUrl,
+                requestOptions,
+                (resp) => {
+                    setPaginationInfo(resp.paginationInfo);
+                    let dataList = [];
+                    dataList.push(
+                        <tr key="no-data">
+                            <td colSpan="9">검색된 결과가 없습니다.</td>
+                        </tr>
+                    );
+
+                    resp.result.getNormalMemberList.forEach(function (item, index) {
+                        if (index === 0) dataList = [];
+
+                        const totalItems = resp.result.getNormalMemberList.length;
+                        const itemNumber = totalItems - index;
+
+                        dataList.push(
+                            <tr key={item.userSn}>
+                                <td>{itemNumber}</td>
+                                <td></td>
+                                <td>{item.kornFlnm}</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>{item.actvtnYn === 'Y' ? '공개' :
+                                     item.actvtnYn === 'W' ? '비공개' :
+                                     item.actvtnYn === 'R' ? '비공개' :
+                                     item.actvtnYn === 'C' ? '비공개' :
+                                     item.actvtnYn === 'S' ? '비공개' : ''}
+                                </td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        );
+                    });
+                    setAuthorityList(dataList);
+                },
+                function (resp) {
+                    console.log("err response : ", resp);
+                }
+            );
+
+        },
+        [consultMemberList, searchDto]
+    );
+
+    useEffect(()=>{
+        getConsultMemberList(searchDto);
+    }, []);
+
     return (
         <div id="container" className="container layout cms">
             <ManagerLeft/>
@@ -116,6 +183,7 @@ function ManagerExpert(props) {
                             </tr>
                             </thead>
                             <tbody>
+                            {consultMemberList}
                             </tbody>
                         </table>
                     </div>
@@ -124,6 +192,10 @@ function ManagerExpert(props) {
                         <EgovPaging
                             pagination={paginationInfo}
                             moveToPage={(passedPage) => {
+                                getConsultMemberList({
+                                    ...searchDto,
+                                    pageIndex: passedPage,
+                                })
 
                             }}
                         />
