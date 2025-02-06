@@ -177,7 +177,8 @@ export default function userJs() {
     modalOpen('.admin .topBox .uploadBtn', '.uploadModal');
     modalOpen('.admin .board.type2 .tableBox table .deletBtn', '.deletModal');
     modalOpen('.admin .cms .inner .contBox .infoBox .program', '.programModal');
-    modalOpen('.user .header .loginBtn', '.loginModal')
+    modalOpen('.user header .loginBtn', '.loginModal')
+
 
     // 모달 닫기  ------------------------------------------------------------
 

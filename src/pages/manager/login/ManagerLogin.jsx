@@ -117,6 +117,7 @@ function ManagerLogin(props) {
     }
     if(location.pathname.split("/")[1] === "manager"){
       import('../../../css/manager/admin.css');
+      import('../../../css/manager/customAdmin.css');
     }
   }, [location.pathname]);
 

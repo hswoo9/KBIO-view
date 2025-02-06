@@ -25,7 +25,7 @@ input {font-size: .9rem;}
 @keyframes leftMove {0% {transform: translateX(20px); opacity: 0;} 100% {transform: none; opacity: 1;}}
 @keyframes rightMove {0% {transform: translateX(-20px); opacity: 0;} 100% {transform: none; opacity: 1;}}
 @keyframes scalremove {0% {transform: scale(.8); opacity: 0;} 100% {transform: none; opacity: 1;}}
-
+@keyframes imgHover {10% {transform: translateY(-5%);} 30% {transform: translateY(-5%) rotate(2deg);} 50% {transform: translateY(-5%) rotate(-2deg);} 70%, 100% {transform: none;}}
 
 
 header {position: fixed; top: 0; left: 0; width: 100%; z-index: 90; height: auto; box-sizing: border-box; background: #fff; transition: .5s ease}
@@ -81,7 +81,7 @@ footer .inner .center .linkBox li a span {position: relative; z-index: 1; }
 footer .inner .center .linkBox li a span:after {content: ""; position: absolute; width: 0; height: 100%; padding: .5em .5em; border-radius: 2em; border: 1px solid #fff; top: 50%; left: 50%; transform: translate(-50%, -50%); transition: .5s ease; opacity: 0; z-index: -1;}
 footer .inner .center address {display: flex; flex-direction: column; gap: .9rem;}
 footer .inner .center address > div {display: flex; gap: .9rem;}
-footer .inner .center address .left {width: 4rem; flex: none; font-weight: 600;}
+footer .inner .center address .left {width: 3.5rem; flex: none; font-weight: 600;}
 footer .inner .center address .right {color: rgba(255, 2555, 255, .6); line-height: 1.4;}
 footer .inner .right {display: flex; flex-direction: column; gap: 1.6rem;}
 footer .inner .right .familySiteWrap .nice-select {padding: .4rem 2rem .4rem .9rem; background: #fff; color: var(--black); font-weight: 600; border-radius: 1.2rem; transition: .5s ease;}
@@ -107,6 +107,10 @@ footer .inner .right .snsBox .youtube .icon {background-image: url(@/assets/imag
 
 .user .container .clickBtn {height: 3.3rem; font-size: 1.1rem;}
 .user .container .warningText {padding-left: 1rem; margin-top: .2rem;}
+.user .titleWrap.type1 {margin-bottom: 3.3rem; text-align: center;}
+.user .titleWrap.type1 .tt1 {position: relative; font-size: 1.1rem; font-weight: 600;}
+.user .titleWrap.type1 .tt1:after {content: ""; display: block; width: 4px; height: 4px; background: var(--black); margin: .9rem auto;}
+.user .titleWrap.type1 .tt2 {font-size: 1.7rem; font-weight: 500; word-break: keep-all;}
 
 .user .loginModal.modalCon .boxWrap {overflow: visible; max-width: 420px;}
 .user .loginModal.modalCon .boxWrap .close {position: absolute; top: -2rem; right:  0; z-izndex: 10; width: 24px; height: 24px; cursor: pointer;}
@@ -132,12 +136,17 @@ footer .inner .right .snsBox .youtube .icon {background-image: url(@/assets/imag
 .user .loginModal.modalCon .boxWrap .box .snsLoginBox .list li.kakao .icon {background-image: url(@/assets/images/ico_logo_kakao.svg);}
 .user .loginModal.modalCon .boxWrap .box .snsLoginBox .list li.google .icon {background-image: url(@/assets/images/ico_logo_google.svg); border: 1px solid #ddd;}
 .user .loginModal.modalCon .boxWrap .box .snsLoginBox .list li.naver .icon {background-image: url(@/assets/images/ico_logo_naver.svg);}
+.user .inner .authenBox {max-width: 530px; width: 100%; margin: 0 auto;}
+.user .inner .authenBox .selectBox {display: flex; gap: 20%; margin-bottom: 2.2rem; justify-content: center;}
+.user .inner .authenBox .selectBox button {display: flex; flex-direction: column; align-items: center; gap: .9rem;}
+.user .inner .authenBox .selectBox button .imgBox img {border-radius: 1.6rem; overflow: hidden; transition: .5s ease; max-width: 8.8rem; width: 90%;}
+.user .inner .authenBox .selectBox button .tt {font-weight: 600; font-size: 1.3rem; word-break: keep-all;}
+.user .inner .authenBox .selectBox .moblie .imgBox img {border: 1px solid #DDDDDD;}
+.user .inner .authenBox .clickBtn {width: 100%;}
+.user .inner .authenBox .textBox {background: #F6F6F6; border-radius: .9rem; padding: 1.35rem; text-align: center; display: flex; flex-direction: column; gap: .9rem; font-size: .9rem; color: #555; font-weight: 600; margin-bottom: 3.3rem;}
+
 
 /* 회원가입 */
-.join .inner .titleWrap {margin-bottom: 3.3rem; text-align: center;}
-.join .inner .titleWrap .tt1 {position: relative; font-size: 1.1rem; font-weight: 600;}
-.join .inner .titleWrap .tt1:after {content: ""; display: block; width: 4px; height: 4px; background: var(--black); margin: .9rem auto;}
-.join .inner .titleWrap .tt2 {font-size: 1.7rem; font-weight: 500; word-break: keep-all;}
 .join .inner .boxWrap {display: flex; gap: 4%; max-width: 1260px; margin: 0 auto; width: 100%;}
 .join .inner .boxWrap .box {padding: 1.35rem; border-radius: .9rem; border: 1px solid #eee; width: 100%; box-sizing: border-box; text-align: center; display: flex; flex-direction: column; gap: 1.35rem;}
 .join .inner .boxWrap .box .tt1 {font-size: 1.75rem; font-weight: 700;}
@@ -148,17 +157,17 @@ footer .inner .right .snsBox .youtube .icon {background-image: url(@/assets/imag
 .join .inner .boxWrap .box02 .buttonBox {display: flex; flex-direction: column; gap: .6rem;}
 .join .inner .boxWrap .box02 .buttonBox button {width: 100%; border-radius: .5rem; display: flex; align-items: center; justify-content: center; gap: .5rem; box-sizing: border-box; height: 3.3rem; padding: .5rem; text-align: center; font-weight: 700; font-size: 1.1rem; transition: .5s ease;}
 .join .inner .boxWrap .box02 .buttonBox li.naver button {background: #3aae36; color: #fff;}
-.join .inner .boxWrap .box02 .buttonBox li.naver button .icon {width: .9rem; height: .9rem; background: url(@/assets/images/ico_logo_naver_small.svg) no-repeat center / contain;} 
+.join .inner .boxWrap .box02 .buttonBox li.naver button .icon {width: .9rem; height: .9rem; background: url(@/assets/images/ico_logo_naver_small.svg) no-repeat center / contain;}
 .join .inner .boxWrap .box02 .buttonBox li.google button {background: #fff; border: 1px solid #ddd;}
-.join .inner .boxWrap .box02 .buttonBox li.google button .icon {width: 1.4rem; height: 1.45rem; background: url(@/assets/images/ico_logo_google_small.svg) no-repeat center / contain;} 
+.join .inner .boxWrap .box02 .buttonBox li.google button .icon {width: 1.4rem; height: 1.45rem; background: url(@/assets/images/ico_logo_google_small.svg) no-repeat center / contain;}
 .join .inner .boxWrap .box02 .buttonBox li.kakao button {background: #fae100;}
-.join .inner .boxWrap .box02 .buttonBox li.kakao button .icon {width: 1.73rem; height: 1.61rem; background: url(@/assets/images/ico_logo_kakao_small.svg) no-repeat center / contain;} 
+.join .inner .boxWrap .box02 .buttonBox li.kakao button .icon {width: 1.73rem; height: 1.61rem; background: url(@/assets/images/ico_logo_kakao_small.svg) no-repeat center / contain;}
 .join_step .inner .stepWrap {display: flex; justify-content: center; gap: 4.2rem; margin-bottom: 3.33rem;}
 .join_step .inner .stepWrap li {position: relative; display: flex; flex-direction: column; gap: .9rem; align-items: center;}
 .join_step .inner .stepWrap li .num {position: relative; width: 4.4rem; height: 4.4rem; border-radius: .9rem; display: flex; align-items: center; justify-content: center; font-weight: 600; background: #eee; color: #999; font-size: 1.5rem;}
 .join_step .inner .stepWrap li:not(:last-child) .num:after {content: ""; width: 3.55rem; height: 1px; position: absolute; top: 50%; right: -4.25rem; transform: translateY(-50%); background: #DDDDDD;}
 .join_step .inner .stepWrap li.active .num {background: var(--black); color: #fff;}
-.join_step .inner .stepWrap li .text {font-size: 1.5rem; font-weight: 500; color: #999;}
+.join_step .inner .stepWrap li .text {font-size: 1.5rem; font-weight: 500; color: #999; text-align: center; word-break: keep-all;}
 .join_step .inner .stepWrap li.active .text {color: var(--black);}
 .join_step .inner .contBox {display: flex; flex-direction: column; gap: 2.2rem;}
 .join_step .inner .contBox .inputWrap {display: flex; flex-wrap: wrap; gap: 1.35rem;}
@@ -170,6 +179,15 @@ footer .inner .right .snsBox .youtube .icon {background-image: url(@/assets/imag
 .join_step .inner .buttonBox {display: flex; flex-direction: column; max-width: 29.4rem; width: 85%; margin: 0 auto;}
 .join_step .inner .buttonBox button {width: 100%;}
 .join_step .inner .buttonBox button.clickBtn.white {border: none;}
+
+
+/* 회원탈퇴 */
+.withdraw .inner .titleWrap.type1 {margin-bottom: 2.2rem;}
+.withdraw .inner .topTextBox {text-align: center; margin-bottom: 2.2rem;}
+.withdraw .inner .topTextBox p {color: #555555; font-size: 1.1rem;}
+.withdraw .inner .topTextBox p:first-child {margin-bottom: .5rem;}
+.withdraw .inner .topTextBox .checkBox.type1 {justify-content: center; margin-top: 2.2rem; flex-wrap: wrap;}
+.withdraw .inner .topTextBox .checkBox.type1 small {word-break: keep-all;}
 
 @media screen and (min-width: 1025px) {
 	header .hInner .hBot .top nav .dep li a:hover:after {width: 100%; opacity: 1;}
@@ -185,19 +203,20 @@ footer .inner .right .snsBox .youtube .icon {background-image: url(@/assets/imag
 	.user .loginModal.modalCon .boxWrap .box .snsLoginBox .list li.kakao .icon:hover {box-shadow: 3px 3px #fae10080;}
 	.user .loginModal.modalCon .boxWrap .box .snsLoginBox .list li.google .icon:hover {box-shadow: 3px 3px #99999940;}
 	.user .loginModal.modalCon .boxWrap .box .snsLoginBox .list li.naver .icon:hover {box-shadow: 3px 3px #3aae3650;}
+	.user .inner .authenBox .selectBox button:hover .imgBox img {animation: imgHover 2s cubic-bezier(0.16,-0.04, 0.81, 0.98) both infinite;}
 	.join .inner .boxWrap .box02 .buttonBox li.naver button:hover {box-shadow: inset 3px 3px 8px rgba(255, 255, 255, .8), 3px 3px #3aae3650;}
 	.join .inner .boxWrap .box02 .buttonBox li.kakao button:hover {box-shadow: inset 3px 3px 8px rgba(255, 255, 255, .8), 3px 3px #fae10080;}
 	.join .inner .boxWrap .box02 .buttonBox li.google button:hover {box-shadow: inset 3px 3px 8px rgba(88, 88, 88, .1), 3px 3px #99999940;}
 }
 
 @media screen and (max-width: 1400px) {
-	html {font-size: 17px;} 
+	html {font-size: 17px;}
 }
 @media screen and (max-width: 1200px) {
 	footer .inner {gap: 5%; font-size: .9rem;}
 }
 @media screen and (max-width: 1024px) {
-	html {font-size: 16.5px;} 
+	html {font-size: 16.5px;}
 	header .hInner .hBot {border-radius: 1.5rem; padding: 1em 30px 4.6rem;}
 	header .hInner .hBot .top h1 {max-width: 95px; width: 100%;}
 	header .hInner .hBot .top nav {display: none;}
@@ -218,11 +237,20 @@ footer .inner .right .snsBox .youtube .icon {background-image: url(@/assets/imag
 }
 
 @media screen and (max-width: 768px) {
-	html {font-size: 16px;} 
+	html {font-size: 16px;}
 	.join .inner .boxWrap {flex-direction: column; gap: 2rem;}
 	.join_step .inner .contBox .inputWrap li {width: 100%;}
+	.join_step .inner .stepWrap {gap: 2rem;}
+	.join_step .inner .stepWrap li .num {width: 3rem; height: 3rem; font-size: 1.2rem;}
+	.join_step .inner .stepWrap li:not(:last-child) .num:after {width: 2rem; right: -2.5rem;}
+	.join_step .inner .stepWrap li .text {font-size: 1.2rem;}
 }
 @media screen and (max-width: 480px) {
-	html {font-size: 15px;} 
+	html {font-size: 15px;}
+	header .hInner .hTop {padding: 0;}
 	footer .inner .right {flex-direction: column; align-items: flex-start; gap: 1rem;}
+	.user .inner .authenBox .selectBox {gap: 10%;}
+}
+@media screen and (max-width: 400px) {
+
 }

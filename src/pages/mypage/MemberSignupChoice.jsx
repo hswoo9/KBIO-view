@@ -15,59 +15,59 @@ const MemberSignupChoice = () => {
     };
 
     return (
-        <div id="container" class="container join">
-            <div class="inner">
-                <div class="titleWrap" data-aos="fade-up" data-aos-duration="1500">
-                    <p class="tt1">회원가입</p>
-                    <strong class="tt2">K-바이오 랩허브 홈페이지 오신걸 환영합니다.</strong>
+        <div id="container" className="container join">
+            <div className="inner">
+                <div className="titleWrap" data-aos="fade-up" data-aos-duration="1500">
+                    <p className="tt1">회원가입</p>
+                    <strong className="tt2">K-바이오 랩허브 홈페이지 오신걸 환영합니다.</strong>
                 </div>
 
                 {/* Layout */}
-                <div class="layout">
-                    <div class="contents JOIN_TYPE" id="contents">
+                <div className="layout">
+                    <div className="contents JOIN_TYPE" id="contents">
 
-                        <div class="boxWrap">
-                            <div class="box box01" data-aos="fade-left" data-aos-duration="1500">
-                                <strong class="tt1">홈페이지 회원</strong>
-                                <p class="tt2">K-바이오 랩허브 홈페이지 회원으로 <br/>가입신청을 진행합니다</p>
+                        <div className="boxWrap">
+                            <div className="box box01" data-aos="fade-left" data-aos-duration="1500">
+                                <strong className="tt1">홈페이지 회원</strong>
+                                <p className="tt2">K-바이오 랩허브 홈페이지 회원으로 <br/>가입신청을 진행합니다</p>
                                 <button
-                                    class="clickBtn black"
+                                    className="clickBtn black"
                                     onClick={() => handleNext("general")}
                                 >
                                     가입하기
                                 </button>
                             </div>
 
-                            <div class="box box02" data-aos="fade-right" data-aos-duration="1500">
-                                <strong class="tt1">SNS 회원</strong>
-                                <p class="tt2">
+                            <div className="box box02" data-aos="fade-right" data-aos-duration="1500">
+                                <strong className="tt1">SNS 회원</strong>
+                                <p className="tt2">
                                     SNS 아이디로 가입 신청하고 K-바이오 랩허브 <br/>홈페이지에서 로그인 합니다.
                                 </p>
-                                <ul class="buttonBox" style={{marginBottom: "0",}}>
-                                    <li class="naver">
+                                <ul className="buttonBox" style={{marginBottom: "0",}}>
+                                    <li className="naver">
                                         <SnsNaverBt
                                             render={() => (
                                                 <button type="button">
-                                                    <div class="icon"></div>
+                                                    <div className="icon"></div>
                                                     <p style={{margin: 0, textAlign: "center"}}>네이버 아이디 로그인</p>
                                                 </button>
                                             )}
                                         />
                                     </li>
-                                    <li class="google">
+                                    <li className="google">
                                         <SnSGoogleBt
                                             render={() => (
                                                 <button type="button" onClick={() => handleNext("google")}>
-                                                    <div class="icon"></div>
+                                                    <div className="icon"></div>
                                                     <p style={{margin: 0, textAlign: "center"}}>구글 아이디 로그인</p></button>
                                             )}
                                         />
                                     </li>
-                                    <li class="kakao">
+                                    <li className="kakao">
                                         <SnsKakaoBt
                                             render={() => (
                                                 <button type="button"  onClick={() => handleNext("kakao")}>
-                                                    <div class="icon"></div>
+                                                    <div className="icon"></div>
                                                     <p style={{margin: 0, textAlign: "center"}}>카카오 아이디 로그인</p>
                                                 </button>
                                             )}
