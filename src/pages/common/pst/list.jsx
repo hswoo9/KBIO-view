@@ -111,7 +111,7 @@ function commonPstList(props) {
                                 </td>
                                 <td style={{textAlign: "left", paddingLeft: "15px"}}>
                                     <a onClick={() => {
-                                        resp.result.authrt.inqAuthrt == "Y" ? pstDetailHandler(item) : Swal.fire("읽기 권한이 없습니다.")
+                                        resp.result.authrt.inqAuthrt == "Y" ? pstDetailHandler(item, rlsYnFlag) : Swal.fire("읽기 권한이 없습니다.")
                                     }}
                                     style={{cursor:"pointer"}}>
                                         {reTag ? <span dangerouslySetInnerHTML={{__html: reTag}} style={{marginRight: "5px"}}></span> : ""}
@@ -144,6 +144,7 @@ function commonPstList(props) {
 
     const pstDetailHandler = (pst, rlsYnFlag) => {
         let modalOpen = false;
+        console.log(rlsYnFlag)
         if(pst.rlsYn == "Y"){
             if(!rlsYnFlag){
                 modalOpen = true;
