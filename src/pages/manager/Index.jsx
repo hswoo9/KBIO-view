@@ -5,13 +5,81 @@ import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
 
+import {
+    format,
+    startOfMonth,
+    endOfMonth,
+    startOfWeek,
+    endOfWeek,
+    addDays,
+    isSameMonth,
+    isToday,
+    setMonth,
+    setYear,
+    isLeapYear,
+    subMonths,
+    addMonths,
+} from "date-fns";
+
 import ManagerLeftNew from "@/components/manager/ManagerLeftNew";
 import {mngrAcsIpChk} from "@/components/CommonComponents.jsx";
 
 function Index(props) {
-    // mngrAcsIpChk(useNavigate())
+// mngrAcsIpChk(useNavigate())
+    const [currentMonth, setCurrentMonth] = useState(new Date());
 
-  return (
+    // 연도 및 월 변경 핸들러
+    const handleYearChange = (e) => {
+        setCurrentMonth(setYear(currentMonth, parseInt(e.target.value, 10)));
+    };
+
+    const handleMonthChange = (e) => {
+        setCurrentMonth(setMonth(currentMonth, parseInt(e.target.value, 10)));
+    };
+
+    // 현재 연도 & 월
+    const currentYear = format(currentMonth, "yyyy");
+    const currentMonthIndex = format(currentMonth, "M") - 1;
+
+    // 현재 월의 시작과 끝
+    const startMonth = startOfMonth(currentMonth);
+    const endMonth = endOfMonth(currentMonth);
+    let startDate = startOfWeek(startMonth);
+    let totalDays = [];
+    let day = startDate;
+
+    // 최대 5주(35일) 채우기
+    while (totalDays.length < 35) {
+        totalDays.push(day);
+        day = addDays(day, 1);
+    }
+
+    // 윤년 체크
+    const leapYear = isLeapYear(currentMonth);
+
+    const renderWeeks = () => {
+        const weeks = [];
+        for (let i = 0; i < totalDays.length; i += 7) {
+            const week = totalDays.slice(i, i + 7);
+
+            weeks.push(
+                <tr key={i}>
+                    {week.map((day, idx) => (
+                        <td key={idx}>
+                            <p
+                                className={isSameMonth(day, currentMonth) ? "date" : "date gray"}
+                            >
+                                {format(day, "d")}
+                            </p>
+                        </td>
+                    ))}
+                </tr>
+            );
+        }
+        return weeks;
+    };
+
+    return (
     <div id="container" className="container layout home">
         <div className="inner">
             <div className="leftBox">
@@ -131,46 +199,38 @@ function Index(props) {
             </div>
             <div className="rightBox calendarWrap">
                 <div className="topBox">
-                    <button type="button" className="arrowBtn prevBtn">
+                    <button type="button" className="arrowBtn prevBtn" onClick={() => {setCurrentMonth(subMonths(currentMonth, 1))}}>
                         <div className="icon"></div>
                     </button>
                     <div className="yearBox">
                         <div className="itemBox">
                             <select className="mainSelectGroup"
                                     defaultValue="2025"
+                                    onChange={handleYearChange}
                             >
-                                <option value="2023">2023</option>
-                                <option value="2024">2024</option>
-                                <option value="2025">2025</option>
-                                <option value="2026">2026</option>
-                                <option value="2027">2027</option>
-                                <option value="2028">2028</option>
-                                <option value="2029">2029</option>
-                                <option value="2030">2030</option>
+                                {Array.from({ length: 10 }, (_, i) => (
+                                    <option key={i} value={2020 + i}>
+                                        {2020 + i}
+                                    </option>
+                                ))}
                             </select>
                         </div>
                     </div>
                     <div className="monthBox">
                         <div className="itemBox">
                             <select className="mainSelectGroup"
-                                    defaultValue="2"
+                                    value={currentMonthIndex}
+                                    onChange={handleMonthChange}
                             >
-                                <option value="1">01</option>
-                                <option value="2">02</option>
-                                <option value="3">03</option>
-                                <option value="4">04</option>
-                                <option value="5">05</option>
-                                <option value="6">06</option>
-                                <option value="7">07</option>
-                                <option value="8">08</option>
-                                <option value="9">09</option>
-                                <option value="10">10</option>
-                                <option value="11">11</option>
-                                <option value="12">12</option>
+                                {["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"].map((month, index) => (
+                                    <option key={index} value={index}>
+                                        {month}
+                                    </option>
+                                ))}
                             </select>
                         </div>
                     </div>
-                    <button type="button" className="arrowBtn nextBtn">
+                    <button type="button" className="arrowBtn nextBtn"onClick={() => setCurrentMonth(addMonths(currentMonth, 1))}>
                         <div className="icon"></div>
                     </button>
                 </div>
@@ -189,6 +249,7 @@ function Index(props) {
                         </tr>
                         </thead>
                         <tbody>
+                        {renderWeeks()}
                         <tr>
                             <td><p className="date gray">29</p></td>
                             <td><p className="date gray">30</p></td>
@@ -489,7 +550,7 @@ function Index(props) {
             </div>
         </div>
     </div>
-  );
+    );
 }
 
 export default Index;
