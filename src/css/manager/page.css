@@ -90,7 +90,8 @@ input::placeholder {color: #BBBBBB; font-weight: 500;}
 .container .modalCon .boxWrap .top .title {font-size: 1.1rem; font-weight: 700;}
 .container .modalCon .boxWrap .top .close {flex: none; cursor: pointer;}
 .container .modalCon .boxWrap .top .close .icon {width: 24px; height: 24px; background: url(@/assets/images/ico_close.svg) no-repeat center / contain; transition: .5s ease;}
-.container .modalCon .boxWrap .box {width: 100%; height: auto; padding: 1.5rem; margin-top: 3.5rem; box-sizing: border-box; overflow-y: auto; display: flex; gap: .5rem; flex-direction: column; max-height: calc(100vh - 7.5rem);}
+.container .modalCon .boxWrap .box {width: 100%; height: auto; padding: 1.5rem; box-sizing: border-box; overflow-y: auto; display: flex; gap: .5rem; flex-direction: column; max-height: calc(100vh - 7.5rem);}
+.container .modalCon .boxWrap .top + .box {margin-top: 3.5rem; padding-top: 0;}
 .container .modalCon .boxWrap .box .bot {display: flex; flex-direction: column; gap: .9rem;}
 .container .modalCon .boxWrap .tabWrap {margin-bottom: 1.35rem;}
 .container .modalCon .boxWrap .buttonBox {display: flex; justify-content: center; gap: 8px;}
@@ -100,15 +101,20 @@ input::placeholder {color: #BBBBBB; font-weight: 500;}
 .container .modalCon .boxWrap .clickBtn.black {background: var(--black);}
 .container .modalCon .boxWrap .clickBtn.red {background: var(--pointColor2);}
 
+
 /* 체크박스 */
 .container .checkWrap {display: flex; flex-wrap: wrap; gap: .6rem;}
 .container .checkBox {display: flex; align-items: center; gap: 8px;}
 .container .checkBox label {display: flex; gap: 6px; align-items: center;}
-.container .checkBox label input {position: relative; width: 18px; height: 18px; -webkit-appearance: none; background: #DDDDDD; border-radius: 50%; flex: none; transition: .5s ease;}
+.container .checkBox label input {position: relative; width: 20px; height: 20px; -webkit-appearance: none; background: #DDDDDD; border-radius: 50%; flex: none; transition: .5s ease;}
 .container .checkBox label input:checked {background: var(--mainColor);}
-.container .checkBox label input:before {content: ""; position: absolute; content: ''; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 100%; height: 100%; background: url(@/assets/images/ico_check_gray.svg) no-repeat center / contain;}
-.container .checkBox label input:checked:before {background-image: url(@/assets/images/ico_check_white.svg);}
-.container .checkBox label small {transition: .5s ease; font-size: .9em; position: relative; font-size: .9em; font-weight: 500;}
+.container .checkBox label input:before {content: ""; position: absolute; width: 100%; height: 100%; background: url(@/assets/images/ico_check_gray.svg) no-repeat center / contain;}
+.container .checkBox label input:checked:before {background-image: url(@/assets/images/ico_check_white.svg)}
+.container .checkBox label small {transition: .5s ease; position: relative; font-size: .8em; font-weight: 500; color: #555;}
+.container .checkBox.type1 input {flex: none; position: relative; width: 20px; height: 20px; font-size: .9rem; -webkit-appearance: none; border: 1px solid #ddd; border-radius: 4px; transition: .5s ease;}
+.container .checkBox.type1 input:checked {background: var(--black); border-color: var(--black);}
+.container .checkBox.type1 input:checked:before {content: ""; position: absolute; width: 100%; height: 100%; background: url(@/assets/images/ico_check_white.svg) no-repeat center / contain;}
+.container .checkBox.type1  small {color: #111; transition: .5s ease; font-weight: 500; font-size: .9rem;}
 .container .checkBox.type2 input {flex: none; position: relative; width: 24px; height: 24px; font-size: .9rem; -webkit-appearance: none; border: 1px solid #ddd; border-radius: 8px; transition: .5s ease;}
 .container .checkBox.type2 input::before {content: ""; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 12px; height: 12px; display: flex; justify-content: center; align-items: center; border-radius: 3px; background: #ddd;}
 .container .checkBox.type2 input:checked {border-color: var(--black);}
@@ -134,7 +140,7 @@ input::placeholder {color: #BBBBBB; font-weight: 500;}
 .container .pageWrap {display: flex; justify-content: space-between;}
 .container .pageWrap .pageList {display: flex; gap: 4px;}
 .container .pageWrap .pageList li {width: 2.2rem; height: 2.2rem;}
-.container .pageWrap .pageList li a {background: #fff; width: 100%; height: 100%; border-radius: .6rem; display: flex; align-items: center; justify-content: center; transition: .5s ease; font-size: .8rem; font-family: 'Rubik'; border: 1px solid #EEEEEE;}
+.container .pageWrap .pageList li a {background: #fff; width: 100%; height: 100%; border-radius: .6rem; display: flex; align-items: center; justify-content: center; transition: .5s ease; font-size: .8rem; font-family: 'Rubik'; border: 1px solid #EEEEEE; box-sizing: border-box;}
 .container .pageWrap .pageList li.arrow {border-radius: .6rem; box-sizing: border-box; background: #fff;}
 .container .pageWrap .pageList li.arrow a {background: transparent; background-size: 65%; background-repeat: no-repeat; background-position: center;}
 .container .pageWrap .pageList li.first a {background-image: url(@/assets/images/ico_page_first.svg);}
@@ -178,7 +184,7 @@ input::placeholder {color: #BBBBBB; font-weight: 500;}
 	.container .tableBox.type1 table tbody td button:hover {background: #999; color: #fff; box-shadow: 2px 2px #99999945, inset 2px 2px 6px rgba(255, 255, 255, .5); border-color: transparent;}
 	.container .inputBox.type2 .input .btn:hover {box-shadow: none; background: var(--mainColor);}
 
-	.container .pageWrap .pageList li:not(.arrow) a:hover {color: var(--mainColor); background: #04819b15;}
+	.container .pageWrap .pageList li:not(.arrow, .now) a:hover {color: var(--mainColor); background: #04819b15;}
 	.container .pageWrap .pageList li.arrow.active:hover {background: #04819b15;}
 	.container .pageWrap .pageList li.first.active:hover a {background-image: url(@/assets/images/ico_page_first_point.svg);}
 	.container .pageWrap .pageList li.prev.active:hover a {background-image: url(@/assets/images/ico_page_prev_point.svg);}

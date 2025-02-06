@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import URL from "@/constants/url";
+import passImage from '@/assets/images/ico_pass.png';
+import mobileImage from '@/assets/images/ico_mobile.png';
 
 const EgovIdentityVerification = () => {
     const [isVerified, setIsVerified] = useState(false);
@@ -15,25 +17,68 @@ const EgovIdentityVerification = () => {
         }
     }, [location.state]);
 
-    const handleVerification = () => {
-        // 실제 본인인증 로직을 여기에 추가
-        // 예: 인증 API 호출 후 성공 시 setIsVerified(true) 호출
-        alert("본인인증이 완료되었습니다.");
-        setIsVerified(true);
-    };
 
+    const handlePrev = (type) => {
+        navigate(URL.TERMS_AGREEMENT, { state: { signupType: type } });
+    }
     const handleNext = () => {
-        if (!isVerified) {
-            alert("본인인증을 완료해야 회원가입을 진행할 수 있습니다.");
-            return;
-        }
         navigate(URL.MYPAGE_CREATE, { state: { signupType } });
     };
 
     return (
-        <div className="container">
+        <div id="container" className="container withdraw join_step">
+            <div className="inner">
+                <ul className="stepWrap" data-aos="fade-up" data-aos-duration="1500">
+                    <li>
+                        <div className="num"><p>1</p></div>
+                        <p className="text">약관동의</p>
+                    </li>
+                    <li className="active">
+                        <div className="num"><p>2</p></div>
+                        <p className="text">본인인증</p>
+                    </li>
+                    <li>
+                        <div className="num"><p>3</p></div>
+                        <p className="text">정보입력</p>
+                    </li>
+                    <li>
+                        <div className="num"><p>4</p></div>
+                        <p className="text">신청완료</p>
+                    </li>
+                </ul>
+
+                <div className="titleWrap type1" data-aos="fade-up" data-aos-duration="1500">
+                    <p className="tt1">본인 인증</p>
+                    <strong className="tt2">사용할 인증을 선택해주세요</strong>
+                </div>
+
+                <div className="authenBox" data-aos="fade-up" data-aos-duration="1500">
+                    <div className="selectBox">
+                        <button type="button" className="pass" onClick={handleNext}>
+                            <figure className="imgBox">
+                                <img src={passImage} alt="pass images"/>
+                            </figure>
+                            <p className="tt">통신사 PASS</p>
+                        </button>
+                        <button type="button" className="moblie" onClick={handleNext}>
+                            <figure className="imgBox">
+                                <img src={mobileImage} alt="mobile ID"/>
+                            </figure>
+                            <p className="tt">모바일 신분증</p>
+                        </button>
+                    </div>
+                    <div className="textBox">
+                        <p>간편인증을 이용하기 위해서는 [휴대폰 본인확인]이 필요합니다.</p>
+                        <p>모바일 신분증앱에서 모바일 신분증을 등록 후 사용할 수 있습니다.</p>
+                    </div>
+                    <button type="button" className="clickBtn black" onClick={() => handlePrev("general")}>
+                        <span>뒤로가기</span></button>
+                </div>
+            </div>
+        </div>
+        /*<div className="container">
             <div className="c_wrap">
-                {/* Location */}
+                {/!* Location *!/}
                 <div className="location">
                     <ul>
                         <li>
@@ -45,10 +90,10 @@ const EgovIdentityVerification = () => {
                     </ul>
                 </div>
 
-                {/* Layout */}
+                {/!* Layout *!/}
                 <div className="layout">
                     <div className="contents VERIFICATION" id="contents">
-                        {/* Header */}
+                        {/!* Header *!/}
                         <div className="top_tit">
                             <h1 className="tit_1">본인인증</h1>
                             <p className="desc">
@@ -56,7 +101,7 @@ const EgovIdentityVerification = () => {
                             </p>
                         </div>
 
-                        {/* Verification */}
+                        {/!* Verification *!/}
                         <div className="verification_wrap">
                             <button
                                 className="btn btn_skyblue_h46 w_100"
@@ -71,7 +116,7 @@ const EgovIdentityVerification = () => {
                             )}
                         </div>
 
-                        {/* Button Area */}
+                        {/!* Button Area *!/}
                         <div className="board_btn_area">
                             <div className="left_col btn1">
                                 <button
@@ -88,8 +133,9 @@ const EgovIdentityVerification = () => {
                     </div>
                 </div>
             </div>
-        </div>
-    );
+        </div>*/
+)
+    ;
 };
 
 export default EgovIdentityVerification;

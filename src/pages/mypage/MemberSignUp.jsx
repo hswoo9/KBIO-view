@@ -508,14 +508,24 @@ function MemberSignUp(props) {
       <div id="container" className="container join_step step2">
         <div className="inner">
           <ul className="stepWrap" data-aos="fade-up" data-aos-duration="1500">
-            <li>
-              <div className="num"><p>1</p></div>
-              <p className="text">약관동의</p>
-            </li>
-            <li className="active">
-              <div className="num"><p>2</p></div>
-              <p className="text">정보입력</p>
-            </li>
+            <ul className="stepWrap" data-aos="fade-up" data-aos-duration="1500">
+              <li>
+                <div className="num"><p>1</p></div>
+                <p className="text">약관동의</p>
+              </li>
+              <li >
+                <div className="num"><p>2</p></div>
+                <p className="text">본인인증</p>
+              </li>
+              <li className="active">
+                <div className="num"><p>3</p></div>
+                <p className="text">정보입력</p>
+              </li>
+              <li>
+                <div className="num"><p>4</p></div>
+                <p className="text">신청완료</p>
+              </li>
+            </ul>
           </ul>
 
           <form className="contBox">
@@ -612,7 +622,7 @@ function MemberSignUp(props) {
                         emailPrefix: e.target.value,
                         email: `${e.target.value}@${memberDetail.emailDomain}` // 이메일 업데이트
                       })}
-                      style={{flex: 1,  padding: '5px'}} // 인라인 스타일
+                      style={{flex: 1, padding: '5px'}} // 인라인 스타일
                   />
                   <span style={{margin: '0 5px'}}>@</span>
                   <div className="itemBox" style={{flex: 1}}>
@@ -812,7 +822,7 @@ function MemberSignUp(props) {
               {/* 입주기업 / 유관기관 폼 */}
               {(memberDetail.mbrType === 1 || memberDetail.mbrType === 3) && (
                   <ul className="inputWrap">
-                  <li className="inputBox type2 business_num">
+                    <li className="inputBox type2 business_num">
                       <span className="tt1">사업자 등록번호</span>
                       <div className="flexinput input" style={{paddingRight: "7rem"}}>
                         <label>

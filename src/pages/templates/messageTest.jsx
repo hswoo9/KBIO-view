@@ -1,8 +1,8 @@
 import React, {useEffect, useRef, useState} from "react";
 import { default as EgovLeftNav } from "@/components/leftmenu/EgovLeftNavTemplates";
 import {useWebSocket, sendMessageFn} from "../../utils/WebSocketProvider.jsx";
-import {getComCdList, getLeftMenu, getMenu} from "../../components/CommonComponents.jsx";
 import {getSessionItem} from "../../utils/storage.js";
+import {fileUpload} from "../../components/CommonComponents.jsx";
 
 const WebSocketNotification = () => {
     const sessionUser = getSessionItem("loginUser");
@@ -10,6 +10,11 @@ const WebSocketNotification = () => {
     const userSnRef = useRef("");
     const privateTitleRef = useRef("");
     const privateContentRef = useRef("");
+
+    const [dataList, setDataList] = useState([]);
+    const fileInputRef = useRef(null); // 파일 입력을 위한 ref 생성
+
+
 
     const sendNotification = (sendType) => {
         if (isConnected) {
@@ -26,6 +31,12 @@ const WebSocketNotification = () => {
         }
     };
 
+    const excelUpload = () => {
+        fileUpload(fileInputRef.current.files[0]).then((data) => {
+            setDataList(data)
+        });
+    }
+
   return (
       <div className="container">
           <div className="c_wrap">
@@ -33,6 +44,23 @@ const WebSocketNotification = () => {
                   {/* <!-- Navigation --> */}
                   <EgovLeftNav/>
                   {/* <!--// Navigation --> */}
+
+                  <h1>엑셀 데이터 추출</h1>
+
+                  <div>
+                      <input type="file" accept=".xlsx, .xls" ref={fileInputRef}/>
+                      <button onClick={() => {excelUpload()}}>업로드</button>
+                      <h3>엑셀 데이터 목록</h3>
+                      <ul>
+                          {dataList.map((item, index) => (
+                              <li key={index}>
+                                  {index == 0 && ("[")}
+                                  {JSON.stringify(item)}
+                                  {index != dataList.length-1 ? "," : "]"}
+                              </li>
+                          ))}
+                      </ul>
+                  </div>
 
                   <h1>WebSocket 알림</h1>
                   <div>

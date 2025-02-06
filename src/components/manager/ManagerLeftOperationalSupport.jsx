@@ -6,8 +6,6 @@ import { getSessionItem, setSessionItem } from "@/utils/storage";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
 
-import LogoImg from "@/assets/images/logo_admin.svg";
-
 function ManagerLeftOperationalSupport() {
 
   const location = useLocation();
@@ -43,7 +41,7 @@ function ManagerLeftOperationalSupport() {
       function header() {
 
         // 메뉴 효과
-        $('.navBox, .lnbBox').each(function () {
+        $('.leftHeader .navBox, .lnbBox').each(function () {
           const container = $(this);
           const li = container.find('li');
           const bg = container.find('.bg');
@@ -69,7 +67,6 @@ function ManagerLeftOperationalSupport() {
                 bg.css({
                   width: `${$activeItem.outerWidth()}px`,
                   top: `${$activeItem.position().top}px`,
-                  left: `${$activeItem.position().left}px`,
                   height: `${$activeItem.outerHeight()}px`,
                   opacity: '1',
                 });
@@ -99,7 +96,6 @@ function ManagerLeftOperationalSupport() {
                   bgHover.css({
                     width: `${liWidth}px`,
                     top: `${liOffsetTop}px`,
-                    left: `${liLeft}px`,
                     height: `${liHeight}px`,
                     opacity: '1',
                   });
@@ -465,12 +461,7 @@ function ManagerLeftOperationalSupport() {
 
   return (
       <header>
-        <div className="hInner">
-          <h1><NavLink to={URL.MANAGER}><img src={LogoImg} alt="images"/><span
-              className="hidden">K BIO LabHub</span></NavLink></h1>
-          <div className="sitemapBtn">
-            <div className="icon"></div>
-          </div>
+        <div className="hInner leftHeader">
           <div className="title"><p>운영지원</p></div>
           <nav className="navBox">
             <div className="bg hover"></div>
