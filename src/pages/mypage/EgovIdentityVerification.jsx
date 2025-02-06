@@ -25,6 +25,9 @@ const EgovIdentityVerification = () => {
         setIsVerified(true);
     };
 
+    const handlePrev = (type) => {
+        navigate(URL.TERMS_AGREEMENT, { state: { signupType: type } });
+    }
     const handleNext = () => {
         if (!isVerified) {
             alert("본인인증을 완료해야 회원가입을 진행할 수 있습니다.");
@@ -73,7 +76,7 @@ const EgovIdentityVerification = () => {
                         <p>간편인증을 이용하기 위해서는 [휴대폰 본인확인]이 필요합니다.</p>
                         <p>모바일 신분증앱에서 모바일 신분증을 등록 후 사용할 수 있습니다.</p>
                     </div>
-                    <button type="button" className="clickBtn black"><span>뒤로가기</span></button>
+                    <button type="button" className="clickBtn black" onClick={() => handlePrev("general")}><span>뒤로가기</span></button>
                 </div>
             </div>
         </div>

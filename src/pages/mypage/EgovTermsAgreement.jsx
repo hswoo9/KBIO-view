@@ -29,69 +29,47 @@ const EgovTermsAgreement = () => {
     };
 
     return (
-        <div className="container">
-            <div className="c_wrap">
-                {/* Location */}
-                <div className="location">
-                    <ul>
-                        <li>
-                            <a className="home" href="#!">
-                                Home
-                            </a>
-                        </li>
-                        <li>약관 동의</li>
-                    </ul>
+        <div id="container" className="container withdraw join_step">
+            <div className="inner">
+                <ul className="stepWrap" data-aos="fade-up" data-aos-duration="1500">
+                    <li className="active">
+                        <div className="num"><p>1</p></div>
+                        <p className="text">약관동의</p>
+                    </li>
+                    <li>
+                        <div className="num"><p>2</p></div>
+                        <p className="text">본인인증</p>
+                    </li>
+                    <li>
+                        <div className="num"><p>3</p></div>
+                        <p className="text">정보입력</p>
+                    </li>
+                    <li>
+                        <div className="num"><p>4</p></div>
+                        <p className="text">신청완료</p>
+                    </li>
+                </ul>
+                <div className="titleWrap type1" data-aos="fade-up" data-aos-duration="1500">
+                    <p className="tt1">약관 동의</p>
+                    <strong className="tt2">회원가입을 위해 아래 약관을 읽고 동의해주세요.</strong>
                 </div>
-
-                {/* Layout */}
-                <div className="layout">
-                    <div className="contents AGREEMENT" id="contents">
-                        {/* Header */}
-                        <div className="top_tit">
-                            <h1 className="tit_1">약관 동의</h1>
-                            <p className="desc">
-                                회원가입을 위해 아래 약관을 읽고 동의해주세요.
-                            </p>
-                        </div>
-
-                        {/* Terms */}
-                        <div className="terms_wrap">
-                            <h2 className="terms_title">이용약관</h2>
-                            <div className="terms_box">
-                                <p>
-                                    약관의 내용이 들어갑니다. 예: 본 약관은 귀하가 본 서비스를
-                                    이용함에 있어 필요한 규정을 명시합니다...
-                                </p>
-                                {/* 약관 내용 추가 가능 */}
-                            </div>
-
-                            <div className="agree_box">
-                                <label>
-                                    <input
-                                        type="checkbox"
-                                        checked={isAgreed}
-                                        onChange={handleAgreementChange}
-                                    />
-                                    <span>약관에 동의합니다.</span>
-                                </label>
-                            </div>
-                        </div>
-
-                        {/* Button Area */}
-                        <div className="board_btn_area">
-                            <div className="left_col btn1">
-                                <button
-                                    className={`btn btn_skyblue_h46 w_100 ${
-                                        isAgreed ? "" : "btn_disabled"
-                                    }`}
-                                    onClick={handleNext}
-                                    disabled={!isAgreed}
-                                >
-                                    다음
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                <div className="topTextBox" data-aos="fade-up" data-aos-duration="1500">
+                    <p>약관의 내용</p>
+                    <label className="checkBox type1"><small>안내 사항을 모두 확인하였으며, 이에 동의합니다.</small><input
+                        type="checkbox" id="agree" name="agree" checked={isAgreed}
+                        onChange={handleAgreementChange}/></label>
+                </div>
+                <div className="authenBox" data-aos="fade-up" data-aos-duration="1500">
+                    <button
+                        type="button"
+                        className={`clickBtn black ${
+                            isAgreed ? "" : "btn_disabled"
+                        }`}
+                        onClick={handleNext}
+                        disabled={!isAgreed}
+                    >
+                        <span>다음</span>
+                    </button>
                 </div>
             </div>
         </div>
