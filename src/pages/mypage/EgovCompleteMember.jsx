@@ -10,47 +10,43 @@ const EgovSignUpComplete = () => {
     };
 
     return (
-        <div className="container">
-            <div className="c_wrap">
-                {/* Location */}
-                <div className="location">
-                    <ul>
-                        <li>
-                            <a className="home" href="#!">
-                                Home
-                            </a>
-                        </li>
-                        <li>회원가입 완료</li>
-                    </ul>
+        <div className="container withdraw join_step">
+            <div className="inner">
+                {/* Step Indicator */}
+                <ul className="stepWrap" data-aos="fade-up" data-aos-duration="1500">
+                    <li>
+                        <div className="num"><p>1</p></div>
+                        <p className="text">약관동의</p>
+                    </li>
+                    <li>
+                        <div className="num"><p>2</p></div>
+                        <p className="text">본인인증</p>
+                    </li>
+                    <li>
+                        <div className="num"><p>3</p></div>
+                        <p className="text">정보입력</p>
+                    </li>
+                    <li className="active">
+                        <div className="num"><p>4</p></div>
+                        <p className="text">신청완료</p>
+                    </li>
+                </ul>
+
+                <div className="titleWrap type1" data-aos="fade-up" data-aos-duration="1500">
+                    <p className="tt1">회원가입 완료</p>
+                    <strong className="tt2">축하합니다! 회원가입이 성공적으로 완료되었습니다.</strong>
                 </div>
 
-                {/* Layout */}
-                <div className="layout">
-                    <div className="contents SIGN_UP_COMPLETE" id="contents">
-                        {/* Header */}
-                        <div className="top_tit">
-                            <h1 className="tit_1">회원가입 완료</h1>
-                        </div>
+                <div className="titleWrap type1" data-aos="fade-up" data-aos-duration="1500">
+                    <p className="success_message">
+                        이제 로그인 후 서비스를 이용하실 수 있습니다.
+                    </p>
+                </div>
 
-                        {/* Success Message */}
-                        <div className="message_wrap">
-                            <p className="success_message">
-                                축하합니다! 회원가입이 성공적으로 완료되었습니다.
-                            </p>
-                        </div>
-
-                        {/* Button Area */}
-                        <div className="board_btn_area">
-                            <div className="left_col btn1">
-                                <button
-                                    className="btn btn_skyblue_h46 w_100"
-                                    onClick={handleNext}
-                                >
-                                    확인
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                <div className="buttonBox">
+                    <button type="button" className="clickBtn black" onClick={handleNext}>
+                        <span>확인</span>
+                    </button>
                 </div>
             </div>
         </div>
