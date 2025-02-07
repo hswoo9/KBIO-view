@@ -33,7 +33,7 @@ function OperationResidentMember(props) {
     const initMode = () => {
         setModeInfo({
             ...modeInfo,
-            editURL: `/memberApi/setNormalMember`,
+            editURL: `/mvnEntApi/setMemberActvYn`,
         });
 
         getNormalMember(searchDto);
@@ -80,6 +80,48 @@ function OperationResidentMember(props) {
     useEffect(() => {
         initMode();
     }, []);
+
+    const updateActvYn = (newStatus) =>{
+
+        const updatedDto = { ...searchDto, actvtnYn: newStatus };
+
+        Swal.fire({
+            title: "수정하시겠습니까?",
+            showCloseButton: true,
+            showCancelButton: true,
+            confirmButtonText: "저장",
+            cancelButtonText: "취소"
+        }).then((result) => {
+            if(result.isConfirmed) {
+                const requestOptions = {
+                    method: "POST",
+                    headers: {
+                        "Content-type": "application/json",
+                    },
+                    body: JSON.stringify(updatedDto),
+                };
+
+                console.log("Request Body:", JSON.stringify(requestOptions));
+
+                EgovNet.requestFetch(modeInfo.editURL, requestOptions, (resp) => {
+                    if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
+                        Swal.fire("수정되었습니다.");
+                        window.location.reload();
+                    } else {
+                        navigate(
+                            { pathname: URL.ERROR },
+                            { state: { msg: resp.resultMessage } }
+                        );
+                    }
+                });
+            } else {
+                //취소
+            }
+        });
+    };
+
+
+
 
     console.log("------------------------------EgovAdminMemberEdit [End]");
     console.groupEnd("EgovAdminMemberEdit");
@@ -337,21 +379,36 @@ function OperationResidentMember(props) {
 
                 {/*버튼영역*/}
                 <div className="pageWrap">
+
                     <div className="leftBox"
-                         style={{display : "inline-block"}}>
+                         style={{ display: memberDetail.actvtnYn === "W" ? "inline-block" : "none" }}>
                         <button
                             type="button" className="clickBtn point"
-                            style={{display : "inline-block"}}>
+                            style={{display : "inline-block"}}
+                            onClick={() => updateActvYn("Y")}>
                             승인
                         </button>
                         <button
                             type="button"
                             className="clickBtn gray"
                             style={{display : "inline-block" , marginLeft : "10px"}}
+                            onClick={() => updateActvYn("R")}
                         >
                             <span>승인반려</span>
                         </button>
                     </div>
+
+                    <div className="leftBox"
+                         style={{ display: memberDetail.actvtnYn === "R" ? "inline-block" : "none" }}>
+                        <button
+                            type="button" className="clickBtn point"
+                            style={{display : "inline-block"}}
+                            onClick={() => updateActvYn("Y")}>
+                            재승인
+                        </button>
+                    </div>
+
+                    <div className="rightBox">
                     <Link
                         to={URL.MANAGER_RESIDENT_MEMBER}
                         state={{mvnEntSn: rcDetail.mvnEntSn,
@@ -359,12 +416,15 @@ function OperationResidentMember(props) {
                                 entTelno : rcDetail.entTelno,
                                 clsNm : rcDetail.clsNm
                         }}>
+
                         <button type="button" className="clickBtn black">
                             <span>목록</span>
                         </button>
                     </Link>
+                    </div>
 
                 </div>
+                {/*버튼영역끝*/}
             </div>
         </div>
     );
