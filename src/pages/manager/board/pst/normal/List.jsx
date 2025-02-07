@@ -149,7 +149,7 @@ function ManagerPst(props) {
                     setPaginationInfo(resp.paginationInfo);
                     let dataList = [];
                     dataList.push(
-                        <tr>
+                        <tr key="0">
                             <td colSpan={
                                 resp.result.bbs.atchFileYn == "Y" && resp.result.bbs.pstCtgryYn == "Y" ? "7" :
                                 resp.result.bbs.atchFileYn == "Y" || resp.result.bbs.pstCtgryYn == "Y" ? "6" : "5"

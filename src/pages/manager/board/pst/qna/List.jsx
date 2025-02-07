@@ -149,7 +149,7 @@ function ManagerPst(props) {
                     setPaginationInfo(resp.paginationInfo);
                     let dataList = [];
                     dataList.push(
-                        <tr>
+                        <tr key="0">
                             <td colSpan={resp.result.bbs.atchFileYn == "Y" ? "5" : "4"}>검색된 결과가 없습니다.</td>
                         </tr>
                     );
