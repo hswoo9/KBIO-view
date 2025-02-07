@@ -178,6 +178,7 @@ const URL = {
   MANAGER_OPERATIONAL_SUPPORT: "/manager/operationalSupport", //운영지원/입주기업관리
   MANAGER_RESIDENT_MANAGER: "/manager/residentMemberManage", //운영지원/입주기업관리/관리자설정
   MANAGER_RESIDENT_MEMBER : "/manager/residentMember", //운영지원/입주기업관리/직원목록
+  MANAGER_RESIDENT_MEMBER_EDIT : "/manager/residentMemberEdit",  //운영지원/입주기업관리/직원목록/직원상세
   MANAGER_RELATED_ORGANIZATION : "/manager/relatedOrganization", //운영지원/유관기관관리
   MANAGER_DIFFICULTIES : "/manager/difficulties", //운영지원/애로사항관리
 

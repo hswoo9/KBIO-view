@@ -498,7 +498,7 @@ function ResidentMemberCreateContent(props){
                         <div className="input">
                             <small className="text btn" onClick={kbioauth}>기업인증</small>
                             <input
-                                type="type"
+                                type="text"
                                 name="brno"
                                 id="brno"
                                 placeholder="숫자만 입력"

@@ -94,7 +94,11 @@ function OperationalSupport(props) {
                                 </td>
                                 <td>
                                     <Link to={URL.MANAGER_RESIDENT_MEMBER}
-                                          state={{mvnEntSn: item.mvnEntSn}}>
+                                          state={{mvnEntSn: item.mvnEntSn,
+                                                  rpsvNm : item.rpsvNm,
+                                                  entTelno : item.entTelno,
+                                                  clsNm : item.clsNm
+                                                }}>
                                     <button type="button" className="listBtn"><span>직원 목록</span></button>
                                     </Link>
                                 </td>
