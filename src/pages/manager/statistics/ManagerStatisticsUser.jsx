@@ -1,18 +1,49 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
-import { Link, NavLink, useLocation } from "react-router-dom";
-import axios from "axios";
-import * as EgovNet from "@/api/egovFetch";
-import URL from "@/constants/url";
-import CODE from "@/constants/code";
-
 import ManagerLeftNew from "@/components/manager/ManagerLeftStatistics";
-import EgovPaging from "@/components/EgovPaging";
-
-import Swal from 'sweetalert2';
-
-import { getSessionItem } from "@/utils/storage";
+import {
+    format,
+    startOfMonth,
+    endOfMonth,
+    startOfWeek,
+    endOfWeek,
+    addDays,
+    isSameMonth,
+    isToday,
+    setMonth,
+    setYear,
+    isLeapYear,
+    subMonths,
+    addMonths,
+} from "date-fns";
 
 function ManagerStatisticsUser(props) {
+    const [currentMonth, setCurrentMonth] = useState(new Date());
+
+    const handleYearChange = (e) => {
+        console.log(setYear(currentMonth, parseInt(e.target.value, 10)));
+        setCurrentMonth(setYear(currentMonth, parseInt(e.target.value, 10)));
+    };
+
+    const handleMonthChange = (e) => {
+        setCurrentMonth(setMonth(currentMonth, parseInt(e.target.value, 10)));
+    };
+
+    // 현재 연도 & 월
+    const currentYear = format(currentMonth, "yyyy");
+    const currentMonthIndex = format(currentMonth, "M") - 1;
+
+    // 현재 월의 시작과 끝
+    const startMonth = startOfMonth(currentMonth);
+    const endMonth = endOfMonth(currentMonth);
+    let startDate = startOfWeek(startMonth);
+    let totalDays = [];
+    let day = startDate;
+
+    // 최대 5주(35일) 채우기
+    while (totalDays.length < 35) {
+        totalDays.push(day);
+        day = addDays(day, 1);
+    }
 
     return (
         <div id="container" className="container layout cms">
@@ -23,57 +54,36 @@ function ManagerStatisticsUser(props) {
                     <form action="">
                         <ul className="cateList">
                             <li className="inputBox type1">
-                                <p className="title">활성여부</p>
+                                <p className="title">기간</p>
                                 <div className="itemBox">
-                                    <select className="selectGroup">
-                                        <option value="">전체</option>
-                                        <option value="Y">사용</option>
-                                        <option value="N">미사용</option>
+                                    <select className="selectGroup"
+                                            value={currentYear}
+                                            id="yearSelect"
+                                            onChange={handleYearChange}
+                                    >
+                                        {Array.from({length: 10}, (_, i) => (
+                                            <option key={i} value={2020 + i}>
+                                                {2020 + i}
+                                            </option>
+                                        ))}
                                     </select>
                                 </div>
                             </li>
                             <li className="inputBox type1">
-                                <p className="title">키워드</p>
                                 <div className="itemBox">
                                     <select className="selectGroup"
-                                            id="bbsTypeNm"
-                                            name="bbsTypeNm"
-                                            title="게시판유형선택"
-                                            ref={bbsTypeNmRef}
-                                            onChange={(e) => {
-                                                getBbsList({
-                                                    ...searchDto,
-                                                    pageIndex: 1,
-                                                    bbsTypeNm: bbsTypeNmRef.current.value,
-                                                    bbsNm: bbsNmRef.current.value,
-                                                });
-                                            }}
+                                            value={currentMonthIndex}
+                                            onChange={handleMonthChange}
                                     >
-                                        <option value="">전체</option>
-                                        <option value="0">일반</option>
-                                        <option value="1">FAQ</option>
-                                        <option value="2">QNA</option>
+                                        {["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"].map((month, index) => (
+                                            <option key={index} value={index}>
+                                                {month}
+                                            </option>
+                                        ))}
                                     </select>
                                 </div>
                             </li>
-                            <li className="searchBox inputBox type1">
-                                <label className="input">
-                                    <input type="text"
-                                           name=""
-                                    />
-                                </label>
-                            </li>
                         </ul>
-                        <div className="rightBtn">
-                            <button type="button" className="refreshBtn btn btn1 gray">
-                                <div className="icon"></div>
-                            </button>
-                            <button type="button"
-                                    className="searchBtn btn btn1 point"
-                            >
-                                <div className="icon"></div>
-                            </button>
-                        </div>
                     </form>
                 </div>
                 <div className="contBox board type1 customContBox">
