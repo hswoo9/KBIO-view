@@ -178,6 +178,13 @@ import EgovTermsAgreement from '@/pages/mypage/EgovTermsAgreement';
 import EgovIdentityVerification from '@/pages/mypage/EgovIdentityVerification';
 import MemberSignupChoice from '@/pages/mypage/MemberSignupChoice';
 import EgovCompleteMember from '@/pages/mypage/EgovCompleteMember';
+
+import MemberMyPageModify from '@/pages/mypage/MemberMyPageModify';
+import MemberMyPageConsulting from '@/pages/mypage/MemberMyPageConsulting';
+import MemberMyPageSimple from '@/pages/mypage/MemberMyPageSimple';
+import MemberMyPageDifficulties from '@/pages/mypage/MemberMyPageDifficulties';
+import MemberMyPageCancel from '@/pages/mypage/MemberMyPageCancel';
+
 import * as EgovNet from "@/api/egovFetch"; // jwt토큰 위조 검사 때문에 추가
 import initPage from "@/js/ui";
 import SnsGoogleCallback from "../components/sns/SnsGoogleCallback.jsx";
@@ -492,6 +499,11 @@ const SecondRoutes = () => {
               path={URL.MYPAGE_CREATE}
               element={<EgovMypageEdit mode={CODE.MODE_CREATE} />}
             />*/}
+              <Route path={URL.MEMBER_MYPAGE_MODIFY} element={<MemberMyPageModify/>}/>
+              <Route path={URL.MEMBER_MYPAGE_CONSULTING} element={<MemberMyPageConsulting/>}/>
+              <Route path={URL.MEMBER_MYPAGE_SIMPLE} element={<MemberMyPageSimple/>}/>
+              <Route path={URL.MEMBER_MYPAGE_DIFFICULTIES} element={<MemberMyPageDifficulties/>}/>
+              <Route path={URL.MEMBER_MYPAGE_CANCEL} element={<MemberMyPageCancel/>}/>
               <Route path={URL.COMPLETE_MEMBER} element={<EgovCompleteMember/>}/>
               <Route path={URL.SIGNUP_CHOICE} element={<MemberSignupChoice/>}/>
               <Route path={URL.TERMS_AGREEMENT} element={<EgovTermsAgreement/>}/>

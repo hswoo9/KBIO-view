@@ -172,6 +172,12 @@ const URL = {
   SIGNUP_CHOICE: "/mypage/signupchoice", // 회원가입시 회원방식 선택
   COMPLETE_MEMBER: "/mypage/completemember", //회원가입 신청 완료
 
+  MEMBER_MYPAGE_MODIFY : "/member/mypage/modify",
+  MEMBER_MYPAGE_CONSULTING : "/member/mypage/consulting",
+  MEMBER_MYPAGE_SIMPLE : "/member/mypage/simple",
+  MEMBER_MYPAGE_DIFFICULTIES : "/member/mypage/difficulties",
+  MEMBER_MYPAGE_CANCEL : "/member/mypage/cancel",
+
   MANAGER_CMS: "/manager/cms",
 
   //운영지원
