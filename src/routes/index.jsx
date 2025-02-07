@@ -193,6 +193,7 @@ import MemberMyPageConsulting from '@/pages/mypage/MemberMyPageConsulting';
 import MemberMyPageSimple from '@/pages/mypage/MemberMyPageSimple';
 import MemberMyPageDifficulties from '@/pages/mypage/MemberMyPageDifficulties';
 import MemberMyPageCancel from '@/pages/mypage/MemberMyPageCancel';
+import MemberMyPageIndentity from '@/pages/mypage/MemberMyPageIdentity';
 
 import * as EgovNet from "@/api/egovFetch"; // jwt토큰 위조 검사 때문에 추가
 import initPage from "@/js/ui";
@@ -513,6 +514,7 @@ const SecondRoutes = () => {
               <Route path={URL.MEMBER_MYPAGE_SIMPLE} element={<MemberMyPageSimple/>}/>
               <Route path={URL.MEMBER_MYPAGE_DIFFICULTIES} element={<MemberMyPageDifficulties/>}/>
               <Route path={URL.MEMBER_MYPAGE_CANCEL} element={<MemberMyPageCancel/>}/>
+              <Route path={URL.MEMBER_MYPAGE_IDENTITY} element={<MemberMyPageIndentity/>}/>
               <Route path={URL.COMPLETE_MEMBER} element={<EgovCompleteMember/>}/>
               <Route path={URL.SIGNUP_CHOICE} element={<MemberSignupChoice/>}/>
               <Route path={URL.TERMS_AGREEMENT} element={<EgovTermsAgreement/>}/>

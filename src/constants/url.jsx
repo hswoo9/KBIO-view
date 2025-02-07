@@ -118,6 +118,7 @@ const URL = {
   MEMBER_MYPAGE_SIMPLE : "/member/mypage/simple",
   MEMBER_MYPAGE_DIFFICULTIES : "/member/mypage/difficulties",
   MEMBER_MYPAGE_CANCEL : "/member/mypage/cancel",
+  MEMBER_MYPAGE_IDENTITY : "/member/mypage/identity",
 
   //관리자 페이지
   MANAGER: "/manager/main",
