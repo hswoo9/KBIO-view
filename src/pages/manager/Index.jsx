@@ -57,6 +57,32 @@ function Index(props) {
     // 윤년 체크
     const leapYear = isLeapYear(currentMonth);
 
+    const makerDayEvent = (day, thisMonthBlooean) => {
+        let returnDay = format(day, "d");
+        if(thisMonthBlooean) {
+            return (
+                <p
+                    className="date"
+                >
+                    {returnDay}
+                    <div className="list">
+                        <a href="#"><p>컨설팅의뢰</p><strong className="red">0</strong></a>
+                        <a href="#"><p>간편상담</p><strong className="red">0</strong></a>
+                        <a href="#"><p>승인 대기</p><strong className="red">0</strong></a>
+                        <a href="#"><p>애로사항</p><strong className="red">0</strong></a>
+                    </div>
+                </p>
+            )
+
+        } else {
+            return (
+                <p className="date gray">
+                    {returnDay}
+                </p>
+            )
+        }
+    }
+
     const renderWeeks = () => {
         const weeks = [];
         for (let i = 0; i < totalDays.length; i += 7) {
@@ -66,11 +92,7 @@ function Index(props) {
                 <tr key={i}>
                     {week.map((day, idx) => (
                         <td key={idx}>
-                            <p
-                                className={isSameMonth(day, currentMonth) ? "date" : "date gray"}
-                            >
-                                {format(day, "d")}
-                            </p>
+                        {makerDayEvent(day, isSameMonth(day, currentMonth))}
                         </td>
                     ))}
                 </tr>
@@ -249,301 +271,7 @@ function Index(props) {
                         </tr>
                         </thead>
                         <tbody>
-                        {renderWeeks()}
-                        <tr>
-                            <td><p className="date gray">29</p></td>
-                            <td><p className="date gray">30</p></td>
-                            <td><p className="date gray">31</p></td>
-                            <td>
-                                <p className="date">1</p>
-                                <div className="list">
-                                    {/*링크 사용 안 하게 되면 div 로 변경해주세요*/}
-                                    <a href="#"><p>컨설팅의뢰</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>간편상담</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>승인 대기</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>애로사항</p><strong className="red">99</strong></a>
-                                </div>
-                            </td>
-                            <td>
-                                <p className="date">2</p>
-                                <div className="list">
-                                    <a href="#"><p>컨설팅의뢰</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>간편상담</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>승인 대기</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>애로사항</p><strong className="red">99</strong></a>
-                                </div>
-                            </td>
-                            <td>
-                                <p className="date">3</p>
-                                <div className="list">
-                                    <a href="#"><p>컨설팅의뢰</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>간편상담</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>승인 대기</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>애로사항</p><strong className="red">99</strong></a>
-                                </div>
-                            </td>
-                            <td>
-                                <p className="date">4</p>
-                                <div className="list">
-                                    <a href="#"><p>컨설팅의뢰</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>간편상담</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>승인 대기</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>애로사항</p><strong className="red">99</strong></a>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <p className="date">5</p>
-                                <div className="list">
-                                    <a href="#"><p>컨설팅의뢰</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>간편상담</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>승인 대기</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>애로사항</p><strong className="red">99</strong></a>
-                                </div>
-                            </td>
-                            <td>
-                                <p className="date">6</p>
-                                <div className="list">
-                                    <a href="#"><p>컨설팅의뢰</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>간편상담</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>승인 대기</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>애로사항</p><strong className="red">99</strong></a>
-                                </div>
-                            </td>
-                            <td>
-                                <p className="date">7</p>
-                                <div className="list">
-                                    <a href="#"><p>컨설팅의뢰</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>간편상담</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>승인 대기</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>애로사항</p><strong className="red">99</strong></a>
-                                </div>
-                            </td>
-                            <td>
-                                <p className="date">8</p>
-                                <div className="list">
-                                    <a href="#"><p>컨설팅의뢰</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>간편상담</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>승인 대기</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>애로사항</p><strong className="red">99</strong></a>
-                                </div>
-                            </td>
-                            <td>
-                                <p className="date">9</p>
-                                <div className="list">
-                                    <a href="#"><p>컨설팅의뢰</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>간편상담</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>승인 대기</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>애로사항</p><strong className="red">99</strong></a>
-                                </div>
-                            </td>
-                            <td>
-                                <p className="date">10</p>
-                                <div className="list">
-                                    <a href="#"><p>컨설팅의뢰</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>간편상담</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>승인 대기</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>애로사항</p><strong className="red">99</strong></a>
-                                </div>
-                            </td>
-                            <td>
-                                <p className="date">11</p>
-                                <div className="list">
-                                    <a href="#"><p>컨설팅의뢰</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>간편상담</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>승인 대기</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>애로사항</p><strong className="red">99</strong></a>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <p className="date">12</p>
-                                <div className="list">
-                                    <a href="#"><p>컨설팅의뢰</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>간편상담</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>승인 대기</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>애로사항</p><strong className="red">99</strong></a>
-                                </div>
-                            </td>
-                            <td>
-                                <p className="date">13</p>
-                                <div className="list">
-                                    <a href="#"><p>컨설팅의뢰</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>간편상담</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>승인 대기</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>애로사항</p><strong className="red">99</strong></a>
-                                </div>
-                            </td>
-                            <td>
-                                <p className="date">14</p>
-                                <div className="list">
-                                    <a href="#"><p>컨설팅의뢰</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>간편상담</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>승인 대기</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>애로사항</p><strong className="red">99</strong></a>
-                                </div>
-                            </td>
-                            <td>
-                                <p className="date">15</p>
-                                <div className="list">
-                                    <a href="#"><p>컨설팅의뢰</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>간편상담</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>승인 대기</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>애로사항</p><strong className="red">99</strong></a>
-                                </div>
-                            </td>
-                            <td>
-                                <p className="date">16</p>
-                                <div className="list">
-                                    <a href="#"><p>컨설팅의뢰</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>간편상담</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>승인 대기</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>애로사항</p><strong className="red">99</strong></a>
-                                </div>
-                            </td>
-                            <td>
-                                <p className="date">17</p>
-                                <div className="list">
-                                    <a href="#"><p>컨설팅의뢰</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>간편상담</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>승인 대기</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>애로사항</p><strong className="red">99</strong></a>
-                                </div>
-                            </td>
-                            <td>
-                                <p className="date">18</p>
-                                <div className="list">
-                                    <a href="#"><p>컨설팅의뢰</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>간편상담</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>승인 대기</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>애로사항</p><strong className="red">99</strong></a>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <p className="date">19</p>
-                                <div className="list">
-                                    <a href="#"><p>컨설팅의뢰</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>간편상담</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>승인 대기</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>애로사항</p><strong className="red">99</strong></a>
-                                </div>
-                            </td>
-                            <td>
-                                <p className="date">20</p>
-                                <div className="list">
-                                    <a href="#"><p>컨설팅의뢰</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>간편상담</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>승인 대기</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>애로사항</p><strong className="red">99</strong></a>
-                                </div>
-                            </td>
-                            <td>
-                                <p className="date">21</p>
-                                <div className="list">
-                                    <a href="#"><p>컨설팅의뢰</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>간편상담</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>승인 대기</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>애로사항</p><strong className="red">99</strong></a>
-                                </div>
-                            </td>
-                            <td>
-                                <p className="date">22</p>
-                                <div className="list">
-                                    <a href="#"><p>컨설팅의뢰</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>간편상담</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>승인 대기</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>애로사항</p><strong className="red">99</strong></a>
-                                </div>
-                            </td>
-                            <td>
-                                <p className="date today">23</p>
-                                <div className="list">
-                                    <a href="#"><p>컨설팅의뢰</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>간편상담</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>승인 대기</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>애로사항</p><strong className="red">99</strong></a>
-                                </div>
-                            </td>
-                            <td>
-                                <p className="date">24</p>
-                                <div className="list">
-                                    <a href="#"><p>컨설팅의뢰</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>간편상담</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>승인 대기</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>애로사항</p><strong className="red">99</strong></a>
-                                </div>
-                            </td>
-                            <td>
-                                <p className="date">25</p>
-                                <div className="list">
-                                    <a href="#"><p>컨설팅의뢰</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>간편상담</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>승인 대기</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>애로사항</p><strong className="red">99</strong></a>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <p className="date">26</p>
-                                <div className="list">
-                                    <a href="#"><p>컨설팅의뢰</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>간편상담</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>승인 대기</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>애로사항</p><strong className="red">99</strong></a>
-                                </div>
-                            </td>
-                            <td>
-                                <p className="date">27</p>
-                                <div className="list">
-                                    <a href="#"><p>컨설팅의뢰</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>간편상담</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>승인 대기</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>애로사항</p><strong className="red">99</strong></a>
-                                </div>
-                            </td>
-                            <td>
-                                <p className="date">28</p>
-                                <div className="list">
-                                    <a href="#"><p>컨설팅의뢰</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>간편상담</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>승인 대기</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>애로사항</p><strong className="red">99</strong></a>
-                                </div>
-                            </td>
-                            <td>
-                                <p className="date">29</p>
-                                <div className="list">
-                                    <a href="#"><p>컨설팅의뢰</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>간편상담</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>승인 대기</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>애로사항</p><strong className="red">99</strong></a>
-                                </div>
-                            </td>
-                            <td>
-                                <p className="date">30</p>
-                                <div className="list">
-                                    <a href="#"><p>컨설팅의뢰</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>간편상담</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>승인 대기</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>애로사항</p><strong className="red">99</strong></a>
-                                </div>
-                            </td>
-                            <td>
-                                <p className="date">31</p>
-                                <div className="list">
-                                    <a href="#"><p>컨설팅의뢰</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>간편상담</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>승인 대기</p><strong className="red">99</strong></a>
-                                    <a href="#"><p>애로사항</p><strong className="red">99</strong></a>
-                                </div>
-                            </td>
-                            <td><p className="date gray">1</p></td>
-                        </tr>
+                            {renderWeeks()}
                         </tbody>
                     </table>
                 </div>
