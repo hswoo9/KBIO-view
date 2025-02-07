@@ -413,7 +413,7 @@ function EgovHeader() {
                     {sessionUserSe}로 로그인하셨습니다.
                     {sessionUserSe === "UDR" && (
                         <NavLink
-                            to={URL.MYPAGE_MODIFY}
+                            to={URL.MEMBER_MYPAGE_MODIFY}
                         >
                           <button type="button" className="myPage"><span>마이페이지</span></button>
                         </NavLink>

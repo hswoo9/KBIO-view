@@ -11,7 +11,7 @@ import Swal from 'sweetalert2';
 import EgovPaging from "@/components/EgovPaging";
 
 import moment from "moment/moment.js";
-import {getSessionItem} from "../../../../utils/storage.js";
+import {getSessionItem} from "../../../../../utils/storage.js";
 
 
 function ManagerPst(props) {
@@ -28,20 +28,19 @@ function ManagerPst(props) {
         }
     );
     const [paginationInfo, setPaginationInfo] = useState({});
+
+    const [bbsDetail, setBbsDetail] = useState([]);
     const [pstList, setPstList] = useState([]);
     const searchTypeRef = useRef();
     const searchValRef = useRef();
 
     const [pstEvlData, setPstEvlData] = useState({});
     useEffect(() => {
-        console.log(pstEvlData);
     }, [pstEvlData]);
 
-    const [comCdList, setComCdList] = useState([]);
+    const [evalComCdList, setEvalComCdList] = useState([]);
     useEffect(() => {
-        console.log(" setComCdList START ");
-        console.log(comCdList)
-    }, [comCdList]);
+    }, [evalComCdList]);
 
     const activeEnter = (e) => {
         if (e.key === "Enter") {
@@ -80,14 +79,13 @@ function ManagerPst(props) {
                 (resp) => {
 
                     if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
-                        console.log(resp.result.pstEvlList);
                         if(resp.result.pstEvlList != null){
                             let data = {};
                             let impvOpnnCnList = [];
                             let countHtml = [];
                             let pstEvlList = resp.result.pstEvlList;
-                            if(comCdList != null && comCdList.length > 0){
-                                comCdList.forEach(function(item, index){
+                            if(evalComCdList != null && evalComCdList.length > 0){
+                                evalComCdList.forEach(function(item, index){
                                     let count = 0;
 
                                     pstEvlList.forEach(function(subItem, subIndex){
@@ -121,7 +119,7 @@ function ManagerPst(props) {
         }
     )
 
-    const getComCdListToHtml = (dataList) => {
+    const getEvalComCdListToHtml = (dataList) => {
         let htmlData = [];
         if(dataList != null && dataList.length > 0){
             dataList.forEach(function(item, index) {
@@ -147,11 +145,17 @@ function ManagerPst(props) {
                 pstListURL,
                 requestOptions,
                 (resp) => {
+                    setBbsDetail(resp.result.bbs);
                     setPaginationInfo(resp.paginationInfo);
                     let dataList = [];
                     dataList.push(
-                        <tr>
-                            <td colSpan={searchDto.atchFileYn == "Y" ? "5" : "4"}>검색된 결과가 없습니다.</td>
+                        <tr key="0">
+                            <td colSpan={
+                                resp.result.bbs.atchFileYn == "Y" && resp.result.bbs.pstCtgryYn == "Y" ? "7" :
+                                resp.result.bbs.atchFileYn == "Y" || resp.result.bbs.pstCtgryYn == "Y" ? "6" : "5"
+                            }>
+                                검색된 결과가 없습니다.
+                            </td>
                         </tr>
                     );
 
@@ -161,23 +165,17 @@ function ManagerPst(props) {
                         let rlsYnFlag = false;
                         let pstSn = "";
 
-                        if(item.rlsYn == "N"){
-                            rlsYnFlag = true;
-                        }
-                        if(sessionUser.userSe == "ADM"){
-                            rlsYnFlag = true;
-                        }
+                        if(item.rlsYn == "N"){ rlsYnFlag = true; }
+                        if(sessionUser.userSe == "ADM"){ rlsYnFlag = true; }
 
                         if(sessionUser.userSn == item.creatrSn){
                             rlsYnFlag = true;
                             pstSn = item.pstSn;
                         }
 
-                        if(pstSn == item.upPstSn){
-                            rlsYnFlag = true;
-                        }
+                        if(pstSn == item.upPstSn){ rlsYnFlag = true; }
 
-                        if(item.upPstSn != null) {  // 답글
+                        if(item.upPstSn != null) {
                             reTag = "<span style='color:#5b72ff ' class='reply_row'>[RE]</span>"
                             if (resp.result.pstList.find(v => v.pstSn == item.upPstSn).rlsYn == "N") {
                                 rlsYnFlag = true;
@@ -191,8 +189,13 @@ function ManagerPst(props) {
                                         "공지" :
                                         resp.paginationInfo.totalRecordCount - (resp.paginationInfo.currentPageNo - 1) * resp.paginationInfo.pageSize - index}
                                 </td>
+                                {resp.result.bbs.pstCtgryYn == "Y" && (
+                                    <td>
+                                        {item.pstClsfNm}
+                                    </td>
+                                )}
                                 <td style={{textAlign: "left", paddingLeft: "15px"}}>
-                                    <Link to={URL.MANAGER_PST_DETAIL}
+                                    <Link to={URL.MANAGER_PST_NORMAL_DETAIL}
                                           mode={CODE.MODE_READ}
                                           state={{pstSn: item.pstSn}}
                                     >
@@ -200,7 +203,7 @@ function ManagerPst(props) {
                                         {item.rlsYn == "Y" ? (rlsYnFlag ? item.pstTtl : item.pstTtl.replaceAll(/./g, '*')) : item.pstTtl}
                                     </Link>
                                 </td>
-                                {searchDto.atchFileYn == "Y" && (
+                                {resp.result.bbs.atchFileYn == "Y" && (
                                     <td>{item.fileCnt != 0 ? "있음" : "없음"}</td>
                                 )}
                                 <td>{moment(item.frstCrtDt).format('YYYY-MM-DD')}</td>
@@ -223,12 +226,10 @@ function ManagerPst(props) {
 
     useEffect(() => {
         getComCdList(2).then((data) => {
-            setComCdList(data);
+            setEvalComCdList(data);
         });
         getPstList(searchDto);
     }, []);
-
-
 
     return (
         <div id="container" className="container layout cms">
@@ -300,8 +301,11 @@ function ManagerPst(props) {
                             <caption>게시글목록</caption>
                             <colgroup>
                                 <col width="80"/>
+                                {bbsDetail.pstCtgryYn == "Y" && (
+                                    <col width="80"/>
+                                )}
                                 <col/>
-                                {searchDto.atchFileYn == "Y" && (
+                                {bbsDetail.atchFileYn == "Y" && (
                                     <col width="80"/>
                                 )}
                                 <col width="120"/>
@@ -311,8 +315,11 @@ function ManagerPst(props) {
                             <thead>
                             <tr>
                                 <th>번호</th>
+                                {bbsDetail.pstCtgryYn == "Y" && (
+                                    <th>분류</th>
+                                )}
                                 <th>제목</th>
-                                {searchDto.atchFileYn == "Y" && (
+                                {bbsDetail.atchFileYn == "Y" && (
                                     <th>첨부파일</th>
                                 )}
                                 <th>등록일</th>
@@ -336,7 +343,7 @@ function ManagerPst(props) {
                             }}
                         />
                         <NavLink
-                            to={URL.MANAGER_PST_CREATE}
+                            to={URL.MANAGER_PST_NORMAL_CREATE}
                             state={{bbsSn: searchDto.bbsSn}}
                             mode={CODE.MODE_CREATE}
                         >
@@ -373,7 +380,7 @@ function ManagerPst(props) {
                                     </colgroup>
                                     <thead>
                                     <tr>
-                                        {getComCdListToHtml(comCdList)}
+                                        {getEvalComCdListToHtml(evalComCdList)}
                                     </tr>
                                     </thead>
                                     <tbody>

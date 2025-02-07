@@ -186,7 +186,7 @@ export default function userJs() {
 
     function modalClose() {
         $('.modalCon .bg, .modalCon .close, .modalCon .closeBtn').on('click', function() {
-            $('.modalCon').removeClass('open');
+            $(this).closest('.modalCon').removeClass('open');
             $('html, body').css('overflow', 'visible');
         })
     }

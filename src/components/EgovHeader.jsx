@@ -181,7 +181,7 @@ function EgovHeader() {
               {sessionUserSe}로 로그인하셨습니다.
               {sessionUserSe === "USR" && (
                 <NavLink
-                  to={URL.MYPAGE_MODIFY}
+                  to={URL.MEMBER_MYPAGE_MODIFY}
                   className={({ isActive }) =>
                     isActive ? "btn login cur" : "btn login"
                   }

@@ -11,6 +11,7 @@ import '@/css/manager/managerPstDetail.css';
 import { getSessionItem, setSessionItem } from "@/utils/storage";
 import {fileDownLoad, fileZipDownLoad} from "@/components/CommonComponents.jsx";
 import CommonPstEval from "./eval.jsx";
+import {getComCdList} from "../../../components/CommonComponents.jsx";
 
 function commonPstDetail(props) {
   const sessionUser = getSessionItem("loginUser");
@@ -32,7 +33,7 @@ function commonPstDetail(props) {
   const [pst, setPst] = useState({});
   const [pstPrevNext, setPstPrevNext] = useState([]);
   const [bbs, setBbs] = useState({});
-
+  const [comCdList, setComCdList] = useState([]);
 
   /** 댓글 */
   const initialCommentState = {
@@ -272,6 +273,18 @@ function commonPstDetail(props) {
     getPst(searchDto);
   }, [searchDto.pstSn]);
 
+  useEffect(() => {
+    if(bbs.pstCtgryYn == "Y"){
+      const cdGroupSn =
+          bbs.bbsTypeNm == "0" ? 7 :
+              bbs.bbsTypeNm == "1" ? 9 : 8
+
+      getComCdList(cdGroupSn).then((data) => {
+        setComCdList(data);
+      })
+    }
+  }, [bbs.bbsSn]);
+
   return (
       <div id="container" className="container layout cms">
         <div className="inner">
@@ -279,6 +292,12 @@ function commonPstDetail(props) {
           <div className="contBox">
             <div className="box infoBox">
               <ul className="listBox">
+                {bbs.pstCtgryYn == "Y" && comCdList.length > 0 && (
+                    <li className="inputBox type1 width1">
+                      <label className="title"><small>분류</small></label>
+                      <div className="input">{comCdList.find(e => e.comCdSn == pst.pstClsf).comCdNm}</div>
+                    </li>
+                )}
                 <li className="inputBox type1 width1">
                   <label className="title"><small>제목</small></label>
                   <div className="input">{pst.pstTtl}</div>

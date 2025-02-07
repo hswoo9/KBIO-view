@@ -30,12 +30,33 @@ function Index(props) {
 
     // 연도 및 월 변경 핸들러
     const handleYearChange = (e) => {
+        console.log(setYear(currentMonth, parseInt(e.target.value, 10)));
         setCurrentMonth(setYear(currentMonth, parseInt(e.target.value, 10)));
     };
 
     const handleMonthChange = (e) => {
         setCurrentMonth(setMonth(currentMonth, parseInt(e.target.value, 10)));
     };
+
+    const handlePrevNextChange = (type) => {
+        if(type == "prev"){
+            if(format(subMonths(currentMonth, 1), "M") == 12){
+                setCurrentMonth(setYear(currentMonth, parseInt((format(currentMonth, "yyyy") - 1), 10)));
+                document.getElementById("yearSelect").value = String(setYear(currentMonth, parseInt((format(currentMonth, "yyyy") - 1), 10)));
+                setCurrentMonth(subMonths(currentMonth, 1));
+            }else{
+                setCurrentMonth(subMonths(currentMonth, 1));
+            }
+        }else{
+            if(format(subMonths(currentMonth, 1), "M") == 1){
+                setCurrentMonth(setYear(currentMonth, parseInt((format(currentMonth, "yyyy") - 1), 10)));
+                document.getElementById("yearSelect").value = String(setYear(currentMonth, parseInt((format(currentMonth, "yyyy") - 1), 10)));
+                setCurrentMonth(addMonths(currentMonth, 1));
+            }else{
+                setCurrentMonth(addMonths(currentMonth, 1));
+            }
+        }
+    }
 
     // 현재 연도 & 월
     const currentYear = format(currentMonth, "yyyy");
@@ -63,20 +84,21 @@ function Index(props) {
             return (
                 <p
                     className="date"
+                    key={day}
                 >
                     {returnDay}
-                    <div className="list">
-                        <a href="#"><p>컨설팅의뢰</p><strong className="red">0</strong></a>
-                        <a href="#"><p>간편상담</p><strong className="red">0</strong></a>
-                        <a href="#"><p>승인 대기</p><strong className="red">0</strong></a>
-                        <a href="#"><p>애로사항</p><strong className="red">0</strong></a>
-                    </div>
+                    <span className="list">
+                        <a href="#"><span>컨설팅의뢰</span><strong className="red">0</strong></a>
+                        <a href="#"><span>간편상담</span><strong className="red">0</strong></a>
+                        <a href="#"><span>승인 대기</span><strong className="red">0</strong></a>
+                        <a href="#"><span>애로사항</span><strong className="red">0</strong></a>
+                    </span>
                 </p>
             )
 
         } else {
             return (
-                <p className="date gray">
+                <p className="date gray" key={day}>
                     {returnDay}
                 </p>
             )
@@ -221,13 +243,17 @@ function Index(props) {
             </div>
             <div className="rightBox calendarWrap">
                 <div className="topBox">
-                    <button type="button" className="arrowBtn prevBtn" onClick={() => {setCurrentMonth(subMonths(currentMonth, 1))}}>
+                    <button type="button" className="arrowBtn prevBtn"
+                            onClick={() => handlePrevNextChange("prev")}
+                    >
+                        {/*onClick={() => {setCurrentMonth(subMonths(currentMonth, 1))}}*/}
                         <div className="icon"></div>
                     </button>
                     <div className="yearBox">
                         <div className="itemBox">
                             <select className="mainSelectGroup"
-                                    defaultValue="2025"
+                                    value={currentYear}
+                                    id="yearSelect"
                                     onChange={handleYearChange}
                             >
                                 {Array.from({ length: 10 }, (_, i) => (
@@ -252,7 +278,10 @@ function Index(props) {
                             </select>
                         </div>
                     </div>
-                    <button type="button" className="arrowBtn nextBtn"onClick={() => setCurrentMonth(addMonths(currentMonth, 1))}>
+                    <button type="button" className="arrowBtn nextBtn"
+                            onClick={() => handlePrevNextChange("next")}
+                    >
+                        {/*onClick={() => setCurrentMonth(addMonths(currentMonth, 1))}*/}
                         <div className="icon"></div>
                     </button>
                 </div>

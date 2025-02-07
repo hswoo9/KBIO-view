@@ -113,6 +113,12 @@ const URL = {
   SIGNUP_CHOICE: "/mypage/signupchoice", // 회원가입시 회원방식 선택
   COMPLETE_MEMBER: "/mypage/completemember", //회원가입 신청 완료
 
+  MEMBER_MYPAGE_MODIFY : "/member/mypage/modify",
+  MEMBER_MYPAGE_CONSULTING : "/member/mypage/consulting",
+  MEMBER_MYPAGE_SIMPLE : "/member/mypage/simple",
+  MEMBER_MYPAGE_DIFFICULTIES : "/member/mypage/difficulties",
+  MEMBER_MYPAGE_CANCEL : "/member/mypage/cancel",
+
   //관리자 페이지
   MANAGER: "/manager/main",
   MANAGER_NORMAL_MEMBER: "/manager/all/normalMember",
@@ -152,11 +158,28 @@ const URL = {
   MANAGER_MENU_AUTHORITY: "/manager/menuAuthority",
   MANAGER_AUTHORITY_GROUP_USERS: "/manager/groupUsers",
 
+  /** 게시판 관리 시작 */
+  MANAGER_BBS_LIST:"/manager/bbs/list",
+  MANAGER_BBS_CREATE: "/manager/bbs/create",
+  MANAGER_BBS_MODIFY: "/manager/bbs/modify",
+
   MANAGER_BBS_LIST2:"/manager/bbs/pst/bbsList",
-  MANAGER_PST_LIST:"/manager/bbs/pst/list",
-  MANAGER_PST_DETAIL: "/manager/bbs/pst/detail",
-  MANAGER_PST_CREATE: "/manager/bbs/pst/create",
-  MANAGER_PST_MODIFY: "/manager/bbs/pst/modify",
+  MANAGER_PST_NORMAL_LIST:"/manager/bbs/pst/normal/list",
+  MANAGER_PST_NORMAL_DETAIL: "/manager/bbs/pst/normal/detail",
+  MANAGER_PST_NORMAL_CREATE: "/manager/bbs/pst/normal/create",
+  MANAGER_PST_NORMAL_MODIFY: "/manager/bbs/pst/normal/modify",
+
+  MANAGER_PST_QNA_LIST:"/manager/bbs/pst/qna/list",
+  MANAGER_PST_QNA_DETAIL: "/manager/bbs/pst/qna/detail",
+  MANAGER_PST_QNA_CREATE: "/manager/bbs/pst/qna/create",
+  MANAGER_PST_QNA_MODIFY: "/manager/bbs/pst/qna/modify",
+
+  MANAGER_PST_FAQ_LIST:"/manager/bbs/pst/faq/list",
+  MANAGER_PST_FAQ_DETAIL: "/manager/bbs/pst/faq/detail",
+  MANAGER_PST_FAQ_CREATE: "/manager/bbs/pst/faq/create",
+  MANAGER_PST_FAQ_MODIFY: "/manager/bbs/pst/faq/modify",
+  /** 게시판 관리 종료 */
+
 
   MANAGER_NORMAL_MEMBER_MODIFY: "/manager/normal/member/modify",
   MANAGER_NORMAL_MEMBER_CREATE: "/manager/normal/member/create",
