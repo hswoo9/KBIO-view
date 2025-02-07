@@ -11,9 +11,10 @@ import EgovRadioButtonGroup from "@/components/EgovRadioButtonGroup";
 import Swal from "sweetalert2";
 import Form from "react-bootstrap/Form";
 import moment from "moment";
-import {getSessionItem} from "../../../../utils/storage.js";
+import {getSessionItem} from "../../../../../utils/storage.js";
 
 import CommonEditor from "@/components/CommonEditor";
+import {getComCdList} from "../../../../../components/CommonComponents.jsx";
 
 function setPst(props) {
 
@@ -26,24 +27,22 @@ function setPst(props) {
     pstSn : location.state?.pstSn
   });
   const upPstSn = location.state?.upPstSn || null;
+  const upPstClsf = location.state?.upPstClsf || null;
+  const upPstTtl = location.state?.upPstTtl || null;
+  const upRlsYn = location.state?.upRlsYn || null;
+  const upPrvtPswd = location.state?.upPrvtPswd || null;
+
   const pstGroup = location.state?.pstGroup || null;
 
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
   const [modeInfo, setModeInfo] = useState({ mode: props.mode });
   const [pstDetail, setPstDetail] = useState({});
+  const [comCdList, setComCdList] = useState([]);
   useEffect(() => {
-    console.log(pstDetail);
   }, [pstDetail])
   const [isDatePickerEnabled, setIsDatePickerEnabled] = useState(false);
   const [acceptFileTypes, setAcceptFileTypes] = useState('');
   const [fileList, setFileList] = useState([]);
   const [bbsDetail, setBbsDetail] = useState({});
-
-  const rlsYnRadioGroup = [
-    { value: "Y", label: "비공개" },
-    { value: "N", label: "공개" },
-  ];
 
   const isFirstRender = useRef(true);
   const handleChange = (value) => {
@@ -120,9 +119,12 @@ function setPst(props) {
       // 조회/등록이면 조회 안함
       setPstDetail({
         bbsSn : searchDto.bbsSn,
+        pstClsf : upPstClsf ? upPstClsf : null,
+        pstTtl : upPstTtl ? "문의하신 " + upPstTtl + " 답변입니다." : null,
         linkUrlAddr : "",
         upendNtcYn : "N",
-        rlsYn : "N",
+        rlsYn : upRlsYn ? upRlsYn : "N",
+        prvtPswd : upPrvtPswd ? upPrvtPswd : null,
         actvtnYn : "Y",
         creatrSn: sessionUser.userSn,
       });
@@ -150,28 +152,6 @@ function setPst(props) {
 
         resp.result.pst.mdfrSn = sessionUser.userSn
         setPstDetail(resp.result.pst);
-        console.log(resp.result.pst);
-        if(resp.result.pst.upendNtcYn == "Y"){
-          if(resp.result.pst.ntcBgngDt != null){
-            setStartDate(
-                new Date(
-                    resp.result.pst.ntcBgngDt.substring(0, 4),
-                    resp.result.pst.ntcBgngDt.substring(4, 6) - 1,
-                    resp.result.pst.ntcBgngDt.substring(6, 8)
-                )
-            )
-          }
-          if(resp.result.pst.ntcEndDate != null){
-            setEndDate(
-                new Date(
-                    resp.result.pst.ntcEndDate.substring(0, 4),
-                    resp.result.pst.ntcEndDate.substring(4, 6) - 1,
-                    resp.result.pst.ntcEndDate.substring(6, 8)
-                )
-            )
-          }
-          setIsDatePickerEnabled(true);
-        }
       }
     });
   };
@@ -211,9 +191,9 @@ function setPst(props) {
   }
 
   const setPstData = async () => {
-    if (pstDetail.upendNtcYn == "Y") {
-      if(!pstDetail.ntcBgngDt && !pstDetail.ntcEndDate){
-        Swal.fire("공지기간은 선택해주세요.");
+    if(bbsDetail.pstCtgryYn == "Y"){
+      if (!pstDetail.pstClsf) {
+        Swal.fire("분류를 선택해주세요.");
         return;
       }
     }
@@ -242,11 +222,6 @@ function setPst(props) {
       formData.append("pstGroup", pstGroup);
     }
 
-
-    // for (const [key, value] of formData.entries()) {
-    //   console.log(`${key}: ${value}`);
-    // }
-
     fileList.map((file) => {
       formData.append("files", file);
     });
@@ -268,7 +243,7 @@ function setPst(props) {
           if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
             Swal.fire("등록되었습니다.");
             navigate(
-                { pathname : URL.MANAGER_PST_LIST},
+                { pathname : URL.MANAGER_PST_QNA_LIST},
                 { state: {
                     bbsSn: bbsDetail.bbsSn,
                     atchFileYn: bbsDetail.atchFileYn,
@@ -309,7 +284,7 @@ function setPst(props) {
           if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
             Swal.fire("삭제되었습니다.");
             navigate(
-                { pathname : URL.MANAGER_PST_LIST},
+                { pathname : URL.MANAGER_PST_QNA_LIST},
                 { state: {
                     bbsSn: bbsDetail.bbsSn,
                     atchFileYn: bbsDetail.atchFileYn,
@@ -330,6 +305,19 @@ function setPst(props) {
     initMode();
   }, []);
 
+  useEffect(() => {
+    if(bbsDetail.pstCtgryYn == "Y"){
+      const cdGroupSn =
+          bbsDetail.bbsTypeNm == "0" ? 7 :
+              bbsDetail.bbsTypeNm == "1" ? 9 : 8
+
+      getComCdList(cdGroupSn).then((data) => {
+        setComCdList(data);
+      })
+    }
+  }, [bbsDetail]);
+
+
   return (
       <div id="container" className="container layout cms">
         <ManagerLeftNew/>
@@ -344,61 +332,85 @@ function setPst(props) {
 
           <div className="contBox infoWrap customContBox">
             <ul className="inputWrap">
-              {upPstSn == null && pstDetail.upPstSn == null && (
-                  <>
-                    <li className="toggleBox width3">
-                      <div className="box">
-                        <p className="title essential">공지(기간)</p>
-                        <div className="toggleSwithWrap">
-                          <input type="checkbox"
-                                 id="upendNtcYn"
-                                 checked={pstDetail.upendNtcYn == "Y"}
-                                 onChange={(e) => {
-                                   setPstDetail({
-                                     ...pstDetail,
-                                     upendNtcYn: e.target.checked ? "Y" : "N",
-                                     ntcBgngDt: !e.target.checked ? null : pstDetail.ntcBgngDt,
-                                     ntcEndDate: !e.target.checked ? null : pstDetail.ntcEndDate,
-                                   })
-                                   setIsDatePickerEnabled(e.target.checked);
-                                 }}
-                          />
-                          <label htmlFor="upendNtcYn" className="toggleSwitch">
-                            <span className="toggleButton"></span>
-                          </label>
-                        </div>
-                      </div>
-                    </li>
-                    <li className="inputBox type1 width3">
-                      <label className="title" htmlFor="ntcBgngDt"><small>공지시작일</small></label>
-                      <div className="input">
-                        <input type="date"
-                               id="ntcBgngDt"
-                               name="ntcBgngDt"
-                               defaultValue={pstDetail.upendNtcYn == "Y" ? moment(pstDetail.ntcBgngDt).format('YYYY-MM-DD') : "" }
-                               onChange={(e) =>
-                                   setPstDetail({...pstDetail, ntcBgngDt: moment(e.target.value).format('YYYYMMDD')})
-                               }
-                               disabled={!isDatePickerEnabled}
-                        />
-                      </div>
-                    </li>
-                    <li className="inputBox type1 width3">
-                      <label className="title" htmlFor="ntcEndDate"><small>공지종료일</small></label>
-                      <div className="input">
-                        <input type="date"
-                               id="ntcEndDate"
-                               name="ntcEndDate"
-                               defaultValue={pstDetail.upendNtcYn == "Y" ? moment(pstDetail.ntcEndDate).format('YYYY-MM-DD') : "" }
-                               onChange={(e) =>
-                                   setPstDetail({...pstDetail, ntcEndDate: moment(e.target.value).format('YYYYMMDD')})
-                               }
-                               disabled={!isDatePickerEnabled}
+              {/*{upPstSn == null && pstDetail.upPstSn == null && (*/}
+              {/*    <>*/}
+              {/*      <li className="toggleBox width3">*/}
+              {/*        <div className="box">*/}
+              {/*          <p className="title essential">공지(기간)</p>*/}
+              {/*          <div className="toggleSwithWrap">*/}
+              {/*            <input type="checkbox"*/}
+              {/*                   id="upendNtcYn"*/}
+              {/*                   checked={pstDetail.upendNtcYn == "Y"}*/}
+              {/*                   onChange={(e) => {*/}
+              {/*                     setPstDetail({*/}
+              {/*                       ...pstDetail,*/}
+              {/*                       upendNtcYn: e.target.checked ? "Y" : "N",*/}
+              {/*                       ntcBgngDt: !e.target.checked ? null : pstDetail.ntcBgngDt,*/}
+              {/*                       ntcEndDate: !e.target.checked ? null : pstDetail.ntcEndDate,*/}
+              {/*                     })*/}
+              {/*                     setIsDatePickerEnabled(e.target.checked);*/}
+              {/*                   }}*/}
+              {/*            />*/}
+              {/*            <label htmlFor="upendNtcYn" className="toggleSwitch">*/}
+              {/*              <span className="toggleButton"></span>*/}
+              {/*            </label>*/}
+              {/*          </div>*/}
+              {/*        </div>*/}
+              {/*      </li>*/}
+              {/*      <li className="inputBox type1 width3">*/}
+              {/*        <label className="title" htmlFor="ntcBgngDt"><small>공지시작일</small></label>*/}
+              {/*        <div className="input">*/}
+              {/*          <input type="date"*/}
+              {/*                 id="ntcBgngDt"*/}
+              {/*                 name="ntcBgngDt"*/}
+              {/*                 defaultValue={pstDetail.upendNtcYn == "Y" ? moment(pstDetail.ntcBgngDt).format('YYYY-MM-DD') : "" }*/}
+              {/*                 onChange={(e) =>*/}
+              {/*                     setPstDetail({...pstDetail, ntcBgngDt: moment(e.target.value).format('YYYYMMDD')})*/}
+              {/*                 }*/}
+              {/*                 disabled={!isDatePickerEnabled}*/}
+              {/*          />*/}
+              {/*        </div>*/}
+              {/*      </li>*/}
+              {/*      <li className="inputBox type1 width3">*/}
+              {/*        <label className="title" htmlFor="ntcEndDate"><small>공지종료일</small></label>*/}
+              {/*        <div className="input">*/}
+              {/*          <input type="date"*/}
+              {/*                 id="ntcEndDate"*/}
+              {/*                 name="ntcEndDate"*/}
+              {/*                 defaultValue={pstDetail.upendNtcYn == "Y" ? moment(pstDetail.ntcEndDate).format('YYYY-MM-DD') : "" }*/}
+              {/*                 onChange={(e) =>*/}
+              {/*                     setPstDetail({...pstDetail, ntcEndDate: moment(e.target.value).format('YYYYMMDD')})*/}
+              {/*                 }*/}
+              {/*                 disabled={!isDatePickerEnabled}*/}
 
-                        />
+              {/*          />*/}
+              {/*        </div>*/}
+              {/*      </li>*/}
+              {/*    </>*/}
+              {/*)}*/}
+              {bbsDetail.pstCtgryYn == "Y" && (
+                  <li className="inputBox type1 width1">
+                    <label className="title essential" htmlFor="pstClsf"><small>분류</small></label>
+                    <div className="input">
+                      <div className="itemBox">
+                        <select
+                            id="pstClsf"
+                            className="selectGroup"
+                            key={pstDetail.pstSn}
+                            value={upPstClsf != null ? upPstClsf : pstDetail.pstClsf}
+                            onChange={(e) =>
+                                setPstDetail({...pstDetail, pstClsf: e.target.value})
+                            }
+                            disabled={upPstClsf}
+                        >
+                          <option value="">선택</option>
+                          {comCdList.map((item, index) => (
+                              <option value={item.comCdSn}>{item.comCdNm}</option>
+                          ))}
+                        </select>
                       </div>
-                    </li>
-                  </>
+                    </div>
+                  </li>
               )}
               <li className="inputBox type1 width1">
                 <label className="title essential" htmlFor="pstTtl"><small>제목</small></label>
@@ -407,10 +419,11 @@ function setPst(props) {
                          name="pstTtl"
                          title=""
                          id="pstTtl"
-                         defaultValue={pstDetail.pstTtl}
+                         defaultValue={upPstTtl != null ? "문의하신 " + upPstTtl + " 답변입니다." : pstDetail.pstTtl}
                          onChange={(e) =>
                              setPstDetail({...pstDetail, pstTtl: e.target.value})
                          }
+                         disabled={upPstTtl}
                   />
                 </div>
               </li>
@@ -547,7 +560,7 @@ function setPst(props) {
                 )}
               </div>
               <NavLink
-                  to={URL.MANAGER_PST_LIST}
+                  to={URL.MANAGER_PST_QNA_LIST}
                   className="btn btn_blue_h46 w_100"
                   state={{
                     bbsSn: bbsDetail.bbsSn,

@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useCallback, useRef} from "react";
-import { Link, useLocation } from "react-router-dom";
+import {Link, NavLink, useLocation} from "react-router-dom";
 import axios from "axios";
 import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
@@ -61,29 +61,33 @@ function ManagerBbs(props) {
                     resp.result.bbsList.forEach(function (item, index) {
                         if (index === 0) dataList = []; // 목록 초기화
 
+                        let pstListUrl = "";
+
+                        if(item.bbsTypeNm == "0"){
+                            pstListUrl = URL.MANAGER_PST_NORMAL_LIST
+                        }else if(item.bbsTypeNm == "1"){
+                            pstListUrl = URL.MANAGER_PST_FAQ_LIST
+                        }else if(item.bbsTypeNm == "2"){
+                            pstListUrl = URL.MANAGER_PST_QNA_LIST
+                        }
+
                         dataList.push(
                             <tr key={item.bbsSn}>
                                 <td>
                                     {item.bbsNm}
-                                    {/*<Link to={URL.MANAGER_BBS_MODIFY}*/}
-                                    {/*      mode={CODE.MODE_MODIFY}*/}
-                                    {/*      state={{ bbsSn: item.bbsSn }}*/}
-                                    {/*      >*/}
-                                    {/*    {item.bbsNm}*/}
-                                    {/*</Link>*/}
                                 </td>
-                                <td>{item.bbsTypeNm == "0" ? "일반" : item.bbsTypeNm == "1" ? "faQ" : "QnA"}</td>
+                                <td>{item.bbsTypeNm == "0" ? "일반" : item.bbsTypeNm == "1" ? "FAQ" : "Q&A"}</td>
                                 <td>{item.actvtnYn === "Y" ? "사용" : "미사용"}</td>
                                 <td>{moment(item.frstCrtDt).format('YYYY-MM-DD')}</td>
                                 <td>
-                                    <Link to={URL.MANAGER_PST_LIST}
+                                    <NavLink to={pstListUrl}
                                         state={{
                                             bbsSn: item.bbsSn,
                                             atchFileYn : item.atchFileYn
                                         }}
                                     >
                                         <button>게시글 관리</button>
-                                    </Link>
+                                    </NavLink>
                                 </td>
                             </tr>
                         );

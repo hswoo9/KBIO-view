@@ -90,9 +90,17 @@ import ManagerBbsList from "@/pages/manager/board/ManagerBbsList";
 import ManagerBbsEdit from "@/pages/manager/board/ManagerBbsEdit";
 
 import ManagerBbsList2 from "@/pages/manager/board/pst/ManagerBbsList";
-import ManagerBbsPstList from "@/pages/manager/board/pst/ManagerPstList";
-import ManagerPstDetail from "@/pages/manager/board/pst/ManagerPstDetail";
-import ManagerBbsPstEdit from "@/pages/manager/board/pst/ManagerPstEdit";
+import ManagerPstNormalList from "@/pages/manager/board/pst/normal/List";
+import ManagerPstNormalDetail from "@/pages/manager/board/pst/normal/Detail";
+import ManagerPstNormalEdit from "@/pages/manager/board/pst/normal/Edit";
+
+import ManagerPstQnaList from "@/pages/manager/board/pst/qna/List";
+import ManagerPstQnaDetail from "@/pages/manager/board/pst/qna/Detail";
+import ManagerPstQnaEdit from "@/pages/manager/board/pst/qna/Edit";
+
+import ManagerPstFaqList from "@/pages/manager/board/pst/faq/List";
+import ManagerPstFaqDetail from "@/pages/manager/board/pst/faq/Detail";
+import ManagerPstFaqEdit from "@/pages/manager/board/pst/faq/Edit";
 
 import ManagerNormalMemberEdit from "@/pages/manager/member/all/ManagerNormalMemberEdit";
 import ManagerApprovalMemberEdit from "@/pages/manager/member/approval/ManagerApprovalMemberEdit";
@@ -581,6 +589,7 @@ const SecondRoutes = () => {
                   element={<ManagerMenuContentManagement/>}
               />
 
+
               <Route
                   path={URL.MANAGER_MENU_AUTHORITY}
                   element={<ManagerMenuAuthority/>}
@@ -605,30 +614,22 @@ const SecondRoutes = () => {
                   element={<ManagerBbsEdit mode={CODE.MODE_MODIFY}/>}
               />
 
-              <Route
-                  path={URL.MANAGER_BBS_LIST2}
-                  element={<ManagerBbsList2/>}
-              />
+              <Route path={URL.MANAGER_BBS_LIST2} element={<ManagerBbsList2/>}/>
 
-              <Route
-                  path={URL.MANAGER_PST_LIST}
-                  element={<ManagerBbsPstList/>}
-              />
+              <Route path={URL.MANAGER_PST_NORMAL_LIST} element={<ManagerPstNormalList/>}/>
+              <Route path={URL.MANAGER_PST_NORMAL_DETAIL} element={<ManagerPstNormalDetail mode={CODE.MODE_READ}/>} />
+              <Route path={URL.MANAGER_PST_NORMAL_CREATE} element={<ManagerPstNormalEdit mode={CODE.MODE_CREATE}/>} />
+              <Route path={URL.MANAGER_PST_NORMAL_MODIFY} element={<ManagerPstNormalEdit mode={CODE.MODE_MODIFY}/>} />
 
-              <Route
-                  path={URL.MANAGER_PST_DETAIL}
-                  element={<ManagerPstDetail mode={CODE.MODE_READ}/>}
-              />
+              <Route path={URL.MANAGER_PST_QNA_LIST} element={<ManagerPstQnaList/>}/>
+              <Route path={URL.MANAGER_PST_QNA_DETAIL} element={<ManagerPstQnaDetail mode={CODE.MODE_READ}/>} />
+              <Route path={URL.MANAGER_PST_QNA_CREATE} element={<ManagerPstQnaEdit mode={CODE.MODE_CREATE}/>} />
+              <Route path={URL.MANAGER_PST_QNA_MODIFY} element={<ManagerPstQnaEdit mode={CODE.MODE_MODIFY}/>} />
 
-              <Route
-                  path={URL.MANAGER_PST_CREATE}
-                  element={<ManagerBbsPstEdit mode={CODE.MODE_CREATE}/>}
-              />
-
-              <Route
-                  path={URL.MANAGER_PST_MODIFY}
-                  element={<ManagerBbsPstEdit mode={CODE.MODE_MODIFY}/>}
-              />
+              <Route path={URL.MANAGER_PST_FAQ_LIST} element={<ManagerPstFaqList/>}/>
+              <Route path={URL.MANAGER_PST_FAQ_DETAIL} element={<ManagerPstFaqDetail mode={CODE.MODE_READ}/>}/>
+              <Route path={URL.MANAGER_PST_FAQ_CREATE} element={<ManagerPstFaqEdit mode={CODE.MODE_CREATE}/>} />
+              <Route path={URL.MANAGER_PST_FAQ_MODIFY} element={<ManagerPstFaqEdit mode={CODE.MODE_MODIFY}/>} />
 
               <Route
                   path={URL.FIND_ID_PSWD}

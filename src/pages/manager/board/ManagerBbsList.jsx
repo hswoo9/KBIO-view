@@ -75,7 +75,7 @@ function ManagerBbs(props) {
                                         {item.bbsNm}
                                     </Link>
                                 </td>
-                                <td>{item.bbsTypeNm == "0" ? "일반" : item.bbsTypeNm == "1" ? "faQ" : "QnA"}</td>
+                                <td>{item.bbsTypeNm == "0" ? "일반" : item.bbsTypeNm == "1" ? "FAQ" : "Q&A"}</td>
                                 <td>{item.wrtrRlsYn === "Y" ? "공개" : "비공개"}</td>
                                 <td>{item.atchFileYn === "Y" ? "가능" : "불가능"}</td>
                                 <td>{item.cmntPsbltyYn === "Y" ? "가능" : "불가능"}</td>

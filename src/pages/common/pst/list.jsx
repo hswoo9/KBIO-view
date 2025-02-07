@@ -23,7 +23,7 @@ function commonPstList(props) {
             bbsSn : location.state?.bbsSn,
             searchType: "",
             searchVal : "",
-            userSn : sessionUser.userSn
+            userSn : sessionUser ? sessionUser.userSn : ""
         }
     );
 
@@ -82,14 +82,18 @@ function commonPstList(props) {
                         if(item.rlsYn == "N"){
                             rlsYnFlag = true;
                         }
-                        if(sessionUser.userSe == "ADM"){
-                            rlsYnFlag = true;
+
+                        if(sessionUser){
+                            if(sessionUser.userSe == "ADM"){
+                                rlsYnFlag = true;
+                            }
+
+                            if(sessionUser.userSn == item.creatrSn){
+                                rlsYnFlag = true;
+                                pstSn = item.pstSn;
+                            }
                         }
 
-                        if(sessionUser.userSn == item.creatrSn){
-                            rlsYnFlag = true;
-                            pstSn = item.pstSn;
-                        }
 
                         if(pstSn == item.upPstSn){
                             rlsYnFlag = true;

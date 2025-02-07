@@ -14,7 +14,7 @@ import moment from "moment";
 import ReactQuill from 'react-quill-new';
 import '@/css/quillSnow.css';
 import '@/css/manager/managerPstDetail.css';
-import Eval  from "../../../common/pst/eval.jsx";
+import Eval  from "../../../../common/pst/eval.jsx";
 import { getSessionItem, setSessionItem } from "@/utils/storage";
 import ManagerLeftNew from "@/components/manager/ManagerLeftNew";
 import {fileDownLoad} from "@/components/CommonComponents.jsx";
@@ -45,7 +45,6 @@ function setPst(props) {
   /** 대댓글, 수정 */
   const [pstSubCmnt, setPstSubCmnt] = useState(initialCommentState); // 현재 활성화된 답글 입력창 ID
   useEffect(() => {
-    console.log(pstSubCmnt);
   }, [pstSubCmnt])
   /** 댓글 */
   const [pstCmnt, setPstCmnt] = useState(initialCommentState)
@@ -139,7 +138,7 @@ function setPst(props) {
           if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
             Swal.fire("삭제되었습니다.");
             navigate(
-              { pathname : URL.MANAGER_PST_LIST},
+              { pathname : URL.MANAGER_PST_QNA_LIST},
               { state: {
                   bbsSn: bbsDetail.bbsSn,
                   atchFileYn: bbsDetail.atchFileYn,
@@ -166,7 +165,6 @@ function setPst(props) {
   const handleSubmit = (type) => {
 
     let pstCmntSubmit = type === "sub" ? pstSubCmnt : pstCmnt;
-    console.log(pstCmntSubmit);
     if (!pstCmntSubmit.cmntCn) {
       alert("댓글을 입력해주세요.");
       return;
@@ -284,6 +282,13 @@ function setPst(props) {
           <div className="contBox">
             <div className="box infoBox">
               <ul className="listBox">
+                {bbsDetail.pstCtgryYn == "Y" && (
+                    <li className="inputBox type1 width1">
+                      <label className="title"><small>분류</small></label>
+                      <div className="input">{pstDetail.pstClsfNm}</div>
+                    </li>
+                )}
+
                 <li className="inputBox type1 width1">
                   <label className="title"><small>제목</small></label>
                   <div className="input">{pstDetail.pstTtl}</div>
@@ -463,11 +468,15 @@ function setPst(props) {
                 <div className="left">
                   {bbsDetail.ansPsbltyYn == "Y" && (
                       <Link
-                          to={URL.MANAGER_PST_CREATE}
+                          to={URL.MANAGER_PST_QNA_CREATE}
                           state={{
                             bbsSn: pstDetail.bbsSn,
                             pstGroup: pstDetail.pstGroup,
                             upPstSn: pstDetail.pstSn,
+                            upPstClsf : pstDetail.pstClsf,
+                            upPstTtl : pstDetail.pstTtl,
+                            upRlsYn : pstDetail.rlsYn,
+                            upPrvtPswd : pstDetail.prvtPswd,
                           }}
                       >
                         <button type="button" className="clickBtn">
@@ -476,7 +485,7 @@ function setPst(props) {
                       </Link>
                   )}
                   <Link
-                      to={URL.MANAGER_PST_MODIFY}
+                      to={URL.MANAGER_PST_QNA_MODIFY}
                       mode={CODE.MODE_MODIFY}
                       state={{
                         pstSn: pstDetail.pstSn,
@@ -494,7 +503,7 @@ function setPst(props) {
                 </div>
                 <div className="right">
                   <Link
-                      to={URL.MANAGER_PST_LIST}
+                      to={URL.MANAGER_PST_QNA_LIST}
                       state={{
                         bbsSn: bbsDetail.bbsSn,
                         atchFileYn: bbsDetail.atchFileYn

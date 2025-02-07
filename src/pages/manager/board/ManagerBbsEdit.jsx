@@ -20,7 +20,7 @@ function setBbs(props) {
   const bbsTypeNmOptions = [
     { value: "", label: "선택" },
     { value: "0", label: "일반" },
-    { value: "1", label: "FaQ" },
+    { value: "1", label: "FAQ" },
     { value: "2", label: "QnA" },
   ];
   const wrtrRlsYnRadioGroup = [
