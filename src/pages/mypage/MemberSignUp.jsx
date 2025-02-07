@@ -253,6 +253,20 @@ function MemberSignUp(props) {
         mberSttus: "P", //로그인가능여부 초기값
         checkIdResult: "",
       });
+
+      if(location.state?.snsType){
+        if(location.state.snsType == "naver"){
+          setMemberDetail({
+            ...memberDetail,
+            kornFlnm: location.state.totalData.name,
+            userId: location.state.totalData.email,
+            mblTelno: location.state.totalData.mobile,
+            snsType: location.state.snsType,
+            snsId: location.state.snsId
+          })
+        }
+      }
+
       return;
     }
 
@@ -279,11 +293,11 @@ function MemberSignUp(props) {
         alert("회원ID를 입력해 주세요");
         return false;
       }
-      const regex = /^[a-zA-Z0-9]{6,12}$/;
+      /*const regex = /^[a-zA-Z0-9]{6,12}$/;
       if (!regex.test(checkId)) {
         alert("회원ID는 6~12자의 영문 대소문자와 숫자만 사용 가능합니다.");
         return false;
-      }
+      }*/
       const checkIdURL = `/memberApi/checkMemberId.do`;
       const reqOptions = {
         method: "POST",
@@ -554,7 +568,7 @@ function MemberSignUp(props) {
                       title=""
                       id="kornFlnm"
                       placeholder=""
-                      value={memberDetail.kornFlnm}
+                      value={memberDetail.kornFlnm || ""}
                       onChange={(e) => setMemberDetail({...memberDetail, kornFlnm: e.target.value})}
                       ref={(el) => (checkRef.current[3] = el)}
                   />
@@ -570,7 +584,7 @@ function MemberSignUp(props) {
                       title=""
                       id="mblTelno"
                       placeholder=""
-                      value={memberDetail.mblTelno}
+                      value={memberDetail.mblTelno || ""}
                       onChange={(e) => setMemberDetail({...memberDetail, mblTelno: e.target.value})}
                       ref={(el) => (checkRef.current[4] = el)}
                   />
@@ -587,7 +601,7 @@ function MemberSignUp(props) {
                         id="userId"
                         placeholder="아이디는 6~12자 영문, 숫자만 가능합니다."
                         title="아이디"
-                        value={memberDetail.userId}
+                        value={memberDetail.userId || ""}
                         onChange={(e) => setMemberDetail({...memberDetail, userId: e.target.value})}
                         style={{flex: 1}}
                     />
@@ -616,7 +630,7 @@ function MemberSignUp(props) {
                       name="emailPrefix"
                       id="emailPrefix"
                       placeholder="이메일 아이디 입력"
-                      value={memberDetail.emailPrefix}
+                      value={memberDetail.emailPrefix || ""}
                       onChange={(e) => setMemberDetail({
                         ...memberDetail,
                         emailPrefix: e.target.value,
@@ -630,7 +644,7 @@ function MemberSignUp(props) {
                         <input
                             type="text"
                             placeholder="도메인 입력"
-                            value={memberDetail.emailDomain}
+                            value={memberDetail.emailDomain || ""}
                             onChange={(e) => setMemberDetail({
                               ...memberDetail,
                               emailDomain: e.target.value,
@@ -658,7 +672,7 @@ function MemberSignUp(props) {
                                 email: newEmail
                               }));
                             }}
-                            value={memberDetail.emailProvider}
+                            value={memberDetail.emailProvider || ""}
                             style={{
                               padding: '5px',
                               flex: 1,
@@ -691,7 +705,7 @@ function MemberSignUp(props) {
                       id="userPw"
                       placeholder="영문자, 숫자, 특수문자 조합으로 8~20자 이내만 가능합니다."
                       title="비밀번호"
-                      value={memberDetail.userPw}
+                      value={memberDetail.userPw || ""}
                       onChange={(e) => setMemberDetail({...memberDetail, userPw: e.target.value})}
                   />
                 </label>
@@ -723,7 +737,7 @@ function MemberSignUp(props) {
                       id="addr"
                       readOnly
                       title="주소"
-                      value={memberDetail.addr}
+                      value={memberDetail.addr || ""}
                   />
                   <button type="button" className="addressBtn btn" onClick={searchAddress}>
                     <span>주소검색</span>
@@ -740,7 +754,7 @@ function MemberSignUp(props) {
                       id="daddr"
                       placeholder="상세주소를 입력해주세요"
                       title="상세주소"
-                      value={memberDetail.daddr}
+                      value={memberDetail.daddr || ""}
                       onChange={(e) => setMemberDetail({...memberDetail, daddr: e.target.value})}
                   />
                 </label>

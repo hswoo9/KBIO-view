@@ -25,7 +25,12 @@ const EgovTermsAgreement = () => {
             return;
         }
         // navigate(URL.MYPAGE_CREATE); // 회원가입 폼 페이지로 이동
-        navigate(URL.IDENTITY_VERIFICATION, { state: { signupType } });
+        if (location.state?.signupType) {
+            navigate(URL.IDENTITY_VERIFICATION, { state: { signupType } });
+        }else{
+            navigate(URL.IDENTITY_VERIFICATION, { state : location.state} );
+        }
+
     };
 
     return (

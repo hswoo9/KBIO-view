@@ -22,7 +22,11 @@ const EgovIdentityVerification = () => {
         navigate(URL.TERMS_AGREEMENT, { state: { signupType: type } });
     }
     const handleNext = () => {
-        navigate(URL.MYPAGE_CREATE, { state: { signupType } });
+        if (location.state?.signupType) {
+            navigate(URL.MYPAGE_CREATE, { state: { signupType } });
+        }else{
+            navigate(URL.MYPAGE_CREATE, { state : location.state} );
+        }
     };
 
     return (
