@@ -78,7 +78,6 @@ function ManagerPst(props) {
                 (resp) => {
 
                     if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
-                        console.log(resp.result.pstEvlList);
                         if(resp.result.pstEvlList != null){
                             let data = {};
                             let impvOpnnCnList = [];
@@ -196,7 +195,8 @@ function ManagerPst(props) {
                                           mode={CODE.MODE_READ}
                                           state={{pstSn: item.pstSn}}
                                     >
-                                        {reTag ? <span dangerouslySetInnerHTML={{__html: reTag}} style={{marginRight: "5px"}}></span> : ""}
+                                        {reTag ? <span dangerouslySetInnerHTML={{__html: reTag}}
+                                                       style={{marginRight: "5px"}}></span> : ""}
                                         {item.rlsYn == "Y" ? (rlsYnFlag ? item.pstTtl : item.pstTtl.replaceAll(/./g, '*')) : item.pstTtl}
                                     </Link>
                                 </td>
@@ -204,8 +204,8 @@ function ManagerPst(props) {
                                     <td>{item.fileCnt != 0 ? "있음" : "없음"}</td>
                                 )}
                                 <td>{moment(item.frstCrtDt).format('YYYY-MM-DD')}</td>
+                                <td>{item.answer === "Y" ? "답변완료" : "답변대기"}</td>
                                 <td>{item.actvtnYn === "Y" ? "사용" : "미사용"}</td>
-
 
 
                                 <td>
@@ -311,6 +311,7 @@ function ManagerPst(props) {
                                 <col width="120"/>
                                 <col width="80"/>
                                 <col width="80"/>
+                                <col width="80"/>
                             </colgroup>
                             <thead>
                             <tr>
@@ -322,7 +323,8 @@ function ManagerPst(props) {
                                 {bbsDetail.atchFileYn == "Y" && (
                                     <th>첨부파일</th>
                                 )}
-                                <th>등록일</th>
+                                <th>작성일</th>
+                                <th>상태</th>
                                 <th>사용여부</th>
                                 <th>만족도</th>
                             </tr>

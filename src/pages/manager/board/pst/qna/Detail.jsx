@@ -30,6 +30,8 @@ function setPst(props) {
   });
 
   const [pstDetail, setPstDetail] = useState({});
+  const [answer, setAnswer] = useState({});
+
   const [pstPrevNext, setPstPrevNext] = useState([]);
   const [bbsDetail, setBbsDetail] = useState({});
 
@@ -65,6 +67,10 @@ function setPst(props) {
     EgovNet.requestFetch(getPstURL, requestOptions, function (resp) {
       setBbsDetail(resp.result.bbs);
       setPstDetail(resp.result.pst);
+      if(resp.result.pst.answer != null){
+        setAnswer(resp.result.pst.answer);
+      }
+
       setPstPrevNext(resp.result.pstPrevNext);
 
       const cmntList = resp.result.pst.pstCmnt || [];
@@ -323,11 +329,25 @@ function setPst(props) {
                   <div className="input" dangerouslySetInnerHTML={{__html: pstDetail.pstCn}}></div>
                 </li>
 
+                {answer && (
+                    <>
+                      <li className="inputBox type1 width1">
+                        <label className="title"><small>답변</small></label>
+                        <div className="input">답변 : {answer.pstTtl}</div>
+                      </li>
+
+                      <li className="inputBox type1 width1">
+                        <label className="title"><small>내용</small></label>
+                        <div className="input" dangerouslySetInnerHTML={{__html: answer.pstCn}}></div>
+                      </li>
+                    </>
+                )}
+
                 {bbsDetail.cmntPsbltyYn == "Y" && (
                     <li>
                       <div className="comment_section">
-                      <h3 className="comment_title">댓글</h3>
-                      <div className="comments_list">
+                        <h3 className="comment_title">댓글</h3>
+                        <div className="comments_list">
                         {pstCmntList ? (
                             <ul>
                               {pstCmntList.map((v, i) => (
