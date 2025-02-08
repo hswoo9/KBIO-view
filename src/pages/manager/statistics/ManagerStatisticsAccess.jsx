@@ -1,7 +1,10 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import ManagerLeftNew from "@/components/manager/ManagerLeftStatistics";
 
-import ApexCharts from 'react-apexcharts'
+import ApexCharts from 'react-apexcharts';
+
+import Tab1 from '@/pages/manager/statistics/AccessTabAll';
+import Tab2 from '@/pages/manager/statistics/AccessTabMoveIn';
 
 import {
     format,
@@ -21,14 +24,29 @@ import {
 
 function ManagerStatisticsUser(props) {
     const [currentMonth, setCurrentMonth] = useState(new Date());
-
     // 현재 연도 & 월
     const currentYear = format(currentMonth, "yyyy");
     const currentMonthIndex = format(currentMonth, "M") - 1;
 
+    const [menuIndex, setMenuIndex] = useState({ menu : 0});
+    const menuList = {
+        0: <Tab1/>,
+        1: <Tab2/>,
+        2: <Tab2/>,
+        3: <Tab2/>,
+        4: <Tab2/>,
+    };
+
+    const changeMenu = (menuIndex) => {
+        setMenuIndex({
+            menu: menuIndex
+        });
+    }
+
+
     const chartOptions = {
         chart: {
-            id: 'basic-bar',
+            id: 'bar',
         },
         //컬럼명
         xaxis: {
@@ -45,9 +63,26 @@ function ManagerStatisticsUser(props) {
 
     return (
         <div id="container" className="container layout cms">
+            <style>{`
+                .tabs li{
+                    font-size: 1rem;
+                    font-weight: bold;
+                    display: inline-block;
+                    color: black;
+                    padding: 1rem;
+                    cursor: pointer;
+                }
+                .tabs li.tabActive{
+                    background-color: #04819b;
+                    height: 100%;
+                    color: #efefef;
+                }
+                
+                `}
+            </style>
             <ManagerLeftNew/>
             <div className="inner">
-                <h2 className="pageTitle"><p>사용자통계</p></h2>
+                <h2 className="pageTitle"><p>접속통계</p></h2>
                 <div className="cateWrap">
                     <form action="">
                         <ul className="cateList">
@@ -83,34 +118,30 @@ function ManagerStatisticsUser(props) {
                     </form>
                 </div>
                 <div className="contBox board type1 customContBox">
-                    <div className="topBox"></div>
-                    <div className="tableBox type1">
-                        <table>
-                            <caption>회원 수</caption>
-                            <thead>
-                            <tr>
-                                <th>입주기업 회원</th>
-                                <th>유관기관 회원</th>
-                                <th>비입주기업 회원</th>
-                                <th>컨설턴트 회원</th>
-                                <th>총합</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>5,600</td>
-                                <td>4,600</td>
-                                <td>7,600</td>
-                                <td>50</td>
-                                <td>17,850</td>
-                            </tr>
-                            </tbody>
-                        </table>
+                    <div className="topBox">
+                        <ul className="tabs">
+                            <li className={`${menuIndex.menu === 0 ? 'tabActive' : ''}`}
+                                onClick={() => changeMenu(0)}>전체
+                            </li>
+                            <li className={`${menuIndex.menu === 1 ? 'tabActive' : ''}`}
+                                onClick={() => changeMenu(1)}>입주기업 회원
+                            </li>
+                            <li className={`${menuIndex.menu === 2 ? 'tabActive' : ''}`}
+                                onClick={() => changeMenu(2)}>유관기관 회원
+                            </li>
+                            <li className={`${menuIndex.menu === 3 ? 'tabActive' : ''}`}
+                                onClick={() => changeMenu(3)}>비입주기업 회원
+                            </li>
+                            <li className={`${menuIndex.menu === 4 ? 'tabActive' : ''}`}
+                                onClick={() => changeMenu(4)}>컨설턴트 회원
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        {menuList[menuIndex.menu]}
                     </div>
                 </div>
-                <div className="tableBox type1">
-                    <ApexCharts options={chartOptions} series={series} type="bar" height={350}/>
-                </div>
+
             </div>
         </div>
     );

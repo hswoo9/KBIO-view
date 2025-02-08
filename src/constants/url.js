@@ -222,6 +222,7 @@ const URL = {
 
   MANAGER_STATISTICS: "/manager/statistics",
   MANAGER_STATISTICS_USER: "/manager/statistics/user",
+  MANAGER_STATISTICS_ACCESS: "/manager/statistics/access",
 
   MessageTest: "/messageTest"
 };

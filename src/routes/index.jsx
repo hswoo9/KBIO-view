@@ -153,6 +153,7 @@ import ManagerAccessEdit from "@/pages/manager/access/ManagerAccessEdit";
 
 //통계
 import ManagerStatisticsUser from "@/pages/manager/statistics/ManagerStatisticsUser";
+import ManagerStatisticsAccess from "@/pages/manager/statistics/ManagerStatisticsAccess";
 
 
 
@@ -737,6 +738,7 @@ const SecondRoutes = () => {
 
               <Route path={URL.MANAGER_STATISTICS} element={<ManagerStatisticsUser/>}/>
               <Route path={URL.MANAGER_STATISTICS_USER} element={<ManagerStatisticsUser/>}/>
+              <Route path={URL.MANAGER_STATISTICS_ACCESS} element={<ManagerStatisticsAccess/>}/>
 
               <Route path={URL.MessageTest} element={<MessageTest/>}/>
 
