@@ -26,11 +26,7 @@ function setPst(props) {
     bbsSn : location.state?.bbsSn,
     pstSn : location.state?.pstSn
   });
-  const upPstSn = location.state?.upPstSn || null;
-  const pstGroup = location.state?.pstGroup || null;
 
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
   const [modeInfo, setModeInfo] = useState({ mode: props.mode });
   const [pstDetail, setPstDetail] = useState({});
   const [comCdList, setComCdList] = useState([]);
@@ -146,27 +142,6 @@ function setPst(props) {
 
         resp.result.pst.mdfrSn = sessionUser.userSn
         setPstDetail(resp.result.pst);
-        if(resp.result.pst.upendNtcYn == "Y"){
-          if(resp.result.pst.ntcBgngDt != null){
-            setStartDate(
-                new Date(
-                    resp.result.pst.ntcBgngDt.substring(0, 4),
-                    resp.result.pst.ntcBgngDt.substring(4, 6) - 1,
-                    resp.result.pst.ntcBgngDt.substring(6, 8)
-                )
-            )
-          }
-          if(resp.result.pst.ntcEndDate != null){
-            setEndDate(
-                new Date(
-                    resp.result.pst.ntcEndDate.substring(0, 4),
-                    resp.result.pst.ntcEndDate.substring(4, 6) - 1,
-                    resp.result.pst.ntcEndDate.substring(6, 8)
-                )
-            )
-          }
-          setIsDatePickerEnabled(true);
-        }
       }
     });
   };
@@ -206,13 +181,6 @@ function setPst(props) {
   }
 
   const setPstData = async () => {
-    if (pstDetail.upendNtcYn == "Y") {
-      if(!pstDetail.ntcBgngDt && !pstDetail.ntcEndDate){
-        Swal.fire("공지기간은 선택해주세요.");
-        return;
-      }
-    }
-
     if(bbsDetail.pstCtgryYn == "Y"){
       if (!pstDetail.pstClsf) {
         Swal.fire("분류를 선택해주세요.");
@@ -234,14 +202,6 @@ function setPst(props) {
       if(pstDetail[key] != null && key != "pstFiles"){
         formData.append(key, pstDetail[key]);
       }
-    }
-
-    if(upPstSn != null){
-      formData.append("upPstSn", upPstSn);
-    }
-
-    if(pstGroup != null){
-      formData.append("pstGroup", pstGroup);
     }
 
     fileList.map((file) => {
@@ -350,62 +310,6 @@ function setPst(props) {
 
           <div className="contBox infoWrap customContBox">
             <ul className="inputWrap">
-              {/*{upPstSn == null && pstDetail.upPstSn == null && (*/}
-              {/*    <>*/}
-              {/*      <li className="toggleBox width3">*/}
-              {/*        <div className="box">*/}
-              {/*          <p className="title essential">공지(기간)</p>*/}
-              {/*          <div className="toggleSwithWrap">*/}
-              {/*            <input type="checkbox"*/}
-              {/*                   id="upendNtcYn"*/}
-              {/*                   checked={pstDetail.upendNtcYn == "Y"}*/}
-              {/*                   onChange={(e) => {*/}
-              {/*                     setPstDetail({*/}
-              {/*                       ...pstDetail,*/}
-              {/*                       upendNtcYn: e.target.checked ? "Y" : "N",*/}
-              {/*                       ntcBgngDt: !e.target.checked ? null : pstDetail.ntcBgngDt,*/}
-              {/*                       ntcEndDate: !e.target.checked ? null : pstDetail.ntcEndDate,*/}
-              {/*                     })*/}
-              {/*                     setIsDatePickerEnabled(e.target.checked);*/}
-              {/*                   }}*/}
-              {/*            />*/}
-              {/*            <label htmlFor="upendNtcYn" className="toggleSwitch">*/}
-              {/*              <span className="toggleButton"></span>*/}
-              {/*            </label>*/}
-              {/*          </div>*/}
-              {/*        </div>*/}
-              {/*      </li>*/}
-              {/*      <li className="inputBox type1 width3">*/}
-              {/*        <label className="title" htmlFor="ntcBgngDt"><small>공지시작일</small></label>*/}
-              {/*        <div className="input">*/}
-              {/*          <input type="date"*/}
-              {/*                 id="ntcBgngDt"*/}
-              {/*                 name="ntcBgngDt"*/}
-              {/*                 defaultValue={pstDetail.upendNtcYn == "Y" ? moment(pstDetail.ntcBgngDt).format('YYYY-MM-DD') : "" }*/}
-              {/*                 onChange={(e) =>*/}
-              {/*                     setPstDetail({...pstDetail, ntcBgngDt: moment(e.target.value).format('YYYYMMDD')})*/}
-              {/*                 }*/}
-              {/*                 disabled={!isDatePickerEnabled}*/}
-              {/*          />*/}
-              {/*        </div>*/}
-              {/*      </li>*/}
-              {/*      <li className="inputBox type1 width3">*/}
-              {/*        <label className="title" htmlFor="ntcEndDate"><small>공지종료일</small></label>*/}
-              {/*        <div className="input">*/}
-              {/*          <input type="date"*/}
-              {/*                 id="ntcEndDate"*/}
-              {/*                 name="ntcEndDate"*/}
-              {/*                 defaultValue={pstDetail.upendNtcYn == "Y" ? moment(pstDetail.ntcEndDate).format('YYYY-MM-DD') : "" }*/}
-              {/*                 onChange={(e) =>*/}
-              {/*                     setPstDetail({...pstDetail, ntcEndDate: moment(e.target.value).format('YYYYMMDD')})*/}
-              {/*                 }*/}
-              {/*                 disabled={!isDatePickerEnabled}*/}
-
-              {/*          />*/}
-              {/*        </div>*/}
-              {/*      </li>*/}
-              {/*    </>*/}
-              {/*)}*/}
               {bbsDetail.pstCtgryYn == "Y" && (
                   <li className="inputBox type1 width1">
                     <label className="title essential" htmlFor="pstTtl"><small>분류</small></label>
@@ -522,48 +426,6 @@ function setPst(props) {
                   />
                 </div>
               </li>
-              {bbsDetail.wrtrRlsYn == "Y" && upPstSn == null && pstDetail.upPstSn == null && (
-                  <>
-                    <li className="inputBox type1 width2">
-                      <label className="title" htmlFor="rlsYn"><small>공개여부</small></label>
-                      <div className="itemBox">
-                        <select
-                            id="rlsYn"
-                            className="selectGroup"
-                            onChange={(e) =>
-                                setPstDetail({
-                                  ...pstDetail,
-                                  rlsYn: e.target.value,
-                                })
-                            }
-                            value={pstDetail.rlsYn || "Y"}
-                        >
-                          <option value="Y">비공개</option>
-                          <option value="N">공개</option>
-                        </select>
-                      </div>
-                    </li>
-                    <li className="inputBox type1 width2">
-                      <label className="title essential" htmlFor="prvtPswd"><small>비밀번호</small></label>
-                      <div className="input">
-                        <form>
-                          <input type="password"
-                                 name="prvtPswd"
-                                 title=""
-                                 id="prvtPswd"
-                                 placeholder="비밀번호"
-                                 autoComplete="off"
-                                 defaultValue={pstDetail.prvtPswd}
-                                 onChange={(e) =>
-                                     setPstDetail({...pstDetail, prvtPswd: e.target.value})
-                                 }
-                                 disabled={pstDetail.rlsYn == "N"}
-                          />
-                        </form>
-                      </div>
-                    </li>
-                  </>
-              )}
             </ul>
             <div className="buttonBox">
               <div className="leftBox">

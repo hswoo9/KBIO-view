@@ -170,6 +170,9 @@ function ManagerPst(props) {
                                         {item.pstTtl}
                                     </Link>
                                 </td>
+                                {resp.result.bbs.atchFileYn == "Y" && (
+                                    <td>{item.fileCnt != 0 ? "있음" : "없음"}</td>
+                                )}
                                 <td>{moment(item.frstCrtDt).format('YYYY-MM-DD')}</td>
                                 <td>{item.actvtnYn === "Y" ? "사용" : "미사용"}</td>
                                 <td><button type="button" onClick={modelOpenEvent}><span>보기</span></button></td>

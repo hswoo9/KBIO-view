@@ -151,20 +151,6 @@ function setPst(props) {
               </ul>
               <div className="buttonBox">
                 <div className="left">
-                  {bbsDetail.ansPsbltyYn == "Y" && (
-                      <Link
-                          to={URL.MANAGER_PST_FAQ_CREATE}
-                          state={{
-                            bbsSn: pstDetail.bbsSn,
-                            pstGroup: pstDetail.pstGroup,
-                            upPstSn: pstDetail.pstSn,
-                          }}
-                      >
-                        <button type="button" className="clickBtn">
-                          <span>답변</span>
-                        </button>
-                      </Link>
-                  )}
                   <Link
                       to={URL.MANAGER_PST_FAQ_MODIFY}
                       mode={CODE.MODE_MODIFY}
