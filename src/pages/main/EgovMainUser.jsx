@@ -9,7 +9,7 @@ import { getSessionItem, setSessionItem, removeSessionItem } from "@/utils/stora
 import simpleMainIng from "/assets/images/img_simple_main.png";
 import initPage from "@/js/ui";
 import logo from "@/assets/images/logo.svg";
-import {getBnrPopupList} from "../../components/MainComponents.jsx";
+import {getBnrPopupList, getMvnEntList, getPstList} from "../../components/MainComponents.jsx";
 
 function EgovMainUser(props) {
   const location = useLocation();
@@ -22,10 +22,14 @@ function EgovMainUser(props) {
   const sessionUserSn = sessionUser?.userSn;
   const userSn = getSessionItem("userSn");
 
-  /* 메뉴정보 */
   const [menuList, setMenuList] = useState([]);
+  const [popUpList, setPopUpList] = useState([]);
+  const [mainSlidesList, setMainSlidesList] = useState([]);
+  const [mvnEntList, setMvnEntList] = useState([]);
 
-  /* 메뉴 마우스 오버 이벤트 */
+  const [selBbs, setSelBbs] = useState(1);
+  const [pstList, setPstList] = useState([]);
+
   const hoverRef = useRef(null);
   const handleMouseOver = (e, index) => {
     if(e.target === e.currentTarget){
@@ -33,19 +37,15 @@ function EgovMainUser(props) {
       const parentElement = element.parentElement;
       if(parentElement && hoverRef.current){
         const parentRect = parentElement.getBoundingClientRect();
-        console.log(parentRect.left);
         hoverRef.current.style.width = `${parentRect.width}px`;
         hoverRef.current.style.height = `${parentRect.height}px`;
         hoverRef.current.style.left = `${parentRect.left - 30}px`;
         hoverRef.current.style.top = `0px`;
         hoverRef.current.style.opacity = `1`;
       }
-
-
     }
   }
-  /* 팝업관련 */
-  const [popUpList, setPopUpList] = useState([]);
+
   useEffect(() => {
     popUpList.forEach((e, i) => {
       const popUp = e.tblBnrPopup;
@@ -65,10 +65,6 @@ function EgovMainUser(props) {
   }, [popUpList]);
 
   useEffect(() => {
-    getBnrPopupList("popup").then((data) => {
-      setPopUpList(data);
-    });
-
     getMenu(null, null, userSn).then((data) => {
       let dataList = [];
       if(data != null){
@@ -108,8 +104,25 @@ function EgovMainUser(props) {
       }
     });
 
+    getBnrPopupList("popup").then((data) => {
+      setPopUpList(data.filter(e => e.tblBnrPopup.bnrPopupKnd == "popup"));
+    });
+
+    getBnrPopupList("bnr").then((data) => {
+      setMainSlidesList(data.filter(e => e.tblBnrPopup.bnrPopupFrm == "mainSlides"));
+    });
+
+    getMvnEntList().then((data) => {
+      setMvnEntList(data);
+    });
 
   }, []);
+
+  useEffect(() => {
+    getPstList(selBbs).then((data) => {
+      setPstList(data);
+    });
+  }, [selBbs]);
 
   return (
       <div id="container" className="container layout">
@@ -118,11 +131,6 @@ function EgovMainUser(props) {
             <div className="bg hover" ref={hoverRef}></div>
             <ul className="list">
               {menuList}
-              {/*<li className="active"><a href="#"><span>공지사항</span></a></li>
-              <li><a href="#"><span>Q&A</span></a></li>
-              <li><a href="#"><span>FAQ</span></a></li>
-              <li><a href="#"><span>자료실</span></a></li>
-              <li><a href="#"><span>연구자료실</span></a></li>*/}
             </ul>
           </div>
         </div>

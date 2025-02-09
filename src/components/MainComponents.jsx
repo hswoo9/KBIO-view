@@ -44,3 +44,59 @@ export const getBnrPopupList = async (bnrPopupKnd) => {
         );
     });
 };
+
+/**
+ * 입주기관 리스트
+ * @returns {Promise<unknown>}
+ */
+export const getMvnEntList = async () => {
+    const requestOptions = {
+        method: "POST",
+        headers: {
+            "Content-type": "application/json",
+        },
+        body: ""
+    };
+
+    return new Promise((resolve, reject) => {
+        EgovNet.requestFetch(
+            "/mainApi/getMvnEntList",
+            requestOptions,
+            (resp) => {
+                resolve(resp.result.mvnEntList);
+            },
+            (error) => {
+                console.log("err response : ", error);
+                reject(error);
+            }
+        );
+    });
+};
+
+export const getPstList = async (bbsSn) => {
+    const requestOptions = {
+        method: "POST",
+        headers: {
+            "Content-type": "application/json",
+        },
+        body: JSON.stringify({bbsSn : bbsSn})
+    };
+
+    return new Promise((resolve, reject) => {
+        EgovNet.requestFetch(
+            "/mainApi/getPstList.do",
+            requestOptions,
+            (resp) => {
+                resolve({
+                    bbs : resp.result.bbs,
+                    pstList : resp.result.pstList,
+                    authrt : resp.result.authrt
+                });
+            },
+            (error) => {
+                console.log("err response : ", error);
+                reject(error);
+            }
+        );
+    });
+};

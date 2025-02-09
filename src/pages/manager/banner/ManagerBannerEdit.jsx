@@ -411,13 +411,25 @@ function ManagerBannerEdit(props) {
                       <input type="radio"
                              id="bnrPopupFrm1"
                              name="bnrPopupFrm"
-                             value="images"
+                             value="mainSlides"
                              onChange={(e) =>
                                  setBnrPopupDetail({...bnrPopupDetail, bnrPopupFrm: e.target.value})
                              }
                              ref={(el) => (checkRef.current[0] = el)}
                       />
-                      <small>이미지형식</small>
+                      <small>메인 슬라이드 배너</small>
+                    </label>
+                    <label>
+                      <input type="radio"
+                             id="bnrPopupFrm1"
+                             name="bnrPopupFrm"
+                             value="footSlides"
+                             onChange={(e) =>
+                                 setBnrPopupDetail({...bnrPopupDetail, bnrPopupFrm: e.target.value})
+                             }
+                             ref={(el) => (checkRef.current[0] = el)}
+                      />
+                      <small>하단 슬라이드 배너</small>
                     </label>
                   </li>
                 </ul>

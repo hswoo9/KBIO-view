@@ -10,7 +10,7 @@ function EgovFooterUser() {
 
   useEffect(() => {
     getBnrPopupList("bnr").then((data) => {
-      setBannerList(data);
+      setBannerList(data.filter(e => e.tblBnrPopup.bnrPopupFrm == "footSlides"));
     });
   }, []);
 
