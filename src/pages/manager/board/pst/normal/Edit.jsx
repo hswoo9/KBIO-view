@@ -29,8 +29,6 @@ function setPst(props) {
   const upPstSn = location.state?.upPstSn || null;
   const pstGroup = location.state?.pstGroup || null;
 
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
   const [modeInfo, setModeInfo] = useState({ mode: props.mode });
   const [pstDetail, setPstDetail] = useState({});
   const [comCdList, setComCdList] = useState([]);
@@ -147,24 +145,6 @@ function setPst(props) {
         resp.result.pst.mdfrSn = sessionUser.userSn
         setPstDetail(resp.result.pst);
         if(resp.result.pst.upendNtcYn == "Y"){
-          if(resp.result.pst.ntcBgngDt != null){
-            setStartDate(
-                new Date(
-                    resp.result.pst.ntcBgngDt.substring(0, 4),
-                    resp.result.pst.ntcBgngDt.substring(4, 6) - 1,
-                    resp.result.pst.ntcBgngDt.substring(6, 8)
-                )
-            )
-          }
-          if(resp.result.pst.ntcEndDate != null){
-            setEndDate(
-                new Date(
-                    resp.result.pst.ntcEndDate.substring(0, 4),
-                    resp.result.pst.ntcEndDate.substring(4, 6) - 1,
-                    resp.result.pst.ntcEndDate.substring(6, 8)
-                )
-            )
-          }
           setIsDatePickerEnabled(true);
         }
       }
@@ -379,6 +359,7 @@ function setPst(props) {
                         <input type="date"
                                id="ntcBgngDt"
                                name="ntcBgngDt"
+                               value={moment(pstDetail.ntcBgngDt).format('YYYY-MM-DD')}
                                onChange={(e) =>
                                    setPstDetail({...pstDetail, ntcBgngDt: moment(e.target.value).format('YYYYMMDD')})
                                }
@@ -392,6 +373,7 @@ function setPst(props) {
                         <input type="date"
                                id="ntcEndDate"
                                name="ntcEndDate"
+                               value={moment(pstDetail.ntcEndDate).format('YYYY-MM-DD')}
                                onChange={(e) =>
                                    setPstDetail({...pstDetail, ntcEndDate: moment(e.target.value).format('YYYYMMDD')})
                                }

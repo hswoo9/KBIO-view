@@ -19,10 +19,10 @@ const CommonPstEval  = ({ pstSn }) => {
     }, [paramsPstSn]);
     const [pstEvl, setPstEvl] = useState({
         evlYmd : moment(new Date()).format('YYYYMMDD'),
-        evlUserSn : sessionUser.userSn,
-        creatrSn : sessionUser.userSn,
+        evlUserSn : sessionUser ? sessionUser.userSn : "",
+        creatrSn : sessionUser ? sessionUser.userSn : "",
         pstSn: pstSn,
-        userSn: sessionUser.userSn
+        userSn: sessionUser ? sessionUser.userSn : ""
     });
     useEffect(() => {
     }, [pstEvl]);

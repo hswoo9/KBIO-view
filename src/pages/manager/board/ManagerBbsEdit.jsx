@@ -238,39 +238,6 @@ function setBbs(props) {
               <li className="inputBox type1 width1">
                 <label className="title" htmlFor="bbsTypeNm"><small>게시판유형</small></label>
                 <div className="itemBox">
-                  {/*{modeInfo.mode === CODE.MODE_CREATE && (
-                      <label className="f_select w_130" htmlFor="bbsType">
-                        <select
-                            id="bbsType"
-                            name="bbsType"
-                            title="게시판유형선택"
-                            onChange={(e) =>
-                                setBbsDetail({
-                                  ...bbsDetail,
-                                  bbsType: e.target.value,
-                                })
-                            }
-                            value={bbsDetail.bbsType}
-                        >
-                          {bbsTypeOptions.map((option) => {
-                            return (
-                                <option value={option.value} key={option.value}>
-                                  {option.label}
-                                </option>
-                            );
-                          })}
-                        </select>
-                      </label>
-                  )}
-                  {modeInfo.mode === CODE.MODE_MODIFY && (
-                      <span>
-                      {bbsDetail.bbsType &&
-                          getSelectedLabel(
-                              bbsTypeOptions,
-                              bbsDetail.bbsType
-                          )}
-                    </span>
-                  )}*/}
                   <select
                       id="bbsTypeNm"
                       name="bbsTypeNm"

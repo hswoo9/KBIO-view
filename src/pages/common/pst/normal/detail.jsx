@@ -10,8 +10,8 @@ import '@/css/quillSnow.css';
 import '@/css/manager/managerPstDetail.css';
 import { getSessionItem, setSessionItem } from "@/utils/storage";
 import {fileDownLoad, fileZipDownLoad} from "@/components/CommonComponents.jsx";
-import CommonPstEval from "./eval.jsx";
-import {getComCdList} from "../../../components/CommonComponents.jsx";
+import CommonPstEval from "../eval.jsx";
+import {getComCdList} from "../../../../components/CommonComponents.jsx";
 
 function commonPstDetail(props) {
   const sessionUser = getSessionItem("loginUser");
@@ -21,7 +21,7 @@ function commonPstDetail(props) {
   const [searchDto, setSearchDto] = useState({
     bbsSn : location.state?.bbsSn,
     pstSn : location.state?.pstSn,
-    userSn : sessionUser.userSn
+    userSn : sessionUser ? sessionUser.userSn : ""
   });
 
   const [authrt, setAuthrt] = useState({
@@ -39,7 +39,7 @@ function commonPstDetail(props) {
   const initialCommentState = {
     cmntSeq: 0,
     cmntStp: 0,
-    creatrSn: sessionUser.userSn,
+    creatrSn: sessionUser ? sessionUser.userSn : "",
     mode : "load"
   };
 
@@ -47,7 +47,6 @@ function commonPstDetail(props) {
   const [pstSubCmnt, setPstSubCmnt] = useState(initialCommentState); // 현재 활성화된 답글 입력창 ID
   /** 댓글 */
   const [pstCmnt, setPstCmnt] = useState(initialCommentState)
-
 
   const [pstCmntInput, setPstCmntInput] = useState(null);
   const [pstCmntList, setPstCmntList] = useState([]);
@@ -138,7 +137,7 @@ function commonPstDetail(props) {
           if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
             Swal.fire("삭제되었습니다.");
             navigate(
-              { pathname : URL.COMMON_PST_LIST},
+              { pathname : URL.COMMON_PST_NORMAL_LIST},
               { state: {
                   bbsSn: bbs.bbsSn,
                 }
@@ -492,7 +491,7 @@ function commonPstDetail(props) {
                 <div className="left">
                   {bbs.ansPsbltyYn == "Y" && (
                       <Link
-                          to={URL.COMMON_PST_CREATE}
+                          to={URL.COMMON_PST_NORMAL_CREATE}
                           state={{
                             bbsSn: pst.bbsSn,
                             pstGroup: pst.pstGroup,
@@ -506,7 +505,7 @@ function commonPstDetail(props) {
                   )}
                   {authrt.mdfcnAuthrt == "Y" && (
                       <Link
-                          to={URL.COMMON_PST_MODIFY}
+                          to={URL.COMMON_PST_NORMAL_MODIFY}
                           mode={CODE.MODE_MODIFY}
                           state={{
                             pstSn: pst.pstSn,
@@ -529,7 +528,7 @@ function commonPstDetail(props) {
                 </div>
                 <div className="right">
                   <Link
-                      to={URL.COMMON_PST_LIST}
+                      to={URL.COMMON_PST_NORMAL_LIST}
                       state={{
                         bbsSn: bbs.bbsSn,
                       }}

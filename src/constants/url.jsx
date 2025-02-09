@@ -4,10 +4,23 @@ const URL = {
   //COMMON
   COMMON_POPUP : "/popup",
   COMMON_CONTENT_VIEW : "/content/view",
-  COMMON_PST_LIST : "/pst/list",
-  COMMON_PST_DETAIL : "/pst/detail",
-  COMMON_PST_CREATE: "/pst/create",
-  COMMON_PST_MODIFY: "/pst/modify",
+  COMMON_PST_NORMAL_LIST : "/pst/normal/list",
+  COMMON_PST_NORMAL_DETAIL : "/pst/normal/detail",
+  COMMON_PST_NORMAL_CREATE: "/pst/normal/create",
+  COMMON_PST_NORMAL_MODIFY: "/pst/normal/modify",
+
+  COMMON_PST_QNA_LIST : "/pst/qna/list",
+  COMMON_PST_QNA_DETAIL : "/pst/qna/detail",
+  COMMON_PST_QNA_CREATE: "/pst/qna/create",
+  COMMON_PST_QNA_MODIFY: "/pst/qna/modify",
+
+  COMMON_PST_FAQ_LIST : "/pst/faq/list",
+  COMMON_PST_FAQ_DETAIL : "/pst/faq/detail",
+  COMMON_PST_FAQ_CREATE: "/pst/faq/create",
+  COMMON_PST_FAQ_MODIFY: "/pst/faq/modify",
+
+
+
 
   LOGIN: "/egovframe-template-simple-react/login", //로그인
   MANAGER_LOGIN: "/egovframe-template-simple-react/manager/login", //로그인

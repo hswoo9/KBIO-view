@@ -10,8 +10,8 @@ import Swal from "sweetalert2";
 import moment from "moment";
 
 import CommonEditor from "@/components/CommonEditor";
-import {getSessionItem} from "../../../utils/storage.js";
-import {getComCdList} from "../../../components/CommonComponents.jsx";
+import {getSessionItem} from "../../../../utils/storage.js";
+import {getComCdList} from "../../../../components/CommonComponents.jsx";
 
 function setCommonPst(props) {
 
@@ -26,7 +26,6 @@ function setCommonPst(props) {
   const [bbs, setBbs] = useState({bbsSn : location.state?.bbsSn});
   const [pst, setPst] = useState({pstSn : location.state?.pstSn});
   const [comCdList, setComCdList] = useState([]);
-  const [isDatePickerEnabled, setIsDatePickerEnabled] = useState(false);
   const [acceptFileTypes, setAcceptFileTypes] = useState('');
   const [fileList, setFileList] = useState([]);
 
@@ -134,9 +133,6 @@ function setCommonPst(props) {
 
         resp.result.pst.mdfrSn = sessionUser.userSn
         setPst(resp.result.pst);
-        if(resp.result.pst.upendNtcYn == "Y"){
-          setIsDatePickerEnabled(true);
-        }
       }
     });
   };
@@ -176,13 +172,6 @@ function setCommonPst(props) {
   }
 
   const setPstData = async () => {
-    if (pst.upendNtcYn == "Y") {
-      if(!pst.ntcBgngDt && !pst.ntcEndDate){
-        Swal.fire("공지기간은 선택해주세요.");
-        return;
-      }
-    }
-
     if(bbs.pstCtgryYn == "Y"){
       if (!pst.pstClsf) {
         Swal.fire("분류를 선택해주세요.");
@@ -197,9 +186,6 @@ function setCommonPst(props) {
       Swal.fire("내용을 입력해주세요.");
       return;
     }
-
-
-
 
     const formData = new FormData();
     for (let key in pst) {
@@ -237,7 +223,7 @@ function setCommonPst(props) {
           if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
             Swal.fire("등록되었습니다.");
             navigate(
-                { pathname : URL.COMMON_PST_LIST},
+                { pathname : URL.COMMON_PST_FAQ_LIST},
                 { state: {
                     bbsSn: bbs.bbsSn,
                   }
@@ -277,7 +263,7 @@ function setCommonPst(props) {
           if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
             Swal.fire("삭제되었습니다.");
             navigate(
-                { pathname : URL.COMMON_PST_LIST},
+                { pathname : URL.COMMON_PST_FAQ_LIST},
                 { state: {
                     bbsSn: bbs.bbsSn,
                   }
@@ -299,11 +285,7 @@ function setCommonPst(props) {
 
   useEffect(() => {
     if(bbs.pstCtgryYn == "Y"){
-      const cdGroupSn =
-          bbs.bbsTypeNm == "0" ? 7 :
-              bbs.bbsTypeNm == "1" ? 9 : 8
-
-      getComCdList(cdGroupSn).then((data) => {
+      getComCdList(9).then((data) => {
         setComCdList(data);
       })
     }
@@ -313,70 +295,8 @@ function setCommonPst(props) {
       <div id="container" className="container layout cms">
         <div className="inner">
           <h2 className="pageTitle"><p>{bbs.bbsNm}</p></h2>
-          {/*{modeInfo.mode === CODE.MODE_CREATE && (*/}
-          {/*    <h2 className="pageTitle"><p>{bbs.bbsNm}</p></h2>*/}
-          {/*)}*/}
-          {/**/}
-          {/*{modeInfo.mode === CODE.MODE_MODIFY && (*/}
-          {/*    <h2 className="pageTitle"><p>{bbs.bbsNm}</p></h2>*/}
-          {/*)}*/}
-
           <div className="contBox infoWrap customContBox">
             <ul className="inputWrap">
-              {upPstSn == null && pst.upPstSn == null && (
-                  <>
-                    <li className="toggleBox width3">
-                      <div className="box">
-                        <p className="title essential">공지(기간)</p>
-                        <div className="toggleSwithWrap">
-                          <input type="checkbox"
-                                 id="upendNtcYn"
-                                 checked={pst.upendNtcYn == "Y"}
-                                 onChange={(e) => {
-                                   setPst({
-                                     ...pst,
-                                     upendNtcYn: e.target.checked ? "Y" : "N",
-                                     ntcBgngDt: !e.target.checked ? null : pst.ntcBgngDt,
-                                     ntcEndDate: !e.target.checked ? null : pst.ntcEndDate,
-                                   })
-                                   setIsDatePickerEnabled(e.target.checked);
-                                 }}
-                          />
-                          <label htmlFor="upendNtcYn" className="toggleSwitch">
-                            <span className="toggleButton"></span>
-                          </label>
-                        </div>
-                      </div>
-                    </li>
-                    <li className="inputBox type1 width3">
-                      <label className="title" htmlFor="ntcBgngDt"><small>공지시작일</small></label>
-                      <div className="input">
-                        <input type="date"
-                               id="ntcBgngDt"
-                               name="ntcBgngDt"
-                               onChange={(e) =>
-                                   setPst({...pst, ntcBgngDt: moment(e.target.value).format('YYYYMMDD')})
-                               }
-                               disabled={!isDatePickerEnabled}
-                        />
-                      </div>
-                    </li>
-                    <li className="inputBox type1 width3">
-                      <label className="title" htmlFor="ntcEndDate"><small>공지종료일</small></label>
-                      <div className="input">
-                        <input type="date"
-                               id="ntcEndDate"
-                               name="ntcEndDate"
-                               onChange={(e) =>
-                                   setPst({...pst, ntcEndDate: moment(e.target.value).format('YYYYMMDD')})
-                               }
-                               disabled={!isDatePickerEnabled}
-
-                        />
-                      </div>
-                    </li>
-                  </>
-              )}
               {bbs.pstCtgryYn == "Y" && (
                   <li className="inputBox type1 width1">
                     <label className="title essential" htmlFor="pstTtl"><small>분류</small></label>
@@ -492,48 +412,6 @@ function setCommonPst(props) {
                   />
                 </div>
               </li>
-              {bbs.wrtrRlsYn == "Y" && upPstSn == null && pst.upPstSn == null && (
-                  <>
-                    <li className="inputBox type1 width2">
-                      <label className="title" htmlFor="rlsYn"><small>공개여부</small></label>
-                      <div className="itemBox">
-                        <select
-                            id="rlsYn"
-                            className="selectGroup"
-                            onChange={(e) =>
-                                setPst({
-                                  ...pst,
-                                  rlsYn: e.target.value,
-                                })
-                            }
-                            value={pst.rlsYn || "Y"}
-                        >
-                          <option value="Y">비공개</option>
-                          <option value="N">공개</option>
-                        </select>
-                      </div>
-                    </li>
-                    <li className="inputBox type1 width2">
-                      <label className="title essential" htmlFor="prvtPswd"><small>비밀번호</small></label>
-                      <div className="input">
-                        <form>
-                          <input type="password"
-                                 name="prvtPswd"
-                                 title=""
-                                 id="prvtPswd"
-                                 placeholder="비밀번호"
-                                 autoComplete="off"
-                                 defaultValue={pst.prvtPswd}
-                                 onChange={(e) =>
-                                     setPst({...pst, prvtPswd: e.target.value})
-                                 }
-                                 disabled={pst.rlsYn == "N"}
-                          />
-                        </form>
-                      </div>
-                    </li>
-                  </>
-              )}
             </ul>
             <div className="buttonBox">
               <div className="leftBox">
@@ -547,7 +425,7 @@ function setCommonPst(props) {
                 )}
               </div>
               <Link
-                  to={URL.COMMON_PST_LIST}
+                  to={URL.COMMON_PST_FAQ_LIST}
                   state={{
                     bbsSn: bbs.bbsSn,
                   }}

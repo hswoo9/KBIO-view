@@ -1,39 +1,39 @@
 import React, {useState, useEffect, useRef, useMemo, useCallback} from "react";
-import { useDropzone } from 'react-dropzone';
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import {Link, useNavigate, useLocation, NavLink} from "react-router-dom";
 import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
 import 'moment/locale/ko';
-import { default as EgovLeftNav } from "@/components/leftmenu/ManagerLeftBoard";
-import EgovRadioButtonGroup from "@/components/EgovRadioButtonGroup";
 import Swal from "sweetalert2";
-import Form from "react-bootstrap/Form";
-import ReactDatePicker from 'react-datepicker';
 import moment from "moment";
-import ReactQuill from 'react-quill-new';
 import '@/css/quillSnow.css';
 import '@/css/manager/managerPstDetail.css';
-import Eval  from "../../../../common/pst/eval.jsx";
 import { getSessionItem, setSessionItem } from "@/utils/storage";
-import ManagerLeftNew from "@/components/manager/ManagerLeftNew";
-import {fileDownLoad} from "@/components/CommonComponents.jsx";
+import {fileDownLoad, fileZipDownLoad} from "@/components/CommonComponents.jsx";
+import CommonPstEval from "../eval.jsx";
+import {getComCdList} from "../../../../components/CommonComponents.jsx";
 
-function setPst(props) {
+function commonPstDetail(props) {
   const sessionUser = getSessionItem("loginUser");
   const navigate = useNavigate();
   const location = useLocation();
 
   const [searchDto, setSearchDto] = useState({
     bbsSn : location.state?.bbsSn,
-    pstSn : location.state?.pstSn
+    pstSn : location.state?.pstSn,
+    userSn : sessionUser ? sessionUser.userSn : ""
   });
 
-  const [pstDetail, setPstDetail] = useState({});
+  const [authrt, setAuthrt] = useState({
+    inqAuthrt : "N",
+    wrtAuthrt : "N",
+    mdfcnAuthrt : "N",
+    delAuthrt : "N",
+  })
+  const [pst, setPst] = useState({});
   const [answer, setAnswer] = useState({});
-
   const [pstPrevNext, setPstPrevNext] = useState([]);
-  const [bbsDetail, setBbsDetail] = useState({});
+  const [bbs, setBbs] = useState({});
 
   const getPst = (searchDto) => {
     const getPstURL = `/pstApi/getPst.do`;
@@ -46,8 +46,9 @@ function setPst(props) {
     };
 
     EgovNet.requestFetch(getPstURL, requestOptions, function (resp) {
-      setBbsDetail(resp.result.bbs);
-      setPstDetail(resp.result.pst);
+      setAuthrt(resp.result.authrt)
+      setBbs(resp.result.bbs);
+      setPst(resp.result.pst);
       if(resp.result.pst.answer != null){
         setAnswer(resp.result.pst.answer);
       }
@@ -79,10 +80,9 @@ function setPst(props) {
           if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
             Swal.fire("삭제되었습니다.");
             navigate(
-              { pathname : URL.MANAGER_PST_QNA_LIST},
+              { pathname : URL.COMMON_PST_QNA_LIST},
               { state: {
-                  bbsSn: bbsDetail.bbsSn,
-                  atchFileYn: bbsDetail.atchFileYn,
+                  bbsSn: bbs.bbsSn,
                 }
               }
             );
@@ -109,115 +109,120 @@ function setPst(props) {
 
   return (
       <div id="container" className="container layout cms">
-        <ManagerLeftNew/>
         <div className="inner">
-          <h2 className="pageTitle"><p>게시글 상세보기</p></h2>
+          <h2 className="pageTitle">{bbs.bbsNm}</h2>
           <div className="contBox">
             <div className="box infoBox">
               <ul className="listBox">
-                {bbsDetail.pstCtgryYn == "Y" && (
+                {bbs.pstCtgryYn == "Y" && (
                     <li className="inputBox type1 width1">
                       <label className="title"><small>분류</small></label>
-                      <div className="input">{pstDetail.pstClsfNm}</div>
+                      <div className="input">{pst.pstClsfNm}</div>
                     </li>
                 )}
-
                 <li className="inputBox type1 width1">
                   <label className="title"><small>제목</small></label>
-                  <div className="input">{pstDetail.pstTtl}</div>
+                  <div className="input">{pst.pstTtl}</div>
                 </li>
                 <li className="inputBox type1 width1">
                   <label className="title"><small>작성일</small></label>
-                  <div className="input">{moment(pstDetail.frstCrtDt).format('YYYY-MM-DD')}</div>
+                  <div className="input">{moment(pst.frstCrtDt).format('YYYY-MM-DD')}</div>
                 </li>
-                {bbsDetail.atchFileYn == "Y" && (
+                {bbs.atchFileYn == "Y" && (
                     <li className="inputBox type1 width1">
                       <label className="title"><small>첨부파일</small></label>
                       <div className="input">
-                        {pstDetail.pstFiles.length > 0 && (
+                        {pst.pstFiles.length > 0 && (
                             <ul>
-                              {pstDetail.pstFiles.map((file, index) => (
+                              {pst.pstFiles.map((file, index) => (
                                   <li key={index}>
                                     <span
-                                        onClick={() => fileDownLoad(file.atchFileSn, file.atchFileNm)}>{file.atchFileNm} - {(file.atchFileSz / 1024).toFixed(2)} KB</span>
+                                        onClick={() => fileDownLoad(file.atchFileSn, file.atchFileNm)}
+                                        style={{cursor: "pointer"}}>
+                                      {file.atchFileNm} - {(file.atchFileSz / 1024).toFixed(2)} KB
+                                    </span>
                                   </li>
                               ))}
                             </ul>
                         )}
                       </div>
+                      {pst.pstFiles.length > 0 && (
+                        <button
+                            type="button"
+                            className="clickBtn"
+                            onClick={() => fileZipDownLoad("pst_" + pst.pstSn, pst.pstTtl)}>
+                          압축
+                        </button>
+                      )}
                     </li>
                 )}
                 <li className="inputBox type1 width1">
                   <label className="title"><small>외부링크</small></label>
-                  <div className="input">{pstDetail.linkUrlAddr}</div>
+                  <div className="input">
+                    <NavLink to={pst.linkUrlAddr} target={"_blank"}>
+                      {pst.linkUrlAddr}
+                    </NavLink>
+                  </div>
                 </li>
                 <li className="inputBox type1 width1">
                   <label className="title"><small>내용</small></label>
-                  <div className="input" dangerouslySetInnerHTML={{__html: pstDetail.pstCn}}></div>
+                  <div className="input" dangerouslySetInnerHTML={{__html: pst.pstCn}}></div>
                 </li>
-
-                {answer && (
-                    <>
-                      <li className="inputBox type1 width1">
-                        <label className="title"><small>답변</small></label>
-                        <div className="input">답변 : {answer.pstTtl}</div>
-                      </li>
-
-                      <li className="inputBox type1 width1">
-                        <label className="title"><small>내용</small></label>
-                        <div className="input" dangerouslySetInnerHTML={{__html: answer.pstCn}}></div>
-                      </li>
-                    </>
-                )}
-
               </ul>
               <div className="buttonBox">
                 <div className="left">
-                  {bbsDetail.ansPsbltyYn == "Y" && (
+                  {bbs.ansPsbltyYn == "Y" && authrt.wrtAuthrt == "Y" && sessionUser.userSe == "ADM" && (
                       <Link
-                          to={URL.MANAGER_PST_QNA_CREATE}
+                          to={URL.COMMON_PST_QNA_CREATE}
                           state={{
-                            bbsSn: pstDetail.bbsSn,
-                            pstGroup: pstDetail.pstGroup,
-                            upPstSn: pstDetail.pstSn,
-                            upPstClsf : pstDetail.pstClsf,
-                            upPstTtl : pstDetail.pstTtl,
-                            upRlsYn : pstDetail.rlsYn,
-                            upPrvtPswd : pstDetail.prvtPswd,
+                            bbsSn: pst.bbsSn,
+                            pstGroup: pst.pstGroup,
+                            upPstSn: pst.pstSn,
+                            upPstClsf : pst.pstClsf,
+                            upPstTtl : pst.pstTtl,
+                            upRlsYn : pst.rlsYn,
+                            upPrvtPswd : pst.prvtPswd,
                           }}
                       >
                         <button type="button" className="clickBtn">
-                          <span>답변</span>
+                          답변
                         </button>
                       </Link>
                   )}
-                  <Link
-                      to={URL.MANAGER_PST_QNA_MODIFY}
-                      mode={CODE.MODE_MODIFY}
-                      state={{
-                        pstSn: pstDetail.pstSn,
-                      }}
-                  >
-                    <button type="button" className="clickBtn"><span>수정</span></button>
-                  </Link>
-                  <button type="button" className="clickBtn red"
-                          onClick={() => {
-                            setPstDel(pstDetail.pstSn);
+                  {authrt.mdfcnAuthrt == "Y" && (
+                      <Link
+                          to={URL.COMMON_PST_QNA_MODIFY}
+                          mode={CODE.MODE_MODIFY}
+                          state={{
+                            pstSn: pst.pstSn,
                           }}
-                  >
-                    <span>삭제</span>
-                  </button>
+                      >
+                        <button type="button" className="clickBtn">
+                          수정
+                        </button>
+                      </Link>
+                  )}
+                  {authrt.delAuthrt == "Y" && (
+                      <button type="button" className="clickBtn red"
+                              onClick={() => {
+                                setPstDel(pst.pstSn);
+                              }}
+                      >
+                        <span>삭제</span>
+                      </button>
+                  )}
                 </div>
                 <div className="right">
                   <Link
-                      to={URL.MANAGER_PST_QNA_LIST}
+                      to={URL.COMMON_PST_QNA_LIST}
                       state={{
-                        bbsSn: bbsDetail.bbsSn,
-                        atchFileYn: bbsDetail.atchFileYn
+                        bbsSn: bbs.bbsSn,
                       }}
                   >
-                  <button type="button" className="clickBtn white"><span>목록</span></button>
-                </Link>
+                    <button type="button" className="clickBtn white">
+                      목록
+                    </button>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -261,8 +266,9 @@ function setPst(props) {
             </div>
           </div>
         </div>
+        <CommonPstEval pstSn={pst.pstSn}/>
       </div>
   );
 }
 
-export default setPst;
+export default commonPstDetail;

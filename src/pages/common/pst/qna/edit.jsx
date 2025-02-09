@@ -1,31 +1,24 @@
 
 import React, {useState, useEffect, useRef, useMemo, useCallback} from "react";
 import { useDropzone } from 'react-dropzone';
-import { NavLink, useNavigate, useLocation } from "react-router-dom";
+import {NavLink, useNavigate, useLocation, Link} from "react-router-dom";
 import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
 import 'moment/locale/ko';
-import ManagerLeftNew from "@/components/manager/ManagerLeftNew";
-import EgovRadioButtonGroup from "@/components/EgovRadioButtonGroup";
 import Swal from "sweetalert2";
-import Form from "react-bootstrap/Form";
 import moment from "moment";
-import {getSessionItem} from "../../../../../utils/storage.js";
 
 import CommonEditor from "@/components/CommonEditor";
-import {getComCdList} from "../../../../../components/CommonComponents.jsx";
+import {getSessionItem} from "../../../../utils/storage.js";
+import {getComCdList} from "../../../../components/CommonComponents.jsx";
 
-function setPst(props) {
+function setCommonPst(props) {
 
   const sessionUser = getSessionItem("loginUser");
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [searchDto, setSearchDto] = useState({
-    bbsSn : location.state?.bbsSn,
-    pstSn : location.state?.pstSn
-  });
   const upPstSn = location.state?.upPstSn || null;
   const upPstClsf = location.state?.upPstClsf || null;
   const upPstTtl = location.state?.upPstTtl || null;
@@ -35,14 +28,12 @@ function setPst(props) {
   const pstGroup = location.state?.pstGroup || null;
 
   const [modeInfo, setModeInfo] = useState({ mode: props.mode });
-  const [pstDetail, setPstDetail] = useState({});
+  const [pst, setPst] = useState({pstSn : location.state?.pstSn});
   const [comCdList, setComCdList] = useState([]);
-  useEffect(() => {
-  }, [pstDetail])
 
   const [acceptFileTypes, setAcceptFileTypes] = useState('');
   const [fileList, setFileList] = useState([]);
-  const [bbsDetail, setBbsDetail] = useState({});
+  const [bbs, setBbs] = useState({bbsSn : location.state?.bbsSn});
 
   const isFirstRender = useRef(true);
   const handleChange = (value) => {
@@ -50,21 +41,21 @@ function setPst(props) {
       isFirstRender.current = false;
       return;
     }
-    setPstDetail({...pstDetail, pstCn: value});
+    setPst({...pst, pstCn: value});
   };
 
-  const getBbs = (searchDto) => {
+  const getBbs = (bbs) => {
     const getBbsURL = `/bbsApi/getBbs`;
     const requestOptions = {
       method: "POST",
       headers: {
         "Content-type": "application/json",
       },
-      body: JSON.stringify(searchDto)
+      body: JSON.stringify(bbs)
     };
 
     EgovNet.requestFetch(getBbsURL, requestOptions, function (resp) {
-      setBbsDetail(resp.result.bbs);
+      setBbs(resp.result.bbs);
       setAcceptFileTypes(
           resp.result.bbs.atchFileKndNm != ""
               ? resp.result.bbs.atchFileKndNm.split(',').join(',')
@@ -94,8 +85,7 @@ function setPst(props) {
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
-    /*accept: acceptFileTypes, // accept 값은 `acceptFileTypes` 상태에 따라 동적으로 변경됩니다.*/
-    multiple: true, // 멀티파일 허용
+    multiple: true,
   });
 
   const handleDeleteFile = (index) => {
@@ -110,15 +100,15 @@ function setPst(props) {
       editURL: `/pstApi/setPst`,
     });
 
-    getPst(searchDto);
+    getPst(pst);
   };
 
-  const getPst = (searchDto) => {
+  const getPst = (pst) => {
     if (modeInfo.mode === CODE.MODE_CREATE) {
-      getBbs(searchDto)
+      getBbs(bbs)
       // 조회/등록이면 조회 안함
-      setPstDetail({
-        bbsSn : searchDto.bbsSn,
+      setPst({
+        bbsSn : bbs.bbsSn,
         pstClsf : upPstClsf ? upPstClsf : null,
         pstTtl : upPstTtl ? "문의하신 " + upPstTtl + " 답변입니다." : null,
         linkUrlAddr : "",
@@ -138,12 +128,12 @@ function setPst(props) {
       headers: {
         "Content-type": "application/json",
       },
-      body: JSON.stringify(searchDto)
+      body: JSON.stringify(pst)
     };
 
     EgovNet.requestFetch(getPstURL, requestOptions, function (resp) {
       if (modeInfo.mode === CODE.MODE_MODIFY) {
-        setBbsDetail(resp.result.bbs);
+        setBbs(resp.result.bbs);
         setAcceptFileTypes(
             resp.result.bbs.atchFileKndNm != ""
                 ? resp.result.bbs.atchFileKndNm.split(',').join(',')
@@ -151,7 +141,7 @@ function setPst(props) {
         );
 
         resp.result.pst.mdfrSn = sessionUser.userSn
-        setPstDetail(resp.result.pst);
+        setPst(resp.result.pst);
       }
     });
   };
@@ -179,8 +169,8 @@ function setPst(props) {
           if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
             Swal.fire("삭제되었습니다.");
 
-            const updatedFiles = pstDetail.pstFiles.filter(file => file.atchFileSn !== atchFileSn);
-            setPstDetail({ ...pstDetail, pstFiles: updatedFiles });  // 상태 업데이트
+            const updatedFiles = pst.pstFiles.filter(file => file.atchFileSn !== atchFileSn);
+            setPst({ ...pst, pstFiles: updatedFiles });  // 상태 업데이트
           } else {
           }
         });
@@ -191,26 +181,25 @@ function setPst(props) {
   }
 
   const setPstData = async () => {
-    if(bbsDetail.pstCtgryYn == "Y"){
-      if (!pstDetail.pstClsf) {
+    if(bbs.pstCtgryYn == "Y"){
+      if (!pst.pstClsf) {
         Swal.fire("분류를 선택해주세요.");
         return;
       }
     }
-
-    if (!pstDetail.pstTtl) {
+    if (!pst.pstTtl) {
       Swal.fire("제목을 입력해주세요.");
       return;
     }
-    if (!pstDetail.pstCn) {
+    if (!pst.pstCn) {
       Swal.fire("내용을 입력해주세요.");
       return;
     }
 
     const formData = new FormData();
-    for (let key in pstDetail) {
-      if(pstDetail[key] != null && key != "pstFiles"){
-        formData.append(key, pstDetail[key]);
+    for (let key in pst) {
+      if(pst[key] != null && key != "pstFiles"){
+        formData.append(key, pst[key]);
       }
     }
 
@@ -243,10 +232,9 @@ function setPst(props) {
           if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
             Swal.fire("등록되었습니다.");
             navigate(
-                { pathname : URL.MANAGER_PST_QNA_LIST},
+                { pathname : URL.COMMON_PST_QNA_LIST},
                 { state: {
-                    bbsSn: bbsDetail.bbsSn,
-                    atchFileYn: bbsDetail.atchFileYn,
+                    bbsSn: bbs.bbsSn,
                   }
                 }
             );
@@ -284,10 +272,9 @@ function setPst(props) {
           if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
             Swal.fire("삭제되었습니다.");
             navigate(
-                { pathname : URL.MANAGER_PST_QNA_LIST},
+                { pathname : URL.COMMON_PST_QNA_LIST},
                 { state: {
-                    bbsSn: bbsDetail.bbsSn,
-                    atchFileYn: bbsDetail.atchFileYn,
+                    bbsSn: bbs.bbsSn,
                   }
                 }
             );
@@ -306,40 +293,32 @@ function setPst(props) {
   }, []);
 
   useEffect(() => {
-    if(bbsDetail.pstCtgryYn == "Y"){
+    if(bbs.pstCtgryYn == "Y"){
       getComCdList(8).then((data) => {
         setComCdList(data);
       })
     }
-  }, [bbsDetail]);
-
+  }, [bbs]);
 
   return (
       <div id="container" className="container layout cms">
-        <ManagerLeftNew/>
         <div className="inner">
-          {modeInfo.mode === CODE.MODE_CREATE && (
-              <h2 className="pageTitle"><p>게시글 생성</p></h2>
-          )}
-
-          {modeInfo.mode === CODE.MODE_MODIFY && (
-              <h2 className="pageTitle"><p>게시글 수정</p></h2>
-          )}
+          <h2 className="pageTitle"><p>{bbs.bbsNm}</p></h2>
 
           <div className="contBox infoWrap customContBox">
             <ul className="inputWrap">
-              {bbsDetail.pstCtgryYn == "Y" && (
+              {bbs.pstCtgryYn == "Y" && (
                   <li className="inputBox type1 width1">
-                    <label className="title essential" htmlFor="pstClsf"><small>분류</small></label>
+                    <label className="title essential" htmlFor="pstTtl"><small>분류</small></label>
                     <div className="input">
                       <div className="itemBox">
                         <select
                             id="pstClsf"
                             className="selectGroup"
-                            key={pstDetail.pstSn || 0}
-                            value={upPstClsf != null ? upPstClsf : pstDetail.pstClsf}
+                            key={pst.pstSn || 0}
+                            value={upPstClsf != null ? upPstClsf : pst.pstClsf}
                             onChange={(e) =>
-                                setPstDetail({...pstDetail, pstClsf: e.target.value})
+                                setPst({...pst, pstClsf: e.target.value})
                             }
                             disabled={upPstClsf}
                         >
@@ -359,9 +338,9 @@ function setPst(props) {
                          name="pstTtl"
                          title=""
                          id="pstTtl"
-                         defaultValue={upPstTtl != null ? "문의하신 " + upPstTtl + " 답변입니다." : pstDetail.pstTtl}
+                         defaultValue={upPstTtl != null ? "문의하신 " + upPstTtl + " 답변입니다." : pst.pstTtl}
                          onChange={(e) =>
-                             setPstDetail({...pstDetail, pstTtl: e.target.value})
+                             setPst({...pst, pstTtl: e.target.value})
                          }
                          disabled={upPstTtl}
                   />
@@ -369,9 +348,9 @@ function setPst(props) {
               </li>
               <li className="inputBox type1 width1">
                 <label className="title essential"><small>작성일</small></label>
-                <div className="input">{moment(pstDetail.frstCrtDt).format('YYYY-MM-DD')}</div>
+                <div className="input">{moment(pst.frstCrtDt).format('YYYY-MM-DD')}</div>
               </li>
-              {bbsDetail.atchFileYn == "Y" && (
+              {bbs.atchFileYn == "Y" && (
                   <li className="inputBox type1 width1 file">
                     <p className="title essential">첨부파일</p>
                     <div
@@ -387,9 +366,9 @@ function setPst(props) {
                       <input {...getInputProps()} />
                       <p>파일을 이곳에 드롭하거나 클릭하여 업로드하세요</p>
                     </div>
-                    {pstDetail != null && pstDetail.pstFiles != null && pstDetail.pstFiles.length > 0 && (
+                    {pst != null && pst.pstFiles != null && pst.pstFiles.length > 0 && (
                         <ul>
-                          {pstDetail.pstFiles.map((file, index) => (
+                          {pst.pstFiles.map((file, index) => (
                               <li key={index}>
                                 {file.atchFileNm} - {(file.atchFileSz / 1024).toFixed(2)} KB
 
@@ -429,9 +408,9 @@ function setPst(props) {
                          name="linkUrlAddr"
                          title=""
                          id="linkUrlAddr"
-                         defaultValue={pstDetail.linkUrlAddr}
+                         defaultValue={pst.linkUrlAddr}
                          onChange={(e) =>
-                             setPstDetail({...pstDetail, linkUrlAddr: e.target.value})
+                             setPst({...pst, linkUrlAddr: e.target.value})
                          }
                   />
                 </div>
@@ -440,12 +419,12 @@ function setPst(props) {
                 <label className="title essential"><small>내용</small></label>
                 <div>
                   <CommonEditor
-                      value={pstDetail.pstCn}
+                      value={pst.pstCn}
                       onChange={handleChange}
                   />
                 </div>
               </li>
-              {bbsDetail.wrtrRlsYn == "Y" && upPstSn == null && pstDetail.upPstSn == null && (
+              {bbs.wrtrRlsYn == "Y" && upPstSn == null && pst.upPstSn == null && (
                   <>
                     <li className="inputBox type1 width2">
                       <label className="title" htmlFor="rlsYn"><small>공개여부</small></label>
@@ -454,12 +433,12 @@ function setPst(props) {
                             id="rlsYn"
                             className="selectGroup"
                             onChange={(e) =>
-                                setPstDetail({
-                                  ...pstDetail,
+                                setPst({
+                                  ...pst,
                                   rlsYn: e.target.value,
                                 })
                             }
-                            value={pstDetail.rlsYn || "Y"}
+                            value={pst.rlsYn || "Y"}
                         >
                           <option value="Y">비공개</option>
                           <option value="N">공개</option>
@@ -476,11 +455,11 @@ function setPst(props) {
                                  id="prvtPswd"
                                  placeholder="비밀번호"
                                  autoComplete="off"
-                                 defaultValue={pstDetail.prvtPswd}
+                                 defaultValue={pst.prvtPswd}
                                  onChange={(e) =>
-                                     setPstDetail({...pstDetail, prvtPswd: e.target.value})
+                                     setPst({...pst, prvtPswd: e.target.value})
                                  }
-                                 disabled={pstDetail.rlsYn == "N"}
+                                 disabled={pst.rlsYn == "N"}
                           />
                         </form>
                       </div>
@@ -494,21 +473,21 @@ function setPst(props) {
                 {modeInfo.mode === CODE.MODE_MODIFY && (
                     <button type="button" className="clickBtn gray"
                             onClick={() => {
-                              setPstDel(pstDetail.pstSn);
+                              setPstDel(pst.pstSn);
                             }}
                     ><span>삭제</span></button>
                 )}
               </div>
-              <NavLink
-                  to={URL.MANAGER_PST_QNA_LIST}
-                  className="btn btn_blue_h46 w_100"
+              <Link
+                  to={URL.COMMON_PST_QNA_LIST}
                   state={{
-                    bbsSn: bbsDetail.bbsSn,
-                    atchFileYn: bbsDetail.atchFileYn
+                    bbsSn: bbs.bbsSn,
                   }}
               >
-                <button type="button" className="clickBtn black"><span>목록</span></button>
-              </NavLink>
+                <button type="button" className="clickBtn white">
+                  목록
+                </button>
+              </Link>
             </div>
           </div>
         </div>
@@ -516,4 +495,4 @@ function setPst(props) {
   );
 }
 
-export default setPst;
+export default setCommonPst;

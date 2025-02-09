@@ -1,18 +1,15 @@
 import React, {useState, useEffect, useCallback, useRef} from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
-import axios from "axios";
 import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
 import 'moment/locale/ko';
 import ManagerLeftNew from "@/components/manager/ManagerLeftNew";
 import { getComCdList } from "@/components/CommonComponents";
-import Swal from 'sweetalert2';
 import EgovPaging from "@/components/EgovPaging";
 
 import moment from "moment/moment.js";
 import {getSessionItem} from "../../../../../utils/storage.js";
-
 
 function ManagerPst(props) {
     const sessionUser = getSessionItem("loginUser");
@@ -206,7 +203,6 @@ function ManagerPst(props) {
                                 <td>{moment(item.frstCrtDt).format('YYYY-MM-DD')}</td>
                                 <td>{item.answer === "Y" ? "답변완료" : "답변대기"}</td>
                                 <td>{item.actvtnYn === "Y" ? "사용" : "미사용"}</td>
-
 
                                 <td>
                                     <button type="button" onClick={modelOpenEvent}><span>보기</span></button>

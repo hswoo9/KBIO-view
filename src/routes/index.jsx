@@ -14,9 +14,19 @@ import EgovMainUser from "@/pages/main/EgovMainUser";
 import CommonError from "@/pages/common/error/commonError";
 import CommonPopup from "@/pages/common/popup/commonPopup";
 import CommonContentView from "@/pages/common/content/view";
-import CommonPstList from "@/pages/common/pst/list";
-import CommonPstDetail from "@/pages/common/pst/detail";
-import CommonPstEdit from "@/pages/common/pst/edit";
+
+import CommonPstNormalList from "@/pages/common/pst/normal/list";
+import CommonPstNormalDetail from "@/pages/common/pst/normal/detail";
+import CommonPstNormalEdit from "@/pages/common/pst/normal/edit";
+
+import CommonPstQnaList from "@/pages/common/pst/qna/list";
+import CommonPstQnaDetail from "@/pages/common/pst/qna/detail";
+import CommonPstQnaEdit from "@/pages/common/pst/qna/edit";
+
+import CommonPstFaqList from "@/pages/common/pst/faq/list";
+import CommonPstFaqDetail from "@/pages/common/pst/faq/detail";
+import CommonPstFaqEdit from "@/pages/common/pst/faq/edit";
+
 
 import EgovMain from "@/pages/main/EgovMain";
 import EgovLogin from "@/pages/login/EgovLogin";
@@ -290,10 +300,21 @@ const SecondRoutes = () => {
               {/* COMMON */}
               <Route path={URL.COMMON_CONTENT_VIEW} element={<CommonContentView/>}/>
               <Route path={URL.COMMON_POPUP} element={<CommonPopup/>}/>
-              <Route path={URL.COMMON_PST_LIST} element={<CommonPstList/>}/>
-              <Route path={URL.COMMON_PST_DETAIL} element={<CommonPstDetail mode={CODE.MODE_READ}/>}/>
-              <Route path={URL.COMMON_PST_CREATE} element={<CommonPstEdit mode={CODE.MODE_CREATE}/>}/>
-              <Route path={URL.COMMON_PST_MODIFY} element={<CommonPstEdit mode={CODE.MODE_MODIFY}/>}/>
+              <Route path={URL.COMMON_PST_NORMAL_LIST} element={<CommonPstNormalList/>}/>
+              <Route path={URL.COMMON_PST_NORMAL_DETAIL} element={<CommonPstNormalDetail mode={CODE.MODE_READ}/>}/>
+              <Route path={URL.COMMON_PST_NORMAL_CREATE} element={<CommonPstNormalEdit mode={CODE.MODE_CREATE}/>}/>
+              <Route path={URL.COMMON_PST_NORMAL_MODIFY} element={<CommonPstNormalEdit mode={CODE.MODE_MODIFY}/>}/>
+
+              <Route path={URL.COMMON_PST_QNA_LIST} element={<CommonPstQnaList/>}/>
+              <Route path={URL.COMMON_PST_QNA_DETAIL} element={<CommonPstQnaDetail mode={CODE.MODE_READ}/>}/>
+              <Route path={URL.COMMON_PST_QNA_CREATE} element={<CommonPstQnaEdit mode={CODE.MODE_CREATE}/>}/>
+              <Route path={URL.COMMON_PST_QNA_MODIFY} element={<CommonPstQnaEdit mode={CODE.MODE_MODIFY}/>}/>
+
+              <Route path={URL.COMMON_PST_FAQ_LIST} element={<CommonPstFaqList/>}/>
+              <Route path={URL.COMMON_PST_FAQ_DETAIL} element={<CommonPstFaqDetail mode={CODE.MODE_READ}/>}/>
+              <Route path={URL.COMMON_PST_FAQ_CREATE} element={<CommonPstFaqEdit mode={CODE.MODE_CREATE}/>}/>
+              <Route path={URL.COMMON_PST_FAQ_MODIFY} element={<CommonPstFaqEdit mode={CODE.MODE_MODIFY}/>}/>
+
 
               {/* LOGIN */}
               <Route
