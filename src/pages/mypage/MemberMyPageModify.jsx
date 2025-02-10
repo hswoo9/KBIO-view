@@ -126,7 +126,7 @@ function MemberMyPageModify(props) {
     };
 
     const getNormalMember = (searchDto) => {
-        const getNormalMemberURL = `/memberApi/getNormalMember`;
+        const getNormalMemberURL = `/memberApi/getMyPageNormalMember`;
         const requestOptions = {
             method: "POST",
             headers: {
@@ -136,8 +136,13 @@ function MemberMyPageModify(props) {
         };
 
         EgovNet.requestFetch(getNormalMemberURL, requestOptions, (resp) => {
+            console.log("Response Received:", resp);  // 응답이 올바르게 들어오는지 확인
             if (modeInfo.mode === CODE.MODE_MODIFY) {
                 const memberData = resp.result.member;
+
+                // 여기서 memberData 로그 찍기
+                console.log("D Member Data:", memberData); // 데이터를 제대로 받아오는지 확인
+
                 const decodedPhoneNumber = memberData.mblTelno ? decodePhoneNumber(memberData.mblTelno) : "";
 
                 let emailPrefix = "";
@@ -204,10 +209,23 @@ function MemberMyPageModify(props) {
                 return;
             }
 
+            const emailPrefix = memberDetail.emailPrefix || "defaultPrefix"; // 실제 이메일 아이디
+            const emailDomain = memberDetail.emailDomain || "example.com"; // 실제 도메인
+            const email = `${emailPrefix}@${emailDomain}`;
+
+            const updatedMemberDetail = {
+                ...memberDetail,
+                emailPrefix,
+                emailDomain,
+                email,
+                emailProvider: emailDomain,
+            };
+
             setSaveEvent({
                 ...saveEvent,
                 save: true,
-                mode: "save"
+                mode: "save",
+                memberDetail: updatedMemberDetail
                 });
             } else {
             }
@@ -231,6 +249,8 @@ function MemberMyPageModify(props) {
                     formData.append(key, MemberDetail[key]);
                 }
             }
+
+            console.log("Sending data:", Object.fromEntries(formData.entries()));
 
             const menuListURL = "/memberApi/setMemberMyPageModfiy";
             const requestOptions = {

@@ -42,24 +42,6 @@ function MemberSignUp(props) {
   };
 
   const [memberDetail, setMemberDetail] = useState({
-    mbrType: '',            // 회원 구분
-    zip: '',                // 우편번호
-    userPw: '',             // 비밀번호
-    userId: '',             // 사용자 ID
-    kornFlnm: '',           // 한글 성명
-    addr: '',               // 주소
-    daddr: '',              // 상세 주소
-    joinYmd: '',            // 가입일
-    emlRcptnAgreYn: '',     // 이메일 수신 동의 여부
-    smsRcptnAgreYn: '',     // SMS 수신 동의 여부
-    infoRlsYn: '',          // 정보 공개 여부
-    actvtnYn: "W",          // 활성 여부
-    creatrSn: '',           // 생성자 일련번호
-    mdfrSn: '',             // 수정자 일련번호
-    email: '',              // 이메일
-    emailPrefix: '',        // 이메일 아이디
-    emailDomain: '',        // 이메일 도메인
-    emailProvider: '',      // 이메일 제공자
   });
 
   useEffect(() => {
@@ -695,13 +677,13 @@ function MemberSignUp(props) {
                         />
                     ) : (
                         <select className="selectGroup" onChange={handleSelectChange} value={selectedDomain}
-                            style={{
-                              padding: '5px',
-                              flex: 1,
-                              appearance: 'none',
-                              background: 'none',
-                              width: '70%',
-                            }}
+                                style={{
+                                  padding: '5px',
+                                  flex: 1,
+                                  appearance: 'none',
+                                  background: 'none',
+                                  width: '70%',
+                                }}
                         >
                           <option value="">선택하세요</option>
                           <option value="naver.com">naver.com</option>

@@ -531,7 +531,7 @@ const SecondRoutes = () => {
               path={URL.MYPAGE_CREATE}
               element={<EgovMypageEdit mode={CODE.MODE_CREATE} />}
             />*/}
-              <Route path={URL.MEMBER_MYPAGE_MODIFY} element={<MemberMyPageModify/>}/>
+              <Route path={URL.MEMBER_MYPAGE_MODIFY} element={<MemberMyPageModify mode={CODE.MODE_MODIFY}/>}/>
               <Route path={URL.MEMBER_MYPAGE_CONSULTING} element={<MemberMyPageConsulting/>}/>
               <Route path={URL.MEMBER_MYPAGE_SIMPLE} element={<MemberMyPageSimple/>}/>
               <Route path={URL.MEMBER_MYPAGE_DIFFICULTIES} element={<MemberMyPageDifficulties/>}/>
