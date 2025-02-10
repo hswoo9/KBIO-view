@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { useNavigate, useLocation } from "react-router-dom"; 
+import { useNavigate, useLocation } from "react-router-dom";
 
 import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
@@ -21,6 +21,25 @@ function MemberSignUp(props) {
   //const [memberDetail, setMemberDetail] = useState({});
   const [address, setAddress] = useState("");
   const [image, setImage] = useState("");
+  const [selectedDomain, setSelectedDomain] = useState("");
+  const [isCustom, setIsCustom] = useState(false);
+  const [emailAddr, setEmailAddr] = useState("");
+
+  const splitEmail = (email) =>{
+    if (!email || !email.includes("@")) return "";
+    return email.split("@")[0];
+  }
+
+  const handleSelectChange = (e) => {
+    const value = e.target.value;
+    if (value === "custom") {
+      setIsCustom(true);
+      setSelectedDomain("");
+    } else {
+      setIsCustom(false);
+      setSelectedDomain(value);
+    }
+  };
 
   const [memberDetail, setMemberDetail] = useState({
     mbrType: '',            // 회원 구분
@@ -42,6 +61,32 @@ function MemberSignUp(props) {
     emailDomain: '',        // 이메일 도메인
     emailProvider: '',      // 이메일 제공자
   });
+
+  useEffect(() => {
+    if (memberDetail?.emailPrefix) {
+      const email = memberDetail.emailPrefix;
+      const domain = email.split("@")[1] || "";
+
+      if (["naver.com", "gmail.com"].includes(domain)) {
+        setSelectedDomain(domain);
+        setIsCustom(false);
+      } else {
+        setSelectedDomain(domain);
+        setIsCustom(true);
+      }
+    }
+  }, [memberDetail]);
+
+  useEffect(() => {
+    if (memberDetail.emailPrefix && selectedDomain) {
+      const newEmail = `${memberDetail.emailPrefix}@${selectedDomain}`;
+      setEmailAddr(newEmail);
+      setmemberDetail(prev => ({
+        ...prev,
+        email: newEmail
+      }));
+    }
+  }, [memberDetail.emailPrefix, selectedDomain]);
 
   useEffect(() => {
     const script = document.createElement("script");
@@ -246,7 +291,6 @@ function MemberSignUp(props) {
 
   const retrieveDetail = () => {
     if (modeInfo.mode === CODE.MODE_CREATE) {
-      // 조회/등록이면 조회 안함
       setMemberDetail({
         tmplatId: "TMPLAT_MYPAGE_DEFAULT", //Template 고정
         groupId: "GROUP_00000000000001", //그룹ID 초기값
@@ -270,7 +314,6 @@ function MemberSignUp(props) {
       return;
     }
 
-    const retrieveDetailURL = `/mypage/update`;
 
     const requestOptions = {
       method: "GET",
@@ -508,7 +551,7 @@ function MemberSignUp(props) {
       });
     });
   };
-  
+
 
   useEffect(() => {
     initMode();
@@ -623,56 +666,35 @@ function MemberSignUp(props) {
               </li>
 
               <li className="inputBox type2">
-                <span className="tt1">이메일</span>
+                <span className="tt1" htmlFor="emailId">이메일</span>
                 <div className="input flexinput" style={{display: 'flex', alignItems: 'center'}}>
                   <input
                       type="text"
                       name="emailPrefix"
                       id="emailPrefix"
                       placeholder="이메일 아이디 입력"
-                      value={memberDetail.emailPrefix || ""}
-                      onChange={(e) => setMemberDetail({
-                        ...memberDetail,
-                        emailPrefix: e.target.value,
-                        email: `${e.target.value}@${memberDetail.emailDomain}` // 이메일 업데이트
-                      })}
-                      style={{flex: 1, padding: '5px'}} // 인라인 스타일
+                      defaultValue={splitEmail(memberDetail.emailPrefix || "")}
+                      onChange={(e) =>
+                          setMemberDetail({ ...memberDetail, emailPrefix: e.target.value })
+                      }
+                      style={{flex: 1, padding: '5px'}}
                   />
                   <span style={{margin: '0 5px'}}>@</span>
                   <div className="itemBox" style={{flex: 1}}>
-                    {memberDetail.emailProvider === "direct" ? (
+                    {isCustom ? (
                         <input
                             type="text"
                             placeholder="도메인 입력"
-                            value={memberDetail.emailDomain || ""}
-                            onChange={(e) => setMemberDetail({
-                              ...memberDetail,
-                              emailDomain: e.target.value,
-                              email: `${memberDetail.emailPrefix}@${e.target.value}`
-                            })}
+                            value={selectedDomain}
+                            onChange={(e) => setSelectedDomain(e.target.value)}
                             onBlur={() => {
-                              if (!memberDetail.emailDomain) {
-                                setMemberDetail({...memberDetail, emailProvider: ""});
+                              if (!selectedDomain) {
+                                setIsCustom(false);
                               }
                             }}
-                            style={{flex: 1, padding: '5px'}}
                         />
                     ) : (
-                        <select
-                            className="selectGroup"
-                            onChange={(e) => {
-                              const provider = e.target.value;
-                              const newEmailDomain = provider === "direct" ? "" : provider; // 선택한 도메인
-                              const newEmail = `${memberDetail.emailPrefix}@${newEmailDomain}`; // 새로운 이메일 생성
-
-                              setMemberDetail((prevDetail) => ({
-                                ...prevDetail,
-                                emailProvider: provider,
-                                emailDomain: newEmailDomain,
-                                email: newEmail
-                              }));
-                            }}
-                            value={memberDetail.emailProvider || ""}
+                        <select className="selectGroup" onChange={handleSelectChange} value={selectedDomain}
                             style={{
                               padding: '5px',
                               flex: 1,
@@ -688,7 +710,7 @@ function MemberSignUp(props) {
                           <option value="hotmail.com">hotmail.com</option>
                           <option value="nate.com">nate.com</option>
                           <option value="hanmail.net">hanmail.net</option>
-                          <option value="direct">직접 입력</option>
+                          <option value="custom">직접 입력</option>
                         </select>
                     )}
                   </div>
