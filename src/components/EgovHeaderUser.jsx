@@ -87,6 +87,14 @@ function EgovHeader() {
     setSaveIDFlag(!saveIDFlag);
   };
 
+  const handleSignUp = () => {
+    const modal = document.querySelector('.loginModal.modalCon');
+    if (modal) {
+      modal.style.display = 'none';
+    }
+    navigate(URL.SIGNUP_CHOICE);
+  };
+
   const handleFindPassword = async () => {
 
     const id = document.querySelector('input[name="pwdid"]').value;
@@ -434,7 +442,7 @@ function EgovHeader() {
                     <NavLink
                         to={URL.SIGNUP_CHOICE}
                     >
-                      <button type="button" className="signUpBtn"><span>회원가입</span></button>
+                      <button type="button" className="signUpBtn"><span>회원입</span></button>
                     </NavLink>
                   </>
               )}
@@ -552,7 +560,7 @@ function EgovHeader() {
                     <button type="button" className="pwBtn"><span>비밀번호 찾기</span></button>
                   </li>
                   <li>
-                    <button type="button" className="signUp"><span>회원가입</span></button>
+                    <button type="button" className="signUp" onClick={handleSignUp}><span>회원가입</span></button>
                   </li>
                 </ul>
                 <div className="snsLoginBox">
