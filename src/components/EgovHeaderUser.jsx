@@ -442,7 +442,7 @@ function EgovHeader() {
                     <NavLink
                         to={URL.SIGNUP_CHOICE}
                     >
-                      <button type="button" className="signUpBtn"><span>회원입</span></button>
+                      <button type="button" className="signUpBtn"><span>회원가입</span></button>
                     </NavLink>
                   </>
               )}
