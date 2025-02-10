@@ -23,25 +23,12 @@ function setBbs(props) {
     { value: "1", label: "FAQ" },
     { value: "2", label: "QnA" },
   ];
-  const wrtrRlsYnRadioGroup = [
-    { value: "Y", label: "공개" },
-    { value: "N", label: "비공개" },
-  ];
-  const accessRadioGroup = [
-    { value: "Y", label: "가능" },
-    { value: "N", label: "불가능" },
-  ];
-  const activeRadioGroup = [
-    { value: "Y", label: "사용" },
-    { value: "N", label: "미사용" },
-  ];
 
   const [searchDto, setSearchDto] = useState({bbsSn : location.state?.bbsSn});
 
   const [modeInfo, setModeInfo] = useState({ mode: props.mode });
   const [bbsDetail, setBbsDetail] = useState({});
   useEffect(() => {
-    console.log(bbsDetail);
   }, [bbsDetail])
 
   const initMode = () => {
@@ -103,6 +90,7 @@ function setBbs(props) {
           document.getElementById("ansPsbltyYn").checked = bbsData.ansPsbltyYn == "Y" ? true : false;
         }
         setBbsDetail(bbsData);
+        bbsTypeChange(bbsData.bbsTypeNm)
       }
     });
   };
@@ -199,10 +187,27 @@ function setBbs(props) {
     });
   };
 
-  const getSelectedLabel = (objArray, findLabel = "") => {
-    let foundValueLabelObj = objArray.find((o) => o["value"] === findLabel);
-    return foundValueLabelObj["label"];
-  };
+  const bbsTypeChange = (e) => {
+      if(e == "1"){
+        document.getElementById("wrtrRlsYn").checked = false;
+        document.getElementById("cmntPsbltyYn").checked = false;
+        document.getElementById("ansPsbltyYn").checked = false;
+
+        document.getElementById("wrtrRlsYn").disabled = true;
+        document.getElementById("cmntPsbltyYn").disabled = true;
+        document.getElementById("ansPsbltyYn").disabled = true;
+      }else if(e == "2"){
+        document.getElementById("cmntPsbltyYn").checked = false;
+
+        document.getElementById("cmntPsbltyYn").disabled = true;
+        document.getElementById("wrtrRlsYn").disabled = false;
+        document.getElementById("ansPsbltyYn").disabled = false;
+      }else{
+        document.querySelectorAll(".bbsRadio").forEach((el) => {
+          el.disabled = false;
+        });
+      }
+  }
 
   useEffect(() => {
     initMode();
@@ -243,12 +248,13 @@ function setBbs(props) {
                       name="bbsTypeNm"
                       className="selectGroup"
                       title="게시판유형선택"
-                      onChange={(e) =>
+                      onChange={(e) => {
                           setBbsDetail({
                             ...bbsDetail,
                             bbsTypeNm: e.target.value,
                           })
-                      }
+                          bbsTypeChange(e.target.value)
+                      }}
                       value={bbsDetail.bbsTypeNm || ""}
                   >
                     {bbsTypeNmOptions.map((option) => {
@@ -267,6 +273,7 @@ function setBbs(props) {
                   <div className="toggleSwithWrap">
                     <input type="checkbox"
                            id="pstCtgryYn"
+                           className="bbsRadio"
                            onChange={(e) =>
                                setBbsDetail({
                                  ...bbsDetail,
@@ -286,6 +293,7 @@ function setBbs(props) {
                   <div className="toggleSwithWrap">
                     <input type="checkbox"
                            id="wrtrRlsYn"
+                           className="bbsRadio"
                            onChange={(e) =>
                                setBbsDetail({
                                  ...bbsDetail,
@@ -305,6 +313,7 @@ function setBbs(props) {
                   <div className="toggleSwithWrap">
                     <input type="checkbox"
                            id="atchFileYn"
+                           className="bbsRadio"
                            onChange={(e) =>
                                setBbsDetail({
                                  ...bbsDetail,
@@ -361,6 +370,7 @@ function setBbs(props) {
                   <div className="toggleSwithWrap">
                     <input type="checkbox"
                            id="cmntPsbltyYn"
+                           className="bbsRadio"
                            onChange={(e) =>
                                setBbsDetail({
                                  ...bbsDetail,
@@ -380,6 +390,7 @@ function setBbs(props) {
                   <div className="toggleSwithWrap">
                     <input type="checkbox"
                            id="ansPsbltyYn"
+                           className="bbsRadio"
                            onChange={(e) =>
                                setBbsDetail({
                                  ...bbsDetail,
