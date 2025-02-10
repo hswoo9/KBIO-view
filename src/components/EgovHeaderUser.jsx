@@ -450,7 +450,7 @@ function EgovHeader() {
           </div>
           <div className="hBot inner">
             <div className="top">
-              <h1><a href="#"><img src={logoWhite} alt="images"/><span className="hidden">K BIO LabHub</span></a>
+              <h1><a href="/"><img src={logoWhite} alt="images"/><span className="hidden">K BIO LabHub</span></a>
               </h1>
               <nav className="navBox">
                 <ul className="dep">
@@ -471,10 +471,15 @@ function EgovHeader() {
             </div>
             <div className="bot">
               <ul className="lnbBox">
-                <li className="home"><a href="#">
-                  <div className="icon"></div>
-                  <span>홈</span></a></li>
-                <li><p>커뮤니티</p></li>
+                <li className="home">
+                  <a href="/">
+                    <div className="icon"></div>
+                    <span>홈</span>
+                  </a>
+                </li>
+                <li>
+                  <p>커뮤니티</p>
+                </li>
               </ul>
               <h2 className="pageTitle">커뮤니티</h2>
             </div>
