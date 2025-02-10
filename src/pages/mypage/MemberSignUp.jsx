@@ -31,6 +31,7 @@ function MemberSignUp(props) {
   }
 
   const handleSelectChange = (e) => {
+    debugger;
     const value = e.target.value;
     if (value === "custom") {
       setIsCustom(true);
@@ -63,7 +64,7 @@ function MemberSignUp(props) {
     if (memberDetail.emailPrefix && selectedDomain) {
       const newEmail = `${memberDetail.emailPrefix}@${selectedDomain}`;
       setEmailAddr(newEmail);
-      setmemberDetail(prev => ({
+      setMemberDetail(prev => ({
         ...prev,
         email: newEmail
       }));
@@ -440,64 +441,6 @@ function MemberSignUp(props) {
   };
 
 
-  /*const updateMember = () => {
-    let modeStr = modeInfo.mode === CODE.MODE_CREATE ? "POST" : "PUT";
-
-    let requestOptions = {};
-
-    if (modeStr === "POST") {
-      const formData = new FormData();
-      for (let key in memberDetail) {
-        formData.append(key, memberDetail[key]);
-        //console.log("boardDetail [%s] ", key, boardDetail[key]);
-      }
-
-      formValidator(formData).then((res) => {
-        if (res) {
-          requestOptions = {
-            method: modeStr,
-            headers: {},
-            body: formData,
-          };
-
-          EgovNet.requestFetch(modeInfo.editURL, requestOptions, (resp) => {
-            if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
-              alert("회원 정보가 등록되었습니다. 로그인 후 이용해 주세요.");
-              navigate({ pathname: URL.MAIN });
-            } else {
-              navigate(
-                  { pathname: URL.ERROR },
-                  { state: { msg: resp.resultMessage } }
-              );
-            }
-          });
-        }
-      });
-    } else {
-      if (formObjValidator(checkRef)) {
-        requestOptions = {
-          method: modeStr,
-          headers: {
-            "Content-type": "application/json",
-          },
-          body: JSON.stringify({ ...memberDetail }),
-        };
-
-        EgovNet.requestFetch(modeInfo.editURL, requestOptions, (resp) => {
-          if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
-            alert("회원 정보가 수정되었습니다.");
-            navigate({ pathname: URL.MYPAGE_MODIFY });
-          } else {
-            navigate(
-                { pathname: URL.ERROR },
-                { state: { msg: resp.resultMessage } }
-            );
-          }
-        });
-      }
-    }
-  };*/
-
   // 회원가입 신청
   const insertMember = () => {
     const insertMemURL = `/memberApi/insertMember.do`;
@@ -656,9 +599,11 @@ function MemberSignUp(props) {
                       id="emailPrefix"
                       placeholder="이메일 아이디 입력"
                       defaultValue={splitEmail(memberDetail.emailPrefix || "")}
-                      onChange={(e) =>
-                          setMemberDetail({ ...memberDetail, emailPrefix: e.target.value })
-                      }
+                      onChange={(e) => {
+                        setMemberDetail({...memberDetail, emailPrefix: e.target.value});
+                        setSelectedDomain("");
+                        setIsCustom(false);
+                      }}
                       style={{flex: 1, padding: '5px'}}
                   />
                   <span style={{margin: '0 5px'}}>@</span>
