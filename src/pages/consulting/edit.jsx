@@ -12,7 +12,7 @@ import CommonEditor from "@/components/CommonEditor";
 import {getSessionItem} from "../../utils/storage.js";
 import {getComCdList} from "../../components/CommonComponents.jsx";
 
-function setConsulting(props) {
+function ConsultingPage(props) {
   const sessionUser = getSessionItem("loginUser");
   const navigate = useNavigate();
   const location = useLocation();
@@ -243,4 +243,4 @@ function setConsulting(props) {
   );
 }
 
-export default setConsulting;
+export default ConsultingPage;
