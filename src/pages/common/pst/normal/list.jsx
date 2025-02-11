@@ -149,8 +149,6 @@ function commonPstList(props) {
 
     const pstDetailHandler = (pst, rlsYnFlag) => {
         let modalOpen = false;
-        console.log(rlsYnFlag)
-        console.log(pst.rlsYn)
         if(pst.rlsYn == "Y"){
             if(!rlsYnFlag){
                 modalOpen = true;

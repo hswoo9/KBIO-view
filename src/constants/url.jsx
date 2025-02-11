@@ -4,6 +4,8 @@ const URL = {
   COMMUNITY: "/community",
   K_BIO_LABHUB: "/kBioLabHub",
   INTRODUCE: "/introduce",
+  INTRODUCE_OPERATIONAL_LIST: "/insi/operationalList",
+  INTRODUCE_OPERATIONAL_DETAIL: "/insi/operationaldetail",
   //COMMON
   COMMON_POPUP : "/popup",
   COMMON_CONTENT_VIEW : "/content/view",
@@ -32,6 +34,8 @@ const URL = {
 
   /** CONSULTING */
   CONSULTANT_LIST:"/consulting/consultantList",
+  DIFFICULTIES:"/consulting/difficulties",
+  CONSULTING_CREATE : "/consulting/create",
 
   //ABOUT
   ABOUT: "/egovframe-template-simple-react/about", //사이트소개
@@ -229,6 +233,8 @@ const URL = {
   MANAGER_HOMEPAGE_MAIN_VIEW: "/manager/mainView",
 
   MANAGER_HOMEPAGE_ORGANIZATION_CHART_LIST: "/manager/organizationChart/list",
+  MANAGER_HOMEPAGE_ORGANIZATION_CHART_CREATE: "/manager/organizationChart/create",
+  MANAGER_HOMEPAGE_ORGANIZATION_CHART_MODIFY: "/manager/organizationChart/modify",
   MANAGER_HOMEPAGE_PRIVACY_POLICY: "/manager/privacyPolicy",
   MANAGER_HOMEPAGE_PRIVACY_CREATE: "/manager/privacyPolicy/create",
   MANAGER_HOMEPAGE_PRIVACY_MODIFY: "/manager/privacyPolicy/modify",

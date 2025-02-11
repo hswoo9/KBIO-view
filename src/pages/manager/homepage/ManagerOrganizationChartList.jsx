@@ -12,7 +12,7 @@ import Swal from 'sweetalert2';
 
 import { getSessionItem } from "@/utils/storage";
 
-function ManagerAccessList(props) {
+function ManagerOrganizationChartList(props) {
     const location = useLocation();
     console.log(location);
     const sessionUser = getSessionItem("loginUser");
@@ -122,7 +122,7 @@ function ManagerAccessList(props) {
                             }}
                         />
                         <NavLink
-                            to={""}
+                            to={URL.MANAGER_HOMEPAGE_ORGANIZATION_CHART_CREATE}
                         >
                             <button type="button" className="writeBtn clickBtn"><span>등록</span></button>
                         </NavLink>
@@ -133,4 +133,4 @@ function ManagerAccessList(props) {
     );
 }
 
-export default ManagerAccessList;
+export default ManagerOrganizationChartList;

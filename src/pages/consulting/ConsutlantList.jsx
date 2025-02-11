@@ -1,16 +1,10 @@
 import React, {useState, useEffect, useCallback, useRef} from "react";
 import {Link, NavLink, useLocation, useNavigate} from "react-router-dom";
-import axios from "axios";
 import * as EgovNet from "@/api/egovFetch";
-import URL from "@/constants/url";
-import CODE from "@/constants/code";
 import 'moment/locale/ko';
-import {getMenu } from "@/components/CommonComponents";
-import Swal from 'sweetalert2';
 import EgovPaging from "@/components/EgovPaging";
 import CommonSubMenu from "@/components/CommonSubMenu";
 
-import moment from "moment/moment.js";
 import {getSessionItem} from "../../utils/storage.js";
 import {getComCdList} from "../../components/CommonComponents.jsx";
 
