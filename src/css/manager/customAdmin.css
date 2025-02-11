@@ -396,3 +396,5 @@ header nav .dep li:nth-child(5).active a .icon {background-image: url(@/assets/i
     align-content: center;
     justify-content: space-around;
 }
+
+.cms .inner .contBox .infoBox .listBox > li.width2 {width: calc(100% / 2 - .6rem);}

@@ -652,7 +652,7 @@ function Index(props) {
                                     />
                                 </div>
                             </li>
-                            <li className="inputBox type1">
+                            <li className="inputBox type1 width3">
                                 <label className="title" htmlFor="menuSortSeq"><small>메뉴순서</small></label>
                                 <div className="input">
                                     <input
@@ -670,7 +670,7 @@ function Index(props) {
                                     />
                                 </div>
                             </li>
-                            <li className="toggleBox width3">
+                            <li className="toggleBox width3 customToggleBox">
                                 <div className="box">
                                     <p className="title">활성여부</p>
                                     <div className="toggleSwithWrap">

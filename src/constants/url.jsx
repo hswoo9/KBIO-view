@@ -1,6 +1,9 @@
 const URL = {
   MAIN: "/egovframe-template-simple-react", //메인페이지
   TOTAL_SEARCH : "/search",
+  COMMUNITY: "/community",
+  K_BIO_LABHUB: "/kBioLabHub",
+  INTRODUCE: "/introduce",
   //COMMON
   COMMON_POPUP : "/popup",
   COMMON_CONTENT_VIEW : "/content/view",
