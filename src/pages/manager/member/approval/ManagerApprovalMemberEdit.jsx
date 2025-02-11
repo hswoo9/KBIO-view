@@ -196,10 +196,10 @@ function setApprovalMember(props) {
                                     type="text"
                                     value={
                                         memberDetail.actvtnYn === 'Y' ? '정상회원' :
-                                            memberDetail.actvtnYn === 'W' ? '대기회원' :
-                                                memberDetail.actvtnYn === 'R' ? '반려회원' :
-                                                    memberDetail.actvtnYn === 'C' ? '정지회원' :
-                                                        memberDetail.actvtnYn === 'S' ? '탈퇴회원' : ''
+                                        memberDetail.actvtnYn === 'W' ? '대기회원' :
+                                        memberDetail.actvtnYn === 'R' ? '반려회원' :
+                                        memberDetail.actvtnYn === 'S' ? '정지회원' :
+                                        memberDetail.actvtnYn === 'C' ? '탈퇴회원' : ''
                                     }
                                     readOnly
                                 />

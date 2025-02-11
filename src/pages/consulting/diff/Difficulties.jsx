@@ -3,8 +3,8 @@ import * as EgovNet from "@/api/egovFetch";
 import {NavLink, useLocation, useNavigate} from "react-router-dom";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
-import CommonSubMenu from "../../components/CommonSubMenu.jsx";
-import {getSessionItem} from "../../utils/storage.js";
+import CommonSubMenu from "../../../components/CommonSubMenu.jsx";
+import {getSessionItem} from "../../../utils/storage.js";
 import Swal from "sweetalert2";
 import $ from "jquery";
 
@@ -16,11 +16,10 @@ function contentView(props) {
     const editClick = () => {
         if(sessionUser){
             navigate(
-                { pathname : URL.CONSULTING_CREATE },
+                { pathname : URL.DIFFICULTIES_CREATE },
                 {
                     state : {
                         callBackUrl : URL.DIFFICULTIES,
-                        cnsltSe : 28,
                         menuSn : location.state?.menuSn,
                         menuNmPath : location.state?.menuNmPath,
                     }

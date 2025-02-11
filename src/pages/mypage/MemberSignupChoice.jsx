@@ -66,7 +66,7 @@ const MemberSignupChoice = () => {
                                     <li className="kakao">
                                         <SnsKakaoBt
                                             render={() => (
-                                                <button type="button"  onClick={() => handleNext("kakao")}>
+                                                <button type="button">
                                                     <div className="icon"></div>
                                                     <p style={{margin: 0, textAlign: "center"}}>카카오 아이디 로그인</p>
                                                 </button>

@@ -47,8 +47,9 @@ import SnsKakaoCallback from "@/components/sns/SnsKakaoCallback";
 
 /** CONSUTLING */
 import ConsultantList from "@/pages/consulting/ConsutlantList";
-import Difficulties from "@/pages/consulting/Difficulties";
 import ConsultingCreate from "@/pages/consulting/edit";
+import Difficulties from "@/pages/consulting/diff/Difficulties";
+import DifficultiesCreate from "@/pages/consulting/diff/edit";
 
 //ABOUT
 import EgovAboutSite from "@/pages/about/EgovAboutSite";
@@ -371,8 +372,9 @@ const SecondRoutes = () => {
 
               {/* 사용자 페이지 */}
               <Route path={URL.CONSULTANT_LIST} element={<ConsultantList/>}/>
-              <Route path={URL.DIFFICULTIES} element={<Difficulties/>}/>
               <Route path={URL.CONSULTING_CREATE} element={<ConsultingCreate/>}/>
+              <Route path={URL.DIFFICULTIES} element={<Difficulties/>}/>
+              <Route path={URL.DIFFICULTIES_CREATE} element={<DifficultiesCreate/>}/>
 
 
               {/* ERROR */}
