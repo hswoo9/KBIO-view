@@ -77,7 +77,8 @@ function Community(props) {
                 <NavLink
                     to={item.menuPathNm}
                     state={{
-                      bbsSn: item.bbsSn
+                      bbsSn: item.bbsSn,
+                      menuNmPath: item.menuNmPath
                     }}
                     onMouseOver={(e) => handleMouseOver(e, index)}
                 >
