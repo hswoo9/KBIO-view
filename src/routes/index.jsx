@@ -14,6 +14,7 @@ import Community from "@/pages/community/Community";
 import KBioLabHub from "@/pages/kBioLabHub/KBioLabHub";
 import Introduce from "@/pages/introduce/Introduce";
 import IntroduceOperational from "@/pages/introduce/OperationalList";
+import IntroduceOperationalDetail from "@/pages/introduce/OperationalDetail";
 import TotalSearch from "@/pages/search/TotalSearch";
 //COMMON
 import CommonError from "@/pages/common/error/commonError";
@@ -313,6 +314,7 @@ const SecondRoutes = () => {
               <Route path={URL.K_BIO_LABHUB} element={<KBioLabHub/>}/>
               <Route path={URL.INTRODUCE} element={<Introduce/>}/>
               <Route path={URL.INTRODUCE_OPERATIONAL_LIST} element={<IntroduceOperational/>}/>
+              <Route path={URL.INTRODUCE_OPERATIONAL_DETAIL} element={<IntroduceOperationalDetail/>}/>
 
               {/* COMMON */}
               <Route path={URL.COMMON_CONTENT_VIEW} element={<CommonContentView/>}/>

@@ -5,6 +5,7 @@ const URL = {
   K_BIO_LABHUB: "/kBioLabHub",
   INTRODUCE: "/introduce",
   INTRODUCE_OPERATIONAL_LIST: "/insi/operationalList",
+  INTRODUCE_OPERATIONAL_DETAIL: "/insi/operationaldetail",
   //COMMON
   COMMON_POPUP : "/popup",
   COMMON_CONTENT_VIEW : "/content/view",

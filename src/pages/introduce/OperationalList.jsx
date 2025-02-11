@@ -4,6 +4,7 @@ import * as EgovNet from "@/api/egovFetch";
 import EgovPaging from "@/components/EgovPaging";
 import { getSessionItem } from "@/utils/storage";
 import moment from "moment/moment.js";
+import URL from "@/constants/url";
 
 function OperationalList() {
     const userSn = getSessionItem("userSn");
@@ -63,7 +64,10 @@ function OperationalList() {
                                             fontWeight: 'bold',
                                             marginBottom: '10px',
                                         }}>
-                                            {item.mvnEntNm}
+                                            <Link to={URL.INTRODUCE_OPERATIONAL_DETAIL}
+                                                  state={{mvnEntSn: item.mvnEntSn }}>
+                                                {item.mvnEntNm}
+                                            </Link>
                                         </p>
 
                                         <p style={{
