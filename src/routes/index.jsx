@@ -10,6 +10,7 @@ import ManagerTop from "@/components/manager/ManagerTop";
 import EgovFooterUser from "@/components/EgovFooterUser";
 import EgovMainUser from "@/pages/main/EgovMainUser";
 
+import TotalSearch from "@/pages/search/TotalSearch";
 //COMMON
 import CommonError from "@/pages/common/error/commonError";
 import CommonPopup from "@/pages/common/popup/commonPopup";
@@ -298,6 +299,7 @@ const SecondRoutes = () => {
             <Routes>
               {/* MAIN */}
               <Route path={URL.MAIN} element={<EgovMainUser/>}/>
+              <Route path={URL.TOTAL_SEARCH} element={<TotalSearch/>}/>
 
               {/* COMMON */}
               <Route path={URL.COMMON_CONTENT_VIEW} element={<CommonContentView/>}/>

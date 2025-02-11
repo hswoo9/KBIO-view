@@ -1,6 +1,6 @@
 const URL = {
   MAIN: "/", //메인페이지
-
+  TOTAL_SEARCH : "/search",
   //COMMON
   COMMON_POPUP : "/popup",
   COMMON_CONTENT_VIEW : "/content/view",

@@ -494,9 +494,13 @@ function EgovHeader() {
                 </ul>
               </nav>
               <div className="rightBox">
-                <button type="button" className="searchBtn">
-                  <div className="icon"></div>
-                </button>
+                <NavLink
+                  to={URL.TOTAL_SEARCH}
+                >
+                  <button type="button" className="searchBtn">
+                    <div className="icon"></div>
+                  </button>
+                </NavLink>
                 <button type="button" className="sitemapBtn">
                   <div className="icon"></div>
                 </button>

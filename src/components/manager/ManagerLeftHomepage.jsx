@@ -469,42 +469,6 @@ function ManagerLeftHomepage() {
             <ul className="dep">
               <li>
                 <NavLink
-                    to={URL.MANAGER_HOMEPAGE_MAIN_VIEW}
-                    className={({isActive}) => (isActive ? "activeTag" : "")}
-                >
-                  <div className="icon"></div>
-                  <p>메인비주얼관리</p>
-                </NavLink>
-              </li>
-              <li>
-                <NavLink
-                    to={""}
-                    className={({isActive}) => (isActive ? "activeTag" : "")}
-                >
-                  <div className="icon"></div>
-                  <p>팝업관리</p>
-                </NavLink>
-              </li>
-              <li>
-                <NavLink
-                    to={""}
-                    className={({isActive}) => (isActive ? "activeTag" : "")}
-                >
-                  <div className="icon"></div>
-                  <p>팝업존관리</p>
-                </NavLink>
-              </li>
-              <li>
-                <NavLink
-                    to={""}
-                    className={({isActive}) => (isActive ? "activeTag" : "")}
-                >
-                  <div className="icon"></div>
-                  <p>배너관리</p>
-                </NavLink>
-              </li>
-              <li>
-                <NavLink
                     to={URL.MANAGER_HOMEPAGE_ORGANIZATION_CHART_LIST}
                     className={({isActive}) => (isActive ? "activeTag" : "")}
                 >
