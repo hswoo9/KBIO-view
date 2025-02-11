@@ -69,3 +69,51 @@
     padding: 1rem 1rem;
 
 }
+
+.customInnerDiv {
+    display: flex;
+    flex-direction: column;
+    gap: .9rem;
+    padding: 1.35rem;
+}
+.customUl{
+    display: flex;
+    flex-wrap: wrap;
+    gap: .9rem;
+}
+.inputBox.width1{ width: 100% !important; }
+.inputBox.width2{ width: calc(100% / 2 - .6rem) !important; }
+.container .blueText {color: #11c1e7; font-size: 12px; font-weight: 600; font-family: 'pretendard';}
+
+.tabs {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: space-around;
+}
+.tabs li {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 5rem;
+    height: 2.5rem;
+    justify-content: center;
+    border-radius: .6rem;
+    font-size: .9rem;
+    font-weight: 600;
+    box-sizing: border-box;
+    transition: .5s ease;
+}
+.tabs li.tabActive {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--mainColor);
+    color: #fff;
+    border-radius: .6rem;
+    font-size: .9rem;
+    font-weight: 600;
+    box-sizing: border-box;
+    transition: .5s ease;
+}
