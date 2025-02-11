@@ -108,9 +108,9 @@ export default function userJs() {
     profile()
 
 
-    $(document).ready(function () {
-        $('select').niceSelect();
-    });
+    /*$(document).ready(function () {
+        $('select').not('.selectGroup').niceSelect();
+    });*/
 
 
     $( document ).ready( function() {

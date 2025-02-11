@@ -487,7 +487,7 @@ function ManagerLeftStatistics() {
               </li>
               <li>
                 <NavLink
-                    to={""}
+                    to={URL.MANAGER_STATISTICS_BOARD}
                     className={({isActive}) => (isActive ? "activeTag" : "")}
                 >
                   <div className="icon"></div>
@@ -496,7 +496,7 @@ function ManagerLeftStatistics() {
               </li>
               <li>
                 <NavLink
-                    to={""}
+                    to={URL.MANAGER_STATISTICS_FILE}
                     className={({isActive}) => (isActive ? "activeTag" : "")}
                 >
                   <div className="icon"></div>

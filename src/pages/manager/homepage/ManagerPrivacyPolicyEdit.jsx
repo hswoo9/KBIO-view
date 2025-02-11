@@ -13,6 +13,7 @@ import BtTable from 'react-bootstrap/Table';
 import BTButton from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { getSessionItem } from "@/utils/storage";
+import CommonEditor from "@/components/CommonEditor";
 
 function ManagerPrivacyPolicyEdit(props) {
     const navigate = useNavigate();
@@ -21,6 +22,15 @@ function ManagerPrivacyPolicyEdit(props) {
     const sessionUser = getSessionItem("loginUser");
     const sessionUserName = sessionUser?.name;
     const sessionUserSn = sessionUser?.userSn;
+
+    const isFirstRender = useRef(true);
+    const handleChange = (value) => {
+        if(isFirstRender.current){
+            isFirstRender.current = false;
+            return;
+        }
+        setPrivacyPolicyDetail({...privacyPolicyDetail, utztnTrmsCn: value});
+    };
 
     const [searchDto, setSearchDto] = useState(
         {
@@ -274,13 +284,17 @@ function ManagerPrivacyPolicyEdit(props) {
                         <li className="inputBox type1 width1">
                             <label className="title" htmlFor="policyContent"><small>내용</small></label>
                             <div className="input">
-                                <textarea
+                                {/*<textarea
                                     id="policyContent"
                                     value={privacyPolicyDetail.utztnTrmsCn || ""}
                                     onChange={(e) => setPrivacyPolicyDetail({
                                         ...privacyPolicyDetail,
                                         utztnTrmsCn: e.target.value
                                     })}
+                                />*/}
+                                <CommonEditor
+                                    value={privacyPolicyDetail.utztnTrmsCn || ""}
+                                    onChange={handleChange}
                                 />
                             </div>
                         </li>

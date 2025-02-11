@@ -2,7 +2,7 @@ import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
 import React, {useEffect, useRef, useState} from "react";
 
 import * as EgovNet from "@/api/egovFetch";
-
+import {getMenu } from "@/components/CommonComponents";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
 import logo from "@/assets/images/logo.svg";
@@ -16,6 +16,7 @@ import '@/css/manager/pretendard.css';
 import '@/css/manager/Rubik.css';
 import '@/css/manager/reset.css';
 import '@/css/manager/user.css';
+import '@/css/manager/userCustom.css';
 import '@/css/manager/page.css';
 
 import userJs from "@/js/userCustom";
@@ -61,9 +62,11 @@ function EgovHeader() {
   const sessionUserName = sessionUser?.name;
   const sessionUserSe = sessionUser?.userSe;
   const sessionUserSn = sessionUser?.userSn;
+  const userSn = getSessionItem("userSn");
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-
+  const [menuList, setMenuList] = useState([]);
   const [userInfo, setUserInfo] = useState({
     id: "",
     password: "default",
@@ -225,6 +228,31 @@ function EgovHeader() {
     if (data !== null) {
       setUserInfo({ id: data, password: "default", userSe: "USR", loginType: "base"});
     }
+
+
+    getMenu(null, 0, userSn).then((data) => {
+      let dataList = [];
+      if(data != null){
+        data.forEach(function(item, index){
+          if (index === 0) dataList = [];
+          if(item.menuType == "n"){
+            dataList.push(
+                <li key={item.menuSn}>
+                  <NavLink
+                      to={item.menuPathNm}
+                      state={{
+                        menuSn: item.menuSn
+                      }}
+                  >
+                    <p>{item.menuNm}</p>
+                  </NavLink>
+                </li>
+            )
+          }
+        });
+        setMenuList(dataList);
+      }
+    });
   }, []);
 
   const activeEnter = (e) => {
@@ -449,7 +477,7 @@ function EgovHeader() {
             </div>
             <div className="langBox">
               <div className="itemBox">
-                <select>
+                <select className="selectGroup langSelect">
                   <option value="0">KR</option>
                   <option value="1">EN</option>
                 </select>
@@ -462,16 +490,17 @@ function EgovHeader() {
               </h1>
               <nav className="navBox">
                 <ul className="dep">
-                  <li><a href="#"><p>기관소개</p></a></li>
-                  <li><a href="#"><p>컨설팅</p></a></li>
-                  <li><a href="#"><p>커뮤니티</p></a></li>
-                  <li><a href="#"><p>k-BioLabHub</p></a></li>
+                  {menuList}
                 </ul>
               </nav>
               <div className="rightBox">
-                <button type="button" className="searchBtn">
-                  <div className="icon"></div>
-                </button>
+                <NavLink
+                  to={URL.TOTAL_SEARCH}
+                >
+                  <button type="button" className="searchBtn">
+                    <div className="icon"></div>
+                  </button>
+                </NavLink>
                 <button type="button" className="sitemapBtn">
                   <div className="icon"></div>
                 </button>

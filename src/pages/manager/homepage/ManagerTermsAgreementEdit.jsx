@@ -13,6 +13,7 @@ import BtTable from 'react-bootstrap/Table';
 import BTButton from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { getSessionItem } from "@/utils/storage";
+import CommonEditor from "@/components/CommonEditor";
 
 function ManagerTermsAgreementEdit(props) {
     const navigate = useNavigate();
@@ -21,6 +22,15 @@ function ManagerTermsAgreementEdit(props) {
     const sessionUser = getSessionItem("loginUser");
     const sessionUserName = sessionUser?.name;
     const sessionUserSn = sessionUser?.userSn;
+
+    const isFirstRender = useRef(true);
+    const handleChange = (value) => {
+        if(isFirstRender.current){
+            isFirstRender.current = false;
+            return;
+        }
+        setTermsAgreementDetail({...termsAgreementDetail, utztnTrmsCn: value});
+    };
 
     const [termsAgreementDetail, setTermsAgreementDetail] = useState({
         useYn: "Y",
@@ -266,16 +276,20 @@ function ManagerTermsAgreementEdit(props) {
                             </div>
                         </li>
                         <li className="inputBox type1 width1">
-                            <label className="title" htmlFor="termsContent"><small>내용</small></label>
+                            <label className="title" >내용</label>
                             <div className="input">
-                            <textarea
+                            {/*<textarea
                                 id="termsContent"
                                 value={termsAgreementDetail.utztnTrmsCn || ""}
                                 onChange={(e) => setTermsAgreementDetail({
                                     ...termsAgreementDetail,
                                     utztnTrmsCn: e.target.value
                                 })}
-                            />
+                            />*/}
+                                <CommonEditor
+                                    value={termsAgreementDetail.utztnTrmsCn || ""}
+                                    onChange={handleChange}
+                                />
                             </div>
                         </li>
                         <li className="toggleBox width3">

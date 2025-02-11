@@ -1,6 +1,8 @@
 const URL = {
   MAIN: "/", //메인페이지
-
+  TOTAL_SEARCH : "/search",
+  COMMUNITY: "/community",
+  K_BIO_LABHUB: "/kBioLabHub",
   //COMMON
   COMMON_POPUP : "/popup",
   COMMON_CONTENT_VIEW : "/content/view",
@@ -29,6 +31,9 @@ const URL = {
   COMMON_ERROR : "/commonError",
 
   FIND_ID_PSWD:"/findIdPswd", //아이디 비번찾기
+
+  /** CONSULTING */
+  CONSULTANT_LIST:"/consulting/consultantList",
 
   //ABOUT
   ABOUT: "/about", //사이트소개
@@ -233,6 +238,9 @@ const URL = {
   MANAGER_STATISTICS: "/manager/statistics",
   MANAGER_STATISTICS_USER: "/manager/statistics/user",
   MANAGER_STATISTICS_ACCESS: "/manager/statistics/access",
+  MANAGER_STATISTICS_BOARD: "/manager/statistics/board",
+  MANAGER_STATISTICS_FILE: "/manager/statistics/file",
+  
 
   MessageTest: "/messageTest"
 };
