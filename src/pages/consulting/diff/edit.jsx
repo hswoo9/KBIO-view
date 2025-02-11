@@ -12,25 +12,23 @@ import CommonEditor from "@/components/CommonEditor";
 import {getSessionItem} from "../../../utils/storage.js";
 import {getComCdList} from "../../../components/CommonComponents.jsx";
 
-function ConsultingPage(props) {
+function DfclMttrPage(props) {
   const sessionUser = getSessionItem("loginUser");
   const navigate = useNavigate();
   const location = useLocation();
   const callBackUrl = location.state?.callBackUrl || "/";
 
-  const [consulting, setConsulting] = useState({
-    cnsltSe : location.state?.cnsltSe,
-    cnslttUserSn : location.state?.cnslttUserSn || '',
+  const [dfclMttr, setDfclMttr] = useState({
     creatrSn : sessionUser.userSn,
     userSn : sessionUser.userSn
   });
 
   const [comCdList, setComCdList] = useState([]);
-  const acceptFileTypes = 'pdf,hwp,docx,xls,ppt';
+  const acceptFileTypes = 'pdf,hwp,docx,xls,xlsx,ppt';
   const [fileList, setFileList] = useState([]);
 
   const handleChange = (value) => {
-    setConsulting({...consulting, cn: value});
+    setDfclMttr({...dfclMttr, dfclMttrCn: value});
   };
 
   const onDrop = useCallback((acceptedFiles) => {
@@ -62,25 +60,25 @@ function ConsultingPage(props) {
     setFileList(updatedFileList);  // 파일 리스트 업데이트
   };
 
-  const setConsultingData = async () => {
-    if (!consulting.cnsltFld) {
+  const setDfclMttrData = async () => {
+    if (!dfclMttr.dfclMttrFld) {
       Swal.fire("분야를 선택해주세요.");
       return;
     }
 
-    if (!consulting.ttl) {
+    if (!dfclMttr.ttl) {
       Swal.fire("제목을 입력해주세요.");
       return;
     }
-    if (!consulting.cn) {
+    if (!dfclMttr.dfclMttrCn) {
       Swal.fire("내용을 입력해주세요.");
       return;
     }
 
     const formData = new FormData();
-    for (let key in consulting) {
-      if(consulting[key] != null){
-        formData.append(key, consulting[key]);
+    for (let key in dfclMttr) {
+      if(dfclMttr[key] != null){
+        formData.append(key, dfclMttr[key]);
       }
     }
 
@@ -101,7 +99,7 @@ function ConsultingPage(props) {
           body: formData
         };
 
-        EgovNet.requestFetch("/consultingApi/setConsulting", requestOptions, (resp) => {
+        EgovNet.requestFetch("/consultingApi/setDfclMttr", requestOptions, (resp) => {
           if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
             Swal.fire("등록되었습니다.");
             navigate(
@@ -122,7 +120,7 @@ function ConsultingPage(props) {
   };
 
   useEffect(() => {
-      getComCdList(10).then((data) => {
+      getComCdList(15).then((data) => {
         setComCdList(data);
       })
   }, []);
@@ -130,7 +128,7 @@ function ConsultingPage(props) {
   return (
       <div id="container" className="container layout cms">
         <div className="inner">
-          <h2 className="pageTitle"><p>컨설팅 신청</p></h2>
+          <h2 className="pageTitle"><p>애로사항 등록</p></h2>
 
           <div className="contBox infoWrap customContBox">
             <ul className="inputWrap">
@@ -143,7 +141,7 @@ function ConsultingPage(props) {
                         className="selectGroup"
                         key="0"
                         onChange={(e) =>
-                            setConsulting({...consulting, cnsltFld: e.target.value})
+                            setDfclMttr({...dfclMttr, dfclMttrFld: e.target.value})
                         }
                     >
                       <option value="">선택</option>
@@ -162,7 +160,7 @@ function ConsultingPage(props) {
                          title=""
                          id="ttl"
                          onChange={(e) =>
-                             setConsulting({...consulting, ttl: e.target.value})
+                             setDfclMttr({...dfclMttr, ttl: e.target.value})
                          }
                   />
                 </div>
@@ -211,7 +209,7 @@ function ConsultingPage(props) {
             </ul>
             <div className="buttonBox">
               <div className="leftBox">
-                <button type="button" className="clickBtn point" onClick={() => setConsultingData()}><span>등록</span>
+                <button type="button" className="clickBtn point" onClick={() => setDfclMttrData()}><span>등록</span>
                 </button>
               </div>
               <Link
@@ -232,4 +230,4 @@ function ConsultingPage(props) {
   );
 }
 
-export default ConsultingPage;
+export default DfclMttrPage;
