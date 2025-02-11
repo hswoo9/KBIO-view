@@ -388,3 +388,11 @@ header nav .dep li:nth-child(5).active a .icon {background-image: url(@/assets/i
 .mainSelectGroup:after {top: 50%; transform: translateY(-50%); right: 0;}
 
 .mainSelectGroup option.focus, .mainSelectGroup option.selected.focus {background: #04819B15 !important; color: var(--mainColor);}
+
+.tabs{
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: space-around;
+}

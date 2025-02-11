@@ -233,6 +233,9 @@ const URL = {
   MANAGER_STATISTICS: "/manager/statistics",
   MANAGER_STATISTICS_USER: "/manager/statistics/user",
   MANAGER_STATISTICS_ACCESS: "/manager/statistics/access",
+  MANAGER_STATISTICS_BOARD: "/manager/statistics/board",
+  MANAGER_STATISTICS_FILE: "/manager/statistics/file",
+  
 
   MessageTest: "/messageTest"
 };

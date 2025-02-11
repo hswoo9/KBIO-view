@@ -3,8 +3,7 @@ import ManagerLeftNew from "@/components/manager/ManagerLeftStatistics";
 
 import ApexCharts from 'react-apexcharts';
 
-import Tab1 from '@/pages/manager/statistics/tabGroup/AccessTabAll';
-import Tab2 from '@/pages/manager/statistics/tabGroup/AccessTabMoveIn';
+import Tab from '@/pages/manager/statistics/tabGroup/AccessTabCommon';
 
 import {
     format,
@@ -22,19 +21,17 @@ import {
     addMonths,
 } from "date-fns";
 
-function ManagerStatisticsAccess(props) {
+function ManagerStatisticsBoard(props) {
     const [currentMonth, setCurrentMonth] = useState(new Date());
     // 현재 연도 & 월
     const currentYear = format(currentMonth, "yyyy");
     const currentMonthIndex = format(currentMonth, "M") - 1;
 
     const [menuIndex, setMenuIndex] = useState({ menu : 0});
-    const menuList = {
-        0: <Tab1/>,
-        1: <Tab2/>,
-        2: <Tab2/>,
-        3: <Tab2/>,
-        4: <Tab2/>,
+    const tabMenuList = {
+        0: <Tab/>,
+        1: <Tab/>,
+        2: <Tab/>,
     };
 
     const changeMenu = (menuIndex) => {
@@ -82,7 +79,7 @@ function ManagerStatisticsAccess(props) {
             </style>
             <ManagerLeftNew/>
             <div className="inner">
-                <h2 className="pageTitle"><p>접속통계</p></h2>
+                <h2 className="pageTitle"><p>게시물접속통계</p></h2>
                 <div className="cateWrap">
                     <form action="">
                         <ul className="cateList">
@@ -121,24 +118,18 @@ function ManagerStatisticsAccess(props) {
                     <div className="topBox">
                         <ul className="tabs">
                             <li className={`${menuIndex.menu === 0 ? 'tabActive' : ''}`}
-                                onClick={() => changeMenu(0)}>전체
+                                onClick={() => changeMenu(0)}>공지사항
                             </li>
                             <li className={`${menuIndex.menu === 1 ? 'tabActive' : ''}`}
-                                onClick={() => changeMenu(1)}>입주기업 회원
+                                onClick={() => changeMenu(1)}>자료실
                             </li>
                             <li className={`${menuIndex.menu === 2 ? 'tabActive' : ''}`}
-                                onClick={() => changeMenu(2)}>유관기관 회원
-                            </li>
-                            <li className={`${menuIndex.menu === 3 ? 'tabActive' : ''}`}
-                                onClick={() => changeMenu(3)}>비입주기업 회원
-                            </li>
-                            <li className={`${menuIndex.menu === 4 ? 'tabActive' : ''}`}
-                                onClick={() => changeMenu(4)}>컨설턴트 회원
+                                onClick={() => changeMenu(2)}>연구자료실
                             </li>
                         </ul>
                     </div>
                     <div>
-                        {menuList[menuIndex.menu]}
+                        {tabMenuList[menuIndex.menu]}
                     </div>
                 </div>
 
@@ -147,4 +138,4 @@ function ManagerStatisticsAccess(props) {
     );
 }
 
-export default ManagerStatisticsAccess;
+export default ManagerStatisticsBoard;
