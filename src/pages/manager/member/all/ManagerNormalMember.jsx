@@ -210,7 +210,7 @@ function NormalMemberList(props) {
         <div id="container" className="container layout cms">
             <ManagerLeft/>
             <div className="inner">
-                <h2 className="pageTitle"><p>회원관리</p></h2>
+                <h2 className="pageTitle"><p>전체회원</p></h2>
                 <div className="cateWrap">
                     <form action="">
                         <ul className="cateList">
