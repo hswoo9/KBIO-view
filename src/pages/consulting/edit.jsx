@@ -19,7 +19,8 @@ function ConsultingPage(props) {
   const callBackUrl = location.state?.callBackUrl || "/";
 
   const [consulting, setConsulting] = useState({
-    cnsltSe : 28,
+    cnsltSe : location.state?.cnsltSe,
+    cnslttUserSn : location.state?.cnslttUserSn || '',
     creatrSn : sessionUser.userSn,
     userSn : sessionUser.userSn
   });

@@ -20,6 +20,7 @@ function contentView(props) {
                 {
                     state : {
                         callBackUrl : URL.DIFFICULTIES,
+                        cnsltSe : 28,
                         menuSn : location.state?.menuSn,
                         menuNmPath : location.state?.menuNmPath,
                     }
