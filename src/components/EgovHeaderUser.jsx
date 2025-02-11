@@ -2,7 +2,7 @@ import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
 import React, {useEffect, useRef, useState} from "react";
 
 import * as EgovNet from "@/api/egovFetch";
-
+import {getMenu } from "@/components/CommonComponents";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
 import logo from "@/assets/images/logo.svg";
@@ -62,9 +62,11 @@ function EgovHeader() {
   const sessionUserName = sessionUser?.name;
   const sessionUserSe = sessionUser?.userSe;
   const sessionUserSn = sessionUser?.userSn;
+  const userSn = getSessionItem("userSn");
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-
+  const [menuList, setMenuList] = useState([]);
   const [userInfo, setUserInfo] = useState({
     id: "",
     password: "default",
@@ -226,6 +228,31 @@ function EgovHeader() {
     if (data !== null) {
       setUserInfo({ id: data, password: "default", userSe: "USR", loginType: "base"});
     }
+
+
+    getMenu(null, null, userSn).then((data) => {
+      let dataList = [];
+      if(data != null){
+        data.forEach(function(item, index){
+          if (index === 0) dataList = [];
+          if(item.menuType == "n"){
+            dataList.push(
+                <li key={item.menuSn}>
+                  <NavLink
+                      to={item.menuPathNm}
+                      state={{
+                        bbsSn: item.bbsSn
+                      }}
+                  >
+                    <p>{item.menuNm}</p>
+                  </NavLink>
+                </li>
+            )
+          }
+        });
+        setMenuList(dataList);
+      }
+    });
   }, []);
 
   const activeEnter = (e) => {
@@ -463,10 +490,7 @@ function EgovHeader() {
               </h1>
               <nav className="navBox">
                 <ul className="dep">
-                  <li><a href="#"><p>기관소개</p></a></li>
-                  <li><a href="#"><p>컨설팅</p></a></li>
-                  <li><a href="#"><p>커뮤니티</p></a></li>
-                  <li><a href="#"><p>k-BioLabHub</p></a></li>
+                  {menuList}
                 </ul>
               </nav>
               <div className="rightBox">

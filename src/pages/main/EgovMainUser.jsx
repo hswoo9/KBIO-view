@@ -84,7 +84,7 @@ function EgovMainUser(props) {
                   </NavLink>
                 </li>
             )
-          }else if(item.menuType == "c"){
+          }else if(item.menuType == "c" && item.menuSeq != 0){
             dataList.push(
                 <li key={item.menuSn}>
                   <NavLink
