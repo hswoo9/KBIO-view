@@ -16,6 +16,7 @@ import '@/css/manager/pretendard.css';
 import '@/css/manager/Rubik.css';
 import '@/css/manager/reset.css';
 import '@/css/manager/user.css';
+import '@/css/manager/userCustom.css';
 import '@/css/manager/page.css';
 
 import userJs from "@/js/userCustom";

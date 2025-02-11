@@ -1,0 +1,29 @@
+.selectGroup {
+    -webkit-tap-highlight-color: transparent;
+    background-color: transparent;
+    border-radius: 5px;
+    box-sizing: border-box;
+    clear: both;
+    cursor: pointer;
+    display: block;
+    float: left;
+    font-family: inherit;
+    font-size: .9em;
+    font-weight: normal;
+    padding: .8em 1em;
+    outline: none;
+    position: relative;
+    text-align: left !important;
+    -webkit-transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    white-space: nowrap;
+    width: auto; color: #333;display: flex;
+    justify-content: space-between;
+    width: 100%;
+    border-radius: 0;
+    background: url(@/assets/images/ico_select_arrow.svg) calc(100% - 5px) center no-repeat;
+}

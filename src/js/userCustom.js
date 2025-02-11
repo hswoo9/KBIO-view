@@ -109,7 +109,7 @@ export default function userJs() {
 
 
     $(document).ready(function () {
-        $('select').niceSelect();
+        $('select').not('.selectGroup').niceSelect();
     });
 
 

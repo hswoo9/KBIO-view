@@ -626,7 +626,6 @@ function MemberSignUp(props) {
                                   padding: '5px',
                                   flex: 1,
                                   appearance: 'none',
-                                  background: 'none',
                                   width: '70%',
                                 }}
                         >
