@@ -316,17 +316,26 @@ function MemberSignUp(props) {
         checkIdResult: "",
       });
 
-      if(location.state?.snsType){
-        if(location.state.snsType == "naver"){
+      if (location.state?.snsType) {
+        if (location.state.snsType === "naver") {
           setMemberDetail({
             ...memberDetail,
             kornFlnm: location.state.totalData.name,
             userId: location.state.totalData.email,
             mblTelno: location.state.totalData.mobile,
             snsType: location.state.snsType,
-            snsId: location.state.snsId
-          })
+            snsId: location.state.snsId,
+          });
+        } else if (location.state.snsType === "kakao") {
+          setMemberDetail({
+            ...memberDetail,
+            kornFlnm: location.state.totalData.properties.nickname,
+            snsType: location.state.snsType,
+            snsId: location.state.snsId,
+          });
         }
+        console.log("snsType:", location.state.snsType);
+        console.log("snsId:", location.state.snsId);
       }
 
       return;
