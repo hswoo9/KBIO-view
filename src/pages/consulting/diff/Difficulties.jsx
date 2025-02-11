@@ -16,11 +16,10 @@ function contentView(props) {
     const editClick = () => {
         if(sessionUser){
             navigate(
-                { pathname : URL.CONSULTING_CREATE },
+                { pathname : URL.DIFFICULTIES_CREATE },
                 {
                     state : {
                         callBackUrl : URL.DIFFICULTIES,
-                        cnsltSe : 28,
                         menuSn : location.state?.menuSn,
                         menuNmPath : location.state?.menuNmPath,
                     }
