@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import * as EgovNet from "@/api/egovFetch";
 import EgovPaging from "@/components/EgovPaging";
 import { getSessionItem } from "@/utils/storage";
@@ -7,6 +7,7 @@ import moment from "moment/moment.js";
 import URL from "@/constants/url";
 import CommonSubMenu from "@/components/CommonSubMenu";
 function OperationalList() {
+    const location = useLocation();
     const userSn = getSessionItem("userSn");
     const [paginationInfo, setPaginationInfo] = useState({});
     const [operationalList, setAuthorityList] = useState([]);

@@ -1,10 +1,12 @@
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { getComCdList } from "../../components/CommonComponents.jsx";
 
 import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
 import axios from "axios";
+import CommonEditor from "@/components/CommonEditor";
 
 import { setSessionItem } from "@/utils/storage";
 
@@ -23,6 +25,8 @@ function MemberSignUp(props) {
   const [image, setImage] = useState("");
   const [selectedDomain, setSelectedDomain] = useState("");
   const [emailAddr, setEmailAddr] = useState("");
+  const isFirstRender = useRef(true);
+  const [comCdList, setComCdList] = useState([]);
 
 
   const [memberDetail, setMemberDetail] = useState({
@@ -50,6 +54,79 @@ function MemberSignUp(props) {
       document.body.removeChild(script);
     };
   }, [location.state]);
+
+  useEffect(() => {
+    getComCdList(10).then((data) => {
+      setComCdList(data);
+    })
+  }, []);
+
+  const getComCdListToHtml = (dataList) => {
+    let htmlData = [];
+    if(dataList != null && dataList.length > 0) {
+      htmlData.push(
+          <select
+              className="selectGroup"
+              name="cnsltFld"
+              onChange={(e) =>
+                  setMemberDetail({...memberDetail, cnsltFld: e.target.value})
+              }
+              key="commonCodeSelect" // React에서 고유 key 추가
+          >
+            <option value="">전체</option>
+            {dataList.map((item) => (
+                <option key={item.comCd} value={item.comCd}>
+                  {item.comCdNm}
+                </option>
+            ))}
+          </select>
+      )
+
+    }
+    return htmlData;
+  }
+
+  const getComCdForCnstltArtcl = (dataList) => {
+    let htmlData = [];
+    if (dataList != null && dataList.length > 0) {
+      htmlData.push(
+          <label className="checkBox type2" key="all">
+            <input
+                type="radio"
+                name="cnsltFld"
+                key="all"
+                value=""
+                checked
+                onChange={(e) =>
+                    setMemberDetail({...memberDetail, cnsltArtcl: e.target.value})
+                }
+            />전체</label>
+      )
+      dataList.forEach(function (item, index) {
+        htmlData.push(
+            <label className="checkBox type2" key={item.comCd}>
+              <input
+                  type="radio"
+                  name="cnsltFld"
+                  key={item.comCd}
+                  value={item.comCd}
+                  onChange={(e) =>
+                      setMemberDetail({...memberDetail, cnsltArtcl: e.target.value})
+                  }
+              />{item.comCdNm}</label>
+        )
+      });
+    }
+    return htmlData;
+  }
+
+  const handleChange = (value) => {
+    /*if(isFirstRender.current){
+      isFirstRender.current = false;
+      return;
+    }*/
+    setMemberDetail({...memberDetail, cnsltSlfint: value});
+  };
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -239,17 +316,26 @@ function MemberSignUp(props) {
         checkIdResult: "",
       });
 
-      if(location.state?.snsType){
-        if(location.state.snsType == "naver"){
+      if (location.state?.snsType) {
+        if (location.state.snsType === "naver") {
           setMemberDetail({
             ...memberDetail,
             kornFlnm: location.state.totalData.name,
             userId: location.state.totalData.email,
             mblTelno: location.state.totalData.mobile,
             snsType: location.state.snsType,
-            snsId: location.state.snsId
-          })
+            snsId: location.state.snsId,
+          });
+        } else if (location.state.snsType === "kakao") {
+          setMemberDetail({
+            ...memberDetail,
+            kornFlnm: location.state.totalData.properties.nickname,
+            snsType: location.state.snsType,
+            snsId: location.state.snsId,
+          });
         }
+        console.log("snsType:", location.state.snsType);
+        console.log("snsId:", location.state.snsId);
       }
 
       return;
@@ -1090,23 +1176,9 @@ function MemberSignUp(props) {
                     <li className="inputBox type2">
                       <span className="tt1">소개</span>
                       <label className="input" style={{height: "100%"}}>
-                        <textarea
-                            name="consultantIntroduction"
-                            placeholder="소개를 입력해주세요"
-                            value={memberDetail.consultantIntroduction || ""}
-                            onChange={(e) => setMemberDetail({...memberDetail, consultantIntroduction: e.target.value})}
-                            style={{
-                              width: "100%",
-                              height: "100px",
-                              border: "none",
-                              outline: "none",
-                              resize: "none",
-                              backgroundColor: "transparent",
-                              fontFamily: "inherit",
-                              fontSize: "inherit",
-                              lineHeight: "1.5",
-                              padding: 0
-                            }}
+                        <CommonEditor
+                            value={memberDetail.cnsltSlfint || ""}
+                            onChange={handleChange}
                         />
                       </label>
                     </li>
@@ -1118,8 +1190,8 @@ function MemberSignUp(props) {
                             type="text"
                             name="consultantPosition"
                             placeholder="직위를 입력해주세요"
-                            value={memberDetail.consultantPosition || ""}
-                            onChange={(e) => setMemberDetail({...memberDetail, consultantPosition: e.target.value})}
+                            value={memberDetail.jbpsNm || ""}
+                            onChange={(e) => setMemberDetail({...memberDetail, jbpsNm: e.target.value})}
                         />
                       </label>
                     </li>
@@ -1131,8 +1203,8 @@ function MemberSignUp(props) {
                             type="text"
                             name="consultantExperience"
                             placeholder="숫자만 입력"
-                            value={memberDetail.consultantExperience || ""}
-                            onChange={(e) => setMemberDetail({...memberDetail, consultantExperience: e.target.value})}
+                            value={memberDetail.crrPrd || ""}
+                            onChange={(e) => setMemberDetail({...memberDetail, crrPrd: e.target.value})}
                             style={{width: "120px"}}
                         />
                         <span style={{marginLeft: "10px", color: "#333"}}>년</span>
@@ -1146,8 +1218,8 @@ function MemberSignUp(props) {
                             type="text"
                             name="consultantAffiliation"
                             placeholder="소속을 입력해주세요"
-                            value={memberDetail.consultantAffiliation || ""}
-                            onChange={(e) => setMemberDetail({...memberDetail, consultantAffiliation: e.target.value})}
+                            value={memberDetail.ogdpNm || ""}
+                            onChange={(e) => setMemberDetail({...memberDetail, ogdpNm: e.target.value})}
                         />
                       </label>
                     </li>
@@ -1166,19 +1238,7 @@ function MemberSignUp(props) {
                                   consultingOption1: e.target.checked
                                 })}
                             />
-                            <small>체크박스 1</small>
-                          </label>
-                          <label className="checkBox type3">
-                            <input
-                                type="checkbox"
-                                name="consultingOption2"
-                                checked={memberDetail.consultingOption2}
-                                onChange={(e) => setMemberDetail({
-                                  ...memberDetail,
-                                  consultingOption2: e.target.checked
-                                })}
-                            />
-                            <small>체크박스 2</small>
+                            <small>예시</small>
                           </label>
                         </div>
                       </div>
@@ -1187,15 +1247,44 @@ function MemberSignUp(props) {
                     <li className="inputBox type2">
                       <span className="tt1">자문분야</span>
                       <label className="input">
-                        <input
-                            type="text"
-                            name="consultantArea"
-                            placeholder="자문분야를 입력해주세요"
-                            value={memberDetail.consultantArea || ""}
-                            onChange={(e) => setMemberDetail({...memberDetail, consultantArea: e.target.value})}
-                        />
+                        <div className="itemBox" style={{flex: 1}}>
+                          {getComCdListToHtml(comCdList)}
+                        </div>
                       </label>
                     </li>
+
+                    <li className="inputBox type2">
+                      <span className="tt1">컨설팅 활동</span>
+                      <div className="input">
+                        <div className="checkWrap" style={{ display: "flex", gap: "20px" }}>
+                          <label className="checkBox type3">
+                            <input
+                                type="radio"
+                                name="cnsltActv"
+                                value="Y"
+                                checked={memberDetail.cnsltActv === "Y"}
+                                onChange={() =>
+                                    setMemberDetail({ ...memberDetail, cnsltActv: "Y" })
+                                }
+                            />
+                            <small>공개</small>
+                          </label>
+                          <label className="checkBox type3">
+                            <input
+                                type="radio"
+                                name="cnsltActv"
+                                value="N"
+                                checked={memberDetail.cnsltActv === "N"}
+                                onChange={() =>
+                                    setMemberDetail({ ...memberDetail, cnsltActv: "N" })
+                                }
+                            />
+                            <small>비공개</small>
+                          </label>
+                        </div>
+                      </div>
+                    </li>
+
 
                     <li className="inputBox type2">
                       <span className="tt1">자격증</span>
