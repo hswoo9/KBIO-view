@@ -230,7 +230,7 @@ function EgovHeader() {
     }
 
 
-    getMenu(null, null, userSn).then((data) => {
+    getMenu(null, 0, userSn).then((data) => {
       let dataList = [];
       if(data != null){
         data.forEach(function(item, index){
