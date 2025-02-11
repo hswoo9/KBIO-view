@@ -8,6 +8,7 @@ import 'moment/locale/ko';
 import {getMenu } from "@/components/CommonComponents";
 import Swal from 'sweetalert2';
 import EgovPaging from "@/components/EgovPaging";
+import CommonSubMenu from "@/components/CommonSubMenu";
 
 import moment from "moment/moment.js";
 import {getSessionItem} from "../../utils/storage.js";
@@ -34,22 +35,6 @@ function ConsultantList(props) {
 
     const searchTypeRef = useRef();
     const searchValRef = useRef();
-
-    const hoverRef = useRef(null);
-    const handleMouseOver = (e, index) => {
-        if(e.target === e.currentTarget){
-            const element = e.currentTarget;
-            const parentElement = element.parentElement;
-            if(parentElement && hoverRef.current){
-                const parentRect = parentElement.getBoundingClientRect();
-                hoverRef.current.style.width = `${parentRect.width}px`;
-                hoverRef.current.style.height = `${parentRect.height}px`;
-                hoverRef.current.style.left = `${parentRect.left - 30}px`;
-                hoverRef.current.style.top = `0px`;
-                hoverRef.current.style.opacity = `1`;
-            }
-        }
-    }
 
     const activeEnter = (e) => {
         if (e.key === "Enter") {
@@ -184,31 +169,6 @@ function ConsultantList(props) {
     }
 
     useEffect(() => {
-        const menuSn = location.state?.menuSn || null;
-        getMenu(menuSn, 1, userSn).then((data) => {
-            let dataList = [];
-            if(data != null){
-                data.forEach(function(item, index){
-                    if (index === 0) dataList = [];
-                    dataList.push(
-                        <li key={item.menuSn}>
-                            <NavLink
-                                to={item.menuPathNm}
-                                state={{
-                                    bbsSn: item.bbsSn,
-                                    menuNmPath: item.menuNmPath
-                                }}
-                                onMouseOver={(e) => handleMouseOver(e, index)}
-                            >
-                                <span>{item.menuNm}</span>
-                            </NavLink>
-                        </li>
-                    )
-                });
-                setMenuList(dataList);
-            }
-        });
-
         getComCdList(10).then((data) => {
             setComCdList(data);
         })
@@ -222,12 +182,7 @@ function ConsultantList(props) {
     return (
         <div id="container" className="container layout">
             <div className="inner">
-                <div className="tabBox type1" data-aos="fade-up" data-aos-duration="1500">
-                    <div className="bg hover" ref={hoverRef}></div>
-                    <ul className="list">
-                        {menuList}
-                    </ul>
-                </div>
+                <CommonSubMenu/>
                 <div className="cateWrap inputBox type1" style={{flexDirection: "row"}}>
                     <div className="rating-options">
                         {getComCdListToHtml(comCdList)}

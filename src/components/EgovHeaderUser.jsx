@@ -207,6 +207,17 @@ function EgovHeader() {
   };
 
   useEffect(() => {
+
+    const activeTag = document.getElementsByClassName('activeTag');
+    console.log(activeTag);
+    if(activeTag.length){
+      const parentTag = activeTag[0].parentElement;
+      if(parentTag){
+        parentTag.className = "active";
+      }
+    }
+    
+    
     let idFlag = getLocalItem(KEY_SAVE_ID_FLAG);
     if (idFlag === null) {
       setSaveIDFlag(false);
@@ -498,6 +509,9 @@ function EgovHeader() {
               <div className="rightBox">
                 <NavLink
                   to={URL.TOTAL_SEARCH}
+                  state={{
+                    menuNmPath: "통합검색"
+                  }}
                 >
                   <button type="button" className="searchBtn">
                     <div className="icon"></div>

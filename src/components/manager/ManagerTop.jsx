@@ -182,7 +182,7 @@ function ManagerTop() {
               <li>
                 <a
                     onClick={() => {
-                      navigate({pathname: URL.MANAGER_HOMEPAGE_MAIN_VIEW}, {state: {selectMenuNm: "홈페이지"}});
+                      navigate({pathname: URL.MANAGER_HOMEPAGE_ORGANIZATION_CHART_LIST}, {state: {selectMenuNm: "홈페이지"}});
                     }}
                     className="cursorClass"
                 ><p>홈페이지</p>
