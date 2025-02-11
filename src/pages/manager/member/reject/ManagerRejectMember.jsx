@@ -203,7 +203,7 @@ function RejectMemberList(props) {
         <div id="container" className="container layout cms">
             <ManagerLeft/>
             <div className="inner">
-                <h2 className="pageTitle"><p>회원관리</p></h2>
+                <h2 className="pageTitle"><p>승인반려</p></h2>
                 <div className="cateWrap">
                     <form action="">
                         <ul className="cateList">
