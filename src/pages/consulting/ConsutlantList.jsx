@@ -8,6 +8,7 @@ import CommonSubMenu from "@/components/CommonSubMenu";
 import {getSessionItem} from "../../utils/storage.js";
 import {getComCdList} from "../../components/CommonComponents.jsx";
 import moment from "moment";
+import Swal from "sweetalert2";
 
 function ConsultantList(props) {
     const sessionUser = getSessionItem("loginUser");
@@ -38,6 +39,25 @@ function ConsultantList(props) {
         }
     };
 
+    const editClick = () => {
+        if(sessionUser){
+            navigate(
+                { pathname : "" },
+                {
+                    state : {
+                        callBackUrl : URL.CONSULTANT_LIST,
+                        menuSn : location.state?.menuSn,
+                        menuNmPath : location.state?.menuNmPath,
+                    }
+                });
+        }else{
+            Swal.fire("로그인이 필요한 서비스 입니다.");
+            document.getElementsByClassName("loginModal").item(0).classList.add("open")
+            document.documentElement.style.overflow = 'hidden';
+            document.body.style.overflow = 'hidden';
+        }
+    }
+
     const getConsultantList = useCallback(
         (searchDto) => {
             const pstListURL = "/consultingApi/getConsultantList.do";
@@ -54,15 +74,10 @@ function ConsultantList(props) {
                 (resp) => {
                     setPaginationInfo(resp.paginationInfo);
                      let dataList = [];
-                     dataList.push(
-                         <tr>
-                             <td>검색된 결과가 없습니다.</td>
-                         </tr>
-                     );
 
                      resp.result.consultantList.forEach(function (item, index) {
                          dataList.push(
-                             <div key={item.userSn} style={{
+                             <div key={item.tblUser.userSn} style={{
                                  display: 'flex',
                                  padding: '20px',
                                  border: '1px solid #ddd',
@@ -75,7 +90,7 @@ function ConsultantList(props) {
                                          height: '100px',
                                          overflow: 'hidden',
                                      }}>
-                                         <img src="" alt="" style={{
+                                         <img src="/src/assets/images/kbio.png" alt="" style={{
                                              width: '100%',
                                              height: '100%',
                                              objectFit: 'cover',
@@ -89,13 +104,13 @@ function ConsultantList(props) {
                                              fontWeight: 'bold',
                                              marginBottom: '10px',
                                          }}>
-                                             <NavLink to={""}
+                                             <NavLink to={URL.CONSULTANT_DETAIL}
                                                       state={{
-                                                          userSn: item.userSn,
+                                                          userSn: item.tblUser.userSn,
                                                           menuSn : location.state?.menuSn,
                                                           menuNmPath : location.state?.menuNmPath,
                                                       }}>
-                                                 {item.kornFlnm}
+                                                 {item.tblUser.kornFlnm}
                                              </NavLink>
                                          </p>
 
@@ -105,8 +120,24 @@ function ConsultantList(props) {
                                              color: '#555',
                                              lineHeight: '1.6',
                                          }}>
-                                             {item.ogdpNm}
+                                             {item.tblCnslttMbr.ogdpNm}
                                          </p>
+                                         <div>
+                                             <button
+                                                 type="button"
+                                                 className="writeBtn clickBtn"
+                                                 onClick={editClick}
+                                             >
+                                                 <span>컨설팅 의뢰</span>
+                                             </button>
+                                             <button
+                                                 type="button"
+                                                 className="writeBtn clickBtn"
+                                                 onClick={editClick}
+                                             >
+                                                 <span>간편상담</span>
+                                             </button>
+                                         </div>
                                      </div>
                                  </div>
                              </div>
