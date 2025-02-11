@@ -241,8 +241,10 @@ function EgovHeader() {
                   <NavLink
                       to={item.menuPathNm}
                       state={{
-                        menuSn: item.menuSn
+                        menuSn: item.menuSn,
+                        menuNmPath: item.menuNmPath
                       }}
+                      className={({ isActive }) => (isActive ? "activeTopMenu" : "")}
                   >
                     <p>{item.menuNm}</p>
                   </NavLink>
@@ -515,10 +517,10 @@ function EgovHeader() {
                   </a>
                 </li>
                 <li>
-                  <p>커뮤니티</p>
+                  <p>{location.state?.menuNmPath}</p>
                 </li>
               </ul>
-              <h2 className="pageTitle">커뮤니티</h2>
+              <h2 className="pageTitle">{location.state?.menuNmPath}</h2>
             </div>
           </div>
         </div>
