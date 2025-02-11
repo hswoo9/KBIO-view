@@ -12,6 +12,7 @@ import EgovMainUser from "@/pages/main/EgovMainUser";
 
 import Community from "@/pages/community/Community";
 import KBioLabHub from "@/pages/kBioLabHub/KBioLabHub";
+import Introduce from "@/pages/introduce/Introduce";
 import TotalSearch from "@/pages/search/TotalSearch";
 //COMMON
 import CommonError from "@/pages/common/error/commonError";
@@ -41,6 +42,9 @@ import EgovFindIdPswd from "@/pages/login/EgovFindIdPswd";
 //SNS
 import SnsNaverCallback from "@/components/sns/SnsNaverCallback";
 import SnsKakaoCallback from "@/components/sns/SnsKakaoCallback";
+
+/** CONSUTLING */
+import ConsultantList from "@/pages/consulting/ConsutlantList";
 
 //ABOUT
 import EgovAboutSite from "@/pages/about/EgovAboutSite";
@@ -304,6 +308,7 @@ const SecondRoutes = () => {
               <Route path={URL.TOTAL_SEARCH} element={<TotalSearch/>}/>
               <Route path={URL.COMMUNITY} element={<Community/>}/>
               <Route path={URL.K_BIO_LABHUB} element={<KBioLabHub/>}/>
+              <Route path={URL.INTRODUCE} element={<Introduce/>}/>
 
               {/* COMMON */}
               <Route path={URL.COMMON_CONTENT_VIEW} element={<CommonContentView/>}/>
@@ -356,6 +361,9 @@ const SecondRoutes = () => {
                     <SnsGoogleCallback onChangeLogin={(user) => setLoginVO(user)}/>
                   }
               />
+
+              {/* 사용자 페이지 */}
+              <Route path={URL.CONSULTANT_LIST} element={<ConsultantList/>}/>
 
 
               {/* ERROR */}
