@@ -19,8 +19,11 @@ function ConsultingPage(props) {
   const callBackUrl = location.state?.callBackUrl || "/";
 
   const [consulting, setConsulting] = useState({
-    creatrSn : sessionUser.userSn
+    cnsltSe : 28,
+    creatrSn : sessionUser.userSn,
+    userSn : sessionUser.userSn
   });
+
   const [comCdList, setComCdList] = useState([]);
   const acceptFileTypes = 'pdf,hwp,docx,xls,ppt';
   const [fileList, setFileList] = useState([]);
@@ -59,41 +62,25 @@ function ConsultingPage(props) {
   };
 
   const setConsultingData = async () => {
-    if (pst.upendNtcYn == "Y") {
-      if(!pst.ntcBgngDt && !pst.ntcEndDate){
-        Swal.fire("공지기간은 선택해주세요.");
-        return;
-      }
+    if (!consulting.cnsltFld) {
+      Swal.fire("분야를 선택해주세요.");
+      return;
     }
 
-    if(bbs.pstCtgryYn == "Y"){
-      if (!pst.pstClsf) {
-        Swal.fire("분류를 선택해주세요.");
-        return;
-      }
-    }
-    if (!pst.pstTtl) {
+    if (!consulting.ttl) {
       Swal.fire("제목을 입력해주세요.");
       return;
     }
-    if (!pst.pstCn) {
+    if (!consulting.cn) {
       Swal.fire("내용을 입력해주세요.");
       return;
     }
 
     const formData = new FormData();
-    for (let key in pst) {
-      if(pst[key] != null && key != "pstFiles"){
-        formData.append(key, pst[key]);
+    for (let key in consulting) {
+      if(consulting[key] != null){
+        formData.append(key, consulting[key]);
       }
-    }
-
-    if(upPstSn != null){
-      formData.append("upPstSn", upPstSn);
-    }
-
-    if(pstGroup != null){
-      formData.append("pstGroup", pstGroup);
     }
 
     fileList.map((file) => {
@@ -113,13 +100,14 @@ function ConsultingPage(props) {
           body: formData
         };
 
-        EgovNet.requestFetch("", requestOptions, (resp) => {
+        EgovNet.requestFetch("/consultingApi/setConsulting", requestOptions, (resp) => {
           if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
             Swal.fire("등록되었습니다.");
             navigate(
-                { pathname : URL.COMMON_PST_NORMAL_LIST},
+                { pathname : callBackUrl},
                 { state: {
-                    bbsSn: bbs.bbsSn,
+                    menuSn : location.state?.menuSn,
+                    menuNmPath : location.state?.menuNmPath,
                   }
                 }
             );
@@ -154,7 +142,7 @@ function ConsultingPage(props) {
                         className="selectGroup"
                         key="0"
                         onChange={(e) =>
-                            setPst({...consulting, cnsltFld: e.target.value})
+                            setConsulting({...consulting, cnsltFld: e.target.value})
                         }
                     >
                       <option value="">선택</option>
@@ -173,7 +161,7 @@ function ConsultingPage(props) {
                          title=""
                          id="ttl"
                          onChange={(e) =>
-                             setPst({...consulting, ttl: e.target.value})
+                             setConsulting({...consulting, ttl: e.target.value})
                          }
                   />
                 </div>
