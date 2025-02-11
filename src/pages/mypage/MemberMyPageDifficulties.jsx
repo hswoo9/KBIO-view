@@ -10,34 +10,19 @@ import EgovPaging from "@/components/EgovPaging";
 import Swal from 'sweetalert2';
 
 function MemberMyPageDifficulties(props) {
-
-    const [searchDto, setSearchDto] = useState(
-        location.state?.searchDto || {
-            pageIndex: 1,
-            actvtnYn: "",
-            kornFlnm: "",
-            companyName: "",
-            mbrType: "2",
-        }
-    );
-    const [paginationInfo, setPaginationInfo] = useState({
-        currentPageNo: 1,
-        firstPageNo: 1,
-        firstPageNoOnPageList: 1,
-        firstRecordIndex: 0,
-        lastPageNo: 1,
-        lastPageNoOnPageList: 1,
-        lastRecordIndex: 10,
-        pageSize: 10,
-        recordCountPerPage: 10,
-        totalPageCount: 15,
-        totalRecordCount: 158
+    const location = useLocation();
+    const [searchDto, setSearchDto] = useState({
+        category: "",
+        keywordType: "",
+        keyword: "",
+        pageIndex: 1,
     });
-    const [consultMemberList, setAuthorityList] = useState([]);
+    const [paginationInfo, setPaginationInfo] = useState({});
+    const [dfclMttrList, setAuthorityList] = useState([]);
 
-    const getConsultMemberList = useCallback(
+    const getdfclMttrList = useCallback(
         (searchDto) => {
-            const consultMemberListUrl = "/memberApi/getNormalMemberList.do"; //임시로 회원조회 url을 사용하나 나중에 join된 걸 불러와야할듯
+            const dfclMttrListUrl = "/consultingApi/getDfclMttrList.do";
             const requestOptions = {
                 method: "POST",
                 headers: {
@@ -47,7 +32,7 @@ function MemberMyPageDifficulties(props) {
             };
 
             EgovNet.requestFetch(
-                consultMemberListUrl,
+                dfclMttrListUrl,
                 requestOptions,
                 (resp) => {
                     setPaginationInfo(resp.paginationInfo);
@@ -58,23 +43,19 @@ function MemberMyPageDifficulties(props) {
                         </tr>
                     );
 
-                    resp.result.getNormalMemberList.forEach(function (item, index) {
-                        if (index === 0) dataList = [];
-
-                        const totalItems = resp.result.getNormalMemberList.length;
-                        const itemNumber = totalItems - index;
-
+                    resp.result.getdfclMttrList.forEach(function (item, index) {
+                        
                         dataList.push(
                             <tr key={item.userSn}>
                                 <td>{itemNumber}</td>
                                 <td></td>
-                                <td>{item.kornFlnm}</td>
+                                <td>{item.ttl}</td>
                                 <td></td>
                                 <td>{item.actvtnYn === 'Y' ? '공개' :
                                     item.actvtnYn === 'W' ? '비공개' :
-                                        item.actvtnYn === 'R' ? '비공개' :
-                                            item.actvtnYn === 'C' ? '비공개' :
-                                                item.actvtnYn === 'S' ? '비공개' : ''}
+                                    item.actvtnYn === 'R' ? '비공개' :
+                                    item.actvtnYn === 'C' ? '비공개' :
+                                    item.actvtnYn === 'S' ? '비공개' : ''}
                                 </td>
                                 <td></td>
                                 <td></td>
@@ -89,11 +70,11 @@ function MemberMyPageDifficulties(props) {
             );
 
         },
-        [consultMemberList, searchDto]
+        [searchDto]
     );
 
     useEffect(()=>{
-        getConsultMemberList(searchDto);
+        getdfclMttrList(searchDto);
     }, []);
 
     return (
@@ -203,7 +184,7 @@ function MemberMyPageDifficulties(props) {
                             </tr>
                             </thead>
                             <tbody>
-                            {consultMemberList}
+                            {dfclMttrList}
                             </tbody>
                         </table>
                     </div>
@@ -212,7 +193,7 @@ function MemberMyPageDifficulties(props) {
                         <EgovPaging
                             pagination={paginationInfo}
                             moveToPage={(passedPage) => {
-                                getConsultMemberList({
+                                getdfclMttrList({
                                     ...searchDto,
                                     pageIndex: passedPage,
                                 })
