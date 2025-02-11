@@ -34,6 +34,8 @@ const URL = {
 
   /** CONSULTING */
   CONSULTANT_LIST:"/consulting/consultantList",
+  DIFFICULTIES:"/consulting/difficulties",
+  CONSULTING_CREATE : "/consulting/create",
 
   //ABOUT
   ABOUT: "/about", //사이트소개

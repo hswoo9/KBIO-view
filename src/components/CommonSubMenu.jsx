@@ -36,8 +36,9 @@ function EgovSubMenu() {
                 <NavLink
                     to={item.menuPathNm}
                     state={{
-                      bbsSn: item.bbsSn,
-                      menuNmPath: item.menuNmPath
+                        menuSn: item.menuSn,
+                        bbsSn: item.bbsSn,
+                        menuNmPath: item.menuNmPath
                     }}
                     onMouseOver={(e) => handleMouseOver(e, index)}
                 >

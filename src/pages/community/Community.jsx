@@ -18,24 +18,6 @@ function Community(props) {
   const [popUpList, setPopUpList] = useState([]);
 
   useEffect(() => {
-    popUpList.forEach((e, i) => {
-      const popUp = e.tblBnrPopup;
-      if(!localStorage.getItem(popUp.bnrPopupSn) || Date.now() > localStorage.getItem(popUp.bnrPopupSn)){
-        window.open(
-            `/popup?bnrPopupSn=${popUp.bnrPopupSn}`, // 여기에 원하는 URL 입력
-            `${popUp.bnrPopupSn}`,
-            `width=${popUp.popupWdthSz},
-            height=${popUp.popupVrtcSz},
-            left=${popUp.popupPstnWdth},
-            top=${popUp.popupPstnUpend}`
-        );
-
-        localStorage.removeItem(popUp.bnrPopupSn)
-      }
-    })
-  }, [popUpList]);
-
-  useEffect(() => {
     getBnrPopupList("popup").then((data) => {
       setPopUpList(data.filter(e => e.tblBnrPopup.bnrPopupKnd == "popup"));
     });
