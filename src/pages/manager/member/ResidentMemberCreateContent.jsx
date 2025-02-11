@@ -6,6 +6,7 @@ import URL from "@/constants/url";
 import CODE from "@/constants/code";
 import axios from "axios";
 import Swal from "sweetalert2";
+import CommonEditor from "@/components/CommonEditor";
 
 
 
@@ -19,6 +20,7 @@ function ResidentMemberCreateContent(props){
     const [acceptFileTypes, setAcceptFileTypes] = useState('jpg,jpeg,png,gif,bmp,tiff,tif,webp,svg,ico,heic,avif');
     const [selectedFiles, setSelectedFiles] = useState([]);
     const [imgFile, setImgFile] = useState("");
+    const isFirstRender = useRef(true);
 
 
     const initMode = () => {
@@ -50,6 +52,14 @@ function ResidentMemberCreateContent(props){
             setIsCustom(false);
             setSelectedDomain(value);
         }
+    };
+
+    const handleChange = (value) => {
+        if(isFirstRender.current){
+            isFirstRender.current = false;
+            return;
+        }
+        setResidentDetail({...residentDetail, bzentyExpln: value});
     };
 
     //수정 시 데이터 조회
@@ -577,10 +587,10 @@ function ResidentMemberCreateContent(props){
                     <li className="inputBox type1">
                         <label className="title essential" htmlFor=""><small>기업소개</small></label>
                         <div className="input">
-                            <textarea
-                                type="text"
-                            >
-                            </textarea>
+                            <CommonEditor
+                                value={residentDetail.bzentyExpln || ""}
+                                onChange={handleChange}
+                            />
                         </div>
                     </li>
                     {/* 주요이력 */}
