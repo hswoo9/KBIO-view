@@ -104,7 +104,8 @@ function ConsultantList(props) {
                                              fontWeight: 'bold',
                                              marginBottom: '10px',
                                          }}>
-                                             <NavLink to={URL.CONSULTANT_DETAIL}
+                                             <NavLink
+                                                      to={URL.CONSULTANT_DETAIL}
                                                       state={{
                                                           userSn: item.tblUser.userSn,
                                                           menuSn : location.state?.menuSn,
