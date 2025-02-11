@@ -36,7 +36,7 @@ function EgovSubMenu() {
                 <NavLink
                     to={item.menuPathNm}
                     state={{
-                        menuSn: item.menuSn,
+                        menuSn: item.upperMenuSn,
                         bbsSn: item.bbsSn,
                         menuNmPath: item.menuNmPath
                     }}

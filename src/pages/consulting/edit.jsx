@@ -227,6 +227,10 @@ function setConsulting(props) {
               </div>
               <Link
                   to={callBackUrl}
+                  state={{
+                    menuSn : location.state?.menuSn,
+                    menuNmPath : location.state?.menuNmPath,
+                  }}
               >
                 <button type="button" className="clickBtn white">
                   목록

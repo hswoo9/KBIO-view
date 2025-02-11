@@ -6,6 +6,7 @@ import CODE from "@/constants/code";
 import CommonSubMenu from "../../components/CommonSubMenu.jsx";
 
 function contentView(props) {
+    const location = useLocation();
     return (
         <div id="container" className="container layout">
             <div className="inner">
@@ -21,7 +22,8 @@ function contentView(props) {
                     mode={CODE.MODE_CREATE}
                     state={{
                         callBackUrl : URL.DIFFICULTIES,
-
+                        menuSn : location.state?.menuSn,
+                        menuNmPath : location.state?.menuNmPath,
                     }}
                 >
                     <button type="button" className="writeBtn clickBtn"><span>등록하기</span></button>
