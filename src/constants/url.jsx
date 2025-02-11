@@ -19,9 +19,6 @@ const URL = {
   COMMON_PST_FAQ_CREATE: "/pst/faq/create",
   COMMON_PST_FAQ_MODIFY: "/pst/faq/modify",
 
-
-
-
   LOGIN: "/egovframe-template-simple-react/login", //로그인
   MANAGER_LOGIN: "/egovframe-template-simple-react/manager/login", //로그인
   ERROR: "/egovframe-template-simple-react/error", //로그인
@@ -29,6 +26,9 @@ const URL = {
   COMMON_ERROR : "/commonError",
 
   FIND_ID_PSWD:"/egovframe-template-simple-react/findIdPswd", //아이디 비번찾기
+
+  /** CONSULTING */
+  CONSULTANT_LIST:"/consulting/consultantList",
 
   //ABOUT
   ABOUT: "/egovframe-template-simple-react/about", //사이트소개

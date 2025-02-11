@@ -30,6 +30,9 @@ const URL = {
 
   FIND_ID_PSWD:"/findIdPswd", //아이디 비번찾기
 
+  /** CONSULTING */
+  CONSULTANT_LIST:"/consulting/consultantList",
+
   //ABOUT
   ABOUT: "/about", //사이트소개
   ABOUT_SITE: "/about/site", // 사이트소개/소개

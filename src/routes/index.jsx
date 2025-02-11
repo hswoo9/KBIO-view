@@ -40,6 +40,9 @@ import EgovFindIdPswd from "@/pages/login/EgovFindIdPswd";
 import SnsNaverCallback from "@/components/sns/SnsNaverCallback";
 import SnsKakaoCallback from "@/components/sns/SnsKakaoCallback";
 
+/** CONSUTLING */
+import ConsultantList from "@/pages/consulting/ConsutlantList";
+
 //ABOUT
 import EgovAboutSite from "@/pages/about/EgovAboutSite";
 import EgovAboutHistory from "@/pages/about/EgovAboutHistory";
@@ -352,6 +355,9 @@ const SecondRoutes = () => {
                     <SnsGoogleCallback onChangeLogin={(user) => setLoginVO(user)}/>
                   }
               />
+
+              {/* 사용자 페이지 */}
+              <Route path={URL.CONSULTANT_LIST} element={<ConsultantList/>}/>
 
 
               {/* ERROR */}
