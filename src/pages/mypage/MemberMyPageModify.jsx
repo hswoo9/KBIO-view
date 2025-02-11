@@ -96,15 +96,25 @@ function MemberMyPageModify(props) {
             const emailPrefix = emailParts[0] || "";
             const emailDomain = emailParts[1] || "";
 
-            setMemberDetail({
-                ...memberDetail,
+            // 기본 제공 도메인 리스트
+            const defaultProviders = [
+                "naver.com",
+                "gmail.com",
+                "daum.net",
+                "hotmail.com",
+                "nate.com",
+                "hanmail.net"
+            ];
+
+            setMemberDetail((prevState) => ({
+                ...prevState,
                 emailPrefix,
                 emailDomain,
-                emailProvider: emailDomain || "direct",
-                email: `${emailPrefix}@${emailDomain}`,
-            });
+                emailProvider: defaultProviders.includes(emailDomain) ? emailDomain : "direct",
+            }));
         }
     }, [memberDetail.email]);
+
     const searchAddress = () => {
         if (!window.daum || !window.daum.Postcode) {
             alert('주소 검색 API가 아직 로드되지 않았습니다. 잠시 후 다시 시도해주세요.');
@@ -140,28 +150,30 @@ function MemberMyPageModify(props) {
             if (modeInfo.mode === CODE.MODE_MODIFY) {
                 const memberData = resp.result.member;
 
-                // 여기서 memberData 로그 찍기
-                console.log("D Member Data:", memberData); // 데이터를 제대로 받아오는지 확인
+                console.log("D Member Data:", memberData);
 
                 const decodedPhoneNumber = memberData.mblTelno ? decodePhoneNumber(memberData.mblTelno) : "";
 
                 let emailPrefix = "";
                 let emailDomain = "";
+                let emailProvider = "direct";
 
                 if (memberData.email && memberData.email.includes("@")) {
                     const emailParts = memberData.email.split("@");
                     emailPrefix = emailParts[0] || "";
                     emailDomain = emailParts[1] || "";
+                    emailProvider = emailDomain;
                 }
 
-                setMemberDetail({
+                setMemberDetail((prevState) => ({
+                    ...prevState,
                     ...memberData,
                     mblTelno: decodedPhoneNumber,
                     emailPrefix,
                     emailDomain,
                     email: memberData.email,
-                    emailProvider: emailDomain ? emailDomain : "direct",
-                });
+                    emailProvider,
+                }));
             }
         });
     };
@@ -209,8 +221,8 @@ function MemberMyPageModify(props) {
                 return;
             }
 
-            const emailPrefix = memberDetail.emailPrefix || "defaultPrefix"; // 실제 이메일 아이디
-            const emailDomain = memberDetail.emailDomain || "example.com"; // 실제 도메인
+            const emailPrefix = memberDetail.emailPrefix || "";
+            const emailDomain = memberDetail.emailDomain || "";
             const email = `${emailPrefix}@${emailDomain}`;
 
             const updatedMemberDetail = {
@@ -380,12 +392,12 @@ function MemberMyPageModify(props) {
                                     name="emailPrefix"
                                     id="emailPrefix"
                                     placeholder="이메일 아이디 입력"
-                                    value={memberDetail.emailPrefix}
-                                    onChange={(e) => setMemberDetail({
-                                        ...memberDetail,
+                                    value={memberDetail.emailPrefix || ""}
+                                    onChange={(e) => setMemberDetail((prev) => ({
+                                        ...prev,
                                         emailPrefix: e.target.value,
-                                        email: `${e.target.value}@${memberDetail.emailDomain}`
-                                    })}
+                                        email: `${e.target.value}@${prev.emailDomain}`
+                                    }))}
                                     style={{flex: 1, padding: '5px'}}
                                 />
                                 <span style={{margin: '0 5px'}}>@</span>
@@ -419,21 +431,19 @@ function MemberMyPageModify(props) {
                                             className="selectGroup"
                                             onChange={(e) => {
                                                 const provider = e.target.value;
-                                                const newEmailDomain = provider === "direct" ? "" : provider;
-                                                const newEmail = `${memberDetail.emailPrefix}@${newEmailDomain}`;
-                                                setMemberDetail({
-                                                    ...memberDetail,
+                                                setMemberDetail((prev) => ({
+                                                    ...prev,
                                                     emailProvider: provider,
-                                                    emailDomain: newEmailDomain,
-                                                    email: newEmail
-                                                });
+                                                    emailDomain: provider === "direct" ? "" : provider,
+                                                    email: `${prev.emailPrefix}@${provider === "direct" ? "" : provider}`
+                                                }));
                                             }}
-                                            value={memberDetail.emailProvider}
+                                            value={memberDetail.emailProvider || ""}
                                             style={{
                                                 padding: '5px',
                                                 flex: 1,
                                                 appearance: 'none',
-                                                width: '70%',
+                                                width: '100%',
                                             }}
                                         >
                                             <option value="">선택하세요</option>
@@ -465,7 +475,7 @@ function MemberMyPageModify(props) {
                         </li>
 
                         <li className="inputBox type2">
-                            <span className="tt1">주소</span>
+                        <span className="tt1">주소</span>
                             <label className="input" style={{paddingRight: "6rem"}}>
                                 <input type="text" name="addr" id="addr" readOnly value={memberDetail.addr}/>
                                 <button type="button" className="addressBtn btn" onClick={searchAddress}>
