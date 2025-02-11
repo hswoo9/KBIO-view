@@ -15,6 +15,9 @@ function ConsultantDetail(props) {
 
     const [consultantDetail, setConsultantDetail] = useState(null);
 
+    const getConsultantDetail = () => {
+
+    };
 
 
     return(
