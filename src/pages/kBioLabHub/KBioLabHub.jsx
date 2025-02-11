@@ -1,15 +1,10 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { Link, useLocation, NavLink } from "react-router-dom";
-
 import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
-import {getMenu } from "@/components/CommonComponents";
 import { getSessionItem, setSessionItem, removeSessionItem } from "@/utils/storage";
 import CommonSubMenu from "@/components/CommonSubMenu";
-import simpleMainIng from "/assets/images/img_simple_main.png";
-import initPage from "@/js/ui";
-import logo from "@/assets/images/logo.svg";
-import {getBnrPopupList} from "../../components/MainComponents.jsx";
+import {getBnrPopupList} from "@/components/MainComponents";
 
 function KBioLabHub(props) {
   const location = useLocation();
@@ -44,11 +39,6 @@ function KBioLabHub(props) {
     getBnrPopupList("popup").then((data) => {
       setPopUpList(data.filter(e => e.tblBnrPopup.bnrPopupKnd == "popup"));
     });
-
-    getBnrPopupList("bnr").then((data) => {
-      setMainSlidesList(data.filter(e => e.tblBnrPopup.bnrPopupFrm == "mainSlides"));
-    });
-
   }, []);
 
   return (
