@@ -22,7 +22,7 @@ function Introduce(props) {
             const popUp = e.tblBnrPopup;
             if(!localStorage.getItem(popUp.bnrPopupSn) || Date.now() > localStorage.getItem(popUp.bnrPopupSn)){
                 window.open(
-                    `/popup?bnrPopupSn=${popUp.bnrPopupSn}`, // 여기에 원하는 URL 입력
+                    `/popup?bnrPopupSn=${popUp.bnrPopupSn}`, 
                     `${popUp.bnrPopupSn}`,
                     `width=${popUp.popupWdthSz},
             height=${popUp.popupVrtcSz},
