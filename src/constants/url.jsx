@@ -34,6 +34,7 @@ const URL = {
 
   /** CONSULTING */
   CONSULTANT_LIST:"/consulting/consultantList",
+  CONSULTANT_DETAIL:"/consulting/consultantDetail",
   CONSULTING_CREATE : "/consulting/create",
 
   DIFFICULTIES:"/diff/difficulties",
