@@ -3,8 +3,8 @@ import * as EgovNet from "@/api/egovFetch";
 import {NavLink, useLocation, useNavigate} from "react-router-dom";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
-import CommonSubMenu from "../../components/CommonSubMenu.jsx";
-import {getSessionItem} from "../../utils/storage.js";
+import CommonSubMenu from "../../../components/CommonSubMenu.jsx";
+import {getSessionItem} from "../../../utils/storage.js";
 import Swal from "sweetalert2";
 import $ from "jquery";
 
