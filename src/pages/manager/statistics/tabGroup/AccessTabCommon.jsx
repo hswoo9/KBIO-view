@@ -25,4 +25,4 @@ function AccessTabCommon(props) {
     );
 }
 
-export default AccessTabBoard;
+export default AccessTabCommon;
