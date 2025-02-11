@@ -5,6 +5,8 @@ import "@/css/slickCustom.css";
 const CommonSlider = ({data}) => {
 
     const sliderSettings = {
+        centerMode: true, //현재 컨텐츠 가운데 정렬
+        variableWidth: true,
         dots: true, //슬라이드 및 동그라미 사용 여부
         infinite: true, // 슬라이드 반복 여부
         speed: 500, //슬라이드 넘기는 속도 ms
@@ -14,6 +16,27 @@ const CommonSlider = ({data}) => {
         autoplay: true, //자동재생
         autoplaySpeed: 5000, //자동재생속도
         pauseOvHover: true, //호버시 일시중지
+        centerPadding: "60px",
+        responsive: [
+            {
+                breakpoint: 768,
+                settings: {
+                    arrows: false,
+                    centerMode: true,
+                    centerPadding: '40px',
+                    slidesToShow: 3
+                }
+            },
+            {
+                breakpoint: 480,
+                settings: {
+                    arrows: false,
+                    centerMode: true,
+                    centerPadding: '40px',
+                    slidesToShow: 1
+                }
+            }
+        ]
     }
     
     return (
@@ -23,11 +46,7 @@ const CommonSlider = ({data}) => {
                     data.map( (item) => (
                         <div
                             key={item.tblBnrPopup.bnrPopupSn}
-                            style={{
-                                width: "300px",
-                                height: "300px",
-                                textAlign: "center"
-                            }}
+                            className="sliderInDiv"
                         >
                             <img
                                 //src={window.location.hostname + item.tblComFile.atchFilePathNm + '/' + item.tblComFile.strgFileNm + '.' + item.tblComFile.atchFileExtnNm}
