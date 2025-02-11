@@ -3,6 +3,7 @@ const URL = {
   TOTAL_SEARCH : "/search",
   COMMUNITY: "/community",
   K_BIO_LABHUB: "/kBioLabHub",
+  INTRODUCE: "/introduce",
   //COMMON
   COMMON_POPUP : "/popup",
   COMMON_CONTENT_VIEW : "/content/view",
