@@ -159,6 +159,7 @@ header nav .dep li:nth-child(5).active a .icon {background-image: url(@/assets/i
 }
 
 .container .itemBox .selectGroup {border-radius: .66rem; border:  1px solid #ddd; background-color: #fff; font-weight: 500; font-family: 'pretendard';}
+.container .input .selectGroup {border-radius: .66rem; border:  1px solid #ddd; background-color: #fff; font-weight: 500; font-family: 'pretendard';}
 
 
 .react-checkbox-tree {border-radius: .8rem; padding: .9rem; display: flex; flex-direction: column; gap: .8rem; background: #F7F7F7; min-height: 595px;}
@@ -398,3 +399,12 @@ header nav .dep li:nth-child(5).active a .icon {background-image: url(@/assets/i
 }
 
 .cms .inner .contBox .infoBox .listBox > li.width2 {width: calc(100% / 2 - .6rem);}
+
+input.width2{ width: calc(100% / 2 - .6rem) !important; }
+input.width3{ width: calc(100% / 3 - .6rem) !important; }
+
+.customInputBox{
+    align-items: center;
+    display: flex;
+    gap: .5rem;
+}
