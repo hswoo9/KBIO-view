@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import * as EgovNet from "@/api/egovFetch";
 import EgovPaging from "@/components/EgovPaging";
 import { getSessionItem } from "@/utils/storage";
 import moment from "moment/moment.js";
 import URL from "@/constants/url";
-
+import CommonSubMenu from "@/components/CommonSubMenu";
 function OperationalList() {
     const userSn = getSessionItem("userSn");
     const [paginationInfo, setPaginationInfo] = useState({});
@@ -64,10 +64,14 @@ function OperationalList() {
                                             fontWeight: 'bold',
                                             marginBottom: '10px',
                                         }}>
-                                            <Link to={URL.INTRODUCE_OPERATIONAL_DETAIL}
-                                                  state={{mvnEntSn: item.mvnEntSn }}>
+                                            <NavLink to={URL.INTRODUCE_OPERATIONAL_DETAIL}
+                                                  state={{
+                                                      mvnEntSn: item.mvnEntSn,
+                                                      menuSn : location.state?.menuSn,
+                                                      menuNmPath : location.state?.menuNmPath,
+                                                  }}>
                                                 {item.mvnEntNm}
-                                            </Link>
+                                            </NavLink>
                                         </p>
 
                                         <p style={{
@@ -115,6 +119,7 @@ function OperationalList() {
     return (
         <div id="container" className="container layout">
             <div className="inner">
+                <CommonSubMenu/>
                 <h2 className="pageTitle">
                     <p>입주기업 소개</p>
                 </h2>
