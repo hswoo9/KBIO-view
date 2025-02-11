@@ -1,6 +1,8 @@
 const URL = {
   MAIN: "/", //메인페이지
   TOTAL_SEARCH : "/search",
+  COMMUNITY: "/community",
+  K_BIO_LABHUB: "/kBioLabHub",
   //COMMON
   COMMON_POPUP : "/popup",
   COMMON_CONTENT_VIEW : "/content/view",

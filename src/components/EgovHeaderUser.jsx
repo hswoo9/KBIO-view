@@ -241,7 +241,7 @@ function EgovHeader() {
                   <NavLink
                       to={item.menuPathNm}
                       state={{
-                        bbsSn: item.bbsSn
+                        menuSn: item.menuSn
                       }}
                   >
                     <p>{item.menuNm}</p>

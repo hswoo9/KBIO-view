@@ -11,7 +11,7 @@ import initPage from "@/js/ui";
 import logo from "@/assets/images/logo.svg";
 import {getBnrPopupList, getMvnEntList, getPstList} from "../../components/MainComponents.jsx";
 
-function EgovMainUser(props) {
+function Community(props) {
   const location = useLocation();
   console.log(location.state);
 
@@ -66,40 +66,25 @@ function EgovMainUser(props) {
   }, [popUpList]);
 
   useEffect(() => {
-    getMenu(null, null, userSn).then((data) => {
+    const menuSn = location.state?.menuSn || null;
+    getMenu(menuSn, 1, userSn).then((data) => {
       let dataList = [];
       if(data != null){
         data.forEach(function(item, index){
           if (index === 0) dataList = [];
-          if(item.menuType == "b"){
-            dataList.push(
-                <li key={item.menuSn}>
-                  <NavLink
-                      to={item.menuPathNm}
-                      state={{
-                        bbsSn: item.bbsSn
-                      }}
-                      onMouseOver={(e) => handleMouseOver(e, index)}
-                  >
-                    <span>{item.menuNm}</span>
-                  </NavLink>
-                </li>
-            )
-          }else if(item.menuType == "c" && item.menuSeq != 0){
-            dataList.push(
-                <li key={item.menuSn}>
-                  <NavLink
-                      to={item.menuPathNm}
-                      state={{
-                        menuSn: item.menuSn
-                      }}
-                      onMouseOver={(e) => handleMouseOver(e, index)}
-                  >
-                    <span>{item.menuNm}</span>
-                  </NavLink>
-                </li>
-            )
-          }
+          dataList.push(
+              <li key={item.menuSn}>
+                <NavLink
+                    to={item.menuPathNm}
+                    state={{
+                      bbsSn: item.bbsSn
+                    }}
+                    onMouseOver={(e) => handleMouseOver(e, index)}
+                >
+                  <span>{item.menuNm}</span>
+                </NavLink>
+              </li>
+          )
         });
         setMenuList(dataList);
       }
@@ -119,12 +104,6 @@ function EgovMainUser(props) {
 
   }, []);
 
-  useEffect(() => {
-    getPstList(selBbs).then((data) => {
-      setPstList(data);
-    });
-  }, [selBbs]);
-
   return (
       <div id="container" className="container layout">
         <div className="inner">
@@ -139,4 +118,4 @@ function EgovMainUser(props) {
   );
 }
 
-export default EgovMainUser;
+export default Community;

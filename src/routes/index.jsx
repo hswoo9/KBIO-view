@@ -10,6 +10,8 @@ import ManagerTop from "@/components/manager/ManagerTop";
 import EgovFooterUser from "@/components/EgovFooterUser";
 import EgovMainUser from "@/pages/main/EgovMainUser";
 
+import Community from "@/pages/community/Community";
+import KBioLabHub from "@/pages/kBioLabHub/KBioLabHub";
 import TotalSearch from "@/pages/search/TotalSearch";
 //COMMON
 import CommonError from "@/pages/common/error/commonError";
@@ -300,6 +302,8 @@ const SecondRoutes = () => {
               {/* MAIN */}
               <Route path={URL.MAIN} element={<EgovMainUser/>}/>
               <Route path={URL.TOTAL_SEARCH} element={<TotalSearch/>}/>
+              <Route path={URL.COMMUNITY} element={<Community/>}/>
+              <Route path={URL.K_BIO_LABHUB} element={<KBioLabHub/>}/>
 
               {/* COMMON */}
               <Route path={URL.COMMON_CONTENT_VIEW} element={<CommonContentView/>}/>
