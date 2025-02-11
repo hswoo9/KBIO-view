@@ -152,7 +152,7 @@ import ResidentCompanyCreate from "@/pages/manager/member/ResidentCompanyCreate"
 import OperationalSupport from "@/pages/manager/operationalSupport/OperationalSupport";
 import OperationalResidentMember from "@/pages/manager/operationalSupport/OperationalResidentMember";
 import OperationalRelatedOrganization from "@/pages/manager/operationalSupport/OperationalRelatedOrganization";
-import OpertionalDifficulties from "@/pages/manager/operationalSupport/OpertionalDifficulties";
+import OperationalDifficulties from "@/pages/manager/operationalSupport/OperationalDifficulties";
 import OperationalResidentManageMember from "@/pages/manager/operationalSupport/OperationalResidentManageMember";
 import OperationResidentMemberEdit from "@/pages/manager/operationalSupport/OperationResidentMemberEdit";
 
@@ -769,7 +769,7 @@ const SecondRoutes = () => {
               <Route path={URL.MANAGER_RESIDENT_MANAGER} element={<OperationalResidentManageMember />}/>
               <Route path={URL.MANAGER_RESIDENT_MEMBER_EDIT} element={<OperationResidentMemberEdit mode={CODE.MODE_MODIFY}/>}/>
               <Route path={URL.MANAGER_RELATED_ORGANIZATION} element={<OperationalRelatedOrganization />} />
-              <Route path={URL.MANAGER_DIFFICULTIES} element={<OpertionalDifficulties />} />
+              <Route path={URL.MANAGER_DIFFICULTIES} element={<OperationalDifficulties />} />
 
 
                 <Route path={URL.MANAGER_HOMEPAGE} element={<ManagerMainView/>}/>
