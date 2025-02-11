@@ -72,7 +72,7 @@ function EgovFooterUser() {
             <div className="right">
               <div className="familySiteWrap">
                 <div className="itemBox">
-                  <select>
+                  <select className="selectGroup footerSelect">
                     <option value="0">패밀리 사이트 바로가기</option>
                     <option value="1">예시1</option>
                     <option value="2">예시2</option>

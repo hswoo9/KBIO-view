@@ -450,7 +450,7 @@ function EgovHeader() {
             </div>
             <div className="langBox">
               <div className="itemBox">
-                <select>
+                <select className="selectGroup langSelect">
                   <option value="0">KR</option>
                   <option value="1">EN</option>
                 </select>
