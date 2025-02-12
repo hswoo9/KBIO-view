@@ -478,11 +478,20 @@ function ManagerLeftConsulting() {
               </li>
               <li>
                 <NavLink
+                    to={URL.MANAGER_SIMPLE_CONSULTING}
+                    className={({isActive}) => (isActive ? "activeTag" : "")}
+                >
+                  <div className="icon"></div>
+                  <p>간편의뢰관리</p>
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
                     to={URL.MANAGER_CONSULTING_MATCHING}
                     className={({isActive}) => (isActive ? "activeTag" : "")}
                 >
                   <div className="icon"></div>
-                  <p>전문가매칭관리</p>
+                  <p>컨설팅의뢰관리</p>
                 </NavLink>
               </li>
             </ul>
