@@ -9,7 +9,7 @@ import { getSessionItem, setSessionItem, removeSessionItem } from "@/utils/stora
 import simpleMainIng from "/assets/images/img_simple_main.png";
 import initPage from "@/js/ui";
 import logo from "@/assets/images/logo.svg";
-import {getBnrPopupList, getMvnEntList, getPstList} from "../../components/MainComponents.jsx";
+import {getBnrPopupList, getMvnEntList, getPstList} from "@/components/main/MainComponents";
 
 import Slider from 'react-slick';
 import "@/css/slickCustom.css";
@@ -19,7 +19,7 @@ import "@/css/userMain.css";
 import AOS from "aos";
 
 import CommonSlider from "@/components/CommonSlider";
-import MainSlider from "@/components/MainSlider";
+import MainSlider from "@/components/main/MainSlider";
 
 import user_main_sec01_slide01 from "@/assets/images/user_main_sec01_slide01.jpg";
 import user_main_sec01_icon01 from "@/assets/images/user_main_sec01_icon01.svg";
@@ -55,6 +55,11 @@ function EgovMainUser(props) {
 
   const [popUpList, setPopUpList] = useState([]);
   const [mainSlidesList, setMainSlidesList] = useState([]);
+  const [footerSlidesList, setFooterSlidesList] = useState([]);
+  useEffect(() => {
+    console.log(mainSlidesList);
+  }, [mainSlidesList]);
+
   const [mvnEntList, setMvnEntList] = useState([]);
   const [pstList, setPstList] = useState([]);
 
@@ -97,7 +102,7 @@ function EgovMainUser(props) {
         {/*<CommonSlider data={mainSlidesList} />*/}
         <div className="sec01">
           <div className="bg bgSlide">
-            <div className="slide"><img src={user_main_sec01_slide01} alt="images"/></div>
+            <div className="slide"><img src={user_main_sec01_slide01} alt="images" loading="lazy"/></div>
           </div>
           <div className="inner">
             <MainSlider/>
@@ -107,28 +112,28 @@ function EgovMainUser(props) {
                   <a href="#">
                     <strong className="tt1">연구개발 장비 구축</strong>
                     <p className="tt2">바이오 연구개발 장비 및 <br/>시설 구축 오퍼레이터 상주 및 <br/>장비운용 관리</p>
-                    <figure className="icon"><img src={user_main_sec01_icon01} alt="icon image"/></figure>
+                    <figure className="icon"><img src={user_main_sec01_icon01} alt="icon image" loading="lazy"/></figure>
                   </a>
                 </li>
                 <li>
                   <a href="#">
                     <strong className="tt1">네트워킹 플랫폼</strong>
                     <p className="tt2">산,학,연,병 업무 협력 <br/>플랫폼 운용 기술교류회 <br/>IR, 포럼 등 개최</p>
-                    <figure className="icon"><img src={user_main_sec01_icon02} alt="icon image"/></figure>
+                    <figure className="icon"><img src={user_main_sec01_icon02} alt="icon image" loading="lazy"/></figure>
                   </a>
                 </li>
                 <li>
                   <a href="#">
                     <strong className="tt1">입주시설 구축</strong>
                     <p className="tt2">기업성장단계를 고려한 <br/>기업별 사무공간 및 <br/>공용 실험공간</p>
-                    <figure className="icon"><img src={user_main_sec01_icon03} alt="icon image"/></figure>
+                    <figure className="icon"><img src={user_main_sec01_icon03} alt="icon image" loading="lazy"/></figure>
                   </a>
                 </li>
                 <li>
                   <a href="#">
                     <strong className="tt1">프로그램 운영</strong>
                     <p className="tt2">스타트업 기술사업화, <br/>편딩 및 투자 지원과 관련된 <br/>5개 프로그램 운영</p>
-                    <figure className="icon"><img src={user_main_sec01_icon04} alt="icon image"/></figure>
+                    <figure className="icon"><img src={user_main_sec01_icon04} alt="icon image" loading="lazy"/></figure>
                   </a>
                 </li>
               </ul>
@@ -145,7 +150,7 @@ function EgovMainUser(props) {
             <div className="institution_swiper swiper" data-aos="fade-up" data-aos-duration="1500">
               <div className="swiper-wrapper">
                 <div className="swiper-slide">
-                  <figure className="logoBox"><img src={user_main_sec02_logo01} alt="서울 바이오 허브"/></figure>
+                  <figure className="logoBox"><img src={user_main_sec02_logo01} alt="서울 바이오 허브" loading="lazy"/></figure>
                   <div className="textBox">
                     <h3 className="tt1">서울 바이오 허브</h3>
                     <p className="tt2">혁신적인 기술력과 신뢰를 바탕으로 <br/>바이오 산업의 미래를 열어가고 있습니다</p>
@@ -153,7 +158,7 @@ function EgovMainUser(props) {
                   <a href="#" className="linkBtn"><span>바로가기</span></a>
                 </div>
                 <div className="swiper-slide">
-                  <figure className="logoBox"><img src={user_main_sec02_logo02} alt="대웅제약"/></figure>
+                  <figure className="logoBox"><img src={user_main_sec02_logo02} alt="대웅제약" loading="lazy"/></figure>
                   <div className="textBox">
                     <h3 className="tt1">대웅제약</h3>
                     <p className="tt2">혁신적인 기술력과 신뢰를 바탕으로 <br/>바이오 산업의 미래를 열어가고 있습니다</p>
@@ -161,7 +166,7 @@ function EgovMainUser(props) {
                   <a href="#" className="linkBtn"><span>바로가기</span></a>
                 </div>
                 <div className="swiper-slide">
-                  <figure className="logoBox"><img src={user_main_sec02_logo03} alt="바이오넥스"/></figure>
+                  <figure className="logoBox"><img src={user_main_sec02_logo03} alt="바이오넥스" loading="lazy"/></figure>
                   <div className="textBox">
                     <h3 className="tt1">바이오넥스</h3>
                     <p className="tt2">혁신적인 기술력과 신뢰를 바탕으로 <br/>바이오 산업의 미래를 열어가고 있습니다</p>
@@ -169,7 +174,7 @@ function EgovMainUser(props) {
                   <a href="#" className="linkBtn"><span>바로가기</span></a>
                 </div>
                 <div className="swiper-slide">
-                  <figure className="logoBox"><img src={user_main_sec02_logo04} alt="동화약품"/></figure>
+                  <figure className="logoBox"><img src={user_main_sec02_logo04} alt="동화약품" loading="lazy"/></figure>
                   <div className="textBox">
                     <h3 className="tt1">동화약품</h3>
                     <p className="tt2">혁신적인 기술력과 신뢰를 바탕으로 <br/>바이오 산업의 미래를 열어가고 있습니다</p>
@@ -177,7 +182,7 @@ function EgovMainUser(props) {
                   <a href="#" className="linkBtn"><span>바로가기</span></a>
                 </div>
                 <div className="swiper-slide">
-                  <figure className="logoBox"><img src={user_main_sec02_logo05} alt="GC 녹십자"/></figure>
+                  <figure className="logoBox"><img src={user_main_sec02_logo05} alt="GC 녹십자" loading="lazy"/></figure>
                   <div className="textBox">
                     <h3 className="tt1">GC 녹십자</h3>
                     <p className="tt2">혁신적인 기술력과 신뢰를 바탕으로 <br/>바이오 산업의 미래를 열어가고 있습니다</p>
@@ -185,7 +190,7 @@ function EgovMainUser(props) {
                   <a href="#" className="linkBtn"><span>바로가기</span></a>
                 </div>
                 <div className="swiper-slide">
-                  <figure className="logoBox"><img src={user_main_sec02_logo01} alt="서울 바이오 허브"/></figure>
+                  <figure className="logoBox"><img src={user_main_sec02_logo01} alt="서울 바이오 허브" loading="lazy"/></figure>
                   <div className="textBox">
                     <h3 className="tt1">서울 바이오 허브</h3>
                     <p className="tt2">혁신적인 기술력과 신뢰를 바탕으로 <br/>바이오 산업의 미래를 열어가고 있습니다</p>
@@ -193,7 +198,7 @@ function EgovMainUser(props) {
                   <a href="#" className="linkBtn"><span>바로가기</span></a>
                 </div>
                 <div className="swiper-slide">
-                  <figure className="logoBox"><img src={user_main_sec02_logo02} alt="대웅제약"/></figure>
+                  <figure className="logoBox"><img src={user_main_sec02_logo02} alt="대웅제약" loading="lazy"/></figure>
                   <div className="textBox">
                     <h3 className="tt1">대웅제약</h3>
                     <p className="tt2">혁신적인 기술력과 신뢰를 바탕으로 <br/>바이오 산업의 미래를 열어가고 있습니다</p>
@@ -201,7 +206,7 @@ function EgovMainUser(props) {
                   <a href="#" className="linkBtn"><span>바로가기</span></a>
                 </div>
                 <div className="swiper-slide">
-                  <figure className="logoBox"><img src={user_main_sec02_logo03} alt="바이오넥스"/></figure>
+                  <figure className="logoBox"><img src={user_main_sec02_logo03} alt="바이오넥스" loading="lazy"/></figure>
                   <div className="textBox">
                     <h3 className="tt1">바이오넥스</h3>
                     <p className="tt2">혁신적인 기술력과 신뢰를 바탕으로 <br/>바이오 산업의 미래를 열어가고 있습니다</p>
@@ -209,7 +214,7 @@ function EgovMainUser(props) {
                   <a href="#" className="linkBtn"><span>바로가기</span></a>
                 </div>
                 <div className="swiper-slide">
-                  <figure className="logoBox"><img src={user_main_sec02_logo04} alt="동화약품"/></figure>
+                  <figure className="logoBox"><img src={user_main_sec02_logo04} alt="동화약품" loading="lazy"/></figure>
                   <div className="textBox">
                     <h3 className="tt1">동화약품</h3>
                     <p className="tt2">혁신적인 기술력과 신뢰를 바탕으로 <br/>바이오 산업의 미래를 열어가고 있습니다</p>
@@ -217,7 +222,7 @@ function EgovMainUser(props) {
                   <a href="#" className="linkBtn"><span>바로가기</span></a>
                 </div>
                 <div className="swiper-slide">
-                  <figure className="logoBox"><img src={user_main_sec02_logo05} alt="GC 녹십자"/></figure>
+                  <figure className="logoBox"><img src={user_main_sec02_logo05} alt="GC 녹십자" loading="lazy"/></figure>
                   <div className="textBox">
                     <h3 className="tt1">GC 녹십자</h3>
                     <p className="tt2">혁신적인 기술력과 신뢰를 바탕으로 <br/>바이오 산업의 미래를 열어가고 있습니다</p>
@@ -386,28 +391,28 @@ function EgovMainUser(props) {
               <div className="bannerSwiper swiper" data-aos="fade-up" data-aos-duration="1500">
                 <div className="swiper-wrapper">
                   <div className="swiper-slide">
-                    <div className="bg"><img src={user_main_sec04_banner01} alt="images"/></div>
+                    <div className="bg"><img src={user_main_sec04_banner01} alt="images" loading="lazy"/></div>
                     <div className="textBox">
                       <h2 className="text">사업 기획부터 연구 개발, 펀딩 투자를 지원하는</h2>
                       <p className="title">BIO <br/>특화프로그램 지원</p>
                     </div>
                   </div>
                   <div className="swiper-slide">
-                    <div className="bg"><img src={user_main_sec04_banner01} alt="images"/></div>
+                    <div className="bg"><img src={user_main_sec04_banner01} alt="images" loading="lazy"/></div>
                     <div className="textBox">
                       <h2 className="text">사업 기획부터 연구 개발, 펀딩 투자를 지원하는</h2>
                       <p className="title">BIO <br/>특화프로그램 지원</p>
                     </div>
                   </div>
                   <div className="swiper-slide">
-                    <div className="bg"><img src={user_main_sec04_banner01} alt="images"/></div>
+                    <div className="bg"><img src={user_main_sec04_banner01} alt="images" loading="lazy"/></div>
                     <div className="textBox">
                       <h2 className="text">사업 기획부터 연구 개발, 펀딩 투자를 지원하는</h2>
                       <p className="title">BIO <br/>특화프로그램 지원</p>
                     </div>
                   </div>
                   <div className="swiper-slide">
-                    <div className="bg"><img src={user_main_sec04_banner01} alt="images"/></div>
+                    <div className="bg"><img src={user_main_sec04_banner01} alt="images" loading="lazy"/></div>
                     <div className="textBox">
                       <h2 className="text">사업 기획부터 연구 개발, 펀딩 투자를 지원하는</h2>
                       <p className="title">BIO <br/>특화프로그램 지원</p>
@@ -495,16 +500,17 @@ function EgovMainUser(props) {
         <div className="rollingWrap">
           <div className="moveWrap">
             <ul className="imgMove">
-              <li><img src={user_main_rolling_logo01} alt="SAMSUNG BIOLOGICS"/></li>
-              <li><img src={user_main_rolling_logo02} alt="동화약품"/></li>
-              <li><img src={user_main_rolling_logo03} alt="GC녹십자"/></li>
-              <li><img src={user_main_rolling_logo04} alt="DAEWOONG"/></li>
-              <li><img src={user_main_rolling_logo05} alt="서울바이오허브"/></li>
-              <li><img src={user_main_rolling_logo01} alt="SAMSUNG BIOLOGICS"/></li>
-              <li><img src={user_main_rolling_logo02} alt="동화약품"/></li>
-              <li><img src={user_main_rolling_logo03} alt="GC녹십자"/></li>
-              <li><img src={user_main_rolling_logo04} alt="DAEWOONG"/></li>
-              <li><img src={user_main_rolling_logo05} alt="서울바이오허브"/></li>
+              {/*<MainFooterBnr data={footerSlidesList} />*/}
+              <li><img src={user_main_rolling_logo01} alt="SAMSUNG BIOLOGICS" loading="lazy"/></li>
+              <li><img src={user_main_rolling_logo02} alt="동화약품" loading="lazy"/></li>
+              <li><img src={user_main_rolling_logo03} alt="GC녹십자" loading="lazy"/></li>
+              <li><img src={user_main_rolling_logo04} alt="DAEWOONG" loading="lazy"/></li>
+              <li><img src={user_main_rolling_logo05} alt="서울바이오허브" loading="lazy"/></li>
+              <li><img src={user_main_rolling_logo01} alt="SAMSUNG BIOLOGICS" loading="lazy"/></li>
+              <li><img src={user_main_rolling_logo02} alt="동화약품" loading="lazy"/></li>
+              <li><img src={user_main_rolling_logo03} alt="GC녹십자" loading="lazy"/></li>
+              <li><img src={user_main_rolling_logo04} alt="DAEWOONG" loading="lazy"/></li>
+              <li><img src={user_main_rolling_logo05} alt="서울바이오허브" loading="lazy"/></li>
             </ul>
           </div>
         </div>

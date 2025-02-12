@@ -1,43 +1,50 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
-import { Link, NavLink, useLocation } from "react-router-dom";
-import axios from "axios";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { useDropzone } from 'react-dropzone';
 import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
-import { getSessionItem } from "@/utils/storage";
 import EgovPaging from "@/components/EgovPaging";
 
 import Swal from 'sweetalert2';
+import {getComCdList} from "@/components/CommonComponents";
+import { getSessionItem } from "@/utils/storage";
+import moment from "moment/moment.js";
 
 function MemberMyPageSimple(props) {
+    const sessionUser = getSessionItem("loginUser");
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    const searchTypeRef = useRef();
+    const searchValRef = useRef();
 
     const [searchDto, setSearchDto] = useState(
         location.state?.searchDto || {
             pageIndex: 1,
-            actvtnYn: "",
-            kornFlnm: "",
-            companyName: "",
-            mbrType: "2",
+            cnsltSe : 27,
+            startDt : "",
+            endDt : "",
+            answerYn: "",
+            dfclMttrFld : "",
+            searchType: "",
+            searchVal : "",
+            userSn: sessionUser?.userSn || "",
         }
     );
-    const [paginationInfo, setPaginationInfo] = useState({
-        currentPageNo: 1,
-        firstPageNo: 1,
-        firstPageNoOnPageList: 1,
-        firstRecordIndex: 0,
-        lastPageNo: 1,
-        lastPageNoOnPageList: 1,
-        lastRecordIndex: 10,
-        pageSize: 10,
-        recordCountPerPage: 10,
-        totalPageCount: 15,
-        totalRecordCount: 158
-    });
-    const [consultMemberList, setAuthorityList] = useState([]);
+    const [paginationInfo, setPaginationInfo] = useState({});
+    const [simpleList, setSimpleListList] = useState([]);
+    const [dfclMttrFldList, setDfclMttrFldList] = useState([]);
 
-    const getConsultMemberList = useCallback(
+    useEffect(() => {
+        getComCdList(15).then((data) => {
+            setDfclMttrFldList(data);
+        })
+    }, []);
+
+    const getSimpleList = useCallback(
         (searchDto) => {
-            const consultMemberListUrl = "/memberApi/getNormalMemberList.do"; //임시로 회원조회 url을 사용하나 나중에 join된 걸 불러와야할듯
+            const simpleListUrl = "/memberApi/getMyPageSimpleList.do"; 
             const requestOptions = {
                 method: "POST",
                 headers: {
@@ -47,41 +54,43 @@ function MemberMyPageSimple(props) {
             };
 
             EgovNet.requestFetch(
-                consultMemberListUrl,
+                simpleListUrl,
                 requestOptions,
                 (resp) => {
                     setPaginationInfo(resp.paginationInfo);
                     let dataList = [];
                     dataList.push(
-                        <tr key="no-data">
-                            <td colSpan="9">검색된 결과가 없습니다.</td>
+                        <tr>
+                            <td colSpan="6">검색된 결과가 없습니다.</td>
                         </tr>
                     );
 
-                    resp.result.getNormalMemberList.forEach(function (item, index) {
+                    resp.result.consultantList.forEach(function (item, index) {
                         if (index === 0) dataList = [];
 
-                        const totalItems = resp.result.getNormalMemberList.length;
-                        const itemNumber = totalItems - index;
-
                         dataList.push(
-                            <tr key={item.userSn}>
-                                <td>{itemNumber}</td>
-                                <td></td>
-                                <td>{item.kornFlnm}</td>
-                                <td></td>
-                                <td>{item.actvtnYn === 'Y' ? '공개' :
-                                    item.actvtnYn === 'W' ? '비공개' :
-                                        item.actvtnYn === 'R' ? '비공개' :
-                                            item.actvtnYn === 'C' ? '비공개' :
-                                                item.actvtnYn === 'S' ? '비공개' : ''}
+                            <tr key={item.pstSn}>
+                                <td>
+                                    {resp.paginationInfo.totalRecordCount - (resp.paginationInfo.currentPageNo - 1) * resp.paginationInfo.pageSize - index}
                                 </td>
-                                <td></td>
-                                <td></td>
+                                <td>{item.cnsltFld}</td>
+                                <td>
+                                        <Link to={{pathname: URL.test}}
+                                              state={{
+                                                  dfclMttrSn: item.dfclMttrSn
+                                              }}
+                                              style={{cursor: 'pointer', textDecoration: 'underline'}}
+                                        >
+                                            {item.ttl}
+                                        </Link>
+                                </td>
+                                <td>{moment(item.frstCrtDt).format('YYYY-MM-DD')}</td>
+                                <td>{item.answer == "Y" ? "답변완료" : "답변대기"}</td>
                             </tr>
                         );
                     });
-                    setAuthorityList(dataList);
+                    setSimpleListList(dataList);
+                    setPaginationInfo(resp.paginationInfo);
                 },
                 function (resp) {
                     console.log("err response : ", resp);
@@ -89,11 +98,11 @@ function MemberMyPageSimple(props) {
             );
 
         },
-        [consultMemberList, searchDto]
+        [simpleList, searchDto]
     );
 
-    useEffect(()=>{
-        getConsultMemberList(searchDto);
+    useEffect(() => {
+        getSimpleList(searchDto);
     }, []);
 
     return (
@@ -173,10 +182,14 @@ function MemberMyPageSimple(props) {
                                 </label>
                             </li>
                             <div className="rightBtn" style={{display: 'flex', gap: '10px', marginTop:"25px"}}>
-                                <button type="button" className="refreshBtn btn btn1 gray">
-                                    <div className="icon"></div>
-                                </button>
-                                <button type="button" className="searchBtn btn btn1 point">
+                                <button type="button" className="searchBtn btn btn1 point"
+                                        onClick={() => {
+                                            getSimpleList({
+                                                ...searchDto,
+                                                pageIndex: 1
+                                            });
+                                        }}
+                                >
                                     <div className="icon"></div>
                                 </button>
                             </div>
@@ -186,24 +199,30 @@ function MemberMyPageSimple(props) {
                 </div>
                 <div className="contBox board type1 customContBox">
                     <div className="topBox">
-                        <p className="resultText">Total <span className="red">50</span></p>
+                        <p className="resultText">Total <span className="red">{paginationInfo.totalRecordCount}</span>
+                        </p>
                     </div>
                     <div className="tableBox type1">
                         <table>
-                            <caption>전문가목록</caption>
+                            <caption>애로사항목록</caption>
+                            <col width="80"/>
+                            <col width="150"/>
+                            <col width="300"/>
+                            <col width="150"/>
+                            <col width="150"/>
+                            <col width="150"/>
                             <thead>
                             <tr>
                                 <th>번호</th>
-                                <th>분야</th>
-                                <th>컨설턴트</th>
+                                <th>분류</th>
                                 <th>제목</th>
-                                <th>의뢰일시</th>
+                                <th>신청일</th>
                                 <th>상태</th>
                                 <th>만족도</th>
                             </tr>
                             </thead>
                             <tbody>
-                            {consultMemberList}
+                            {simpleList}
                             </tbody>
                         </table>
                     </div>
@@ -212,7 +231,7 @@ function MemberMyPageSimple(props) {
                         <EgovPaging
                             pagination={paginationInfo}
                             moveToPage={(passedPage) => {
-                                getConsultMemberList({
+                                getSimpleList({
                                     ...searchDto,
                                     pageIndex: passedPage,
                                 })
