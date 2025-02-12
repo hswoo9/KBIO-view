@@ -135,14 +135,16 @@ function MemberMyPageDifficultiesDetail(props) {
                                 <ul className="inputWrap" style={{listStyleType: "none", paddingLeft: "0"}}>
                                     <li className="inputBox type1 width1" style={{marginBottom: "10px"}}>
                                         <label className="title"
-                                               style={{fontWeight: "bold"}}><small>의뢰내용</small></label>
+                                               style={{fontWeight: "bold"}}><small>답변내용</small></label>
                                         <div className="input" style={{marginTop: "5px"}}
                                              dangerouslySetInnerHTML={{__html: difficultiesDetail.ansCn}}></div>
                                     </li>
                                     <li className="inputBox type1 width1" style={{marginBottom: "10px"}}>
-                                        <label className="title" style={{fontWeight: "bold"}}><small>답변날짜</small></label>
-                                        <div className="input"
-                                             style={{marginTop: "5px"}}>{moment(difficultiesDetail.ansRegDt).format('YYYY-MM-DD')}</div>
+                                        <label className="title"
+                                               style={{fontWeight: "bold"}}><small>답변날짜</small></label>
+                                        <div className="input" style={{marginTop: "5px"}}>
+                                            {difficultiesDetail.ansRegDt ? moment(difficultiesDetail.ansRegDt).format('YYYY-MM-DD') : ""}
+                                        </div>
                                     </li>
                                     <li className="inputBox type1 width1" style={{marginBottom: "10px"}}>
                                         <label className="title" style={{fontWeight: "bold"}}><small>답변
