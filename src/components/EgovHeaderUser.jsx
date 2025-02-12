@@ -2,6 +2,7 @@ import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
 import React, {useEffect, useRef, useState} from "react";
 
 import * as EgovNet from "@/api/egovFetch";
+import * as ComScript from "@/components/CommonScript";
 import {getMenu } from "@/components/CommonComponents";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
@@ -75,8 +76,20 @@ function EgovHeader() {
   });
 
   const [loginVO, setLoginVO] = useState({});
-
   const [saveIDFlag, setSaveIDFlag] = useState(false);
+
+
+  /* 알림창 관련 */
+  const [isToggled, setIsToggled] = useState(false);
+  const handleToggle = () => {
+    setIsToggled(prevState => !prevState);
+  };
+
+  /* 스크롤 이벤트 관련 */
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [headerHeight, setHeaderHeight] = useState(0);
+
+
 
   const checkRef = useRef();
   const idRef = useRef(null); //id입력 부분에서 엔터키 이벤트 발생 확인
@@ -216,8 +229,8 @@ function EgovHeader() {
         parentTag.className = "active";
       }
     }
-    
-    
+
+
     let idFlag = getLocalItem(KEY_SAVE_ID_FLAG);
     if (idFlag === null) {
       setSaveIDFlag(false);
@@ -232,9 +245,7 @@ function EgovHeader() {
     } else {
       checkRef.current.className = "f_chk on";
     }
-  }, []);
 
-  useEffect(() => {
     let data = getLocalItem(KEY_ID);
     if (data !== null) {
       setUserInfo({ id: data, password: "default", userSe: "USR", loginType: "base"});
@@ -266,15 +277,61 @@ function EgovHeader() {
         setMenuList(dataList);
       }
     });
+
+    // 이벤트 리스너 추가
+    const events = ["mousemove", "mousedown", "keypress", "scroll", "touchstart"];
+    events.forEach((event) => window.addEventListener(event, resetTimer) );
+    // 초기 타이머 설정
+    resetTimer();
+
+    return () => {
+      // 컴포넌트가 언마운트될 때 이벤트 리스너 제거 및 타이머 초기화
+      events.forEach((event) => window.removeEventListener(event, resetTimer));
+      if (logoutTimer.current) {
+        clearTimeout(logoutTimer.current);
+      }
+    };
   }, []);
+
+  /* 스크롤 이벤트 */
+  useEffect(() => {
+    const headerElement = document.querySelector('header');
+    if(headerElement){
+      setHeaderHeight(headerElement ? headerElement.offsetHeight : 0);
+    }
+    const handleScroll = () => {
+      if (window.scrollY > 0) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+    handleScroll();
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+  useEffect(() => {
+    // 스크롤 상태에 따라 스타일을 조정
+    const container = document.querySelector('.container');
+    if(container){
+      if (isScrolled) {
+        container.style.paddingTop = '16.2rem';
+      } else {
+        container.style.paddingTop = '23.9rem';
+      }
+    }
+  }, [isScrolled]);
+
 
   const activeEnter = (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
-      submitFormHandler(e);
+      submitFormHandler("N");
     }
   };
-  const submitFormHandler = () => {
+  const submitFormHandler = (confirmPass) => {
     if(!idRef.current.value){
       Swal.fire("아이디를 입력해주세요.");
       idRef.current.focus();
@@ -291,13 +348,27 @@ function EgovHeader() {
       headers: {
         "Content-type": "application/json",
       },
-      body: JSON.stringify(userInfo),
+      body: JSON.stringify({ ...userInfo, confirmPass : confirmPass }),
     };
 
     EgovNet.requestFetch(loginUrl, requestOptions, (resp) => {
       if(resp.resultCode != "200"){
-        Swal.fire(resp.resultMessage);
-        return;
+        if(resp.resultCode == "502"){
+          Swal.fire({
+            title: resp.resultMessage,
+            showCloseButton: true,
+            showCancelButton: true,
+            confirmButtonText: "예",
+            cancelButtonText: "아니오"
+          }).then((result) => {
+            if(result.isConfirmed) {
+              submitFormHandler("Y");
+            }
+          });
+        }else{
+          Swal.fire(resp.resultMessage);
+          return;
+        }
       }else{
         console.log("resp",resp)
         setSessionItem("loginUser", {userSn : resp.result.userSn, name : resp.result.userName, id : resp.result.userId, userSe : resp.result.userSe});
@@ -346,7 +417,7 @@ function EgovHeader() {
     });
   };
 
-  console.log("------------------------------EgovHeader [End]");
+  console.log("------------------------------EgovHeadeㅁㄴㅇㅁㄴㅇㅁㄴㅇr [End]");
   console.groupEnd("EgovHeader");
 
   //자동 로그아웃
@@ -369,23 +440,7 @@ function EgovHeader() {
   };
 
   useEffect(() => {
-    // 이벤트 리스너 추가
-    const events = ["mousemove", "mousedown", "keypress", "scroll", "touchstart"];
-    events.forEach((event) => window.addEventListener(event, resetTimer) );
-    // 초기 타이머 설정
-    resetTimer();
-
-    return () => {
-      // 컴포넌트가 언마운트될 때 이벤트 리스너 제거 및 타이머 초기화
-      events.forEach((event) => window.removeEventListener(event, resetTimer));
-      if (logoutTimer.current) {
-        clearTimeout(logoutTimer.current);
-      }
-    };
-  }, []);
-
-  useEffect(() => {
-    userJs();
+    //userJs();
   });
 
   useEffect(() => {
@@ -394,12 +449,45 @@ function EgovHeader() {
       if(element){
         element.classList.remove("main");
       }
+    }else{
+      const element = document.querySelector("#wrap");
+      if(element){
+        element.classList.add("main");
+      }
     }
+
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: "",
+    };
+
+    EgovNet.requestFetch("/commonApi/getDuplicateLogin", requestOptions, (resp) => {
+      if(resp.result != null){
+        if(resp.result.duplicateLogin == "Y"){
+          removeSessionItem("loginUser");
+          removeSessionItem("jToken");
+          removeSessionItem("userSn");
+          navigate(
+              { pathname : URL.COMMON_ERROR},
+              { state : {
+                  redirectPath : URL.MAIN,
+                  errorCode: resp.resultCode,
+                  errorMessage: resp.resultMessage,
+                  errorSubMessage : "메인으로 이동합니다."
+                }
+              }
+          );
+        }
+      }
+    });
   }, [window.location.pathname]);
 
   return (
       // <!-- header -->
-      <header>
+      <header className={isScrolled ? 'scroll' : ''}>
         <style>{`
                 header .modalCon {display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 150;}
                 header .modalCon.open {display: block; animation: fadeIn 1s ease both;}
@@ -487,7 +575,7 @@ function EgovHeader() {
                     {/*<NavLink
                         to={URL.LOGIN}
                     >*/}
-                    <button type="button" className="loginBtn"><span>로그인</span></button>
+                    <button type="button" className="loginBtn" onClick={() => ComScript.openModal("loginModal")}><span>로그인</span></button>
                     {/*</NavLink>*/}
                     <NavLink
                         to={URL.SIGNUP_CHOICE}
@@ -497,8 +585,8 @@ function EgovHeader() {
                   </>
               )}
             </div>
-            <div className="alarmWrap">
-              <button type="button" className="alarmBtn">
+            <div className={isToggled ? "alarmWrap click" : "alarmWrap"}>
+              <button type="button" className="alarmBtn" onClick={handleToggle}>
                 <div className="icon"></div>
               </button>
               <ul className="selectBox">
@@ -561,10 +649,10 @@ function EgovHeader() {
           </div>
         </div>
         <div className="loginModal modalCon">
-          <div className="bg"></div>
+          <div className="bg" onClick={() => ComScript.closeModal("loginModal")}></div>
           <div className="m-inner">
             <div className="boxWrap">
-              <div className="close">
+              <div className="close" onClick={() => ComScript.closeModal("loginModal")}>
                 <div className="icon"></div>
               </div>
               <form className="box">
@@ -618,13 +706,13 @@ function EgovHeader() {
                     <small>로그인 상태 유지</small>
                   </label>
                 </div>
-                <button type="button" className="loginBtn" onClick={submitFormHandler}><span>로그인</span></button>
+                <button type="button" className="loginBtn" onClick={(e) => {submitFormHandler("N")}}><span>로그인</span></button>
                 <ul className="botBtnBox">
                   <li>
-                    <button type="button" className="idBtn"><span>아이디 찾기</span></button>
+                    <button type="button" className="idBtn" onClick={() => ComScript.openModal("findId")}><span>아이디 찾기</span></button>
                   </li>
                   <li>
-                    <button type="button" className="pwBtn"><span>비밀번호 찾기</span></button>
+                    <button type="button" className="pwBtn" onClick={() => ComScript.openModal("findPwd")}><span>비밀번호 찾기</span></button>
                   </li>
                   <li>
                     <button type="button" className="signUp" onClick={handleSignUp}><span>회원가입</span></button>
@@ -649,10 +737,10 @@ function EgovHeader() {
           </div>
         </div>
         <div className="findId modalCon">
-          <div className="bg"></div>
+          <div className="bg" onClick={() => ComScript.closeModal("findId")}></div>
           <div className="m-inner">
             <div className="boxWrap">
-              <div className="close">
+              <div className="close" onClick={() => ComScript.closeModal("findId")}>
                 <div className="icon"></div>
               </div>
               <form className="box">
@@ -691,10 +779,10 @@ function EgovHeader() {
           </div>
         </div>
         <div className="findPwd modalCon">
-          <div className="bg"></div>
+          <div className="bg" onClick={() => ComScript.closeModal("findPwd")}></div>
           <div className="m-inner">
             <div className="boxWrap">
-              <div className="close">
+              <div className="close" onClick={() => ComScript.closeModal("findPwd")}>
                 <div className="icon"></div>
               </div>
               <form className="box">

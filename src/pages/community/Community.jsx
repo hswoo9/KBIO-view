@@ -4,7 +4,7 @@ import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
 import { getSessionItem, setSessionItem, removeSessionItem } from "@/utils/storage";
 import CommonSubMenu from "@/components/CommonSubMenu";
-import {getBnrPopupList} from "@/components/MainComponents";
+import {getBnrPopupList} from "@/components/main/MainComponents";
 
 function Community(props) {
   const location = useLocation();

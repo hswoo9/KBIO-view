@@ -3,7 +3,7 @@ import ManagerLeftNew from "@/components/manager/ManagerLeftStatistics";
 
 import ApexCharts from 'react-apexcharts';
 
-import Tab from '@/pages/manager/statistics/tabGroup/AccessTabCommon';
+import Tab from '@/pages/manager/statistics/tabGroup/AccessTabPst';
 
 import {
     format,
@@ -22,41 +22,31 @@ import {
 } from "date-fns";
 
 function ManagerStatisticsBoard(props) {
-    const [currentMonth, setCurrentMonth] = useState(new Date());
-    // 현재 연도 & 월
-    const currentYear = format(currentMonth, "yyyy");
-    const currentMonthIndex = format(currentMonth, "M") - 1;
+    const nowDate = new Date();
 
-    const [menuIndex, setMenuIndex] = useState({ menu : 0});
-    const tabMenuList = {
-        0: <Tab/>,
-        1: <Tab/>,
-        2: <Tab/>,
-    };
+    const [searchDto, setSearchDto] = useState({
+        searchYear : format(nowDate, "yyyy"),
+        searchMonth : format(nowDate, "MM"),
+    });
+
+    const currentYear = format(nowDate, "yyyy");
+
+    const [menuIndex, setMenuIndex] = useState(0);
+    const [tabRenderKey, setTabRenderKey] = useState(0);
+
+    useEffect(() => {
+        setTabRenderKey(prev => prev + 1);
+    }, [menuIndex, searchDto]);
+
+    const menuList = () => ({
+        0: <Tab key={menuIndex === 0 ? tabRenderKey : 0} searchDto={{ ...searchDto, bbsSn: 1 }} />,
+        1: <Tab key={menuIndex === 1 ? tabRenderKey : 1} searchDto={{ ...searchDto, bbsSn: 5 }} />,
+        2: <Tab key={menuIndex === 2 ? tabRenderKey : 2} searchDto={{ ...searchDto, bbsSn: 7 }} />,
+    });
 
     const changeMenu = (menuIndex) => {
-        setMenuIndex({
-            menu: menuIndex
-        });
+        setMenuIndex(menuIndex);
     }
-
-
-    const chartOptions = {
-        chart: {
-            id: 'bar',
-        },
-        //컬럼명
-        xaxis: {
-            categories: ['입주기업', '유관기관', '비입주기업', '컨설턴트'],
-        },
-    };
-
-    const series = [
-        {
-            name: '사용자',
-            data: [5600, 4600, 7600, 50],
-        },
-    ];
 
     return (
         <div id="container" className="container layout cms">
@@ -68,6 +58,7 @@ function ManagerStatisticsBoard(props) {
                     color: black;
                     padding: 1rem;
                     cursor: pointer;
+                    width : auto;
                 }
                 .tabs li.tabActive{
                     background-color: #04819b;
@@ -87,12 +78,18 @@ function ManagerStatisticsBoard(props) {
                                 <p className="title">기간</p>
                                 <div className="itemBox">
                                     <select className="selectGroup"
-                                            defaultValue={currentYear}
-                                            id="yearSelect"
+                                            id="searchYear"
+                                            defaultValue={searchDto.searchYear}
+                                            onChange={(e) => {
+                                                setSearchDto(prev => ({
+                                                    ...prev,
+                                                    searchYear: e.target.value
+                                                }));
+                                            }}
                                     >
-                                        {Array.from({length: 10}, (_, i) => (
-                                            <option key={i} value={2020 + i}>
-                                                {2020 + i}
+                                        {Array.from({length: Math.max(0, currentYear - 2025) + 1}, (_, i) => (
+                                            <option key={i} value={currentYear - i}>
+                                                {currentYear - i}
                                             </option>
                                         ))}
                                     </select>
@@ -101,11 +98,18 @@ function ManagerStatisticsBoard(props) {
                             <li className="inputBox type1">
                                 <div className="itemBox">
                                     <select className="selectGroup"
-                                            defaultValue={currentMonthIndex}
+                                            id="searchMonth"
+                                            defaultValue={searchDto.searchMonth}
+                                            onChange={(e) => {
+                                                setSearchDto(prev => ({
+                                                    ...prev,
+                                                    searchMonth: e.target.value
+                                                }));
+                                            }}
                                     >
                                         {["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"].map((month, index) => (
-                                            <option key={index} value={index}>
-                                                {month}
+                                            <option key={index} value={String(month).padStart(2, '0')}>
+                                                {String(month).padStart(2, '0')}
                                             </option>
                                         ))}
                                     </select>
@@ -117,19 +121,19 @@ function ManagerStatisticsBoard(props) {
                 <div className="contBox board type1 customContBox">
                     <div className="topBox">
                         <ul className="tabs">
-                            <li className={`${menuIndex.menu === 0 ? 'tabActive' : ''}`}
+                            <li className={`${menuIndex === 0 ? 'tabActive' : ''}`}
                                 onClick={() => changeMenu(0)}>공지사항
                             </li>
-                            <li className={`${menuIndex.menu === 1 ? 'tabActive' : ''}`}
+                            <li className={`${menuIndex === 1 ? 'tabActive' : ''}`}
                                 onClick={() => changeMenu(1)}>자료실
                             </li>
-                            <li className={`${menuIndex.menu === 2 ? 'tabActive' : ''}`}
+                            <li className={`${menuIndex === 2 ? 'tabActive' : ''}`}
                                 onClick={() => changeMenu(2)}>연구자료실
                             </li>
                         </ul>
                     </div>
                     <div>
-                        {tabMenuList[menuIndex.menu]}
+                        {menuList()[menuIndex]}
                     </div>
                 </div>
 

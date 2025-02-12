@@ -19,7 +19,8 @@ function ManagerLogin(props) {
     id: "",
     password: "default",
     userSe: "ADM",
-    loginType : "base"
+    loginType : "base",
+    confirmPass : "N"
   });
   // eslint-disable-next-line no-unused-vars
   const [loginVO, setLoginVO] = useState({});
@@ -62,17 +63,17 @@ function ManagerLogin(props) {
   useEffect(() => {
     let data = getLocalItem(KEY_ID);
     if (data !== null) {
-      setUserInfo({ id: data, password: "default", userSe: "USR", loginType: "base"});
+      setUserInfo({ id: data, password: "default", userSe: "USR", loginType: "base", confirmPass : "N"});
     }
   }, []);
 
   const activeEnter = (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
-      submitFormHandler(e);
+      submitFormHandler("N");
     }
   };
-  const submitFormHandler = () => {
+  const submitFormHandler = (confirmPass) => {
     if(!idRef.current.value){
       Swal.fire("아이디를 입력해주세요.");
       idRef.current.focus();
@@ -89,13 +90,27 @@ function ManagerLogin(props) {
       headers: {
         "Content-type": "application/json",
       },
-      body: JSON.stringify(userInfo),
+      body: JSON.stringify({ ...userInfo, confirmPass : confirmPass }),
     };
 
     EgovNet.requestFetch(loginUrl, requestOptions, (resp) => {
       if(resp.resultCode != "200"){
-        Swal.fire(resp.resultMessage);
-        return;
+        if(resp.resultCode == "502"){
+          Swal.fire({
+            title: resp.resultMessage,
+            showCloseButton: true,
+            showCancelButton: true,
+            confirmButtonText: "예",
+            cancelButtonText: "아니오"
+          }).then((result) => {
+            if(result.isConfirmed) {
+              submitFormHandler("Y");
+            }
+          });
+        }else{
+          Swal.fire(resp.resultMessage);
+          return;
+        }
       }else{
         console.log("resp",resp)
         setSessionItem("loginUser", {userSn : resp.result.userSn, name : resp.result.userName, id : resp.result.userId, userSe : resp.result.userSe});
@@ -182,7 +197,7 @@ function ManagerLogin(props) {
                     />
                     <small>ID저장</small></label>
                 </div>
-                <button type="button" className="loginBtn" onClick={submitFormHandler}><span>로그인</span></button>
+                <button type="button" className="loginBtn" onClick={(e) => {submitFormHandler("N")}}><span>로그인</span></button>
               </div>
             </form>
           </div>

@@ -6,27 +6,6 @@ export default function userJs() {
     })
 
     function header() {
-        $('header .hInner .hTop .alarmWrap .alarmBtn').on('click', function() {
-            $(this).parent('.alarmWrap').toggleClass('click')
-        })
-        function headerScroll() {
-            function checkWrapClass() {
-                const headerHeight = $('header').outerHeight();
-                if ($(window).scrollTop() > 0) {
-                    $('header').addClass('scroll');
-                    $('.container').css('padding-top', '16.2rem')
-                } else {
-                    $('header').removeClass('scroll');
-                    $('.container').css('padding-top', '23.9rem')
-                }
-            }
-            checkWrapClass();
-
-            $(window).on('scroll', function() {
-                checkWrapClass();
-            });
-        }
-        headerScroll();
 
         // 메뉴 효과
         $('.tabBox').each(function () {
@@ -210,32 +189,6 @@ export default function userJs() {
 
     }
 
-    function modalOpen(selector, modalSeletor) {
-
-        $(selector).on('click', function() {
-            $(modalSeletor).addClass('open');
-            $('html, body').css('overflow', 'hidden');
-        })
-    }
-    modalOpen('.admin .topBox .uploadBtn', '.uploadModal');
-    modalOpen('.admin .board.type2 .tableBox table .deletBtn', '.deletModal');
-    modalOpen('.admin .cms .inner .contBox .infoBox .program', '.programModal');
-    modalOpen('.user header .loginBtn', '.loginModal')
-    modalOpen('.user header .idBtn', '.findId')
-    modalOpen('.user header .pwBtn', '.findPwd')
-
-
-    // 모달 닫기  ------------------------------------------------------------
-
-    function modalClose() {
-        $('.modalCon .bg, .modalCon .close, .modalCon .closeBtn').on('click', function() {
-            $(this).closest('.modalCon').removeClass('open');
-            $('html, body').css('overflow', 'visible');
-        })
-    }
-    modalClose()
-
-    
     if ($('.container').hasClass('main')) {
         main()
     }

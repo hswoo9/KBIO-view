@@ -96,6 +96,35 @@ function ManagerTop() {
 
       });
     }
+
+    console.log(location.pathname)
+
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: "",
+    };
+
+    EgovNet.requestFetch("/commonApi/getDuplicateLogin", requestOptions, (resp) => {
+      if(resp.result.duplicateLogin == "Y"){
+        removeSessionItem("loginUser");
+        removeSessionItem("jToken");
+        removeSessionItem("userSn");
+        navigate(
+            { pathname : URL.COMMON_ERROR},
+            { state : {
+                redirectPath : URL.MANAGER_LOGIN,
+                errorCode: resp.resultCode,
+                errorMessage: resp.resultMessage,
+                errorSubMessage : "메인으로 이동합니다."
+              }
+            }
+        );
+
+      }
+    });
   }, [location.pathname]);
 
 

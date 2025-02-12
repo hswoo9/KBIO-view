@@ -2,12 +2,12 @@ import React, { useState, useEffect, useCallback, useRef } from "react";
 import ApexCharts from 'react-apexcharts'
 import * as EgovNet from "../../../../api/egovFetch.js";
 
-function AccessTabMoveIn(props) {
+function AccessTabPst(props) {
     const [searchDto, setSearchDto] = useState(
         props.searchDto || {
             searchYear: "",
             searchMonth: "",
-            mbrType : ""
+            bbsSn : ""
         }
     );
 
@@ -16,9 +16,9 @@ function AccessTabMoveIn(props) {
     const lastDay = new Date(year, month, 0).getDate();
 
     const categories = Array.from({ length: lastDay }, (_, i) => String(i + 1 + "일").padStart(2, '0'));
-    const [userCnt, setUserCnt] = useState([])
+    const [pstInqCnt, setPstInqCnt] = useState([])
 
-    const getStatisticsUserAccess = () => {
+    const getStatisticsPstAccess = () => {
         const requestOptions = {
             method: "POST",
             headers: {
@@ -27,27 +27,28 @@ function AccessTabMoveIn(props) {
             body: JSON.stringify(searchDto)
         };
 
-        EgovNet.requestFetch("/statisticsApi/getStatisticsUserAccess.do", requestOptions, function (resp) {
-            console.log(resp)
-            resp.result.statisticsUserAccess.forEach(function(v, i){
+        EgovNet.requestFetch("/statisticsApi/getStatisticsPstAccess.do", requestOptions, function (resp) {
+            resp.result.statisticsPstAccess.forEach(function(v, i){
                 const userCounts = categories.map((day) => {
-                    const item = resp.result.statisticsUserAccess.find(v => parseInt(v.day.split("-")[2]) === parseInt(day.slice(0, -1)));
-                    return item ? item["mbrType" + searchDto.mbrType + "Cnt"] : 0;
+                    const item = resp.result.statisticsPstAccess.find(v => parseInt(v.day.split("-")[2]) === parseInt(day.slice(0, -1)));
+                    return item ? item.inqCnt : 0;
                 });
 
-                setUserCnt(userCounts)
+                setPstInqCnt(userCounts)
             })
         });
     }
 
     useEffect(() => {
-        getStatisticsUserAccess()
+        getStatisticsPstAccess()
     }, [searchDto]);
+
 
     const chartOptions = {
         chart: {
             id: 'basic-bar',
         },
+        //컬럼명
         xaxis: {
             categories: categories,
         },
@@ -55,8 +56,8 @@ function AccessTabMoveIn(props) {
 
     const series = [
         {
-            name: props.pageName || "사용자",
-            data: userCnt,
+            name: '조회수',
+            data: pstInqCnt,
         },
     ];
 
@@ -65,4 +66,4 @@ function AccessTabMoveIn(props) {
     );
 }
 
-export default AccessTabMoveIn;
+export default AccessTabPst;

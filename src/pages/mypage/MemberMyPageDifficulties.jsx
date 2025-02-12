@@ -18,7 +18,6 @@ function MemberMyPageDifficulties(props) {
 
     const searchTypeRef = useRef();
     const searchValRef = useRef();
-    const acceptFileTypes = 'pdf,hwp,docx,xls,xlsx,ppt';
 
     const [searchDto, setSearchDto] = useState(
         location.state?.searchDto || {
@@ -49,67 +48,11 @@ function MemberMyPageDifficulties(props) {
         })
     }, []);
 
-    const onDrop = useCallback((acceptedFiles) => {
-        const allowedExtensions = acceptFileTypes.split(','); // 허용된 확장자 목록
-        const validFiles = acceptedFiles.filter((file) => {
-            const fileExtension = file.name.split(".").pop().toLowerCase();
-            return allowedExtensions.includes(fileExtension);
-        });
 
-        if (validFiles.length > 0) {
-            setAnswerFileList((prevFiles) => [...prevFiles, ...validFiles]); // 유효한 파일만 추가
-        }
-
-        if (validFiles.length !== acceptedFiles.length) {
-            Swal.fire(
-                `허용되지 않은 파일 유형이 포함되어 있습니다! (허용 파일: ${acceptFileTypes})`
-            );
-        }
-
-    }, [acceptFileTypes]);
-
-    const handleDeleteFile = (index) => {
-        const updatedFileList = answerFileList.filter((_, i) => i !== index);
-        setAnswerFileList(updatedFileList);  // 파일 리스트 업데이트
-    };
-
-    const setFileDel = (atchFileSn) => {
-        Swal.fire({
-            title: "삭제한 파일은 복구할 수 없습니다.\n그래도 삭제하시겠습니까?",
-            showCloseButton: true,
-            showCancelButton: true,
-            confirmButtonText: "확인",
-            cancelButtonText: "취소"
-        }).then((result) => {
-            if(result.isConfirmed) {
-                const requestOptions = {
-                    method: "POST",
-                    headers: {
-                        "Content-type": "application/json",
-                    },
-                    body:  JSON.stringify({
-                        atchFileSn: atchFileSn,
-                    }),
-                };
-
-                EgovNet.requestFetch("/commonApi/setFileDel", requestOptions, (resp) => {
-                    if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
-                        Swal.fire("삭제되었습니다.");
-
-                        const updatedFiles = pstDetail.pstFiles.filter(file => file.atchFileSn !== atchFileSn);
-                        setDfclMttr({ ...dfclMttr, pstFiles: updatedFiles });  // 상태 업데이트
-                    } else {
-                    }
-                });
-            } else {
-                //취소
-            }
-        });
-    }
 
     const getDfclMttrList = useCallback(
         (searchDto) => {
-            const dfclMttrListUrl = "/memeberApi/getMypageDfclMttrList.do";
+            const dfclMttrListUrl = "/memeberApi/getMyPageDfclMttrList.do";
             const requestOptions = {
                 method: "POST",
                 headers: {

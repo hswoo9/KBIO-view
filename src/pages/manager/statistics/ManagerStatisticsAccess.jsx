@@ -30,7 +30,6 @@ function ManagerStatisticsAccess(props) {
         searchMonth : format(nowDate, "MM"),
     });
 
-    // 현재 연도 & 월
     const currentYear = format(nowDate, "yyyy");
 
     const [menuIndex, setMenuIndex] = useState(0);

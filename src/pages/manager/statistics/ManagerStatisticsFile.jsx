@@ -3,7 +3,7 @@ import ManagerLeftNew from "@/components/manager/ManagerLeftStatistics";
 
 import ApexCharts from 'react-apexcharts';
 
-import Tab from '@/pages/manager/statistics/tabGroup/AccessTabCommon';
+import Tab from '@/pages/manager/statistics/tabGroup/AccessTabPstFile';
 
 import {
     format,

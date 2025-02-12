@@ -11,12 +11,12 @@ const commonError = (props) => {
                     <p className="error-message">{location.state?.errorMessage}</p>
                 </div>
                 <p className="error-description">
-                    관리자에게 문의해주세요.
+                    {location.state?.errorSubMessage}
                 </p>
                 <button
                     className="go-home-button"
                     onClick={(e) => {
-                        window.location.href = "/";
+                        window.location.href = location.state?.redirectPath;
                     }}>
                     메인으로
                 </button>
