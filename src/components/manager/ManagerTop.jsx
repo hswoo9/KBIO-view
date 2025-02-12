@@ -104,26 +104,29 @@ function ManagerTop() {
       headers: {
         "Content-type": "application/json",
       },
-      body: "",
+      body: JSON.stringify({userSn : userSn}),
     };
 
-    EgovNet.requestFetch("/commonApi/getDuplicateLogin", requestOptions, (resp) => {
-      if(resp.result.duplicateLogin == "Y"){
-        removeSessionItem("loginUser");
-        removeSessionItem("jToken");
-        removeSessionItem("userSn");
-        navigate(
-            { pathname : URL.COMMON_ERROR},
-            { state : {
-                redirectPath : URL.MANAGER_LOGIN,
-                errorCode: resp.resultCode,
-                errorMessage: resp.resultMessage,
-                errorSubMessage : "메인으로 이동합니다."
+    EgovNet.requestFetch("/commonApi/getDuplicateLogin.do", requestOptions, (resp) => {
+      if(resp.result != null){
+        if(resp.result.duplicateLogin == "Y"){
+          removeSessionItem("loginUser");
+          removeSessionItem("jToken");
+          removeSessionItem("userSn");
+          navigate(
+              { pathname : URL.COMMON_ERROR},
+              { state : {
+                  redirectPath : URL.MANAGER_LOGIN,
+                  errorCode: resp.resultCode,
+                  errorMessage: resp.resultMessage,
+                  errorSubMessage : "메인으로 이동합니다."
+                }
               }
-            }
-        );
+          );
 
+        }
       }
+
     });
   }, [location.pathname]);
 

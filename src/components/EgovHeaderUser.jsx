@@ -461,10 +461,10 @@ function EgovHeader() {
       headers: {
         "Content-type": "application/json",
       },
-      body: "",
+      body: JSON.stringify({userSn : userSn}),
     };
 
-    EgovNet.requestFetch("/commonApi/getDuplicateLogin", requestOptions, (resp) => {
+    EgovNet.requestFetch("/commonApi/getDuplicateLogin.do", requestOptions, (resp) => {
       if(resp.result != null){
         if(resp.result.duplicateLogin == "Y"){
           removeSessionItem("loginUser");

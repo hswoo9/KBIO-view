@@ -146,7 +146,6 @@ function EgovMainUser(props) {
             </div>
             <div className="institution_swiper swiper" data-aos="fade-up" data-aos-duration="1500">
               <MainSwiper />
-              
             </div>
           </div>
         </section>
