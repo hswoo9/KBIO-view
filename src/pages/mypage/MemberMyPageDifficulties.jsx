@@ -4,25 +4,52 @@ import axios from "axios";
 import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
-import { getSessionItem } from "@/utils/storage";
 import EgovPaging from "@/components/EgovPaging";
 
 import Swal from 'sweetalert2';
+import {getComCdList} from "@/components/CommonComponents";
+import { getSessionItem } from "@/utils/storage";
+import moment from "moment/moment.js";
 
 function MemberMyPageDifficulties(props) {
+    const sessionUser = getSessionItem("loginUser");
     const location = useLocation();
-    const [searchDto, setSearchDto] = useState({
-        category: "",
-        keywordType: "",
-        keyword: "",
-        pageIndex: 1,
-    });
-    const [paginationInfo, setPaginationInfo] = useState({});
-    const [dfclMttrList, setAuthorityList] = useState([]);
 
-    const getdfclMttrList = useCallback(
+    const searchTypeRef = useRef();
+    const searchValRef = useRef();
+
+    const [searchDto, setSearchDto] = useState(
+        location.state?.searchDto || {
+            pageIndex: 1,
+            startDt : "",
+            endDt : "",
+            answerYn: "",
+            dfclMttrFld : "",
+            searchType: "",
+            searchVal : "",
+            userSn: sessionUser?.userSn || "",
+        }
+    );
+
+    const activeEnter = (e) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            getDfclMttrList(searchDto);
+        }
+    };
+    const [dfclMttrFldList, setDfclMttrFldList] = useState([]);
+    const [dfclMttrList, setDfclMttrList] = useState([]);
+    const [paginationInfo, setPaginationInfo] = useState({});
+
+    useEffect(() => {
+        getComCdList(15).then((data) => {
+            setDfclMttrFldList(data);
+        })
+    }, []);
+
+    const getDfclMttrList = useCallback(
         (searchDto) => {
-            const dfclMttrListUrl = "/consultingApi/getDfclMttrList.do";
+            const dfclMttrListUrl = "/memeberApi/getMypageDfclMttrList.do";
             const requestOptions = {
                 method: "POST",
                 headers: {
@@ -38,31 +65,29 @@ function MemberMyPageDifficulties(props) {
                     setPaginationInfo(resp.paginationInfo);
                     let dataList = [];
                     dataList.push(
-                        <tr key="no-data">
-                            <td colSpan="9">검색된 결과가 없습니다.</td>
+                        <tr>
+                            <td colSpan="6">애로사항 내역이 없습니다.</td>
                         </tr>
                     );
 
-                    resp.result.getdfclMttrList.forEach(function (item, index) {
-                        
+                    resp.result.diffList.forEach(function (item, index) {
+                        if (index === 0) dataList = []; // 목록 초기화
+
                         dataList.push(
-                            <tr key={item.userSn}>
-                                <td>{itemNumber}</td>
-                                <td></td>
-                                <td>{item.ttl}</td>
-                                <td></td>
-                                <td>{item.actvtnYn === 'Y' ? '공개' :
-                                    item.actvtnYn === 'W' ? '비공개' :
-                                    item.actvtnYn === 'R' ? '비공개' :
-                                    item.actvtnYn === 'C' ? '비공개' :
-                                    item.actvtnYn === 'S' ? '비공개' : ''}
+                            <tr key={item.pstSn}>
+                                <td>
+                                    {resp.paginationInfo.totalRecordCount - (resp.paginationInfo.currentPageNo - 1) * resp.paginationInfo.pageSize - index}
                                 </td>
-                                <td></td>
-                                <td></td>
+                                <td>{item.dfclMttrFldNm}</td>
+                                <td>{item.ttl}</td>
+                                <td>{item.kornFlnm}</td>
+                                <td>{moment(item.frstCrtDt).format('YYYY-MM-DD')}</td>
+                                <td>{item.answer == "Y" ? "답변완료" : "답변대기"}</td>
                             </tr>
                         );
                     });
-                    setAuthorityList(dataList);
+                    setDfclMttrList(dataList);
+                    setPaginationInfo(resp.paginationInfo);
                 },
                 function (resp) {
                     console.log("err response : ", resp);
@@ -70,12 +95,13 @@ function MemberMyPageDifficulties(props) {
             );
 
         },
-        [searchDto]
+        [dfclMttrList,searchDto]
     );
 
     useEffect(()=>{
-        getdfclMttrList(searchDto);
+        getDfclMttrList(searchDto);
     }, []);
+
 
     return (
         <div id="container" className="container ithdraw join_step">
@@ -118,7 +144,7 @@ function MemberMyPageDifficulties(props) {
                     <form action="">
                         <ul className="cateList" style={{display: 'flex', flexWrap: 'wrap', gap: '10px'}}>
                             <li className="inputBox type1" style={{flex: '1  10%'}}>
-                                <p className="title">자문분야</p>
+                                <p className="title">상태</p>
                                 <div className="itemBox">
                                     <select className="selectGroup">
                                         <option value="">전체</option>
@@ -128,36 +154,59 @@ function MemberMyPageDifficulties(props) {
                                 </div>
                             </li>
                             <li className="inputBox type1" style={{flex: '1  10%'}}>
-                                <p className="title">컨설팅 활동</p>
+                                <p className="title">분야</p>
                                 <div className="itemBox">
-                                    <select className="selectGroup">
+                                    <select
+                                        className="selectGroup"
+                                        name="dfclMttrFld"
+                                        onChange={(e) => {
+                                            setSearchDto({...searchDto, dfclMttrFld: e.target.value})
+                                        }}
+                                    >
                                         <option value="">전체</option>
-                                        <option value="1">공개</option>
-                                        <option value="2">비공개</option>
+                                        {dfclMttrFldList.map((item, index) => (
+                                            <option value={item.comCdSn} key={item.comCdSn}>{item.comCdNm}</option>
+                                        ))}
                                     </select>
                                 </div>
                             </li>
                             <li className="inputBox type1" style={{flex: '1  10%'}}>
                                 <p className="title">키워드</p>
                                 <div className="itemBox">
-                                    <select className="selectGroup">
+                                    <select
+                                        className="selectGroup"
+                                        id="searchType"
+                                        name="searchType"
+                                        title="검색유형"
+                                        ref={searchTypeRef}
+                                        onChange={(e) => {
+                                            setSearchDto({...searchDto, searchType: e.target.value})
+                                        }}
+                                    >
                                         <option value="">전체</option>
-                                        <option value="1">성명</option>
-                                        <option value="2">소속</option>
-                                        <option value="3">직위</option>
+                                        <option value="ttl">제목</option>
+                                        <option value="kornFlnm">신청자</option>
+                                        <option value="dfclMttrCn">내용</option>
                                     </select>
                                 </div>
                             </li>
-                            <li className="searchBox inputBox type1" style={{flex: '1 40%', marginTop:"25px"}}>
+                            <li className="searchBox inputBox type1" style={{flex: '1 40%', marginTop: "25px"}}>
                                 <label className="input">
                                     <input type="text" id="search" name="search" placeholder="검색어를 입력해주세요"/>
                                 </label>
                             </li>
-                            <div className="rightBtn" style={{display: 'flex', gap: '10px', marginTop:"25px"}}>
+                            <div className="rightBtn" style={{display: 'flex', gap: '10px', marginTop: "25px"}}>
                                 <button type="button" className="refreshBtn btn btn1 gray">
                                     <div className="icon"></div>
                                 </button>
-                                <button type="button" className="searchBtn btn btn1 point">
+                                <button type="button" className="searchBtn btn btn1 point"
+                                        onClick={() => {
+                                            getDfclMttrList({
+                                                ...searchDto,
+                                                pageIndex: 1
+                                            });
+                                        }}
+                                >
                                     <div className="icon"></div>
                                 </button>
                             </div>
@@ -171,16 +220,21 @@ function MemberMyPageDifficulties(props) {
                     </div>
                     <div className="tableBox type1">
                         <table>
-                            <caption>전문가목록</caption>
+                            <caption>애로사항목록</caption>
+                            <col width="80"/>
+                            <col width="150"/>
+                            <col width="300"/>
+                            <col width="150"/>
+                            <col width="150"/>
+                            <col width="150"/>
                             <thead>
                             <tr>
                                 <th>번호</th>
-                                <th>분야</th>
-                                <th>컨설턴트</th>
+                                <th>분류</th>
                                 <th>제목</th>
-                                <th>의뢰일시</th>
+                                <th>신청자</th>
+                                <th>신청일</th>
                                 <th>상태</th>
-                                <th>만족도</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -193,7 +247,7 @@ function MemberMyPageDifficulties(props) {
                         <EgovPaging
                             pagination={paginationInfo}
                             moveToPage={(passedPage) => {
-                                getdfclMttrList({
+                                getDfclMttrList({
                                     ...searchDto,
                                     pageIndex: passedPage,
                                 })
