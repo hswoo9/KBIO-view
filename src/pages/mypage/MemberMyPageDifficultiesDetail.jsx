@@ -83,6 +83,7 @@ function MemberMyPageDifficultiesDetail(props) {
 
                 {/* 애로사항 상세 내용 */}
                 <div className="detailBox" style={{marginTop: "20px"}}>
+                    {difficultiesDetail ? (
                         <div className="contBox infoWrap customContBox"
                              style={{padding: "20px", background: "#f9f9f9", borderRadius: "5px"}}>
                             <ul className="inputWrap" style={{listStyleType: "none", paddingLeft: "0"}}>
@@ -134,15 +135,14 @@ function MemberMyPageDifficultiesDetail(props) {
                                 <ul className="inputWrap" style={{listStyleType: "none", paddingLeft: "0"}}>
                                     <li className="inputBox type1 width1" style={{marginBottom: "10px"}}>
                                         <label className="title"
-                                               style={{fontWeight: "bold"}}><small>답변내용</small></label>
-                                        <div className="input"
-                                             style={{marginTop: "5px"}}>{difficultiesDetail?.ansCn}</div>
+                                               style={{fontWeight: "bold"}}><small>의뢰내용</small></label>
+                                        <div className="input" style={{marginTop: "5px"}}
+                                             dangerouslySetInnerHTML={{__html: difficultiesDetail.ansCn}}></div>
                                     </li>
                                     <li className="inputBox type1 width1" style={{marginBottom: "10px"}}>
-                                        <label className="title"
-                                               style={{fontWeight: "bold"}}><small>답변날짜</small></label>
+                                        <label className="title" style={{fontWeight: "bold"}}><small>답변날짜</small></label>
                                         <div className="input"
-                                             style={{marginTop: "5px"}}>{difficultiesDetail?.ansCn}</div>
+                                             style={{marginTop: "5px"}}>{moment(difficultiesDetail.ansRegDt).format('YYYY-MM-DD')}</div>
                                     </li>
                                     <li className="inputBox type1 width1" style={{marginBottom: "10px"}}>
                                         <label className="title" style={{fontWeight: "bold"}}><small>답변
@@ -165,19 +165,22 @@ function MemberMyPageDifficultiesDetail(props) {
                                 </ul>
                             </div>
                         </div>
-                </div>
-                <div className="buttonBox">
-                    <div className="rightBox">
-                        <NavLink
-                            to={URL.MEMBER_MYPAGE_DIFFICULTIES}
-                            className="btn btn_blue_h46 w_100"
-                        >
-                            <button type="button" className="clickBtn black"><span>목록</span></button>
-                        </NavLink>
-                    </div>
+                    ) : (
+                        <div className="contBox infoWrap customContBox"
+                             style={{padding: "20px", background: "#f9f9f9", borderRadius: "5px"}}>
+                            <ul className="inputWrap" style={{listStyleType: "none", paddingLeft: "0"}}>
+                                <li className="inputBox type1 width1" style={{marginBottom: "10px"}}>
+                                    <label className="title" style={{fontWeight: "bold"}}><small>상세 정보가
+                                        없습니다.</small></label>
+                                    <div className="input" style={{marginTop: "5px"}}>해당 애로사항의 상세 정보가 없습니다.</div>
+                                </li>
+                            </ul>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
+
     );
 }
 
