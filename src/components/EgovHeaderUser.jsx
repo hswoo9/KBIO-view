@@ -2,6 +2,7 @@ import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
 import React, {useEffect, useRef, useState} from "react";
 
 import * as EgovNet from "@/api/egovFetch";
+import * as ComScript from "@/components/CommonScript";
 import {getMenu } from "@/components/CommonComponents";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
@@ -385,14 +386,34 @@ function EgovHeader() {
   }, []);
 
   useEffect(() => {
-    userJs();
+    //userJs();
   });
+
+  const closeLoginModal = () => {
+    const element = document.querySelector(".loginModal");
+    if(element){
+      const htmlElement = document.querySelector("html");
+      const bodyElement = document.querySelector("body");
+      if(htmlElement){
+        htmlElement.style.overflow = "visible";
+      }
+      if(bodyElement){
+        bodyElement.style.overflow = "visible";
+      }
+      element.classList.remove("open");
+    }
+  }
 
   useEffect(() => {
     if(window.location.pathname != "/"){
       const element = document.querySelector(".user.main");
       if(element){
         element.classList.remove("main");
+      }
+    }else{
+      const element = document.querySelector("#wrap");
+      if(element){
+        element.classList.add("main");
       }
     }
   }, [window.location.pathname]);
@@ -487,7 +508,7 @@ function EgovHeader() {
                     {/*<NavLink
                         to={URL.LOGIN}
                     >*/}
-                    <button type="button" className="loginBtn"><span>로그인</span></button>
+                    <button type="button" className="loginBtn" onClick={() => ComScript.openModal("loginModal")}><span>로그인</span></button>
                     {/*</NavLink>*/}
                     <NavLink
                         to={URL.SIGNUP_CHOICE}
@@ -561,10 +582,10 @@ function EgovHeader() {
           </div>
         </div>
         <div className="loginModal modalCon">
-          <div className="bg"></div>
+          <div className="bg" onClick={() => ComScript.closeModal("loginModal")}></div>
           <div className="m-inner">
             <div className="boxWrap">
-              <div className="close">
+              <div className="close" onClick={() => ComScript.closeModal("loginModal")}>
                 <div className="icon"></div>
               </div>
               <form className="box">
@@ -621,10 +642,10 @@ function EgovHeader() {
                 <button type="button" className="loginBtn" onClick={submitFormHandler}><span>로그인</span></button>
                 <ul className="botBtnBox">
                   <li>
-                    <button type="button" className="idBtn"><span>아이디 찾기</span></button>
+                    <button type="button" className="idBtn" onClick={() => ComScript.openModal("findId")}><span>아이디 찾기</span></button>
                   </li>
                   <li>
-                    <button type="button" className="pwBtn"><span>비밀번호 찾기</span></button>
+                    <button type="button" className="pwBtn" onClick={() => ComScript.openModal("findPwd")}><span>비밀번호 찾기</span></button>
                   </li>
                   <li>
                     <button type="button" className="signUp" onClick={handleSignUp}><span>회원가입</span></button>
@@ -649,10 +670,10 @@ function EgovHeader() {
           </div>
         </div>
         <div className="findId modalCon">
-          <div className="bg"></div>
+          <div className="bg" onClick={() => ComScript.closeModal("findId")}></div>
           <div className="m-inner">
             <div className="boxWrap">
-              <div className="close">
+              <div className="close" onClick={() => ComScript.closeModal("findId")}>
                 <div className="icon"></div>
               </div>
               <form className="box">
@@ -691,10 +712,10 @@ function EgovHeader() {
           </div>
         </div>
         <div className="findPwd modalCon">
-          <div className="bg"></div>
+          <div className="bg" onClick={() => ComScript.closeModal("findPwd")}></div>
           <div className="m-inner">
             <div className="boxWrap">
-              <div className="close">
+              <div className="close" onClick={() => ComScript.closeModal("findPwd")}>
                 <div className="icon"></div>
               </div>
               <form className="box">

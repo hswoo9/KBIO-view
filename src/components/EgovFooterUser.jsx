@@ -2,7 +2,7 @@ import { getComCdList } from "@/components/CommonComponents";
 
 import logoWhite from "@/assets/images/logo_white.svg";
 import React, {useEffect, useState} from "react";
-import {getBnrPopupList} from "./MainComponents.jsx";
+import {getBnrPopupList} from "@/components/main/MainComponents";
 
 function EgovFooterUser() {
   const [comCdList, setComCdList] = useState([]);
