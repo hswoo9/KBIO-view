@@ -3,6 +3,7 @@ import {Link, NavLink, useLocation, useNavigate} from "react-router-dom";
 import * as EgovNet from "@/api/egovFetch";
 import 'moment/locale/ko';
 import EgovPaging from "@/components/EgovPaging";
+import URL from "@/constants/url";
 import CommonSubMenu from "@/components/CommonSubMenu";
 
 import {getSessionItem} from "../../utils/storage.js";
@@ -42,7 +43,7 @@ function ConsultantList(props) {
     const editClick = () => {
         if(sessionUser){
             navigate(
-                { pathname : "" },
+                { pathname : URL.CONSULTING_CREATE },
                 {
                     state : {
                         callBackUrl : URL.CONSULTANT_LIST,
@@ -104,8 +105,7 @@ function ConsultantList(props) {
                                              fontWeight: 'bold',
                                              marginBottom: '10px',
                                          }}>
-                                             <NavLink
-                                                      to={URL.CONSULTANT_DETAIL}
+                                             <NavLink to={URL.CONSULTANT_DETAIL}
                                                       state={{
                                                           userSn: item.tblUser.userSn,
                                                           menuSn : location.state?.menuSn,

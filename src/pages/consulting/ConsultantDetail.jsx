@@ -3,9 +3,12 @@ import { useNavigate, useLocation, Link, NavLink } from "react-router-dom";
 import * as EgovNet from "@/api/egovFetch";
 import CommonSubMenu from "@/components/CommonSubMenu";
 import URL from "@/constants/url";
+import Swal from "sweetalert2";
+import {getSessionItem} from "../../utils/storage.js";
 
 
 function ConsultantDetail(props) {
+    const sessionUser = getSessionItem("loginUser");
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -14,10 +17,53 @@ function ConsultantDetail(props) {
     });
 
     const [consultantDetail, setConsultantDetail] = useState(null);
+    const [memberDetail, setMemberDetail] = useState(null);
 
+
+    const editClick = () => {
+        if(sessionUser){
+            navigate(
+                { pathname : URL.CONSULTING_CREATE },
+                {
+                    state : {
+                        callBackUrl : URL.CONSULTANT_LIST,
+                        menuSn : location.state?.menuSn,
+                        menuNmPath : location.state?.menuNmPath,
+                    }
+                });
+        }else{
+            Swal.fire("로그인이 필요한 서비스 입니다.");
+            document.getElementsByClassName("loginModal").item(0).classList.add("open")
+            document.documentElement.style.overflow = 'hidden';
+            document.body.style.overflow = 'hidden';
+        }
+    }
     const getConsultantDetail = () => {
+        const getConsultantDetailUrl = "/consultingApi/getConsultantDetail.do";
+        const requestOptions = {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json",
+            },
+            body: JSON.stringify(searchDto),
+        };
 
+        EgovNet.requestFetch(
+            getConsultantDetailUrl,
+            requestOptions,
+            (resp) => {
+                setConsultantDetail(resp.result.consultant);
+                setMemberDetail(resp.result.memberDetail);
+            },
+            (error) => {
+                console.error("Error fetching operational detail:", error);
+            }
+        );
     };
+
+    useEffect(() => {
+        getConsultantDetail();
+    }, [searchDto]);
 
 
     return(
@@ -25,7 +71,7 @@ function ConsultantDetail(props) {
             <div className="inner">
                 <CommonSubMenu/>
                 <h2 className="pageTitle">
-                    <p>{consultantDetail?.mvnEntNm || "기업"} 상세보기</p>
+                    <p>{consultantDetail?.ogdpNm || ""} (대표) {memberDetail?.kornFlnm || ""}</p>
                 </h2>
 
                 {consultantDetail && (
@@ -46,7 +92,7 @@ function ConsultantDetail(props) {
                             >
                                 <img
                                     src="/src/assets/images/ico_logo_kakao.svg"
-                                    alt="기업 로고"
+                                    alt="컨설턴트사진"
                                     style={{
                                         width: "100%",
                                         height: "100%",
@@ -57,10 +103,7 @@ function ConsultantDetail(props) {
 
                             <div style={{flex: 1}}>
                                 <p style={{fontSize: "30px", fontWeight: "bold", marginBottom: "10px"}}>
-                                    {consultantDetail.mvnEntNm}
-                                </p>
-                                <p style={{fontSize: "14px", color: "#555", lineHeight: "1.6"}}>
-                                    {consultantDetail.description}
+                                    {memberDetail.kornFlnm || ""}
                                 </p>
                             </div>
                         </div>
@@ -68,33 +111,20 @@ function ConsultantDetail(props) {
                         <div style={{padding: "20px 0", borderBottom: "1px solid #ddd"}}>
                             <h3 style={{fontSize: "18px", fontWeight: "bold", marginBottom: "10px"}}>상세정보</h3>
                             <div style={{display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px 20px"}}>
-                                <p><strong>대표 성함:</strong> {consultantDetail.rpsvNm}</p>
-                                <p><strong>참여 기관:</strong> {consultantDetail.partOrg || "-"}</p>
-                                <p><strong>대표 전화:</strong> {consultantDetail.entTelno}</p>
-                                <p><strong>업종:</strong> {consultantDetail.bizType || "-"}</p>
-                                <p><strong>대표 메일:</strong> {consultantDetail.email || "-"}</p>
-                                <p><strong>소재지:</strong> {consultantDetail.address || "-"}</p>
-                                <p style={{gridColumn: "span 2"}}>
-                                    <strong>홈페이지 주소:</strong>{" "}
-                                    <a
-                                        href={consultantDetail.hmpgAddr}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        style={{color: "#007bff", textDecoration: "none"}}
-                                    >
-                                        {consultantDetail.hmpgAddr}
-                                    </a>
-                                </p>
+                                <p><strong>소속:</strong> {consultantDetail.ogdpNm || "-"}</p>
+                                <p><strong>직위:</strong> {consultantDetail.jbpsNm || "-"}</p>
+                                <p><strong>이름:</strong> {memberDetail.kornFlnm}</p>
+                                <p><strong>이메일:</strong> {memberDetail.email || "-"}</p>
+                                <p><strong>경력:</strong> {consultantDetail.crrPrd || "-"} 년</p>
+                                <p><strong>컨설팅 항목:</strong> {consultantDetail.cnsltArtcl || "-"}</p>
                             </div>
                         </div>
 
                         <div style={{padding: "20px 0"}}>
-                            <h3 style={{fontSize: "18px", fontWeight: "bold", marginBottom: "10px"}}>주요 이력</h3>
+                            <h3 style={{fontSize: "18px", fontWeight: "bold", marginBottom: "10px"}}>컨설턴트 소개</h3>
                             <ul style={{paddingLeft: "20px", lineHeight: "1.8", color: "#555"}}>
-                                {consultantDetail.historyList?.length > 0 ? (
-                                    consultantDetail.historyList.map((history, index) => (
-                                        <li key={index}>{history}</li>
-                                    ))
+                                {consultantDetail.cnsltSlfint?.length > 0 ? (
+                                    <li>{consultantDetail.cnsltSlfint}</li>
                                 ) : (
                                     <li>등록된 이력이 없습니다.</li>
                                 )}
@@ -102,6 +132,21 @@ function ConsultantDetail(props) {
                         </div>
                         <div className="buttonBox">
                             <div className="leftBox">
+                                <button
+                                    type="button"
+                                    className="writeBtn clickBtn"
+                                    onClick={editClick}
+                                >
+                                    <span>컨설팅 의뢰</span>
+                                </button>
+                                <button
+                                    type="button"
+                                    className="writeBtn clickBtn"
+                                    onClick={editClick}
+                                >
+                                    <span>간편상담</span>
+                                </button>
+                            </div>
                                 <NavLink
                                     to={URL.CONSULTANT_LIST}
                                     state={{
@@ -112,7 +157,7 @@ function ConsultantDetail(props) {
                                         <span>목록</span>
                                     </button>
                                 </NavLink>
-                            </div>
+
                         </div>
                     </div>
                 )}
