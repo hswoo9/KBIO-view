@@ -230,8 +230,10 @@ const URL = {
   MANAGER_DIFFICULTIES : "/manager/difficulties", //운영지원/애로사항관리
   MANAGER_DIFFICULTIES_MODIFY : "/manager/difficulties/modifiy", //운영지원/애로사항관리 답변
 
+  //컨설팅지원
   MANAGER_CONSULTING_EXPERT: "/manager/expert",
   MANAGER_CONSULTING_MATCHING: "/manager/matching",
+  MANAGER_SIMPLE_CONSULTING: "/manager/simpleconsulting",
   MANAGER_MEMBER: "/manager/member",
   MANAGER_MEMBER_ALL_MEMBER: "/manager/allMember",
   

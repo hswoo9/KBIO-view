@@ -5,17 +5,17 @@ import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
 
+import ManagerLeft from "@/components/manager/ManagerLeftConsulting";
 import EgovPaging from "@/components/EgovPaging";
 
 import Swal from 'sweetalert2';
 
 /* bootstrip */
 import { getSessionItem } from "@/utils/storage";
-import {getComCdList} from "../../../../components/CommonComponents.jsx";
+import {getComCdList} from "../../../components/CommonComponents.jsx";
 import moment from "moment/moment.js";
-import ManagerLeftOperationalSupport from "../../../../components/manager/ManagerLeftOperationalSupport.jsx";
 
-function OperationalDifficulties(props) {
+function ManagerSimpleCnslt(props) {
     const sessionUser = getSessionItem("loginUser");
     const location = useLocation();
 
@@ -25,30 +25,33 @@ function OperationalDifficulties(props) {
     const [searchDto, setSearchDto] = useState(
         location.state?.searchDto || {
             pageIndex: 1,
+            //cnsltSttsCd : 26,
+            cnsltSe : 27,
             startDt : "",
             endDt : "",
-            answerYn: "",
-            dfclMttrFld : "",
+            cnsltFld: "",
             searchType: "",
             searchVal : "",
         }
     );
-    /** 애로사항 분야 코드 */
-    const [dfclMttrFldList, setDfclMttrFldList] = useState([]);
+    const [consultingList, setConsultingList] = useState([]);
+    /** 컨설팅 분야 코드 */
+    const [cnsltFldList, setCnsltFldList] = useState([]);
+    /** 컨설팅 상태 코드 */
+    const [cnsltSttsCdList, setCnsltSttsCd] = useState([]);
 
-    const [dfclMttrList, setDfclMttrList] = useState([]);
     const [paginationInfo, setPaginationInfo] = useState({});
 
     const activeEnter = (e) => {
         if (e.key === "Enter") {
             e.preventDefault();
-            getDfclMttrList(searchDto);
+            getConsultingList(searchDto);
         }
     };
 
-    const getDfclMttrList = useCallback(
+    const getConsultingList = useCallback(
         (searchDto) => {
-            const pstListURL = "/diffApi/getDfclMttrList.do";
+            const pstListURL = "/consultingApi/getConsultingList.do";
             const requestOptions = {
                 method: "POST",
                 headers: {
@@ -63,34 +66,28 @@ function OperationalDifficulties(props) {
                     let dataList = [];
                     dataList.push(
                         <tr>
-                            <td colSpan="6">검색된 결과가 없습니다.</td>
+                            <td colSpan={9}>검색된 결과가 없습니다.</td>
                         </tr>
                     );
 
-                    resp.result.diffList.forEach(function (item, index) {
+                    resp.result.consultantList.forEach(function (item, index) {
                         if (index === 0) dataList = []; // 목록 초기화
 
                         dataList.push(
-                            <tr key={item.pstSn}>
-                                <td>
-                                    {resp.paginationInfo.totalRecordCount - (resp.paginationInfo.currentPageNo - 1) * resp.paginationInfo.pageSize - index}
-                                </td>
-                                <td>{item.dfclMttrFldNm}</td>
-                                <td>
-                                    <NavLink to={URL.MANAGER_DIFFICULTIES_MODIFY}
-                                          mode={CODE.MODE_MODIFY}
-                                          state={{dfclMttrSn: item.dfclMttrSn}}
-                                    >
-                                        {item.ttl}
-                                    </NavLink>
-                                </td>
-                                <td>{item.kornFlnm}</td>
+                            <tr key={item.cnsltAplySn}>
+                                <td>{index + 1}</td>
+                                <td>{item.cnsltFld}</td>
+                                <td>{item.cnslttKornFlnm}</td>
+                                <td>{item.ogdpNm}</td>
+                                <td>{item.ttl}</td>
+                                <td>{item.kornFlnm || ""}</td>
                                 <td>{moment(item.frstCrtDt).format('YYYY-MM-DD')}</td>
-                                <td>{item.answer == "Y" ? "답변완료" : "답변대기"}</td>
+                                <td>{item.cnsltSttsCd}</td>
+                                <td>{item.dgstfnArtcl || "미등록"}</td>
                             </tr>
                         );
                     });
-                    setDfclMttrList(dataList);
+                    setConsultingList(dataList);
                     setPaginationInfo(resp.paginationInfo);
                 },
                 function (resp) {
@@ -98,34 +95,43 @@ function OperationalDifficulties(props) {
                 }
             )
         },
-        [dfclMttrList, searchDto]
+        [consultingList, searchDto]
     );
 
     useEffect(() => {
-        getDfclMttrList(searchDto);
+        getConsultingList(searchDto);
     }, []);
 
     useEffect(() => {
-        getComCdList(15).then((data) => {
-            setDfclMttrFldList(data);
+        getComCdList(10).then((data) => {
+            setCnsltFldList(data);
+            console.log("cnsltFldList : " , cnsltFldList);
         })
     }, []);
 
+    useEffect(() => {
+        getComCdList(14).then((data) => {
+            setCnsltSttsCd(data);
+            console.log("cnsltSttsCd : " , cnsltSttsCdList);
+        })
+    }, []);
+
+
     return (
         <div id="container" className="container layout cms">
-            <ManagerLeftOperationalSupport/>
+            <ManagerLeft/>
             <div className="inner">
-                <h2 className="pageTitle"><p>애로사항관리</p></h2>
+                <h2 className="pageTitle"><p>간편의뢰 관리</p></h2>
                 <div className="cateWrap">
                     <form action="">
                         <ul className="cateList">
-                            <li className="searchBox inputBox type1" style={{width: "55%"}}>
+                            <li className="searchBox inputBox type1" style={{width:"55%"}}>
                                 <p className="title">신청일</p>
                                 <div className="input">
                                     <input type="date"
                                            id="startDt"
                                            name="startDt"
-                                           style={{width: "47%"}}
+                                           style={{width:"47%"}}
                                            onChange={(e) =>
                                                setSearchDto({
                                                    ...searchDto,
@@ -136,7 +142,7 @@ function OperationalDifficulties(props) {
                                     <input type="date"
                                            id="endDt"
                                            name="endDt"
-                                           style={{width: "47%"}}
+                                           style={{width:"47%"}}
                                            onChange={(e) =>
                                                setSearchDto({
                                                    ...searchDto,
@@ -146,40 +152,41 @@ function OperationalDifficulties(props) {
                                     />
                                 </div>
                             </li>
-                            <li className="inputBox type1" style={{width: "25%"}}>
-                                <p className="title">상태</p>
+                            <li className="inputBox type1" style={{width:"25%"}}>
+                                <p className="title">자문분야</p>
                                 <div className="itemBox">
                                     <select
                                         className="selectGroup"
-                                        name="answer"
+                                        name="cnsltFld"
                                         onChange={(e) => {
-                                            setSearchDto({...searchDto, answerYn: e.target.value})
+                                            setSearchDto({...searchDto, cnsltFld: e.target.value})
                                         }}
                                     >
                                         <option value="">전체</option>
-                                        <option value="N">답변대기</option>
-                                        <option value="Y">답변완료</option>
-                                    </select>
-                                </div>
-                            </li>
-                            <li className="inputBox type1" style={{width: "25%"}}>
-                                <p className="title">분류</p>
-                                <div className="itemBox">
-                                    <select
-                                        className="selectGroup"
-                                        name="dfclMttrFld"
-                                        onChange={(e) => {
-                                            setSearchDto({...searchDto, dfclMttrFld: e.target.value})
-                                        }}
-                                    >
-                                        <option value="">전체</option>
-                                        {dfclMttrFldList.map((item, index) => (
+                                        {cnsltFldList.map((item, index) => (
                                             <option value={item.comCdSn} key={item.comCdSn}>{item.comCdNm}</option>
                                         ))}
                                     </select>
                                 </div>
                             </li>
-                            <li className="inputBox type1" style={{width: "25%"}}>
+                            <li className="inputBox type1" style={{width:"25%"}}>
+                                <p className="title">상태</p>
+                                <div className="itemBox">
+                                    <select
+                                        className="selectGroup"
+                                        name="cnsltSttsCd"
+                                        onChange={(e) => {
+                                            setSearchDto({...searchDto, cnsltSttsCd: e.target.value})
+                                        }}
+                                    >
+                                        <option value="">전체</option>
+                                        {cnsltSttsCdList.map((item, index) => (
+                                            <option value={item.comCdSn} key={item.comCdSn}>{item.comCdNm}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                            </li>
+                            <li className="inputBox type1" style={{width:"25%"}}>
                                 <p className="title">키워드</p>
                                 <div className="itemBox">
                                     <select
@@ -193,13 +200,13 @@ function OperationalDifficulties(props) {
                                         }}
                                     >
                                         <option value="">전체</option>
-                                        <option value="ttl">제목</option>
-                                        <option value="kornFlnm">신청자</option>
-                                        <option value="dfclMttrCn">내용</option>
+                                        <option value="kornFlnm">성명</option>
+                                        <option value="ogdpNm">소속</option>
+                                        <option value="jbpsNm">직위</option>
                                     </select>
                                 </div>
                             </li>
-                            <li className="searchBox inputBox type1" style={{width: "30%"}}>
+                            <li className="searchBox inputBox type1" style={{width:"30%"}}>
                                 <label className="input">
                                     <input
                                         type="text"
@@ -219,14 +226,7 @@ function OperationalDifficulties(props) {
                             <button type="button" className="refreshBtn btn btn1 gray">
                                 <div className="icon"></div>
                             </button>
-                            <button type="button" className="searchBtn btn btn1 point"
-                                onClick={() => {
-                                    getDfclMttrList({
-                                        ...searchDto,
-                                        pageIndex: 1
-                                    });
-                                }}
-                            >
+                            <button type="button" className="searchBtn btn btn1 point">
                                 <div className="icon"></div>
                             </button>
                         </div>
@@ -234,10 +234,8 @@ function OperationalDifficulties(props) {
                 </div>
                 <div className="contBox board type1 customContBox">
                     <div className="topBox">
-                        <p className="resultText">
-                            전체 : <span className="red">{paginationInfo.totalRecordCount}</span>건
-                            페이지 : <span className="red">{paginationInfo.currentPageNo}/{paginationInfo.totalPageCount}</span>
-                        </p>
+                        <p className="resultText">전체 : <span className="red">0</span>건 페이지 : <span
+                            className="red">1/400</span></p>
                         <div className="rightBox">
                             <button type="button" className="btn btn2 downBtn red">
                                 <div className="icon"></div>
@@ -246,27 +244,22 @@ function OperationalDifficulties(props) {
                     </div>
                     <div className="tableBox type1">
                         <table>
-                            <caption>애로사항목록</caption>
-                            <colgroup>
-                                <col width="80"/>
-                                <col width="150"/>
-                                <col/>
-                                <col width="150"/>
-                                <col width="150"/>
-                                <col width="150"/>
-                            </colgroup>
+                            <caption>전문가목록</caption>
                             <thead>
                             <tr>
                                 <th>번호</th>
-                                <th>분류</th>
+                                <th>자문분야</th>
+                                <th>컨설턴트</th>
+                                <th>소속</th>
                                 <th>제목</th>
                                 <th>신청자</th>
                                 <th>신청일</th>
                                 <th>상태</th>
+                                <th>만족도</th>
                             </tr>
                             </thead>
                             <tbody>
-                            {dfclMttrList}
+                            {consultingList}
                             </tbody>
                         </table>
                     </div>
@@ -275,7 +268,7 @@ function OperationalDifficulties(props) {
                         <EgovPaging
                             pagination={paginationInfo}
                             moveToPage={(passedPage) => {
-                                getDfclMttrList({
+                                getConsultingList({
                                     ...searchDto,
                                     pageIndex: passedPage
                                 });
@@ -288,4 +281,4 @@ function OperationalDifficulties(props) {
     );
 }
 
-export default OperationalDifficulties;
+export default ManagerSimpleCnslt;

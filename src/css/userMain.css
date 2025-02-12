@@ -1,8 +1,8 @@
-header {background: transparent;}
-header.scroll {background: var(--mainColor3);}
-header .hInner {padding-bottom: 0;}
-header .hInner .hBot {background: transparent; height: auto;}
-header .hInner .hBot .bot {display: none;}
+.user.main header {background: transparent;}
+.user.main header.scroll {background: var(--mainColor3);}
+.user.main header .hInner {padding-bottom: 0;}
+.user.main header .hInner .hBot {background: transparent; height: auto;}
+.user.main header .hInner .hBot .bot {display: none;}
 .main.container {padding-top: 0 !important;}
 
 

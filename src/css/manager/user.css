@@ -407,6 +407,7 @@ footer .inner > .right .snsBox .youtube .icon {background-image: url(../../asset
 	footer .inner > .center .linkBox li:not(:last-child):after {right: -1.1rem;}
 }
 @media screen and (max-width: 1024px) {
+	.main .sec01 .bg img {transform: scale(10.05);}
 	html {font-size: 16.5px;}
 	header .hInner .hBot {border-radius: 1.5rem; padding: 1em 30px 4.6rem;}
 	header .hInner .hBot .top h1 {max-width: 95px; width: 100%;}
@@ -443,7 +444,7 @@ footer .inner > .right .snsBox .youtube .icon {background-image: url(../../asset
 
 @media screen and (max-width: 768px) {
 	html {font-size: 16px;}
-
+	.main .sec01 .bg img {transform: scale(10.05);}
 	.main .sec .secTitle {font-size: 2rem;}
 	.main .sec .secText {font-size: 1.1rem;}
 	.main .sec02 .inner .institution_swiper .swiper-slide {width: 75%;}
@@ -457,6 +458,7 @@ footer .inner > .right .snsBox .youtube .icon {background-image: url(../../asset
 }
 @media screen and (max-width: 480px) {
 	html {font-size: 15px;}
+	.main .sec01 .bg img {transform: scale(10.05);}
 	header .hInner .hTop {padding: 0;}
 	header .hInner .hTop .alarmWrap .selectBox {max-width: 12rem;}
 	footer .inner > .right {flex-direction: column; align-items: flex-start; gap: 1rem;}

@@ -25,7 +25,8 @@ function ManagerMatching(props) {
     const [searchDto, setSearchDto] = useState(
         location.state?.searchDto || {
             pageIndex: 1,
-            cnsltSttsCd : 26,
+            //cnsltSttsCd : 26,
+            cnsltSe : 26,
             startDt : "",
             endDt : "",
             cnsltFld: "",
@@ -62,43 +63,32 @@ function ManagerMatching(props) {
                 pstListURL,
                 requestOptions,
                 (resp) => {
-                    // let dataList = [];
-                    // dataList.push(
-                    //     <tr>
-                    //         <td colSpan={resp.result.bbs.atchFileYn == "Y" ? "5" : "4"}>검색된 결과가 없습니다.</td>
-                    //     </tr>
-                    // );
-                    //
-                    // resp.result.pstList.forEach(function (item, index) {
-                    //     if (index === 0) dataList = []; // 목록 초기화
-                    //
-                    //     dataList.push(
-                    //         <tr key={item.pstSn}>
-                    //             <td>
-                    //                 {item.upendNtcYn == "Y" ?
-                    //                     "공지" :
-                    //                     resp.paginationInfo.totalRecordCount - (resp.paginationInfo.currentPageNo - 1) * resp.paginationInfo.pageSize - index}
-                    //             </td>
-                    //             <td style={{textAlign: "left", paddingLeft: "15px"}}>
-                    //                 <a onClick={() => {
-                    //                     resp.result.authrt.inqAuthrt == "Y" ? pstDetailHandler(item, rlsYnFlag) : Swal.fire("읽기 권한이 없습니다.")
-                    //                 }}
-                    //                    style={{cursor:"pointer"}}>
-                    //                     {reTag ? <span dangerouslySetInnerHTML={{__html: reTag}} style={{marginRight: "5px"}}></span> : ""}
-                    //                     {item.rlsYn == "Y" ? (rlsYnFlag ? item.pstTtl : item.pstTtl.replaceAll(/./g, '*')) : item.pstTtl}
-                    //                 </a>
-                    //             </td>
-                    //             {resp.result.bbs.atchFileYn == "Y" && (
-                    //                 <td>{item.fileCnt != 0 ? "있음" : "없음"}</td>
-                    //             )}
-                    //             <td>{item.pstInqCnt}</td>
-                    //             <td>{moment(item.frstCrtDt).format('YYYY-MM-DD')}</td>
-                    //             <td>{item.rlsYn == "Y" ? (rlsYnFlag ? item.kornFlnm : item.kornFlnm.replaceAll(/./g, '*')) : item.kornFlnm}</td>
-                    //         </tr>
-                    //     );
-                    // });
-                    // setConsultingList(dataList);
-                    // setPaginationInfo(resp.paginationInfo);
+                     let dataList = [];
+                     dataList.push(
+                         <tr>
+                            <td colSpan={9}>검색된 결과가 없습니다.</td>
+                         </tr>
+                     );
+
+                     resp.result.consultantList.forEach(function (item, index) {
+                         if (index === 0) dataList = []; // 목록 초기화
+
+                         dataList.push(
+                             <tr key={item.cnsltAplySn}>
+                                 <td>{index + 1}</td>
+                                 <td>{item.cnsltFld}</td>
+                                 <td>{item.cnslttKornFlnm}</td>
+                                 <td>{item.ogdpNm}</td>
+                                 <td>{item.ttl}</td>
+                                 <td>{item.kornFlnm || ""}</td>
+                                 <td>{moment(item.frstCrtDt).format('YYYY-MM-DD')}</td>
+                                 <td>{item.cnsltSttsCd}</td>
+                                 <td>{item.dgstfnArtcl || "미등록"}</td>
+                             </tr>
+                         );
+                     });
+                     setConsultingList(dataList);
+                     setPaginationInfo(resp.paginationInfo);
                 },
                 function (resp) {
                     console.log("err response : ", resp);
@@ -115,12 +105,14 @@ function ManagerMatching(props) {
     useEffect(() => {
         getComCdList(10).then((data) => {
             setCnsltFldList(data);
+            console.log("cnsltFldList : " , cnsltFldList);
         })
     }, []);
 
     useEffect(() => {
         getComCdList(14).then((data) => {
             setCnsltSttsCd(data);
+            console.log("cnsltSttsCd : " , cnsltSttsCdList);
         })
     }, []);
 
@@ -129,7 +121,7 @@ function ManagerMatching(props) {
         <div id="container" className="container layout cms">
             <ManagerLeft/>
             <div className="inner">
-                <h2 className="pageTitle"><p>전문가매칭관리</p></h2>
+                <h2 className="pageTitle"><p>컨설팅의뢰 관리</p></h2>
                 <div className="cateWrap">
                     <form action="">
                         <ul className="cateList">
@@ -267,6 +259,7 @@ function ManagerMatching(props) {
                             </tr>
                             </thead>
                             <tbody>
+                            {consultingList}
                             </tbody>
                         </table>
                     </div>
