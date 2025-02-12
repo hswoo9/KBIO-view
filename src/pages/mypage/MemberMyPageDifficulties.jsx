@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
-import { Link, NavLink, useLocation } from "react-router-dom";
-import axios from "axios";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
@@ -14,6 +13,7 @@ import moment from "moment/moment.js";
 function MemberMyPageDifficulties(props) {
     const sessionUser = getSessionItem("loginUser");
     const location = useLocation();
+    const navigate = useNavigate();
 
     const searchTypeRef = useRef();
     const searchValRef = useRef();
@@ -80,12 +80,14 @@ function MemberMyPageDifficulties(props) {
                                 </td>
                                 <td>{item.dfclMttrFldNm}</td>
                                 <td>
-                                    <NavLink to={URL.MYPAGE_DIFFICULTIES_DETAIL}
-                                             state={{
-                                                 dfclMttrSn: item.dfclMttrSn
-                                             }}>
+                                    <Link to={{pathname: URL.MEMBER_MYPAGE_DIFFICULTIES_DETAIL}}
+                                          state={{
+                                              dfclMttrSn: item.dfclMttrSn
+                                          }}
+                                          style={{cursor: 'pointer', textDecoration: 'underline'}}
+                                    >
                                         {item.ttl}
-                                    </NavLink>
+                                    </Link>
                                 </td>
                                 <td>{moment(item.frstCrtDt).format('YYYY-MM-DD')}</td>
                                 <td>{item.answer == "Y" ? "답변완료" : "답변대기"}</td>
