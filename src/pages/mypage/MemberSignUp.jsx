@@ -6,6 +6,7 @@ import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
 import axios from "axios";
+import Swal from "sweetalert2";
 import CommonEditor from "@/components/CommonEditor";
 
 import { setSessionItem } from "@/utils/storage";
@@ -182,7 +183,9 @@ function MemberSignUp(props) {
     const businessNumber = `${memberDetail.bizRegNum1}-${memberDetail.bizRegNum2}-${memberDetail.bizRegNum3}`;
 
     if (!businessNumber || businessNumber.includes("--")) {
-      alert("사업자 등록번호를 정확히 입력하세요.");
+      Swal.fire({
+        text: "사업자 등록번호를 정확히 입력하세요.",
+      });
       return;
     }
 
@@ -199,16 +202,18 @@ function MemberSignUp(props) {
         }),
       };
 
-      // 비동기 함수로 처리하기 위해 내부 콜백 함수를 async로 설정
       await EgovNet.requestFetch(checkBusinessURL, reqOptions, async function (resp) {
         if (resp.resultCode === 200) {
           const businessData = resp.result.businessData;
           console.log("로컬 데이터:", businessData);
+          Swal.fire({
+            text: "해당 기업은 K-바이오 랩허브 입주기업입니다.",
+          });
 
           if (businessData) {
-
             setMemberDetail({
               ...memberDetail,
+              isResident: true,
               mvnEntSn: businessData.mvnEntSn,
               mvnEntNm: businessData.mvnEntNm,
               rpsvNm: businessData.rpsvNm,
@@ -217,52 +222,76 @@ function MemberSignUp(props) {
               bzentyEmlAddr: businessData.bzentyEmlAddr,
               address: businessData.entAddr,
               daddress: businessData.entDaddr,
-
             });
           } else {
-            alert("로컬 데이터는 있으나 상세 정보가 없습니다.");
+            Swal.fire({
+              text: "로컬 데이터는 있으나 상세 정보가 없습니다.",
+            });
           }
         } else if (resp.resultCode === 400) {
-          const apiKey = import.meta.env.VITE_APP_DATA_API_CLIENTID;
-          const url = `https://api.odcloud.kr/api/nts-businessman/v1/status?serviceKey=${apiKey}`;
-
-          try {
-            const response = await axios.post(url, {
-              b_no: [businessNumber.replace(/-/g, '')],
+          Swal.fire({
+            text: "해당 기업은 K-바이오 랩허브 비입주기업입니다.",
+          }).then(async () => {
+            setMemberDetail({
+              ...memberDetail,
+              isResident: false,
             });
 
-            const businessData = response.data[0];
-            console.log("공공포털 데이터:", businessData);
+            const apiKey = import.meta.env.VITE_APP_DATA_API_CLIENTID;
+            const url = `https://api.odcloud.kr/api/nts-businessman/v1/status?serviceKey=${apiKey}`;
 
-            const businessStatus = response.data.data[0]?.b_stt_cd;
+            try {
+              const response = await axios.post(url, {
+                b_no: [businessNumber.replace(/-/g, '')],
+              });
 
-            if (businessStatus === '01') {
-              alert("사업자가 정상적으로 운영 중입니다.");
-            } else if (businessStatus === '02') {
-              alert("사업자가 휴업 중입니다.");
-            } else if (businessStatus === '03') {
-              alert("사업자가 폐업 상태입니다.");
-            } else {
-              alert("사업자가 존재하지 않습니다.");
+              const businessData = response.data[0];
+              console.log("공공포털 데이터:", businessData);
+
+              const businessStatus = response.data.data[0]?.b_stt_cd;
+
+              if (businessStatus === '01') {
+                Swal.fire({
+                  text: "사업자가 정상적으로 운영 중입니다.",
+                });
+              } else if (businessStatus === '02') {
+                Swal.fire({
+                  text: "사업자가 휴업 중입니다.",
+                });
+              } else if (businessStatus === '03') {
+                Swal.fire({
+                  text: "사업자가 폐업 상태입니다.",
+                });
+              } else {
+                Swal.fire({
+                  text: "사업자가 존재하지 않습니다.",
+                });
+              }
+            } catch (error) {
+              console.error("공공 API 요청 실패:", error);
+              Swal.fire({
+                text: "공공 API 요청 중 문제가 발생했습니다.",
+              });
             }
-          } catch (error) {
-            console.error("공공 API 요청 실패:", error);
-            alert("공공 API 요청 중 문제가 발생했습니다.");
-          }
+          });
         } else {
-          alert("서버에서 데이터를 조회할 수 없습니다.");
+          Swal.fire({
+            text: "서버에서 데이터를 조회할 수 없습니다.",
+          });
         }
       }, function (error) {
         console.error("로컬 데이터 요청 실패:", error);
-        alert("로컬 데이터 요청 중 문제가 발생했습니다.");
+        Swal.fire({
+          text: "로컬 데이터 요청 중 문제가 발생했습니다.",
+        });
       });
     } catch (error) {
       console.error("에러 발생:", error);
-      alert("오류가 발생했습니다.");
+      Swal.fire({
+        text: "오류가 발생했습니다.",
+      });
     }
   };
-
-
 
   const nonsearchAddress = () => {
     if (!window.daum || !window.daum.Postcode) {
@@ -881,10 +910,15 @@ function MemberSignUp(props) {
                               onChange={(e) => handleBusinessNumberChange(e, 'bizRegNum3')}
                           />
                         </label>
-                        <button type="button" className="addressBtn btn" onClick={kbioauth}>
+                        <button type="button" className="btn btn_skyblue_h46" onClick={kbioauth}>
                           <span>사업자번호 인증</span>
                         </button>
                       </div>
+                      {/*{memberDetail.isResident !== undefined && (
+                          <div style={{ color: memberDetail.isResident ? 'green' : 'red', marginTop: '10px', fontSize: '12px'}}>
+                            {memberDetail.isResident ? "해당 기업은 K-바이오 랩허브 입주기업입니다." : "해당 기업은 K-바이오 랩허브 비입주기업입니다."}
+                          </div>
+                      )}*/}
                     </li>
                     <li className="inputBox type2">
                       <span className="tt1">대표번호</span>
