@@ -77,7 +77,6 @@ function OperationalDifficulties(props) {
                                 </td>
                                 <td>{item.dfclMttrFldNm}</td>
                                 <td>
-                                    {item.dfclMttrSn}
                                     <NavLink to={URL.MANAGER_DIFFICULTIES_MODIFY}
                                           mode={CODE.MODE_MODIFY}
                                           state={{dfclMttrSn: item.dfclMttrSn}}
