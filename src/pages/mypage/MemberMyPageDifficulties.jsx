@@ -66,7 +66,7 @@ function MemberMyPageDifficulties(props) {
                     let dataList = [];
                     dataList.push(
                         <tr>
-                            <td colSpan="6">애로사항 내역이 없습니다.</td>
+                            <td colSpan="5">애로사항 내역이 없습니다.</td>
                         </tr>
                     );
 
@@ -79,8 +79,14 @@ function MemberMyPageDifficulties(props) {
                                     {resp.paginationInfo.totalRecordCount - (resp.paginationInfo.currentPageNo - 1) * resp.paginationInfo.pageSize - index}
                                 </td>
                                 <td>{item.dfclMttrFldNm}</td>
-                                <td>{item.ttl}</td>
-                                <td>{item.kornFlnm}</td>
+                                <td>
+                                    <NavLink to={URL.MYPAGE_DIFFICULTIES_DETAIL}
+                                             state={{
+                                                 dfclMttrSn: item.dfclMttrSn
+                                             }}>
+                                        {item.ttl}
+                                    </NavLink>
+                                </td>
                                 <td>{moment(item.frstCrtDt).format('YYYY-MM-DD')}</td>
                                 <td>{item.answer == "Y" ? "답변완료" : "답변대기"}</td>
                             </tr>
@@ -226,13 +232,11 @@ function MemberMyPageDifficulties(props) {
                             <col width="300"/>
                             <col width="150"/>
                             <col width="150"/>
-                            <col width="150"/>
                             <thead>
                             <tr>
                                 <th>번호</th>
                                 <th>분류</th>
                                 <th>제목</th>
-                                <th>신청자</th>
                                 <th>신청일</th>
                                 <th>상태</th>
                             </tr>
