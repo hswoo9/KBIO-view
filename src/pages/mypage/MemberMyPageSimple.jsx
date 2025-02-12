@@ -73,7 +73,7 @@ function MemberMyPageSimple(props) {
                                 <td>
                                     {resp.paginationInfo.totalRecordCount - (resp.paginationInfo.currentPageNo - 1) * resp.paginationInfo.pageSize - index}
                                 </td>
-                                <td>{item.dfclMttrFldNm}</td>
+                                <td>{item.cnsltFld}</td>
                                 <td>
                                         <Link to={{pathname: URL.test}}
                                               state={{
