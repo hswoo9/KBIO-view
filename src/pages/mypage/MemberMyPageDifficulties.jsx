@@ -295,11 +295,12 @@ function MemberMyPageDifficulties(props) {
                 </div>
                 <div className="contBox board type1 customContBox">
                     <div className="topBox">
-                        <p className="resultText">Total <span className="red">50</span></p>
+                        <p className="resultText">Total : <span className="red">{paginationInfo.totalRecordCount}</span>
+                        </p>
                     </div>
                     <div className="tableBox type1">
                         <table>
-                            <caption>애로사항목록</caption>
+                        <caption>애로사항목록</caption>
                             <col width="80"/>
                             <col width="150"/>
                             <col width="300"/>

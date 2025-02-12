@@ -185,7 +185,7 @@ function OperationalList() {
                 <div className="contBox board type1 customContBox">
                     <div className="topBox">
                         <p className="resultText">
-                            Total <span className="red">{paginationInfo.totalCount}</span>
+                            Total <span className="red">{paginationInfo.totalRecordCount}</span>
                         </p>
                     </div>
                     <div className="companyList">
