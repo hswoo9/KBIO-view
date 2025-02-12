@@ -234,8 +234,11 @@ function setDiffEdit(props) {
                     <ul>
                       {dfclMttr.answerFiles.map((file, index) => (
                           <li key={index}>
-                            {file.atchFileNm} - {(file.atchFileSz / 1024).toFixed(2)} KB
-
+                            <span
+                                onClick={() => fileDownLoad(file.atchFileSn, file.atchFileNm)}
+                                style={{cursor: "pointer"}}>
+                                      {file.atchFileNm} - {(file.atchFileSz / 1024).toFixed(2)} KB
+                            </span>
                             <button
                                 onClick={() => setFileDel(file.atchFileSn)}  // 삭제 버튼 클릭 시 처리할 함수
                                 style={{marginLeft: '10px', color: 'red'}}
@@ -251,7 +254,7 @@ function setDiffEdit(props) {
                     <ul>
                       {answerFileList.map((file, index) => (
                           <li key={index}>
-                            {file.name} - {(file.size / 1024).toFixed(2)} KB
+                          {file.name} - {(file.size / 1024).toFixed(2)} KB
 
                             <button
                                 onClick={() => handleDeleteFile(index)}  // 삭제 버튼 클릭 시 처리할 함수
