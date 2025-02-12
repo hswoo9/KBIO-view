@@ -107,8 +107,8 @@ function ManagerStatisticsUser(props) {
                                     >
                                         <option key="" value="">전체</option>
                                         {["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"].map((month, index) => (
-                                            <option key={index} value={index}>
-                                                {month}
+                                            <option key={index} value={String(month).padStart(2, '0')}>
+                                                {String(month).padStart(2, '0')}
                                             </option>
                                         ))}
                                     </select>
