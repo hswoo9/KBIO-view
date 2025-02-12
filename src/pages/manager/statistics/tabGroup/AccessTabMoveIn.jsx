@@ -1,22 +1,62 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import ApexCharts from 'react-apexcharts'
+import * as EgovNet from "../../../../api/egovFetch.js";
 
-function AccessTabAll(props) {
+function AccessTabMoveIn(props) {
+    const [searchDto, setSearchDto] = useState(
+        props.searchDto || {
+            searchYear: "",
+            searchMonth: "",
+            mbrType : ""
+        }
+    );
+
+    const year = parseInt(searchDto.searchYear, 10);
+    const month = parseInt(searchDto.searchMonth, 10);
+    const lastDay = new Date(year, month, 0).getDate();
+
+    const categories = Array.from({ length: lastDay }, (_, i) => String(i + 1 + "일").padStart(2, '0'));
+    const [userCnt, setUserCnt] = useState([])
+
+
+    const getStatisticsUserAccess = () => {
+        const requestOptions = {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json",
+            },
+            body: JSON.stringify(searchDto)
+        };
+
+        EgovNet.requestFetch("/statisticsApi/getStatisticsUserAccess.do", requestOptions, function (resp) {
+            resp.result.statisticsUserAccess.forEach(function(v, i){
+                const userCounts = categories.map((day) => {
+                    const item = resp.result.statisticsUserAccess.find(v => v.day.split("-")[2] === day.slice(0, -1));
+                    return item ? item["mbrType" + searchDto.mbrType + "Cnt"] : 0;
+                });
+
+                setUserCnt(userCounts)
+            })
+        });
+    }
+
+    useEffect(() => {
+        getStatisticsUserAccess()
+    }, [searchDto]);
 
     const chartOptions = {
         chart: {
             id: 'basic-bar',
         },
-        //컬럼명
         xaxis: {
-            categories: ['1일', '2일', '3일', '4일', '5일', '6일', '7일', '8일', '9일', '10일'],
+            categories: categories,
         },
     };
 
     const series = [
         {
-            name: '사용자',
-            data: [5, 6, 7, 5, 10, 12, 16, 3, 20, 1],
+            name: props.pageName || "사용자",
+            data: userCnt,
         },
     ];
 
@@ -25,4 +65,4 @@ function AccessTabAll(props) {
     );
 }
 
-export default AccessTabAll;
+export default AccessTabMoveIn;

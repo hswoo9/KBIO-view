@@ -104,9 +104,10 @@ function setDiffEdit(props) {
           if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
             Swal.fire("삭제되었습니다.");
 
-            const updatedFiles = pstDetail.pstFiles.filter(file => file.atchFileSn !== atchFileSn);
-            setDfclMttr({ ...dfclMttr, pstFiles: updatedFiles });  // 상태 업데이트
+            const updatedFiles = dfclMttr.answerFiles.filter(file => file.atchFileSn !== atchFileSn);
+            setDfclMttr({ ...dfclMttr, answerFiles: updatedFiles });  // 상태 업데이트
           } else {
+
           }
         });
       } else {

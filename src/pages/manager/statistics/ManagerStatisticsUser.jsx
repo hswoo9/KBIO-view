@@ -28,8 +28,8 @@ function ManagerStatisticsUser(props) {
     const [mbrTypeUserCnt, setMbrTypeUserCnt] = useState([]);
 
     const [searchDto, setSearchDto] = useState({
-        searchYear : "",
-        searchMonth : ""
+        searchYear : format(nowDate, "yyyy"),
+        searchMonth : format(nowDate, "MM"),
     });
 
     const currentYear = format(nowDate, "yyyy");
@@ -84,11 +84,11 @@ function ManagerStatisticsUser(props) {
                                 <div className="itemBox">
                                     <select className="selectGroup"
                                         id="searchYear"
+                                        defaultValue={searchDto.searchYear}
                                         onChange={(e) => {
                                             setSearchDto({...searchDto, searchYear: e.target.value})
                                         }}
                                     >
-                                        <option key="" value="">전체</option>
                                         {Array.from({length: Math.max(0, currentYear - 2025) + 1}, (_, i) => (
                                             <option key={i} value={currentYear - i}>
                                                 {currentYear - i}
@@ -101,11 +101,11 @@ function ManagerStatisticsUser(props) {
                                 <div className="itemBox">
                                     <select className="selectGroup"
                                             id="searchMonth"
+                                            defaultValue={searchDto.searchMonth}
                                             onChange={(e) => {
                                                 setSearchDto({...searchDto, searchMonth: e.target.value})
                                             }}
                                     >
-                                        <option key="" value="">전체</option>
                                         {["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"].map((month, index) => (
                                             <option key={index} value={String(month).padStart(2, '0')}>
                                                 {String(month).padStart(2, '0')}
