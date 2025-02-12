@@ -20,12 +20,14 @@ function ConsultantDetail(props) {
     const [memberDetail, setMemberDetail] = useState(null);
 
 
-    const editClick = () => {
+    const editClick = (cnsltSe, userSn) => {
         if(sessionUser){
             navigate(
                 { pathname : URL.CONSULTING_CREATE },
                 {
                     state : {
+                        cnsltSe : cnsltSe,
+                        cnslttUserSn : userSn,
                         callBackUrl : URL.CONSULTANT_LIST,
                         menuSn : location.state?.menuSn,
                         menuNmPath : location.state?.menuNmPath,
@@ -135,14 +137,14 @@ function ConsultantDetail(props) {
                                 <button
                                     type="button"
                                     className="writeBtn clickBtn"
-                                    onClick={editClick}
+                                    onClick={() => editClick(26, memberDetail.userSn)}
                                 >
                                     <span>컨설팅 의뢰</span>
                                 </button>
                                 <button
                                     type="button"
                                     className="writeBtn clickBtn"
-                                    onClick={editClick}
+                                    onClick={() => editClick(27, memberDetail.userSn)}
                                 >
                                     <span>간편상담</span>
                                 </button>
