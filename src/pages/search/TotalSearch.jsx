@@ -111,7 +111,7 @@ const TotalSearch = () => {
     }, []);
 
     return (
-        <div className="container withdraw join_step">
+        <div className="container">
             <div className="inner">
                 <div className="infoWrap customInnerDiv">
                     <ul className="inputWrap customUl">
