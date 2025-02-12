@@ -211,6 +211,7 @@ export const mngrAcsIpChk = (navigate) => {
                 navigate(
                     { pathname : URL.COMMON_ERROR},
                     { state : {
+                            redirectPath : URL.MAIN,
                             errorCode: resp.resultCode,
                             errorMessage: resp.resultMessage,
                             errorSubMessage : "관리자에게 문의해주세요."

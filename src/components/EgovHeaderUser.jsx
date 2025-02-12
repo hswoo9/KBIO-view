@@ -271,10 +271,10 @@ function EgovHeader() {
   const activeEnter = (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
-      submitFormHandler(e);
+      submitFormHandler("N");
     }
   };
-  const submitFormHandler = () => {
+  const submitFormHandler = (confirmPass) => {
     if(!idRef.current.value){
       Swal.fire("아이디를 입력해주세요.");
       idRef.current.focus();
@@ -291,13 +291,27 @@ function EgovHeader() {
       headers: {
         "Content-type": "application/json",
       },
-      body: JSON.stringify(userInfo),
+      body: JSON.stringify({ ...userInfo, confirmPass : confirmPass }),
     };
 
     EgovNet.requestFetch(loginUrl, requestOptions, (resp) => {
       if(resp.resultCode != "200"){
-        Swal.fire(resp.resultMessage);
-        return;
+        if(resp.resultCode == "502"){
+          Swal.fire({
+            title: resp.resultMessage,
+            showCloseButton: true,
+            showCancelButton: true,
+            confirmButtonText: "예",
+            cancelButtonText: "아니오"
+          }).then((result) => {
+            if(result.isConfirmed) {
+              submitFormHandler("Y");
+            }
+          });
+        }else{
+          Swal.fire(resp.resultMessage);
+          return;
+        }
       }else{
         console.log("resp",resp)
         setSessionItem("loginUser", {userSn : resp.result.userSn, name : resp.result.userName, id : resp.result.userId, userSe : resp.result.userSe});
@@ -395,6 +409,31 @@ function EgovHeader() {
         element.classList.remove("main");
       }
     }
+
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: "",
+    };
+
+    EgovNet.requestFetch("/commonApi/getDuplicateLogin", requestOptions, (resp) => {
+      if(resp.result.duplicateLogin == "Y"){
+        removeSessionItem("loginUser");
+        navigate(
+            { pathname : URL.COMMON_ERROR},
+            { state : {
+                redirectPath : URL.MAIN,
+                errorCode: resp.resultCode,
+                errorMessage: resp.resultMessage,
+                errorSubMessage : "메인으로 이동합니다."
+              }
+            }
+        );
+
+      }
+    });
   }, [window.location.pathname]);
 
   return (
@@ -618,7 +657,7 @@ function EgovHeader() {
                     <small>로그인 상태 유지</small>
                   </label>
                 </div>
-                <button type="button" className="loginBtn" onClick={submitFormHandler}><span>로그인</span></button>
+                <button type="button" className="loginBtn" onClick={(e) => {submitFormHandler("N")}}><span>로그인</span></button>
                 <ul className="botBtnBox">
                   <li>
                     <button type="button" className="idBtn"><span>아이디 찾기</span></button>
