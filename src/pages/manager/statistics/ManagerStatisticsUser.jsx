@@ -18,30 +18,58 @@ import {
     subMonths,
     addMonths,
 } from "date-fns";
+import {Link} from "react-router-dom";
+import * as EgovNet from "../../../api/egovFetch.js";
 
 function ManagerStatisticsUser(props) {
-    const [currentMonth, setCurrentMonth] = useState(new Date());
+    const nowDate = new Date();
 
-    // 현재 연도 & 월
-    const currentYear = format(currentMonth, "yyyy");
-    const currentMonthIndex = format(currentMonth, "M") - 1;
+    const [userCnt, setUserCnt] = useState([])
+    const [mbrTypeUserCnt, setMbrTypeUserCnt] = useState([]);
+
+    const [searchDto, setSearchDto] = useState({
+        searchYear : "",
+        searchMonth : ""
+    });
+
+    const currentYear = format(nowDate, "yyyy");
 
     const chartOptions = {
         chart: {
             id: 'basic-bar',
         },
-        //컬럼명
         xaxis: {
             categories: ['입주기업', '유관기관', '비입주기업', '컨설턴트'],
         },
     };
-
     const series = [
         {
             name: '사용자',
-            data: [5600, 4600, 7600, 50],
+            data: userCnt,
         },
     ];
+
+    const getStatisticsUser = () => {
+        const requestOptions = {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json",
+            },
+            body: JSON.stringify(searchDto)
+        };
+
+        EgovNet.requestFetch("/statisticsApi/getStatisticsUser.do", requestOptions, function (resp) {
+            setMbrTypeUserCnt(resp.result.statisticsUser);
+            setUserCnt([]);
+            resp.result.statisticsUser.forEach(function(v, i){
+                setUserCnt(userCnt => [...userCnt, v.cnt])
+            })
+        });
+    }
+
+    useEffect(() => {
+        getStatisticsUser()
+    }, [searchDto]);
 
     return (
         <div id="container" className="container layout cms">
@@ -55,12 +83,15 @@ function ManagerStatisticsUser(props) {
                                 <p className="title">기간</p>
                                 <div className="itemBox">
                                     <select className="selectGroup"
-                                            defaultValue={currentYear}
-                                            id="yearSelect"
+                                        id="searchYear"
+                                        onChange={(e) => {
+                                            setSearchDto({...searchDto, searchYear: e.target.value})
+                                        }}
                                     >
-                                        {Array.from({length: 10}, (_, i) => (
-                                            <option key={i} value={2020 + i}>
-                                                {2020 + i}
+                                        <option key="" value="">전체</option>
+                                        {Array.from({length: Math.max(0, currentYear - 2025) + 1}, (_, i) => (
+                                            <option key={i} value={currentYear - i}>
+                                                {currentYear - i}
                                             </option>
                                         ))}
                                     </select>
@@ -69,11 +100,15 @@ function ManagerStatisticsUser(props) {
                             <li className="inputBox type1">
                                 <div className="itemBox">
                                     <select className="selectGroup"
-                                            defaultValue={currentMonthIndex}
+                                            id="searchMonth"
+                                            onChange={(e) => {
+                                                setSearchDto({...searchDto, searchMonth: e.target.value})
+                                            }}
                                     >
+                                        <option key="" value="">전체</option>
                                         {["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"].map((month, index) => (
-                                            <option key={index} value={index}>
-                                                {month}
+                                            <option key={index} value={String(month).padStart(2, '0')}>
+                                                {String(month).padStart(2, '0')}
                                             </option>
                                         ))}
                                     </select>
@@ -98,11 +133,32 @@ function ManagerStatisticsUser(props) {
                             </thead>
                             <tbody>
                             <tr>
-                                <td>5,600</td>
-                                <td>4,600</td>
-                                <td>7,600</td>
-                                <td>50</td>
-                                <td>17,850</td>
+                                <td>
+                                    {mbrTypeUserCnt.find(e => e.mbrType == 1) ? (
+                                        mbrTypeUserCnt.find(e => e.mbrType == 1).cnt.toLocaleString()
+                                    ) : 0}
+                                </td>
+                                <td>
+                                    {mbrTypeUserCnt.find(e => e.mbrType == 3) ? (
+                                        mbrTypeUserCnt.find(e => e.mbrType == 3).cnt.toLocaleString()
+                                    ) : 0}
+                                </td>
+                                <td>
+                                    {mbrTypeUserCnt.find(e => e.mbrType == 4)? (
+                                        mbrTypeUserCnt.find(e => e.mbrType == 4).cnt.toLocaleString()
+                                    ) : 0}
+                                </td>
+                                <td>
+                                    {mbrTypeUserCnt.find(e => e.mbrType == 2) ? (
+                                        mbrTypeUserCnt.find(e => e.mbrType == 2).cnt.toLocaleString()
+                                    ) : 0}
+                                </td>
+                                <td> {[
+                                    mbrTypeUserCnt.find(e => e.mbrType == 1) ?.cnt || 0,
+                                    mbrTypeUserCnt.find(e => e.mbrType == 3) ?.cnt || 0,
+                                    mbrTypeUserCnt.find(e => e.mbrType == 4) ?.cnt || 0,
+                                    mbrTypeUserCnt.find(e => e.mbrType == 2) ?.cnt || 0
+                                ].reduce((total, cnt) => total + cnt, 0).toLocaleString()}</td>
                             </tr>
                             </tbody>
                         </table>
