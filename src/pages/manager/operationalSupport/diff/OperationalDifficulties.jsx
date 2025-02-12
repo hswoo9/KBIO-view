@@ -11,9 +11,9 @@ import Swal from 'sweetalert2';
 
 /* bootstrip */
 import { getSessionItem } from "@/utils/storage";
-import {getComCdList} from "../../../components/CommonComponents.jsx";
+import {getComCdList} from "../../../../components/CommonComponents.jsx";
 import moment from "moment/moment.js";
-import ManagerLeftOperationalSupport from "../../../components/manager/ManagerLeftOperationalSupport.jsx";
+import ManagerLeftOperationalSupport from "../../../../components/manager/ManagerLeftOperationalSupport.jsx";
 
 function OperationalDifficulties(props) {
     const sessionUser = getSessionItem("loginUser");
@@ -60,7 +60,6 @@ function OperationalDifficulties(props) {
                 pstListURL,
                 requestOptions,
                 (resp) => {
-                    console.log(resp.paginationInfo)
                     let dataList = [];
                     dataList.push(
                         <tr>
@@ -78,12 +77,13 @@ function OperationalDifficulties(props) {
                                 </td>
                                 <td>{item.dfclMttrFldNm}</td>
                                 <td>
-                                    {/*<Link to={URL.MANAGER_BBS_MODIFY}*/}
-                                    {/*      mode={CODE.MODE_MODIFY}*/}
-                                    {/*      state={{bbsSn: item.bbsSn}}*/}
-                                    {/*>*/}
+                                    {item.dfclMttrSn}
+                                    <NavLink to={URL.MANAGER_DIFFICULTIES_MODIFY}
+                                          mode={CODE.MODE_MODIFY}
+                                          state={{dfclMttrSn: item.dfclMttrSn}}
+                                    >
                                         {item.ttl}
-                                    {/*</Link>*/}
+                                    </NavLink>
                                 </td>
                                 <td>{item.kornFlnm}</td>
                                 <td>{moment(item.frstCrtDt).format('YYYY-MM-DD')}</td>
@@ -248,12 +248,14 @@ function OperationalDifficulties(props) {
                     <div className="tableBox type1">
                         <table>
                             <caption>애로사항목록</caption>
-                            <col width="80"/>
-                            <col width="150"/>
-                            <col/>
-                            <col width="150"/>
-                            <col width="150"/>
-                            <col width="150"/>
+                            <colgroup>
+                                <col width="80"/>
+                                <col width="150"/>
+                                <col/>
+                                <col width="150"/>
+                                <col width="150"/>
+                                <col width="150"/>
+                            </colgroup>
                             <thead>
                             <tr>
                                 <th>번호</th>
