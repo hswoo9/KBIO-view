@@ -1,0 +1,17 @@
+.user.main header {background: transparent;}
+.user.main header.scroll {background: var(--mainColor3);}
+.user.main header .hInner {padding-bottom: 0;}
+.user.main header .hInner .hBot {background: transparent; height: auto;}
+.user.main header .hInner .hBot .bot {display: none;}
+.main.container {padding-top: 0 !important;}
+
+
+.slick-slider {
+    user-select: none; /* 텍스트 선택 방지 */
+    -webkit-user-drag: none; /* 이미지 드래그 방지 (웹킷 브라우저) */
+    pointer-events: auto;
+}
+
+.slick-slide img {
+    pointer-events: none; /* 이미지 클릭 시 드래그 방지 */
+}

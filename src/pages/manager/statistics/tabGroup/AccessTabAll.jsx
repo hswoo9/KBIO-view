@@ -1,25 +1,88 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
-import ManagerLeftNew from "@/components/manager/ManagerLeftStatistics";
-
-import ApexCharts from 'react-apexcharts'
-
-import {
-    format,
-    startOfMonth,
-    endOfMonth,
-    startOfWeek,
-    endOfWeek,
-    addDays,
-    isSameMonth,
-    isToday,
-    setMonth,
-    setYear,
-    isLeapYear,
-    subMonths,
-    addMonths,
-} from "date-fns";
+import * as EgovNet from "../../../../api/egovFetch.js";
 
 function AccessTabAll(props) {
+    const [searchDto, setSearchDto] = useState(
+        props.searchDto || {
+            searchYear: "",
+            searchMonth: "",
+        }
+    );
+    const [userAccessList, setUserAccessList] = useState([]);
+
+    const getStatisticsUserAccess = () => {
+        const requestOptions = {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json",
+            },
+            body: JSON.stringify(searchDto)
+        };
+
+        EgovNet.requestFetch("/statisticsApi/getStatisticsUserAccess.do", requestOptions, function (resp) {
+
+            const year = parseInt(searchDto.searchYear, 10);
+            const month = parseInt(searchDto.searchMonth, 10);
+            const lastDay = new Date(year, month, 0).getDate();
+            const daysInMonth = Array.from({ length: lastDay }, (_, i) => String(i + 1).padStart(2, '0'));
+
+            const statisticsMap = new Map(
+                resp.result.statisticsUserAccess.map(item => [item.day.split("-")[2], item])
+            );
+
+            let totalMbrType1Cnt = 0;
+            let totalMbrType2Cnt = 0;
+            let totalMbrType3Cnt = 0;
+            let totalMbrType4Cnt = 0;
+
+            const dataList = daysInMonth.map(day => {
+                const item = statisticsMap.get(day) || {
+                    day,
+                    mbrType1Cnt: 0,
+                    mbrType2Cnt: 0,
+                    mbrType3Cnt: 0,
+                    mbrType4Cnt: 0,
+                };
+
+                totalMbrType1Cnt += item.mbrType1Cnt;
+                totalMbrType2Cnt += item.mbrType2Cnt;
+                totalMbrType3Cnt += item.mbrType3Cnt;
+                totalMbrType4Cnt += item.mbrType4Cnt;
+
+                return (
+                    <tr key={day}>
+                        <td>{day} 일</td>
+                        <td>{item.mbrType1Cnt.toLocaleString()}</td>
+                        <td>{item.mbrType3Cnt.toLocaleString()}</td>
+                        <td>{item.mbrType4Cnt.toLocaleString()}</td>
+                        <td>{item.mbrType2Cnt.toLocaleString()}</td>
+                        <td>
+                            {(item.mbrType1Cnt + item.mbrType2Cnt + item.mbrType3Cnt + item.mbrType4Cnt).toLocaleString()}
+                        </td>
+                    </tr>
+                );
+            });
+
+            dataList.push(
+                <tr key="total">
+                    <td>총합</td>
+                    <td>{totalMbrType1Cnt.toLocaleString()}</td>
+                    <td>{totalMbrType3Cnt.toLocaleString()}</td>
+                    <td>{totalMbrType4Cnt.toLocaleString()}</td>
+                    <td>{totalMbrType2Cnt.toLocaleString()}</td>
+                    <td>
+                        {(totalMbrType1Cnt + totalMbrType2Cnt + totalMbrType3Cnt + totalMbrType4Cnt).toLocaleString()}
+                    </td>
+                </tr>
+            );
+
+            setUserAccessList(dataList);
+        });
+    }
+
+    useEffect(() => {
+        getStatisticsUserAccess()
+    }, [searchDto]);
 
     return (
         <div className="tableBox type1">
@@ -36,46 +99,7 @@ function AccessTabAll(props) {
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>1일</td>
-                    <td>5,600</td>
-                    <td>4,600</td>
-                    <td>7,600</td>
-                    <td>50</td>
-                    <td>17,850</td>
-                </tr>
-                <tr>
-                    <td>2일</td>
-                    <td>5,600</td>
-                    <td>4,600</td>
-                    <td>7,600</td>
-                    <td>50</td>
-                    <td>17,850</td>
-                </tr>
-                <tr>
-                    <td>3일</td>
-                    <td>5,600</td>
-                    <td>4,600</td>
-                    <td>7,600</td>
-                    <td>50</td>
-                    <td>17,850</td>
-                </tr>
-                <tr>
-                    <td>4일</td>
-                    <td>5,600</td>
-                    <td>4,600</td>
-                    <td>7,600</td>
-                    <td>50</td>
-                    <td>17,850</td>
-                </tr>
-                <tr>
-                    <td>5일</td>
-                    <td>5,600</td>
-                    <td>4,600</td>
-                    <td>7,600</td>
-                    <td>50</td>
-                    <td>17,850</td>
-                </tr>
+                {userAccessList}
                 </tbody>
             </table>
         </div>

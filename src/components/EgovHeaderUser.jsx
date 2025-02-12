@@ -388,6 +388,15 @@ function EgovHeader() {
     userJs();
   });
 
+  useEffect(() => {
+    if(window.location.pathname != "/"){
+      const element = document.querySelector(".user.main");
+      if(element){
+        element.classList.remove("main");
+      }
+    }
+  }, [window.location.pathname]);
+
   return (
       // <!-- header -->
       <header>
@@ -488,6 +497,19 @@ function EgovHeader() {
                   </>
               )}
             </div>
+            <div className="alarmWrap">
+              <button type="button" className="alarmBtn">
+                <div className="icon"></div>
+              </button>
+              <ul className="selectBox">
+                <li><NavLink href="#"><span>알람1</span></NavLink></li>
+                <li><NavLink href="#"><span>알람1</span></NavLink></li>
+                <li><NavLink href="#"><span>알람1</span></NavLink></li>
+                <li><NavLink href="#"><span>알람1</span></NavLink></li>
+                <li><NavLink href="#"><span>알람1</span></NavLink></li>
+                <li><NavLink href="#"><span>알람1</span></NavLink></li>
+              </ul>
+            </div>
             <div className="langBox">
               <div className="itemBox">
                 <select className="selectGroup langSelect">
@@ -499,7 +521,7 @@ function EgovHeader() {
           </div>
           <div className="hBot inner">
             <div className="top">
-              <h1><a href="/"><img src={logoWhite} alt="images"/><span className="hidden">K BIO LabHub</span></a>
+              <h1><NavLink to={URL.MAIN}><img src={logoWhite} alt="images"/><span className="hidden">K BIO LabHub</span></NavLink>
               </h1>
               <nav className="navBox">
                 <ul className="dep">
@@ -508,10 +530,10 @@ function EgovHeader() {
               </nav>
               <div className="rightBox">
                 <NavLink
-                  to={URL.TOTAL_SEARCH}
-                  state={{
-                    menuNmPath: "통합검색"
-                  }}
+                    to={URL.TOTAL_SEARCH}
+                    state={{
+                      menuNmPath: "통합검색"
+                    }}
                 >
                   <button type="button" className="searchBtn">
                     <div className="icon"></div>

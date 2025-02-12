@@ -169,8 +169,10 @@ function ManagerPrivacyList(props) {
                 </div>
                 <div className="contBox board type1 customContBox">
                     <div className="topBox">
-                        <p className="resultText">전체 : <span className="red">1234</span>건 페이지 : <span
-                            className="red">1/400</span></p>
+                        <p className="resultText">전체 : <span className="red">{paginationInfo.totalRecordCount}</span>건
+                            페이지 : <span
+                                className="red">{paginationInfo.currentPageNo}/{paginationInfo.totalPageCount}</span>
+                        </p>
                         <div className="rightBox">
                             <button type="button" className="btn btn2 downBtn red">
                                 <div className="icon"></div>
@@ -182,7 +184,7 @@ function ManagerPrivacyList(props) {
                         <table>
                             <caption>조직도목록</caption>
                             <colgroup>
-                                <col width="80px"/>
+                            <col width="80px"/>
                                 <col width="600px"/>
                                 <col width="200px"/>
                                 <col width="250px"/>
