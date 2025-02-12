@@ -110,6 +110,8 @@ function ManagerTop() {
     EgovNet.requestFetch("/commonApi/getDuplicateLogin", requestOptions, (resp) => {
       if(resp.result.duplicateLogin == "Y"){
         removeSessionItem("loginUser");
+        removeSessionItem("jToken");
+        removeSessionItem("userSn");
         navigate(
             { pathname : URL.COMMON_ERROR},
             { state : {

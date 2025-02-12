@@ -76,8 +76,20 @@ function EgovHeader() {
   });
 
   const [loginVO, setLoginVO] = useState({});
-
   const [saveIDFlag, setSaveIDFlag] = useState(false);
+
+
+  /* 알림창 관련 */
+  const [isToggled, setIsToggled] = useState(false);
+  const handleToggle = () => {
+    setIsToggled(prevState => !prevState);
+  };
+
+  /* 스크롤 이벤트 관련 */
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [headerHeight, setHeaderHeight] = useState(0);
+
+
 
   const checkRef = useRef();
   const idRef = useRef(null); //id입력 부분에서 엔터키 이벤트 발생 확인
@@ -217,8 +229,8 @@ function EgovHeader() {
         parentTag.className = "active";
       }
     }
-    
-    
+
+
     let idFlag = getLocalItem(KEY_SAVE_ID_FLAG);
     if (idFlag === null) {
       setSaveIDFlag(false);
@@ -233,9 +245,7 @@ function EgovHeader() {
     } else {
       checkRef.current.className = "f_chk on";
     }
-  }, []);
 
-  useEffect(() => {
     let data = getLocalItem(KEY_ID);
     if (data !== null) {
       setUserInfo({ id: data, password: "default", userSe: "USR", loginType: "base"});
@@ -267,7 +277,53 @@ function EgovHeader() {
         setMenuList(dataList);
       }
     });
+
+    // 이벤트 리스너 추가
+    const events = ["mousemove", "mousedown", "keypress", "scroll", "touchstart"];
+    events.forEach((event) => window.addEventListener(event, resetTimer) );
+    // 초기 타이머 설정
+    resetTimer();
+
+    return () => {
+      // 컴포넌트가 언마운트될 때 이벤트 리스너 제거 및 타이머 초기화
+      events.forEach((event) => window.removeEventListener(event, resetTimer));
+      if (logoutTimer.current) {
+        clearTimeout(logoutTimer.current);
+      }
+    };
   }, []);
+
+  /* 스크롤 이벤트 */
+  useEffect(() => {
+    const headerElement = document.querySelector('header');
+    if(headerElement){
+      setHeaderHeight(headerElement ? headerElement.offsetHeight : 0);
+    }
+    const handleScroll = () => {
+      if (window.scrollY > 0) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+    handleScroll();
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+  useEffect(() => {
+    // 스크롤 상태에 따라 스타일을 조정
+    const container = document.querySelector('.container');
+    if(container){
+      if (isScrolled) {
+        container.style.paddingTop = '16.2rem';
+      } else {
+        container.style.paddingTop = '23.9rem';
+      }
+    }
+  }, [isScrolled]);
+
 
   const activeEnter = (e) => {
     if (e.key === "Enter") {
@@ -361,7 +417,7 @@ function EgovHeader() {
     });
   };
 
-  console.log("------------------------------EgovHeader [End]");
+  console.log("------------------------------EgovHeadeㅁㄴㅇㅁㄴㅇㅁㄴㅇr [End]");
   console.groupEnd("EgovHeader");
 
   //자동 로그아웃
@@ -384,39 +440,8 @@ function EgovHeader() {
   };
 
   useEffect(() => {
-    // 이벤트 리스너 추가
-    const events = ["mousemove", "mousedown", "keypress", "scroll", "touchstart"];
-    events.forEach((event) => window.addEventListener(event, resetTimer) );
-    // 초기 타이머 설정
-    resetTimer();
-
-    return () => {
-      // 컴포넌트가 언마운트될 때 이벤트 리스너 제거 및 타이머 초기화
-      events.forEach((event) => window.removeEventListener(event, resetTimer));
-      if (logoutTimer.current) {
-        clearTimeout(logoutTimer.current);
-      }
-    };
-  }, []);
-
-  useEffect(() => {
     //userJs();
   });
-
-  const closeLoginModal = () => {
-    const element = document.querySelector(".loginModal");
-    if(element){
-      const htmlElement = document.querySelector("html");
-      const bodyElement = document.querySelector("body");
-      if(htmlElement){
-        htmlElement.style.overflow = "visible";
-      }
-      if(bodyElement){
-        bodyElement.style.overflow = "visible";
-      }
-      element.classList.remove("open");
-    }
-  }
 
   useEffect(() => {
     if(window.location.pathname != "/"){
@@ -440,26 +465,29 @@ function EgovHeader() {
     };
 
     EgovNet.requestFetch("/commonApi/getDuplicateLogin", requestOptions, (resp) => {
-      if(resp.result.duplicateLogin == "Y"){
-        removeSessionItem("loginUser");
-        navigate(
-            { pathname : URL.COMMON_ERROR},
-            { state : {
-                redirectPath : URL.MAIN,
-                errorCode: resp.resultCode,
-                errorMessage: resp.resultMessage,
-                errorSubMessage : "메인으로 이동합니다."
+      if(resp.result != null){
+        if(resp.result.duplicateLogin == "Y"){
+          removeSessionItem("loginUser");
+          removeSessionItem("jToken");
+          removeSessionItem("userSn");
+          navigate(
+              { pathname : URL.COMMON_ERROR},
+              { state : {
+                  redirectPath : URL.MAIN,
+                  errorCode: resp.resultCode,
+                  errorMessage: resp.resultMessage,
+                  errorSubMessage : "메인으로 이동합니다."
+                }
               }
-            }
-        );
-
+          );
+        }
       }
     });
   }, [window.location.pathname]);
 
   return (
       // <!-- header -->
-      <header>
+      <header className={isScrolled ? 'scroll' : ''}>
         <style>{`
                 header .modalCon {display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 150;}
                 header .modalCon.open {display: block; animation: fadeIn 1s ease both;}
@@ -557,8 +585,8 @@ function EgovHeader() {
                   </>
               )}
             </div>
-            <div className="alarmWrap">
-              <button type="button" className="alarmBtn">
+            <div className={isToggled ? "alarmWrap click" : "alarmWrap"}>
+              <button type="button" className="alarmBtn" onClick={handleToggle}>
                 <div className="icon"></div>
               </button>
               <ul className="selectBox">

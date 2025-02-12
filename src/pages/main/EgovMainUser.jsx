@@ -10,6 +10,7 @@ import simpleMainIng from "/assets/images/img_simple_main.png";
 import initPage from "@/js/ui";
 import logo from "@/assets/images/logo.svg";
 import {getBnrPopupList, getMvnEntList, getPstList} from "@/components/main/MainComponents";
+import MainSwiper from "@/components/main/MainSwiper";
 
 import Slider from 'react-slick';
 import "@/css/slickCustom.css";
@@ -29,11 +30,7 @@ import user_main_sec01_icon04 from "@/assets/images/user_main_sec01_icon04.svg";
 
 import user_main_sec04_banner01 from "@/assets/images/user_main_sec04_banner01.jpg";
 
-import user_main_sec02_logo01 from "@/assets/images/user_main_sec02_logo01.png";
-import user_main_sec02_logo02 from "@/assets/images/user_main_sec02_logo02.png";
-import user_main_sec02_logo03 from "@/assets/images/user_main_sec02_logo03.png";
-import user_main_sec02_logo04 from "@/assets/images/user_main_sec02_logo04.png";
-import user_main_sec02_logo05 from "@/assets/images/user_main_sec02_logo05.png";
+
 
 import user_main_rolling_logo01 from "@/assets/images/user_main_rolling_logo01.svg";
 import user_main_rolling_logo02 from "@/assets/images/user_main_rolling_logo02.svg";
@@ -148,99 +145,8 @@ function EgovMainUser(props) {
               <p className="secText"><strong className="kBio">K- Bio Labhub</strong>는 바이오산업 기업을 위한 서비스를 제공하고있습니다</p>
             </div>
             <div className="institution_swiper swiper" data-aos="fade-up" data-aos-duration="1500">
-              <div className="swiper-wrapper">
-                <div className="swiper-slide">
-                  <figure className="logoBox"><img src={user_main_sec02_logo01} alt="서울 바이오 허브" loading="lazy"/></figure>
-                  <div className="textBox">
-                    <h3 className="tt1">서울 바이오 허브</h3>
-                    <p className="tt2">혁신적인 기술력과 신뢰를 바탕으로 <br/>바이오 산업의 미래를 열어가고 있습니다</p>
-                  </div>
-                  <a href="#" className="linkBtn"><span>바로가기</span></a>
-                </div>
-                <div className="swiper-slide">
-                  <figure className="logoBox"><img src={user_main_sec02_logo02} alt="대웅제약" loading="lazy"/></figure>
-                  <div className="textBox">
-                    <h3 className="tt1">대웅제약</h3>
-                    <p className="tt2">혁신적인 기술력과 신뢰를 바탕으로 <br/>바이오 산업의 미래를 열어가고 있습니다</p>
-                  </div>
-                  <a href="#" className="linkBtn"><span>바로가기</span></a>
-                </div>
-                <div className="swiper-slide">
-                  <figure className="logoBox"><img src={user_main_sec02_logo03} alt="바이오넥스" loading="lazy"/></figure>
-                  <div className="textBox">
-                    <h3 className="tt1">바이오넥스</h3>
-                    <p className="tt2">혁신적인 기술력과 신뢰를 바탕으로 <br/>바이오 산업의 미래를 열어가고 있습니다</p>
-                  </div>
-                  <a href="#" className="linkBtn"><span>바로가기</span></a>
-                </div>
-                <div className="swiper-slide">
-                  <figure className="logoBox"><img src={user_main_sec02_logo04} alt="동화약품" loading="lazy"/></figure>
-                  <div className="textBox">
-                    <h3 className="tt1">동화약품</h3>
-                    <p className="tt2">혁신적인 기술력과 신뢰를 바탕으로 <br/>바이오 산업의 미래를 열어가고 있습니다</p>
-                  </div>
-                  <a href="#" className="linkBtn"><span>바로가기</span></a>
-                </div>
-                <div className="swiper-slide">
-                  <figure className="logoBox"><img src={user_main_sec02_logo05} alt="GC 녹십자" loading="lazy"/></figure>
-                  <div className="textBox">
-                    <h3 className="tt1">GC 녹십자</h3>
-                    <p className="tt2">혁신적인 기술력과 신뢰를 바탕으로 <br/>바이오 산업의 미래를 열어가고 있습니다</p>
-                  </div>
-                  <a href="#" className="linkBtn"><span>바로가기</span></a>
-                </div>
-                <div className="swiper-slide">
-                  <figure className="logoBox"><img src={user_main_sec02_logo01} alt="서울 바이오 허브" loading="lazy"/></figure>
-                  <div className="textBox">
-                    <h3 className="tt1">서울 바이오 허브</h3>
-                    <p className="tt2">혁신적인 기술력과 신뢰를 바탕으로 <br/>바이오 산업의 미래를 열어가고 있습니다</p>
-                  </div>
-                  <a href="#" className="linkBtn"><span>바로가기</span></a>
-                </div>
-                <div className="swiper-slide">
-                  <figure className="logoBox"><img src={user_main_sec02_logo02} alt="대웅제약" loading="lazy"/></figure>
-                  <div className="textBox">
-                    <h3 className="tt1">대웅제약</h3>
-                    <p className="tt2">혁신적인 기술력과 신뢰를 바탕으로 <br/>바이오 산업의 미래를 열어가고 있습니다</p>
-                  </div>
-                  <a href="#" className="linkBtn"><span>바로가기</span></a>
-                </div>
-                <div className="swiper-slide">
-                  <figure className="logoBox"><img src={user_main_sec02_logo03} alt="바이오넥스" loading="lazy"/></figure>
-                  <div className="textBox">
-                    <h3 className="tt1">바이오넥스</h3>
-                    <p className="tt2">혁신적인 기술력과 신뢰를 바탕으로 <br/>바이오 산업의 미래를 열어가고 있습니다</p>
-                  </div>
-                  <a href="#" className="linkBtn"><span>바로가기</span></a>
-                </div>
-                <div className="swiper-slide">
-                  <figure className="logoBox"><img src={user_main_sec02_logo04} alt="동화약품" loading="lazy"/></figure>
-                  <div className="textBox">
-                    <h3 className="tt1">동화약품</h3>
-                    <p className="tt2">혁신적인 기술력과 신뢰를 바탕으로 <br/>바이오 산업의 미래를 열어가고 있습니다</p>
-                  </div>
-                  <a href="#" className="linkBtn"><span>바로가기</span></a>
-                </div>
-                <div className="swiper-slide">
-                  <figure className="logoBox"><img src={user_main_sec02_logo05} alt="GC 녹십자" loading="lazy"/></figure>
-                  <div className="textBox">
-                    <h3 className="tt1">GC 녹십자</h3>
-                    <p className="tt2">혁신적인 기술력과 신뢰를 바탕으로 <br/>바이오 산업의 미래를 열어가고 있습니다</p>
-                  </div>
-                  <a href="#" className="linkBtn"><span>바로가기</span></a>
-                </div>
-              </div>
-              <div className="slideControl blue">
-                <button type="button" className="arrowBtn prevBtn">
-                  <div className="icon"></div>
-                </button>
-                <button type="button" className="pauseBtn">
-                  <div className="icon"></div>
-                </button>
-                <button type="button" className="arrowBtn nextBtn">
-                  <div className="icon"></div>
-                </button>
-              </div>
+              <MainSwiper />
+              
             </div>
           </div>
         </section>
