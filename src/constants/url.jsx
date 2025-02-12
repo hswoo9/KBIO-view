@@ -234,6 +234,8 @@ const URL = {
   MANAGER_CONSULTING_EXPERT: "/manager/expert",
   MANAGER_CONSULTING_MATCHING: "/manager/matching",
   MANAGER_SIMPLE_CONSULTING: "/manager/simpleconsulting",
+  MANAGER_CONSULTING_DETAIL: "/manager/consultingDetail",
+  MANAGER_SIMPLE_CONSULTING_DETAIL: "/manager/simpleconsultingDetail",
   MANAGER_MEMBER: "/manager/member",
   MANAGER_MEMBER_ALL_MEMBER: "/manager/allMember",
   

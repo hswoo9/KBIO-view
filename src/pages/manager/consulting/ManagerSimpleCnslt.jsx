@@ -78,8 +78,19 @@ function ManagerSimpleCnslt(props) {
                                 <td>{index + 1}</td>
                                 <td>{item.cnsltFld}</td>
                                 <td>{item.cnslttKornFlnm}</td>
+
                                 <td>{item.ogdpNm}</td>
-                                <td>{item.ttl}</td>
+                                <td>
+                                <NavLink to={URL.MANAGER_SIMPLE_CONSULTING_DETAIL}
+                                     state = {{
+                                         cnsltAplySn : item.cnsltAplySn,
+                                         cnslttUserSn : item.cnslttUserSn,
+                                         userSn : item.userSn
+                                     }}
+                                >
+                                    {item.ttl}
+                            </NavLink>
+                                </td>
                                 <td>{item.kornFlnm || ""}</td>
                                 <td>{moment(item.frstCrtDt).format('YYYY-MM-DD')}</td>
                                 <td>{item.cnsltSttsCd}</td>

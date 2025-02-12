@@ -161,6 +161,8 @@ import OperationalDifficultiesEdit from "@/pages/manager/operationalSupport/diff
 import ManagerExpert from "@/pages/manager/consulting/ManagerExpert";
 import ManagerMatching from "@/pages/manager/consulting/ManagerMatching";
 import ManagerSimpleCnslt from "@/pages/manager/consulting/ManagerSimpleCnslt";
+import ManagerSimpleCnsltDetail from "@/pages/manager/consulting/ManagerSimpleCnsltDetail";
+import ManagerCnsltDetail from "@/pages/manager/consulting/ManagerCnsltDetail";
 //회원관리
 import ManagerAllMember from "@/pages/manager/member/all/ManagerNormalMember";
 
@@ -770,6 +772,8 @@ const SecondRoutes = () => {
               <Route path={URL.MANAGER_CONSULTING_EXPERT} element={<ManagerExpert/>}/>
               <Route path={URL.MANAGER_CONSULTING_MATCHING} element={<ManagerMatching/>}/>
               <Route path ={URL.MANAGER_SIMPLE_CONSULTING} element={<ManagerSimpleCnslt/>}/>
+              <Route path = {URL.MANAGER_CONSULTING_DETAIL} element={<ManagerCnsltDetail/>}/>
+              <Route path = {URL.MANAGER_SIMPLE_CONSULTING_DETAIL} element={<ManagerSimpleCnsltDetail/>}/>
               <Route path={URL.MANAGER_MEMBER} element={<ManagerAllMember/>}/>
               <Route path={URL.MANAGER_MEMBER_ALL_MEMBER} element={<ManagerAllMember/>}/>
 
