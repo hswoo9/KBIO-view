@@ -264,7 +264,6 @@ function MemberMyPageDifficulties(props) {
                                     >
                                         <option value="">전체</option>
                                         <option value="ttl">제목</option>
-                                        <option value="kornFlnm">신청자</option>
                                         <option value="dfclMttrCn">내용</option>
                                     </select>
                                 </div>
@@ -275,9 +274,6 @@ function MemberMyPageDifficulties(props) {
                                 </label>
                             </li>
                             <div className="rightBtn" style={{display: 'flex', gap: '10px', marginTop: "25px"}}>
-                                <button type="button" className="refreshBtn btn btn1 gray">
-                                    <div className="icon"></div>
-                                </button>
                                 <button type="button" className="searchBtn btn btn1 point"
                                         onClick={() => {
                                             getDfclMttrList({
