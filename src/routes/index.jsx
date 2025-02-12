@@ -219,6 +219,7 @@ import MemberMyPageModify from '@/pages/mypage/MemberMyPageModify';
 import MemberMyPageConsulting from '@/pages/mypage/MemberMyPageConsulting';
 import MemberMyPageSimple from '@/pages/mypage/MemberMyPageSimple';
 import MemberMyPageDifficulties from '@/pages/mypage/MemberMyPageDifficulties';
+import MemberMyPageDifficultiesDetail from '@/pages/mypage/MemberMyPageDifficultiesDetail';
 import MemberMyPageCancel from '@/pages/mypage/MemberMyPageCancel';
 import MemberMyPageIndentity from '@/pages/mypage/MemberMyPageIdentity';
 
@@ -564,6 +565,8 @@ const SecondRoutes = () => {
               <Route path={URL.MEMBER_MYPAGE_CONSULTING} element={<MemberMyPageConsulting/>}/>
               <Route path={URL.MEMBER_MYPAGE_SIMPLE} element={<MemberMyPageSimple/>}/>
               <Route path={URL.MEMBER_MYPAGE_DIFFICULTIES} element={<MemberMyPageDifficulties/>}/>
+              <Route path={URL.MEMBER_MYPAGE_DIFFICULTIES_DETAIL} element={<MemberMyPageDifficultiesDetail/>}/>
+
               <Route path={URL.MEMBER_MYPAGE_CANCEL} element={<MemberMyPageCancel/>}/>
               <Route path={URL.MEMBER_MYPAGE_IDENTITY} element={<MemberMyPageIndentity/>}/>
               <Route path={URL.COMPLETE_MEMBER} element={<EgovCompleteMember/>}/>
