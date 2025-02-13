@@ -21,6 +21,7 @@ import AOS from "aos";
 
 import CommonSlider from "@/components/CommonSlider";
 import MainSlider from "@/components/main/MainSlider";
+import MainCalendar from "@/components/main/MainCalendar";
 
 import user_main_sec01_slide01 from "@/assets/images/user_main_sec01_slide01.jpg";
 import user_main_sec01_icon01 from "@/assets/images/user_main_sec01_icon01.svg";
@@ -153,82 +154,7 @@ function EgovMainUser(props) {
           <div className="inner">
             <h2 className="secTitle">일정현황</h2>
             <div className="boxWrap">
-              <div className="calendarWrap leftBox" data-aos="fade-left" data-aos-duration="1500">
-                <div className="topBox">
-                  <button type="button" className="arrowBtn prevBtn">
-                    <div className="icon"></div>
-                  </button>
-                  <div className="date"><strong>2024년 6월</strong>
-                    <div className="icon"></div>
-                  </div>
-                  <button type="button" className="arrowBtn nextBtn">
-                    <div className="icon"></div>
-                  </button>
-                </div>
-                <div className="calendarBox">
-                  <table>
-                    <caption>달력</caption>
-                    <thead>
-                    <tr>
-                      <th><p>일</p></th>
-                      <th><p>월</p></th>
-                      <th><p>화</p></th>
-                      <th><p>수</p></th>
-                      <th><p>목</p></th>
-                      <th><p>금</p></th>
-                      <th><p>토</p></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                      <td className="noText"></td>
-                      <td><strong className="num">1</strong><p className="case">13건</p></td>
-                      <td className="click"><strong className="num">2</strong><p className="case">13건</p></td>
-                      <td><strong className="num">3</strong><p className="case">13건</p></td>
-                      <td><strong className="num">4</strong><p className="case">13건</p></td>
-                      <td><strong className="num">5</strong><p className="case">13건</p></td>
-                      <td><strong className="num">6</strong><p className="case">13건</p></td>
-                    </tr>
-                    <tr>
-                      <td><strong className="num">7</strong></td>
-                      <td><strong className="num">8</strong><p className="case">13건</p></td>
-                      <td><strong className="num">9</strong><p className="case">13건</p></td>
-                      <td><strong className="num">10</strong><p className="case">13건</p></td>
-                      <td><strong className="num">11</strong><p className="case">13건</p></td>
-                      <td><strong className="num">12</strong><p className="case">13건</p></td>
-                      <td><strong className="num">13</strong><p className="case">13건</p></td>
-                    </tr>
-                    <tr>
-                      <td><strong className="num">14</strong><p className="case">13건</p></td>
-                      <td><strong className="num">15</strong><p className="case">13건</p></td>
-                      <td><strong className="num">16</strong><p className="case">13건</p></td>
-                      <td><strong className="num">17</strong><p className="case">13건</p></td>
-                      <td><strong className="num">18</strong><p className="case">13건</p></td>
-                      <td><strong className="num">19</strong><p className="case">13건</p></td>
-                      <td><strong className="num">20</strong><p className="case">13건</p></td>
-                    </tr>
-                    <tr>
-                      <td><strong className="num">21</strong><p className="case">13건</p></td>
-                      <td><strong className="num">22</strong><p className="case">13건</p></td>
-                      <td><strong className="num">23</strong><p className="case">13건</p></td>
-                      <td><strong className="num">24</strong><p className="case">13건</p></td>
-                      <td><strong className="num">25</strong><p className="case">13건</p></td>
-                      <td><strong className="num">26</strong><p className="case">13건</p></td>
-                      <td><strong className="num">27</strong><p className="case">13건</p></td>
-                    </tr>
-                    <tr>
-                      <td><strong className="num">28</strong><p className="case">13건</p></td>
-                      <td><strong className="num">29</strong><p className="case">13건</p></td>
-                      <td><strong className="num">30</strong><p className="case">13건</p></td>
-                      <td><strong className="num">31</strong><p className="case">13건</p></td>
-                      <td className="noText"></td>
-                      <td className="noText"></td>
-                      <td className="noText"></td>
-                    </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
+              <MainCalendar />
               <div className="rightBox tabContWrap" data-aos="fade-right" data-aos-duration="1500">
                 <div className="topBox">
                   <strong className="date">06월 02일</strong>
