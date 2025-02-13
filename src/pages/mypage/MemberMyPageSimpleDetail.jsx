@@ -16,6 +16,19 @@ function MemberMyPageSimpleDetail(props) {
     });
     const [simpleDetail, setSimpleDetail] = useState(null);
 
+    useEffect(() => {
+        const handleStorageChange = (event) => {
+            if (event.key === "refreshCnsltDsctnList") {
+                getSimpleDetail();
+            }
+        };
+
+        window.addEventListener("storage", handleStorageChange);
+        return () => {
+            window.removeEventListener("storage", handleStorageChange);
+        };
+    }, []);
+
     const getSimpleDetail = () => {
         if (!searchDto.cnsltAplySn) return;
 

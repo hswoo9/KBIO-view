@@ -133,6 +133,7 @@ function MemberMyPageSimplePopup() {
                 EgovNet.requestFetch("/memberApi/setSimpleData", requestOptions, (resp) => {
                     if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
                         Swal.fire("수정되었습니다.").then(() => {
+                            localStorage.setItem("refreshCnsltDsctnList", Date.now());
                             window.close();
                         });
                     } else {
