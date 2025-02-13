@@ -173,31 +173,31 @@ function MemberMyPageDifficultiesModify(props) {
                 {/* Step Indicator */}
                 <ul className="stepWrap" data-aos="fade-up" data-aos-duration="1500">
                     <li>
-                        <NavLink to={URL.MEMBER_MYPAGE_MODIFY} activeClassName="active">
+                        <NavLink to={URL.MEMBER_MYPAGE_MODIFY} >
                             <div className="num"><p>1</p></div>
                             <p className="text">회원정보수정</p>
                         </NavLink>
                     </li>
                     <li>
-                        <NavLink to={URL.MEMBER_MYPAGE_CONSULTING} activeClassName="active">
+                        <NavLink to={URL.MEMBER_MYPAGE_CONSULTING} >
                             <div className="num"><p>2</p></div>
                             <p className="text">컨설팅의뢰 내역</p>
                         </NavLink>
                     </li>
                     <li>
-                        <NavLink to={URL.MEMBER_MYPAGE_SIMPLE} activeClassName="active">
+                        <NavLink to={URL.MEMBER_MYPAGE_SIMPLE} >
                             <div className="num"><p>3</p></div>
                             <p className="text">간편상담 내역</p>
                         </NavLink>
                     </li>
                     <li className="active">
-                        <NavLink to={URL.MEMBER_MYPAGE_DIFFICULTIES} activeClassName="active">
+                        <NavLink to={URL.MEMBER_MYPAGE_DIFFICULTIES} >
                             <div className="num"><p>4</p></div>
                             <p className="text">애로사항 내역</p>
                         </NavLink>
                     </li>
                     <li>
-                        <NavLink to={URL.MEMBER_MYPAGE_CANCEL} activeClassName="active">
+                        <NavLink to={URL.MEMBER_MYPAGE_CANCEL} >
                             <div className="num"><p>5</p></div>
                             <p className="text">회원탈퇴</p>
                         </NavLink>
@@ -257,9 +257,9 @@ function MemberMyPageDifficultiesModify(props) {
                                             <ul style={{paddingLeft: "20px"}}>
                                                 {difficultiesDetail.diffFiles.map((file, index) => (
                                                     <li key={index} style={{marginBottom: "5px"}}>
-                        <span onClick={() => fileDownLoad(file.atchFileSn, file.atchFileNm)} style={{cursor: "pointer"}}>
-                            {file.atchFileNm} - {(file.atchFileSz / 1024).toFixed(2)} KB
-                        </span>
+                                                            <span onClick={() => fileDownLoad(file.atchFileSn, file.atchFileNm)} style={{cursor: "pointer"}}>
+                                                                {file.atchFileNm} - {(file.atchFileSz / 1024).toFixed(2)} KB
+                                                            </span>
                                                         <button
                                                             onClick={() => setFileDel(file.atchFileSn)} // 삭제 버튼 클릭 시 처리할 함수
                                                             style={{marginLeft: '10px', color: 'red'}}

@@ -12,13 +12,14 @@ const MainSlider = () => {
     const autoplaySpeed = 8000;
 
     const toggleAutoPlay = () => {
-        console.log(isAutoPlay);
-        if(isAutoPlay){
-            sliderRef.current.slickPlay();
-        }else{
-            sliderRef.current.slickPause();
-        }
-        setIsAutoPlay(!isAutoPlay);
+        setIsAutoPlay((prev) => {
+            if (prev) {
+                sliderRef.current.slickPause();
+            } else {
+                sliderRef.current.slickPlay();
+            }
+            return !prev;
+        });
     }
 
     const nextSlide = () => {

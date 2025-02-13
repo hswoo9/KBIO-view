@@ -10,7 +10,7 @@ import simpleMainIng from "/assets/images/img_simple_main.png";
 import initPage from "@/js/ui";
 import logo from "@/assets/images/logo.svg";
 import {getBnrPopupList, getMvnEntList, getPstList} from "@/components/main/MainComponents";
-import MainSwiper from "@/components/main/MainSwiper";
+
 
 import Slider from 'react-slick';
 import "@/css/slickCustom.css";
@@ -19,6 +19,8 @@ import "@/css/userMain.css";
 
 import AOS from "aos";
 
+import MainSwiper from "@/components/main/MainSwiper";
+import MainFooterSwiper from "@/components/main/MainFooterSwiper";
 import CommonSlider from "@/components/CommonSlider";
 import MainSlider from "@/components/main/MainSlider";
 import MainCalendar from "@/components/main/MainCalendar";
@@ -28,10 +30,6 @@ import user_main_sec01_icon01 from "@/assets/images/user_main_sec01_icon01.svg";
 import user_main_sec01_icon02 from "@/assets/images/user_main_sec01_icon02.svg";
 import user_main_sec01_icon03 from "@/assets/images/user_main_sec01_icon03.svg";
 import user_main_sec01_icon04 from "@/assets/images/user_main_sec01_icon04.svg";
-
-import user_main_sec04_banner01 from "@/assets/images/user_main_sec04_banner01.jpg";
-
-
 
 import user_main_rolling_logo01 from "@/assets/images/user_main_rolling_logo01.svg";
 import user_main_rolling_logo02 from "@/assets/images/user_main_rolling_logo02.svg";
@@ -52,11 +50,47 @@ function EgovMainUser(props) {
   const userSn = getSessionItem("userSn");
 
   const [popUpList, setPopUpList] = useState([]);
-  const [mainSlidesList, setMainSlidesList] = useState([]);
-  const [footerSlidesList, setFooterSlidesList] = useState([]);
+
+  const wrapRef = useRef(null);
+  const listRef = useRef(null);
+  const [windowSize, setWindowSize] = useState(getWindowSize());
+  function getWindowSize() {
+    if (window.innerWidth > 1279) return 'pc';
+    if (window.innerWidth > 767) return 'ta';
+    return 'mo';
+  }
   useEffect(() => {
-    console.log(mainSlidesList);
-  }, [mainSlidesList]);
+    function handleResize() {
+      setWindowSize(getWindowSize());
+    }
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+  useEffect(() => {
+    // flowBannerAct 함수 실행
+    flowBannerAct();
+  }, [windowSize]);
+  const flowBannerAct = () => {
+    const wrap = wrapRef.current;
+    const list = listRef.current;
+    let wrapWidth = wrap.offsetWidth;
+    let listWidth = list.offsetWidth;
+    const speed = 15;
+    let $clone = list.cloneNode(true);
+    wrap.appendChild($clone);
+    if (listWidth < wrapWidth) {
+      const listCount = Math.ceil(wrapWidth * 2 / listWidth);
+      for (let i = 2; i < listCount; i++) {
+        $clone = $clone.cloneNode(true);
+        wrap.appendChild($clone);
+      }
+    }
+    wrap.querySelectorAll('.imgMove').forEach((el) => {
+      el.style.animation = `${listWidth / speed}s linear infinite flowRolling`;
+    });
+  };
 
   const [mvnEntList, setMvnEntList] = useState([]);
   const [pstList, setPstList] = useState([]);
@@ -84,10 +118,6 @@ function EgovMainUser(props) {
       setPopUpList(data.filter(e => e.tblBnrPopup.bnrPopupKnd == "popup"));
     });
 
-    getBnrPopupList("bnr").then((data) => {
-      setMainSlidesList(data.filter(e => e.tblBnrPopup.bnrPopupFrm == "mainSlides"));
-    });
-
     getMvnEntList().then((data) => {
       setMvnEntList(data);
     });
@@ -97,7 +127,6 @@ function EgovMainUser(props) {
 
   return (
       <div id="container" className="container main">
-        {/*<CommonSlider data={mainSlidesList} />*/}
         <div className="sec01">
           <div className="bg bgSlide">
             <div className="slide"><img src={user_main_sec01_slide01} alt="images" loading="lazy"/></div>
@@ -150,109 +179,10 @@ function EgovMainUser(props) {
             </div>
           </div>
         </section>
-        <section className="sec sec03" data-aos="fade-in">
-          <div className="inner">
-            <h2 className="secTitle">일정현황</h2>
-            <div className="boxWrap">
-              <MainCalendar />
-              <div className="rightBox tabContWrap" data-aos="fade-right" data-aos-duration="1500">
-                <div className="topBox">
-                  <strong className="date">06월 02일</strong>
-                  <div className="tabBox type1">
-                    <div className="bg hover"></div>
-                    <ul className="list">
-                      <li className="active"><a href="#"><span>공지사항</span></a></li>
-                      <li><a href="#"><span>자료실</span></a></li>
-                    </ul>
-                  </div>
-                </div>
-                <div className="tabCont tab01 active">
-                  <ul className="list">
-                    <li><a href="#"><p>2024 한-덴 의약바이오 & CMC 혁신 기술포럼 개최 안내 (11.20, 수)</p></a></li>
-                    <li><a href="#"><p>K-바이오랩허브 소개자료(최종)</p></a></li>
-                    <li><a href="#"><p>[한국혁신의약품컨소시엄] KIMCo 2024년도 하반기 공동투자·육성사업 참가기업 모집</p></a></li>
-                    <li><a href="#"><p>[서울바이오허브] 「2024 헬스엑스챌린지 서울」 모집공고 및 참가 수상기업 안내</p></a></li>
-                    <li><a href="#"><p>[서울경제진흥원] 2024년 I'M Challenge(아임 챌린지) 참여 스타트업 모집</p></a></li>
-                    <li><a href="#"><p>[서울경제진흥원] 마곡의료아카데미(6월) 교육 참여기업 모집공고 안내</p></a></li>
-                    <li><a href="#"><p>2024 한-덴 의약바이오 & CMC 혁신 기술포럼 개최 안내 (11.20, 수)</p></a></li>
-                    <li><a href="#"><p>K-바이오랩허브 소개자료(최종)</p></a></li>
-                    <li><a href="#"><p>[한국혁신의약품컨소시엄] KIMCo 2024년도 하반기 공동투자·육성사업 참가기업 모집</p></a></li>
-                    <li><a href="#"><p>[서울바이오허브] 「2024 헬스엑스챌린지 서울」 모집공고 및 참가 수상기업 안내</p></a></li>
-                    <li><a href="#"><p>[서울경제진흥원] 2024년 I'M Challenge(아임 챌린지) 참여 스타트업 모집</p></a></li>
-                    <li><a href="#"><p>[서울경제진흥원] 마곡의료아카데미(6월) 교육 참여기업 모집공고 안내</p></a></li>
-                  </ul>
-                </div>
-                <div className="tabCont tab02">
-                  <ul className="list">
-                    <li><a href="#"><p>2024 한-덴 의약바이오 & CMC 혁신 기술포럼 개최 안내 (11.20, 수)</p></a></li>
-                    <li><a href="#"><p>K-바이오랩허브 소개자료(최종)</p></a></li>
-                    <li><a href="#"><p>[한국혁신의약품컨소시엄] KIMCo 2024년도 하반기 공동투자·육성사업 참가기업 모집</p></a></li>
-                    <li><a href="#"><p>[서울바이오허브] 「2024 헬스엑스챌린지 서울」 모집공고 및 참가 수상기업 안내</p></a></li>
-                    <li><a href="#"><p>[서울경제진흥원] 2024년 I'M Challenge(아임 챌린지) 참여 스타트업 모집</p></a></li>
-                    <li><a href="#"><p>[서울경제진흥원] 마곡의료아카데미(6월) 교육 참여기업 모집공고 안내</p></a></li>
-                    <li><a href="#"><p>2024 한-덴 의약바이오 & CMC 혁신 기술포럼 개최 안내 (11.20, 수)</p></a></li>
-                    <li><a href="#"><p>K-바이오랩허브 소개자료(최종)</p></a></li>
-                    <li><a href="#"><p>[한국혁신의약품컨소시엄] KIMCo 2024년도 하반기 공동투자·육성사업 참가기업 모집</p></a></li>
-                    <li><a href="#"><p>[서울바이오허브] 「2024 헬스엑스챌린지 서울」 모집공고 및 참가 수상기업 안내</p></a></li>
-                    <li><a href="#"><p>[서울경제진흥원] 2024년 I'M Challenge(아임 챌린지) 참여 스타트업 모집</p></a></li>
-                    <li><a href="#"><p>[서울경제진흥원] 마곡의료아카데미(6월) 교육 참여기업 모집공고 안내</p></a></li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+        <MainCalendar />
         <section className="sec sec04" data-aos="fade-in">
           <div className="inner">
-            <div className="box bannerBox" data-aos="fade-in">
-              <div className="topBox" data-aos="fade-in" data-aos-duration="1500">
-                <h2 className="secTitle">일정현황</h2>
-                <div className="slideControl">
-                  <button type="button" className="arrowBtn prevBtn">
-                    <div className="icon"></div>
-                  </button>
-                  <button type="button" className="pauseBtn">
-                    <div className="icon"></div>
-                  </button>
-                  <button type="button" className="arrowBtn nextBtn">
-                    <div className="icon"></div>
-                  </button>
-                </div>
-              </div>
-              <div className="bannerSwiper swiper" data-aos="fade-up" data-aos-duration="1500">
-                <div className="swiper-wrapper">
-                  <div className="swiper-slide">
-                    <div className="bg"><img src={user_main_sec04_banner01} alt="images" loading="lazy"/></div>
-                    <div className="textBox">
-                      <h2 className="text">사업 기획부터 연구 개발, 펀딩 투자를 지원하는</h2>
-                      <p className="title">BIO <br/>특화프로그램 지원</p>
-                    </div>
-                  </div>
-                  <div className="swiper-slide">
-                    <div className="bg"><img src={user_main_sec04_banner01} alt="images" loading="lazy"/></div>
-                    <div className="textBox">
-                      <h2 className="text">사업 기획부터 연구 개발, 펀딩 투자를 지원하는</h2>
-                      <p className="title">BIO <br/>특화프로그램 지원</p>
-                    </div>
-                  </div>
-                  <div className="swiper-slide">
-                    <div className="bg"><img src={user_main_sec04_banner01} alt="images" loading="lazy"/></div>
-                    <div className="textBox">
-                      <h2 className="text">사업 기획부터 연구 개발, 펀딩 투자를 지원하는</h2>
-                      <p className="title">BIO <br/>특화프로그램 지원</p>
-                    </div>
-                  </div>
-                  <div className="swiper-slide">
-                    <div className="bg"><img src={user_main_sec04_banner01} alt="images" loading="lazy"/></div>
-                    <div className="textBox">
-                      <h2 className="text">사업 기획부터 연구 개발, 펀딩 투자를 지원하는</h2>
-                      <p className="title">BIO <br/>특화프로그램 지원</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="swiper-pagination"></div>
-              </div>
-            </div>
+            <MainFooterSwiper />
             <div className="box noticeBox" data-aos="fade-in">
               <div className="topBox" data-aos="fade-in" data-aos-duration="1500">
                 <h2 className="secTitle">공지사항</h2>
@@ -329,9 +259,8 @@ function EgovMainUser(props) {
           </div>
         </section>
         <div className="rollingWrap">
-          <div className="moveWrap">
-            <ul className="imgMove">
-              {/*<MainFooterBnr data={footerSlidesList} />*/}
+          <div className="moveWrap" ref={wrapRef}>
+            <ul className="imgMove" ref={listRef}>
               <li><img src={user_main_rolling_logo01} alt="SAMSUNG BIOLOGICS" loading="lazy"/></li>
               <li><img src={user_main_rolling_logo02} alt="동화약품" loading="lazy"/></li>
               <li><img src={user_main_rolling_logo03} alt="GC녹십자" loading="lazy"/></li>

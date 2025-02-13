@@ -18,6 +18,7 @@ import Eval  from "../../../../common/pst/eval.jsx";
 import { getSessionItem, setSessionItem } from "@/utils/storage";
 import ManagerLeftNew from "@/components/manager/ManagerLeftNew";
 import {fileDownLoad} from "@/components/CommonComponents.jsx";
+import {fileZipDownLoad} from "../../../../../components/CommonComponents.jsx";
 
 function setPst(props) {
   const sessionUser = getSessionItem("loginUser");
@@ -307,12 +308,20 @@ function setPst(props) {
                               {pstDetail.pstFiles.map((file, index) => (
                                   <li key={index}>
                                     <span
-                                        onClick={() => fileDownLoad(file.atchFileSn, file.atchFileNm)}>{file.atchFileNm} - {(file.atchFileSz / 1024).toFixed(2)} KB</span>
+                                        onClick={() => fileDownLoad(file.atchFileSn, file.atchFileNm, 'tbl_bbs', pstDetail.bbsSn)}>{file.atchFileNm} - {(file.atchFileSz / 1024).toFixed(2)} KB</span>
                                   </li>
                               ))}
                             </ul>
                         )}
                       </div>
+                      {pstDetail.pstFiles.length > 0 && (
+                          <button
+                              type="button"
+                              className="clickBtn"
+                              onClick={() => fileZipDownLoad("pst_" + pstDetail.pstSn, pstDetail.pstTtl, 'tbl_bbs', pstDetail.bbsSn)}>
+                            압축
+                          </button>
+                      )}
                     </li>
                 )}
                 <li className="inputBox type1 width1">

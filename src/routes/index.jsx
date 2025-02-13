@@ -184,6 +184,9 @@ import ManagerStatisticsUser from "@/pages/manager/statistics/ManagerStatisticsU
 import ManagerStatisticsAccess from "@/pages/manager/statistics/ManagerStatisticsAccess";
 import ManagerStatisticsBoard from "@/pages/manager/statistics/ManagerStatisticsBoard";
 import ManagerStatisticsFile from "@/pages/manager/statistics/ManagerStatisticsFile";
+import ManagerStatisticsUserAnalyze from "@/pages/manager/statistics/ManagerStatisticsUserAnalyze";
+import ManagerStatisticsInflowRoute from "@/pages/manager/statistics/ManagerStatisticsInflowRoute";
+import ManagerStatisticsUserEqui from "@/pages/manager/statistics/ManagerStatisticsUserEqui";
 
 
 
@@ -223,6 +226,8 @@ import MemberMyPageModify from '@/pages/mypage/MemberMyPageModify';
 import MemberMyPageConsulting from '@/pages/mypage/MemberMyPageConsulting';
 import MemberMyPageSimple from '@/pages/mypage/MemberMyPageSimple';
 import MemberMyPageSimpleDetail from '@/pages/mypage/MemberMyPageSimpleDetail';
+import MemberMyPageSimplePopup from '@/pages/mypage/MemberMyPageSimplePopup';
+import MemberMyPageSimpleCreatePopup from '@/pages/mypage/MemberMyPageSimpleCreatePopup';
 import MemberMyPageDifficulties from '@/pages/mypage/MemberMyPageDifficulties';
 import MemberMyPageDifficultiesDetail from '@/pages/mypage/MemberMyPageDifficultiesDetail';
 import MemberMyPageDifficultiesModify from '@/pages/mypage/MemberMyPageDifficultiesModify';
@@ -571,6 +576,8 @@ const SecondRoutes = () => {
               <Route path={URL.MEMBER_MYPAGE_CONSULTING} element={<MemberMyPageConsulting/>}/>
               <Route path={URL.MEMBER_MYPAGE_SIMPLE} element={<MemberMyPageSimple/>}/>
               <Route path={URL.MEMBER_MYPAGE_SIMPLE_DETAIL} element={<MemberMyPageSimpleDetail/>}/>
+              <Route path={URL.MEMBER_MYPAGE_SIMPLE_POPUP} element={<MemberMyPageSimplePopup/>}/>
+              <Route path={URL.MEMBER_MYPAGE_SIMPLE_CREATE_POPUP} element={<MemberMyPageSimpleCreatePopup/>}/>
               <Route path={URL.MEMBER_MYPAGE_DIFFICULTIES} element={<MemberMyPageDifficulties/>}/>
               <Route path={URL.MEMBER_MYPAGE_DIFFICULTIES_DETAIL} element={<MemberMyPageDifficultiesDetail/>}/>
               <Route path={URL.MEMBER_MYPAGE_DIFFICULTIES_MODIFY} element={<MemberMyPageDifficultiesModify/>}/>
@@ -808,6 +815,10 @@ const SecondRoutes = () => {
               <Route path={URL.MANAGER_STATISTICS_ACCESS} element={<ManagerStatisticsAccess/>}/>
               <Route path={URL.MANAGER_STATISTICS_BOARD} element={<ManagerStatisticsBoard/>}/>
               <Route path={URL.MANAGER_STATISTICS_FILE} element={<ManagerStatisticsFile/>}/>
+
+              <Route path={URL.MANAGER_STATISTICS_USER_ANALYZE} element={<ManagerStatisticsUserAnalyze/>}/>
+              <Route path={URL.MANAGER_STATISTICS_INFLOW_ROUTE} element={<ManagerStatisticsInflowRoute/>}/>
+              <Route path={URL.MANAGER_STATISTICS_USER_EQUI} element={<ManagerStatisticsUserEqui/>}/>
 
               <Route path={URL.MessageTest} element={<MessageTest/>}/>
 

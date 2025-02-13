@@ -16,7 +16,7 @@ function AccessTabPst(props) {
     const lastDay = new Date(year, month, 0).getDate();
 
     const categories = Array.from({ length: lastDay }, (_, i) => String(i + 1 + "일").padStart(2, '0'));
-    const [pstInqCnt, setPstInqCnt] = useState([])
+    const [cnt, setCnt] = useState([])
 
     const getStatisticsPstAccess = () => {
         const requestOptions = {
@@ -31,10 +31,10 @@ function AccessTabPst(props) {
             resp.result.statisticsPstAccess.forEach(function(v, i){
                 const userCounts = categories.map((day) => {
                     const item = resp.result.statisticsPstAccess.find(v => parseInt(v.day.split("-")[2]) === parseInt(day.slice(0, -1)));
-                    return item ? item.inqCnt : 0;
+                    return item ? item.cnt : 0;
                 });
 
-                setPstInqCnt(userCounts)
+                setCnt(userCounts)
             })
         });
     }
@@ -57,7 +57,7 @@ function AccessTabPst(props) {
     const series = [
         {
             name: '조회수',
-            data: pstInqCnt,
+            data: cnt,
         },
     ];
 

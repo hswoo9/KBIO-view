@@ -69,7 +69,7 @@ function MemberMyPageConsult(props) {
                         if (index === 0) dataList = [];
 
                         dataList.push(
-                            <tr key={item.pstSn}>
+                            <tr key={item.cnsltAplySn}>
                                 <td>
                                     {resp.paginationInfo.totalRecordCount - (resp.paginationInfo.currentPageNo - 1) * resp.paginationInfo.pageSize - index}
                                 </td>

@@ -503,6 +503,34 @@ function ManagerLeftStatistics() {
                   <p>첨부자료이용통계</p>
                 </NavLink>
               </li>
+
+              <li>
+                <NavLink
+                    to={URL.MANAGER_STATISTICS_USER_ANALYZE}
+                    className={({isActive}) => (isActive ? "activeTag" : "")}
+                >
+                  <div className="icon"></div>
+                  <p>사용자분석</p>
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                    to={URL.MANAGER_STATISTICS_INFLOW_ROUTE}
+                    className={({isActive}) => (isActive ? "activeTag" : "")}
+                >
+                  <div className="icon"></div>
+                  <p>유입정보</p>
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                    to={URL.MANAGER_STATISTICS_USER_EQUI}
+                    className={({isActive}) => (isActive ? "activeTag" : "")}
+                >
+                  <div className="icon"></div>
+                  <p>사용자기기</p>
+                </NavLink>
+              </li>
             </ul>
           </nav>
         </div>
