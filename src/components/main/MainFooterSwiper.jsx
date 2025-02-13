@@ -114,16 +114,17 @@ const MainFooterSwiper = ({data}) => {
                                 bannerList.length > 0 ? (
                                     bannerList.map( (bnr, index) => (
                                         bnr ? (
-                                            <SwiperSlide className="swiper-slide" key={`${bnr.bnrPopupSn || "no_key"}-${index}`}>
-                                                <div className="bg">
+                                            <SwiperSlide className="swiper-slide" key={`${bnr.tblBnrPopup.bnrPopupSn || "no_key"}-${index}`}>
+                                                <div className="bg"
+                                                     onClick={() => {
+                                                         window.open(bnr.tblBnrPopup.bnrPopupUrlAddr);
+                                                     }}
+                                                >
                                                     <img
                                                         src={`http://133.186.250.158${bnr.tblComFile.atchFilePathNm}/${bnr.tblComFile.strgFileNm}.${bnr.tblComFile.atchFileExtnNm}`}
                                                         alt={bnr.tblComFile.atchFileNm}
                                                         style={{
                                                             cursor: "pointer"
-                                                        }}
-                                                        onClick={() => {
-                                                            window.open(bnr.bnrPopupUrlAddr);
                                                         }}
                                                         loading="lazy"
                                                     />
