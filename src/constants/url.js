@@ -210,6 +210,7 @@ const URL = {
   MEMBER_MYPAGE_MODIFY : "/member/mypage/modify",
   MEMBER_MYPAGE_CONSULTING : "/member/mypage/consulting",
   MEMBER_MYPAGE_SIMPLE : "/member/mypage/simple",
+  MEMBER_MYPAGE_SIMPLE_DETAIL : "/member/mypage/simple/detail",
   MEMBER_MYPAGE_DIFFICULTIES : "/member/mypage/difficulties",
   MEMBER_MYPAGE_DIFFICULTIES_DETAIL : "/member/mypage/difficulties/detail",
   MEMBER_MYPAGE_DIFFICULTIES_MODIFY : "/member/mypage/difficulties/modify",
