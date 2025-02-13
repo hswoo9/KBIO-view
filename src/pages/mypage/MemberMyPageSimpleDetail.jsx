@@ -152,7 +152,7 @@ function MemberMyPageSimpleDetail(props) {
                                                 borderRadius: "5px",
                                                 cursor: "pointer"
                                             }}
-                                            onClick={() => handleEditClick(item)} // 수정 버튼 클릭 시 핸들러 호출
+                                            onClick={() => handleEditClick(item)}
                                         >
                                             수정
                                         </button>
@@ -170,6 +170,10 @@ function MemberMyPageSimpleDetail(props) {
             }
         );
     };
+
+    const handleCreateClick = () => {
+        window.open(`/popup/simple/create`, "_blank", "width=800,height=530");
+    }
 
     const handleEditClick = (item) => {
         const popupData = {
@@ -222,7 +226,7 @@ function MemberMyPageSimpleDetail(props) {
                 </ul>
 
                 {/* 애로사항 상세 내용 */}
-                <div className="detailBox" style={{ marginTop: "20px" }}>
+                <div className="contBox" style={{marginTop: "20px"}}>
                     {simpleDetail ? (
                         <div className="contBox infoWrap customContBox"
                              style={{padding: "20px", background: "#f9f9f9", borderRadius: "5px"}}>
@@ -275,10 +279,26 @@ function MemberMyPageSimpleDetail(props) {
                             </div>
                         </div>
                     ) : (
-                        <div className="contBox infoWrap customContBox" style={{padding: "20px", background: "#f9f9f9", borderRadius: "5px"}}>
-                            <div className="input" style={{ marginTop: "5px" }}>해당 간편상담의 상세 정보가 없습니다.</div>
+                        <div className="contBox infoWrap customContBox"
+                             style={{padding: "20px", background: "#f9f9f9", borderRadius: "5px"}}>
+                            <div className="input" style={{marginTop: "5px"}}>해당 간편상담의 상세 정보가 없습니다.</div>
                         </div>
                     )}
+                </div>
+                <div className="buttonBox">
+                    <div className="leftBox">
+                        <button type="button" className="clickBtn point"  onClick={() => handleCreateClick()}>
+                            <span>등록</span>
+                        </button>
+                        <button type="button" className="clickBtn point" onClick={() => handleCreateClick()}>
+                            <span>처리완료</span>
+                        </button>
+                    </div>
+                    <NavLink to={URL.MEMBER_MYPAGE_SIMPLE}>
+                        <button type="button" className="clickBtn white">
+                            목록
+                        </button>
+                    </NavLink>
                 </div>
             </div>
         </div>

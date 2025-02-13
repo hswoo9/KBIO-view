@@ -49,56 +49,6 @@ function MemberMyPageSimplePopup() {
         setFileList(updatedFileList);
     };
 
-    const setFileDel = (atchFileSn) => {
-        Swal.fire({
-            title: "삭제한 파일은 복구할 수 없습니다.\n그래도 삭제하시겠습니까?",
-            showCloseButton: true,
-            showCancelButton: true,
-            confirmButtonText: "확인",
-            cancelButtonText: "취소"
-        }).then((result) => {
-            if(result.isConfirmed) {
-                const requestOptions = {
-                    method: "POST",
-                    headers: {
-                        "Content-type": "application/json",
-                    },
-                    body:  JSON.stringify({
-                        atchFileSn: atchFileSn,
-                    }),
-                };
-
-                EgovNet.requestFetch("/commonApi/setFileDel", requestOptions, (resp) => {
-                    if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
-                        Swal.fire("삭제되었습니다.");
-
-                        const updatedFiles = simplePopupModify.simpleFiles.filter(file => file.atchFileSn !== atchFileSn);
-                        setSimplePopupModify({ ...simplePopupModify, simpleFiles: updatedFiles });
-                    }
-                });
-            }
-        });
-    }
-
-    useEffect(() => {
-        const item = JSON.parse(localStorage.getItem('popupData'));
-        console.log("로컬스토리지에서 불러온 데이터:", item);
-        if (item) {
-            if (item.mode === CODE.MODE_CREATE) {
-                setSimplePopupModify({
-                    content: '',
-                    simpleFiles: [],
-                    cn: ''
-                });
-            } else {
-                setSimplePopupModify({
-                    ...item,
-                    content: item.cn || '',
-                    simpleFiles: item.simpleFiles || [],
-                });
-            }
-        }
-    }, []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -155,12 +105,17 @@ function MemberMyPageSimplePopup() {
     };
 
     return (
-        <div style={{ padding: "20px", borderRadius: "8px", background: "#f9f9f9", boxShadow: "0 2px 10px rgba(0,0,0,0.1)" }}>
-            <h2 style={{ marginBottom: "20px", color: "#333" }}>상담 수정</h2>
+        <div style={{
+            padding: "20px",
+            borderRadius: "8px",
+            background: "#f9f9f9",
+            boxShadow: "0 2px 10px rgba(0,0,0,0.1)"
+        }}>
+            <h2 style={{marginBottom: "20px", color: "#333"}}>상담 수정</h2>
 
             {/* 내용 수정 */}
-            <div style={{ marginBottom: "15px" }}>
-                <label style={{ fontWeight: "bold" }}>내용:</label>
+            <div style={{marginBottom: "15px"}}>
+                <label style={{fontWeight: "bold"}}>내용:</label>
                 <CommonEditor
                     value={simplePopupModify.content}
                     onChange={handleEditorChange}
@@ -168,48 +123,31 @@ function MemberMyPageSimplePopup() {
             </div>
 
             {/* 첨부파일 */}
-            <div style={{ marginBottom: "15px" }}>
-                <label style={{ fontWeight: "bold" }}>첨부파일</label>
-                <div {...getRootProps({
-                    style: {
-                        border: "2px dashed #cccccc",
-                        padding: "20px",
-                        textAlign: "center",
-                        cursor: "pointer",
-                    },
-                })}>
+            <div style={{marginBottom: "15px"}}>
+                <label style={{fontWeight: "bold"}}>첨부파일</label>
+                <div
+                    {...getRootProps({
+                        style: {
+                            border: "2px dashed #cccccc",
+                            padding: "20px",
+                            textAlign: "center",
+                            cursor: "pointer",
+                        },
+                    })}
+                >
                     <input {...getInputProps()} />
                     <p>파일을 이곳에 드롭하거나 클릭하여 업로드하세요</p>
                 </div>
 
-                {simplePopupModify.simpleFiles.length > 0 && (
-                    <ul style={{ paddingLeft: "20px" }}>
-                        {simplePopupModify.simpleFiles.map((file, index) => (
-                            <li key={index} style={{ marginBottom: "5px" }}>
-                                <span
-                                    onClick={() => fileDownLoad(file.atchFileSn, file.atchFileNm)}
-                                    style={{ cursor: "pointer" }}>
-                                    {file.atchFileNm} - {(file.atchFileSz / 1024).toFixed(2)} KB
-                                </span>
-                                <button
-                                    onClick={() => setFileDel(file.atchFileSn)} // 삭제 버튼 클릭 시 처리할 함수
-                                    style={{ marginLeft: '10px', color: 'red' }}
-                                >
-                                    삭제
-                                </button>
-                            </li>
-                        ))}
-                    </ul>
-                )}
-
                 {fileList.length > 0 && (
-                    <ul style={{ paddingLeft: "20px" }}>
+                    <ul>
                         {fileList.map((file, index) => (
-                            <li key={index} style={{ marginBottom: "5px" }}>
+                            <li key={index}>
                                 {file.name} - {(file.size / 1024).toFixed(2)} KB
+
                                 <button
-                                    onClick={() => handleDeleteFile(index)} // 삭제 버튼 클릭 시 처리할 함수
-                                    style={{ marginLeft: '10px', color: 'red' }}
+                                    onClick={() => handleDeleteFile(index)}  // 삭제 버튼 클릭 시 처리할 함수
+                                    style={{marginLeft: '10px', color: 'red'}}
                                 >
                                     삭제
                                 </button>
@@ -217,6 +155,7 @@ function MemberMyPageSimplePopup() {
                         ))}
                     </ul>
                 )}
+                <span className="warningText"></span>
             </div>
 
             <button onClick={handleSave} style={{
@@ -227,7 +166,7 @@ function MemberMyPageSimplePopup() {
                 border: "none",
                 cursor: "pointer"
             }}>
-                수정
+                등록
             </button>
         </div>
     );
