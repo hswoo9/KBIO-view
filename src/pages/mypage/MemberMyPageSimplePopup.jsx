@@ -1,36 +1,123 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
-import { Link, NavLink, useLocation, useNavigate } from "react-router-dom"
+import React, { useState, useEffect, useCallback } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2';
+import { fileDownLoad } from "@/components/CommonComponents";
+import CommonEditor from "@/components/CommonEditor";
+import { useDropzone } from 'react-dropzone';
+import * as EgovNet from "@/api/egovFetch";
+import CODE from "@/constants/code";
 
 function MemberMyPageSimplePopup() {
+    const navigate = useNavigate();
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const cnsltAplySn = queryParams.get('cnsltDsctnSn');
 
-    const [formData, setFormData] = useState({
-        title: '',
+    const [simplePopupModify, setSimplePopupModify] = useState({
         content: '',
+        simpleFiles: [],
+        cn: ''// 파일 목록도 관리
     });
+    const [fileList, setFileList] = useState([]);
+    const acceptFileTypes = 'pdf,hwp,docx,xls,xlsx,ppt';
+
+    const onDrop = useCallback((acceptedFiles) => {
+        const allowedExtensions = acceptFileTypes.split(','); // 허용된 확장자 목록
+        const validFiles = acceptedFiles.filter((file) => {
+            const fileExtension = file.name.split(".").pop().toLowerCase();
+            return allowedExtensions.includes(fileExtension);
+        });
+
+        if (validFiles.length > 0) {
+            setFileList((prevFiles) => [...prevFiles, ...validFiles]); // 유효한 파일만 추가
+        }
+
+        if (validFiles.length !== acceptedFiles.length) {
+            Swal.fire(
+                `허용되지 않은 파일 유형이 포함되어 있습니다! (허용 파일: ${acceptFileTypes})`
+            );
+        }
+    }, [acceptFileTypes]);
+
+    const { getRootProps, getInputProps } = useDropzone({
+        onDrop,
+        multiple: true,
+    });
+
+    const handleDeleteFile = (index) => {
+        const updatedFileList = fileList.filter((_, i) => i !== index);
+        setFileList(updatedFileList);
+    };
+
+    const setFileDel = (atchFileSn) => {
+        Swal.fire({
+            title: "삭제한 파일은 복구할 수 없습니다.\n그래도 삭제하시겠습니까?",
+            showCloseButton: true,
+            showCancelButton: true,
+            confirmButtonText: "확인",
+            cancelButtonText: "취소"
+        }).then((result) => {
+            if(result.isConfirmed) {
+                const requestOptions = {
+                    method: "POST",
+                    headers: {
+                        "Content-type": "application/json",
+                    },
+                    body:  JSON.stringify({
+                        atchFileSn: atchFileSn,
+                    }),
+                };
+
+                EgovNet.requestFetch("/commonApi/setFileDel", requestOptions, (resp) => {
+                    if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
+                        Swal.fire("삭제되었습니다.");
+
+                        const updatedFiles = simplePopupModify.simpleFiles.filter(file => file.atchFileSn !== atchFileSn);
+                        setSimplePopupModify({ ...simplePopupModify, simpleFiles: updatedFiles });
+                    }
+                });
+            }
+        });
+    }
 
     useEffect(() => {
         const item = JSON.parse(localStorage.getItem('popupData'));
+        console.log("로컬스토리지에서 불러온 데이터:", item);
         if (item) {
-            setFormData({
-                title: item.ttl || '',
+            setSimplePopupModify({
+                ...item,
                 content: item.cn || '',
+                simpleFiles: item.simpleFiles || [],
             });
         }
     }, []);
+
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData({
-            ...formData,
-            [name]: value,
-        });
+        setSimplePopupModify({ ...simplePopupModify, [name]: value });
+    };
+
+    const handleEditorChange = (value) => {
+        console.log("Editor 변경된 값:", value);
+        setSimplePopupModify({ ...simplePopupModify, content: value, cn: value });
     };
 
     const handleSave = () => {
-        // 저장 로직 구현
+        const formData = new FormData();
+
+
+        console.log("저장할 데이터:", simplePopupModify.cn);
+
+        for (let key in simplePopupModify) {
+            if (simplePopupModify[key] != null && key !== "simpleFiles") {
+                formData.append(key, simplePopupModify[key]);
+            }
+        }
+
+        fileList.forEach((file) => {
+            formData.append("simpleFiles", file);
+        });
+
         Swal.fire({
             title: '저장하시겠습니까?',
             showCloseButton: true,
@@ -38,38 +125,98 @@ function MemberMyPageSimplePopup() {
             confirmButtonText: '저장',
             cancelButtonText: '취소',
         }).then((result) => {
-            if (result.isConfirmed) {
-                // 실제 저장 로직을 여기에 추가
-                console.log('저장할 데이터:', { ...formData, cnsltAplySn });
-                Swal.fire('저장되었습니다!', '', 'success');
+            if(result.isConfirmed) {
+                const requestOptions = {
+                    method: "POST",
+                    body: formData
+                };
+                EgovNet.requestFetch("/memberApi/setSimpleData", requestOptions, (resp) => {
+                    if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
+                        Swal.fire("수정되었습니다.").then(() => {
+                            window.close();
+                        });
+                    } else {
+                    }
+                });
+            } else {
+                //취소
             }
         });
-    };
+    }
 
     return (
         <div style={{ padding: "20px", borderRadius: "8px", background: "#f9f9f9", boxShadow: "0 2px 10px rgba(0,0,0,0.1)" }}>
             <h2 style={{ marginBottom: "20px", color: "#333" }}>상담 수정</h2>
-            <p style={{ marginBottom: "15px", color: "#555" }}>상담 신청 번호: {cnsltAplySn}</p>
-            <div style={{ marginBottom: "15px" }}>
-                <label style={{ fontWeight: "bold" }}>제목:</label>
-                <input
-                    type="text"
-                    name="title"
-                    value={formData.title}
-                    onChange={handleChange}
-                    style={{ width: "100%", padding: "8px", borderRadius: "4px", border: "1px solid #ccc", marginTop: "5px" }}
-                />
-            </div>
+
+            {/* 내용 수정 */}
             <div style={{ marginBottom: "15px" }}>
                 <label style={{ fontWeight: "bold" }}>내용:</label>
-                <textarea
-                    name="content"
-                    value={formData.content}
-                    onChange={handleChange}
-                    style={{ width: "100%", padding: "8px", borderRadius: "4px", border: "1px solid #ccc", marginTop: "5px", minHeight: "100px" }}
+                <CommonEditor
+                    value={simplePopupModify.content}
+                    onChange={handleEditorChange}
                 />
             </div>
-            <button onClick={handleSave} style={{ padding: "10px 15px", borderRadius: "5px", background: "#007bff", color: "#fff", border: "none", cursor: "pointer" }}>
+
+            {/* 첨부파일 */}
+            <div style={{ marginBottom: "15px" }}>
+                <label style={{ fontWeight: "bold" }}>첨부파일</label>
+                <div {...getRootProps({
+                    style: {
+                        border: "2px dashed #cccccc",
+                        padding: "20px",
+                        textAlign: "center",
+                        cursor: "pointer",
+                    },
+                })}>
+                    <input {...getInputProps()} />
+                    <p>파일을 이곳에 드롭하거나 클릭하여 업로드하세요</p>
+                </div>
+
+                {simplePopupModify.simpleFiles.length > 0 && (
+                    <ul style={{ paddingLeft: "20px" }}>
+                        {simplePopupModify.simpleFiles.map((file, index) => (
+                            <li key={index} style={{ marginBottom: "5px" }}>
+                                <span
+                                    onClick={() => fileDownLoad(file.atchFileSn, file.atchFileNm)}
+                                    style={{ cursor: "pointer" }}>
+                                    {file.atchFileNm} - {(file.atchFileSz / 1024).toFixed(2)} KB
+                                </span>
+                                <button
+                                    onClick={() => setFileDel(file.atchFileSn)} // 삭제 버튼 클릭 시 처리할 함수
+                                    style={{ marginLeft: '10px', color: 'red' }}
+                                >
+                                    삭제
+                                </button>
+                            </li>
+                        ))}
+                    </ul>
+                )}
+
+                {fileList.length > 0 && (
+                    <ul style={{ paddingLeft: "20px" }}>
+                        {fileList.map((file, index) => (
+                            <li key={index} style={{ marginBottom: "5px" }}>
+                                {file.name} - {(file.size / 1024).toFixed(2)} KB
+                                <button
+                                    onClick={() => handleDeleteFile(index)} // 삭제 버튼 클릭 시 처리할 함수
+                                    style={{ marginLeft: '10px', color: 'red' }}
+                                >
+                                    삭제
+                                </button>
+                            </li>
+                        ))}
+                    </ul>
+                )}
+            </div>
+
+            <button onClick={handleSave} style={{
+                padding: "10px 15px",
+                borderRadius: "5px",
+                background: "#007bff",
+                color: "#fff",
+                border: "none",
+                cursor: "pointer"
+            }}>
                 저장
             </button>
         </div>

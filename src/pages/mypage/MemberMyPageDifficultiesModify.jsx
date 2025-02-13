@@ -257,9 +257,9 @@ function MemberMyPageDifficultiesModify(props) {
                                             <ul style={{paddingLeft: "20px"}}>
                                                 {difficultiesDetail.diffFiles.map((file, index) => (
                                                     <li key={index} style={{marginBottom: "5px"}}>
-                        <span onClick={() => fileDownLoad(file.atchFileSn, file.atchFileNm)} style={{cursor: "pointer"}}>
-                            {file.atchFileNm} - {(file.atchFileSz / 1024).toFixed(2)} KB
-                        </span>
+                                                            <span onClick={() => fileDownLoad(file.atchFileSn, file.atchFileNm)} style={{cursor: "pointer"}}>
+                                                                {file.atchFileNm} - {(file.atchFileSz / 1024).toFixed(2)} KB
+                                                            </span>
                                                         <button
                                                             onClick={() => setFileDel(file.atchFileSn)} // 삭제 버튼 클릭 시 처리할 함수
                                                             style={{marginLeft: '10px', color: 'red'}}

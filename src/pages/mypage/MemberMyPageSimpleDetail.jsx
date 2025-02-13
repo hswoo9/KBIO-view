@@ -159,8 +159,12 @@ function MemberMyPageSimpleDetail(props) {
     };
 
     const handleEditClick = (item) => {
-        localStorage.setItem('popupData', JSON.stringify(item));
-        window.open(`/popup/simple`, "_blank", "width=600,height=400");
+        const popupData = {
+            ...item
+        };
+        console.log("팝업에 전달될 데이터:", popupData);
+        localStorage.setItem('popupData', JSON.stringify(popupData));
+        window.open(`/popup/simple`, "_blank", "width=800,height=530");
     };
 
     useEffect(() => {
