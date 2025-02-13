@@ -73,6 +73,43 @@ function ManagerCnsltDetail(props) {
             setCnslt({
                 ...resp.result.cnslt
             });
+
+            let dataList = [];
+            dataList.push(
+                <p>내역이 없습니다.</p>
+            );
+
+            resp.result.cnsltDsctnList.forEach(function (item,index){
+                if(index === 0) dataList =[];
+
+                dataList.push(
+                    <div className="input"
+                         style={{
+                             display: "flex",
+                             justifyContent: "center",
+                             alignItems: "center",
+                             gap : "20px"
+                         }}>
+                    <div
+                        style={{order: item.dsctnSe === "0" ? 1 : 2,  border: "1px solid #333", borderRadius: "10px" , padding : "10px", width : "80%"}}
+                    >
+                        <div dangerouslySetInnerHTML={{__html: item.cn}}>
+                        </div>
+                        <p style={{textAlign : "right"}}
+                        >{moment(item.frstCrtDt).format('YYYY.MM.DD  HH:MM')}</p>
+                    </div>
+                    <div
+                        style={{order: item.dsctnSe === "0" ? 1 : 2, border: "1px solid #333", borderRadius: "20px", padding : "10px", width : "7%"}}
+                    >
+                        <p style={{textAlign : "center"}}
+                        >{item.dsctnSe === "0" ? "신청자" : "컨설턴트"}</p>
+                    </div>
+                    </div>
+                );
+            });
+            setCnsltDsctnList(dataList);
+
+
         });
     };
 
@@ -211,12 +248,13 @@ function ManagerCnsltDetail(props) {
                             </li>
                             <li className="inputBox type1 width1">
                                 <label className="title"><small>소개</small></label>
-                                <div className="input">
-                                    <input
+                                <div className="input"
+                                     dangerouslySetInnerHTML={{__html: consulttDtl.cnsltSlfint}}>
+                                    {/*<input
                                         type="text"
                                         value={consulttDtl.cnsltSlfint || ""}
                                         readOnly
-                                    />
+                                    />*/}
                                 </div>
                             </li>
 
@@ -296,7 +334,10 @@ function ManagerCnsltDetail(props) {
                 </h2>
                 <div className="contBox infoWrap customContBox">
                     <ul className="inputWrap">
-
+                        <li className="inputBox type1 email width1">
+                            <label className="title"><small>{cnslt.ttl}</small></label>
+                                {cnsltDsctnList}
+                        </li>
                     </ul>
                 </div>
                 {/*컨설팅 내역 끝*/}
@@ -307,7 +348,7 @@ function ManagerCnsltDetail(props) {
                 </h2>
                 <div className="contBox infoWrap customContBox">
                     <ul className="inputWrap">
-
+                        <table></table>
                     </ul>
                 </div>
                 {/*만족도끝*/}
