@@ -22,7 +22,19 @@ function MemberMyPageModify(props) {
 
     console.log(sessionUser);
 
-    const [memberDetail, setMemberDetail] = useState({});
+    const [memberDetail, setMemberDetail] = useState({
+        kornFlnm: '', // 성명
+        mblTelno: '', // 휴대폰
+        userId: '', // 아이디
+        emailPrefix: '', // 이메일 아이디
+        emailDomain: '', // 이메일 도메인
+        email: '', // 전체 이메일
+        userPw: '', // 비밀번호
+        addr: '', // 주소
+        daddr: '', // 상세주소
+        emlRcptnAgreYn: '', // 메일 수신 동의
+        smsRcptnAgreYn: '' // 문자 수신 동의
+    });
     const [modeInfo, setModeInfo] = useState({mode: props.mode});
     const [searchDto, setSearchDto] = useState({userSn:sessionUserSn});
 

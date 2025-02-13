@@ -240,11 +240,13 @@ function MemberMyPageDifficulties(props) {
                     <div className="tableBox type1">
                         <table>
                         <caption>애로사항목록</caption>
-                            <col width="80"/>
-                            <col width="150"/>
-                            <col width="300"/>
-                            <col width="150"/>
-                            <col width="150"/>
+                            <colgroup>
+                                <col width="80"/>
+                                <col width="150"/>
+                                <col width="300"/>
+                                <col width="150"/>
+                                <col width="150"/>
+                            </colgroup>
                             <thead>
                             <tr>
                                 <th>번호</th>
