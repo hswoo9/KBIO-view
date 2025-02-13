@@ -5,6 +5,8 @@ import URL from "@/constants/url";
 import { getSessionItem } from "@/utils/storage";
 import moment from "moment/moment.js";
 import { fileDownLoad } from "@/components/CommonComponents";
+import Swal from 'sweetalert2';
+import CODE from "@/constants/code";
 
 function MemberMyPageSimpleDetail(props) {
     const sessionUser = getSessionItem("loginUser");
@@ -13,10 +15,14 @@ function MemberMyPageSimpleDetail(props) {
     const [paginationInfo, setPaginationInfo] = useState({});
     const [searchDto, setSearchDto] = useState({
         cnsltAplySn: location.state?.cnsltAplySn || "",
+        cnsltSttsCd: location.state?.cnsltSttsCd || "",
     });
     const [simpleDetail, setSimpleDetail] = useState(null);
 
     useEffect(() => {
+        console.log("컴포넌트가 마운트되었습니다.");
+        console.log("초기 searchDto:", searchDto);
+
         const handleStorageChange = (event) => {
             if (event.key === "refreshCnsltDsctnList") {
                 getSimpleDetail();
@@ -170,9 +176,44 @@ function MemberMyPageSimpleDetail(props) {
             }
         );
     };
+    
+    const handleComClick = (cnsltAplySn) => {
+        const setComSimpleURL = '/memberApi/setComSimple';
+
+        Swal.fire({
+            title: `해당 건에 대해 완료처리 하시겠습니까?`,
+            showCloseButton: true,
+            showCancelButton: true,
+            confirmButtonText: "예",
+            cancelButtonText: "아니오"
+        }).then((result) => {
+            if(result.isConfirmed) {
+                const requestOptions = {
+                    method: "POST",
+                    headers: {
+                        "Content-type": "application/json",
+                    },
+                    body:JSON.stringify({
+                        cnsltAplySn: cnsltAplySn
+                    }),
+                };
+
+                EgovNet.requestFetch(setComSimpleURL, requestOptions, (resp) => {
+                    if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
+                        Swal.fire("처리완료 되었습니다.");
+                    } else {
+                        alert("ERR : " + resp.resultMessage);
+                    }
+                });
+            } else {
+
+            }
+        });
+    };
 
     const handleCreateClick = () => {
-        window.open(`/popup/simple/create`, "_blank", "width=800,height=530");
+        const popupURL = `/popup/simple/create?cnsltAplySn=${searchDto.cnsltAplySn}`;
+        window.open(popupURL, "_blank", "width=800,height=530");
     }
 
     const handleEditClick = (item) => {
@@ -287,12 +328,19 @@ function MemberMyPageSimpleDetail(props) {
                 </div>
                 <div className="buttonBox">
                     <div className="leftBox">
-                        <button type="button" className="clickBtn point"  onClick={() => handleCreateClick()}>
-                            <span>등록</span>
-                        </button>
-                        <button type="button" className="clickBtn point" onClick={() => handleCreateClick()}>
-                            <span>처리완료</span>
-                        </button>
+                        {simpleDetail && searchDto.cnsltSttsCd !== "200" && (
+                            <>
+                                <button type="button" className="clickBtn point" onClick={() => handleCreateClick()}>
+                                    <span>등록</span>
+                                </button>
+                                {sessionUser.mbrType !== 2 && (
+                                    <button type="button" className="clickBtn point"
+                                            onClick={() => handleComClick(searchDto.cnsltAplySn)}>
+                                        <span>처리완료</span>
+                                    </button>
+                                )}
+                            </>
+                        )}
                     </div>
                     <NavLink to={URL.MEMBER_MYPAGE_SIMPLE}>
                         <button type="button" className="clickBtn white">
@@ -300,6 +348,7 @@ function MemberMyPageSimpleDetail(props) {
                         </button>
                     </NavLink>
                 </div>
+
             </div>
         </div>
     );

@@ -18,6 +18,12 @@ function MemberMyPageSimple(props) {
 
     const searchTypeRef = useRef();
     const searchValRef = useRef();
+    const statusMap = {
+        101: "답변대기",
+        102: "답변완료",
+        200: "처리완료",
+    };
+
 
     const [searchDto, setSearchDto] = useState(
         location.state?.searchDto || {
@@ -77,7 +83,8 @@ function MemberMyPageSimple(props) {
                                 <td>
                                         <Link to={{pathname: URL.MEMBER_MYPAGE_SIMPLE_DETAIL}}
                                               state={{
-                                                  cnsltAplySn: item.cnsltAplySn
+                                                  cnsltAplySn: item.cnsltAplySn,
+                                                  cnsltSttsCd: item.cnsltSttsCd
                                               }}
                                               style={{cursor: 'pointer', textDecoration: 'underline'}}
                                         >
@@ -85,7 +92,7 @@ function MemberMyPageSimple(props) {
                                         </Link>
                                 </td>
                                 <td>{moment(item.frstCrtDt).format('YYYY-MM-DD')}</td>
-                                <td>{item.answer == "Y" ? "답변완료" : "답변대기"}</td>
+                                <td>{statusMap[item.cnsltSttsCd] || item.cnsltSttsCd}</td>
                                 <td></td>
                             </tr>
                         );

@@ -6,18 +6,26 @@ import CommonEditor from "@/components/CommonEditor";
 import { useDropzone } from 'react-dropzone';
 import * as EgovNet from "@/api/egovFetch";
 import CODE from "@/constants/code";
+import {getSessionItem} from "@/utils/storage";
 
-function MemberMyPageSimplePopup() {
+function MemberMyPageSimpleCreatePopup() {
     const navigate = useNavigate();
     const location = useLocation();
-    const queryParams = new URLSearchParams(location.search);
-    const cnsltAplySn = queryParams.get('cnsltDsctnSn');
+    const params = new URLSearchParams(location.search);
+    const cnsltAplySn = params.get("cnsltAplySn");
+    const sessionUser = getSessionItem("loginUser");
+
+    console.log("받은 cnsltAplySn:", cnsltAplySn);
+    console.log("sessionUser :", sessionUser)
 
     const [simplePopupModify, setSimplePopupModify] = useState({
-        content: '',
-        simpleFiles: [],
-        cn: ''// 파일 목록도 관리
+        creatrSn : sessionUser.userSn,
+        dsctnSe: sessionUser.mbrType === 2 ? 1 : 0,
+        actvtnYn : 'Y',
+        cnsltAplySn : cnsltAplySn,
     });
+
+     console.log(simplePopupModify)
     const [fileList, setFileList] = useState([]);
     const acceptFileTypes = 'pdf,hwp,docx,xls,xlsx,ppt';
 
@@ -50,30 +58,23 @@ function MemberMyPageSimplePopup() {
     };
 
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setSimplePopupModify({ ...simplePopupModify, [name]: value });
-    };
-
     const handleEditorChange = (value) => {
         console.log("Editor 변경된 값:", value);
-        setSimplePopupModify({ ...simplePopupModify, content: value, cn: value });
+        setSimplePopupModify({ ...simplePopupModify, cn: value });
     };
 
     const handleSave = () => {
         const formData = new FormData();
-
-        console.log("저장할 데이터:", simplePopupModify.cn);
-
         for (let key in simplePopupModify) {
-            if (simplePopupModify[key] != null && key !== "simpleFiles") {
+            if(simplePopupModify[key] != null){
                 formData.append(key, simplePopupModify[key]);
             }
         }
 
-        fileList.forEach((file) => {
-            formData.append("simpleFiles", file);
+        fileList.map((file) => {
+            formData.append("files", file);
         });
+
 
         Swal.fire({
             title: '저장하시겠습니까?',
@@ -87,10 +88,9 @@ function MemberMyPageSimplePopup() {
                     method: "POST",
                     body: formData
                 };
-                const apiUrl = simplePopupModify.mode === CODE.MODE_CREATE ? "/memberApi/setSimpleCreateData" : "/memberApi/setSimpleData";
-                EgovNet.requestFetch(apiUrl, requestOptions, (resp) => {
+                EgovNet.requestFetch("/memberApi/setCreateSimpleData", requestOptions, (resp) => {
                     if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
-                        Swal.fire("수정되었습니다.").then(() => {
+                        Swal.fire("등록되었습니다.").then(() => {
                             localStorage.setItem("refreshCnsltDsctnList", Date.now());
                             window.close();
                         });
@@ -117,7 +117,7 @@ function MemberMyPageSimplePopup() {
             <div style={{marginBottom: "15px"}}>
                 <label style={{fontWeight: "bold"}}>내용:</label>
                 <CommonEditor
-                    value={simplePopupModify.content}
+                    value={simplePopupModify.cn}
                     onChange={handleEditorChange}
                 />
             </div>
@@ -172,4 +172,4 @@ function MemberMyPageSimplePopup() {
     );
 }
 
-export default MemberMyPageSimplePopup;
+export default MemberMyPageSimpleCreatePopup;
