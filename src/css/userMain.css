@@ -15,3 +15,8 @@
 .slick-slide img {
     pointer-events: none; /* 이미지 클릭 시 드래그 방지 */
 }
+
+.customMonth {
+    width: 0;
+    height: 0;
+}

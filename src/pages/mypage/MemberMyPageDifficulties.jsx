@@ -131,31 +131,31 @@ function MemberMyPageDifficulties(props) {
                 {/* Step Indicator */}
                 <ul className="stepWrap" data-aos="fade-up" data-aos-duration="1500">
                     <li>
-                        <NavLink to={URL.MEMBER_MYPAGE_MODIFY} activeClassName="active">
+                        <NavLink to={URL.MEMBER_MYPAGE_MODIFY} >
                             <div className="num"><p>1</p></div>
                             <p className="text">회원정보수정</p>
                         </NavLink>
                     </li>
                     <li>
-                    <NavLink to={URL.MEMBER_MYPAGE_CONSULTING} activeClassName="active">
+                    <NavLink to={URL.MEMBER_MYPAGE_CONSULTING} >
                             <div className="num"><p>2</p></div>
                             <p className="text">컨설팅의뢰 내역</p>
                         </NavLink>
                     </li>
                     <li>
-                        <NavLink to={URL.MEMBER_MYPAGE_SIMPLE} activeClassName="active">
+                        <NavLink to={URL.MEMBER_MYPAGE_SIMPLE} >
                             <div className="num"><p>3</p></div>
                             <p className="text">간편상담 내역</p>
                         </NavLink>
                     </li>
                     <li  className="active">
-                        <NavLink to={URL.MEMBER_MYPAGE_DIFFICULTIES} activeClassName="active">
+                        <NavLink to={URL.MEMBER_MYPAGE_DIFFICULTIES} >
                             <div className="num"><p>4</p></div>
                             <p className="text">애로사항 내역</p>
                         </NavLink>
                     </li>
                     <li>
-                        <NavLink to={URL.MEMBER_MYPAGE_CANCEL} activeClassName="active">
+                        <NavLink to={URL.MEMBER_MYPAGE_CANCEL} >
                             <div className="num"><p>5</p></div>
                             <p className="text">회원탈퇴</p>
                         </NavLink>
@@ -240,11 +240,13 @@ function MemberMyPageDifficulties(props) {
                     <div className="tableBox type1">
                         <table>
                         <caption>애로사항목록</caption>
-                            <col width="80"/>
-                            <col width="150"/>
-                            <col width="300"/>
-                            <col width="150"/>
-                            <col width="150"/>
+                            <colgroup>
+                                <col width="80"/>
+                                <col width="150"/>
+                                <col width="300"/>
+                                <col width="150"/>
+                                <col width="150"/>
+                            </colgroup>
                             <thead>
                             <tr>
                                 <th>번호</th>

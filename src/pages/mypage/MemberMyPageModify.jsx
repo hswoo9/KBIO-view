@@ -22,7 +22,19 @@ function MemberMyPageModify(props) {
 
     console.log(sessionUser);
 
-    const [memberDetail, setMemberDetail] = useState({});
+    const [memberDetail, setMemberDetail] = useState({
+        kornFlnm: '', // 성명
+        mblTelno: '', // 휴대폰
+        userId: '', // 아이디
+        emailPrefix: '', // 이메일 아이디
+        emailDomain: '', // 이메일 도메인
+        email: '', // 전체 이메일
+        userPw: '', // 비밀번호
+        addr: '', // 주소
+        daddr: '', // 상세주소
+        emlRcptnAgreYn: '', // 메일 수신 동의
+        smsRcptnAgreYn: '' // 문자 수신 동의
+    });
     const [modeInfo, setModeInfo] = useState({mode: props.mode});
     const [searchDto, setSearchDto] = useState({userSn:sessionUserSn});
 
@@ -296,31 +308,31 @@ function MemberMyPageModify(props) {
             <div className="inner">
                 <ul className="stepWrap" data-aos="fade-up" data-aos-duration="1500">
                     <li className="active">
-                        <NavLink to={URL.MEMBER_MYPAGE_MODIFY} activeClassName="active">
+                        <NavLink to={URL.MEMBER_MYPAGE_MODIFY} >
                             <div className="num"><p>1</p></div>
                             <p className="text">회원정보수정</p>
                         </NavLink>
                     </li>
                     <li>
-                        <NavLink to={URL.MEMBER_MYPAGE_CONSULTING} activeClassName="active">
+                        <NavLink to={URL.MEMBER_MYPAGE_CONSULTING} >
                             <div className="num"><p>2</p></div>
                             <p className="text">컨설팅의뢰 내역</p>
                         </NavLink>
                     </li>
                     <li>
-                        <NavLink to={URL.MEMBER_MYPAGE_SIMPLE} activeClassName="active">
+                        <NavLink to={URL.MEMBER_MYPAGE_SIMPLE} >
                             <div className="num"><p>3</p></div>
                             <p className="text">간편상담 내역</p>
                         </NavLink>
                     </li>
                     <li>
-                        <NavLink to={URL.MEMBER_MYPAGE_DIFFICULTIES} activeClassName="active">
+                        <NavLink to={URL.MEMBER_MYPAGE_DIFFICULTIES} >
                             <div className="num"><p>4</p></div>
                             <p className="text">애로사항 내역</p>
                         </NavLink>
                     </li>
                     <li>
-                        <NavLink to={URL.MEMBER_MYPAGE_CANCEL} activeClassName="active">
+                        <NavLink to={URL.MEMBER_MYPAGE_CANCEL} >
                             <div className="num"><p>5</p></div>
                             <p className="text">회원탈퇴</p>
                         </NavLink>

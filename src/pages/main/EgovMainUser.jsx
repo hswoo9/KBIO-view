@@ -21,6 +21,7 @@ import AOS from "aos";
 
 import CommonSlider from "@/components/CommonSlider";
 import MainSlider from "@/components/main/MainSlider";
+import MainCalendar from "@/components/main/MainCalendar";
 
 import user_main_sec01_slide01 from "@/assets/images/user_main_sec01_slide01.jpg";
 import user_main_sec01_icon01 from "@/assets/images/user_main_sec01_icon01.svg";
@@ -149,133 +150,7 @@ function EgovMainUser(props) {
             </div>
           </div>
         </section>
-        <section className="sec sec03" data-aos="fade-in">
-          <div className="inner">
-            <h2 className="secTitle">일정현황</h2>
-            <div className="boxWrap">
-              <div className="calendarWrap leftBox" data-aos="fade-left" data-aos-duration="1500">
-                <div className="topBox">
-                  <button type="button" className="arrowBtn prevBtn">
-                    <div className="icon"></div>
-                  </button>
-                  <div className="date"><strong>2024년 6월</strong>
-                    <div className="icon"></div>
-                  </div>
-                  <button type="button" className="arrowBtn nextBtn">
-                    <div className="icon"></div>
-                  </button>
-                </div>
-                <div className="calendarBox">
-                  <table>
-                    <caption>달력</caption>
-                    <thead>
-                    <tr>
-                      <th><p>일</p></th>
-                      <th><p>월</p></th>
-                      <th><p>화</p></th>
-                      <th><p>수</p></th>
-                      <th><p>목</p></th>
-                      <th><p>금</p></th>
-                      <th><p>토</p></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                      <td className="noText"></td>
-                      <td><strong className="num">1</strong><p className="case">13건</p></td>
-                      <td className="click"><strong className="num">2</strong><p className="case">13건</p></td>
-                      <td><strong className="num">3</strong><p className="case">13건</p></td>
-                      <td><strong className="num">4</strong><p className="case">13건</p></td>
-                      <td><strong className="num">5</strong><p className="case">13건</p></td>
-                      <td><strong className="num">6</strong><p className="case">13건</p></td>
-                    </tr>
-                    <tr>
-                      <td><strong className="num">7</strong></td>
-                      <td><strong className="num">8</strong><p className="case">13건</p></td>
-                      <td><strong className="num">9</strong><p className="case">13건</p></td>
-                      <td><strong className="num">10</strong><p className="case">13건</p></td>
-                      <td><strong className="num">11</strong><p className="case">13건</p></td>
-                      <td><strong className="num">12</strong><p className="case">13건</p></td>
-                      <td><strong className="num">13</strong><p className="case">13건</p></td>
-                    </tr>
-                    <tr>
-                      <td><strong className="num">14</strong><p className="case">13건</p></td>
-                      <td><strong className="num">15</strong><p className="case">13건</p></td>
-                      <td><strong className="num">16</strong><p className="case">13건</p></td>
-                      <td><strong className="num">17</strong><p className="case">13건</p></td>
-                      <td><strong className="num">18</strong><p className="case">13건</p></td>
-                      <td><strong className="num">19</strong><p className="case">13건</p></td>
-                      <td><strong className="num">20</strong><p className="case">13건</p></td>
-                    </tr>
-                    <tr>
-                      <td><strong className="num">21</strong><p className="case">13건</p></td>
-                      <td><strong className="num">22</strong><p className="case">13건</p></td>
-                      <td><strong className="num">23</strong><p className="case">13건</p></td>
-                      <td><strong className="num">24</strong><p className="case">13건</p></td>
-                      <td><strong className="num">25</strong><p className="case">13건</p></td>
-                      <td><strong className="num">26</strong><p className="case">13건</p></td>
-                      <td><strong className="num">27</strong><p className="case">13건</p></td>
-                    </tr>
-                    <tr>
-                      <td><strong className="num">28</strong><p className="case">13건</p></td>
-                      <td><strong className="num">29</strong><p className="case">13건</p></td>
-                      <td><strong className="num">30</strong><p className="case">13건</p></td>
-                      <td><strong className="num">31</strong><p className="case">13건</p></td>
-                      <td className="noText"></td>
-                      <td className="noText"></td>
-                      <td className="noText"></td>
-                    </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-              <div className="rightBox tabContWrap" data-aos="fade-right" data-aos-duration="1500">
-                <div className="topBox">
-                  <strong className="date">06월 02일</strong>
-                  <div className="tabBox type1">
-                    <div className="bg hover"></div>
-                    <ul className="list">
-                      <li className="active"><a href="#"><span>공지사항</span></a></li>
-                      <li><a href="#"><span>자료실</span></a></li>
-                    </ul>
-                  </div>
-                </div>
-                <div className="tabCont tab01 active">
-                  <ul className="list">
-                    <li><a href="#"><p>2024 한-덴 의약바이오 & CMC 혁신 기술포럼 개최 안내 (11.20, 수)</p></a></li>
-                    <li><a href="#"><p>K-바이오랩허브 소개자료(최종)</p></a></li>
-                    <li><a href="#"><p>[한국혁신의약품컨소시엄] KIMCo 2024년도 하반기 공동투자·육성사업 참가기업 모집</p></a></li>
-                    <li><a href="#"><p>[서울바이오허브] 「2024 헬스엑스챌린지 서울」 모집공고 및 참가 수상기업 안내</p></a></li>
-                    <li><a href="#"><p>[서울경제진흥원] 2024년 I'M Challenge(아임 챌린지) 참여 스타트업 모집</p></a></li>
-                    <li><a href="#"><p>[서울경제진흥원] 마곡의료아카데미(6월) 교육 참여기업 모집공고 안내</p></a></li>
-                    <li><a href="#"><p>2024 한-덴 의약바이오 & CMC 혁신 기술포럼 개최 안내 (11.20, 수)</p></a></li>
-                    <li><a href="#"><p>K-바이오랩허브 소개자료(최종)</p></a></li>
-                    <li><a href="#"><p>[한국혁신의약품컨소시엄] KIMCo 2024년도 하반기 공동투자·육성사업 참가기업 모집</p></a></li>
-                    <li><a href="#"><p>[서울바이오허브] 「2024 헬스엑스챌린지 서울」 모집공고 및 참가 수상기업 안내</p></a></li>
-                    <li><a href="#"><p>[서울경제진흥원] 2024년 I'M Challenge(아임 챌린지) 참여 스타트업 모집</p></a></li>
-                    <li><a href="#"><p>[서울경제진흥원] 마곡의료아카데미(6월) 교육 참여기업 모집공고 안내</p></a></li>
-                  </ul>
-                </div>
-                <div className="tabCont tab02">
-                  <ul className="list">
-                    <li><a href="#"><p>2024 한-덴 의약바이오 & CMC 혁신 기술포럼 개최 안내 (11.20, 수)</p></a></li>
-                    <li><a href="#"><p>K-바이오랩허브 소개자료(최종)</p></a></li>
-                    <li><a href="#"><p>[한국혁신의약품컨소시엄] KIMCo 2024년도 하반기 공동투자·육성사업 참가기업 모집</p></a></li>
-                    <li><a href="#"><p>[서울바이오허브] 「2024 헬스엑스챌린지 서울」 모집공고 및 참가 수상기업 안내</p></a></li>
-                    <li><a href="#"><p>[서울경제진흥원] 2024년 I'M Challenge(아임 챌린지) 참여 스타트업 모집</p></a></li>
-                    <li><a href="#"><p>[서울경제진흥원] 마곡의료아카데미(6월) 교육 참여기업 모집공고 안내</p></a></li>
-                    <li><a href="#"><p>2024 한-덴 의약바이오 & CMC 혁신 기술포럼 개최 안내 (11.20, 수)</p></a></li>
-                    <li><a href="#"><p>K-바이오랩허브 소개자료(최종)</p></a></li>
-                    <li><a href="#"><p>[한국혁신의약품컨소시엄] KIMCo 2024년도 하반기 공동투자·육성사업 참가기업 모집</p></a></li>
-                    <li><a href="#"><p>[서울바이오허브] 「2024 헬스엑스챌린지 서울」 모집공고 및 참가 수상기업 안내</p></a></li>
-                    <li><a href="#"><p>[서울경제진흥원] 2024년 I'M Challenge(아임 챌린지) 참여 스타트업 모집</p></a></li>
-                    <li><a href="#"><p>[서울경제진흥원] 마곡의료아카데미(6월) 교육 참여기업 모집공고 안내</p></a></li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+        <MainCalendar />
         <section className="sec sec04" data-aos="fade-in">
           <div className="inner">
             <div className="box bannerBox" data-aos="fade-in">
