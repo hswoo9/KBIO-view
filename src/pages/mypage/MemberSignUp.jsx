@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, {useState, useEffect, useRef, useCallback} from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { getComCdList } from "../../components/CommonComponents.jsx";
 
@@ -129,16 +129,71 @@ function MemberSignUp(props) {
     setMemberDetail({...memberDetail, cnsltSlfint: value});
   };
 
+  const [acceptImgFileTypes, setAcceptImgFileTypes] = useState('jpg,jpeg,png');
+  const [acceptFileTypes, setAcceptFileTypes] = useState('jpg,jpeg,png,gif,bmp,tiff,tif,webp,svg,ico,heic,avif');
+  const [selectedImgFile, setSelectedImgFile] = useState([]);
+  const [selectedFiles, setSelectedFiles] = useState([]);
+
+  const allowedImgExtensions = acceptImgFileTypes.split(',');
+  const allowedExtensions = acceptFileTypes.split(',');
+
+  //컨설턴트 사진
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImage(reader.result); // 사진 데이터를 상태에 저장
-      };
-      reader.readAsDataURL(file); // 사진 파일을 Data URL로 변환
+    const fileExtension = file.name.split(".").pop().toLowerCase();
+    if(allowedImgExtensions.includes(fileExtension)) {
+      if (file) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setImage(reader.result); // 사진 데이터를 상태에 저장
+        };
+        reader.readAsDataURL(file); // 사진 파일을 Data URL로 변환
+        setSelectedImgFile(Array.from(e.target.files));
+      }
+    }else{
+      Swal.fire({
+        title: "허용되지 않은 확장자입니다.",
+        text: `허용 확장자: ` + acceptImgFileTypes
+      });
+      e.target.value = null;
     }
+
+
   };
+
+  //컨설턴트 자격증
+  const handleFileChange = (e, num) => {
+    const file = e.target.files[0];
+    const fileExtension = e.target.files[0].name.split(".").pop().toLowerCase();
+
+    const allowedExtensions = acceptFileTypes.split(',');
+    if(e.target.files.length > 0){
+
+      if(allowedExtensions.includes(fileExtension)){
+        let fileName = e.target.files[0].name;
+        if(fileName.length > 30){
+          fileName = fileName.slice(0, 30) + "...";
+        }
+        setSelectedFiles((prevFiles) => {
+          const updatedFiles = [...prevFiles]; // 기존 배열 복사
+          updatedFiles[num - 1] = file; // 배열의 인덱스를 이용해 해당 자격증 파일을 추가
+          return updatedFiles;
+        });
+        console.log("Selected Files:", Array.from(e.target.files));
+      }else{
+        Swal.fire({
+          title: "허용되지 않은 확장자입니다.",
+          text: `허용 확장자: ` + acceptFileTypes
+        });
+        e.target.value = null;
+      }
+    }else{
+      Swal.fire(
+          `선택된 파일이 없습니다.`
+      );
+    }
+
+  }
 
 
   const searchAddress = () => {
@@ -516,24 +571,55 @@ function MemberSignUp(props) {
 
   // 회원가입 신청
   const insertMember = () => {
-    const insertMemURL = `/memberApi/insertMember.do`;
+    const formData = new FormData();
+    const insertMemURL = `/memberApi/insertMember`;
 
     formValidator(memberDetail).then((isValid) => {
       if (!isValid) return; // 검증 실패 시 함수 종료
 
+      selectedFiles.map((file) => {
+        formData.append("files", file);
+      });
+
+      selectedImgFile.map((file) => {
+        formData.append("profileImgFiles", file);
+      });
+
+
+      /*
+      for (let key in memberDetail) {
+        if (memberDetail[key] != null && key != "tblComFile") {
+          formData.append(key, memberDetail[key]);
+        }
+      }
+       */
+      formData.append("userInfo", JSON.stringify(memberDetail));
+
+      console.log("Selected Files:", selectedFiles);
+      console.log("Selected Image Files:", selectedImgFile);
+
+
+      if(formData != null) {
+          for (let [key, value] of formData.entries()) {
+            console.log(`${key}:`, value);
+          }
+      }
+
       const reqOptions = {
         method: "POST",
-        headers: {
+        /*headers: {
           "Content-type": "application/json",
         },
         body: JSON.stringify({
           ...memberDetail,
-        }),
+        }),*/
+        body : formData
       };
 
-      EgovNet.requestFetch(insertMemURL, reqOptions, function (resp) {
+      EgovNet.requestFetch(insertMemURL, reqOptions, (resp)=> {
         console.log("Result Code:", resp.resultCode);
         console.log("Expected Code:", CODE.RCV_SUCCESS);
+
         if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
           setMemberDetail({
             ...memberDetail,
@@ -1333,12 +1419,21 @@ function MemberSignUp(props) {
                                     className="f_input2"
                                     style={{width: "40%"}}
                                 />
-                                <input
+                                {/*<input
                                     type="file"
                                     name={`consultantCertificatesFile${num}`}
                                     accept=".pdf,.jpg,.jpeg,.png"
                                     style={{flex: 1}}
-                                />
+                                    onChange={handleFileChange}
+                                />*/}
+                                <p className="file_name" id={`fileNamePTag${num}`}></p>
+                                <label>
+                                  <input type="file"
+                                         name={`selectedFile${num}`}
+                                         id={`formFile${num}`}
+                                         onChange={(e) => handleFileChange(e, num)}
+                                  />
+                                </label>
                               </div>
                           ))}
                         </div>
