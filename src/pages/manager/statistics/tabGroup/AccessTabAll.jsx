@@ -52,12 +52,12 @@ function AccessTabAll(props) {
                 return (
                     <tr key={day}>
                         <td>{day} 일</td>
-                        <td>{item.mbrType1Cnt.toLocaleString()}</td>
-                        <td>{item.mbrType3Cnt.toLocaleString()}</td>
-                        <td>{item.mbrType4Cnt.toLocaleString()}</td>
-                        <td>{item.mbrType2Cnt.toLocaleString()}</td>
+                        <td>{Number(item.mbrType1Cnt).toLocaleString()}</td>
+                        <td>{Number(item.mbrType3Cnt).toLocaleString()}</td>
+                        <td>{Number(item.mbrType4Cnt).toLocaleString()}</td>
+                        <td>{Number(item.mbrType2Cnt).toLocaleString()}</td>
                         <td>
-                            {(item.mbrType1Cnt + item.mbrType2Cnt + item.mbrType3Cnt + item.mbrType4Cnt).toLocaleString()}
+                            {Number(item.mbrType1Cnt + item.mbrType2Cnt + item.mbrType3Cnt + item.mbrType4Cnt).toLocaleString()}
                         </td>
                     </tr>
                 );
@@ -66,12 +66,12 @@ function AccessTabAll(props) {
             dataList.push(
                 <tr key="total">
                     <td>총합</td>
-                    <td>{totalMbrType1Cnt.toLocaleString()}</td>
-                    <td>{totalMbrType3Cnt.toLocaleString()}</td>
-                    <td>{totalMbrType4Cnt.toLocaleString()}</td>
-                    <td>{totalMbrType2Cnt.toLocaleString()}</td>
+                    <td>{Number(totalMbrType1Cnt).toLocaleString()}</td>
+                    <td>{Number(totalMbrType3Cnt).toLocaleString()}</td>
+                    <td>{Number(totalMbrType4Cnt).toLocaleString()}</td>
+                    <td>{Number(totalMbrType2Cnt).toLocaleString()}</td>
                     <td>
-                        {(totalMbrType1Cnt + totalMbrType2Cnt + totalMbrType3Cnt + totalMbrType4Cnt).toLocaleString()}
+                        {Number(totalMbrType1Cnt + totalMbrType2Cnt + totalMbrType3Cnt + totalMbrType4Cnt).toLocaleString()}
                     </td>
                 </tr>
             );

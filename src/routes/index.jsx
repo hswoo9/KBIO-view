@@ -184,6 +184,9 @@ import ManagerStatisticsUser from "@/pages/manager/statistics/ManagerStatisticsU
 import ManagerStatisticsAccess from "@/pages/manager/statistics/ManagerStatisticsAccess";
 import ManagerStatisticsBoard from "@/pages/manager/statistics/ManagerStatisticsBoard";
 import ManagerStatisticsFile from "@/pages/manager/statistics/ManagerStatisticsFile";
+import ManagerStatisticsUserAnalyze from "@/pages/manager/statistics/ManagerStatisticsUserAnalyze";
+import ManagerStatisticsInflowRoute from "@/pages/manager/statistics/ManagerStatisticsInflowRoute";
+import ManagerStatisticsUserEqui from "@/pages/manager/statistics/ManagerStatisticsUserEqui";
 
 
 
@@ -812,6 +815,10 @@ const SecondRoutes = () => {
               <Route path={URL.MANAGER_STATISTICS_ACCESS} element={<ManagerStatisticsAccess/>}/>
               <Route path={URL.MANAGER_STATISTICS_BOARD} element={<ManagerStatisticsBoard/>}/>
               <Route path={URL.MANAGER_STATISTICS_FILE} element={<ManagerStatisticsFile/>}/>
+
+              <Route path={URL.MANAGER_STATISTICS_USER_ANALYZE} element={<ManagerStatisticsUserAnalyze/>}/>
+              <Route path={URL.MANAGER_STATISTICS_INFLOW_ROUTE} element={<ManagerStatisticsInflowRoute/>}/>
+              <Route path={URL.MANAGER_STATISTICS_USER_EQUI} element={<ManagerStatisticsUserEqui/>}/>
 
               <Route path={URL.MessageTest} element={<MessageTest/>}/>
 

@@ -264,6 +264,12 @@ const URL = {
   MANAGER_STATISTICS_ACCESS: "/manager/statistics/access",
   MANAGER_STATISTICS_BOARD: "/manager/statistics/board",
   MANAGER_STATISTICS_FILE: "/manager/statistics/file",
+
+  MANAGER_STATISTICS_USER_ANALYZE: "/manager/statistics/userAnalyze",
+  MANAGER_STATISTICS_INFLOW_ROUTE: "/manager/statistics/inflowRoute",
+  MANAGER_STATISTICS_USER_EQUI: "/manager/statistics/userEqui",
+
+
   MessageTest: "/messageTest",
 };
 
