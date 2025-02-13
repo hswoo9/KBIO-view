@@ -9,6 +9,8 @@ import { fileDownLoad } from "@/components/CommonComponents";
 function MemberMyPageSimpleDetail(props) {
     const sessionUser = getSessionItem("loginUser");
     const location = useLocation();
+    const [cnsltDsctnList, setCnsltDsctnList] = useState([]);
+    const [paginationInfo, setPaginationInfo] = useState({});
 
     const [searchDto, setSearchDto] = useState({
         cnsltAplySn: location.state?.cnsltAplySn || "",
@@ -50,31 +52,31 @@ function MemberMyPageSimpleDetail(props) {
                 {/* Step Indicator */}
                 <ul className="stepWrap" data-aos="fade-up" data-aos-duration="1500">
                     <li>
-                        <NavLink to={URL.MEMBER_MYPAGE_MODIFY} activeClassName="active">
+                        <NavLink to={URL.MEMBER_MYPAGE_MODIFY} >
                             <div className="num"><p>1</p></div>
                             <p className="text">회원정보수정</p>
                         </NavLink>
                     </li>
                     <li>
-                        <NavLink to={URL.MEMBER_MYPAGE_CONSULTING} activeClassName="active">
+                        <NavLink to={URL.MEMBER_MYPAGE_CONSULTING} >
                             <div className="num"><p>2</p></div>
                             <p className="text">컨설팅의뢰 내역</p>
                         </NavLink>
                     </li>
                     <li className="active">
-                        <NavLink to={URL.MEMBER_MYPAGE_SIMPLE} activeClassName="active">
+                        <NavLink to={URL.MEMBER_MYPAGE_SIMPLE} >
                             <div className="num"><p>3</p></div>
                             <p className="text">간편상담 내역</p>
                         </NavLink>
                     </li>
                     <li>
-                        <NavLink to={URL.MEMBER_MYPAGE_DIFFICULTIES} activeClassName="active">
+                        <NavLink to={URL.MEMBER_MYPAGE_DIFFICULTIES} >
                             <div className="num"><p>4</p></div>
                             <p className="text">애로사항 내역</p>
                         </NavLink>
                     </li>
                     <li>
-                        <NavLink to={URL.MEMBER_MYPAGE_CANCEL} activeClassName="active">
+                        <NavLink to={URL.MEMBER_MYPAGE_CANCEL} >
                             <div className="num"><p>5</p></div>
                             <p className="text">회원탈퇴</p>
                         </NavLink>
@@ -95,7 +97,7 @@ function MemberMyPageSimpleDetail(props) {
                                 <li className="inputBox type1 width1" style={{marginBottom: "10px"}}>
                                     <label className="title" style={{fontWeight: "bold"}}><small>분류</small></label>
                                     <div className="input"
-                                         style={{marginTop: "5px"}}>{simpleDetail.dfclMttrFldNm}</div>
+                                         style={{marginTop: "5px"}}>{simpleDetail.cnsltAplyFldNm}</div>
                                 </li>
                                 <li className="inputBox type1 width1" style={{marginBottom: "10px"}}>
                                     <label className="title" style={{fontWeight: "bold"}}><small>제목</small></label>
@@ -104,7 +106,7 @@ function MemberMyPageSimpleDetail(props) {
                                 <li className="inputBox type1 width1" style={{marginBottom: "10px"}}>
                                     <label className="title" style={{fontWeight: "bold"}}><small>의뢰내용</small></label>
                                     <div className="input" style={{marginTop: "5px"}}
-                                         dangerouslySetInnerHTML={{__html: simpleDetail.dfclMttrCn}}></div>
+                                         dangerouslySetInnerHTML={{__html: simpleDetail.cn}}></div>
                                 </li>
                                 <li className="inputBox type1 width1" style={{marginBottom: "10px"}}>
                                     <label className="title" style={{fontWeight: "bold"}}><small>첨부파일</small></label>
@@ -174,7 +176,7 @@ function MemberMyPageSimpleDetail(props) {
                                 <li className="inputBox type1 width1" style={{marginBottom: "10px"}}>
                                     <label className="title" style={{fontWeight: "bold"}}><small>상세 정보가
                                         없습니다.</small></label>
-                                    <div className="input" style={{marginTop: "5px"}}>해당 애로사항의 상세 정보가 없습니다.</div>
+                                    <div className="input" style={{marginTop: "5px"}}>해당 간편상담의 상세 정보가 없습니다.</div>
                                 </li>
                             </ul>
                         </div>
