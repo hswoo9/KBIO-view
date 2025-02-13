@@ -37,7 +37,7 @@ function ManagerStatisticsAccess(props) {
 
     useEffect(() => {
         setTabRenderKey(prev => prev + 1);
-    }, [searchDto]);
+    }, [menuIndex, searchDto]);
 
     const menuList = () => ({
         0: <Tab1 key={menuIndex === 0 ? tabRenderKey : 0} searchDto={searchDto} />,
