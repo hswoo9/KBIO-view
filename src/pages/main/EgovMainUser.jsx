@@ -53,10 +53,51 @@ function EgovMainUser(props) {
 
   const [popUpList, setPopUpList] = useState([]);
   const [mainSlidesList, setMainSlidesList] = useState([]);
-  const [footerSlidesList, setFooterSlidesList] = useState([]);
   useEffect(() => {
     console.log(mainSlidesList);
   }, [mainSlidesList]);
+
+
+  const wrapRef = useRef(null);
+  const listRef = useRef(null);
+  const [windowSize, setWindowSize] = useState(getWindowSize());
+  function getWindowSize() {
+    if (window.innerWidth > 1279) return 'pc';
+    if (window.innerWidth > 767) return 'ta';
+    return 'mo';
+  }
+  useEffect(() => {
+    function handleResize() {
+      setWindowSize(getWindowSize());
+    }
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+  useEffect(() => {
+    // flowBannerAct 함수 실행
+    flowBannerAct();
+  }, [windowSize]);
+  const flowBannerAct = () => {
+    const wrap = wrapRef.current;
+    const list = listRef.current;
+    let wrapWidth = wrap.offsetWidth;
+    let listWidth = list.offsetWidth;
+    const speed = 15;
+    let $clone = list.cloneNode(true);
+    wrap.appendChild($clone);
+    if (listWidth < wrapWidth) {
+      const listCount = Math.ceil(wrapWidth * 2 / listWidth);
+      for (let i = 2; i < listCount; i++) {
+        $clone = $clone.cloneNode(true);
+        wrap.appendChild($clone);
+      }
+    }
+    wrap.querySelectorAll('.imgMove').forEach((el) => {
+      el.style.animation = `${listWidth / speed}s linear infinite flowRolling`;
+    });
+  };
 
   const [mvnEntList, setMvnEntList] = useState([]);
   const [pstList, setPstList] = useState([]);
@@ -278,9 +319,8 @@ function EgovMainUser(props) {
           </div>
         </section>
         <div className="rollingWrap">
-          <div className="moveWrap">
-            <ul className="imgMove">
-              {/*<MainFooterBnr data={footerSlidesList} />*/}
+          <div className="moveWrap" ref={wrapRef}>
+            <ul className="imgMove" ref={listRef}>
               <li><img src={user_main_rolling_logo01} alt="SAMSUNG BIOLOGICS" loading="lazy"/></li>
               <li><img src={user_main_rolling_logo02} alt="동화약품" loading="lazy"/></li>
               <li><img src={user_main_rolling_logo03} alt="GC녹십자" loading="lazy"/></li>
