@@ -33,7 +33,8 @@ function MemberMyPageSimpleDetail(props) {
             requestOptions,
             function (resp) {
                 setSimpleDetail({
-                    ...resp.result.simple});
+                    ...resp.result.simple
+                });
                 let dataList = [];
                 dataList.push(
                     <p>내역이 없습니다.</p>
@@ -43,43 +44,111 @@ function MemberMyPageSimpleDetail(props) {
 
                     dataList.push(
                         <div key={item.cnsltAplySn}>
-                        <div className="input"
-                             style={{
-                                 display: "flex",
-                                 justifyContent: "center",
-                                 alignItems: "center",
-                                 gap: "20px"
-                             }}>
-                            <div
-                                style={{
-                                    order: item.dsctnSe === "0" ? 1 : 2,
-                                    border: "1px solid #333",
-                                    borderRadius: "10px",
-                                    padding: "10px",
-                                    width: "80%"
-                                }}
-                            >
-                                <div dangerouslySetInnerHTML={{ __html: item.cn }}></div>
-                                <p style={{ textAlign: "right" }}>
-                                    {moment(item.frstCrtDt).format('YYYY.MM.DD  HH:MM')}
-                                </p>
+                            <div className="input"
+                                 style={{
+                                     display: "flex",
+                                     justifyContent: "center",
+                                     alignItems: "center",
+                                     gap: "10px"
+                                 }}>
+
+                                {item.dsctnSe === "0" ? (
+                                    <>
+                                        {/* 버튼 */}
+                                        <button
+                                            style={{
+                                                border: "1px solid #007bff",
+                                                background: "#007bff",
+                                                color: "#fff",
+                                                padding: "5px 10px",
+                                                borderRadius: "5px",
+                                                cursor: "pointer"
+                                            }}
+                                            onClick={() => handleEditClick(item)} // 수정 버튼 클릭 시 핸들러 호출
+                                        >
+                                            수정
+                                        </button>
+
+                                        {/* 내용 */}
+                                        <div
+                                            style={{
+                                                border: "1px solid #333",
+                                                borderRadius: "10px",
+                                                padding: "10px",
+                                                width: "80%"
+                                            }}
+                                        >
+                                            <div dangerouslySetInnerHTML={{__html: item.cn}}></div>
+                                            <p style={{textAlign: "right"}}>
+                                                {moment(item.frstCrtDt).format('YYYY.MM.DD  HH:MM')}
+                                            </p>
+                                        </div>
+
+                                        {/* 사람 */}
+                                        <div
+                                            style={{
+                                                border: "1px solid #333",
+                                                borderRadius: "20px",
+                                                padding: "10px",
+                                                width: "7%"
+                                            }}
+                                        >
+                                            <p style={{ textAlign: "center" }}>
+                                                신청자
+                                            </p>
+                                        </div>
+                                    </>
+                                ) : (
+                                    <>
+                                        {/* 사람 */}
+                                        <div
+                                            style={{
+                                                border: "1px solid #333",
+                                                borderRadius: "20px",
+                                                padding: "10px",
+                                                width: "7%"
+                                            }}
+                                        >
+                                            <p style={{ textAlign: "center" }}>
+                                                컨설턴트
+                                            </p>
+                                        </div>
+
+                                        {/* 내용 */}
+                                        <div
+                                            style={{
+                                                border: "1px solid #333",
+                                                borderRadius: "10px",
+                                                padding: "10px",
+                                                width: "80%"
+                                            }}
+                                        >
+                                            <div dangerouslySetInnerHTML={{__html: item.cn}}></div>
+                                            <p style={{textAlign: "right"}}>
+                                                {moment(item.frstCrtDt).format('YYYY.MM.DD  HH:MM')}
+                                            </p>
+                                        </div>
+
+                                        {/* 버튼 */}
+                                        <button
+                                            style={{
+                                                border: "1px solid #007bff",
+                                                background: "#007bff",
+                                                color: "#fff",
+                                                padding: "5px 10px",
+                                                borderRadius: "5px",
+                                                cursor: "pointer"
+                                            }}
+                                            onClick={() => handleEditClick(item)} // 수정 버튼 클릭 시 핸들러 호출
+                                        >
+                                            수정
+                                        </button>
+                                    </>
+                                )}
                             </div>
-                            <div
-                                style={{
-                                    order: item.dsctnSe === "0" ? 1 : 2,
-                                    border: "1px solid #333",
-                                    borderRadius: "20px",
-                                    padding: "10px",
-                                    width: "7%"
-                                }}
-                            >
-                                <p style={{ textAlign: "center" }}>
-                                    {item.dsctnSe === "0" ? "신청자" : "컨설턴트"}
-                                </p>
-                            </div>
-                        </div>
                         </div>
                     );
+
                 });
                 setCnsltDsctnList(dataList);
             },
@@ -87,6 +156,11 @@ function MemberMyPageSimpleDetail(props) {
                 console.error("Error fetching simple detail:", error);
             }
         );
+    };
+
+    const handleEditClick = (item) => {
+        localStorage.setItem('popupData', JSON.stringify(item));
+        window.open(`/popup/simple`, "_blank", "width=600,height=400");
     };
 
     useEffect(() => {
@@ -161,7 +235,7 @@ function MemberMyPageSimpleDetail(props) {
                                         {simpleDetail.simpleFile && simpleDetail.simpleFile.length > 0 ? (
                                             <ul style={{paddingLeft: "20px"}}>
                                                 {simpleDetail.simpleFile.map((file, index) => (
-                                                    <li style={{marginBottom: "5px"}}>
+                                                    <li style={{marginBottom: "5px"}} key={index}>
                                                         <span
                                                             onClick={() => fileDownLoad(file.atchFileSn, file.atchFileNm)}
                                                             style={{cursor: "pointer"}}>
@@ -184,14 +258,8 @@ function MemberMyPageSimpleDetail(props) {
                             </div>
                         </div>
                     ) : (
-                        <div className="contBox infoWrap customContBox"
-                             style={{padding: "20px", background: "#f9f9f9", borderRadius: "5px"}}>
-                            <ul className="inputWrap" style={{listStyleType: "none", paddingLeft: "0"}}>
-                                <li className="inputBox type1 width1" style={{ marginBottom: "10px" }}>
-                                    <label className="title" style={{ fontWeight: "bold" }}><small>상세 정보가 없습니다.</small></label>
-                                    <div className="input" style={{ marginTop: "5px" }}>해당 간편상담의 상세 정보가 없습니다.</div>
-                                </li>
-                            </ul>
+                        <div className="contBox infoWrap customContBox" style={{padding: "20px", background: "#f9f9f9", borderRadius: "5px"}}>
+                            <div className="input" style={{ marginTop: "5px" }}>해당 간편상담의 상세 정보가 없습니다.</div>
                         </div>
                     )}
                 </div>
