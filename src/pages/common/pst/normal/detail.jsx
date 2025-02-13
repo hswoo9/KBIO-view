@@ -327,7 +327,7 @@ function commonPstDetail(props) {
                         <button
                             type="button"
                             className="clickBtn"
-                            onClick={() => fileZipDownLoad("pst_" + pst.pstSn, pst.pstTtl)}>
+                            onClick={() => fileZipDownLoad("pst_" + pst.pstSn, pst.pstTtl, 'tbl_bbs', pst.bbsSn)}>
                           압축
                         </button>
                       )}

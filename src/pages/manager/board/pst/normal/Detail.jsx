@@ -18,6 +18,7 @@ import Eval  from "../../../../common/pst/eval.jsx";
 import { getSessionItem, setSessionItem } from "@/utils/storage";
 import ManagerLeftNew from "@/components/manager/ManagerLeftNew";
 import {fileDownLoad} from "@/components/CommonComponents.jsx";
+import {fileZipDownLoad} from "../../../../../components/CommonComponents.jsx";
 
 function setPst(props) {
   const sessionUser = getSessionItem("loginUser");
@@ -313,6 +314,14 @@ function setPst(props) {
                             </ul>
                         )}
                       </div>
+                      {pstDetail.pstFiles.length > 0 && (
+                          <button
+                              type="button"
+                              className="clickBtn"
+                              onClick={() => fileZipDownLoad("pst_" + pstDetail.pstSn, pstDetail.pstTtl, 'tbl_bbs', pstDetail.bbsSn)}>
+                            압축
+                          </button>
+                      )}
                     </li>
                 )}
                 <li className="inputBox type1 width1">
