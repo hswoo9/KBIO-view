@@ -38,7 +38,7 @@ const MainFooterSwiper = ({data}) => {
         loop: true,
         centeredSlides: true,
         autoplay: {
-            delay: 2000,
+            delay: 4000,
         },
         navigation: {
             nextEl: ".footerSwiperBtn.nextBtn",
