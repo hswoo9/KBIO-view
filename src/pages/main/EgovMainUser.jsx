@@ -10,7 +10,7 @@ import simpleMainIng from "/assets/images/img_simple_main.png";
 import initPage from "@/js/ui";
 import logo from "@/assets/images/logo.svg";
 import {getBnrPopupList, getMvnEntList, getPstList} from "@/components/main/MainComponents";
-import MainSwiper from "@/components/main/MainSwiper";
+
 
 import Slider from 'react-slick';
 import "@/css/slickCustom.css";
@@ -19,6 +19,8 @@ import "@/css/userMain.css";
 
 import AOS from "aos";
 
+import MainSwiper from "@/components/main/MainSwiper";
+import MainFooterSwiper from "@/components/main/MainFooterSwiper";
 import CommonSlider from "@/components/CommonSlider";
 import MainSlider from "@/components/main/MainSlider";
 import MainCalendar from "@/components/main/MainCalendar";
@@ -28,10 +30,6 @@ import user_main_sec01_icon01 from "@/assets/images/user_main_sec01_icon01.svg";
 import user_main_sec01_icon02 from "@/assets/images/user_main_sec01_icon02.svg";
 import user_main_sec01_icon03 from "@/assets/images/user_main_sec01_icon03.svg";
 import user_main_sec01_icon04 from "@/assets/images/user_main_sec01_icon04.svg";
-
-import user_main_sec04_banner01 from "@/assets/images/user_main_sec04_banner01.jpg";
-
-
 
 import user_main_rolling_logo01 from "@/assets/images/user_main_rolling_logo01.svg";
 import user_main_rolling_logo02 from "@/assets/images/user_main_rolling_logo02.svg";
@@ -194,55 +192,7 @@ function EgovMainUser(props) {
         <MainCalendar />
         <section className="sec sec04" data-aos="fade-in">
           <div className="inner">
-            <div className="box bannerBox" data-aos="fade-in">
-              <div className="topBox" data-aos="fade-in" data-aos-duration="1500">
-                <h2 className="secTitle">일정현황</h2>
-                <div className="slideControl">
-                  <button type="button" className="arrowBtn prevBtn">
-                    <div className="icon"></div>
-                  </button>
-                  <button type="button" className="pauseBtn">
-                    <div className="icon"></div>
-                  </button>
-                  <button type="button" className="arrowBtn nextBtn">
-                    <div className="icon"></div>
-                  </button>
-                </div>
-              </div>
-              <div className="bannerSwiper swiper" data-aos="fade-up" data-aos-duration="1500">
-                <div className="swiper-wrapper">
-                  <div className="swiper-slide">
-                    <div className="bg"><img src={user_main_sec04_banner01} alt="images" loading="lazy"/></div>
-                    <div className="textBox">
-                      <h2 className="text">사업 기획부터 연구 개발, 펀딩 투자를 지원하는</h2>
-                      <p className="title">BIO <br/>특화프로그램 지원</p>
-                    </div>
-                  </div>
-                  <div className="swiper-slide">
-                    <div className="bg"><img src={user_main_sec04_banner01} alt="images" loading="lazy"/></div>
-                    <div className="textBox">
-                      <h2 className="text">사업 기획부터 연구 개발, 펀딩 투자를 지원하는</h2>
-                      <p className="title">BIO <br/>특화프로그램 지원</p>
-                    </div>
-                  </div>
-                  <div className="swiper-slide">
-                    <div className="bg"><img src={user_main_sec04_banner01} alt="images" loading="lazy"/></div>
-                    <div className="textBox">
-                      <h2 className="text">사업 기획부터 연구 개발, 펀딩 투자를 지원하는</h2>
-                      <p className="title">BIO <br/>특화프로그램 지원</p>
-                    </div>
-                  </div>
-                  <div className="swiper-slide">
-                    <div className="bg"><img src={user_main_sec04_banner01} alt="images" loading="lazy"/></div>
-                    <div className="textBox">
-                      <h2 className="text">사업 기획부터 연구 개발, 펀딩 투자를 지원하는</h2>
-                      <p className="title">BIO <br/>특화프로그램 지원</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="swiper-pagination"></div>
-              </div>
-            </div>
+            <MainFooterSwiper />
             <div className="box noticeBox" data-aos="fade-in">
               <div className="topBox" data-aos="fade-in" data-aos-duration="1500">
                 <h2 className="secTitle">공지사항</h2>
