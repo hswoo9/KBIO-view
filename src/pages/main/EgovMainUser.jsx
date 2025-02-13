@@ -50,11 +50,6 @@ function EgovMainUser(props) {
   const userSn = getSessionItem("userSn");
 
   const [popUpList, setPopUpList] = useState([]);
-  const [mainSlidesList, setMainSlidesList] = useState([]);
-  useEffect(() => {
-    console.log(mainSlidesList);
-  }, [mainSlidesList]);
-
 
   const wrapRef = useRef(null);
   const listRef = useRef(null);
@@ -123,10 +118,6 @@ function EgovMainUser(props) {
       setPopUpList(data.filter(e => e.tblBnrPopup.bnrPopupKnd == "popup"));
     });
 
-    getBnrPopupList("bnr").then((data) => {
-      setMainSlidesList(data.filter(e => e.tblBnrPopup.bnrPopupFrm == "mainSlides"));
-    });
-
     getMvnEntList().then((data) => {
       setMvnEntList(data);
     });
@@ -136,7 +127,6 @@ function EgovMainUser(props) {
 
   return (
       <div id="container" className="container main">
-        {/*<CommonSlider data={mainSlidesList} />*/}
         <div className="sec01">
           <div className="bg bgSlide">
             <div className="slide"><img src={user_main_sec01_slide01} alt="images" loading="lazy"/></div>

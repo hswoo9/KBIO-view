@@ -1,6 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination, Navigation } from 'swiper/modules';
+import {getBnrPopupList, getMvnEntList, getPstList} from "@/components/main/MainComponents";
+
+
 
 import user_main_sec02_logo01 from "@/assets/images/user_main_sec02_logo01.png";
 import user_main_sec02_logo02 from "@/assets/images/user_main_sec02_logo02.png";
@@ -12,6 +15,8 @@ import user_main_sec04_banner01 from "@/assets/images/user_main_sec04_banner01.j
 const MainFooterSwiper = ({data}) => {
     const swiperRef = useRef(null);
     const [isAutoPlay, setIsAutoPlay] = useState(true);
+    const [swiperList, setSwiperList] = useState([]);
+    const [bannerList, setBannerList] = useState([]);
     const toggleAutoPlay = () => {
         setIsAutoPlay((prev) => {
             if (prev) {
@@ -58,6 +63,10 @@ const MainFooterSwiper = ({data}) => {
     }
 
     useEffect(() => {
+        getBnrPopupList("bnr").then((data) => {
+            setBannerList(data.filter(e => e.tblBnrPopup.bnrPopupFrm == "mainSlides"));
+        });
+
         if (swiperRef.current && swiperRef.current.swiper) {
             swiperRef.current.swiper.params.navigation.prevEl = ".footerSwiperBtn.prevBtn";
             swiperRef.current.swiper.params.navigation.nextEl = ".footerSwiperBtn.nextBtn";
@@ -71,10 +80,16 @@ const MainFooterSwiper = ({data}) => {
             swiperInstance.pagination.init();
             swiperInstance.pagination.update();
         }
+
     }, []);
 
     return (
         <>
+            <style>
+            {`
+                .swiper-wrapper .swiper-initialized {width : 100%;
+            `}
+            </style>
             <div className="box bannerBox" data-aos="fade-in">
                 <div className="topBox" data-aos="fade-in" data-aos-duration="1500">
                     <h2 className="secTitle">배너</h2>
@@ -82,7 +97,7 @@ const MainFooterSwiper = ({data}) => {
                         <button type="button" className="arrowBtn prevBtn footerSwiperBtn">
                             <div className="icon"></div>
                         </button>
-                        <button type="button"  onClick={toggleAutoPlay} className={isAutoPlay ? "pauseBtn" : "pauseBtn on"}>
+                        <button type="button" onClick={toggleAutoPlay} className={isAutoPlay ? "pauseBtn" : "pauseBtn on"}>
                             <div className="icon"></div>
                         </button>
                         <button type="button" className="arrowBtn nextBtn footerSwiperBtn">
@@ -95,38 +110,38 @@ const MainFooterSwiper = ({data}) => {
                         <Swiper {...swiperSettings} ref={swiperRef}
                                 onSwiper={(swiper) => (swiperRef.current = swiper)}
                         >
-                            <SwiperSlide className="swiper-slide">
-                                <div className="bg"><img src={user_main_sec04_banner01} alt="images" loading="lazy"/>
-                                </div>
-                                <div className="textBox">
-                                    <h2 className="text">사업 기획부터 연구 개발, 펀딩 투자를 지원하는</h2>
-                                    <p className="title">BIO <br/>특화프로그램 지원</p>
-                                </div>
-                            </SwiperSlide>
-                            <SwiperSlide className="swiper-slide">
-                                <div className="bg"><img src={user_main_sec04_banner01} alt="images" loading="lazy"/>
-                                </div>
-                                <div className="textBox">
-                                    <h2 className="text">사업 기획부터 연구 개발, 펀딩 투자를 지원하는</h2>
-                                    <p className="title">BIO <br/>특화프로그램 지원</p>
-                                </div>
-                            </SwiperSlide>
-                            <SwiperSlide className="swiper-slide">
-                                <div className="bg"><img src={user_main_sec04_banner01} alt="images" loading="lazy"/>
-                                </div>
-                                <div className="textBox">
-                                    <h2 className="text">사업 기획부터 연구 개발, 펀딩 투자를 지원하는</h2>
-                                    <p className="title">BIO <br/>특화프로그램 지원</p>
-                                </div>
-                            </SwiperSlide>
-                            <SwiperSlide className="swiper-slide">
-                                <div className="bg"><img src={user_main_sec04_banner01} alt="images" loading="lazy"/>
-                                </div>
-                                <div className="textBox">
-                                    <h2 className="text">사업 기획부터 연구 개발, 펀딩 투자를 지원하는</h2>
-                                    <p className="title">BIO <br/>특화프로그램 지원</p>
-                                </div>
-                            </SwiperSlide>
+                            {
+                                bannerList.length > 0 ? (
+                                    bannerList.map( (bnr, index) => (
+                                        bnr ? (
+                                            <SwiperSlide className="swiper-slide" key={`${bnr.bnrPopupSn || "no_key"}-${index}`}>
+                                                <div className="bg">
+                                                    <img
+                                                        src={`http://133.186.250.158${bnr.tblComFile.atchFilePathNm}/${bnr.tblComFile.strgFileNm}.${bnr.tblComFile.atchFileExtnNm}`}
+                                                        alt={bnr.tblComFile.atchFileNm}
+                                                        style={{
+                                                            cursor: "pointer"
+                                                        }}
+                                                        onClick={() => {
+                                                            window.open(bnr.bnrPopupUrlAddr);
+                                                        }}
+                                                        loading="lazy"
+                                                    />
+                                                </div>
+                                            </SwiperSlide>
+                                        ) : null
+                                    ))
+                                ) : (
+                                    <SwiperSlide className="swiper-slide" key="bnr_no_data">
+                                        <div className="bg"><img src={user_main_sec04_banner01} alt="images" loading="lazy"/>
+                                        </div>
+                                        <div className="textBox">
+                                            <h2 className="text"></h2>
+                                            <p className="title">등록된 배너가 없습니다.</p>
+                                        </div>
+                                    </SwiperSlide>
+                                )
+                            }
                         </Swiper>
                     </div>
                     <div className="swiper-pagination footerSwiperBtn"></div>

@@ -84,6 +84,7 @@ const MainSwiper = ({data}) => {
                 requestUrl,
                 requestOptions,
                 (resp) => {
+                    let operationalList = resp.result.operationalList;
                     let dataList = [];
                     {/* TODO :
                         기업별 이미지 맞춰서 수정
@@ -99,10 +100,25 @@ const MainSwiper = ({data}) => {
                                     <h3 className="tt1">{item.mvnEntNm}</h3>
                                     <p className="tt2">혁신적인 기술력과 신뢰를 바탕으로 <br/>바이오 산업의 미래를 열어가고 있습니다</p>
                                 </div>
-                                <a href={item.hmpgAddr} target="_blank" rel="noopener noreferrer" className="linkBtn"><span>바로가기</span></a>
+                                <a href={item.hmpgAddr} target="_blank" rel="noopener noreferrer" className="linkBtn" key={item.mvnEntSn}><span>바로가기</span></a>
                             </SwiperSlide>
                         );
                     });
+                    if(dataList.length < 5 && dataList.length > 1){
+                        operationalList.forEach(function(item, index) {
+                            dataList.push(
+                                <SwiperSlide className="swiper-slide" key={item.mvnEntSn + 100}>
+                                    <figure className="logoBox"><img src={user_main_sec02_logo01} alt={item.mvnEntNm} loading="lazy"/>
+                                    </figure>
+                                    <div className="textBox">
+                                        <h3 className="tt1">{item.mvnEntNm}</h3>
+                                        <p className="tt2">혁신적인 기술력과 신뢰를 바탕으로 <br/>바이오 산업의 미래를 열어가고 있습니다</p>
+                                    </div>
+                                    <a href={item.hmpgAddr} target="_blank" rel="noopener noreferrer" className="linkBtn"  key={item.mvnEntSn + 100}><span>바로가기</span></a>
+                                </SwiperSlide>
+                            )
+                        })
+                    }
                     setAuthorityList(dataList);
                 },
                 (resp) => {
