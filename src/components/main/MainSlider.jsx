@@ -9,16 +9,17 @@ const MainSlider = () => {
     const [currentSlide, setCurrentSlide] = useState(1);
     const [key, setKey] = useState(0);
     const [isAutoPlay, setIsAutoPlay] = useState(true);
-    const autoplaySpeed = 8000;
+    const autoplaySpeed = 2000;
 
     const toggleAutoPlay = () => {
-        console.log(isAutoPlay);
-        if(isAutoPlay){
-            sliderRef.current.slickPlay();
-        }else{
-            sliderRef.current.slickPause();
-        }
-        setIsAutoPlay(!isAutoPlay);
+        setIsAutoPlay((prev) => {
+            if (prev) {
+                sliderRef.current.slickPause();
+            } else {
+                sliderRef.current.slickPlay();
+            }
+            return !prev;
+        });
     }
 
     const nextSlide = () => {
