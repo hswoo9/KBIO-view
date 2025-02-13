@@ -75,9 +75,9 @@ function MemberMyPageSimple(props) {
                                 </td>
                                 <td>{item.cnsltFld}</td>
                                 <td>
-                                        <Link to={{pathname: URL.test}}
+                                        <Link to={{pathname: URL.MEMBER_MYPAGE_SIMPLE_DETAIL}}
                                               state={{
-                                                  dfclMttrSn: item.dfclMttrSn
+                                                  cnsltAplySn: item.cnsltAplySn
                                               }}
                                               style={{cursor: 'pointer', textDecoration: 'underline'}}
                                         >

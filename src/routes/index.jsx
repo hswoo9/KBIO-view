@@ -222,6 +222,7 @@ import EgovCompleteMember from '@/pages/mypage/EgovCompleteMember';
 import MemberMyPageModify from '@/pages/mypage/MemberMyPageModify';
 import MemberMyPageConsulting from '@/pages/mypage/MemberMyPageConsulting';
 import MemberMyPageSimple from '@/pages/mypage/MemberMyPageSimple';
+import MemberMyPageSimpleDetail from '@/pages/mypage/MemberMyPageSimpleDetail';
 import MemberMyPageDifficulties from '@/pages/mypage/MemberMyPageDifficulties';
 import MemberMyPageDifficultiesDetail from '@/pages/mypage/MemberMyPageDifficultiesDetail';
 import MemberMyPageDifficultiesModify from '@/pages/mypage/MemberMyPageDifficultiesModify';
@@ -569,6 +570,7 @@ const SecondRoutes = () => {
               <Route path={URL.MEMBER_MYPAGE_MODIFY} element={<MemberMyPageModify mode={CODE.MODE_MODIFY}/>}/>
               <Route path={URL.MEMBER_MYPAGE_CONSULTING} element={<MemberMyPageConsulting/>}/>
               <Route path={URL.MEMBER_MYPAGE_SIMPLE} element={<MemberMyPageSimple/>}/>
+              <Route path={URL.MEMBER_MYPAGE_SIMPLE_DETAIL} element={<MemberMyPageSimpleDetail/>}/>
               <Route path={URL.MEMBER_MYPAGE_DIFFICULTIES} element={<MemberMyPageDifficulties/>}/>
               <Route path={URL.MEMBER_MYPAGE_DIFFICULTIES_DETAIL} element={<MemberMyPageDifficultiesDetail/>}/>
               <Route path={URL.MEMBER_MYPAGE_DIFFICULTIES_MODIFY} element={<MemberMyPageDifficultiesModify/>}/>
