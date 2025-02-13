@@ -9,7 +9,7 @@ const MainSlider = () => {
     const [currentSlide, setCurrentSlide] = useState(1);
     const [key, setKey] = useState(0);
     const [isAutoPlay, setIsAutoPlay] = useState(true);
-    const autoplaySpeed = 2000;
+    const autoplaySpeed = 8000;
 
     const toggleAutoPlay = () => {
         setIsAutoPlay((prev) => {

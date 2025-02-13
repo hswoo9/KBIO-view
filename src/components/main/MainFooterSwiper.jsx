@@ -77,7 +77,7 @@ const MainFooterSwiper = ({data}) => {
         <>
             <div className="box bannerBox" data-aos="fade-in">
                 <div className="topBox" data-aos="fade-in" data-aos-duration="1500">
-                    <h2 className="secTitle">일정현황</h2>
+                    <h2 className="secTitle">배너</h2>
                     <div className="slideControl">
                         <button type="button" className="arrowBtn prevBtn footerSwiperBtn">
                             <div className="icon"></div>
