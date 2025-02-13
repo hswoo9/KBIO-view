@@ -134,10 +134,12 @@ export const getComCdList = async (cdGroupSn) => {
  * @param atchFileNm
  * @returns {Promise<void>}
  */
-export const fileDownLoad = async (atchFileSn, atchFileNm) => {
+export const fileDownLoad = async (atchFileSn, atchFileNm, trgtTblNm, trgtSn) => {
     try {
-        const response = await axios.post(`${window.location.protocol}//${window.location.hostname}:8080/commonApi/getFileDownLoad`, {
-            atchFileSn : atchFileSn
+        const response = await axios.post(`${window.location.protocol}//${window.location.hostname}:8080/commonApi/getFileDownLoad.do`, {
+            atchFileSn : atchFileSn,
+            trgtTblNm : trgtTblNm,
+            trgtSn : trgtSn
         }, {
             responseType : 'blob'
         });

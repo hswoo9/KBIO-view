@@ -314,7 +314,7 @@ function commonPstDetail(props) {
                               {pst.pstFiles.map((file, index) => (
                                   <li key={index}>
                                     <span
-                                        onClick={() => fileDownLoad(file.atchFileSn, file.atchFileNm)}
+                                        onClick={() => fileDownLoad(file.atchFileSn, file.atchFileNm, 'tbl_bbs', pst.bbsSn)}
                                         style={{cursor: "pointer"}}>
                                       {file.atchFileNm} - {(file.atchFileSz / 1024).toFixed(2)} KB
                                     </span>

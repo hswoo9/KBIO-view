@@ -307,7 +307,7 @@ function setPst(props) {
                               {pstDetail.pstFiles.map((file, index) => (
                                   <li key={index}>
                                     <span
-                                        onClick={() => fileDownLoad(file.atchFileSn, file.atchFileNm)}>{file.atchFileNm} - {(file.atchFileSz / 1024).toFixed(2)} KB</span>
+                                        onClick={() => fileDownLoad(file.atchFileSn, file.atchFileNm, 'tbl_bbs', pstDetail.bbsSn)}>{file.atchFileNm} - {(file.atchFileSz / 1024).toFixed(2)} KB</span>
                                   </li>
                               ))}
                             </ul>

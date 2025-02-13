@@ -16,7 +16,7 @@ function AccessTabPst(props) {
     const lastDay = new Date(year, month, 0).getDate();
 
     const categories = Array.from({ length: lastDay }, (_, i) => String(i + 1 + "일").padStart(2, '0'));
-    const [pstInqCnt, setPstInqCnt] = useState([])
+    const [cnt, setCnt] = useState([])
 
     const getStatisticsPstAccess = () => {
         const requestOptions = {
@@ -27,14 +27,14 @@ function AccessTabPst(props) {
             body: JSON.stringify(searchDto)
         };
 
-        EgovNet.requestFetch("/statisticsApi/getStatisticsPstAccess.do", requestOptions, function (resp) {
-            resp.result.statisticsPstAccess.forEach(function(v, i){
+        EgovNet.requestFetch("/statisticsApi/getStatisticsPstFile.do", requestOptions, function (resp) {
+            resp.result.statisticsPstFile.forEach(function(v, i){
                 const userCounts = categories.map((day) => {
-                    const item = resp.result.statisticsPstAccess.find(v => parseInt(v.day.split("-")[2]) === parseInt(day.slice(0, -1)));
-                    return item ? item.inqCnt : 0;
+                    const item = resp.result.statisticsPstFile.find(v => parseInt(v.day.split("-")[2]) === parseInt(day.slice(0, -1)));
+                    return item ? item.cnt : 0;
                 });
 
-                setPstInqCnt(userCounts)
+                setCnt(userCounts)
             })
         });
     }
@@ -48,7 +48,6 @@ function AccessTabPst(props) {
         chart: {
             id: 'basic-bar',
         },
-        //컬럼명
         xaxis: {
             categories: categories,
         },
@@ -56,8 +55,8 @@ function AccessTabPst(props) {
 
     const series = [
         {
-            name: '조회수',
-            data: pstInqCnt,
+            name: '다운로드수',
+            data: cnt,
         },
     ];
 
