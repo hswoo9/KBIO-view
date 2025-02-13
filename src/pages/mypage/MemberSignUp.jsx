@@ -1209,12 +1209,14 @@ function MemberSignUp(props) {
 
                     <li className="inputBox type2">
                       <span className="tt1">소개</span>
-                      <label className="input" style={{height: "100%"}}>
+                      {/*<label className="input" style={{height: "100%"}}>*/}
+                        <div className="input" style={{height: "100%"}}>
                         <CommonEditor
                             value={memberDetail.cnsltSlfint || ""}
                             onChange={handleChange}
                         />
-                      </label>
+                        </div>
+                      {/*</label>*/}
                     </li>
 
                     <li className="inputBox type2">
@@ -1262,9 +1264,8 @@ function MemberSignUp(props) {
                       <span className="tt1">컨설팅 항목</span>
                       <div className="input">
                         <div className="checkWrap" style={{display: "flex", gap: "20px"}}>
-                          <label className="checkBox type3">
                             <input
-                                type="checkbox"
+                                type="text"
                                 name="consultingOption1"
                                 checked={memberDetail.consultingOption1}
                                 onChange={(e) => setMemberDetail({
@@ -1272,8 +1273,6 @@ function MemberSignUp(props) {
                                   consultingOption1: e.target.checked
                                 })}
                             />
-                            <small>예시</small>
-                          </label>
                         </div>
                       </div>
                     </li>
