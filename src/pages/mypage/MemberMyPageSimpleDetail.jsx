@@ -13,6 +13,7 @@ function MemberMyPageSimpleDetail(props) {
     const location = useLocation();
     const [cnsltDsctnList, setCnsltDsctnList] = useState([]);
     const [paginationInfo, setPaginationInfo] = useState({});
+    const [latestCreator, setLatestCreator] = useState(null);
     const [searchDto, setSearchDto] = useState({
         cnsltAplySn: location.state?.cnsltAplySn || "",
         cnsltSttsCd: location.state?.cnsltSttsCd || "",
@@ -35,6 +36,8 @@ function MemberMyPageSimpleDetail(props) {
         };
     }, []);
 
+    console.log(searchDto.cnsltSttsCd)
+
     const getSimpleDetail = () => {
         if (!searchDto.cnsltAplySn) return;
 
@@ -51,124 +54,70 @@ function MemberMyPageSimpleDetail(props) {
             getSimpleDetailURL,
             requestOptions,
             function (resp) {
-                setSimpleDetail({
-                    ...resp.result.simple
-                });
+                setSimpleDetail({ ...resp.result.simple });
+
                 let dataList = [];
-                dataList.push(
-                    <p>내역이 없습니다.</p>
-                );
-                resp.result.cnsltDsctnList.forEach(function (item, index) {
-                    if (index === 0) dataList = [];
+                if (resp.result.cnsltDsctnList.length === 0) {
+                    dataList.push(<p key="no-data">내역이 없습니다.</p>);
+                } else {
+                    // 가장 최근 데이터 찾기 (frstCrtDt 기준 최신)
+                    const latestItem = resp.result.cnsltDsctnList.reduce((latest, item) =>
+                        moment(item.frstCrtDt).isAfter(moment(latest.frstCrtDt)) ? item : latest
+                    );
 
-                    dataList.push(
-                        <div key={item.cnsltAplySn}>
-                            <div className="input"
-                                 style={{
-                                     display: "flex",
-                                     justifyContent: "center",
-                                     alignItems: "center",
-                                     gap: "10px"
-                                 }}>
+                    setLatestCreator(latestItem.creatrSn);
 
+                    console.log("최신 :",latestItem);
+
+                    resp.result.cnsltDsctnList.forEach((item) => {
+                        const isLatest = item.cnsltAplySn === latestItem.cnsltAplySn;
+                        const isOwnComment = item.creatrSn === sessionUser.userSn;
+                        const isSn = latestItem.cnsltDsctnSn === item.cnsltDsctnSn;
+                        const showEditButton = isLatest && isOwnComment && isSn && searchDto.cnsltSttsCd !== "200" && searchDto.cnsltSttsCd !== "999"
+
+                        dataList.push(
+                            <div key={item.cnsltAplySn} className="input" style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                                 {item.dsctnSe === "0" ? (
                                     <>
-                                        {/* 버튼 */}
-                                        <button
-                                            style={{
-                                                border: "1px solid #007bff",
-                                                background: "#007bff",
-                                                color: "#fff",
-                                                padding: "5px 10px",
-                                                borderRadius: "5px",
-                                                cursor: "pointer"
-                                            }}
-                                            onClick={() => handleEditClick(item)} // 수정 버튼 클릭 시 핸들러 호출
-                                        >
-                                            수정
-                                        </button>
-
-                                        {/* 내용 */}
-                                        <div
-                                            style={{
-                                                border: "1px solid #333",
-                                                borderRadius: "10px",
-                                                padding: "10px",
-                                                width: "80%"
-                                            }}
-                                        >
-                                            <div dangerouslySetInnerHTML={{__html: item.cn}}></div>
-                                            <p style={{textAlign: "right"}}>
-                                                {moment(item.frstCrtDt).format('YYYY.MM.DD  HH:MM')}
-                                            </p>
+                                        {showEditButton &&  (
+                                            <button
+                                                style={{ border: "1px solid #007bff", background: "#007bff", color: "#fff", padding: "5px 10px", borderRadius: "5px", cursor: "pointer" }}
+                                                onClick={() => handleEditClick(item)}
+                                            >
+                                                수정
+                                            </button>
+                                        )}
+                                        <div style={{ border: "1px solid #333", borderRadius: "10px", padding: "10px", width: "80%" }}>
+                                            <div dangerouslySetInnerHTML={{ __html: item.cn }}></div>
+                                            <p style={{ textAlign: "right" }}>{moment(item.frstCrtDt).format('YYYY.MM.DD HH:mm')}</p>
                                         </div>
-
-                                        {/* 사람 */}
-                                        <div
-                                            style={{
-                                                border: "1px solid #333",
-                                                borderRadius: "20px",
-                                                padding: "10px",
-                                                width: "7%"
-                                            }}
-                                        >
-                                            <p style={{ textAlign: "center" }}>
-                                                신청자
-                                            </p>
+                                        <div style={{ border: "1px solid #333", borderRadius: "20px", padding: "10px", width: "7%" }}>
+                                            <p style={{ textAlign: "center" }}>신청자</p>
                                         </div>
                                     </>
                                 ) : (
                                     <>
-                                        {/* 사람 */}
-                                        <div
-                                            style={{
-                                                border: "1px solid #333",
-                                                borderRadius: "20px",
-                                                padding: "10px",
-                                                width: "7%"
-                                            }}
-                                        >
-                                            <p style={{ textAlign: "center" }}>
-                                                컨설턴트
-                                            </p>
+                                        <div style={{ border: "1px solid #333", borderRadius: "20px", padding: "10px", width: "7%" }}>
+                                            <p style={{ textAlign: "center" }}>컨설턴트</p>
                                         </div>
-
-                                        {/* 내용 */}
-                                        <div
-                                            style={{
-                                                border: "1px solid #333",
-                                                borderRadius: "10px",
-                                                padding: "10px",
-                                                width: "80%"
-                                            }}
-                                        >
-                                            <div dangerouslySetInnerHTML={{__html: item.cn}}></div>
-                                            <p style={{textAlign: "right"}}>
-                                                {moment(item.frstCrtDt).format('YYYY.MM.DD  HH:MM')}
-                                            </p>
+                                        <div style={{ border: "1px solid #333", borderRadius: "10px", padding: "10px", width: "80%" }}>
+                                            <div dangerouslySetInnerHTML={{ __html: item.cn }}></div>
+                                            <p style={{ textAlign: "right" }}>{moment(item.frstCrtDt).format('YYYY.MM.DD HH:mm')}</p>
                                         </div>
-
-                                        {/* 버튼 */}
-                                        <button
-                                            style={{
-                                                border: "1px solid #007bff",
-                                                background: "#007bff",
-                                                color: "#fff",
-                                                padding: "5px 10px",
-                                                borderRadius: "5px",
-                                                cursor: "pointer"
-                                            }}
-                                            onClick={() => handleEditClick(item)}
-                                        >
-                                            수정
-                                        </button>
+                                        {showEditButton && (
+                                            <button
+                                                style={{ border: "1px solid #007bff", background: "#007bff", color: "#fff", padding: "5px 10px", borderRadius: "5px", cursor: "pointer" }}
+                                                onClick={() => handleEditClick(item)}
+                                            >
+                                                수정
+                                            </button>
+                                        )}
                                     </>
                                 )}
                             </div>
-                        </div>
-                    );
-
-                });
+                        );
+                    });
+                }
                 setCnsltDsctnList(dataList);
             },
             (error) => {
@@ -176,7 +125,50 @@ function MemberMyPageSimpleDetail(props) {
             }
         );
     };
-    
+
+    const handleCancleClick = (cnsltAplySn) => {
+        const setCancleSimpleURL = '/memberApi/setCancelSimple';
+
+        Swal.fire({
+            title: `해당 건에 대해 취소 하시겠습니까?`,
+            showCloseButton: true,
+            showCancelButton: true,
+            confirmButtonText: "예",
+            cancelButtonText: "아니오"
+        }).then((result) => {
+            if(result.isConfirmed) {
+                const requestOptions = {
+                    method: "POST",
+                    headers: {
+                        "Content-type": "application/json",
+                    },
+                    body:JSON.stringify({
+                        cnsltAplySn: cnsltAplySn
+                    }),
+                };
+
+                EgovNet.requestFetch(setCancleSimpleURL, requestOptions, (resp) => {
+                    if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
+                        Swal.fire("취소 되었습니다.").then(() => {
+                            setSearchDto((prev) => ({
+                                ...prev,
+                                cnsltSttsCd: "999"
+                            }));
+                            getSimpleDetail();
+                        });
+
+                    } else {
+                        alert("ERR : " + resp.resultMessage);
+                    }
+                });
+            } else {
+
+            }
+        });
+    };
+
+
+
     const handleComClick = (cnsltAplySn) => {
         const setComSimpleURL = '/memberApi/setComSimple';
 
@@ -200,7 +192,14 @@ function MemberMyPageSimpleDetail(props) {
 
                 EgovNet.requestFetch(setComSimpleURL, requestOptions, (resp) => {
                     if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
-                        Swal.fire("처리완료 되었습니다.");
+                        Swal.fire("처리완료 되었습니다.").then(() => {
+                            setSearchDto((prev) => ({
+                                ...prev,
+                                cnsltSttsCd: "200"
+                            }));
+                            getSimpleDetail();
+                        });
+
                     } else {
                         alert("ERR : " + resp.resultMessage);
                     }
@@ -328,25 +327,91 @@ function MemberMyPageSimpleDetail(props) {
                 </div>
                 <div className="buttonBox">
                     <div className="leftBox">
-                        {simpleDetail && searchDto.cnsltSttsCd !== "200" && (
+                        {simpleDetail && (
                             <>
-                                <button type="button" className="clickBtn point" onClick={() => handleCreateClick()}>
-                                    <span>등록</span>
-                                </button>
-                                {sessionUser.mbrType !== 2 && (
-                                    <button type="button" className="clickBtn point"
-                                            onClick={() => handleComClick(searchDto.cnsltAplySn)}>
-                                        <span>처리완료</span>
-                                    </button>
+                            {/* 취소상태일때 */}
+                                {searchDto.cnsltSttsCd === "999" ? (
+                                    <>
+                                        <NavLink to={URL.MEMBER_MYPAGE_SIMPLE}>
+                                            <button type="button" className="clickBtn white">
+                                                목록
+                                            </button>
+                                        </NavLink>
+                                    </>
+                                ) : cnsltDsctnList.length === 1 && latestCreator === sessionUser.userSn ? (
+                                    <>
+                                        <button type="button" className="clickBtn point"
+                                                onClick={() => handleCancleClick(searchDto.cnsltAplySn)}>
+                                            <span>취소</span>
+                                        </button>
+                                        <NavLink to={URL.MEMBER_MYPAGE_SIMPLE}>
+                                            <button type="button" className="clickBtn white">
+                                                목록
+                                            </button>
+                                        </NavLink>
+                                    </>
+                                ) : searchDto.cnsltSttsCd === "200" ? (
+                                    // 처리 완료 상태일 경우
+                                    <>
+                                        <button type="button" className="clickBtn point">
+                                            <span>만족도 조사</span>
+                                        </button>
+                                        <NavLink to={URL.MEMBER_MYPAGE_SIMPLE}>
+                                            <button type="button" className="clickBtn white">
+                                                목록
+                                            </button>
+                                        </NavLink>
+                                    </>
+                                ) : latestCreator === sessionUser.userSn ? (
+                                    // 사용자가 로그인했을 때 마지막 작성자가 사용자일 경우
+                                    <>
+                                        <NavLink to={URL.MEMBER_MYPAGE_SIMPLE}>
+                                            <button type="button" className="clickBtn white">
+                                                목록
+                                            </button>
+                                        </NavLink>
+                                    </>
+                                ) : latestCreator !== sessionUser.userSn && sessionUser.mbrType !== 2 ? (
+                                    // 사용자가 로그인했을 때 마지막 작성자가 컨설턴트일 경우
+                                    <>
+                                        <button type="button" className="clickBtn point"
+                                                onClick={() => handleCreateClick()}>
+                                            <span>등록</span>
+                                        </button>
+                                        <button type="button" className="clickBtn point"
+                                                onClick={() => handleComClick(searchDto.cnsltAplySn)}>
+                                            <span>처리완료</span>
+                                        </button>
+                                        <NavLink to={URL.MEMBER_MYPAGE_SIMPLE}>
+                                            <button type="button" className="clickBtn white">
+                                                목록
+                                            </button>
+                                        </NavLink>
+                                    </>
+                                ) : sessionUser.mbrType === 2 ? (
+                                    // 컨설턴트가 로그인했을 때 마지막 작성자가 사용자일 경우
+                                    <>
+                                        <button type="button" className="clickBtn point"
+                                                onClick={() => handleCreateClick()}>
+                                            <span>등록</span>
+                                        </button>
+                                        <NavLink to={URL.MEMBER_MYPAGE_SIMPLE}>
+                                            <button type="button" className="clickBtn white">
+                                                목록
+                                            </button>
+                                        </NavLink>
+                                    </>
+                                ) : (
+                                    // 컨설턴트가 로그인했을 때 마지막 작성자가 컨설턴트일 경우
+                                    <NavLink to={URL.MEMBER_MYPAGE_SIMPLE}>
+                                        <button type="button" className="clickBtn white">
+                                            목록
+                                        </button>
+                                    </NavLink>
                                 )}
                             </>
                         )}
                     </div>
-                    <NavLink to={URL.MEMBER_MYPAGE_SIMPLE}>
-                        <button type="button" className="clickBtn white">
-                            목록
-                        </button>
-                    </NavLink>
                 </div>
 
             </div>

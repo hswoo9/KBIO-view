@@ -74,7 +74,8 @@ function MemberMyPageSimpleCreatePopup() {
         fileList.map((file) => {
             formData.append("files", file);
         });
-
+        const cnsltSttsCd = sessionUser.mbrType === 2 ? "102" : "101"; 
+        formData.append("cnsltSttsCd", cnsltSttsCd);
 
         Swal.fire({
             title: '저장하시겠습니까?',

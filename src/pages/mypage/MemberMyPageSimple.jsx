@@ -18,11 +18,19 @@ function MemberMyPageSimple(props) {
 
     const searchTypeRef = useRef();
     const searchValRef = useRef();
-    const statusMap = {
-        101: "답변대기",
-        102: "답변완료",
-        200: "처리완료",
-    };
+    const statusMap = sessionUser.mbrType === 2
+        ? {
+            102: "답변대기",
+            101: "답변완료",
+            200: "처리완료",
+            999: "취소",
+        }
+        : {
+            102: "답변완료",
+            101: "답변대기",
+            200: "처리완료",
+            999: "취소",    
+        };
 
 
     const [searchDto, setSearchDto] = useState(

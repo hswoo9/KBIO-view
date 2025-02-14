@@ -1,5 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Link, useLocation, NavLink } from "react-router-dom";
+import { Link, useLocation, NavLink, useNavigate } from "react-router-dom";
+import { getBbsInPst } from "@/components/CommonComponents";
+import { getSessionItem } from "@/utils/storage";
+import URL from "@/constants/url";
+import CODE from "@/constants/code";
 import {
     format,
     startOfMonth,
@@ -17,6 +21,12 @@ import {
 } from "date-fns";
 
 function MainCalendar() {
+    const navigate = useNavigate();
+    const sessionUser = getSessionItem("loginUser");
+    const userSn = getSessionItem("userSn");
+    const [menuList, setMenuList] = useState([]);
+    const [bbsList, setBbsList] = useState([]);
+    const [tabList, setTabList] = useState([]);
     const tdRef = useRef(null);
     const [currentMonth, setCurrentMonth] = useState(new Date());
     const [selectMonth, setSelectMonth] = useState(format(currentMonth, "M"));
@@ -33,9 +43,24 @@ function MainCalendar() {
         day = addDays(day, 1);
     }
 
-    const [activeTabIndex, setActiveTabIndex] = useState(1);
+    const [activeTabIndex, setActiveTabIndex] = useState(0);
     const handleTabClick = (index) => {
-        setActiveTabIndex(index);
+
+        const tabLiClass = document.querySelector(".tabLi.active");
+        if(tabLiClass){
+            tabLiClass.classList.remove("active");
+        }
+        const tabContClass = document.querySelector(".tabCont.active");
+        if(tabContClass){
+            tabContClass.classList.remove("active");
+        }
+        const tabClass = document.querySelectorAll(".tab" + index);
+        if(tabClass){
+            tabClass.forEach(function(item, index){
+                item.classList.add("active");
+            })
+        }
+
     };
 
     const leapYear = isLeapYear(currentMonth);
@@ -80,6 +105,7 @@ function MainCalendar() {
         if(tdElement){
             const day = tdElement.getAttribute("day");
             setSelectDay(day);
+            console.log(format(currentMonth, "yyyy-MM") + "-" + String(day).padStart(2, '0'));
         }
     }
 
@@ -111,6 +137,79 @@ function MainCalendar() {
         return weeks;
     };
 
+    const pstDetailHandler = (pst) => {
+        navigate(
+            { pathname: URL.COMMON_PST_NORMAL_DETAIL },
+            { state: { pstSn:  pst.pstSn} },
+            { mode:  CODE.MODE_READ}
+        );
+    };
+
+    const makerPstLi = (list) => {
+        let resultList = [];
+        resultList.push(
+            <li
+
+                key="no_data"
+                className="mouseCursor"
+            >
+                <a>
+                    <p>게시글이 없습니다.</p>
+                </a>
+            </li>
+        )
+
+        list.forEach(function (item, index) {
+            if (index === 0) resultList = [];
+            resultList.push(
+                <li
+                    onClick={() => {
+                        pstDetailHandler(item);
+                    }}
+                    key={item.pstSn}
+                    className="mouseCursor"
+                >
+                    <a>
+                        <p>{item.pstTtl}</p>
+                    </a>
+                </li>
+            )
+        })
+        return resultList;
+    }
+
+    useEffect(() => {
+        getBbsInPst(null, "0", "Y", userSn).then((data) => {
+            let bbsList = [];
+            let tabList = [];
+            if(data){
+                data.forEach(function(item, index){
+                    console.log(index);
+                    bbsList.push(
+                        <li
+                            className={index === 0 ? `tabLi tab${index} active` : `tabLi tab${index}`}
+                            onClick={() => handleTabClick(index)}
+                            key={index}
+                        >
+                            <NavLink>
+                                <span>{item.bbsNm}</span>
+                            </NavLink>
+                        </li>
+                    )
+                    tabList.push(
+                        <div className={`tabCont tab${index} ${index === 0 ? 'active' : ''}`} key={`${index}_sub`}>
+                            <ul className="list">
+                                {makerPstLi(item.tblPstList)}
+                            </ul>
+                        </div>
+                    )
+                })
+            }
+            setBbsList(bbsList);
+            setTabList(tabList);
+        });
+    }, []);
+
     return (
         <section className="sec sec03" data-aos="fade-in">
             <div className="inner">
@@ -134,7 +233,7 @@ function MainCalendar() {
                             </div>
                             <button type="button" className="arrowBtn nextBtn"
                                     onClick={() => handlePrevNextChange("next")}>
-                                <div className="icon"></div>
+                            <div className="icon"></div>
                             </button>
                         </div>
                         <div className="calendarBox">
@@ -163,43 +262,11 @@ function MainCalendar() {
                             <div className="tabBox type1">
                                 <div className="bg hover"></div>
                                 <ul className="list">
-                                    <li className={activeTabIndex === 1 ? 'active' : ''} onClick={() => handleTabClick(1)}><NavLink><span>공지사항</span></NavLink></li>
-                                    <li className={activeTabIndex === 2 ? 'active' : ''} onClick={() => handleTabClick(2)}><NavLink><span>자료실</span></NavLink></li>
+                                    {bbsList}
                                 </ul>
                             </div>
                         </div>
-                        <div className={`tabCont tab01 ${activeTabIndex === 1 ? 'active' : ''}`}>
-                            <ul className="list">
-                                <li><a href="#"><p>2024 한-덴 의약바이오 & CMC 혁신 기술포럼 개최 안내 (11.20, 수)</p></a></li>
-                                <li><a href="#"><p>K-바이오랩허브 소개자료(최종)</p></a></li>
-                                <li><a href="#"><p>[한국혁신의약품컨소시엄] KIMCo 2024년도 하반기 공동투자·육성사업 참가기업 모집</p></a></li>
-                                <li><a href="#"><p>[서울바이오허브] 「2024 헬스엑스챌린지 서울」 모집공고 및 참가 수상기업 안내</p></a></li>
-                                <li><a href="#"><p>[서울경제진흥원] 2024년 I'M Challenge(아임 챌린지) 참여 스타트업 모집</p></a></li>
-                                <li><a href="#"><p>[서울경제진흥원] 마곡의료아카데미(6월) 교육 참여기업 모집공고 안내</p></a></li>
-                                <li><a href="#"><p>2024 한-덴 의약바이오 & CMC 혁신 기술포럼 개최 안내 (11.20, 수)</p></a></li>
-                                <li><a href="#"><p>K-바이오랩허브 소개자료(최종)</p></a></li>
-                                <li><a href="#"><p>[한국혁신의약품컨소시엄] KIMCo 2024년도 하반기 공동투자·육성사업 참가기업 모집</p></a></li>
-                                <li><a href="#"><p>[서울바이오허브] 「2024 헬스엑스챌린지 서울」 모집공고 및 참가 수상기업 안내</p></a></li>
-                                <li><a href="#"><p>[서울경제진흥원] 2024년 I'M Challenge(아임 챌린지) 참여 스타트업 모집</p></a></li>
-                                <li><a href="#"><p>[서울경제진흥원] 마곡의료아카데미(6월) 교육 참여기업 모집공고 안내</p></a></li>
-                            </ul>
-                        </div>
-                        <div className={`tabCont tab02 ${activeTabIndex === 2 ? 'active' : ''}`}>
-                            <ul className="list">
-                                <li><a href="#"><p>2024 한-덴 의약바이오 & CMC 혁신 기술포럼 개최 안내 (11.20, 수)</p></a></li>
-                                <li><a href="#"><p>K-바이오랩허브 소개자료(최종)</p></a></li>
-                                <li><a href="#"><p>[한국혁신의약품컨소시엄] KIMCo 2024년도 하반기 공동투자·육성사업 참가기업 모집</p></a></li>
-                                <li><a href="#"><p>[서울바이오허브] 「2024 헬스엑스챌린지 서울」 모집공고 및 참가 수상기업 안내</p></a></li>
-                                <li><a href="#"><p>[서울경제진흥원] 2024년 I'M Challenge(아임 챌린지) 참여 스타트업 모집</p></a></li>
-                                <li><a href="#"><p>[서울경제진흥원] 마곡의료아카데미(6월) 교육 참여기업 모집공고 안내</p></a></li>
-                                <li><a href="#"><p>2024 한-덴 의약바이오 & CMC 혁신 기술포럼 개최 안내 (11.20, 수)</p></a></li>
-                                <li><a href="#"><p>K-바이오랩허브 소개자료(최종)</p></a></li>
-                                <li><a href="#"><p>[한국혁신의약품컨소시엄] KIMCo 2024년도 하반기 공동투자·육성사업 참가기업 모집</p></a></li>
-                                <li><a href="#"><p>[서울바이오허브] 「2024 헬스엑스챌린지 서울」 모집공고 및 참가 수상기업 안내</p></a></li>
-                                <li><a href="#"><p>[서울경제진흥원] 2024년 I'M Challenge(아임 챌린지) 참여 스타트업 모집</p></a></li>
-                                <li><a href="#"><p>[서울경제진흥원] 마곡의료아카데미(6월) 교육 참여기업 모집공고 안내</p></a></li>
-                            </ul>
-                        </div>
+                        {tabList}
                     </div>
                 </div>
             </div>
