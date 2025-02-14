@@ -73,7 +73,7 @@ function MemberMyPageSimpleDetail(props) {
                         const isLatest = item.cnsltAplySn === latestItem.cnsltAplySn;
                         const isOwnComment = item.creatrSn === sessionUser.userSn;
                         const isSn = latestItem.cnsltDsctnSn === item.cnsltDsctnSn;
-                        const showEditButton = isLatest && isOwnComment && isSn && searchDto.cnsltSttsCd !== "200"
+                        const showEditButton = isLatest && isOwnComment && isSn && searchDto.cnsltSttsCd !== "200" && searchDto.cnsltSttsCd !== "999"
 
                         dataList.push(
                             <div key={item.cnsltAplySn} className="input" style={{ display: "flex", alignItems: "center", gap: "10px" }}>
@@ -125,6 +125,48 @@ function MemberMyPageSimpleDetail(props) {
             }
         );
     };
+
+    const handleCancleClick = (cnsltAplySn) => {
+        const setCancleSimpleURL = '/memberApi/setCancelSimple';
+
+        Swal.fire({
+            title: `해당 건에 대해 취소 하시겠습니까?`,
+            showCloseButton: true,
+            showCancelButton: true,
+            confirmButtonText: "예",
+            cancelButtonText: "아니오"
+        }).then((result) => {
+            if(result.isConfirmed) {
+                const requestOptions = {
+                    method: "POST",
+                    headers: {
+                        "Content-type": "application/json",
+                    },
+                    body:JSON.stringify({
+                        cnsltAplySn: cnsltAplySn
+                    }),
+                };
+
+                EgovNet.requestFetch(setCancleSimpleURL, requestOptions, (resp) => {
+                    if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
+                        Swal.fire("취소 되었습니다.").then(() => {
+                            setSearchDto((prev) => ({
+                                ...prev,
+                                cnsltSttsCd: "999"
+                            }));
+                            getSimpleDetail();
+                        });
+
+                    } else {
+                        alert("ERR : " + resp.resultMessage);
+                    }
+                });
+            } else {
+
+            }
+        });
+    };
+
 
 
     const handleComClick = (cnsltAplySn) => {
@@ -287,7 +329,28 @@ function MemberMyPageSimpleDetail(props) {
                     <div className="leftBox">
                         {simpleDetail && (
                             <>
-                                {searchDto.cnsltSttsCd === "200" ? (
+                            {/* 취소상태일때 */}
+                                {searchDto.cnsltSttsCd === "999" ? (
+                                    <>
+                                        <NavLink to={URL.MEMBER_MYPAGE_SIMPLE}>
+                                            <button type="button" className="clickBtn white">
+                                                목록
+                                            </button>
+                                        </NavLink>
+                                    </>
+                                ) : cnsltDsctnList.length === 1 && latestCreator === sessionUser.userSn ? (
+                                    <>
+                                        <button type="button" className="clickBtn point"
+                                                onClick={() => handleCancleClick(searchDto.cnsltAplySn)}>
+                                            <span>취소</span>
+                                        </button>
+                                        <NavLink to={URL.MEMBER_MYPAGE_SIMPLE}>
+                                            <button type="button" className="clickBtn white">
+                                                목록
+                                            </button>
+                                        </NavLink>
+                                    </>
+                                ) : searchDto.cnsltSttsCd === "200" ? (
                                     // 처리 완료 상태일 경우
                                     <>
                                         <button type="button" className="clickBtn point">
@@ -350,6 +413,7 @@ function MemberMyPageSimpleDetail(props) {
                         )}
                     </div>
                 </div>
+
             </div>
         </div>
     );

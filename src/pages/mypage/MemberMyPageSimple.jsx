@@ -22,6 +22,7 @@ function MemberMyPageSimple(props) {
         101: "답변대기",
         102: "답변완료",
         200: "처리완료",
+        999: "취소",
     };
 
 
