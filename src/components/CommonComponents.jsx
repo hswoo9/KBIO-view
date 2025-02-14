@@ -347,3 +347,48 @@ export const fileUpload = async (file) => {
         };
     });
 };
+
+
+/**
+ * 게시판 게시글 포함 조회
+ * @param bbsNm 게시판명
+ * @param bbsType 게시판 유형
+ * @param actvtnYn 활성여부
+ * @returns {Promise<unknown>}
+ * 조회 예시
+ * const [menuList, setMenuList] = useState([]);
+ *
+ * useEffect(() => {
+ *     getMenu().then((data) => {
+ *         setMenuList(data);
+ *     })
+ * }, []);
+ */
+export const getBbsInPst = async (bbsNm, bbsTypeNm, actvtnYn, userSn) => {
+    const requestOptions = {
+        method: "POST",
+        headers: {
+            "Content-type": "application/json",
+        },
+        body: JSON.stringify({
+            bbsNm : bbsNm,
+            bbsTypeNm : bbsTypeNm,
+            actvtnYn : actvtnYn,
+            userSn : userSn
+        })
+    };
+
+    return new Promise((resolve, reject) => {
+        EgovNet.requestFetch(
+            "/bbsApi/getBbsInPstList.do",
+            requestOptions,
+            (resp) => {
+                resolve(resp.result.bbsList);
+            },
+            (error) => {
+                console.log("err response : ", error);
+                reject(error);
+            }
+        );
+    });
+};
