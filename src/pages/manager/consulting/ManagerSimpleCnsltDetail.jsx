@@ -516,7 +516,7 @@ function ManagerSimpleCnsltDetail(props) {
                 <div className="pageWrap">
                     <div className="rightBox">
                         <Link
-                            to={URL.MANAGER_CONSULTING_MATCHING}
+                            to={URL.MANAGER_SIMPLE_CONSULTING}
                         >
 
                             <button type="button" className="clickBtn black">
