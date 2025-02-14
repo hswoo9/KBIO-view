@@ -24,3 +24,7 @@
 .main .sec02 .inner .institution_swiper .swiper-wrapper {align-items: center; cursor: unset !important;}
 .main .sec02 .inner .institution_swiper .swiper-wrapper .swiper-slide {cursor: pointer;}
 .mouseCursor{cursor: pointer;}
+
+@media screen and (min-width: 1025px){
+    .main .sec03 .inner .boxWrap .rightBox.aos-animate {width: 100%;}
+}
