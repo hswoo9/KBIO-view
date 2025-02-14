@@ -167,7 +167,7 @@ function ManagerStatisticsRegionUser(props) {
         let dataList = [];
         dataList.push(
             <tr>
-                <td colSpan="10">검색된 결과가 없습니다.</td>
+                <td colSpan="8">검색된 결과가 없습니다.</td>
             </tr>
         );
         let totalVisitors = 0;
