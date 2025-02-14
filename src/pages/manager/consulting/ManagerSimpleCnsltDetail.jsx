@@ -17,16 +17,17 @@ import {getComCdList} from "../../../components/CommonComponents.jsx";
 import moment from "moment/moment.js";
 
 
-function ManagerSimpleCnsltDetail(props){
+function ManagerSimpleCnsltDetail(props) {
 
     const navigate = useNavigate();
     const location = useLocation();
     const checkRef = useRef([]);
 
     const [searchDto, setSearchDto] = useState(
-        {userSn: location.state?.userSn,
-            cnsltAplySn : location.state?.cnsltAplySn,
-            cnslttUserSn : location.state?.cnslttUserSn
+        {
+            userSn: location.state?.userSn,
+            cnsltAplySn: location.state?.cnsltAplySn,
+            cnslttUserSn: location.state?.cnslttUserSn
         }
     );
     const [comCdList, setComCdList] = useState([]);
@@ -35,16 +36,31 @@ function ManagerSimpleCnsltDetail(props){
     const [userDetail, setUserDetail] = useState({});
     const [userCompDetail, setUserCompDetail] = useState({});
     const [cnslt, setCnslt] = useState({});
-    const [cnsltProfileFile , setCnsltProfileFile] = useState({});
-    const [cnsltCertificateFile , setCnsltCertificateFile] = useState([]);
+    const [cnsltProfileFile, setCnsltProfileFile] = useState({});
+    const [cnsltCertificateFile, setCnsltCertificateFile] = useState([]);
 
     const [cnsltDsctnList, setCnsltDsctnList] = useState([]);
+    const [filesByDsctnSn, setFilesByDsctnSn] = useState([]);
     const [cnsltDgstfnList, setcnsltDgstfnList] = useState([]);
 
     const decodePhoneNumber = (encodedPhoneNumber) => {
         const decodedBytes = base64.toByteArray(encodedPhoneNumber);
         return new TextDecoder().decode(decodedBytes);
     };
+
+    const handleDownload = (file) => {
+
+        const downloadUrl = `http://133.186.250.158${file.atchFilePathNm}/${file.strgFileNm}.${file.atchFileExtnNm}`; // 실제 파일 경로로 변경
+        console.log("Download URL: ", downloadUrl);
+
+        /*const a = document.createElement('a');
+            a.href = downloadUrl;
+            a.download = file.atchFileNm; // 파일명을 다운로드할 이름으로 지정
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);*/
+    };
+
     const getCnsltDetail = (searchDto) => {
         const getCnsltDetailUrl = `/consultingApi/getConsultingDetail.do`;
         const requestOptions = {
@@ -81,6 +97,11 @@ function ManagerSimpleCnsltDetail(props){
                     ...resp.result.userCompDetail
                 });
             }
+
+            if (resp.result.filesByDsctnSn) {
+                setFilesByDsctnSn(resp.result.filesByDsctnSn);
+            }
+
             setCnslt({
                 ...resp.result.cnslt
             });
@@ -90,7 +111,7 @@ function ManagerSimpleCnsltDetail(props){
                 <p>내역이 없습니다.</p>
             );
 
-            resp.result.cnsltDsctnList.forEach(function (item,index){
+            /*resp.result.cnsltDsctnList.forEach(function (item,index){
                 if(index === 0) dataList =[];
 
                 dataList.push(
@@ -101,19 +122,84 @@ function ManagerSimpleCnsltDetail(props){
                              alignItems: "center",
                              gap : "20px"
                          }}>
+                    <div
+                        style={{order: item.dsctnSe === "0" ? 1 : 2,  border: "1px solid #333", borderRadius: "10px" , padding : "10px", width : "80%"}}
+                    >
+                        <div dangerouslySetInnerHTML={{__html: item.cn}}>
+                        </div>
+                        <p style={{textAlign : "right"}}
+                        >{moment(item.frstCrtDt).format('YYYY.MM.DD  HH:MM')}</p>
+                    </div>
+                    <div
+                        style={{order: item.dsctnSe === "0" ? 1 : 2, border: "1px solid #333", borderRadius: "20px", padding : "10px", width : "7%"}}
+                    >
+                        <p style={{textAlign : "center"}}
+                        >{item.dsctnSe === "0" ? "신청자" : "컨설턴트"}</p>
+                    </div>
+                    </div>
+                );
+            });*/
+
+
+            resp.result.cnsltDsctnList.forEach(function (item, index) {
+                if (index === 0) dataList = [];
+
+                const files = resp.result.filesByDsctnSn[item.cnsltDsctnSn] || []; // 해당 cnsltDsctnSn의 파일 리스트 가져오기
+
+                dataList.push(
+                    <div className="input"
+                         style={{
+                             display: "flex",
+                             justifyContent: "center",
+                             alignItems: "center",
+                             gap: "20px"
+                         }}>
                         <div
-                            style={{order: item.dsctnSe === "0" ? 1 : 2,  border: "1px solid #333", borderRadius: "10px" , padding : "10px", width : "80%"}}
+                            style={{
+                                order: item.dsctnSe === "0" ? 1 : 2,
+                                border: "1px solid #333",
+                                borderRadius: "10px",
+                                padding: "10px",
+                                width: "80%"
+                            }}
                         >
                             <div dangerouslySetInnerHTML={{__html: item.cn}}>
                             </div>
-                            <p style={{textAlign : "right"}}
-                            >{moment(item.frstCrtDt).format('YYYY.MM.DD  HH:MM')}</p>
+                            <div style={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                alignItems: "center",
+                                marginTop: "10px"
+                            }}>
+                                {/* 파일 리스트 추가 */}
+                                {files.length > 0 && (
+                                    <p style={{textAlign: "left"}}>
+                                        {files.map((file, fileIndex) => (
+                                            <span key={fileIndex}
+                                                  onClick={() => handleDownload(file)}>
+                                                {fileIndex + 1}. {file.atchFileNm} </span>
+                                        ))}
+                                    </p>
+                                )}
+
+                                {/*날짜*/}
+                                <p style={{textAlign: "right"}}>
+                                    {moment(item.frstCrtDt).format('YYYY.MM.DD  HH:MM')}
+                                </p>
+                            </div>
                         </div>
                         <div
-                            style={{order: item.dsctnSe === "0" ? 1 : 2, border: "1px solid #333", borderRadius: "20px", padding : "10px", width : "7%"}}
+                            style={{
+                                order: item.dsctnSe === "0" ? 1 : 2,
+                                border: "1px solid #333",
+                                borderRadius: "20px",
+                                padding: "10px",
+                                width: "7%"
+                            }}
                         >
-                            <p style={{textAlign : "center"}}
-                            >{item.dsctnSe === "0" ? "신청자" : "컨설턴트"}</p>
+                            <p style={{textAlign: "center"}}>
+                                {item.dsctnSe === "0" ? "신청자" : "컨설턴트"}
+                            </p>
                         </div>
                     </div>
                 );
@@ -133,7 +219,7 @@ function ManagerSimpleCnsltDetail(props){
                             '테스트';
 
     const initMode = () => {
-        console.log("state : ",searchDto);
+        console.log("state : ", searchDto);
         getCnsltDetail(searchDto);
     };
 
@@ -142,6 +228,7 @@ function ManagerSimpleCnsltDetail(props){
             setComCdList(data);
         })
     }, []);
+
 
     useEffect(() => {
         initMode();
