@@ -224,10 +224,11 @@ import EgovCompleteMember from '@/pages/mypage/EgovCompleteMember';
 
 import MemberMyPageModify from '@/pages/mypage/MemberMyPageModify';
 import MemberMyPageConsulting from '@/pages/mypage/MemberMyPageConsulting';
-import MemberMyPageSimple from '@/pages/mypage/MemberMyPageSimple';
-import MemberMyPageSimpleDetail from '@/pages/mypage/MemberMyPageSimpleDetail';
-import MemberMyPageSimplePopup from '@/pages/mypage/MemberMyPageSimplePopup';
-import MemberMyPageSimpleCreatePopup from '@/pages/mypage/MemberMyPageSimpleCreatePopup';
+import MemberMyPageSimple from '@/pages/mypage/simple/MemberMyPageSimple';
+import MemberMyPageSimpleDetail from '@/pages/mypage/simple/MemberMyPageSimpleDetail';
+import MemberMyPageSimplePopup from '@/pages/mypage/simple/MemberMyPageSimplePopup';
+import MemberMyPageSimpleCreatePopup from '@/pages/mypage/simple/MemberMyPageSimpleCreatePopup';
+import MemberMyPageSimpleSatisPopup from '@/pages/mypage/simple/MemberMyPageSimpleSatisPopup';
 import MemberMyPageDifficulties from '@/pages/mypage/MemberMyPageDifficulties';
 import MemberMyPageDifficultiesDetail from '@/pages/mypage/MemberMyPageDifficultiesDetail';
 import MemberMyPageDifficultiesModify from '@/pages/mypage/MemberMyPageDifficultiesModify';
@@ -578,6 +579,7 @@ const SecondRoutes = () => {
               <Route path={URL.MEMBER_MYPAGE_SIMPLE_DETAIL} element={<MemberMyPageSimpleDetail/>}/>
               <Route path={URL.MEMBER_MYPAGE_SIMPLE_POPUP} element={<MemberMyPageSimplePopup/>}/>
               <Route path={URL.MEMBER_MYPAGE_SIMPLE_CREATE_POPUP} element={<MemberMyPageSimpleCreatePopup/>}/>
+              <Route path={URL.MEMBER_MYPAGE_SIMPLE_SATIS_POPUP} element={<MemberMyPageSimpleSatisPopup/>}/>
               <Route path={URL.MEMBER_MYPAGE_DIFFICULTIES} element={<MemberMyPageDifficulties/>}/>
               <Route path={URL.MEMBER_MYPAGE_DIFFICULTIES_DETAIL} element={<MemberMyPageDifficultiesDetail/>}/>
               <Route path={URL.MEMBER_MYPAGE_DIFFICULTIES_MODIFY} element={<MemberMyPageDifficultiesModify/>}/>

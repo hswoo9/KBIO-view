@@ -210,6 +210,11 @@ function MemberMyPageSimpleDetail(props) {
         });
     };
 
+    const handleSatisClick = () => {
+        const popupURL = `/popup/simple/satis?cnsltAplySn=${searchDto.cnsltAplySn}`;
+        window.open(popupURL, "_blank", "width=800, height=600");
+    }
+
     const handleCreateClick = () => {
         const popupURL = `/popup/simple/create?cnsltAplySn=${searchDto.cnsltAplySn}`;
         window.open(popupURL, "_blank", "width=800,height=530");
@@ -353,7 +358,8 @@ function MemberMyPageSimpleDetail(props) {
                                 ) : searchDto.cnsltSttsCd === "200" ? (
                                     // 처리 완료 상태일 경우
                                     <>
-                                        <button type="button" className="clickBtn point">
+                                        <button type="button" className="clickBtn point"
+                                                onClick={() => handleSatisClick()}>
                                             <span>만족도 조사</span>
                                         </button>
                                         <NavLink to={URL.MEMBER_MYPAGE_SIMPLE}>

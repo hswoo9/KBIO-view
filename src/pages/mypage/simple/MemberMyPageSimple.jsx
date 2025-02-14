@@ -29,7 +29,7 @@ function MemberMyPageSimple(props) {
             102: "답변완료",
             101: "답변대기",
             200: "처리완료",
-            999: "취소",    
+            999: "취소",
         };
 
 
@@ -81,6 +81,7 @@ function MemberMyPageSimple(props) {
 
                     resp.result.consultantList.forEach(function (item, index) {
                         if (index === 0) dataList = [];
+                        console.log(item)
 
                         dataList.push(
                             <tr key={item.cnsltAplySn}>
