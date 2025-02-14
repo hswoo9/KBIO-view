@@ -29,12 +29,14 @@ function ManagerSimpleCnsltDetail(props){
             cnslttUserSn : location.state?.cnslttUserSn
         }
     );
-
+    const [comCdList, setComCdList] = useState([]);
     const [consulttUser, setConsulttUser] = useState({});
     const [consulttDtl, setConsulttDtl] = useState({});
     const [userDetail, setUserDetail] = useState({});
     const [userCompDetail, setUserCompDetail] = useState({});
     const [cnslt, setCnslt] = useState({});
+    const [cnsltProfileFile , setCnsltProfileFile] = useState({});
+    const [cnsltCertificateFile , setCnsltCertificateFile] = useState([]);
 
     const [cnsltDsctnList, setCnsltDsctnList] = useState([]);
     const [cnsltDgstfnList, setcnsltDgstfnList] = useState([]);
@@ -65,6 +67,15 @@ function ManagerSimpleCnsltDetail(props){
             setUserDetail({
                 ...resp.result.userDetail
             });
+            if (resp.result.cnsltCertificateFile) {
+                setCnsltCertificateFile(resp.result.cnsltCertificateFile);
+            }
+
+            if (resp.result.cnsltProfileFile) {
+                setCnsltProfileFile({
+                    ...resp.result.cnsltProfileFile
+                });
+            }
             if (resp.result.userCompDetail) {
                 setUserCompDetail({
                     ...resp.result.userCompDetail
@@ -109,6 +120,7 @@ function ManagerSimpleCnsltDetail(props){
             });
             setCnsltDsctnList(dataList);
 
+
         });
     };
 
@@ -124,6 +136,12 @@ function ManagerSimpleCnsltDetail(props){
         console.log("state : ",searchDto);
         getCnsltDetail(searchDto);
     };
+
+    useEffect(() => {
+        getComCdList(10).then((data) => {
+            setComCdList(data);
+        })
+    }, []);
 
     useEffect(() => {
         initMode();
@@ -142,118 +160,160 @@ function ManagerSimpleCnsltDetail(props){
                         <li className="inputBox type1 width1">
                             <label className="title"><small>자문분야</small></label>
                             <div className="input">
-                                <input
-                                    type="text"
-                                    readOnly
-                                />
-                            </div>
-                        </li>
-
-                        <li className="inputBox type1 width2">
-                            <label className="title"><small>성명</small></label>
-                            <div className="input">
-                                <input
-                                    type="text"
-                                    value={consulttUser.kornFlnm || ""}
-                                    readOnly
-                                />
-                            </div>
-                        </li>
-
-                        <li className="inputBox type1 width2">
-                            <label className="title"><small>휴대폰</small></label>
-                            <div className="input">
-                                <input
-                                    type="text"
-                                    value={consulttUser.mblTelno || ""}
-                                    readOnly
-                                />
-                            </div>
-                        </li>
-
-                        <li className="inputBox type1 width2">
-                            <label className="title"><small>이메일</small></label>
-                            <div className="input">
-                                <input
-                                    type="text"
-                                    value={consulttUser.email || ""}
-                                    readOnly
-                                />
-                            </div>
-                        </li>
-
-                        <li className="inputBox type1 width2">
-                            <label className="title"><small>주소</small></label>
-                            <div className="input">
-                                <input
-                                    type="text"
-                                    value={`${consulttUser.addr || ''} ${consulttUser.daddr || ''}`} // addr과 daddr을 합쳐서 표시
-                                    readOnly
-                                />
+                                {/*<div style={{
+                                    border: "1px solid #ddd",
+                                    borderRadius: "10px",
+                                    padding: "10px",
+                                }}>
+                                    {consulttDtl.cnsltFld || ""}
+                                </div>*/}
+                                <div style={{
+                                    border: "1px solid #ddd",
+                                    borderRadius: "10px",
+                                    padding: "10px",
+                                }}>
+                                    {comCdList.find(item => item.comCd === String(consulttDtl.cnsltFld))?.comCdNm || ""}
+                                </div>
                             </div>
                         </li>
 
                         <li className="inputBox type1 width1">
                             <label className="title"><small>사진</small></label>
                             <div className="input">
-                                <input
-                                    type="text"
-                                    readOnly
-                                />
+                                <div style={{
+                                    border: "1px solid #ddd",
+                                    borderRadius: "10px",
+                                    padding: "10px"
+                                }}>
+                                    <img
+                                        src={
+                                            cnsltProfileFile
+                                                ? `http://133.186.250.158${cnsltProfileFile.atchFilePathNm}/${cnsltProfileFile.strgFileNm}.${cnsltProfileFile.atchFileExtnNm}`
+                                                : "" // 기본 이미지 (필요한 경우)
+                                        }
+                                        alt="컨설턴트사진"
+                                        style={{
+                                            width: "100%",
+                                            height: "100%",
+                                            objectFit: "cover",
+                                        }}
+                                    />
+                                </div>
                             </div>
                         </li>
 
                         <li className="inputBox type1 width2">
+                            <label className="title"><small>성명</small></label>
+                            <div className="input">
+                                <div style={{
+                                    border: "1px solid #ddd",
+                                    borderRadius: "10px",
+                                    padding: "10px"
+                                }}>
+                                    {consulttUser.kornFlnm || ""}
+                                </div>
+                            </div>
+                        </li>
+
+                        <li className="inputBox type1 width2">
+                            <label className="title"><small>휴대폰</small></label>
+                            <div className="input">
+                                <div style={{
+                                    border: "1px solid #ddd",
+                                    borderRadius: "10px",
+                                    padding: "10px"
+                                }}>
+                                    {consulttUser.mblTelno || ""}
+                                </div>
+                            </div>
+                        </li>
+
+                        <li className="inputBox type1 width1">
+                            <label className="title"><small>이메일</small></label>
+                            <div className="input">
+                                <div style={{
+                                    border: "1px solid #ddd",
+                                    borderRadius: "10px",
+                                    padding: "10px"
+                                }}>
+                                    {consulttUser.email || ""}
+                                </div>
+                            </div>
+                        </li>
+
+                        <li className="inputBox type1 width2">
+                            <label className="title"><small>주소</small></label>
+                            <div className="input">
+                                <div style={{
+                                    border: "1px solid #ddd",
+                                    borderRadius: "10px",
+                                    padding: "10px"
+                                }}>
+                                    {`${consulttUser.addr || ''} ${consulttUser.daddr || ''}`}
+                                </div>
+                            </div>
+                        </li>
+
+
+                        <li className="inputBox type1 width2">
                             <label className="title"><small>소속</small></label>
                             <div className="input">
-                                <input
-                                    type="text"
-                                    value={consulttDtl.ogdpNm || ""}
-                                    readOnly
-                                />
+                                <div style={{
+                                    border: "1px solid #ddd",
+                                    borderRadius: "10px",
+                                    padding: "10px"
+                                }}>
+                                    {consulttDtl.ogdpNm || ""}
+                                </div>
                             </div>
                         </li>
 
                         <li className="inputBox type1 width2">
                             <label className="title"><small>직위</small></label>
                             <div className="input">
-                                <input
-                                    type="text"
-                                    value={consulttDtl.jbpsNm || ""}
-                                    readOnly
-                                />
+                                <div style={{
+                                    border: "1px solid #ddd",
+                                    borderRadius: "10px",
+                                    padding: "10px"
+                                }}>
+                                    {consulttDtl.jbpsNm || ""}
+                                </div>
                             </div>
                         </li>
 
                         <li className="inputBox type1 width2">
                             <label className="title"><small>경력</small></label>
                             <div className="input">
-                                <input
-                                    type="text"
-                                    value={`${consulttDtl.crrPrd || ''} 년`}
-                                    readOnly
-                                />
+                                <div style={{
+                                    border: "1px solid #ddd",
+                                    borderRadius: "10px",
+                                    padding: "10px"
+                                }}>
+                                    {`${consulttDtl.crrPrd || ''} 년`}
+                                </div>
                             </div>
                         </li>
 
-                        <li className="inputBox type1 width2">
+                        <li className="inputBox type1 width1">
                             <label className="title"><small>컨설팅항목</small></label>
                             <div className="input">
-                                <input
-                                    type="text"
-                                    readOnly
-                                />
+                                <div style={{
+                                    border: "1px solid #ddd",
+                                    borderRadius: "10px",
+                                    padding: "10px"
+                                }}>
+                                </div>
                             </div>
                         </li>
                         <li className="inputBox type1 width1">
                             <label className="title"><small>소개</small></label>
                             <div className="input"
+                                 style={{
+                                     border: "1px solid #ddd",
+                                     borderRadius: "10px",
+                                     padding: "10px"
+                                 }}
                                  dangerouslySetInnerHTML={{__html: consulttDtl.cnsltSlfint}}>
-                                {/*<input
-                                    type="text"
-                                    value={consulttDtl.cnsltSlfint || ""}
-                                    readOnly
-                                />*/}
                             </div>
                         </li>
 
@@ -261,10 +321,22 @@ function ManagerSimpleCnsltDetail(props){
                         <li className="inputBox type1 width1">
                             <label className="title"><small>자격증</small></label>
                             <div className="input">
-                                <input
-                                    type="text"
-                                    readOnly
-                                />
+                                <div style={{
+                                    border: "1px solid #ddd",
+                                    borderRadius: "10px",
+                                    padding: "10px"
+                                }}>
+                                    {cnsltCertificateFile.length > 0 ? (
+                                        cnsltCertificateFile.map((file, index) => (
+                                            <p key={index}>
+                                                {index + 1}. {file.atchFileNm}
+                                            </p>
+                                        ))
+                                    ) : (
+                                        <p></p>
+                                    )}
+                                </div>
+
                             </div>
                         </li>
                     </ul>
@@ -276,51 +348,51 @@ function ManagerSimpleCnsltDetail(props){
                 </h2>
                 <div className="contBox infoWrap customContBox">
                     <ul className="inputWrap">
-                        <li className="inputBox type1 email width1">
+                        <li className="inputBox type1 width1">
                             <label className="title"><small>회원분류</small></label>
                             <div className="input">
-                                <input
-                                    type="text"
-                                    value={memberTypeLabel}
-                                    readOnly
-                                >
-                                </input>
+                                <div style={{
+                                    border: "1px solid #ddd",
+                                    borderRadius: "10px",
+                                    padding: "10px"
+                                }}>
+                                    {memberTypeLabel}
+                                </div>
                             </div>
                         </li>
-                        <li className="inputBox type1 email width1">
+                        <li className="inputBox type1 width1">
                             <label className="title"><small>신청자</small></label>
                             <div className="input">
-                                <input
-                                    type="text"
-                                    value={userDetail.kornFlnm}
-                                    readOnly
-                                >
-                                </input>
+                                <div style={{
+                                    border: "1px solid #ddd",
+                                    borderRadius: "10px",
+                                    padding: "10px"
+                                }}>{userDetail.kornFlnm}
+                                </div>
                             </div>
                         </li>
                         {/*만약 기업 정보가 없는 경우 숨김처리할것*/}
-                        <li className="inputBox type1 email width2">
+                        <li className="inputBox type1 width2">
                             <label className="title"><small>기업명</small></label>
                             <div className="input">
-                                <input
-                                    type="text"
-                                    name="clsNm"
-                                    id="clsNm"
-                                    readOnly
-                                >
-                                </input>
+                                <div style={{
+                                    border: "1px solid #ddd",
+                                    borderRadius: "10px",
+                                    padding: "10px"
+                                }}>
+
+                                </div>
                             </div>
                         </li>
-                        <li className="inputBox type1 email width2">
+                        <li className="inputBox type1 width2">
                             <label className="title"><small>산업</small></label>
                             <div className="input">
-                                <input
-                                    type="text"
-                                    name="brno"
-                                    id="brno"
-                                    readOnly
-                                >
-                                </input>
+                                <div style={{
+                                    border: "1px solid #ddd",
+                                    borderRadius: "10px",
+                                    padding: "10px"
+                                }}>
+                                </div>
                             </div>
                         </li>
                     </ul>
@@ -329,13 +401,12 @@ function ManagerSimpleCnsltDetail(props){
 
                 {/*컨설팅 내역*/}
                 <h2 className="pageTitle">
-                    <p>컨설팅의뢰 내역</p>
+                    <p>간편상담 의뢰 내역</p>
                 </h2>
                 <div className="contBox infoWrap customContBox">
                     <ul className="inputWrap">
                         <li className="inputBox type1 email width1">
                             <label className="title"><small>{cnslt.ttl}</small></label>
-
                             {cnsltDsctnList}
                         </li>
                     </ul>
@@ -348,7 +419,7 @@ function ManagerSimpleCnsltDetail(props){
                 </h2>
                 <div className="contBox infoWrap customContBox">
                     <ul className="inputWrap">
-
+                        <table></table>
                     </ul>
                 </div>
                 {/*만족도끝*/}
@@ -358,8 +429,8 @@ function ManagerSimpleCnsltDetail(props){
                 <div className="pageWrap">
                     <div className="rightBox">
                         <Link
-                            to={URL.MANAGER_SIMPLE_CONSULTING}
-                            >
+                            to={URL.MANAGER_CONSULTING_MATCHING}
+                        >
 
                             <button type="button" className="clickBtn black">
                                 <span>목록</span>

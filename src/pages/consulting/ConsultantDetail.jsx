@@ -18,6 +18,7 @@ function ConsultantDetail(props) {
 
     const [consultantDetail, setConsultantDetail] = useState(null);
     const [memberDetail, setMemberDetail] = useState(null);
+    const [cnsltProfileFile, setCnsltProfileFile] = useState(null);
 
 
     const editClick = (cnsltSe, userSn) => {
@@ -56,6 +57,11 @@ function ConsultantDetail(props) {
             (resp) => {
                 setConsultantDetail(resp.result.consultant);
                 setMemberDetail(resp.result.memberDetail);
+
+                if (resp.result.cnsltProfileFile) {
+                    setCnsltProfileFile(resp.result.cnsltProfileFile);
+                }
+
             },
             (error) => {
                 console.error("Error fetching operational detail:", error);
@@ -73,7 +79,10 @@ function ConsultantDetail(props) {
             <div className="inner">
                 <CommonSubMenu/>
                 <h2 className="pageTitle">
-                    <p>{consultantDetail?.ogdpNm || ""} (대표) {memberDetail?.kornFlnm || ""}</p>
+                    <p>
+                        {consultantDetail?.ogdpNm || ""} ({consultantDetail?.jbpsNm || "-"}) {memberDetail?.kornFlnm || ""}
+                    </p>
+
                 </h2>
 
                 {consultantDetail && (
@@ -93,7 +102,11 @@ function ConsultantDetail(props) {
                                 }}
                             >
                                 <img
-                                    src="/src/assets/images/ico_logo_kakao.svg"
+                                    src={
+                                        cnsltProfileFile
+                                            ? `http://133.186.250.158${cnsltProfileFile.atchFilePathNm}/${cnsltProfileFile.strgFileNm}.${cnsltProfileFile.atchFileExtnNm}`
+                                            : "" // 기본 이미지 (필요한 경우)
+                                    }
                                     alt="컨설턴트사진"
                                     style={{
                                         width: "100%",
@@ -118,6 +131,7 @@ function ConsultantDetail(props) {
                                 <p><strong>이름:</strong> {memberDetail.kornFlnm}</p>
                                 <p><strong>이메일:</strong> {memberDetail.email || "-"}</p>
                                 <p><strong>경력:</strong> {consultantDetail.crrPrd || "-"} 년</p>
+                                <p><strong>분야:</strong> {consultantDetail.cnsltFld || "-"} </p>
                                 <p><strong>컨설팅 항목:</strong> {consultantDetail.cnsltArtcl || "-"}</p>
                             </div>
                         </div>
@@ -126,9 +140,9 @@ function ConsultantDetail(props) {
                             <h3 style={{fontSize: "18px", fontWeight: "bold", marginBottom: "10px"}}>컨설턴트 소개</h3>
                             <ul style={{paddingLeft: "20px", lineHeight: "1.8", color: "#555"}}>
                                 {consultantDetail.cnsltSlfint?.length > 0 ? (
-                                    <li>{consultantDetail.cnsltSlfint}</li>
+                                    <div className="input" style={{marginTop: "5px"}}     dangerouslySetInnerHTML={{__html: consultantDetail.cnsltSlfint}}></div>
                                 ) : (
-                                    <li>등록된 이력이 없습니다.</li>
+                                    <div className="input" style={{marginTop: "5px"}}> 등록된 소개가 없습니다. </div>
                                 )}
                             </ul>
                         </div>

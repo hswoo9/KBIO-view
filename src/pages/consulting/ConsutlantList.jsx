@@ -93,11 +93,20 @@ function ConsultantList(props) {
                                          height: '100px',
                                          overflow: 'hidden',
                                      }}>
-                                         <img src="/src/assets/images/kbio.png" alt="" style={{
-                                             width: '100%',
-                                             height: '100%',
-                                             objectFit: 'cover',
-                                         }}/>
+                                         <img
+                                             src={
+                                                 item.tblComFile
+                                                     ? `http://133.186.250.158${item.tblComFile.atchFilePathNm}/${item.tblComFile.strgFileNm}.${item.tblComFile.atchFileExtnNm}`
+                                                     : "" // 기본 이미지 (필요한 경우)
+                                             }
+                                             alt=""
+                                             style={{
+                                                 width: '100%',
+                                                 height: '100%',
+                                                 objectFit: 'cover',
+                                             }}
+                                         />
+
                                      </div>
 
                                      <div style={{flex: 1}}>
