@@ -263,7 +263,6 @@ function ManagerStatisticsRegionUser(props) {
                 }
             `}
             </style>
-            <h2 className="pageTitle"><p>지역별 사용자</p></h2>
             <div className="cateWrap">
                 <form action="">
                     <ul className="cateList">

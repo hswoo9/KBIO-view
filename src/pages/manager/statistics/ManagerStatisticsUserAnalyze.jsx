@@ -21,12 +21,16 @@ import {
 import {Link} from "react-router-dom";
 import ManagerStatisticsPeriodUser from "./tabGroup/ManagerStatisticsPeriodUser.jsx";
 import ManagerStatisticsRegionUser from "./tabGroup/ManagerStatisticsRegionUser.jsx";
+import LoadingSpinner from "../../../components/LoadingSpinner.jsx";
 
 function ManagerStatisticsUserAnalyze(props) {
 
     return (
         <div id="container" className="container layout cms">
             <ManagerLeftNew/>
+
+            {/*<LoadingSpinner/>*/}
+
             <div className="inner period">
                 <ManagerStatisticsPeriodUser/>
             </div>

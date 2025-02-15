@@ -20,6 +20,7 @@ import {
 } from "date-fns";
 import {Link} from "react-router-dom";
 import * as EgovNet from "../../../../api/egovFetch.js";
+import LoadingSpinner from "../../../../components/LoadingSpinner.jsx";
 
 function ManagerStatisticsPeriodUser(props) {
     const nowDate = new Date();
@@ -126,6 +127,7 @@ function ManagerStatisticsPeriodUser(props) {
     ];
 
     const getStatistics = () => {
+
         const searchCategory = document.querySelector("#searchCategory").value;
         const startDt = document.querySelector(".period li#" + searchCategory + "Div #startDate").value;
         const endDt = document.querySelector(".period li#" + searchCategory + "Div #endDate").value;
@@ -264,6 +266,7 @@ function ManagerStatisticsPeriodUser(props) {
         setChartLabels(newChartLabels);
         setChartData(newChartData);
         setPeriodUserList(dataList);
+
     }
 
     useEffect(() => {
@@ -272,7 +275,7 @@ function ManagerStatisticsPeriodUser(props) {
 
     return (
         <div>
-            <h2 className="pageTitle"><p>기간별 사용자</p></h2>
+            <h2 className="pageTitle"><p>사용자분석</p></h2>
             <div className="cateWrap">
                 <form action="">
                     <ul className="cateList">
@@ -385,7 +388,7 @@ function ManagerStatisticsPeriodUser(props) {
                         </li>
                         <li className="inputBox type1 rightBtn">
                             <button type="button" className="searchBtn btn btn1 point"
-                            onClick={getStatistics}>
+                                    onClick={getStatistics}>
                                 <div className="icon"></div>
                             </button>
                         </li>
@@ -393,7 +396,6 @@ function ManagerStatisticsPeriodUser(props) {
                 </form>
             </div>
             <div className="contBox board type1 customContBox">
-                <div className="topBox"></div>
                 <div className="tableBox type1">
                     <ApexCharts options={chartOptions} series={series} type="line" height={350}/>
 
@@ -404,7 +406,7 @@ function ManagerStatisticsPeriodUser(props) {
                             <th rowSpan="2">일자</th>
                             <th rowSpan="2">방문자 수</th>
                             <th rowSpan="2">활성사용자 수</th>
-                            <th colSpan="4" style={{textAlign : "center"}}>신규가입자 수</th>
+                            <th colSpan="4" style={{textAlign: "center"}}>신규가입자 수</th>
                             <th rowSpan="2">총 화원수</th>
                             <th rowSpan="2">페이지조회수</th>
                             <th rowSpan="2">평균이용시간</th>
