@@ -28,3 +28,49 @@
 @media screen and (min-width: 1025px){
     .main .sec03 .inner .boxWrap .rightBox.aos-animate {width: 100%;}
 }
+
+.niceSelectCustom{
+    -webkit-tap-highlight-color: transparent;
+    background-color: transparent;
+    border-radius: 5px;
+    box-sizing: border-box;
+    clear: both;
+    cursor: pointer;
+    display: block;
+    float: left;
+    font-family: inherit;
+    font-size: .9em;
+    font-weight: normal;
+    padding: .8em 1em;
+    outline: none;
+    position: relative;
+    text-align: left !important;
+    -webkit-transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    white-space: nowrap;
+    width: auto;
+    color: #333;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    border-radius: 0;
+    background: url(@/assets/images/ico_select_arrow.svg) calc(100% - 5px) center no-repeat;
+}
+
+.container .itemBox .niceSelectCustom{
+    border-radius: .66rem;
+    border: 1px solid #ddd;
+    font-weight: 500;
+    font-family: 'pretendard';
+}
+
+.container .itemBox.type2 .niceSelectCustom{
+    border-radius: 3rem;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+}

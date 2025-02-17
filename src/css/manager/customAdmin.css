@@ -408,3 +408,30 @@ input.width3{ width: calc(100% / 3 - .6rem) !important; }
     display: flex;
     gap: .5rem;
 }
+
+
+/* 페이지 번호  */
+.container .pageWrap {display: flex; justify-content: space-between;}
+.container .pageWrap .pageList {display: flex; gap: 4px;}
+.container .pageWrap .pageList li {width: 2.2rem; height: 2.2rem;}
+.container .pageWrap .pageList li a {background: #fff; width: 100%; height: 100%; border-radius: .6rem; display: flex; align-items: center; justify-content: center; transition: .5s ease; font-size: .8rem; font-family: 'Rubik'; border: 1px solid #EEEEEE; box-sizing: border-box;}
+.container .pageWrap .pageList li.arrow {border-radius: .6rem; box-sizing: border-box; background: #fff;}
+.container .pageWrap .pageList li.arrow a {background: transparent; background-size: 65%; background-repeat: no-repeat; background-position: center;}
+.container .pageWrap .pageList li.first a {background-image: url(@/assets/images/ico_page_first.svg);}
+.container .pageWrap .pageList li.first.active a {background-image: url(@/assets/images/ico_page_first_active.svg);}
+.container .pageWrap .pageList li.prev a {background-image: url(@/assets/images/ico_page_prev.svg);}
+.container .pageWrap .pageList li.prev.active a {background-image: url(@/assets/images/ico_page_prev_active.svg);}
+.container .pageWrap .pageList li.next a {background-image: url(@/assets/images/ico_page_next.svg);}
+.container .pageWrap .pageList li.next.active a {background-image: url(@/assets/images/ico_page_next_active.svg);}
+.container .pageWrap .pageList li.last a {background-image: url(@/assets/images/ico_page_last.svg);}
+.container .pageWrap .pageList li.last.active a {background-image: url(@/assets/images/ico_page_last_active.svg);}
+.container .pageWrap .pageList li.now a {background: var(--mainColor); color: #fff; border-color: transparent;}
+.container .pageWrap .rightBox {display: flex; gap: .5rem;}
+
+.container .pageWrap .pageList li:not(.arrow, .now) a:hover {color: var(--mainColor); background: #04819b15;}
+.container .pageWrap .pageList li.arrow.active:hover {background: #04819b15;}
+.container .pageWrap .pageList li.first.active:hover a {background-image: url(@/assets/images/ico_page_first_point.svg);}
+.container .pageWrap .pageList li.prev.active:hover a {background-image: url(@/assets/images/ico_page_prev_point.svg);}
+.container .pageWrap .pageList li.next.active:hover a {background-image: url(@/assets/images/ico_page_next_point.svg);}
+.container .pageWrap .pageList li.last.active:hover a {background-image: url(@/assets/images/ico_page_last_point.svg);}
+
