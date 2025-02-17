@@ -1,13 +1,15 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import { Link, useLocation, NavLink } from "react-router-dom";
+import { Link, useLocation, NavLink, useNavigate } from "react-router-dom";
 import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
+import CODE from "@/constants/code";
 import { getSessionItem, setSessionItem, removeSessionItem } from "@/utils/storage";
 import CommonSubMenu from "@/components/CommonSubMenu";
 import {getBnrPopupList} from "@/components/main/MainComponents";
 
 function KBioLabHub(props) {
   const location = useLocation();
+  const navigate = useNavigate();
   const sessionUser = getSessionItem("loginUser");
   const sessionUserId = sessionUser?.id;
   const sessionUserName = sessionUser?.name;
@@ -15,30 +17,15 @@ function KBioLabHub(props) {
   const sessionUserSn = sessionUser?.userSn;
   const userSn = getSessionItem("userSn");
 
-  const [popUpList, setPopUpList] = useState([]);
-
   useEffect(() => {
-    popUpList.forEach((e, i) => {
-      const popUp = e.tblBnrPopup;
-      if(!localStorage.getItem(popUp.bnrPopupSn) || Date.now() > localStorage.getItem(popUp.bnrPopupSn)){
-        window.open(
-            `/popup?bnrPopupSn=${popUp.bnrPopupSn}`, // 여기에 원하는 URL 입력
-            `${popUp.bnrPopupSn}`,
-            `width=${popUp.popupWdthSz},
-            height=${popUp.popupVrtcSz},
-            left=${popUp.popupPstnWdth},
-            top=${popUp.popupPstnUpend}`
-        );
-
-        localStorage.removeItem(popUp.bnrPopupSn)
-      }
-    })
-  }, [popUpList]);
-
-  useEffect(() => {
-    getBnrPopupList("popup").then((data) => {
-      setPopUpList(data.filter(e => e.tblBnrPopup.bnrPopupKnd == "popup"));
-    });
+    navigate(
+        { pathname: URL.KBIO_BUSINESS_OVERVIEW},
+        { state: {
+            menuSn : location.state?.menuSn,
+            menuNmPath : location.state?.menuNmPath,
+          } },
+        { mode:  CODE.MODE_READ}
+    );
   }, []);
 
   return (

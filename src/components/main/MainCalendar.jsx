@@ -19,16 +19,21 @@ import {
     subMonths,
     addMonths,
 } from "date-fns";
+import moment from "moment/moment.js";
 
 function MainCalendar() {
     const navigate = useNavigate();
     const sessionUser = getSessionItem("loginUser");
     const userSn = getSessionItem("userSn");
+    const [calendarList, setCalendarList] = useState([]);
     const [menuList, setMenuList] = useState([]);
     const [bbsList, setBbsList] = useState([]);
     const [tabList, setTabList] = useState([]);
     const tdRef = useRef(null);
     const [currentMonth, setCurrentMonth] = useState(new Date());
+
+    const [selectDate, setSelectDate] = useState(new Date());
+
     const [selectMonth, setSelectMonth] = useState(format(currentMonth, "M"));
     const [selectDay, setSelectDay] = useState(format(currentMonth, "dd"));
     const currentYear = format(currentMonth, "yyyy");
@@ -105,12 +110,11 @@ function MainCalendar() {
         if(tdElement){
             const day = tdElement.getAttribute("day");
             setSelectDay(day);
-            console.log(format(currentMonth, "yyyy-MM") + "-" + String(day).padStart(2, '0'));
+            setSelectDate(format(currentMonth, "yyyy-MM") + "-" + String(day).padStart(2, '0'))
         }
     }
 
     const renderWeeks = () => {
-        document.querySelectorAll(".click").forEach((el) => el.classList.remove("click"));
         const weeks = [];
         for (let i = 0; i < totalDays.length; i += 7) {
             const week = totalDays.slice(i, i + 7);
@@ -124,7 +128,18 @@ function MainCalendar() {
                         >
                             {
                                 isSameMonth(day, currentMonth) ? (
-                                    <><strong className="num">{format(day, "d")}</strong><p className="case">13건</p></>
+                                    <>
+                                        <strong className="num">
+                                            {format(day, "d")}
+                                        </strong>
+                                        <p className="case">
+                                            {
+                                                calendarList.filter(event =>
+                                                    moment(day).format('YYYYMMDD') >= event.ntcBgngDt && moment(day).format('YYYYMMDD') <= event.ntcEndDate
+                                                ).length
+                                            }건
+                                        </p>
+                                    </>
                                 ) : (
                                     <></>
                                 )
@@ -134,6 +149,7 @@ function MainCalendar() {
                 </tr>
             );
         }
+
         return weeks;
     };
 
@@ -149,7 +165,6 @@ function MainCalendar() {
         let resultList = [];
         resultList.push(
             <li
-
                 key="no_data"
                 className="mouseCursor"
             >
@@ -161,27 +176,31 @@ function MainCalendar() {
 
         list.forEach(function (item, index) {
             if (index === 0) resultList = [];
-            resultList.push(
-                <li
-                    onClick={() => {
-                        pstDetailHandler(item);
-                    }}
-                    key={item.pstSn}
-                    className="mouseCursor"
-                >
-                    <a>
-                        <p>{item.pstTtl}</p>
-                    </a>
-                </li>
-            )
+            if(moment(selectDate).format('YYYYMMDD') >= item.ntcBgngDt && moment(selectDate).format('YYYYMMDD') <= item.ntcEndDate){
+                resultList.push(
+                    <li
+                        onClick={() => {
+                            pstDetailHandler(item);
+                        }}
+                        key={item.pstSn}
+                        className="mouseCursor"
+                    >
+                        <a>
+                            <p>{item.pstTtl}</p>
+                        </a>
+                    </li>
+                )
+            }
         })
         return resultList;
     }
 
     useEffect(() => {
-        getBbsInPst(null, "0", "Y", userSn).then((data) => {
+        getBbsInPst(null, "0", "Y", userSn, format(selectDate, "yyyy-MM")).then((data) => {
             let bbsList = [];
             let tabList = [];
+            let calList = [];
+
             if(data){
                 data.forEach(function(item, index){
                     bbsList.push(
@@ -195,6 +214,8 @@ function MainCalendar() {
                             </NavLink>
                         </li>
                     )
+
+
                     tabList.push(
                         <div className={`tabCont tab${index} ${index === 0 ? 'active' : ''}`} key={`${index}_sub`}>
                             <ul className="list">
@@ -202,12 +223,20 @@ function MainCalendar() {
                             </ul>
                         </div>
                     )
+
+                    calList = [...calList, ...item.tblPstList]
                 })
             }
+
             setBbsList(bbsList);
             setTabList(tabList);
+            setCalendarList(calList)
         });
-    }, []);
+    }, [selectDate]);
+
+    useEffect(() => {
+        setSelectDate(format(currentMonth, "yyyy-MM-dd"))
+    }, [currentMonth]);
 
     return (
         <section className="sec sec03" data-aos="fade-in">
