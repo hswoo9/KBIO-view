@@ -29,9 +29,8 @@ import moment from "moment";
 function Index(props) {
 // mngrAcsIpChk(useNavigate())
     const [status, setStatus] = useState({
-        mbrType1Cnt : 0,
+        mvnEntCnt : 0,
         mbrType2Cnt : 0,
-        mbrType3Cnt : 0,
         mbrType4Cnt : 0,
         dfclCnt : 0,
         cnsltAply26Cnt : 0,
@@ -42,6 +41,7 @@ function Index(props) {
         activeSCnt : 0,
     });
     const [pstList, setPstList] = useState([]);
+    const [calendarDataList, setCalendarDataList] = useState([]);
 
     const [currentMonth, setCurrentMonth] = useState(new Date());
 
@@ -97,6 +97,7 @@ function Index(props) {
 
     const makerDayEvent = (day, thisMonthBlooean) => {
         let returnDay = format(day, "d");
+        const yyyyMMdd= moment(day).format('YYYY-MM-DD')
         if(thisMonthBlooean) {
             return (
                 <p
@@ -105,10 +106,20 @@ function Index(props) {
                 >
                     {returnDay}
                     <span className="list">
-                        <a href="#"><span>컨설팅의뢰</span><strong className="red">0</strong></a>
-                        <a href="#"><span>간편상담</span><strong className="red">0</strong></a>
-                        <a href="#"><span>승인 대기</span><strong className="red">0</strong></a>
-                        <a href="#"><span>애로사항</span><strong className="red">0</strong></a>
+                        <NavLink to={URL.MANAGER_CONSULTING_MATCHING}>
+                            <span>컨설팅의뢰</span>
+                            <strong className="red">
+                                {calendarDataList.find(item => item.day === yyyyMMdd && item.type === "consulting")?.cnt || 0}
+                            </strong>
+                        </NavLink>
+                        <NavLink to={URL.MANAGER_SIMPLE_CONSULTING}>
+                            <span>간편상담</span>
+                            <strong className="red">{calendarDataList.find(item => item.day === yyyyMMdd && item.type === "simpleConsult")?.cnt || 0}</strong>
+                        </NavLink>
+                        <NavLink to={URL.MANAGER_DIFFICULTIES}>
+                            <span>애로사항</span>
+                            <strong className="red">{calendarDataList.find(item => item.day === yyyyMMdd && item.type === "dfclMttr")?.cnt || 0}</strong>
+                        </NavLink>
                     </span>
                 </p>
             )
@@ -150,91 +161,106 @@ function Index(props) {
         };
 
         EgovNet.requestFetch("/mMainApi/getStatus", requestOptions, (resp) => {
-
             setStatus(resp.result.mainStatus)
         });
     }
 
-    const getPstList = useCallback(
-        () => {
-            const requestOptions = {
-                method: "POST",
-                headers: {
-                    "Content-type": "application/json",
-                },
-                body: JSON.stringify({
-                    pageIndex: 1,
-                    bbsSn : 2,
-                    actvtnYn : "Y",
-                    searchVal : "",
-                })
-            };
-            EgovNet.requestFetch(
-                "/pstApi/getPstList.do",
-                requestOptions,
-                (resp) => {
-                    let dataList = [];
+    const getPstList = () => {
+        const requestOptions = {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json",
+            },
+            body: JSON.stringify({
+                pageIndex: 1,
+                bbsSn : 2,
+                actvtnYn : "Y",
+                searchVal : "",
+            })
+        };
+        EgovNet.requestFetch(
+            "/pstApi/getPstList.do",
+            requestOptions,
+            (resp) => {
+                let dataList = [];
+                dataList.push(
+                    <tr key="0">
+                        <td colSpan="5">데이터가 없습니다.</td>
+                    </tr>
+                );
+
+                resp.result.pstList.slice(0, 5).forEach(function (item, index) {
+                    if (index === 0) dataList = []; // 목록 초기화
                     dataList.push(
-                        <tr key="0">
-                            <td colSpan="5">데이터가 없습니다.</td>
+                        <tr key={item.pstSn} fk={item.pstSn}>
+                            <td>
+                                <p>
+                                    {item.pstClsfNm}
+                                </p>
+                            </td>
+                            <td style={{textAlign: "left", paddingLeft: "15px"}}>
+                                <Link to={URL.MANAGER_PST_QNA_DETAIL}
+                                      mode={CODE.MODE_READ}
+                                      state={{pstSn: item.pstSn}}
+                                >
+                                    <p>
+                                        {item.pstTtl}
+                                    </p>
+                                </Link>
+                            </td>
+                            <td>
+                                <p>
+                                    {item.kornFlnm}
+                                </p>
+                            </td>
+                            <td>
+                                <p>
+                                    {moment(item.frstCrtDt).format('YYYY-MM-DD')}
+                                </p>
+                            </td>
+                            <td>
+                                {item.answer === "Y" ?
+                                    (<p className='complete'>답변완료</p>) : (<p className='waiting'>답변대기</p>)}
+                            </td>
                         </tr>
                     );
 
-                    resp.result.pstList.slice(0, 5).forEach(function (item, index) {
-                        if (index === 0) dataList = []; // 목록 초기화
-                        dataList.push(
-                            <tr key={item.pstSn} fk={item.pstSn}>
-                                <td>
-                                    <p>
-                                        {item.pstClsfNm}
-                                    </p>
-                                </td>
-                                <td style={{textAlign: "left", paddingLeft: "15px"}}>
-                                    <Link to={URL.MANAGER_PST_QNA_DETAIL}
-                                          mode={CODE.MODE_READ}
-                                          state={{pstSn: item.pstSn}}
-                                    >
-                                        <p>
-                                            {item.pstTtl}
-                                        </p>
-                                    </Link>
-                                </td>
-                                <td>
-                                    <p>
-                                        {item.kornFlnm}
-                                    </p>
-                                </td>
-                                <td>
-                                    <p>
-                                        {moment(item.frstCrtDt).format('YYYY-MM-DD')}
-                                    </p>
-                                </td>
-                                <td>
-                                    {item.answer === "Y" ?
-                                        (<p className='complete'>답변완료</p>) : (<p className='waiting'>답변대기</p>)}
-                                </td>
-                            </tr>
-                        );
-
-                        if (index === 4) {
-                            return false;
-                        }
-                    });
-                    setPstList(dataList);
-                },
-                function (resp) {
-                    console.log("err response : ", resp);
-                }
-            )
-        },
-        []
-    );
+                    if (index === 4) {
+                        return false;
+                    }
+                });
+                setPstList(dataList);
+            },
+            function (resp) {
+                console.log("err response : ", resp);
+            }
+        )
+    };
 
     useEffect(() => {
         getStatus()
         getPstList()
     }, []);
 
+    const getCalendarData = (currentMonth) => {
+        const requestOptions = {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json",
+            },
+            body: JSON.stringify({
+                year : format(currentMonth, "yyyy"),
+                month : format(currentMonth, "MM")
+            })
+        };
+        EgovNet.requestFetch("/mMainApi/getCalendarData.do", requestOptions, (resp) => {
+            setCalendarDataList(resp.result.mainCalendar);
+        })
+    }
+
+    useEffect(() => {
+        getCalendarData(currentMonth);
+    }, [currentMonth]);
     return (
         <div id="container" className="container layout home">
             <div className="inner">
@@ -247,7 +273,7 @@ function Index(props) {
                             <NavLink
                                 to={URL.MANAGER_OPERATIONAL_SUPPORT}
                                 className="tt2">
-                                <span>{status.mbrType1Cnt}</span>
+                                <span>{status.mvnEntCnt}</span>
                             </NavLink>
                         </li>
                         <li>
@@ -255,7 +281,7 @@ function Index(props) {
                             <NavLink
                                 to={URL.MANAGER_RELATED_ORGANIZATION}
                                 className="tt2">
-                                <span>{status.mbrType3Cnt}</span>
+                                <span>0</span>
                             </NavLink>
                         </li>
                         <li>
@@ -358,41 +384,6 @@ function Index(props) {
                             </thead>
                             <tbody>
                             {pstList}
-                            {/*<tr>*/}
-                            {/*    <td><p>분류값</p></td>*/}
-                            {/*    <td><p>제목입니다.제목입니다.제목입니다.제목입니다.</p></td>*/}
-                            {/*    <td><p>김철수</p></td>*/}
-                            {/*    <td><p>2025. 01. 28.</p></td>*/}
-                            {/*    <td><p className="waiting">답변대기</p></td>*/}
-                            {/*</tr>*/}
-                            {/*<tr>*/}
-                            {/*    <td><p>분류값</p></td>*/}
-                            {/*    <td><p>제목입니다.</p></td>*/}
-                            {/*    <td><p>김철수</p></td>*/}
-                            {/*    <td><p>2025. 01. 28.</p></td>*/}
-                            {/*    <td><p className="waiting">답변대기</p></td>*/}
-                            {/*</tr>*/}
-                            {/*<tr>*/}
-                            {/*    <td><p>분류값</p></td>*/}
-                            {/*    <td><p>제목입니다.</p></td>*/}
-                            {/*    <td><p>김철수</p></td>*/}
-                            {/*    <td><p>2025. 01. 28.</p></td>*/}
-                            {/*    <td><p className="complete">답변완료</p></td>*/}
-                            {/*</tr>*/}
-                            {/*<tr>*/}
-                            {/*    <td><p>분류값</p></td>*/}
-                            {/*    <td><p>제목입니다.</p></td>*/}
-                            {/*    <td><p>김철수</p></td>*/}
-                            {/*    <td><p>2025. 01. 28.</p></td>*/}
-                            {/*    <td><p className="complete">답변완료</p></td>*/}
-                            {/*</tr>*/}
-                            {/*<tr>*/}
-                            {/*    <td><p>분류값</p></td>*/}
-                            {/*    <td><p>제목입니다.</p></td>*/}
-                            {/*    <td><p>김철수</p></td>*/}
-                            {/*    <td><p>2025. 01. 28.</p></td>*/}
-                            {/*    <td><p className="complete">답변완료</p></td>*/}
-                            {/*</tr>*/}
                             </tbody>
                         </table>
                     </div>
