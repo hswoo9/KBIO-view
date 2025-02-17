@@ -313,7 +313,7 @@ function commonPstDetail(props) {
                         <strong className="title">{pst.pstTtl}</strong>
                         <ul className="bot">
                           <li className="date"><p>{moment(pst.frstCrtDt).format('YYYY-MM-DD')}</p></li>
-                          <li className="name"><p>{pst.kornFlnm}</p></li>
+                          <li className="name"><p>{pst.tblUser?.kornFlnm}</p></li>
                         </ul>
                       </div>
                       <ul className="fileBox">
