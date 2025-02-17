@@ -114,6 +114,14 @@ function MainCalendar() {
         }
     }
 
+    const dayPstCnt = (day) => {
+        const pstCnt =  calendarList.filter(event =>
+            moment(day).format('YYYYMMDD') >= event.ntcBgngDt && moment(day).format('YYYYMMDD') <= event.ntcEndDate
+        ).length;
+
+        return pstCnt ? pstCnt + "건" : ""
+    }
+
     const renderWeeks = () => {
         const weeks = [];
         for (let i = 0; i < totalDays.length; i += 7) {
@@ -133,11 +141,7 @@ function MainCalendar() {
                                             {format(day, "d")}
                                         </strong>
                                         <p className="case">
-                                            {
-                                                calendarList.filter(event =>
-                                                    moment(day).format('YYYYMMDD') >= event.ntcBgngDt && moment(day).format('YYYYMMDD') <= event.ntcEndDate
-                                                ).length
-                                            }건
+                                            {dayPstCnt(day)}
                                         </p>
                                     </>
                                 ) : (
@@ -174,6 +178,7 @@ function MainCalendar() {
             </li>
         )
 
+
         list.forEach(function (item, index) {
             if (index === 0) resultList = [];
             if(moment(selectDate).format('YYYYMMDD') >= item.ntcBgngDt && moment(selectDate).format('YYYYMMDD') <= item.ntcEndDate){
@@ -192,6 +197,20 @@ function MainCalendar() {
                 )
             }
         })
+
+        if(resultList.length == 0){
+            resultList.push(
+                <li
+                    key="no_data"
+                    className="mouseCursor"
+                >
+                    <a>
+                        <p>게시글이 없습니다.</p>
+                    </a>
+                </li>
+            )
+        }
+
         return resultList;
     }
 
