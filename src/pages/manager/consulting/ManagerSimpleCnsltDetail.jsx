@@ -103,6 +103,10 @@ function ManagerSimpleCnsltDetail(props) {
                 setFilesByDsctnSn(resp.result.filesByDsctnSn);
             }
 
+            if(resp.result.cnsltDgstfnList) {
+                setcnsltDgstfnList(resp.result.cnsltDgstfnList);
+            }
+
             setCnslt({
                 ...resp.result.cnslt
             });
@@ -215,6 +219,21 @@ function ManagerSimpleCnsltDetail(props) {
                 );
             });
             setCnsltDsctnList(dataList);
+
+            /*let dgstfnDataList = [];
+            dgstfnDataList.push(
+                <p>내역이 없습니다.</p>
+            );
+
+            resp.result.cnsltDgstfnList.forEach(function (item, index) {
+                if (index === 0) dgstfnDataList = [];
+
+                dgstfnDataList.push(
+                        <td>{item.chcScr}</td>
+                );
+
+            });
+            setcnsltDgstfnList(dgstfnDataList);*/
 
 
         });
@@ -515,9 +534,32 @@ function ManagerSimpleCnsltDetail(props) {
                     <p>만족도</p>
                 </h2>
                 <div className="contBox infoWrap customContBox">
-                    <ul className="inputWrap">
-                        <table></table>
-                    </ul>
+                    <div className="tableBox">
+                            {cnsltDgstfnList.length > 0 ? (
+                                <table border="1" style={{ border: '1px solid black', borderCollapse: 'collapse' }}>
+                                    <thead>
+                                    <tr>
+                                        {cnsltDgstfnList.map((item, index) => (
+                                            <th key={index} style={{ border: '1px solid black', padding: '8px', textAlign : 'center' }}>
+                                                {item.dgstfnArtcl}
+                                            </th>
+                                        ))}
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        {cnsltDgstfnList.map((item, index) => (
+                                            <td key={index} style={{ border: '1px solid black', padding: '8px', textAlign : 'center'}}>
+                                                {item.chcScr}
+                                            </td>
+                                        ))}
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            ):(
+                                <p>아직 만족도 조사가 이루어지지 않았습니다.</p>
+                            )}
+                    </div>
                 </div>
                 {/*만족도끝*/}
 
