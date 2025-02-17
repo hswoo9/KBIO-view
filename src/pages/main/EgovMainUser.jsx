@@ -197,7 +197,7 @@ function EgovMainUser(props) {
               </div>
               <ul className="listBox" data-aos="fade-up" data-aos-duration="1500">
                 {pstList.length > 0 && pstList.map((pst, index) => (
-                  <li>
+                  <li key={pst.pstSn}>
                     <a href="#">
                       {pst.upendNtcYn == "Y" ?
                           <span className="cate">공지</span> :
