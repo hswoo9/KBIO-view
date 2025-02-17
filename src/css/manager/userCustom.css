@@ -117,3 +117,20 @@
     box-sizing: border-box;
     transition: .5s ease;
 }
+
+
+@media screen and (max-width: 1400px) {
+    .main .sec01 .bg img {transform: scale(10.05);}
+}
+
+@media screen and (max-width: 1200px) {
+    .main .sec01 .bg img {transform: scale(10.05);}
+}
+
+@media screen and (max-width: 1024px) {
+    .main .sec01 .bg img {transform: scale(10.05);}
+}
+
+@media screen and (max-width: 768px) {
+    .main .sec01 .bg img {transform: scale(10.05);}
+}

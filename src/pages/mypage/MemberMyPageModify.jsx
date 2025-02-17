@@ -546,9 +546,9 @@ function MemberMyPageModify(props) {
                         <button type="button" className="clickBtn black" onClick={updateMember}>
                             <span>수정</span>
                         </button>
-                        <button type="button" className="clickBtn white" onClick={() => navigate(URL.LOGIN)}>
+                        {/*<button type="button" className="clickBtn white" onClick={() => navigate(URL.LOGIN)}>
                             <span>뒤로가기</span>
-                        </button>
+                        </button>*/}
                     </div>
                 </form>
             </div>

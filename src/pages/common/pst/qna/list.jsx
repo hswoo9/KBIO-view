@@ -117,7 +117,7 @@ function commonPstList(props) {
                                          }}
                                     >
                                         <p>{item.pstTtl}</p>
-                                        {resp.result.authrt.inqAuthrt == "Y" ? (<i className="lock"></i>) : ("")}
+                                        {item.rlsYn == "Y" ? (<i className="lock"></i>) : ("")}
                                         {item.fileCnt != 0 ? (<i className="file"></i>) : ""}
                                     </div>
                                     <div className="bot">
@@ -301,7 +301,11 @@ function commonPstList(props) {
                         {authrt.wrtAuthrt == "Y" && sessionUser && (
                             <NavLink
                                 to={URL.COMMON_PST_QNA_CREATE}
-                                state={{bbsSn: bbs.bbsSn}}
+                                state={{
+                                    bbsSn: bbs.bbsSn,
+                                    menuSn: location.state?.menuSn,
+                                    menuNmPath: location.state?.menuNmPath,
+                                }}
                                 mode={CODE.MODE_CREATE}
                                 style={{float: "right"}}
                             >

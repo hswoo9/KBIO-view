@@ -3,6 +3,9 @@ const URL = {
   TOTAL_SEARCH : "/search",
   COMMUNITY: "/community",
   K_BIO_LABHUB: "/kBioLabHub",
+  KBIO_BUSINESS_OVERVIEW: "/kbio/businessOverview",
+  KBIO_LOCATION: "/kbio/location",
+  KBIO_ORGANIZATION: "/kbio/organization",
   INTRODUCE: "/introduce",
   INTRODUCE_OPERATIONAL_LIST: "/insi/operationalList",
   INTRODUCE_OPERATIONAL_DETAIL: "/insi/operationaldetail",
@@ -226,7 +229,9 @@ const URL = {
 
   RESIDENT_COMPANY_CREATE:"/manager/residentCompanyCreate", //회원관리/입주기업 /입주기업 등록
   RESIDENT_COMPANY_MODIFY:"/manager/residentCompanyModify",
-  
+
+  RELATED_COMPANY_CREATE:"/manager/relatedCompanyCreate", //회원관리/입주기업 /입주기업 등록
+
   MANAGER_CMS: "/manager/cms",
   
   //운영지원

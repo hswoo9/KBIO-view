@@ -12,6 +12,9 @@ import EgovMainUser from "@/pages/main/EgovMainUser";
 
 import Community from "@/pages/community/Community";
 import KBioLabHub from "@/pages/kBioLabHub/KBioLabHub";
+import BusinessOverview from "@/pages/kBioLabHub/BusinessOverview";
+import Organization from "@/pages/kBioLabHub/Organization";
+import KbioLocation from "@/pages/kBioLabHub/Location";
 import Introduce from "@/pages/introduce/Introduce";
 import IntroduceOperational from "@/pages/introduce/OperationalList";
 import IntroduceOperationalDetail from "@/pages/introduce/OperationalDetail";
@@ -146,6 +149,7 @@ import ManagerImagesPopup from "@/pages/manager/popup/ManagerImagesPopup";
 
 
 import ResidentCompanyCreate from "@/pages/manager/member/ResidentCompanyCreate";
+import RelatedCompanyCreate from "@/pages/manager/member/RelatedCompanyCreate";
 
 
 //입주지원
@@ -332,6 +336,9 @@ const SecondRoutes = () => {
               <Route path={URL.TOTAL_SEARCH} element={<TotalSearch/>}/>
               <Route path={URL.COMMUNITY} element={<Community/>}/>
               <Route path={URL.K_BIO_LABHUB} element={<KBioLabHub/>}/>
+              <Route path={URL.KBIO_BUSINESS_OVERVIEW} element={<BusinessOverview/>}/>
+              <Route path={URL.KBIO_ORGANIZATION} element={<Organization/>}/>
+              <Route path={URL.KBIO_LOCATION} element={<KbioLocation/>}/>
               <Route path={URL.INTRODUCE} element={<Introduce/>}/>
               <Route path={URL.INTRODUCE_OPERATIONAL_LIST} element={<IntroduceOperational/>}/>
               <Route path={URL.INTRODUCE_OPERATIONAL_DETAIL} element={<IntroduceOperationalDetail/>}/>
@@ -740,6 +747,12 @@ const SecondRoutes = () => {
                   path={URL.RESIDENT_COMPANY_MODIFY}
                   element={<ResidentCompanyCreate mode={CODE.MODE_MODIFY}/>}
               />
+
+              <Route
+                  path={URL.RELATED_COMPANY_CREATE}
+                  element={<RelatedCompanyCreate mode={CODE.MODE_CREATE}/>}
+              />
+
 
               <Route path={URL.MANAGER_CODE} element={<ManagerCodeList/>}/>
               <Route

@@ -82,10 +82,7 @@ const EgovMyPage = () => {
                     <p className="tt1">K-BIO LabHub회원탈퇴를 진행하려면 가입하신 방법에 따라 “실명확인” 후 회원탈퇴가 가능합니다.
                         <br/>입력한 정보는 회원탈퇴 이외의 목적으로 사용하지 않습니다.</p>
                 </div>
-                <div className="boxWrap">
-                    <div className="close">
-                        <div className="icon"></div>
-                    </div>
+                <div className="boxWrap" data-aos="fade-up" data-aos-duration="1500" >
                     <form className="box">
                         <ul className="inputWrap" style={{width: "30%", display: "block", margin: "0 auto"}}>
                             <li className="inputBox type2" style={{marginBottom: "15px"}}>
