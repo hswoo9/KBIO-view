@@ -272,6 +272,8 @@ function commonPstDetail(props) {
                                   upPstTtl: pst.pstTtl,
                                   upRlsYn: pst.rlsYn,
                                   upPrvtPswd: pst.prvtPswd,
+                                  menuSn: location.state?.menuSn,
+                                  menuNmPath: location.state?.menuNmPath,
                                 }}
                                 className="clickBtn editBtn"
                             >
@@ -285,6 +287,8 @@ function commonPstDetail(props) {
                                 mode={CODE.MODE_MODIFY}
                                 state={{
                                   pstSn: pst.pstSn,
+                                  menuSn: location.state?.menuSn,
+                                  menuNmPath: location.state?.menuNmPath,
                                 }}
                                 className="clickBtn editBtn"
                             >
@@ -305,6 +309,8 @@ function commonPstDetail(props) {
                             to={URL.COMMON_PST_QNA_LIST}
                             state={{
                               bbsSn: bbs.bbsSn,
+                              menuSn: location.state?.menuSn,
+                              menuNmPath: location.state?.menuNmPath,
                             }}
                             className="clickBtn listBtn"
                         >
