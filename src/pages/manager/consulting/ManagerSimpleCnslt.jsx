@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, {useState, useEffect, useCallback, useRef, useMemo} from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import axios from "axios";
 import * as EgovNet from "@/api/egovFetch";
@@ -25,7 +25,6 @@ function ManagerSimpleCnslt(props) {
     const [searchDto, setSearchDto] = useState(
         location.state?.searchDto || {
             pageIndex: 1,
-            //cnsltSttsCd : 26,
             cnsltSe : 27,
             startDt : "",
             endDt : "",
@@ -49,9 +48,10 @@ function ManagerSimpleCnslt(props) {
         }
     };
 
+
     const getConsultingList = useCallback(
         (searchDto) => {
-            const pstListURL = "/consultingApi/getConsultingList.do";
+            const cnlstListURL = "/consultingApi/getConsultingList.do";
             const requestOptions = {
                 method: "POST",
                 headers: {
@@ -59,8 +59,10 @@ function ManagerSimpleCnslt(props) {
                 },
                 body: JSON.stringify(searchDto)
             };
+
+
             EgovNet.requestFetch(
-                pstListURL,
+                cnlstListURL,
                 requestOptions,
                 (resp) => {
                     let dataList = [];
@@ -70,13 +72,16 @@ function ManagerSimpleCnslt(props) {
                         </tr>
                     );
 
+
+
                     resp.result.consultantList.forEach(function (item, index) {
                         if (index === 0) dataList = []; // 목록 초기화
 
                         dataList.push(
                             <tr key={item.cnsltAplySn}>
                                 <td>{index + 1}</td>
-                                <td>{item.cnsltFld}</td>
+                                {/*<td>{item.cnsltFld}</td>*/}
+                                <td>{item.cnsltFldNm}</td>
                                 <td>{item.cnslttKornFlnm}</td>
 
                                 <td>{item.ogdpNm}</td>
@@ -93,7 +98,22 @@ function ManagerSimpleCnslt(props) {
                                 </td>
                                 <td>{item.kornFlnm || ""}</td>
                                 <td>{moment(item.frstCrtDt).format('YYYY-MM-DD')}</td>
-                                <td>{item.cnsltSttsCd}</td>
+                                <td>
+                                    {(() => {
+                                        switch (item.cnsltSttsCd) {
+                                            case "101":
+                                                return "답변대기";
+                                            case "102":
+                                                return "답변완료";
+                                            case "200":
+                                                return "처리완료";
+                                            case "999":
+                                                return "취소";
+                                            default:
+                                                return item.cnsltSttsCd;
+                                        }
+                                    })()}
+                                </td>
                                 <td>{item.dgstfnArtcl || "미등록"}</td>
                             </tr>
                         );
@@ -109,15 +129,11 @@ function ManagerSimpleCnslt(props) {
         [consultingList, searchDto]
     );
 
-    useEffect(() => {
-        getConsultingList(searchDto);
-    }, []);
 
     useEffect(() => {
         getComCdList(10).then((data) => {
             setCnsltFldList(data);
-            console.log("cnsltFldList : " , cnsltFldList);
-        })
+        });
     }, []);
 
     useEffect(() => {
@@ -125,6 +141,11 @@ function ManagerSimpleCnslt(props) {
             setCnsltSttsCd(data);
             console.log("cnsltSttsCd : " , cnsltSttsCdList);
         })
+    }, []);
+
+
+    useEffect(() => {
+        getConsultingList(searchDto);
     }, []);
 
 
@@ -211,9 +232,10 @@ function ManagerSimpleCnslt(props) {
                                         }}
                                     >
                                         <option value="">전체</option>
-                                        <option value="kornFlnm">성명</option>
+                                        <option value="cnslttKornFlnm">컨설턴트</option>
                                         <option value="ogdpNm">소속</option>
-                                        <option value="jbpsNm">직위</option>
+                                        <option value="ttl">제목</option>
+                                        <option value="kornFlnm">신청자</option>
                                     </select>
                                 </div>
                             </li>
@@ -237,7 +259,15 @@ function ManagerSimpleCnslt(props) {
                             <button type="button" className="refreshBtn btn btn1 gray">
                                 <div className="icon"></div>
                             </button>
-                            <button type="button" className="searchBtn btn btn1 point">
+                            <button type="button" className="searchBtn btn btn1 point"
+                                    onClick={() => {
+                                        getConsultingList({
+                                            ...searchDto,
+                                            pageIndex: 1,
+                                            cnsltSe : 27,
+                                        });
+                                    }}
+                            >
                                 <div className="icon"></div>
                             </button>
                         </div>
@@ -245,8 +275,8 @@ function ManagerSimpleCnslt(props) {
                 </div>
                 <div className="contBox board type1 customContBox">
                     <div className="topBox">
-                        <p className="resultText">전체 : <span className="red">0</span>건 페이지 : <span
-                            className="red">1/400</span></p>
+                        <p className="resultText">전체 : <span className="red">{paginationInfo.totalRecordCount}</span>건 페이지 : <span
+                            className="red">{paginationInfo.currentPageNo}/{paginationInfo.totalPageCount}</span></p>
                         <div className="rightBox">
                             <button type="button" className="btn btn2 downBtn red">
                                 <div className="icon"></div>

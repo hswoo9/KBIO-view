@@ -19,7 +19,7 @@ import moment from "moment/moment.js";
 
 function ManagerSimpleCnsltDetail(props) {
 
-    const navigate = useNavigate();
+    //const navigate = useNavigate();
     const location = useLocation();
     const checkRef = useRef([]);
 
@@ -43,6 +43,7 @@ function ManagerSimpleCnsltDetail(props) {
     const [filesByDsctnSn, setFilesByDsctnSn] = useState([]);
     const [cnsltDgstfnList, setcnsltDgstfnList] = useState([]);
 
+
     const decodePhoneNumber = (encodedPhoneNumber) => {
         const decodedBytes = base64.toByteArray(encodedPhoneNumber);
         return new TextDecoder().decode(decodedBytes);
@@ -53,12 +54,12 @@ function ManagerSimpleCnsltDetail(props) {
         const downloadUrl = `http://133.186.250.158${file.atchFilePathNm}/${file.strgFileNm}.${file.atchFileExtnNm}`; // 실제 파일 경로로 변경
         console.log("Download URL: ", downloadUrl);
 
-        /*const a = document.createElement('a');
+        const a = document.createElement('a');
             a.href = downloadUrl;
             a.download = file.atchFileNm; // 파일명을 다운로드할 이름으로 지정
             document.body.appendChild(a);
             a.click();
-            document.body.removeChild(a);*/
+            document.body.removeChild(a);
     };
 
     const getCnsltDetail = (searchDto) => {
@@ -172,15 +173,24 @@ function ManagerSimpleCnsltDetail(props) {
                                 marginTop: "10px"
                             }}>
                                 {/* 파일 리스트 추가 */}
-                                {files.length > 0 && (
+                                {/*{files.length > 0 && (
                                     <p style={{textAlign: "left"}}>
                                         {files.map((file, fileIndex) => (
                                             <span key={fileIndex}
+                                                  style={{cursor : "pointer"}}
                                                   onClick={() => handleDownload(file)}>
                                                 {fileIndex + 1}. {file.atchFileNm} </span>
                                         ))}
                                     </p>
-                                )}
+                                )}*/}
+                                <p style={{ textAlign: "left" }}>
+                                    <label className="title" style={{cursor :"default"}}>첨부파일</label>
+                                    {files.map((file, fileIndex) => (
+                                        <div key={fileIndex} style={{ cursor: "pointer" }} onClick={() => handleDownload(file)}>
+                                            {fileIndex + 1}. {file.atchFileNm}
+                                        </div>
+                                    ))}
+                                </p>
 
                                 {/*날짜*/}
                                 <p style={{textAlign: "right"}}>
@@ -190,7 +200,7 @@ function ManagerSimpleCnsltDetail(props) {
                         </div>
                         <div
                             style={{
-                                order: item.dsctnSe === "0" ? 1 : 2,
+                                order: item.dsctnSe === "0" ? 2 : 1,
                                 border: "1px solid #333",
                                 borderRadius: "20px",
                                 padding: "10px",
@@ -245,7 +255,7 @@ function ManagerSimpleCnsltDetail(props) {
                 <div className="contBox infoWrap customContBox">
                     <ul className="inputWrap">
                         <li className="inputBox type1 width1">
-                            <label className="title"><small>자문분야</small></label>
+                            <label className="title" style={{cursor :"default"}}>자문분야</label>
                             <div className="input">
                                 {/*<div style={{
                                     border: "1px solid #ddd",
@@ -265,12 +275,13 @@ function ManagerSimpleCnsltDetail(props) {
                         </li>
 
                         <li className="inputBox type1 width1">
-                            <label className="title"><small>사진</small></label>
+                            <label className="title" style={{cursor :"default"}}>사진</label>
                             <div className="input">
                                 <div style={{
                                     border: "1px solid #ddd",
                                     borderRadius: "10px",
-                                    padding: "10px"
+                                    padding: "10px",
+                                    display:"inline-block"
                                 }}>
                                     <img
                                         src={
@@ -280,8 +291,7 @@ function ManagerSimpleCnsltDetail(props) {
                                         }
                                         alt="컨설턴트사진"
                                         style={{
-                                            width: "100%",
-                                            height: "100%",
+                                            width: "200px",
                                             objectFit: "cover",
                                         }}
                                     />
@@ -290,7 +300,7 @@ function ManagerSimpleCnsltDetail(props) {
                         </li>
 
                         <li className="inputBox type1 width2">
-                            <label className="title"><small>성명</small></label>
+                            <label className="title" style={{cursor :"default"}}>성명</label>
                             <div className="input">
                                 <div style={{
                                     border: "1px solid #ddd",
@@ -303,7 +313,7 @@ function ManagerSimpleCnsltDetail(props) {
                         </li>
 
                         <li className="inputBox type1 width2">
-                            <label className="title"><small>휴대폰</small></label>
+                            <label className="title" style={{cursor :"default"}}>휴대폰</label>
                             <div className="input">
                                 <div style={{
                                     border: "1px solid #ddd",
@@ -316,7 +326,7 @@ function ManagerSimpleCnsltDetail(props) {
                         </li>
 
                         <li className="inputBox type1 width1">
-                            <label className="title"><small>이메일</small></label>
+                            <label className="title" style={{cursor :"default"}}>이메일</label>
                             <div className="input">
                                 <div style={{
                                     border: "1px solid #ddd",
@@ -329,7 +339,7 @@ function ManagerSimpleCnsltDetail(props) {
                         </li>
 
                         <li className="inputBox type1 width2">
-                            <label className="title"><small>주소</small></label>
+                            <label className="title" style={{cursor :"default"}}>주소</label>
                             <div className="input">
                                 <div style={{
                                     border: "1px solid #ddd",
@@ -343,7 +353,7 @@ function ManagerSimpleCnsltDetail(props) {
 
 
                         <li className="inputBox type1 width2">
-                            <label className="title"><small>소속</small></label>
+                            <label className="title" style={{cursor :"default"}}>소속</label>
                             <div className="input">
                                 <div style={{
                                     border: "1px solid #ddd",
@@ -356,7 +366,7 @@ function ManagerSimpleCnsltDetail(props) {
                         </li>
 
                         <li className="inputBox type1 width2">
-                            <label className="title"><small>직위</small></label>
+                            <label className="title" style={{cursor :"default"}}>직위</label>
                             <div className="input">
                                 <div style={{
                                     border: "1px solid #ddd",
@@ -369,7 +379,7 @@ function ManagerSimpleCnsltDetail(props) {
                         </li>
 
                         <li className="inputBox type1 width2">
-                            <label className="title"><small>경력</small></label>
+                            <label className="title" style={{cursor :"default"}}>경력</label>
                             <div className="input">
                                 <div style={{
                                     border: "1px solid #ddd",
@@ -382,7 +392,7 @@ function ManagerSimpleCnsltDetail(props) {
                         </li>
 
                         <li className="inputBox type1 width1">
-                            <label className="title"><small>컨설팅항목</small></label>
+                            <label className="title" style={{cursor :"default"}}>컨설팅항목</label>
                             <div className="input">
                                 <div style={{
                                     border: "1px solid #ddd",
@@ -393,7 +403,7 @@ function ManagerSimpleCnsltDetail(props) {
                             </div>
                         </li>
                         <li className="inputBox type1 width1">
-                            <label className="title"><small>소개</small></label>
+                            <label className="title" style={{cursor :"default"}}>소개</label>
                             <div className="input"
                                  style={{
                                      border: "1px solid #ddd",
@@ -406,7 +416,7 @@ function ManagerSimpleCnsltDetail(props) {
 
 
                         <li className="inputBox type1 width1">
-                            <label className="title"><small>자격증</small></label>
+                            <label className="title" style={{cursor :"default"}}>자격증</label>
                             <div className="input">
                                 <div style={{
                                     border: "1px solid #ddd",
@@ -436,7 +446,7 @@ function ManagerSimpleCnsltDetail(props) {
                 <div className="contBox infoWrap customContBox">
                     <ul className="inputWrap">
                         <li className="inputBox type1 width1">
-                            <label className="title"><small>회원분류</small></label>
+                            <label className="title" style={{cursor :"default"}}>회원분류</label>
                             <div className="input">
                                 <div style={{
                                     border: "1px solid #ddd",
@@ -448,7 +458,7 @@ function ManagerSimpleCnsltDetail(props) {
                             </div>
                         </li>
                         <li className="inputBox type1 width1">
-                            <label className="title"><small>신청자</small></label>
+                            <label className="title" style={{cursor :"default"}}>신청자</label>
                             <div className="input">
                                 <div style={{
                                     border: "1px solid #ddd",
@@ -460,7 +470,7 @@ function ManagerSimpleCnsltDetail(props) {
                         </li>
                         {/*만약 기업 정보가 없는 경우 숨김처리할것*/}
                         <li className="inputBox type1 width2">
-                            <label className="title"><small>기업명</small></label>
+                            <label className="title" style={{cursor :"default"}}>기업명</label>
                             <div className="input">
                                 <div style={{
                                     border: "1px solid #ddd",
@@ -472,7 +482,7 @@ function ManagerSimpleCnsltDetail(props) {
                             </div>
                         </li>
                         <li className="inputBox type1 width2">
-                            <label className="title"><small>산업</small></label>
+                            <label className="title" style={{cursor :"default"}}>산업</label>
                             <div className="input">
                                 <div style={{
                                     border: "1px solid #ddd",
@@ -493,7 +503,7 @@ function ManagerSimpleCnsltDetail(props) {
                 <div className="contBox infoWrap customContBox">
                     <ul className="inputWrap">
                         <li className="inputBox type1 email width1">
-                            <label className="title"><small>{cnslt.ttl}</small></label>
+                            <label className="title" style={{cursor :"default"}}>{cnslt.ttl}</label>
                             {cnsltDsctnList}
                         </li>
                     </ul>
