@@ -17,10 +17,11 @@ function commonPstList(props) {
     const sessionUser = getSessionItem("loginUser");
     const location = useLocation();
     const navigate = useNavigate();
+    const bbsSn = location.state?.bbsSn || null;
     const [searchDto, setSearchDto] = useState(
         location.state?.searchDto || {
             pageIndex: 1,
-            bbsSn : location.state?.bbsSn,
+            bbsSn : bbsSn,
             searchType: "",
             searchVal : "",
             userSn : sessionUser ? sessionUser.userSn : ""
@@ -153,6 +154,16 @@ function commonPstList(props) {
         },
         [pstList, searchDto]
     );
+
+    useEffect(() => {
+        setSearchDto({
+            ...searchDto,
+            bbsSn: bbsSn
+        });
+    }, [bbsSn]);
+    useEffect(() => {
+        getPstList(searchDto);
+    }, [searchDto.bbsSn]);
 
     useEffect(() => {
         getPstList(searchDto);
