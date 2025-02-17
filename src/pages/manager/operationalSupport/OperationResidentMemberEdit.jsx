@@ -33,7 +33,7 @@ function OperationResidentMember(props) {
     const initMode = () => {
         setModeInfo({
             ...modeInfo,
-            editURL: `/mvnEntApi/setMemberActvYn`,
+            editURL: `/mvnEntApi/setMemberMbrStts`,
         });
 
         getNormalMember(searchDto);
@@ -81,9 +81,9 @@ function OperationResidentMember(props) {
         initMode();
     }, []);
 
-    const updateActvYn = (newStatus) =>{
+    const updateMbrStts = (newStatus) =>{
 
-        const updatedDto = { ...searchDto, actvtnYn: newStatus };
+        const updatedDto = { ...searchDto, mbrStts: newStatus };
 
         Swal.fire({
             title: "수정하시겠습니까?",
@@ -142,11 +142,11 @@ function OperationResidentMember(props) {
                                 <input
                                     type="text"
                                     value={
-                                        memberDetail.actvtnYn === 'Y' ? '정상회원' :
-                                            memberDetail.actvtnYn === 'W' ? '대기회원' :
-                                                memberDetail.actvtnYn === 'R' ? '반려회원' :
-                                                    memberDetail.actvtnYn === 'C' ? '정지회원' :
-                                                        memberDetail.actvtnYn === 'S' ? '탈퇴회원' : ''
+                                        memberDetail.mbrStts === 'Y' ? '정상회원' :
+                                            memberDetail.mbrStts === 'W' ? '대기회원' :
+                                                memberDetail.mbrStts === 'R' ? '반려회원' :
+                                                    memberDetail.mbrStts === 'C' ? '정지회원' :
+                                                        memberDetail.mbrStts === 'S' ? '탈퇴회원' : ''
                                     }
                                     readOnly
                                 />
@@ -385,14 +385,14 @@ function OperationResidentMember(props) {
                         <button
                             type="button" className="clickBtn point"
                             style={{display : "inline-block"}}
-                            onClick={() => updateActvYn("Y")}>
+                            onClick={() => updateMbrStts("Y")}>
                             승인
                         </button>
                         <button
                             type="button"
                             className="clickBtn gray"
                             style={{display : "inline-block" , marginLeft : "10px"}}
-                            onClick={() => updateActvYn("R")}
+                            onClick={() => updateMbrStts("R")}
                         >
                             <span>승인반려</span>
                         </button>
@@ -403,7 +403,7 @@ function OperationResidentMember(props) {
                         <button
                             type="button" className="clickBtn point"
                             style={{display : "inline-block"}}
-                            onClick={() => updateActvYn("Y")}>
+                            onClick={() => updateMbrStts("Y")}>
                             재승인
                         </button>
                     </div>
