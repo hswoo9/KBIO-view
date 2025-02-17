@@ -259,9 +259,15 @@ function MemberMyPageSimpleDetail(props) {
     }
 
     const handleEditClick = (item) => {
+
+        const files = filesByDsctnSn[item.cnsltDsctnSn] || [];
+        console.log(files)
+        console.log("item 객체 확인:", item);
         const popupData = {
-            ...item
+            ...item,
+            simpleFiles: files
         };
+
         console.log("팝업에 전달될 데이터:", popupData);
         localStorage.setItem('popupData', JSON.stringify(popupData));
         window.open(`/popup/simple`, "_blank", "width=800,height=530");

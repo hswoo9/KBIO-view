@@ -16,7 +16,7 @@ function MemberMyPageSimplePopup() {
     const [simplePopupModify, setSimplePopupModify] = useState({
         content: '',
         simpleFiles: [],
-        cn: ''// 파일 목록도 관리
+        cn: ''
     });
     const [fileList, setFileList] = useState([]);
     const acceptFileTypes = 'pdf,hwp,docx,xls,xlsx,ppt';
@@ -43,6 +43,7 @@ function MemberMyPageSimplePopup() {
         onDrop,
         multiple: true,
     });
+
 
     const handleDeleteFile = (index) => {
         const updatedFileList = fileList.filter((_, i) => i !== index);
@@ -96,6 +97,11 @@ function MemberMyPageSimplePopup() {
                     content: item.cn || '',
                     simpleFiles: item.simpleFiles || [],
                 });
+
+                // 파일 리스트가 존재하면 기존 파일을 fileList에 넣어줌
+                if (item.simpleFiles && item.simpleFiles.length > 0) {
+                    setFileList(item.simpleFiles);
+                }
             }
         }
     }, []);
@@ -124,6 +130,7 @@ function MemberMyPageSimplePopup() {
         fileList.forEach((file) => {
             formData.append("simpleFiles", file);
         });
+
 
         Swal.fire({
             title: '저장하시겠습니까?',
@@ -184,39 +191,29 @@ function MemberMyPageSimplePopup() {
 
                 {simplePopupModify.simpleFiles.length > 0 && (
                     <ul style={{ paddingLeft: "20px" }}>
-                        {simplePopupModify.simpleFiles.map((file, index) => (
-                            <li key={index} style={{ marginBottom: "5px" }}>
-                                <span
-                                    onClick={() => fileDownLoad(file.atchFileSn, file.atchFileNm)}
-                                    style={{ cursor: "pointer" }}>
-                                    {file.atchFileNm} - {(file.atchFileSz / 1024).toFixed(2)} KB
-                                </span>
-                                <button
-                                    onClick={() => setFileDel(file.atchFileSn)} // 삭제 버튼 클릭 시 처리할 함수
-                                    style={{ marginLeft: '10px', color: 'red' }}
-                                >
-                                    삭제
-                                </button>
-                            </li>
-                        ))}
+                        {simplePopupModify.simpleFiles.map((file, index) => {
+                            console.log("파일 정보:", file); // 파일 정보 출력
+                            const fileSize = Number(file.atchFileSz); // 숫자로 변환
+                            return (
+                                <li key={index} style={{ marginBottom: "5px" }}>
+                                    <span
+                                        onClick={() => fileDownLoad(file.atchFileSn, file.atchFileNm)}
+                                        style={{ cursor: "pointer" }}
+                                    >
+                                        {file.atchFileNm} - {(fileSize && fileSize > 0) ? (fileSize / 1024).toFixed(2) : '0.00'} KB
+                                    </span>
+                                    <button
+                                        onClick={() => setFileDel(file.atchFileSn)} // 삭제 버튼 클릭 시 처리할 함수
+                                        style={{ marginLeft: '10px', color: 'red' }}
+                                    >
+                                        삭제
+                                    </button>
+                                </li>
+                            );
+                        })}
                     </ul>
                 )}
-
-                {fileList.length > 0 && (
-                    <ul style={{ paddingLeft: "20px" }}>
-                        {fileList.map((file, index) => (
-                            <li key={index} style={{ marginBottom: "5px" }}>
-                                {file.name} - {(file.size / 1024).toFixed(2)} KB
-                                <button
-                                    onClick={() => handleDeleteFile(index)} // 삭제 버튼 클릭 시 처리할 함수
-                                    style={{ marginLeft: '10px', color: 'red' }}
-                                >
-                                    삭제
-                                </button>
-                            </li>
-                        ))}
-                    </ul>
-                )}
+                
             </div>
 
             <button onClick={handleSave} style={{
