@@ -5,7 +5,7 @@ import URL from "@/constants/url";
 import { getSessionItem } from "@/utils/storage";
 import moment from "moment/moment.js";
 import { fileDownLoad } from "@/components/CommonComponents";
-
+import CommonSubMenu from "@/components/CommonSubMenu";
 function MemberMyPageDifficultiesDetail(props) {
     const sessionUser = getSessionItem("loginUser");
     const location = useLocation();
@@ -47,39 +47,7 @@ function MemberMyPageDifficultiesDetail(props) {
     return (
         <div id="container" className="container ithdraw join_step">
             <div className="inner">
-                {/* Step Indicator */}
-                <ul className="stepWrap" data-aos="fade-up" data-aos-duration="1500">
-                    <li>
-                        <NavLink to={URL.MEMBER_MYPAGE_MODIFY} >
-                            <div className="num"><p>1</p></div>
-                            <p className="text">회원정보수정</p>
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink to={URL.MEMBER_MYPAGE_CONSULTING} >
-                            <div className="num"><p>2</p></div>
-                            <p className="text">컨설팅의뢰 내역</p>
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink to={URL.MEMBER_MYPAGE_SIMPLE} >
-                            <div className="num"><p>3</p></div>
-                            <p className="text">간편상담 내역</p>
-                        </NavLink>
-                    </li>
-                    <li className="active">
-                        <NavLink to={URL.MEMBER_MYPAGE_DIFFICULTIES} >
-                            <div className="num"><p>4</p></div>
-                            <p className="text">애로사항 내역</p>
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink to={URL.MEMBER_MYPAGE_CANCEL} >
-                            <div className="num"><p>5</p></div>
-                            <p className="text">회원탈퇴</p>
-                        </NavLink>
-                    </li>
-                </ul>
+                <CommonSubMenu/>
 
                 {/* 애로사항 상세 내용 */}
                 <div className="detailBox" style={{marginTop: "20px"}}>
@@ -179,6 +147,17 @@ function MemberMyPageDifficultiesDetail(props) {
                             </ul>
                         </div>
                     )}
+                    <div className="buttonBox">
+                        <NavLink
+                            className = "btn btn_blue_h46 w_100"
+                            to={URL.MEMBER_MYPAGE_DIFFICULTIES}
+                            state={{
+                                menuSn: location.state?.menuSn,
+                                menuNmPath: location.state?.menuNmPath
+                            }}>
+                            <button type="button" className="clickBtn black"><span>목록</span></button>
+                        </NavLink>
+                    </div>
                 </div>
             </div>
         </div>
