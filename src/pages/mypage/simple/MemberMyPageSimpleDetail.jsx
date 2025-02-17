@@ -14,6 +14,8 @@ function MemberMyPageSimpleDetail(props) {
     const [cnsltDsctnList, setCnsltDsctnList] = useState([]);
     const [paginationInfo, setPaginationInfo] = useState({});
     const [latestCreator, setLatestCreator] = useState(null);
+
+    const [filesByDsctnSn, setFilesByDsctnSn] = useState([]);
     const [searchDto, setSearchDto] = useState({
         cnsltAplySn: location.state?.cnsltAplySn || "",
         cnsltSttsCd: location.state?.cnsltSttsCd || "",
@@ -56,6 +58,10 @@ function MemberMyPageSimpleDetail(props) {
             function (resp) {
                 setSimpleDetail({ ...resp.result.simple });
 
+                if (resp.result.filesByDsctnSn) {
+                    setFilesByDsctnSn(resp.result.filesByDsctnSn);
+                }
+
                 let dataList = [];
                 if (resp.result.cnsltDsctnList.length === 0) {
                     dataList.push(<p key="no-data">내역이 없습니다.</p>);
@@ -69,14 +75,19 @@ function MemberMyPageSimpleDetail(props) {
 
                     console.log("최신 :",latestItem);
 
-                    resp.result.cnsltDsctnList.forEach((item) => {
+                    resp.result.cnsltDsctnList.forEach(function (item, index) {
+                        if (index === 0) dataList =[];
+
+                        const files = resp.result.filesByDsctnSn[item.cnsltDsctnSn] || [];
+                        console.log("file : ", files);
+
                         const isLatest = item.cnsltAplySn === latestItem.cnsltAplySn;
                         const isOwnComment = item.creatrSn === sessionUser.userSn;
                         const isSn = latestItem.cnsltDsctnSn === item.cnsltDsctnSn;
                         const showEditButton = isLatest && isOwnComment && isSn && searchDto.cnsltSttsCd !== "200" && searchDto.cnsltSttsCd !== "999"
 
                         dataList.push(
-                            <div key={item.cnsltAplySn} className="input" style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                            <div key={index} className="input" style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                                 {item.dsctnSe === "0" ? (
                                     <>
                                         {showEditButton &&  (
@@ -89,6 +100,19 @@ function MemberMyPageSimpleDetail(props) {
                                         )}
                                         <div style={{ border: "1px solid #333", borderRadius: "10px", padding: "10px", width: "80%" }}>
                                             <div dangerouslySetInnerHTML={{ __html: item.cn }}></div>
+                                            {files.length > 0 && (
+                                                <ul style={{paddingLeft: "20px"}}>
+                                                    {files.map((file, fileIndex) => (
+                                                        <li style={{marginBottom: "5px", marginTop: "20px"}} key={index}>
+                                                        <span
+                                                            onClick={() => fileDownLoad(file.atchFileSn, file.atchFileNm)}
+                                                            style={{cursor: "pointer"}}>
+                                                            {file.atchFileNm} - {(file.atchFileSz / 1024).toFixed(2)} KB
+                                                        </span>
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                            )}
                                             <p style={{ textAlign: "right" }}>{moment(item.frstCrtDt).format('YYYY.MM.DD HH:mm')}</p>
                                         </div>
                                         <div style={{ border: "1px solid #333", borderRadius: "20px", padding: "10px", width: "7%" }}>
@@ -102,6 +126,19 @@ function MemberMyPageSimpleDetail(props) {
                                         </div>
                                         <div style={{ border: "1px solid #333", borderRadius: "10px", padding: "10px", width: "80%" }}>
                                             <div dangerouslySetInnerHTML={{ __html: item.cn }}></div>
+                                            {files.length > 0 && (
+                                                <ul style={{paddingLeft: "20px"}}>
+                                                    {files.map((file, fileIndex) => (
+                                                        <li style={{marginBottom: "5px", marginTop: "20px"}} key={index}>
+                                                        <span
+                                                            onClick={() => fileDownLoad(file.atchFileSn, file.atchFileNm)}
+                                                            style={{cursor: "pointer"}}>
+                                                            {file.atchFileNm} - {(file.atchFileSz / 1024).toFixed(2)} KB
+                                                        </span>
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                            )}
                                             <p style={{ textAlign: "right" }}>{moment(item.frstCrtDt).format('YYYY.MM.DD HH:mm')}</p>
                                         </div>
                                         {showEditButton && (
@@ -210,6 +247,7 @@ function MemberMyPageSimpleDetail(props) {
         });
     };
 
+
     const handleSatisClick = () => {
         const popupURL = `/popup/simple/satis?cnsltAplySn=${searchDto.cnsltAplySn}`;
         window.open(popupURL, "_blank", "width=800, height=600");
@@ -295,7 +333,7 @@ function MemberMyPageSimpleDetail(props) {
                                     <div className="input" style={{marginTop: "5px"}}
                                          dangerouslySetInnerHTML={{__html: simpleDetail.cn}}></div>
                                 </li>
-                                <li className="inputBox type1 width1" style={{marginBottom: "10px"}}>
+                                {/*<li className="inputBox type1 width1" style={{marginBottom: "10px"}}>
                                     <label className="title" style={{fontWeight: "bold"}}><small>첨부파일</small></label>
                                     <div className="input" style={{marginTop: "5px"}}>
                                         {simpleDetail.simpleFile && simpleDetail.simpleFile.length > 0 ? (
@@ -312,7 +350,7 @@ function MemberMyPageSimpleDetail(props) {
                                             </ul>
                                         ) : "첨부파일이 없습니다."}
                                     </div>
-                                </li>
+                                </li>*/}
                             </ul>
                             <div className="contBox infoWrap customContBox">
                                 <ul className="inputWrap">
