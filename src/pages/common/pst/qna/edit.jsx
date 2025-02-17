@@ -8,7 +8,8 @@ import CODE from "@/constants/code";
 import 'moment/locale/ko';
 import Swal from "sweetalert2";
 import moment from "moment";
-
+import CommonSubMenu from "@/components/CommonSubMenu";
+import AOS from "aos";
 import CommonEditor from "@/components/CommonEditor";
 import {getSessionItem} from "../../../../utils/storage.js";
 import {getComCdList} from "../../../../components/CommonComponents.jsx";
@@ -30,6 +31,13 @@ function setCommonPst(props) {
   const [modeInfo, setModeInfo] = useState({ mode: props.mode });
   const [pst, setPst] = useState({pstSn : location.state?.pstSn});
   const [comCdList, setComCdList] = useState([]);
+  const [rlsYn, setRlsYn] = useState(null);
+  useEffect(() => {
+    setPst({
+        ...pst,
+        rlsYn: rlsYn
+        })
+  }, [rlsYn]);
 
   const [acceptFileTypes, setAcceptFileTypes] = useState('');
   const [fileList, setFileList] = useState([]);
@@ -235,6 +243,8 @@ function setCommonPst(props) {
                 { pathname : URL.COMMON_PST_QNA_LIST},
                 { state: {
                     bbsSn: bbs.bbsSn,
+                    menuSn: location.state?.menuSn,
+                    menuNmPath: location.state?.menuNmPath,
                   }
                 }
             );
@@ -275,6 +285,8 @@ function setCommonPst(props) {
                 { pathname : URL.COMMON_PST_QNA_LIST},
                 { state: {
                     bbsSn: bbs.bbsSn,
+                    menuSn: location.state?.menuSn,
+                    menuNmPath: location.state?.menuNmPath,
                   }
                 }
             );
@@ -288,8 +300,20 @@ function setCommonPst(props) {
     });
   };
 
+  const rlsYnChange = (e) => {
+    if(e.currentTarget.closest("button").classList.contains("click")){
+      e.currentTarget.closest("button").classList.remove("click");
+      setRlsYn("N");
+    }else{
+      e.currentTarget.closest("button").classList.add("click");
+      setRlsYn("Y");
+    }
+
+  }
+
   useEffect(() => {
     initMode();
+    AOS.init();
   }, []);
 
   useEffect(() => {
@@ -301,192 +325,168 @@ function setCommonPst(props) {
   }, [bbs]);
 
   return (
-      <div id="container" className="container layout cms">
+      <div id="container" className="container q&a board write">
         <div className="inner">
-          <h2 className="pageTitle"><p>{bbs.bbsNm}</p></h2>
-
-          <div className="contBox infoWrap customContBox">
-            <ul className="inputWrap">
-              {bbs.pstCtgryYn == "Y" && (
-                  <li className="inputBox type1 width1">
-                    <label className="title essential" htmlFor="pstTtl"><small>분류</small></label>
-                    <div className="input">
-                      <div className="itemBox">
-                        <select
-                            id="pstClsf"
-                            className="selectGroup"
-                            key={pst.pstSn || 0}
-                            value={upPstClsf != null ? upPstClsf : pst.pstClsf}
-                            onChange={(e) =>
-                                setPst({...pst, pstClsf: e.target.value})
-                            }
-                            disabled={upPstClsf}
-                        >
-                          <option value="">선택</option>
-                          {comCdList.map((item, index) => (
-                              <option value={item.comCdSn} key={index}>{item.comCdNm}</option>
-                          ))}
-                        </select>
-                      </div>
-                    </div>
-                  </li>
-              )}
-              <li className="inputBox type1 width1">
-                <label className="title essential" htmlFor="pstTtl"><small>제목</small></label>
-                <div className="input">
-                  <input type="text"
-                         name="pstTtl"
-                         title=""
-                         id="pstTtl"
-                         defaultValue={upPstTtl != null ? "문의하신 " + upPstTtl + " 답변입니다." : pst.pstTtl}
-                         onChange={(e) =>
-                             setPst({...pst, pstTtl: e.target.value})
-                         }
-                         disabled={upPstTtl}
-                  />
-                </div>
-              </li>
-              <li className="inputBox type1 width1">
-                <label className="title essential"><small>작성일</small></label>
-                <div className="input">{moment(pst.frstCrtDt).format('YYYY-MM-DD')}</div>
-              </li>
-              {bbs.atchFileYn == "Y" && (
-                  <li className="inputBox type1 width1 file">
-                    <p className="title essential">첨부파일</p>
-                    <div
-                        {...getRootProps({
-                          style: {
-                            border: "2px dashed #cccccc",
-                            padding: "20px",
-                            textAlign: "center",
-                            cursor: "pointer",
-                          },
-                        })}
+          <CommonSubMenu />
+          <div className="inner2">
+            <div className="textWrap">
+              <ul className="listBox" data-aos="fade-up" data-aos-duration="1500">
+                <li className="textBox width3">
+                  <p className="title">작성자</p>
+                  <p className="text">김덕배</p>
+                </li>
+                <li className="textBox width3">
+                  <p className="title">작성일</p>
+                  <p className="text">{moment(pst.frstCrtDt).format('YYYY-MM-DD')}</p>
+                </li>
+                <li className="inputBox type1 width3">
+                  <p className="title essential">분류</p>
+                  <div className="itemBox">
+                    <select
+                        className="niceSelectCustom"
+                        id="pstClsf"
+                        key={pst.pstSn || 0}
+                        value={upPstClsf != null ? upPstClsf : pst.pstClsf}
+                        onChange={(e) =>
+                            setPst({...pst, pstClsf: e.target.value})
+                        }
+                        disabled={upPstClsf}
                     >
-                      <input {...getInputProps()} />
-                      <p>파일을 이곳에 드롭하거나 클릭하여 업로드하세요</p>
-                    </div>
-                    {pst != null && pst.pstFiles != null && pst.pstFiles.length > 0 && (
-                        <ul>
-                          {pst.pstFiles.map((file, index) => (
-                              <li key={index}>
-                                {file.atchFileNm} - {(file.atchFileSz / 1024).toFixed(2)} KB
-
-                                <button
-                                    onClick={() => setFileDel(file.atchFileSn)}  // 삭제 버튼 클릭 시 처리할 함수
-                                    style={{marginLeft: '10px', color: 'red'}}
-                                >
-                                  삭제
-                                </button>
-                              </li>
-                          ))}
-                        </ul>
-                    )}
-                    {fileList.length > 0 && (
-                        <ul>
-                          {fileList.map((file, index) => (
-                              <li key={index}>
-                                {file.name} - {(file.size / 1024).toFixed(2)} KB
-
-                                <button
-                                    onClick={() => handleDeleteFile(index)}  // 삭제 버튼 클릭 시 처리할 함수
-                                    style={{marginLeft: '10px', color: 'red'}}
-                                >
-                                  삭제
-                                </button>
-                              </li>
-                          ))}
-                        </ul>
-                    )}
-                    <span className="warningText"></span>
-                  </li>
-              )}
-              <li className="inputBox type1 width1">
-                <label className="title" htmlFor="linkUrlAddr"><small>외부링크</small></label>
-                <div className="input">
-                  <input type="text"
-                         name="linkUrlAddr"
-                         title=""
-                         id="linkUrlAddr"
-                         defaultValue={pst.linkUrlAddr}
-                         onChange={(e) =>
-                             setPst({...pst, linkUrlAddr: e.target.value})
-                         }
-                  />
-                </div>
-              </li>
-              <li className="inputBox type1 width1">
-                <label className="title essential"><small>내용</small></label>
-                <div>
-                  <CommonEditor
-                      value={pst.pstCn}
-                      onChange={handleChange}
-                  />
-                </div>
-              </li>
-              {bbs.wrtrRlsYn == "Y" && upPstSn == null && pst.upPstSn == null && (
-                  <>
-                    <li className="inputBox type1 width2">
-                      <label className="title" htmlFor="rlsYn"><small>공개여부</small></label>
-                      <div className="itemBox">
-                        <select
-                            id="rlsYn"
-                            className="selectGroup"
-                            onChange={(e) =>
-                                setPst({
-                                  ...pst,
-                                  rlsYn: e.target.value,
-                                })
-                            }
-                            value={pst.rlsYn || "Y"}
-                        >
-                          <option value="Y">비공개</option>
-                          <option value="N">공개</option>
-                        </select>
+                      <option value="">선택</option>
+                      {comCdList.map((item, index) => (
+                          <option value={item.comCdSn} key={index}>{item.comCdNm}</option>
+                      ))}
+                    </select>
+                  </div>
+                </li>
+                <li className="inputBox type1">
+                  <label htmlFor="q&a_title" className="title">외부링크</label>
+                  <div className="input">
+                    <input
+                        type="text"
+                        name="linkUrlAddr"
+                        title=""
+                        id="linkUrlAddr"
+                        defaultValue={pst.linkUrlAddr}
+                        onChange={(e) =>
+                            setPst({...pst, linkUrlAddr: e.target.value})
+                        }
+                    />
+                  </div>
+                </li>
+                {bbs.atchFileYn == "Y" && (
+                    <li className="inputBox type1 width1 file">
+                      <p className="title essential">첨부파일</p>
+                      <div
+                          {...getRootProps({
+                            style: {
+                              border: "2px dashed #cccccc",
+                              padding: "20px",
+                              textAlign: "center",
+                              cursor: "pointer",
+                            },
+                          })}
+                      >
+                        <input {...getInputProps()} />
+                        <p>파일을 이곳에 드롭하거나 클릭하여 업로드하세요</p>
                       </div>
+                      {pst != null && pst.pstFiles != null && pst.pstFiles.length > 0 && (
+                          <ul>
+                            {pst.pstFiles.map((file, index) => (
+                                <li key={index}>
+                                  {file.atchFileNm} - {(file.atchFileSz / 1024).toFixed(2)} KB
+
+                                  <button
+                                      onClick={() => setFileDel(file.atchFileSn)}  // 삭제 버튼 클릭 시 처리할 함수
+                                      style={{marginLeft: '10px', color: 'red'}}
+                                  >
+                                    삭제
+                                  </button>
+                                </li>
+                            ))}
+                          </ul>
+                      )}
+                      {fileList.length > 0 && (
+                          <ul>
+                            {fileList.map((file, index) => (
+                                <li key={index}>
+                                  {file.name} - {(file.size / 1024).toFixed(2)} KB
+
+                                  <button
+                                      onClick={() => handleDeleteFile(index)}  // 삭제 버튼 클릭 시 처리할 함수
+                                      style={{marginLeft: '10px', color: 'red'}}
+                                  >
+                                    삭제
+                                  </button>
+                                </li>
+                            ))}
+                          </ul>
+                      )}
+                      <span className="warningText"></span>
                     </li>
-                    <li className="inputBox type1 width2">
-                      <label className="title essential" htmlFor="prvtPswd"><small>비밀번호</small></label>
-                      <div className="input">
-                        <form>
-                          <input type="password"
-                                 name="prvtPswd"
-                                 title=""
-                                 id="prvtPswd"
-                                 placeholder="비밀번호"
-                                 autoComplete="off"
-                                 defaultValue={pst.prvtPswd}
-                                 onChange={(e) =>
-                                     setPst({...pst, prvtPswd: e.target.value})
-                                 }
-                                 disabled={pst.rlsYn == "N"}
-                          />
-                        </form>
-                      </div>
-                    </li>
-                  </>
-              )}
-            </ul>
-            <div className="buttonBox">
-              <div className="leftBox">
-                <button type="button" className="clickBtn point" onClick={() => setPstData()}><span>저장</span></button>
-                {modeInfo.mode === CODE.MODE_MODIFY && (
-                    <button type="button" className="clickBtn gray"
-                            onClick={() => {
-                              setPstDel(pst.pstSn);
-                            }}
-                    ><span>삭제</span></button>
                 )}
-              </div>
+                <li className="inputBox type1">
+                  <label htmlFor="q&a_title" className="title essential">제목</label>
+                  <div className="input">
+                    <input
+                        type="text"
+                        name="pstTtl"
+                        title=""
+                        id="pstTtl"
+                        defaultValue={upPstTtl != null ? "문의하신 " + upPstTtl + " 답변입니다." : pst.pstTtl}
+                        onChange={(e) =>
+                            setPst({...pst, pstTtl: e.target.value})
+                        }
+                        disabled={upPstTtl}
+                    />
+                    {bbs.wrtrRlsYn == "Y" && upPstSn == null && pst.upPstSn == null && (
+                        <button type="button"
+                                className={upRlsYn == "Y" ? "secretBtn btn click" : "secretBtn btn"}
+                                onClick={rlsYnChange}
+                                disabled={upRlsYn == "Y"}
+                        >
+                          <span>비밀글 활성화</span>
+                          <div className="icon"></div>
+                        </button>
+                    )}
+                  </div>
+                </li>
+                <li className="inputBox type1">
+                  <label htmlFor="q&a_text" className="title essential">내용</label>
+                  <div className="input">
+                    <CommonEditor
+                        value={pst.pstCn}
+                        onChange={handleChange}
+                    />
+                  </div>
+                </li>
+              </ul>
+              <p className="botText">* 표시는 필수 입력 사항입니다.</p>
+            </div>
+            <div className="buttonBox">
+              <button type="button" className="clickBtn writeBtn" onClick={() => setPstData()}>
+                <div className="icon"></div>
+                <span>등록</span>
+              </button>
+              {modeInfo.mode === CODE.MODE_MODIFY && (
+                  <button type="button" className="clickBtn red"
+                          onClick={() => {
+                            setPstDel(pst.pstSn);
+                          }}
+                  ><span>삭제</span></button>
+              )}
+
               <Link
                   to={URL.COMMON_PST_QNA_LIST}
                   state={{
                     bbsSn: bbs.bbsSn,
+                    menuSn: location.state?.menuSn,
+                    menuNmPath: location.state?.menuNmPath,
                   }}
+                  className="clickBtn listBtn"
               >
-                <button type="button" className="clickBtn white">
-                  목록
-                </button>
+                <div className="icon"></div>
+                <span>목록</span>
               </Link>
             </div>
           </div>
