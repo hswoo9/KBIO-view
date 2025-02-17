@@ -20,8 +20,11 @@ import {
 } from "date-fns";
 import {Link} from "react-router-dom";
 import * as EgovNet from "../../../api/egovFetch.js";
+import LoadingSpinner from "../../../components/LoadingSpinner.jsx";
 
 function ManagerStatisticsUser(props) {
+    const [isLoading, setIsLoading] = useState(true);
+
     const nowDate = new Date();
 
     const [inFlowRouteList, setInFlowRouteList] = useState([]);
@@ -132,6 +135,7 @@ function ManagerStatisticsUser(props) {
         );
 
         setInFlowRouteList(dataList);
+        setIsLoading(false);
     }
 
     useEffect(() => {
@@ -141,6 +145,11 @@ function ManagerStatisticsUser(props) {
     return (
         <div id="container" className="container layout cms">
             <ManagerLeftNew/>
+
+            {isLoading &&
+                <LoadingSpinner />
+            }
+
             <div className="inner">
                 <h2 className="pageTitle"><p>유입정보</p></h2>
                 <div className="cateWrap">

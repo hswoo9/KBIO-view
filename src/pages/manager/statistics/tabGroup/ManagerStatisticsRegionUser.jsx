@@ -19,8 +19,11 @@ import {
     addMonths,
 } from "date-fns";
 import * as EgovNet from "../../../../api/egovFetch.js";
+import LoadingSpinner from "../../../../components/LoadingSpinner.jsx";
 
-function ManagerStatisticsRegionUser(props) {
+function ManagerStatisticsRegionUser({onLoad}) {
+    const [isLoading, setIsLoading] = useState(true);  // 로딩 상태
+
     const nowDate = new Date();
     const korRegion = {
         "Seoul" : 0,
@@ -112,6 +115,8 @@ function ManagerStatisticsRegionUser(props) {
     const series = chartData;
 
     const getStatistics = () => {
+        setIsLoading(true);
+
         const searchCategory = document.querySelector(".region #searchCategory").value;
         const startDt = document.querySelector(".region li#" + searchCategory + "Div #startDate").value;
         const endDt = document.querySelector(".region li#" + searchCategory + "Div #endDate").value;
@@ -248,6 +253,7 @@ function ManagerStatisticsRegionUser(props) {
         setCategories(newCategories);
         setChartData(newChartData);
         setRegionUserList(dataList);
+        setIsLoading(false);
     }
 
     useEffect(() => {
@@ -263,6 +269,9 @@ function ManagerStatisticsRegionUser(props) {
                 }
             `}
             </style>
+            {isLoading &&
+                <LoadingSpinner />
+            }
             <div className="cateWrap">
                 <form action="">
                     <ul className="cateList">
