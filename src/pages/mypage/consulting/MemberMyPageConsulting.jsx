@@ -6,6 +6,7 @@ import URL from "@/constants/url";
 import CODE from "@/constants/code";
 import EgovUserPaging from "@/components/EgovUserPaging";
 import CommonSubMenu from "@/components/CommonSubMenu";
+import fileImages from "@/assets/images/ico_file_blue.svg";
 
 import Swal from 'sweetalert2';
 import {getComCdList} from "@/components/CommonComponents";
@@ -109,6 +110,7 @@ function MemberMyPageConsulting(props) {
                                           style={{cursor: 'pointer', textDecoration: 'underline'}}
                                     >
                                         {item.ttl}
+                                        {item.fileCnt !== 0 && <img src={fileImages} alt="pass images"/>}
                                     </Link>
                                 </td>
                                 <td>{moment(item.frstCrtDt).format('YYYY-MM-DD')}</td>

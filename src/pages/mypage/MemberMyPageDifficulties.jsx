@@ -10,6 +10,7 @@ import Swal from 'sweetalert2';
 import {getComCdList} from "@/components/CommonComponents";
 import { getSessionItem } from "@/utils/storage";
 import moment from "moment/moment.js";
+import fileImages from "@/assets/images/ico_file_blue.svg";
 
 function MemberMyPageDifficulties(props) {
     const sessionUser = getSessionItem("loginUser");
@@ -94,6 +95,8 @@ function MemberMyPageDifficulties(props) {
                                               style={{cursor: 'pointer', textDecoration: 'underline'}}
                                         >
                                             {item.ttl}
+                                            {item.fileCnt !== 0 && <img src={fileImages} alt="pass images"/>}
+
                                         </Link>
                                     ) : (
                                         <Link to={{pathname: URL.MEMBER_MYPAGE_DIFFICULTIES_MODIFY}}
