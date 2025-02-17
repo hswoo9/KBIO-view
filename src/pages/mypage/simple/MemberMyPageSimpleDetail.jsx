@@ -330,7 +330,7 @@ function MemberMyPageSimpleDetail(props) {
                             <div className="contBox infoWrap customContBox">
                                 <ul className="inputWrap">
                                     <li className="inputBox type1 email width1">
-                                        <label className="title"><small>컨설팅 내역</small></label>
+                                        <label className="title"><small>간편상담 내역</small></label>
                                         {cnsltDsctnList}
                                     </li>
                                 </ul>
