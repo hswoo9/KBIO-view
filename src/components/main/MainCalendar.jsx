@@ -184,7 +184,6 @@ function MainCalendar() {
             let tabList = [];
             if(data){
                 data.forEach(function(item, index){
-                    console.log(index);
                     bbsList.push(
                         <li
                             className={index === 0 ? `tabLi tab${index} active` : `tabLi tab${index}`}
