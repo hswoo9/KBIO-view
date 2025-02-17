@@ -4,7 +4,8 @@ import { useDropzone } from 'react-dropzone';
 import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
-import EgovPaging from "@/components/EgovPaging";
+import EgovUserPaging from "@/components/EgovUserPaging";
+import CommonSubMenu from "@/components/CommonSubMenu";
 
 import Swal from 'sweetalert2';
 import {getComCdList} from "@/components/CommonComponents";
@@ -56,6 +57,13 @@ function MemberMyPageConsulting(props) {
         })
     }, []);
 
+    const activeEnter = (e) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            getSimpleList(searchDto);
+        }
+    };
+
     const getSimpleList = useCallback(
         (searchDto) => {
             const simpleListUrl = "/memberApi/getMyPageSimpleList.do";
@@ -90,10 +98,13 @@ function MemberMyPageConsulting(props) {
                                 </td>
                                 <td>{item.cnsltFld}</td>
                                 <td>
-                                    <Link to={{pathname: URL.MEMBER_MYPAGE_SIMPLE_DETAIL}}
+                                    <Link to={{pathname: URL.MEMBER_MYPAGE_CONSULTING_DETAIL}}
                                           state={{
                                               cnsltAplySn: item.cnsltAplySn,
-                                              cnsltSttsCd: item.cnsltSttsCd
+                                              cnsltSttsCd: item.cnsltSttsCd,
+                                              menuSn: location.state?.menuSn,
+                                              menuNmPath: location.state?.menuNmPath,
+
                                           }}
                                           style={{cursor: 'pointer', textDecoration: 'underline'}}
                                     >
@@ -123,111 +134,91 @@ function MemberMyPageConsulting(props) {
     }, []);
 
     return (
-        <div id="container" className="container ithdraw join_step">
+        <div id="container" className="container notice board">
             <div className="inner">
-                {/* Step Indicator */}
-                <ul className="stepWrap" data-aos="fade-up" data-aos-duration="1500">
-                    <li>
-                        <NavLink to={URL.MEMBER_MYPAGE_MODIFY} >
-                            <div className="num"><p>1</p></div>
-                            <p className="text">회원정보수정</p>
-                        </NavLink>
-                    </li>
-                    <li className="active">
-                        <NavLink to={URL.MEMBER_MYPAGE_CONSULTING} >
-                            <div className="num"><p>2</p></div>
-                            <p className="text">컨설팅의뢰 내역</p>
-                        </NavLink>
-                    </li>
-                    <li >
-                        <NavLink to={URL.MEMBER_MYPAGE_SIMPLE} >
-                            <div className="num"><p>3</p></div>
-                            <p className="text">간편상담 내역</p>
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink to={URL.MEMBER_MYPAGE_DIFFICULTIES} >
-                            <div className="num"><p>4</p></div>
-                            <p className="text">애로사항 내역</p>
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink to={URL.MEMBER_MYPAGE_CANCEL} >
-                            <div className="num"><p>5</p></div>
-                            <p className="text">회원탈퇴</p>
-                        </NavLink>
-                    </li>
-                </ul>
-                <h2 className="pageTitle"><p>간편상담 내역</p></h2>
-                <div className="cateWrap">
-                    <form action="">
-                        <ul className="cateList" style={{display: 'flex', flexWrap: 'wrap', gap: '10px'}}>
-                            <li className="inputBox type1" style={{flex: '1  10%'}}>
-                                <p className="title">자문분야</p>
-                                <div className="itemBox">
-                                    <select className="selectGroup">
+                <CommonSubMenu/>
+                <div className="inner2">
+                    <div className="searchFormWrap type1" data-aos="fade-up" data-aos-duration="1500">
+                        <form>
+                            <div className="totalBox">
+                                <div className="total"><p>총 <strong>{paginationInfo.totalRecordCount}</strong>건</p>
+                                </div>
+                            </div>
+                            <div className="searchBox">
+                                {/*<div className="itemBox type2">
+                                    <select
+                                        id="activeYn"
+                                        name="activeYn"
+                                        title="사용여부"
+                                        className="niceSelectCustom">
                                         <option value="">전체</option>
                                         <option value="Y">사용</option>
                                         <option value="N">미사용</option>
                                     </select>
                                 </div>
-                            </li>
-                            <li className="inputBox type1" style={{flex: '1  10%'}}>
-                                <p className="title">컨설팅 활동</p>
-                                <div className="itemBox">
-                                    <select className="selectGroup">
+                                <div className="itemBox type2">
+                                    <select className="niceSelectCustom">
                                         <option value="">전체</option>
                                         <option value="1">공개</option>
                                         <option value="2">비공개</option>
                                     </select>
-                                </div>
-                            </li>
-                            <li className="inputBox type1" style={{flex: '1  10%'}}>
-                                <p className="title">키워드</p>
-                                <div className="itemBox">
-                                    <select className="selectGroup">
+                                </div>*/}
+                                <div className="itemBox type2">
+                                    <select id="simpleNm"
+                                            name="simpleNm"
+                                            title="검색유형"
+                                            className="niceSelectCustom"
+                                            ref={searchTypeRef}
+                                            onChange={(e) => {
+                                                setSearchDto({...searchDto, searchType: e.target.value})
+                                            }}
+                                    >
                                         <option value="">전체</option>
-                                        <option value="1">성명</option>
-                                        <option value="2">소속</option>
-                                        <option value="3">직위</option>
+                                        <option value="ttl">제목</option>
+                                        <option value="cn">내용</option>
                                     </select>
                                 </div>
-                            </li>
-                            <li className="searchBox inputBox type1" style={{flex: '1 40%', marginTop:"25px"}}>
-                                <label className="input">
-                                    <input type="text" id="search" name="search" placeholder="검색어를 입력해주세요"/>
-                                </label>
-                            </li>
-                            <div className="rightBtn" style={{display: 'flex', gap: '10px', marginTop:"25px"}}>
-                                <button type="button" className="searchBtn btn btn1 point"
+                                <div className="inputBox type1">
+                                    <label className="input">
+                                        <input type="text"
+                                               name=""
+                                               defaultValue={
+                                                   searchDto && searchDto.searchVal
+                                               }
+                                               placeholder=""
+                                               ref={searchValRef}
+                                               onChange={(e) => {
+                                                   setSearchDto({...searchDto, searchVal: e.target.value})
+                                               }}
+                                               onKeyDown={activeEnter}
+                                        />
+                                    </label>
+                                </div>
+                                <button type="button"
+                                        className="searchBtn"
                                         onClick={() => {
                                             getSimpleList({
                                                 ...searchDto,
-                                                pageIndex: 1
+                                                pageIndex: 1,
+                                                searchType: searchTypeRef.current.value,
+                                                searchVal: searchValRef.current.value,
                                             });
                                         }}
                                 >
                                     <div className="icon"></div>
                                 </button>
                             </div>
-                        </ul>
-
-                    </form>
-                </div>
-                <div className="contBox board type1 customContBox">
-                    <div className="topBox">
-                        <p className="resultText">Total <span className="red">{paginationInfo.totalRecordCount}</span>
-                        </p>
+                        </form>
                     </div>
-                    <div className="tableBox type1">
+                    <div className="board_list" data-aos="fade-up" data-aos-duration="1500">
                         <table>
-                            <caption>애로사항목록</caption>
+                            <caption>컨설팅 목록</caption>
                             <colgroup>
                                 <col width="80"/>
-                                <col width="150"/>
-                                <col width="300"/>
-                                <col width="150"/>
-                                <col width="150"/>
+                                <col width="170"/>
+                                <col width="450"/>
+                                <col width="250"/>
+                                <col width="250"/>
                                 <col width="150"/>
                             </colgroup>
                             <thead>
@@ -247,7 +238,7 @@ function MemberMyPageConsulting(props) {
                     </div>
 
                     <div className="pageWrap">
-                        <EgovPaging
+                        <EgovUserPaging
                             pagination={paginationInfo}
                             moveToPage={(passedPage) => {
                                 getSimpleList({
