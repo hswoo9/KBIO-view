@@ -149,6 +149,7 @@ import ManagerImagesPopup from "@/pages/manager/popup/ManagerImagesPopup";
 
 
 import ResidentCompanyCreate from "@/pages/manager/member/ResidentCompanyCreate";
+import RelatedCompanyCreate from "@/pages/manager/member/RelatedCompanyCreate";
 
 
 //입주지원
@@ -746,6 +747,12 @@ const SecondRoutes = () => {
                   path={URL.RESIDENT_COMPANY_MODIFY}
                   element={<ResidentCompanyCreate mode={CODE.MODE_MODIFY}/>}
               />
+
+              <Route
+                  path={URL.RELATED_COMPANY_CREATE}
+                  element={<RelatedCompanyCreate mode={CODE.MODE_CREATE}/>}
+              />
+
 
               <Route path={URL.MANAGER_CODE} element={<ManagerCodeList/>}/>
               <Route
