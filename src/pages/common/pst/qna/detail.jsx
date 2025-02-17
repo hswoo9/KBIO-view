@@ -6,12 +6,14 @@ import CODE from "@/constants/code";
 import 'moment/locale/ko';
 import Swal from "sweetalert2";
 import moment from "moment";
+import AOS from "aos";
 import '@/css/quillSnow.css';
 import '@/css/manager/managerPstDetail.css';
 import { getSessionItem, setSessionItem } from "@/utils/storage";
 import {fileDownLoad, fileZipDownLoad} from "@/components/CommonComponents.jsx";
 import CommonPstEval from "../eval.jsx";
 import {getComCdList} from "../../../../components/CommonComponents.jsx";
+import CommonSubMenu from "@/components/CommonSubMenu";
 
 function commonPstDetail(props) {
   const sessionUser = getSessionItem("loginUser");
@@ -51,6 +53,8 @@ function commonPstDetail(props) {
       setPst(resp.result.pst);
       if(resp.result.pst.answer != null){
         setAnswer(resp.result.pst.answer);
+      }else{
+        setAnswer({});
       }
 
       setPstPrevNext(resp.result.pstPrevNext);
@@ -107,166 +111,215 @@ function commonPstDetail(props) {
     getPst(searchDto);
   }, [searchDto.pstSn]);
 
+  useEffect(() => {
+    AOS.init();
+  }, []);
+
   return (
-      <div id="container" className="container layout cms">
+      <div id="container" className="container q&a board">
         <div className="inner">
-          <h2 className="pageTitle">{bbs.bbsNm}</h2>
-          <div className="contBox">
-            <div className="box infoBox">
-              <ul className="listBox">
-                {bbs.pstCtgryYn == "Y" && (
-                    <li className="inputBox type1 width1">
-                      <label className="title"><small>분류</small></label>
-                      <div className="input">{pst.pstClsfNm}</div>
-                    </li>
-                )}
-                <li className="inputBox type1 width1">
-                  <label className="title"><small>제목</small></label>
-                  <div className="input">{pst.pstTtl}</div>
-                </li>
-                <li className="inputBox type1 width1">
-                  <label className="title"><small>작성일</small></label>
-                  <div className="input">{moment(pst.frstCrtDt).format('YYYY-MM-DD')}</div>
-                </li>
-                {bbs.atchFileYn == "Y" && (
-                    <li className="inputBox type1 width1">
-                      <label className="title"><small>첨부파일</small></label>
-                      <div className="input">
-                        {pst.pstFiles.length > 0 && (
-                            <ul>
+          <CommonSubMenu />
+          <div className="inner2">
+            <div className="board_view" data-aos="fade-up" data-aos-duration="1500">
+              <table>
+                <caption>Q&A상세내용</caption>
+                <thead>
+                  <tr>
+                    <th>
+                      <div className="titleBox">
+                        <div className={pst.answer === "Y" ? "state complete" : "state waiting"}>
+                          <p>{pst.answer === "Y" ? "답변완료" : "답변대기"}</p>
+                        </div>
+                        <strong className="title">
+                          {pst.pstTtl}
+                        </strong>
+                        <ul className="bot">
+                          <li className="date"><p>{pst.pstClsfNm}</p></li>
+                          <li className="date"><p>{moment(pst.frstCrtDt).format('YYYY-MM-DD')}</p></li>
+                          <li className="name"><p>{pst.tblUser?.kornFlnm}</p></li>
+                        </ul>
+                      </div>
+                      <ul className="fileBox">
+                        {pst.pstFiles != null && pst.pstFiles.length > 0 && (
+                            <>
                               {pst.pstFiles.map((file, index) => (
                                   <li key={index}>
-                                    <span
-                                        onClick={() => fileDownLoad(file.atchFileSn, file.atchFileNm)}
+                                    <a
+                                        onClick={() => fileDownLoad(file.atchFileSn, file.atchFileNm, 'tbl_bbs', pst.bbsSn)}
                                         style={{cursor: "pointer"}}>
-                                      {file.atchFileNm} - {(file.atchFileSz / 1024).toFixed(2)} KB
-                                    </span>
+                                      <div className="icon"></div>
+                                      <p className="name">{file.atchFileNm}</p>
+                                      <span className="size">{(file.atchFileSz / 1024).toFixed(2)} KB</span>
+                                    </a>
                                   </li>
                               ))}
-                            </ul>
+                            </>
                         )}
+                        {/*{pst.pstFiles != null && pst.pstFiles.length > 0 && (
+                            <button
+                                type="button"
+                                className="clickBtn"
+                                onClick={() => fileZipDownLoad("pst_" + pst.pstSn, pst.pstTtl, 'tbl_bbs', pst.bbsSn)}>
+                              압축
+                            </button>
+                        )}*/}
+                      </ul>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <NavLink to={pst.linkUrlAddr} target={"_blank"}>
+                        {pst.linkUrlAddr ? "외부링크 " + pst.linkUrlAddr : ""}
+                      </NavLink>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div className="textBox" dangerouslySetInnerHTML={{__html: pst.pstCn}}>
                       </div>
-                      {pst.pstFiles.length > 0 && (
-                        <button
-                            type="button"
-                            className="clickBtn"
-                            onClick={() => fileZipDownLoad("pst_" + pst.pstSn, pst.pstTtl)}>
-                          압축
-                        </button>
-                      )}
-                    </li>
-                )}
-                <li className="inputBox type1 width1">
-                  <label className="title"><small>외부링크</small></label>
-                  <div className="input">
-                    <NavLink to={pst.linkUrlAddr} target={"_blank"}>
-                      {pst.linkUrlAddr}
-                    </NavLink>
-                  </div>
-                </li>
-                <li className="inputBox type1 width1">
-                  <label className="title"><small>내용</small></label>
-                  <div className="input" dangerouslySetInnerHTML={{__html: pst.pstCn}}></div>
-                </li>
-              </ul>
-              <div className="buttonBox">
-                <div className="left">
-                  {bbs.ansPsbltyYn == "Y" && authrt.wrtAuthrt == "Y" && sessionUser.userSe == "ADM" && (
-                      <Link
-                          to={URL.COMMON_PST_QNA_CREATE}
-                          state={{
-                            bbsSn: pst.bbsSn,
-                            pstGroup: pst.pstGroup,
-                            upPstSn: pst.pstSn,
-                            upPstClsf : pst.pstClsf,
-                            upPstTtl : pst.pstTtl,
-                            upRlsYn : pst.rlsYn,
-                            upPrvtPswd : pst.prvtPswd,
-                          }}
-                      >
-                        <button type="button" className="clickBtn">
-                          답변
-                        </button>
-                      </Link>
-                  )}
-                  {authrt.mdfcnAuthrt == "Y" && (
-                      <Link
-                          to={URL.COMMON_PST_QNA_MODIFY}
-                          mode={CODE.MODE_MODIFY}
-                          state={{
-                            pstSn: pst.pstSn,
-                          }}
-                      >
-                        <button type="button" className="clickBtn">
-                          수정
-                        </button>
-                      </Link>
-                  )}
-                  {authrt.delAuthrt == "Y" && (
-                      <button type="button" className="clickBtn red"
-                              onClick={() => {
-                                setPstDel(pst.pstSn);
-                              }}
-                      >
-                        <span>삭제</span>
-                      </button>
-                  )}
-                </div>
-                <div className="right">
-                  <Link
-                      to={URL.COMMON_PST_QNA_LIST}
-                      state={{
-                        bbsSn: bbs.bbsSn,
-                      }}
-                  >
-                    <button type="button" className="clickBtn white">
-                      목록
-                    </button>
-                  </Link>
-                </div>
-              </div>
-            </div>
 
-          </div>
-          <div className="contBox">
-            <div className="box infoBox">
-              <ul className="listBox">
-                <li className="inputBox type1 width1">
-                  <label className="title"><small>이전글</small></label>
-                  <div className="input">
-                    {pstPrevNext.find(i => i.position === "PREV") ? (
-                        <span style={{cursor: "pointer"}}
-                              onClick={() =>
-                                  pstPrevNextSearch(pstPrevNext.find(i => i.position === "PREV").pstSn)
-                              }
+                      <div className="answerBox">
+                        <div className="titleBox">
+                          <div className="state">
+                            <p>답변</p>
+                          </div>
+                          <p className="title">답변 : {answer.pstTtl}</p>
+                          <ul className="bot">
+                            <li><p>{answer != null && answer.frstCrtDt != null ? moment(answer.frstCrtDt).format('YYYY-MM-DD') : ""}</p></li>
+                            <li><p>{answer.tblUser?.kornFlnm}</p></li>
+                          </ul>
+                        </div>
+                        <div className="textBox" dangerouslySetInnerHTML={{__html: answer.pstCn}}>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td>
+                      <ul className="navigationBox">
+                        <li className="prevBtn">
+                            {pstPrevNext.find(i => i.position === "PREV") ? (
+                                <a
+                                    href="#"
+                                    style={{cursor: "pointer"}}
+                                    onClick={() =>
+                                        pstPrevNextSearch(pstPrevNext.find(i => i.position === "PREV").pstSn)
+                                    }
+                                    key="prev"
+                                >
+                                  <div className="left">
+                                    <span>이전글</span>
+                                    <i className="icon"></i>
+                                  </div>
+                                  <p className="name">
+                                    {pstPrevNext.find(i => i.position === "PREV").pstTtl}
+                                  </p>
+                                </a>
+                            ) : (
+                                <a key="prevNo">
+                                  <div className="left">
+                                    <span>이전글</span>
+                                    <i className="icon"></i>
+                                  </div>
+                                  <p className="name">이전글이 존재하지 않습니다.</p>
+                                </a>
+                            )
+                            }
+                        </li>
+                        <li className="nextBtn">
+                          {pstPrevNext.find(i => i.position === "NEXT") ? (
+                              <a
+                                  href="#"
+                                  style={{cursor: "pointer"}}
+                                  onClick={() =>
+                                      pstPrevNextSearch(pstPrevNext.find(i => i.position === "NEXT").pstSn)
+                                  }
+                                  key="next"
+                              >
+                                <div className="left">
+                                  <span>다음글</span>
+                                  <i className="icon"></i>
+                                </div>
+                                <p className="name">
+                                  {pstPrevNext.find(i => i.position === "NEXT").pstTtl}
+                                </p>
+                              </a>
+                          ) : (
+                              <a key="nextNo">
+                                <div className="left">
+                                  <span>다음글</span>
+                                  <i className="icon"></i>
+                                </div>
+                                <p className="name">다음글이 존재하지 않습니다.</p>
+                              </a>
+                          )
+                          }
+                        </li>
+                      </ul>
+                      <div className="buttonBox">
+                        {bbs.ansPsbltyYn == "Y" && authrt.wrtAuthrt == "Y" && sessionUser.userSe == "ADM" && (
+                            <Link
+                                to={URL.COMMON_PST_QNA_CREATE}
+                                state={{
+                                  bbsSn: pst.bbsSn,
+                                  pstGroup: pst.pstGroup,
+                                  upPstSn: pst.pstSn,
+                                  upPstClsf: pst.pstClsf,
+                                  upPstTtl: pst.pstTtl,
+                                  upRlsYn: pst.rlsYn,
+                                  upPrvtPswd: pst.prvtPswd,
+                                }}
+                                className="clickBtn editBtn"
+                            >
+                              <div className="icon"></div>
+                              <span>답변</span>
+                            </Link>
+                        )}
+                        {authrt.mdfcnAuthrt == "Y" && (
+                            <Link
+                                to={URL.COMMON_PST_QNA_MODIFY}
+                                mode={CODE.MODE_MODIFY}
+                                state={{
+                                  pstSn: pst.pstSn,
+                                }}
+                                className="clickBtn editBtn"
+                            >
+                              <div className="icon"></div>
+                              <span>수정</span>
+                            </Link>
+                        )}
+                        {authrt.delAuthrt == "Y" && (
+                            <button type="button" className="clickBtn red"
+                                    onClick={() => {
+                                      setPstDel(pst.pstSn);
+                                    }}
+                            >
+                              <span>삭제</span>
+                            </button>
+                        )}
+                        <Link
+                            to={URL.COMMON_PST_QNA_LIST}
+                            state={{
+                              bbsSn: bbs.bbsSn,
+                            }}
+                            className="clickBtn listBtn"
                         >
-                          {pstPrevNext.find(i => i.position === "PREV").pstTtl}
-                      </span>
-                    ) : "이전글이 존재하지 않습니다."
-                    }
-                  </div>
-                </li>
-                <li className="inputBox type1 width1">
-                  <label className="title"><small>다음글</small></label>
-                  <div className="input">
-                    {pstPrevNext.find(i => i.position === "NEXT") ? (
-                        <span style={{cursor: "pointer"}}
-                              onClick={() =>
-                                  pstPrevNextSearch(pstPrevNext.find(i => i.position === "NEXT").pstSn)
-                              }
-                        >
-                          {pstPrevNext.find(i => i.position === "NEXT").pstTtl}
-                        </span>
-                    ) : "다음글이 존재하지 않습니다."
-                    }
-                  </div>
-                </li>
-              </ul>
-
+                          <div className="icon"></div>
+                          <span>목록</span>
+                        </Link>
+                      </div>
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+              <CommonPstEval pstSn={pst.pstSn}/>
             </div>
           </div>
         </div>
-        <CommonPstEval pstSn={pst.pstSn}/>
       </div>
   );
 }
