@@ -17,13 +17,11 @@ function Community(props) {
   const sessionUserSn = sessionUser?.userSn;
   const userSn = getSessionItem("userSn");
 
-  const [popUpList, setPopUpList] = useState([]);
-
   useEffect(() => {
     navigate(
         { pathname: URL.COMMON_PST_NORMAL_LIST},
         { state: {
-            pstSn:  1,
+            bbsSn:  1,
             menuSn : location.state?.menuSn,
             menuNmPath : location.state?.menuNmPath,
           } },
