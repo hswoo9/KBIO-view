@@ -204,7 +204,11 @@ function commonPstList(props) {
     const moveToPstDetail = (pstSn) => {
         navigate(
             { pathname: URL.COMMON_PST_NORMAL_DETAIL },
-            { state: { pstSn:  pstSn} },
+            { state: {
+                pstSn:  pstSn,
+                menuSn : location.state?.menuSn,
+                menuNmPath : location.state?.menuNmPath,
+            } },
             { mode:  CODE.MODE_READ}
         );
     }
@@ -274,7 +278,7 @@ function commonPstList(props) {
                             <thead>
                             <tr>
                                 <th className="th1">번호</th>
-                                <th className="th1"></th>
+                                <th className="th1">분류</th>
                                 <th></th>
                                 <th className="th1">조회수</th>
                             </tr>
