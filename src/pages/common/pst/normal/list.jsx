@@ -237,6 +237,16 @@ function commonPstList(props) {
                             <div className="searchBox">
                                 <div className="itemBox type2">
                                     <select
+                                        className="niceSelectCustom"
+                                    >
+                                        <option value="15" selected>10건</option>
+                                        <option value="20">20건</option>
+                                        <option value="25">50건</option>
+                                        <option value="30">100건</option>
+                                    </select>
+                                </div>
+                                <div className="itemBox type2">
+                                    <select
                                         id="bbsTypeNm"
                                         name="bbsTypeNm"
                                         title="검색유형"

@@ -364,40 +364,62 @@ function commonPstDetail(props) {
                   <td>
                     <ul className="navigationBox">
                       <li className="prevBtn">
-                        <a href="#">
-                          <div className="left">
-                            <span>이전글</span>
-                            <i className="icon"></i>
-                          </div>
-                          {pstPrevNext.find(i => i.position === "PREV") ? (
-                              <p className="name" style={{cursor: "pointer"}}
-                                 onClick={() =>
-                                     pstPrevNextSearch(pstPrevNext.find(i => i.position === "PREV").pstSn)
-                                 }
-                              >
+                        {pstPrevNext.find(i => i.position === "PREV") ? (
+                            <a
+                                href="#"
+                                style={{cursor: "pointer"}}
+                                onClick={() =>
+                                    pstPrevNextSearch(pstPrevNext.find(i => i.position === "PREV").pstSn)
+                                }
+                                key="prev"
+                            >
+                              <div className="left">
+                                <span>이전글</span>
+                                <i className="icon"></i>
+                              </div>
+                              <p className="name">
                                 {pstPrevNext.find(i => i.position === "PREV").pstTtl}
                               </p>
-                          ) : (<p className="name">이전글이 존재하지 않습니다.</p>)
-                          }
-                        </a>
+                            </a>
+                        ) : (
+                            <a key="prevNo">
+                              <div className="left">
+                                <span>이전글</span>
+                                <i className="icon"></i>
+                              </div>
+                              <p className="name">이전글이 존재하지 않습니다.</p>
+                            </a>
+                        )
+                        }
                       </li>
                       <li className="nextBtn">
-                        <a href="#">
-                          <div className="left">
-                            <span>다음글</span>
-                            <i className="icon"></i>
-                          </div>
-                          {pstPrevNext.find(i => i.position === "NEXT") ? (
-                              <p className="name" style={{cursor: "pointer"}}
-                                 onClick={() =>
-                                     pstPrevNextSearch(pstPrevNext.find(i => i.position === "NEXT").pstSn)
-                                 }
-                              >
+                        {pstPrevNext.find(i => i.position === "NEXT") ? (
+                            <a
+                                href="#"
+                                style={{cursor: "pointer"}}
+                                onClick={() =>
+                                    pstPrevNextSearch(pstPrevNext.find(i => i.position === "NEXT").pstSn)
+                                }
+                                key="next"
+                            >
+                              <div className="left">
+                                <span>다음글</span>
+                                <i className="icon"></i>
+                              </div>
+                              <p className="name">
                                 {pstPrevNext.find(i => i.position === "NEXT").pstTtl}
                               </p>
-                          ) : (<p className="name">다음글이 존재하지 않습니다.</p>)
-                          }
-                        </a>
+                            </a>
+                        ) : (
+                            <a key="nextNo">
+                              <div className="left">
+                                <span>다음글</span>
+                                <i className="icon"></i>
+                              </div>
+                              <p className="name">다음글이 존재하지 않습니다.</p>
+                            </a>
+                        )
+                        }
                       </li>
                     </ul>
                     <div className="buttonBox">
@@ -440,13 +462,13 @@ function commonPstDetail(props) {
                           to={URL.COMMON_PST_NORMAL_LIST}
                           state={{
                             bbsSn: bbs.bbsSn,
-                            menuSn : location.state?.menuSn,
-                            menuNmPath : location.state?.menuNmPath,
+                            menuSn: location.state?.menuSn,
+                            menuNmPath: location.state?.menuNmPath,
                           }}
                           className="clickBtn listBtn"
                       >
-                          <div className="icon"></div>
-                          <span>목록</span>
+                        <div className="icon"></div>
+                        <span>목록</span>
                       </Link>
                     </div>
                   </td>
