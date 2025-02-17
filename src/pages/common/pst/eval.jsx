@@ -72,16 +72,20 @@ const CommonPstEval  = ({ pstSn }) => {
         if(dataList != null && dataList.length > 0){
             dataList.forEach(function(item, index) {
                 htmlData.push(
-                    <label className="checkBox type2" key={item.pstEvlSn}>
-                        <input
-                            type="radio"
-                            name="rating"
-                            key={item.pstEvlSn}
-                            value={item.comCdSn}
-                            onChange={(e) =>
-                                setPstEvl({...pstEvl, comCdSn: e.target.value})
-                            }
-                        />{item.comCdNm}</label>
+                    <div className="checkBox type3">
+                        <label className="checkBox type2" key={item.pstEvlSn}>
+                            <input
+                                type="radio"
+                                name="rating"
+                                key={item.pstEvlSn}
+                                value={item.comCdSn}
+                                onChange={(e) =>
+                                    setPstEvl({...pstEvl, comCdSn: e.target.value})
+                                }
+                            />
+                            <small>{item.comCdNm}</small>
+                        </label>
+                    </div>
                 )
             });
         }
@@ -99,7 +103,7 @@ const CommonPstEval  = ({ pstSn }) => {
         };
 
         EgovNet.requestFetch(requestURL, requestOptions, function (resp) {
-           if(resp.result.pstEvl != null){
+            if (resp.result.pstEvl != null){
                setHtmlView(false);
            }else{
                setHtmlView(true);
@@ -124,79 +128,25 @@ const CommonPstEval  = ({ pstSn }) => {
     return (
         <>
         {htmlView && (
-            <div className="survey-container">
-                <style>{`
-                .survey-container {
-                border: 1px solid #ccc;
-                padding: 20px;
-                border-radius: 5px;
-                margin: 20px auto;
-                font-family: Arial, sans-serif;
-                }
-                
-                h3 {
-                font-size: 16px;
-                margin-bottom: 15px;
-                }
-                
-                .rating-options {
-                display: flex;
-                flex-wrap: wrap;
-                gap: 10px;
-                margin-bottom: 15px;
-                }
-                
-                label {
-                display: flex;
-                align-items: center;
-                gap: 5px;
-                font-size: 14px;
-                }
-                
-                textarea.comment-box {
-                width: 90%;
-                padding: 10px;
-                border: 1px solid #ccc;
-                border-radius: 5px;
-                font-size: 14px;
-                resize: none;
-                }
-                
-                .submit-button {
-                background-color: #e91e63;
-                color: white;
-                border: none;
-                border-radius: 5px;
-                padding: 10px 20px;
-                cursor: pointer;
-                font-size: 14px;
-                transition: background-color 0.3s;
-                }
-                
-                .submit-button:hover {
-                background-color: #c2185b;
-                }
-                
-                `}
-                </style>
-                <h3>※ 현재 페이지의 내용이나 사용 편의성에 대해 만족하시나요?</h3>
-                <div className="rating-options">
+            <form className="satisfactionBox" data-aos="fade-up" data-aos-duration="1500">
+                <strong className="title">현재 페이지의 내용이나 사용 편의성에 대해 만족하시나요?</strong>
+                <div className="checkWrap">
                     {getComCdListToHtml(comCdList)}
                 </div>
-                <div style={{display: "flex"}}>
-                <textarea
-                    className="comment-box"
-                    id="impvOpnnCn"
-                    placeholder="정보에 대한 의견이 있으시면 작성해 주세요."
-                    onChange={(e) =>
-                        setPstEvl({...pstEvl, impvOpnnCn: e.target.value})
-                    }
-                />
-                    <button className="submit-button" onClick={handleSubmit}>
-                        평가
-                    </button>
+                <div className="inputBox type1">
+                    <label className="input">
+                        <input
+                            type="text"
+                            id="impvOpnnCn"
+                            placeholder="정보에 대한 의견이 있으시면 작성해 주세요."
+                            onChange={(e) =>
+                                setPstEvl({...pstEvl, impvOpnnCn: e.target.value})
+                            }
+                        />
+                    </label>
                 </div>
-            </div>
+                <button type="button" className="clickBtn blue" onClick={handleSubmit}><span>평가보내기</span></button>
+            </form>
         )}
         </>
 

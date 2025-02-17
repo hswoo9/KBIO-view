@@ -138,6 +138,10 @@ const URL = {
 
   MEMBER_MYPAGE_MODIFY : "/member/mypage/modify",
   MEMBER_MYPAGE_CONSULTING : "/member/mypage/consulting",
+  MEMBER_MYPAGE_CONSULTING_POPUP : "/popup/consulting",
+  MEMBER_MYPAGE_CONSULTING_CREATE_POPUP : "/popup/consulting/create",
+  MEMBER_MYPAGE_CONSULTING_STAIS_POPUP : "/popup/consulting/satis",
+  MEMBER_MYPAGE_CONSULTING_DETAIL : "/member/mypage/consulting/detail",
   MEMBER_MYPAGE_SIMPLE : "/member/mypage/simple",
   MEMBER_MYPAGE_SIMPLE_DETAIL : "/member/mypage/simple/detail",
   MEMBER_MYPAGE_SIMPLE_POPUP : "/popup/simple",

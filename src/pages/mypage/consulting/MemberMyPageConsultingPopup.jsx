@@ -213,7 +213,7 @@ function MemberMyPageSimplePopup() {
                         })}
                     </ul>
                 )}
-                
+
             </div>
 
             <button onClick={handleSave} style={{

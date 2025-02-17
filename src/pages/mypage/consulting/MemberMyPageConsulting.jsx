@@ -11,13 +11,27 @@ import {getComCdList} from "@/components/CommonComponents";
 import { getSessionItem } from "@/utils/storage";
 import moment from "moment/moment.js";
 
-function MemberMyPageConsult(props) {
+function MemberMyPageConsulting(props) {
     const sessionUser = getSessionItem("loginUser");
     const location = useLocation();
     const navigate = useNavigate();
 
     const searchTypeRef = useRef();
     const searchValRef = useRef();
+    const statusMap = sessionUser.mbrType === 2
+        ? {
+            102: "답변대기",
+            101: "답변완료",
+            200: "처리완료",
+            999: "취소",
+        }
+        : {
+            102: "답변완료",
+            101: "답변대기",
+            200: "처리완료",
+            999: "취소",
+        };
+
 
     const [searchDto, setSearchDto] = useState(
         location.state?.searchDto || {
@@ -67,6 +81,7 @@ function MemberMyPageConsult(props) {
 
                     resp.result.consultantList.forEach(function (item, index) {
                         if (index === 0) dataList = [];
+                        console.log(item)
 
                         dataList.push(
                             <tr key={item.cnsltAplySn}>
@@ -75,9 +90,10 @@ function MemberMyPageConsult(props) {
                                 </td>
                                 <td>{item.cnsltFld}</td>
                                 <td>
-                                    <Link to={{pathname: URL.test}}
+                                    <Link to={{pathname: URL.MEMBER_MYPAGE_SIMPLE_DETAIL}}
                                           state={{
-                                              dfclMttrSn: item.dfclMttrSn
+                                              cnsltAplySn: item.cnsltAplySn,
+                                              cnsltSttsCd: item.cnsltSttsCd
                                           }}
                                           style={{cursor: 'pointer', textDecoration: 'underline'}}
                                     >
@@ -85,7 +101,8 @@ function MemberMyPageConsult(props) {
                                     </Link>
                                 </td>
                                 <td>{moment(item.frstCrtDt).format('YYYY-MM-DD')}</td>
-                                <td>{item.answer == "Y" ? "답변완료" : "답변대기"}</td>
+                                <td>{statusMap[item.cnsltSttsCd] || item.cnsltSttsCd}</td>
+                                <td></td>
                             </tr>
                         );
                     });
@@ -111,31 +128,31 @@ function MemberMyPageConsult(props) {
                 {/* Step Indicator */}
                 <ul className="stepWrap" data-aos="fade-up" data-aos-duration="1500">
                     <li>
-                        <NavLink to={URL.MEMBER_MYPAGE_MODIFY}>
+                        <NavLink to={URL.MEMBER_MYPAGE_MODIFY} >
                             <div className="num"><p>1</p></div>
                             <p className="text">회원정보수정</p>
                         </NavLink>
                     </li>
                     <li className="active">
-                        <NavLink to={URL.MEMBER_MYPAGE_CONSULTING}>
+                        <NavLink to={URL.MEMBER_MYPAGE_CONSULTING} >
                             <div className="num"><p>2</p></div>
                             <p className="text">컨설팅의뢰 내역</p>
                         </NavLink>
                     </li>
-                    <li>
-                        <NavLink to={URL.MEMBER_MYPAGE_SIMPLE}>
+                    <li >
+                        <NavLink to={URL.MEMBER_MYPAGE_SIMPLE} >
                             <div className="num"><p>3</p></div>
                             <p className="text">간편상담 내역</p>
                         </NavLink>
                     </li>
                     <li>
-                        <NavLink to={URL.MEMBER_MYPAGE_DIFFICULTIES}>
+                        <NavLink to={URL.MEMBER_MYPAGE_DIFFICULTIES} >
                             <div className="num"><p>4</p></div>
                             <p className="text">애로사항 내역</p>
                         </NavLink>
                     </li>
                     <li>
-                        <NavLink to={URL.MEMBER_MYPAGE_CANCEL}>
+                        <NavLink to={URL.MEMBER_MYPAGE_CANCEL} >
                             <div className="num"><p>5</p></div>
                             <p className="text">회원탈퇴</p>
                         </NavLink>
@@ -246,4 +263,4 @@ function MemberMyPageConsult(props) {
     );
 };
 
-export default MemberMyPageConsult;
+export default MemberMyPageConsulting;
