@@ -560,6 +560,10 @@ function EgovHeader() {
                     {sessionUserSe === "UDR" && (
                         <NavLink
                             to={URL.MEMBER_MYPAGE_MODIFY}
+                            state={{
+                              menuSn: 53,
+                              menuNmPath: "마이페이지 > 회원정보수정"
+                            }}
                         >
                           <button type="button" className="myPage"><span>마이페이지</span></button>
                         </NavLink>
