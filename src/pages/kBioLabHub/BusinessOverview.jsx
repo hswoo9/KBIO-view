@@ -5,6 +5,7 @@ import URL from "@/constants/url";
 import { getSessionItem, setSessionItem, removeSessionItem } from "@/utils/storage";
 import CommonSubMenu from "@/components/CommonSubMenu";
 import {getBnrPopupList} from "@/components/main/MainComponents";
+import AOS from "aos";
 
 import user_business_overview_box01_img from "@/assets/images/user_business_overview_box01_img.jpg";
 import user_business_overview_box02_logo from "@/assets/images/user_business_overview_box02_logo.png";
@@ -54,6 +55,7 @@ function BusinessOverview(props) {
     getBnrPopupList("popup").then((data) => {
       setPopUpList(data.filter(e => e.tblBnrPopup.bnrPopupKnd == "popup"));
     });
+    AOS.init();
   }, []);
 
   return (

@@ -13,6 +13,7 @@ import EgovMainUser from "@/pages/main/EgovMainUser";
 import Community from "@/pages/community/Community";
 import KBioLabHub from "@/pages/kBioLabHub/KBioLabHub";
 import BusinessOverview from "@/pages/kBioLabHub/BusinessOverview";
+import Organization from "@/pages/kBioLabHub/Organization";
 import KbioLocation from "@/pages/kBioLabHub/Location";
 import Introduce from "@/pages/introduce/Introduce";
 import IntroduceOperational from "@/pages/introduce/OperationalList";
@@ -335,6 +336,7 @@ const SecondRoutes = () => {
               <Route path={URL.COMMUNITY} element={<Community/>}/>
               <Route path={URL.K_BIO_LABHUB} element={<KBioLabHub/>}/>
               <Route path={URL.KBIO_BUSINESS_OVERVIEW} element={<BusinessOverview/>}/>
+              <Route path={URL.KBIO_ORGANIZATION} element={<Organization/>}/>
               <Route path={URL.KBIO_LOCATION} element={<KbioLocation/>}/>
               <Route path={URL.INTRODUCE} element={<Introduce/>}/>
               <Route path={URL.INTRODUCE_OPERATIONAL_LIST} element={<IntroduceOperational/>}/>

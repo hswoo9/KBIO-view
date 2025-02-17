@@ -5,6 +5,7 @@ import URL from "@/constants/url";
 import { getSessionItem, setSessionItem, removeSessionItem } from "@/utils/storage";
 import CommonSubMenu from "@/components/CommonSubMenu";
 import {getBnrPopupList} from "@/components/main/MainComponents";
+import AOS from "aos";
 
 function KbioLocation(props) {
   const location = useLocation();
@@ -39,6 +40,7 @@ function KbioLocation(props) {
     getBnrPopupList("popup").then((data) => {
       setPopUpList(data.filter(e => e.tblBnrPopup.bnrPopupKnd == "popup"));
     });
+    AOS.init();
   }, []);
 
   return (
