@@ -5,6 +5,7 @@ import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
 import EgovPaging from "@/components/EgovPaging";
+import CommonSubMenu from "@/components/CommonSubMenu";
 
 import Swal from 'sweetalert2';
 import {getComCdList} from "@/components/CommonComponents";
@@ -90,10 +91,13 @@ function MemberMyPageConsulting(props) {
                                 </td>
                                 <td>{item.cnsltFld}</td>
                                 <td>
-                                    <Link to={{pathname: URL.MEMBER_MYPAGE_SIMPLE_DETAIL}}
+                                    <Link to={{pathname: URL.MEMBER_MYPAGE_CONSULTING_DETAIL}}
                                           state={{
                                               cnsltAplySn: item.cnsltAplySn,
-                                              cnsltSttsCd: item.cnsltSttsCd
+                                              cnsltSttsCd: item.cnsltSttsCd,
+                                              menuSn: location.state?.menuSn,
+                                              menuNmPath: location.state?.menuNmPath,
+
                                           }}
                                           style={{cursor: 'pointer', textDecoration: 'underline'}}
                                     >
@@ -125,39 +129,8 @@ function MemberMyPageConsulting(props) {
     return (
         <div id="container" className="container ithdraw join_step">
             <div className="inner">
-                {/* Step Indicator */}
-                <ul className="stepWrap" data-aos="fade-up" data-aos-duration="1500">
-                    <li>
-                        <NavLink to={URL.MEMBER_MYPAGE_MODIFY} >
-                            <div className="num"><p>1</p></div>
-                            <p className="text">회원정보수정</p>
-                        </NavLink>
-                    </li>
-                    <li className="active">
-                        <NavLink to={URL.MEMBER_MYPAGE_CONSULTING} >
-                            <div className="num"><p>2</p></div>
-                            <p className="text">컨설팅의뢰 내역</p>
-                        </NavLink>
-                    </li>
-                    <li >
-                        <NavLink to={URL.MEMBER_MYPAGE_SIMPLE} >
-                            <div className="num"><p>3</p></div>
-                            <p className="text">간편상담 내역</p>
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink to={URL.MEMBER_MYPAGE_DIFFICULTIES} >
-                            <div className="num"><p>4</p></div>
-                            <p className="text">애로사항 내역</p>
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink to={URL.MEMBER_MYPAGE_CANCEL} >
-                            <div className="num"><p>5</p></div>
-                            <p className="text">회원탈퇴</p>
-                        </NavLink>
-                    </li>
-                </ul>
+                <CommonSubMenu/>
+
                 <h2 className="pageTitle"><p>간편상담 내역</p></h2>
                 <div className="cateWrap">
                     <form action="">
