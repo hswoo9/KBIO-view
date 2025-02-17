@@ -364,7 +364,7 @@ export const fileUpload = async (file) => {
  *     })
  * }, []);
  */
-export const getBbsInPst = async (bbsNm, bbsTypeNm, actvtnYn, userSn) => {
+export const getBbsInPst = async (bbsNm, bbsTypeNm, actvtnYn, userSn, day) => {
     const requestOptions = {
         method: "POST",
         headers: {
@@ -374,7 +374,8 @@ export const getBbsInPst = async (bbsNm, bbsTypeNm, actvtnYn, userSn) => {
             bbsNm : bbsNm,
             bbsTypeNm : bbsTypeNm,
             actvtnYn : actvtnYn,
-            userSn : userSn
+            userSn : userSn,
+            selectDt : day
         })
     };
 
