@@ -415,7 +415,7 @@ function commonPstDetail(props) {
                             </button>
                           </Link>
                       )}
-                      {authrt.mdfcnAuthrt == "Y" && (
+                      {/*{authrt.mdfcnAuthrt == "Y" && (
                           <Link
                               to={URL.COMMON_PST_NORMAL_MODIFY}
                               mode={CODE.MODE_MODIFY}
@@ -426,7 +426,7 @@ function commonPstDetail(props) {
                           >
                             <span>수정</span>
                           </Link>
-                      )}
+                      )}*/}
                       {authrt.delAuthrt == "Y" && (
                           <button type="button" className="clickBtn red"
                                   onClick={() => {

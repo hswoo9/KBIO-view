@@ -298,7 +298,7 @@ function commonPstList(props) {
                                 });
                             }}
                         />
-                        {authrt.wrtAuthrt == "Y" && (
+                        {/*{authrt.wrtAuthrt == "Y" && (
                             <NavLink
                                 to={URL.COMMON_PST_NORMAL_CREATE}
                                 state={{bbsSn: bbs.bbsSn}}
@@ -307,7 +307,7 @@ function commonPstList(props) {
                             >
                                 <button type="button" className="clickBtn writeBtn"><span>등록</span></button>
                             </NavLink>
-                        )}
+                        )}*/}
                     </div>
                 </div>
             </div>
