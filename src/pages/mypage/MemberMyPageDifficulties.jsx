@@ -4,12 +4,13 @@ import { useDropzone } from 'react-dropzone';
 import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
-import EgovPaging from "@/components/EgovPaging";
-
+import EgovUserPaging from "@/components/EgovUserPaging";
+import CommonSubMenu from "@/components/CommonSubMenu";
 import Swal from 'sweetalert2';
 import {getComCdList} from "@/components/CommonComponents";
 import { getSessionItem } from "@/utils/storage";
 import moment from "moment/moment.js";
+import fileImages from "@/assets/images/ico_file_blue.svg";
 
 function MemberMyPageDifficulties(props) {
     const sessionUser = getSessionItem("loginUser");
@@ -86,16 +87,23 @@ function MemberMyPageDifficulties(props) {
                                     {item.answer === "Y" ? (
                                         <Link to={{pathname: URL.MEMBER_MYPAGE_DIFFICULTIES_DETAIL}}
                                               state={{
-                                                  dfclMttrSn: item.dfclMttrSn
+                                                  dfclMttrSn: item.dfclMttrSn,
+                                                  menuSn : location.state?.menuSn,
+                                                  menuNmPath : location.state?.menuNmPath
+
                                               }}
                                               style={{cursor: 'pointer', textDecoration: 'underline'}}
                                         >
                                             {item.ttl}
+                                            {item.fileCnt !== 0 && <img src={fileImages} alt="pass images"/>}
+
                                         </Link>
                                     ) : (
                                         <Link to={{pathname: URL.MEMBER_MYPAGE_DIFFICULTIES_MODIFY}}
                                               state={{
-                                                  dfclMttrSn: item.dfclMttrSn
+                                                  dfclMttrSn: item.dfclMttrSn,
+                                                  menuSn : location.state?.menuSn,
+                                                  menuNmPath : location.state?.menuNmPath
                                               }}
                                               style={{cursor: 'pointer', textDecoration: 'underline'}}
                                         >
@@ -126,125 +134,82 @@ function MemberMyPageDifficulties(props) {
 
 
     return (
-        <div id="container" className="container ithdraw join_step">
+        <div id="container" className="container notice board">
             <div className="inner">
-                {/* Step Indicator */}
-                <ul className="stepWrap" data-aos="fade-up" data-aos-duration="1500">
-                    <li>
-                        <NavLink to={URL.MEMBER_MYPAGE_MODIFY} >
-                            <div className="num"><p>1</p></div>
-                            <p className="text">회원정보수정</p>
-                        </NavLink>
-                    </li>
-                    <li>
-                    <NavLink to={URL.MEMBER_MYPAGE_CONSULTING} >
-                            <div className="num"><p>2</p></div>
-                            <p className="text">컨설팅의뢰 내역</p>
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink to={URL.MEMBER_MYPAGE_SIMPLE} >
-                            <div className="num"><p>3</p></div>
-                            <p className="text">간편상담 내역</p>
-                        </NavLink>
-                    </li>
-                    <li  className="active">
-                        <NavLink to={URL.MEMBER_MYPAGE_DIFFICULTIES} >
-                            <div className="num"><p>4</p></div>
-                            <p className="text">애로사항 내역</p>
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink to={URL.MEMBER_MYPAGE_CANCEL} >
-                            <div className="num"><p>5</p></div>
-                            <p className="text">회원탈퇴</p>
-                        </NavLink>
-                    </li>
-                </ul>
-                <h2 className="pageTitle"><p>애로사항 내역</p></h2>
-                <div className="cateWrap">
-                    <form action="">
-                        <ul className="cateList" style={{display: 'flex', flexWrap: 'wrap', gap: '10px'}}>
-                            <li className="inputBox type1" style={{flex: '1  10%'}}>
-                                <p className="title">상태</p>
-                                <div className="itemBox">
-                                    <select className="selectGroup">
+                <CommonSubMenu/>
+                <div className="inner2">
+                    <div className="searchFormWrap type1" data-aos="fade-up" data-aos-duration="1500">
+                        <form>
+                            <div className="totalBox">
+                                <div className="total"><p>총 <strong>{paginationInfo.totalRecordCount}</strong>건</p></div>
+                            </div>
+                            <div className="searchBox" >
+                                {/*<div className="itemBox type2">
+                                    <select
+                                        id="activeYn"
+                                        name="activeYn"
+                                        title="사용여부"
+                                        className="niceSelectCustom">
                                         <option value="">전체</option>
                                         <option value="Y">사용</option>
                                         <option value="N">미사용</option>
                                     </select>
                                 </div>
-                            </li>
-                            <li className="inputBox type1" style={{flex: '1  10%'}}>
-                                <p className="title">분야</p>
-                                <div className="itemBox">
-                                    <select
-                                        className="selectGroup"
-                                        name="dfclMttrFld"
-                                        onChange={(e) => {
-                                            setSearchDto({...searchDto, dfclMttrFld: e.target.value})
-                                        }}
-                                    >
+                                <div className="itemBox type2">
+                                    <select className="niceSelectCustom">
                                         <option value="">전체</option>
-                                        {dfclMttrFldList.map((item, index) => (
-                                            <option value={item.comCdSn} key={item.comCdSn}>{item.comCdNm}</option>
-                                        ))}
+                                        <option value="1">공개</option>
+                                        <option value="2">비공개</option>
                                     </select>
-                                </div>
-                            </li>
-                            <li className="inputBox type1" style={{flex: '1  10%'}}>
-                                <p className="title">키워드</p>
-                                <div className="itemBox">
-                                    <select
-                                        className="selectGroup"
-                                        id="searchType"
-                                        name="searchType"
-                                        title="검색유형"
-                                        ref={searchTypeRef}
-                                        onChange={(e) => {
-                                            setSearchDto({...searchDto, searchType: e.target.value})
-                                        }}
-                                    >
+                                </div>*/}
+                                <div className="itemBox type2">
+                                    <select className="niceSelectCustom">
                                         <option value="">전체</option>
                                         <option value="ttl">제목</option>
                                         <option value="dfclMttrCn">내용</option>
                                     </select>
                                 </div>
-                            </li>
-                            <li className="searchBox inputBox type1" style={{flex: '1 40%', marginTop: "25px"}}>
-                                <label className="input">
-                                    <input type="text" id="search" name="search" placeholder="검색어를 입력해주세요"/>
-                                </label>
-                            </li>
-                            <div className="rightBtn" style={{display: 'flex', gap: '10px', marginTop: "25px"}}>
-                                <button type="button" className="searchBtn btn btn1 point"
+                                <div className="inputBox type1">
+                                    <label className="input">
+                                        <input type="text"
+                                               name=""
+                                               defaultValue={
+                                                   searchDto && searchDto.searchVal
+                                               }
+                                               placeholder=""
+                                               ref={searchValRef}
+                                               onChange={(e) => {
+                                                   setSearchDto({...searchDto, searchVal: e.target.value})
+                                               }}
+                                               onKeyDown={activeEnter}
+                                        />
+                                    </label>
+                                </div>
+                                <button type="button"
+                                        className="searchBtn"
                                         onClick={() => {
                                             getDfclMttrList({
                                                 ...searchDto,
-                                                pageIndex: 1
+                                                pageIndex: 1,
+                                                searchType: searchTypeRef.current.value,
+                                                searchVal: searchValRef.current.value,
                                             });
                                         }}
                                 >
                                     <div className="icon"></div>
                                 </button>
                             </div>
-                        </ul>
-
-                    </form>
-                </div>
-                <div className="contBox board type1 customContBox">
-                    <div className="topBox">
-                        <p className="resultText">Total : <span className="red">{paginationInfo.totalRecordCount}</span>
-                        </p>
+                        </form>
                     </div>
-                    <div className="tableBox type1">
+                    <div className="board_list" data-aos="fade-up" data-aos-duration="1500">
                         <table>
-                        <caption>애로사항목록</caption>
+                            <caption>간편상담 목록</caption>
                             <colgroup>
                                 <col width="80"/>
-                                <col width="150"/>
-                                <col width="300"/>
-                                <col width="150"/>
+                                <col width="170"/>
+                                <col width="450"/>
+                                <col width="250"/>
+                                <col width="250"/>
                                 <col width="150"/>
                             </colgroup>
                             <thead>
@@ -254,6 +219,7 @@ function MemberMyPageDifficulties(props) {
                                 <th>제목</th>
                                 <th>신청일</th>
                                 <th>상태</th>
+                                <th>만족도</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -263,7 +229,7 @@ function MemberMyPageDifficulties(props) {
                     </div>
 
                     <div className="pageWrap">
-                        <EgovPaging
+                        <EgovUserPaging
                             pagination={paginationInfo}
                             moveToPage={(passedPage) => {
                                 getDfclMttrList({
@@ -278,5 +244,4 @@ function MemberMyPageDifficulties(props) {
         </div>
     );
 };
-
 export default MemberMyPageDifficulties;

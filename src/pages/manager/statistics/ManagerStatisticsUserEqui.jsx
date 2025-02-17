@@ -21,8 +21,11 @@ import {
 import {Link} from "react-router-dom";
 import * as EgovNet from "../../../api/egovFetch.js";
 import {forEach} from "react-bootstrap/ElementChildren";
+import LoadingSpinner from "../../../components/LoadingSpinner.jsx";
 
 function ManagerStatisticsUser(props) {
+    const [isLoading, setIsLoading] = useState(true);
+
     const nowDate = new Date();
 
     const [devicesList, setDevicesList] = useState([]);
@@ -138,6 +141,7 @@ function ManagerStatisticsUser(props) {
         }
 
         setDevicesList(dataList);
+        setIsLoading(false);
     }
 
     const operatingListMake = (rs) => {
@@ -201,6 +205,11 @@ function ManagerStatisticsUser(props) {
     return (
         <div id="container" className="container layout cms">
             <ManagerLeftNew/>
+
+            {isLoading &&
+                <LoadingSpinner />
+            }
+
             <div className="inner">
                 <h2 className="pageTitle"><p>사용자통계</p></h2>
                 <div className="cateWrap">

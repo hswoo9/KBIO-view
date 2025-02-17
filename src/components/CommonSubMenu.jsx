@@ -2,7 +2,7 @@ import {getMenu } from "@/components/CommonComponents";
 import React, {useState, useEffect, useCallback, useRef} from "react";
 import {Link, NavLink, useLocation, useNavigate} from "react-router-dom";
 import { getSessionItem } from "@/utils/storage";
-
+import AOS from "aos";
 function EgovSubMenu() {
     const location = useLocation();
     const sessionUser = getSessionItem("loginUser");
@@ -50,6 +50,7 @@ function EgovSubMenu() {
         setMenuList(dataList);
       }
     });
+    AOS.init();
     }, []);
 
     return (

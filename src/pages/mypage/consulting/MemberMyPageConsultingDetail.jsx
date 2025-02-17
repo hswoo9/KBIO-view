@@ -9,7 +9,7 @@ import Swal from 'sweetalert2';
 import CODE from "@/constants/code";
 import CommonSubMenu from "@/components/CommonSubMenu";
 
-function MemberMyPageSimpleDetail(props) {
+function MemberMyPageConsultingDetail(props) {
     const sessionUser = getSessionItem("loginUser");
     const location = useLocation();
     const [cnsltDsctnList, setCnsltDsctnList] = useState([]);
@@ -330,7 +330,7 @@ function MemberMyPageSimpleDetail(props) {
                             <div className="contBox infoWrap customContBox">
                                 <ul className="inputWrap">
                                     <li className="inputBox type1 email width1">
-                                        <label className="title"><small>간편상담 내역</small></label>
+                                        <label className="title"><small>컨설팅 내역</small></label>
                                         {cnsltDsctnList}
                                     </li>
                                 </ul>
@@ -347,14 +347,14 @@ function MemberMyPageSimpleDetail(props) {
                     <div className="leftBox">
                         {simpleDetail && (
                             <>
-                            {/* 취소상태일때 */}
+                                {/* 취소상태일때 */}
                                 {searchDto.cnsltSttsCd === "999" ? (
                                     <>
-                                        <NavLink to={URL.MEMBER_MYPAGE_SIMPLE}
-                                        state={{
-                                            menuSn : location.state?.menuSn,
-                                            menuNmPath : location.state?.menuNmPath
-                                        }}>
+                                        <NavLink to={URL.MEMBER_MYPAGE_CONSULTING}
+                                                 state={{
+                                                     menuSn : location.state?.menuSn,
+                                                     menuNmPath : location.state?.menuNmPath
+                                                 }}>
                                             <button type="button" className="clickBtn white">
                                                 목록
                                             </button>
@@ -366,7 +366,7 @@ function MemberMyPageSimpleDetail(props) {
                                                 onClick={() => handleCancleClick(searchDto.cnsltAplySn)}>
                                             <span>취소</span>
                                         </button>
-                                        <NavLink to={URL.MEMBER_MYPAGE_SIMPLE}
+                                        <NavLink to={URL.MEMBER_MYPAGE_CONSULTING}
                                                  state={{
                                                      menuSn : location.state?.menuSn,
                                                      menuNmPath : location.state?.menuNmPath
@@ -383,7 +383,7 @@ function MemberMyPageSimpleDetail(props) {
                                                 onClick={() => handleSatisClick()}>
                                             <span>만족도 조사</span>
                                         </button>
-                                        <NavLink to={URL.MEMBER_MYPAGE_SIMPLE}
+                                        <NavLink to={URL.MEMBER_MYPAGE_CONSULTING}
                                                  state={{
                                                      menuSn : location.state?.menuSn,
                                                      menuNmPath : location.state?.menuNmPath
@@ -396,7 +396,7 @@ function MemberMyPageSimpleDetail(props) {
                                 ) : latestCreator === sessionUser.userSn ? (
                                     // 사용자가 로그인했을 때 마지막 작성자가 사용자일 경우
                                     <>
-                                        <NavLink to={URL.MEMBER_MYPAGE_SIMPLE}
+                                        <NavLink to={URL.MEMBER_MYPAGE_CONSULTING}
                                                  state={{
                                                      menuSn : location.state?.menuSn,
                                                      menuNmPath : location.state?.menuNmPath
@@ -417,7 +417,7 @@ function MemberMyPageSimpleDetail(props) {
                                                 onClick={() => handleComClick(searchDto.cnsltAplySn)}>
                                             <span>처리완료</span>
                                         </button>
-                                        <NavLink to={URL.MEMBER_MYPAGE_SIMPLE}
+                                        <NavLink to={URL.MEMBER_MYPAGE_CONSULTING}
                                                  state={{
                                                      menuSn : location.state?.menuSn,
                                                      menuNmPath : location.state?.menuNmPath
@@ -434,7 +434,7 @@ function MemberMyPageSimpleDetail(props) {
                                                 onClick={() => handleCreateClick()}>
                                             <span>등록</span>
                                         </button>
-                                        <NavLink to={URL.MEMBER_MYPAGE_SIMPLE}
+                                        <NavLink to={URL.MEMBER_MYPAGE_CONSULTING}
                                                  state={{
                                                      menuSn : location.state?.menuSn,
                                                      menuNmPath : location.state?.menuNmPath
@@ -446,7 +446,7 @@ function MemberMyPageSimpleDetail(props) {
                                     </>
                                 ) : (
                                     // 컨설턴트가 로그인했을 때 마지막 작성자가 컨설턴트일 경우
-                                    <NavLink to={URL.MEMBER_MYPAGE_SIMPLE}
+                                    <NavLink to={URL.MEMBER_MYPAGE_CONSULTING}
                                              state={{
                                                  menuSn : location.state?.menuSn,
                                                  menuNmPath : location.state?.menuNmPath
@@ -466,4 +466,4 @@ function MemberMyPageSimpleDetail(props) {
     );
 }
 
-export default MemberMyPageSimpleDetail;
+export default MemberMyPageConsultingDetail;

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { Link, useLocation, NavLink } from "react-router-dom";
 
 import * as EgovNet from "@/api/egovFetch";
@@ -36,6 +36,7 @@ import user_main_rolling_logo02 from "@/assets/images/user_main_rolling_logo02.s
 import user_main_rolling_logo03 from "@/assets/images/user_main_rolling_logo03.svg";
 import user_main_rolling_logo04 from "@/assets/images/user_main_rolling_logo04.svg";
 import user_main_rolling_logo05 from "@/assets/images/user_main_rolling_logo05.svg";
+import moment from "moment/moment.js";
 
 
 function EgovMainUser(props) {
@@ -122,6 +123,10 @@ function EgovMainUser(props) {
       setMvnEntList(data);
     });
 
+    getPstList(1).then((data) => {
+      setPstList(data.pstList);
+    });
+
     AOS.init();
   }, []);
 
@@ -191,33 +196,23 @@ function EgovMainUser(props) {
                 </a>
               </div>
               <ul className="listBox" data-aos="fade-up" data-aos-duration="1500">
-                <li>
-                  <a href="#">
-                    <span className="cate">일반</span>
-                    <div className="titleBox">
-                      <h3 className="title">2024년 TIPA 대국민 혁신아이디어 공모전</h3>
-                      <p className="date">2022.12.30</p>
-                    </div>
-                    <div className="textBox">
-                      <p>중소기업기술정보진흥원(TIPA)은 국민이 체감할 수 있는 공공서비스 <br/>혁신을 위하여 국민 여러분의 소중한 의견을 듣고자 합니다. <br/>국민 여러분의 아이디어를
-                        기관
-                        운영에 적극적으로 반영하고자 하오니,공모전에 많은 관심과 참여 부탁드립니다.</p>
-                    </div>
-                  </a>
-                </li>
-                <li>
-                  <a href="#">
-                    <span className="cate etc">기타</span>
-                    <div className="titleBox">
-                      <h3 className="title">[서울바이오허브] 「2024 헬스엑스챌린지 서울」 모집공고 및 참가 수상기업 안내</h3>
-                      <p className="date">2022.12.30</p>
-                    </div>
-                    <div className="textBox">
-                      <p>서울특별시가 조성하고 한국과학기술연구원·고려대학교가 운영하는 ‘서울바이오허브’에서 국내 유망 바이오 기업의 글로벌 시장 진출 경쟁력 강화를 위해 「2024 헬스엑스챌린지
-                        서울」을 운영합니다. 다음과 같이 바이오 및 헬스케어 분야의 혁신 기술을 보유한 참여기업을 모집하오니 많은 신청 바랍니다.</p>
-                    </div>
-                  </a>
-                </li>
+                {pstList.length > 0 && pstList.map((pst, index) => (
+                  <li>
+                    <a href="#">
+                      {pst.upendNtcYn == "Y" ?
+                          <span className="cate">공지</span> :
+                          <span className="cate etc">일반</span>
+                      }
+                      <div className="titleBox">
+                        <h3 className="title">{pst.pstTtl}</h3>
+                        <p className="date">{moment(pst.frstCrtDt).format('YYYY-MM-DD')}</p>
+                      </div>
+                      <div className="textBox">
+                        <p style={{minHeight : "77px"}}>{pst.pstCn.replace(/<\/?[^>]+(>|$)/g, "")}</p>
+                      </div>
+                    </a>
+                  </li>
+                ))}
               </ul>
             </div>
             <div className="box pressBox" data-aos="fade-in">

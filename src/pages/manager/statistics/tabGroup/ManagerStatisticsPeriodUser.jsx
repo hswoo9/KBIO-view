@@ -22,7 +22,9 @@ import {Link} from "react-router-dom";
 import * as EgovNet from "../../../../api/egovFetch.js";
 import LoadingSpinner from "../../../../components/LoadingSpinner.jsx";
 
-function ManagerStatisticsPeriodUser(props) {
+function ManagerStatisticsPeriodUser(prop) {
+    const [isLoading, setIsLoading] = useState(true);  // 로딩 상태
+
     const nowDate = new Date();
 
     const [periodUserList, setPeriodUserList] = useState([]);
@@ -127,7 +129,7 @@ function ManagerStatisticsPeriodUser(props) {
     ];
 
     const getStatistics = () => {
-
+        setIsLoading(true);
         const searchCategory = document.querySelector("#searchCategory").value;
         const startDt = document.querySelector(".period li#" + searchCategory + "Div #startDate").value;
         const endDt = document.querySelector(".period li#" + searchCategory + "Div #endDate").value;
@@ -266,7 +268,7 @@ function ManagerStatisticsPeriodUser(props) {
         setChartLabels(newChartLabels);
         setChartData(newChartData);
         setPeriodUserList(dataList);
-
+        setIsLoading(false);
     }
 
     useEffect(() => {
@@ -275,6 +277,10 @@ function ManagerStatisticsPeriodUser(props) {
 
     return (
         <div>
+            {isLoading &&
+                <LoadingSpinner />
+            }
+
             <h2 className="pageTitle"><p>사용자분석</p></h2>
             <div className="cateWrap">
                 <form action="">

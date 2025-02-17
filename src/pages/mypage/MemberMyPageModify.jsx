@@ -10,7 +10,7 @@ import EgovRadioButtonGroup from "@/components/EgovRadioButtonGroup";
 import Swal from "sweetalert2";
 import base64 from 'base64-js';
 import { getSessionItem } from "@/utils/storage";
-
+import CommonSubMenu from "@/components/CommonSubMenu";
 function MemberMyPageModify(props) {
     const location = useLocation();
     const checkRef = useRef([]);
@@ -306,39 +306,8 @@ function MemberMyPageModify(props) {
     return (
         <div id="container" className="container ithdraw join_step">
             <div className="inner">
-                <ul className="stepWrap" data-aos="fade-up" data-aos-duration="1500">
-                    <li className="active">
-                        <NavLink to={URL.MEMBER_MYPAGE_MODIFY} >
-                            <div className="num"><p>1</p></div>
-                            <p className="text">회원정보수정</p>
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink to={URL.MEMBER_MYPAGE_CONSULTING} >
-                            <div className="num"><p>2</p></div>
-                            <p className="text">컨설팅의뢰 내역</p>
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink to={URL.MEMBER_MYPAGE_SIMPLE} >
-                            <div className="num"><p>3</p></div>
-                            <p className="text">간편상담 내역</p>
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink to={URL.MEMBER_MYPAGE_DIFFICULTIES} >
-                            <div className="num"><p>4</p></div>
-                            <p className="text">애로사항 내역</p>
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink to={URL.MEMBER_MYPAGE_CANCEL} >
-                            <div className="num"><p>5</p></div>
-                            <p className="text">회원탈퇴</p>
-                        </NavLink>
-                    </li>
-                </ul>
-
+                <CommonSubMenu/>
+                
                 {/* 페이지 내용 표시 */}
                 <form className="contBox">
                     <ul className="inputWrap box01" data-aos="fade-up" data-aos-duration="1500">
@@ -577,9 +546,9 @@ function MemberMyPageModify(props) {
                         <button type="button" className="clickBtn black" onClick={updateMember}>
                             <span>수정</span>
                         </button>
-                        <button type="button" className="clickBtn white" onClick={() => navigate(URL.LOGIN)}>
+                        {/*<button type="button" className="clickBtn white" onClick={() => navigate(URL.LOGIN)}>
                             <span>뒤로가기</span>
-                        </button>
+                        </button>*/}
                     </div>
                 </form>
             </div>

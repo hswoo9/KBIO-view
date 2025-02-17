@@ -10,6 +10,7 @@ import EgovRadioButtonGroup from "@/components/EgovRadioButtonGroup";
 import Swal from "sweetalert2";
 import base64 from 'base64-js';
 import { getSessionItem } from "@/utils/storage";
+import CommonSubMenu from "@/components/CommonSubMenu";
 
 
 const EgovMyPage = () => {
@@ -53,14 +54,19 @@ const EgovMyPage = () => {
             },
             body: JSON.stringify(userInfo),
         };
-        
+
         EgovNet.requestFetch(checkUrl, requestOptions, (resp) => {
             if(resp.resultCode != "200") {
                 Swal.fire(resp.resultMessage);
                 return;
             }else{
                 console.log("resp",resp)
-                navigate(URL.MEMBER_MYPAGE_IDENTITY);
+                navigate(URL.MEMBER_MYPAGE_IDENTITY, {
+                    state: {
+                        menuSn: location.state?.menuSn,
+                        menuNmPath: location.state?.menuNmPath,
+                    },
+                });
             }
         });
     }
@@ -68,49 +74,15 @@ const EgovMyPage = () => {
     return (
         <div id="container" className="container ithdraw join_step">
             <div className="inner">
-                {/* Step Indicator */}
-                <ul className="stepWrap" data-aos="fade-up" data-aos-duration="1500">
-                    <li>
-                        <NavLink to={URL.MEMBER_MYPAGE_MODIFY} >
-                            <div className="num"><p>1</p></div>
-                            <p className="text">회원정보수정</p>
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink to={URL.MEMBER_MYPAGE_CONSULTING} >
-                            <div className="num"><p>2</p></div>
-                            <p className="text">컨설팅의뢰 내역</p>
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink to={URL.MEMBER_MYPAGE_SIMPLE} >
-                            <div className="num"><p>3</p></div>
-                            <p className="text">간편상담 내역</p>
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink to={URL.MEMBER_MYPAGE_DIFFICULTIES} >
-                            <div className="num"><p>4</p></div>
-                            <p className="text">애로사항 내역</p>
-                        </NavLink>
-                    </li>
-                    <li className="active">
-                        <NavLink to={URL.MEMBER_MYPAGE_CANCEL} >
-                            <div className="num"><p>5</p></div>
-                            <p className="text">회원탈퇴</p>
-                        </NavLink>
-                    </li>
-                </ul>
+                <CommonSubMenu/>
+
 
                 <div className="titleWrap type1" data-aos="fade-up" data-aos-duration="1500">
                     <strong className="tt2">회원 탈퇴</strong>
                     <p className="tt1">K-BIO LabHub회원탈퇴를 진행하려면 가입하신 방법에 따라 “실명확인” 후 회원탈퇴가 가능합니다.
                         <br/>입력한 정보는 회원탈퇴 이외의 목적으로 사용하지 않습니다.</p>
                 </div>
-                <div className="boxWrap">
-                    <div className="close">
-                        <div className="icon"></div>
-                    </div>
+                <div className="boxWrap" data-aos="fade-up" data-aos-duration="1500" >
                     <form className="box">
                         <ul className="inputWrap" style={{width: "30%", display: "block", margin: "0 auto"}}>
                             <li className="inputBox type2" style={{marginBottom: "15px"}}>
