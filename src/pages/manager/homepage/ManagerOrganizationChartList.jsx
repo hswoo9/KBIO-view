@@ -1,20 +1,20 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
-import { Link, NavLink, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
-
+import * as ComScript from "@/components/CommonScript";
 import ManagerLeftNew from "@/components/manager/ManagerLeftHomepage";
 import EgovPaging from "@/components/EgovPaging";
-
+import moment from "moment/moment.js";
 import Swal from 'sweetalert2';
 
 import { getSessionItem } from "@/utils/storage";
 
 function ManagerOrganizationChartList(props) {
     const location = useLocation();
-    console.log(location);
+    const navigate = useNavigate();
     const sessionUser = getSessionItem("loginUser");
     const [searchCondition, setSearchCondition] = useState(
         location.state?.searchCondition || {
@@ -25,7 +25,7 @@ function ManagerOrganizationChartList(props) {
     );
 
     const [paginationInfo, setPaginationInfo] = useState({});
-
+    const [orgchtList, setOrgchtList] = useState([]);
     const cndRef = useRef();
     const wrdRef = useRef();
 
@@ -38,7 +38,62 @@ function ManagerOrganizationChartList(props) {
         }
     }, [saveEvent]);
 
+    const getOrgchtList = useCallback(
+        (searchCondition) => {
+            const requestURL = "/orgchtApi/getOrgchtList.do";
+            const requestOptions = {
+                method: "POST",
+                headers: {
+                    "Content-type": "application/json",
+                },
+                body: JSON.stringify(searchCondition)
+            };
+            EgovNet.requestFetch(
+                requestURL,
+                requestOptions,
+                (resp) => {
+                    setPaginationInfo(resp.paginationInfo);
+                    let dataList = [];
+                    dataList.push(
+                        <tr>
+                            <td colSpan="6" key="noData">검색된 결과가 없습니다.</td>
+                        </tr>
+                    );
+
+                    resp.result.orgchtList.forEach(function (item, index) {
+                        if (index === 0) dataList = []; // 목록 초기화
+
+                        dataList.push(
+                            <tr key={item.orgchtSn}
+                                onClick={() => {
+                                    navigate({pathname: URL.MANAGER_HOMEPAGE_ORGANIZATION_CHART_MODIFY}, {state: {orgchtSn: item.orgchtSn}});
+                                }}
+                                style={{cursor: "pointer"}}
+                            >
+                                <td>
+                                    {resp.paginationInfo.totalRecordCount - (resp.paginationInfo.currentPageNo - 1) * resp.paginationInfo.pageSize - index}
+                                </td>
+                                <td>{item.deptNm}</td>
+                                <td>{item.kornFlnm}</td>
+                                <td>{item.jbttlNm}</td>
+                                <td>{ComScript.formatTelNumber(item.telno)}</td>
+                                <td>{item.email}</td>
+                                <td>{moment(item.frstCrtDt).format('YYYY-MM-DD')}</td>
+                            </tr>
+                        );
+                    });
+                    setOrgchtList(dataList);
+                },
+                function (resp) {
+                    console.log("err response : ", resp);
+                }
+            )
+        },
+        [orgchtList, searchCondition]
+    );
+
     useEffect(() => {
+        getOrgchtList(searchCondition);
     }, []);
 
     return (
@@ -77,8 +132,8 @@ function ManagerOrganizationChartList(props) {
                 </div>
                 <div className="contBox board type1 customContBox">
                     <div className="topBox">
-                        <p className="resultText">전체 : <span className="red">1234</span>건 페이지 : <span
-                            className="red">1/400</span></p>
+                        <p className="resultText">전체 : <span className="red">{paginationInfo.totalRecordCount}</span>건 페이지 : <span
+                            className="red">{paginationInfo.currentPageNo}/{paginationInfo.totalPageCount}</span></p>
                         <div className="rightBox">
                             <button type="button" className="btn btn2 downBtn red">
                                 <div className="icon"></div>
@@ -110,6 +165,7 @@ function ManagerOrganizationChartList(props) {
                             </tr>
                             </thead>
                             <tbody>
+                            {orgchtList}
                             </tbody>
                         </table>
                     </div>
@@ -118,7 +174,10 @@ function ManagerOrganizationChartList(props) {
                         <EgovPaging
                             pagination={paginationInfo}
                             moveToPage={(passedPage) => {
-
+                                getOrgchtList({
+                                    ...searchCondition,
+                                    pageIndex: passedPage
+                                })
                             }}
                         />
                         <NavLink
