@@ -7,16 +7,15 @@ import CODE from "@/constants/code";
 
 import ManagerLeft from "@/components/manager/ManagerLeftOperationalSupport";
 import EgovUserPaging from "@/components/EgovUserPaging";
-import OperationalSupport from "./OperationalSupport.jsx";
 import base64 from 'base64-js';
 
 function OperationalRelatedMember(props) {
     const location = useLocation();
-    const [residentMemberList, setAuthorityList] = useState([]);
+    const [relatedMemberList, setAuthorityList] = useState([]);
     const [searchDto, setSearchDto] = useState(
         {
             pageIndex : 1,
-            mvnEntSn : location.state?.mvnEntSn,
+            relInstSn : location.state?.relInstSn,
             actvtnYn: "",
             kornFlnm: "",
             userId: ""
@@ -42,7 +41,7 @@ function OperationalRelatedMember(props) {
 
     const getResidentMemberList = useCallback(
         (searchDto) =>{
-            const getUrl = "/mvnEntApi/getresidentMemberList.do";
+            const getUrl = "/relInstApi/getrelatedMemberList.do";
             const requestOptions = {
                 method: "POST",
                 headers: {
@@ -73,7 +72,7 @@ function OperationalRelatedMember(props) {
                                 <td>
                                     <Link to={URL.MANAGER_RESIDENT_MEMBER_EDIT}
                                           state={{
-                                              mvnEntSn: searchDto.mvnEntSn,
+                                              relInstSn: searchDto.relInstSn,
                                               mode:CODE.MODE_MODIFY,
                                               userSn: item.userSn
                                           }}
@@ -96,7 +95,7 @@ function OperationalRelatedMember(props) {
             )
 
         },
-        [residentMemberList, searchDto]
+        [relatedMemberList, searchDto]
     );
 
     useEffect(() => {
@@ -107,14 +106,14 @@ function OperationalRelatedMember(props) {
         <div id="container" className="container layout cms">
             <ManagerLeft/>
             <div className="inner">
-                <h2 className="pageTitle"><p>입주기업 관리</p></h2>
+                <h2 className="pageTitle"><p>유관기관 관리</p></h2>
                 {/*회사 로고*/}
                 <div className="company_info">
                     <div className="left">
                         <figure className="logo">
                             {/*기업 로고 이미지 추가할 것*/}
                         </figure>
-                        <p className="name" id="mvnEntNm"></p>
+                        <p className="name" id="relInstNm"></p>
                     </div>
                     <ul className="right">
                         <li>
@@ -202,7 +201,7 @@ function OperationalRelatedMember(props) {
                             </tr>
                             </thead>
                             <tbody>
-                            {residentMemberList}
+                            {relatedMemberList}
                             </tbody>
                         </table>
                     </div>

@@ -10,13 +10,13 @@ import EgovPaging from "@/components/EgovPaging";
 import OperationalSupport from "./OperationalSupport.jsx";
 import base64 from 'base64-js';
 
-function OperationalResidentMember(props) {
+function OperationalRelatedMember(props) {
     const location = useLocation();
     const [residentMemberList, setAuthorityList] = useState([]);
     const [searchDto, setSearchDto] = useState(
         {
             pageIndex : 1,
-            mvnEntSn : location.state?.mvnEntSn,
+            relInstSn : location.state?.relInstSn,
             sysMngrYn : "Y",
             actvtnYn: "",
             kornFlnm: "",
@@ -41,9 +41,9 @@ function OperationalResidentMember(props) {
         return new TextDecoder().decode(decodedBytes);
     };
 
-    const getResidentMemberList = useCallback(
+    const getRelatedMemberList = useCallback(
         (searchDto) =>{
-            const getUrl = "/mvnEntApi/getresidentMemberList.do";
+            const getUrl = "/relInstApi/getresidentMemberList.do";
             const requestOptions = {
                 method: "POST",
                 headers: {
@@ -63,7 +63,7 @@ function OperationalResidentMember(props) {
                         </tr>
                     );
 
-                    resp.result.getResidentMemberList.forEach(function (item,index){
+                    resp.result.getRelatedMemberList.forEach(function (item,index){
                         if(index === 0) dataList = [];
                         const decodedPhoneNumber = decodePhoneNumber(item.mblTelno);
 
@@ -74,7 +74,7 @@ function OperationalResidentMember(props) {
                                 <td>
                                     <Link to={URL.MANAGER_RESIDENT_MEMBER_EDIT}
                                           state={{
-                                              mvnEntSn: searchDto.mvnEntSn,
+                                              relInstSn: searchDto.relInstSn,
                                               mode:CODE.MODE_MODIFY,
                                               userSn: item.userSn
                                           }}
@@ -104,7 +104,7 @@ function OperationalResidentMember(props) {
     );
 
     useEffect(() => {
-        getResidentMemberList(searchDto);
+        getRelatedMemberList(searchDto);
     },[]);
 
 
@@ -112,14 +112,14 @@ function OperationalResidentMember(props) {
         <div id="container" className="container layout cms">
             <ManagerLeft/>
             <div className="inner">
-                <h2 className="pageTitle"><p>입주기업 관리</p></h2>
+                <h2 className="pageTitle"><p>유관기관 관리</p></h2>
                 {/*회사 로고*/}
                 <div className="company_info">
                     <div className="left">
                         <figure className="logo">
                             {/*기업 로고 이미지 추가할 것*/}
                         </figure>
-                        <p className="name" id="mvnEntNm"></p>
+                        <p className="name" id="relInstNm"></p>
                     </div>
                     <ul className="right">
                         <li>
@@ -191,7 +191,7 @@ function OperationalResidentMember(props) {
                 {/*본문리스트영역*/}
                 <div className="contBox board type2 customContBox">
                     <div className="topBox">
-                        <p className="resultText"><span className="red">{paginationInfo.totalRecordCount}</span>건의 입주기업 정보가 조회되었습니다.</p>
+                        <p className="resultText"><span className="red">{paginationInfo.totalRecordCount}</span>건의 유관기관 정보가 조회되었습니다.</p>
                     </div>
                     <div className="tableBox type1">
                         <table>
@@ -217,7 +217,7 @@ function OperationalResidentMember(props) {
                         <EgovPaging
                             pagination={paginationInfo}
                             moveToPage={(passedPage) => {
-                                getResidentMemberList({
+                                getRelatedMemberList({
                                     ...searchDto,
                                     pageIndex: passedPage,
                                 });
@@ -244,4 +244,4 @@ function OperationalResidentMember(props) {
     );
 }
 
-export default OperationalResidentMember;
+export default OperationalRelatedMember;
