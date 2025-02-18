@@ -9,6 +9,8 @@ const URL = {
   INTRODUCE: "/introduce",
   INTRODUCE_OPERATIONAL_LIST: "/insi/operationalList",
   INTRODUCE_OPERATIONAL_DETAIL: "/insi/operationaldetail",
+  INTRODUCE_RELATED_LIST: "/insi/relatedList",
+  INTRODUCE_RELATED_DETAIL: "/insi/relateddetail",
   //COMMON
   COMMON_POPUP : "/popup",
   COMMON_CONTENT_VIEW : "/content/view",
