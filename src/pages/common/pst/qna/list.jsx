@@ -21,7 +21,8 @@ function commonPstList(props) {
             bbsSn : location.state?.bbsSn,
             searchType: "",
             searchVal : "",
-            userSn : sessionUser ? sessionUser.userSn : ""
+            userSn : sessionUser ? sessionUser.userSn : "",
+            pageUnit : 10
         }
     );
 
@@ -158,8 +159,9 @@ function commonPstList(props) {
         }
 
         if (modalOpen) {
-            modalOpenEvent()
-            setPst(pst)
+            Swal.fire("비밀글입니다.<br/>작성자 자신만 확인할 수 있습니다.");
+            /*modalOpenEvent()
+            setPst(pst)*/
         }else{
             moveToPstDetail(pst.pstSn)
         }
@@ -218,11 +220,17 @@ function commonPstList(props) {
                                 <div className="itemBox type2">
                                     <select
                                         className="niceSelectCustom"
+                                        onChange={(e) =>
+                                            setSearchDto({
+                                                ...searchDto,
+                                                pageUnit: e.target.value
+                                            })
+                                        }
                                     >
-                                        <option value="15" selected>10건</option>
+                                        <option value="10" selected>10건</option>
                                         <option value="20">20건</option>
-                                        <option value="25">50건</option>
-                                        <option value="30">100건</option>
+                                        <option value="50">50건</option>
+                                        <option value="100">100건</option>
                                     </select>
                                 </div>
                                 <div className="itemBox type2">
