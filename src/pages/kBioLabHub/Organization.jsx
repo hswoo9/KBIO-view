@@ -34,6 +34,13 @@ function KBioLabHub(props) {
       }
   );
 
+    const activeEnter = (e) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            getOrgchtList(searchCondition);
+        }
+    };
+
   useEffect(() => {
     popUpList.forEach((e, i) => {
       const popUp = e.tblBnrPopup;
@@ -255,6 +262,7 @@ function KBioLabHub(props) {
                                     searchVal: e.target.value
                                 })
                             }
+                             onKeyDown={activeEnter}
                       />
                     </label>
                   </div>
