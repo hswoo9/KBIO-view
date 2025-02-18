@@ -196,6 +196,14 @@ function ManagerAccessList(props) {
                         }
                     }
                     resp.result.orgcht.mdfrSn = sessionUser.userSn;
+                    if(resp.result.orgcht.email){
+                        resp.result.orgcht.emailPrefix = "";
+                        resp.result.orgcht.emailProvider = "";
+                        if(resp.result.orgcht.email.indexOf("@") > -1){
+                            resp.result.orgcht.emailPrefix = resp.result.orgcht.email.split("@")[0];
+                            resp.result.orgcht.emailDomain = resp.result.orgcht.email.split("@")[1];
+                        }
+                    }
                     setOrgchtData(resp.result.orgcht);
                 } else {
                     navigate(
@@ -321,19 +329,43 @@ function ManagerAccessList(props) {
                             <div className="input customInputBox">
                                 <input
                                     type="text"
+                                    value={orgchtData.emailPrefix || ""}
+                                    onChange={(e) => setOrgchtData({
+                                        ...orgchtData,
+                                        emailPrefix: e.target.value,
+                                        email: `${e.target.value}@${orgchtData.emailDomain || ''}`
+                                    })}
                                 />
                                 <span>@</span>
                                 <input
                                     type="text"
+                                    value={orgchtData.emailDomain || ""}
                                     disabled={emailMode == "direct" ? false : true}
+                                    onChange={ (e) => {
+                                        setOrgchtData({
+                                            ...orgchtData,
+                                            emailDomain: e.target.value,
+                                            email: `${orgchtData.emailPrefix}@${e.target.value}`
+                                        })
+                                    }}
                                 />
                                 <select className="selectGroup"
                                         id=""
                                         onChange={(e) => {
+                                            const provider = e.target.value;
+                                            const newEmailDomain = provider === "direct" ? "" : provider;
+                                            const newEmail = `${orgchtData.emailPrefix}@${newEmailDomain}`;
+                                            setOrgchtData((prevDetail) => ({
+                                                ...orgchtData,
+                                                emailProvider: provider,
+                                                emailDomain: newEmailDomain,
+                                                email: newEmail
+                                            }));
                                             setEmailMode(
                                                 e.target.value
-                                            )
+                                            );
                                         }}
+                                        value={orgchtData.emailProvider || ""}
                                 >
                                     <option value="">선택하세요</option>
                                     <option value="naver.com">naver.com</option>

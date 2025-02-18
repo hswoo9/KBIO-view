@@ -21,6 +21,7 @@ function commonPstList(props) {
     const [searchDto, setSearchDto] = useState(
         location.state?.searchDto || {
             pageIndex: 1,
+            pstClsf : 10,
             bbsSn : location.state?.bbsSn,
             searchType: "",
             searchVal : "",
@@ -70,6 +71,12 @@ function commonPstList(props) {
                 pstListURL,
                 requestOptions,
                 (resp) => {
+                    if(document.querySelectorAll(".listBox li")){
+                        document.querySelectorAll(".listBox li").forEach((el) => {
+                            el.classList.remove("open");
+                        });
+                    }
+
                     setAuthrt(resp.result.authrt)
                     setBbs(resp.result.bbs);
                     let dataList = [];
@@ -118,7 +125,7 @@ function commonPstList(props) {
     useEffect(() => {
         getPstList(searchDto);
         AOS.init();
-    }, []);
+    }, [searchDto]);
 
     const moveToPstDetail = (pstSn) => {
         navigate(
@@ -190,9 +197,27 @@ function commonPstList(props) {
                             <div className="tabBox type1">
                                 <div className="bg hover"></div>
                                 <ul className="list">
-                                    <li className="active"><a href="#"><span>사이트</span></a></li>
-                                    <li><a href="#"><span>기관</span></a></li>
-                                    <li><a href="#"><span>컨설팅</span></a></li>
+                                    <li className={searchDto.pstClsf == "10" ? "active" : ""}>
+                                        <a href="javascript:void(0)" onClick={() => {
+                                            setSearchDto({...searchDto, pageIndex: 1, pstClsf : "10"})
+                                        }}>
+                                            <span>사이트</span>
+                                        </a>
+                                    </li>
+                                    <li className={searchDto.pstClsf == "11" ? "active" : ""}>
+                                        <a href="javascript:void(0)" onClick={() => {
+                                            setSearchDto({...searchDto, pageIndex: 1, pstClsf : "11"})
+                                        }}>
+                                            <span>기관</span>
+                                        </a>
+                                    </li>
+                                    <li className={searchDto.pstClsf == "12" ? "active" : ""}>
+                                        <a href="javascript:void(0)" onClick={() => {
+                                            setSearchDto({...searchDto, pageIndex: 1, pstClsf : "12"})
+                                        }}>
+                                            <span>컨설팅</span>
+                                        </a>
+                                    </li>
                                 </ul>
                             </div>
                         </form>

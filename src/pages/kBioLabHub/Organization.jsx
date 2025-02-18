@@ -8,6 +8,8 @@ import {getBnrPopupList} from "@/components/main/MainComponents";
 import AOS from "aos";
 import EgovUserPaging from "@/components/EgovUserPaging";
 import * as ComScript from "@/components/CommonScript";
+import { getComCdList } from "@/components/CommonComponents";
+
 
 function KBioLabHub(props) {
   const location = useLocation();
@@ -17,7 +19,7 @@ function KBioLabHub(props) {
   const sessionUserSe = sessionUser?.userSe;
   const sessionUserSn = sessionUser?.userSn;
   const userSn = getSessionItem("userSn");
-
+  const [deptList, setDeptList] = useState([]);
   const [popUpList, setPopUpList] = useState([]);
   const [paginationInfo, setPaginationInfo] = useState({});
   const [orgchtList, setOrgchtList] = useState([]);
@@ -27,8 +29,17 @@ function KBioLabHub(props) {
         pageSize: 5,
         searchCnd: "0",
         searchWrd: "",
+        searchType: "all",
+        searchVal: "",
       }
   );
+
+    const activeEnter = (e) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            getOrgchtList(searchCondition);
+        }
+    };
 
   useEffect(() => {
     popUpList.forEach((e, i) => {
@@ -95,13 +106,36 @@ function KBioLabHub(props) {
       [orgchtList, searchCondition]
   );
 
+    useEffect(() => {
+        getOrgchtList(searchCondition);
+    }, [searchCondition.deptSn]);
+
+    const searchHandle = () => {
+        getOrgchtList(searchCondition);
+    }
+
   useEffect(() => {
     getBnrPopupList("popup").then((data) => {
       setPopUpList(data.filter(e => e.tblBnrPopup.bnrPopupKnd == "popup"));
     });
+      getComCdList(12).then((data) => {
+          if(data != null){
+              let dataList = [];
+              dataList.push(
+                  <option value="" key="nodata">부서</option>
+              )
+              data.forEach(function(item, index){
+                  dataList.push(
+                      <option value={item.comCdSn} key={item.comCdSn}>{item.comCdNm}</option>
+                  )
+              });
+              setDeptList(dataList);
+          }
+      });
+
     AOS.init();
 
-    getOrgchtList(searchCondition);
+
 
   }, []);
 
@@ -112,28 +146,76 @@ function KBioLabHub(props) {
           <div className="inner2">
             <div className="organizationBox" data-aos="fade-up" data-aos-duration="1500">
               <div className="text1">
-                <div className="text type1 move">
+                <div className="text type1 move mouseCursor"
+                  onClick={() => {
+                      setSearchCondition({
+                        ...searchCondition,
+                        deptSn: ""
+                      });
+                    }
+                  }
+                >
                   <strong className="title">사업추진단 협의체</strong>
                   <p className="text">중소벤처기업부 - 인천광역시 - 연세대학교</p>
                 </div>
               </div>
               <div className="textWrap">
-                <div className="text type2 text3">
+                <div className="text type2 text3 mouseCursor"
+                     onClick={() => {
+                           setSearchCondition({
+                             ...searchCondition,
+                             deptSn: 30
+                           });
+                         }
+                     }
+                >
                   <p className="text">건축 TF</p>
                 </div>
                 <div className="textWrap2">
-                  <div className="text type1 text2">
+                  <div className="text type1 text2 mouseCursor"
+                       onClick={() => {
+                           setSearchCondition({
+                               ...searchCondition,
+                               deptSn: 29
+                           });
+                        }
+                       }
+                  >
                     <strong className="title">사업추진단 협의체</strong>
                     <p className="text">단장</p>
                   </div>
                   <ul className="textWrap3">
-                    <li className="text type2 text4">
+                    <li className="text type2 text4 mouseCursor"
+                        onClick={() => {
+                            setSearchCondition({
+                                ...searchCondition,
+                                deptSn: 31
+                            });
+                        }
+                        }
+                    >
                       <p className="text">전략기획팀</p>
                     </li>
-                    <li className="text type2 text5">
+                    <li className="text type2 text5 mouseCursor"
+                        onClick={() => {
+                            setSearchCondition({
+                                ...searchCondition,
+                                deptSn: 41
+                            });
+                        }
+                        }
+                    >
                       <p className="text">경영지원팀</p>
                     </li>
-                    <li className="text type2 text6">
+                    <li className="text type2 text6 mouseCursor"
+                        onClick={() => {
+                            setSearchCondition({
+                                ...searchCondition,
+                                deptSn: 42
+                            });
+                        }
+                        }
+                    >
                       <p className="text">프로그램관리팀</p>
                     </li>
                   </ul>
@@ -145,20 +227,26 @@ function KBioLabHub(props) {
                 <div className="itemBox type2">
                   <select
                       className="niceSelectCustom"
+                      onChange={(e) =>
+                          setSearchCondition({ ...searchCondition, deptSn: e.target.value })
+                      }
+                      value={searchCondition.deptSn || ""}
                   >
-                    <option value="0" selected>부서</option>
-                    <option value="1">예시1</option>
-                    <option value="2">예시2</option>
+                      {deptList}
                   </select>
                 </div>
                 <div className="searchBox">
                   <div className="itemBox type2">
                     <select
                         className="niceSelectCustom"
+                        onChange={(e) =>
+                            setSearchCondition({ ...searchCondition, searchType: e.target.value })
+                        }
+                        value={searchCondition.searchType || "all"}
                     >
-                      <option value="0">전체</option>
-                      <option value="1">분류</option>
-                      <option value="2">제목</option>
+                      <option value="all">전체</option>
+                      <option value="kornFlnm">이름</option>
+                      <option value="tkcgTask">업무</option>
                     </select>
                   </div>
                   <div className="inputBox type1">
@@ -167,10 +255,20 @@ function KBioLabHub(props) {
                              id="board_search"
                              name="board_search"
                              placeholder="검색어를 입력해주세요."
+                             value={searchCondition.searchVal || ""}
+                             onChange={ (e) =>
+                                setSearchCondition({
+                                    ...searchCondition,
+                                    searchVal: e.target.value
+                                })
+                            }
+                             onKeyDown={activeEnter}
                       />
                     </label>
                   </div>
-                  <button type="button" className="searchBtn">
+                  <button type="button" className="searchBtn"
+                          onClick={searchHandle}
+                  >
                     <div className="icon"></div>
                   </button>
                 </div>
@@ -198,10 +296,10 @@ function KBioLabHub(props) {
               <EgovUserPaging
                   pagination={paginationInfo}
                   moveToPage={(passedPage) => {
-                    /*getPstList({
+                    getOrgchtList({
                       ...searchCondition,
                       pageIndex: passedPage
-                    });*/
+                    });
                   }}
               />
             </div>

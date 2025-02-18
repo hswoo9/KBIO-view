@@ -40,10 +40,6 @@ function EgovSubMenu() {
           let dataList = [];
           if(data != null){
             data.forEach(function(item, index){
-                console.log("=======================================");
-                console.log(location.state?.menuSn);
-                console.log(item.menuSn);
-                console.log("=======================================");
               if (index === 0) dataList = [];
               dataList.push(
                   <li key={item.menuSn} onMouseOver={(e) => handleMouseOver(e, index)}

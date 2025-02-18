@@ -9,7 +9,7 @@ import ManagerLeftNew from "@/components/manager/ManagerLeftHomepage";
 import EgovPaging from "@/components/EgovPaging";
 import moment from "moment/moment.js";
 import Swal from 'sweetalert2';
-
+import { getComCdList } from "@/components/CommonComponents";
 import { getSessionItem } from "@/utils/storage";
 
 function ManagerOrganizationChartList(props) {
@@ -21,9 +21,11 @@ function ManagerOrganizationChartList(props) {
             pageIndex: 1,
             searchCnd: "0",
             searchWrd: "",
+            searchType: "kornFlnm",
+            searchVal: "",
         }
     );
-
+    const [deptList, setDeptList] = useState([]);
     const [paginationInfo, setPaginationInfo] = useState({});
     const [orgchtList, setOrgchtList] = useState([]);
     const cndRef = useRef();
@@ -37,6 +39,25 @@ function ManagerOrganizationChartList(props) {
             }
         }
     }, [saveEvent]);
+
+    const searchHandle = () => {
+        getOrgchtList(searchCondition);
+    }
+
+    const activeEnter = (e) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            getOrgchtList(searchCondition);
+        }
+    };
+
+    const searchReset = () => {
+        setSearchCondition({
+            ...searchCondition,
+            searchVal : "",
+            deptSn : ""
+        })
+    }
 
     const getOrgchtList = useCallback(
         (searchCondition) => {
@@ -93,6 +114,21 @@ function ManagerOrganizationChartList(props) {
     );
 
     useEffect(() => {
+        getComCdList(12).then((data) => {
+            if(data != null){
+                let dataList = [];
+                dataList.push(
+                    <option value="" key="nodata">전체</option>
+                )
+                data.forEach(function(item, index){
+                    dataList.push(
+                        <option value={item.comCdSn} key={item.comCdSn}>{item.comCdNm}</option>
+                    )
+                });
+                setDeptList(dataList);
+            }
+        });
+        
         getOrgchtList(searchCondition);
     }, []);
 
@@ -107,24 +143,45 @@ function ManagerOrganizationChartList(props) {
                             <li className="inputBox type1">
                                 <p className="title">부서</p>
                                 <div className="itemBox">
-                                    <select className="selectGroup">
-                                        <option value="">전체</option>
-                                        <option value="Y">사용</option>
-                                        <option value="N">미사용</option>
+                                    <select className="selectGroup"
+                                            onChange={(e) =>
+                                                setSearchCondition({ ...searchCondition, deptSn: e.target.value })
+                                            }
+                                            value={searchCondition.deptSn || ""}
+                                    >
+                                        {deptList}
                                     </select>
                                 </div>
                             </li>
                             <li className="searchBox inputBox type1">
                                 <p className="title">이름</p>
-                                <label className="input"><input type="text" id="search" name="search"
-                                                                placeholder="검색어를 입력해주세요"/></label>
+                                <label className="input">
+                                    <input
+                                        type="text"
+                                        id="search"
+                                        name="search"
+                                        placeholder="검색어를 입력해주세요"
+                                        value={searchCondition.searchVal || ""}
+                                        onChange={ (e) =>
+                                            setSearchCondition({
+                                                ...searchCondition,
+                                                searchVal: e.target.value
+                                            })
+                                        }
+                                        onKeyDown={activeEnter}
+                                    />
+                                </label>
                             </li>
                         </ul>
                         <div className="rightBtn">
-                            <button type="button" className="refreshBtn btn btn1 gray">
+                            <button type="button" className="refreshBtn btn btn1 gray"
+                                onClick={searchReset}
+                            >
                                 <div className="icon"></div>
                             </button>
-                            <button type="button" className="searchBtn btn btn1 point">
+                            <button type="button" className="searchBtn btn btn1 point"
+                                    onClick={searchHandle}
+                            >
                                 <div className="icon"></div>
                             </button>
                         </div>
