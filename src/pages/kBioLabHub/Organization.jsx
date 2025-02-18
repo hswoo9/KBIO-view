@@ -6,6 +6,7 @@ import { getSessionItem, setSessionItem, removeSessionItem } from "@/utils/stora
 import CommonSubMenu from "@/components/CommonSubMenu";
 import {getBnrPopupList} from "@/components/main/MainComponents";
 import AOS from "aos";
+import EgovUserPaging from "@/components/EgovUserPaging";
 
 function KBioLabHub(props) {
   const location = useLocation();
@@ -17,6 +18,15 @@ function KBioLabHub(props) {
   const userSn = getSessionItem("userSn");
 
   const [popUpList, setPopUpList] = useState([]);
+  const [paginationInfo, setPaginationInfo] = useState({});
+  const [searchCondition, setSearchCondition] = useState(
+      location.state?.searchCondition || {
+        pageIndex: 1,
+        pageSize: 5,
+        searchCnd: "0",
+        searchWrd: "",
+      }
+  );
 
   useEffect(() => {
     popUpList.forEach((e, i) => {
@@ -180,15 +190,15 @@ function KBioLabHub(props) {
               </table>
             </div>
             <div className="pageWrap">
-              <ul className="pageList">
-                <li className="first arrow disabled"><a href="#"><span>처음</span></a></li>
-                <li className="prev arrow disabled"><a href="#"><span>이전</span></a></li>
-                <li className="now num"><a href="#"><span>1</span></a></li>
-                <li className="num"><a href="#"><span>2</span></a></li>
-                <li className="num"><a href="#"><span>3</span></a></li>
-                <li className="next arrow"><a href="#"><span>다음</span></a></li>
-                <li className="last arrow"><a href="#"><span>마지막</span></a></li>
-              </ul>
+              <EgovUserPaging
+                  pagination={paginationInfo}
+                  moveToPage={(passedPage) => {
+                    /*getPstList({
+                      ...searchCondition,
+                      pageIndex: passedPage
+                    });*/
+                  }}
+              />
             </div>
           </div>
         </div>

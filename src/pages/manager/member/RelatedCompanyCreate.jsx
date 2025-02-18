@@ -12,9 +12,6 @@ import CommonEditor from "@/components/CommonEditor";
 
 import ManagerLeft from "@/components/manager/ManagerLeftOperationalSupport";
 
-import ResidentMemberCreateContent from "./ResidentMemberCreateContent.jsx";
-
-
 
 function RelatedCompanyCreate(props){
     const location = useLocation();
@@ -79,7 +76,7 @@ function RelatedCompanyCreate(props){
             return;
         }
 
-        const getRcURL = '/mvnEntApi/getRc';
+        const getRcURL = '/relatedApi/getRc';
         const requestOptions = {
             method: "POST",
             headers: {
@@ -260,7 +257,7 @@ function RelatedCompanyCreate(props){
 
 
     //등록and수정
-    const updateResident = () => {
+    const updateRelated = () => {
         let requestOptions = {};
 
         if (!relatedDetail.brno) {
@@ -668,7 +665,7 @@ function RelatedCompanyCreate(props){
                     <div className="leftBox">
                         <button
                             type="button" className="clickBtn point"
-                            onClick={()=>updateResident()}
+                            onClick={()=>updateRelated()}
                         >
                             저장
                         </button>

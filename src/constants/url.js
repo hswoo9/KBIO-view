@@ -202,8 +202,8 @@ const URL = {
   RESIDENT_COMPANY_CREATE:"/manager/residentCompanyCreate", //회원관리/입주기업 /입주기업 등록
   RESIDENT_COMPANY_MODIFY:"/manager/residentCompanyModify",
 
-  RELATED_COMPANY_CREATE:"/manager/relatedCompanyCreate", //회원관리/입주기업 /입주기업 등록
-
+  RELATED_COMPANY_CREATE:"/manager/relatedCompanyCreate",
+  RELATED_COMPANY_MODIFY:"/manager/relatedCompanyModify",
 
   //MYPAGE
   MYPAGE_MODIFY: "/mypage/modify", // 고객지원/마이페이지/회원 수정
@@ -234,7 +234,9 @@ const URL = {
 
   //운영지원
   MANAGER_OPERATIONAL_SUPPORT: "/manager/operationalSupport", //운영지원/입주기업관리
+  MANAGER_RELATED_MANAGER: "/manager/relatedMemberManage",
   MANAGER_RESIDENT_MANAGER: "/manager/residentMemberManage", //운영지원/입주기업관리/관리자설정
+  MANAGER_RELATED_MEMBER : "/manager/relatedMember",
   MANAGER_RESIDENT_MEMBER : "/manager/residentMember", //운영지원/입주기업관리/직원목록
   MANAGER_RESIDENT_MEMBER_EDIT : "/manager/residentMemberEdit",  //운영지원/입주기업관리/직원목록/직원상세
   MANAGER_RELATED_ORGANIZATION : "/manager/relatedOrganization", //운영지원/유관기관관리

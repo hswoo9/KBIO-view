@@ -73,9 +73,9 @@ function OperationalRelatedOrganization(props) {
                                     {item.bzstatNm}
                                 </td>
                                 <td>
-                                    <Link to={{pathname: URL.RESIDENT_COMPANY_MODIFY}}
+                                    <Link to={{pathname: URL.RELATED_COMPANY_MODIFY}}
                                           state={{
-                                              rel: item.relInstSn,
+                                              relInstSn: item.relInstSn,
                                               mode:CODE.MODE_MODIFY
                                           }}
                                     >
@@ -87,7 +87,7 @@ function OperationalRelatedOrganization(props) {
                                 <td>{item.clsNm}</td>
                                 <td>{item.actvtnYn === "Y" ? "공개" : "비공개"}</td>
                                 <td>
-                                    <Link to={URL.MANAGER_RESIDENT_MANAGER}
+                                    <Link to={URL.MANAGER_RELATED_MANAGER}
                                           state={{relInstSn: item.relInstSn,
                                               rpsvNm : item.rpsvNm,
                                               entTelno : item.entTelno,
@@ -96,7 +96,7 @@ function OperationalRelatedOrganization(props) {
                                     </Link>
                                 </td>
                                 <td>
-                                    <Link to={URL.MANAGER_RESIDENT_MEMBER}
+                                    <Link to={URL.MANAGER_RELATED_MEMBER}
                                           state={{relInstSn: item.relInstSn,
                                               rpsvNm : item.rpsvNm,
                                               entTelno : item.entTelno,
