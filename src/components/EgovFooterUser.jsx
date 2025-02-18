@@ -6,17 +6,33 @@ import {getBnrPopupList} from "@/components/main/MainComponents";
 
 function EgovFooterUser() {
   const [comCdList, setComCdList] = useState([]);
+  const [familySiteList, setFamilySiteList] = useState([]);
   const [bannerList, setBannerList] = useState([]);
 
   useEffect(() => {
-    getBnrPopupList("bnr").then((data) => {
+    /*getBnrPopupList("bnr").then((data) => {
       setBannerList(data.filter(e => e.tblBnrPopup.bnrPopupFrm == "footSlides"));
-    });
+    });*/
   }, []);
 
   useEffect(() => {
     getComCdList(6).then((data) => {
       setComCdList(data);
+    })
+
+    getComCdList(16).then((data) => {
+      if(data != null){
+        let dataList = [];
+        data.forEach(function(item, index){
+          console.log(item);
+          dataList.push(
+              <option value={item.etcMttr1} key={item.comCdSn}>{item.comCdNm}</option>
+          )
+
+        });
+        setFamilySiteList(dataList);
+      }
+
     })
   }, []);
 
@@ -72,13 +88,16 @@ function EgovFooterUser() {
             <div className="right">
               <div className="familySiteWrap">
                 <div className="itemBox">
-                  <select className="selectGroup footerSelect">
-                    <option value="0">패밀리 사이트 바로가기</option>
-                    <option value="1">예시1</option>
-                    <option value="2">예시2</option>
-                    <option value="3">예시3</option>
-                    <option value="4">예시4</option>
-                    <option value="5">예시5</option>
+                  <select className="selectGroup footerSelect"
+                    onChange={(e) => {
+                        if (e.target.value != "") {
+                          window.open(e.target.value);
+                        }
+                      }
+                    }
+                  >
+                    <option value="">패밀리 사이트 바로가기</option>
+                    {familySiteList}
                   </select>
                 </div>
               </div>
