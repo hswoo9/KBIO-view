@@ -215,7 +215,7 @@ function MainCalendar() {
     }
 
     useEffect(() => {
-        getBbsInPst(null, "0", "Y", userSn, format(selectDate, "yyyy-MM")).then((data) => {
+        getBbsInPst(null, "0", "Y", userSn, format(selectDate, "yyyy-MM-dd")).then((data) => {
             let bbsList = [];
             let tabList = [];
             let calList = [];
