@@ -291,6 +291,12 @@ function ManagerCnslttCnsltList({ cnsltSe, userSn }) {
                             });
                         }}
                     />
+
+                    <Link
+                        to={URL.MANAGER_CONSULTING_EXPERT}
+                    >
+                        <button type="button" className="clickBtn black"><span>목록</span></button>
+                    </Link>
                 </div>
             </div>
             </div>
