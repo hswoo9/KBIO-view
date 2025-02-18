@@ -27,7 +27,7 @@ function EgovSubMenu() {
             if (closestElement) {
                 const closestElementRect = closestElement.getBoundingClientRect();
                 hoverRef.current.style.width = `${closestElementRect.width}px`;
-                hoverRef.current.style.height = `${closestElementRect.height}px`;
+                hoverRef.current.style.height = `${closestParentDivRect.height}px`;
                 hoverRef.current.style.left = `${closestElementRect.left - closestParentDivRect.left}px`;
                 hoverRef.current.style.top = `0px`;
                 hoverRef.current.style.opacity = `1`;
