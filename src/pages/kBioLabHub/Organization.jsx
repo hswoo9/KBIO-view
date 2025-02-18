@@ -181,13 +181,13 @@ function KBioLabHub(props) {
             </div>
             <div className="pageWrap">
               <ul className="pageList">
-                <li className="first arrow disabled"><a href="javascript:;"><span>처음</span></a></li>
-                <li className="prev arrow disabled"><a href="javascript:;"><span>이전</span></a></li>
-                <li className="now num"><a href="javascript:;"><span>1</span></a></li>
-                <li className="num"><a href="javascript:;"><span>2</span></a></li>
-                <li className="num"><a href="javascript:;"><span>3</span></a></li>
-                <li className="next arrow"><a href="javascript:;"><span>다음</span></a></li>
-                <li className="last arrow"><a href="javascript:;"><span>마지막</span></a></li>
+                <li className="first arrow disabled"><a href="#"><span>처음</span></a></li>
+                <li className="prev arrow disabled"><a href="#"><span>이전</span></a></li>
+                <li className="now num"><a href="#"><span>1</span></a></li>
+                <li className="num"><a href="#"><span>2</span></a></li>
+                <li className="num"><a href="#"><span>3</span></a></li>
+                <li className="next arrow"><a href="#"><span>다음</span></a></li>
+                <li className="last arrow"><a href="#"><span>마지막</span></a></li>
               </ul>
             </div>
           </div>
