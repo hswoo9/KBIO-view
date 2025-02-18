@@ -24,6 +24,9 @@ function ManagerCodeGroup(props) {
             pageIndex: 1,
             searchCnd: "0",
             searchWrd: "",
+            actvtnYn: "",
+            searchType: "",
+            searchVal: ""
         }
     );
 
@@ -42,6 +45,26 @@ function ManagerCodeGroup(props) {
             }
         }
     }, [saveEvent]);
+
+    const searchHandle = () => {
+        getCodeGroupList(searchCondition);
+    }
+
+    const activeEnter = (e) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            getCodeGroupList(searchCondition);
+        }
+    };
+
+    const searchReset = () => {
+        setSearchCondition({
+            ...searchCondition,
+            actvtnYn: "",
+            searchType: "",
+            searchVal: ""
+        })
+    }
 
     const delBtnEvent = (cdGroupSn) => {
         Swal.fire({
@@ -201,7 +224,15 @@ function ManagerCodeGroup(props) {
                             <li className="inputBox type1">
                                 <p className="title">활성여부</p>
                                 <div className="itemBox">
-                                    <select className="selectGroup">
+                                    <select className="selectGroup"
+                                        value={searchCondition.actvtnYn || ""}
+                                        onChange={ (e) => {
+                                            setSearchCondition({
+                                                ...searchCondition,
+                                                actvtnYn: e.target.value
+                                            })
+                                        }}
+                                    >
                                         <option value="">전체</option>
                                         <option value="Y">사용</option>
                                         <option value="N">미사용</option>
@@ -211,23 +242,50 @@ function ManagerCodeGroup(props) {
                             <li className="inputBox type1">
                                 <p className="title">키워드</p>
                                 <div className="itemBox">
-                                    <select className="selectGroup">
+                                    <select
+                                        className="selectGroup"
+                                        value={searchCondition.searchType || ""}
+                                        onChange={ (e) => {
+                                            setSearchCondition({
+                                                ...searchCondition,
+                                                searchType: e.target.value
+                                            })
+                                        }}
+                                    >
                                         <option value="">전체</option>
                                         <option value="cdGroup">코드그룹</option>
-                                        <option value="cdGroup">코드그룹명</option>
+                                        <option value="cdGroupNm">코드그룹명</option>
                                     </select>
                                 </div>
                             </li>
                             <li className="searchBox inputBox type1">
-                                <label className="input"><input type="text" id="search" name="search"
-                                                                placeholder="검색어를 입력해주세요"/></label>
+                                <label className="input">
+                                    <input
+                                        type="text"
+                                        id="search"
+                                        name="search"
+                                        placeholder="검색어를 입력해주세요"
+                                        value={searchCondition.searchVal || ""}
+                                        onChange={ (e) =>
+                                            setSearchCondition({
+                                                ...searchCondition,
+                                                searchVal: e.target.value
+                                            })
+                                        }
+                                        onKeyDown={activeEnter}
+                                    />
+                                </label>
                             </li>
                         </ul>
                         <div className="rightBtn">
-                            <button type="button" className="refreshBtn btn btn1 gray">
+                            <button type="button" className="refreshBtn btn btn1 gray"
+                                    onClick={searchReset}
+                            >
                                 <div className="icon"></div>
                             </button>
-                            <button type="button" className="searchBtn btn btn1 point">
+                            <button type="button" className="searchBtn btn btn1 point"
+                                    onClick={searchHandle}
+                            >
                                 <div className="icon"></div>
                             </button>
                         </div>
