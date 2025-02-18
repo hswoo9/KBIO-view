@@ -122,7 +122,11 @@ function commonPstList(props) {
                                             {resp.paginationInfo.totalRecordCount - (resp.paginationInfo.currentPageNo - 1) * resp.paginationInfo.pageSize - index}
                                         </p>)}
                                 </td>
-                                <td className="cate"></td>
+                                {resp.result.bbs.pstCtgryYn == "Y" && (
+                                    <td className="cate">
+                                        {item.pstClsfNm}
+                                    </td>
+                                )}
                                 <td className="title">
                                     <div className="text"
                                          onClick={() => {
@@ -227,7 +231,7 @@ function commonPstList(props) {
 
     return (
         <div id="container" className="container notice board">
-            <div className="inner">
+            <div className="inner" key={bbsSn}>
                 <CommonSubMenu/>
                 <div className="inner2">
                     <div className="searchFormWrap type1" data-aos="fade-up" data-aos-duration="1500">
@@ -306,7 +310,9 @@ function commonPstList(props) {
                             <thead>
                             <tr>
                                 <th className="th1">번호</th>
-                                <th className="th1">분류</th>
+                                {bbs.pstCtgryYn == "Y" && (
+                                    <th className="th1">분류</th>
+                                )}
                                 <th></th>
                                 <th className="th1">조회수</th>
                             </tr>
