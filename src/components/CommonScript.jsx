@@ -1,3 +1,7 @@
+/**
+ * 모달창 열기
+ * @param className
+ */
 export function openModal(className) {
     const element = document.querySelector("." + className);
     console.log(element);
@@ -14,6 +18,10 @@ export function openModal(className) {
     }
 }
 
+/**
+ * 모달창 닫기
+ * @param className
+ */
 export function closeModal(className) {
     const element = document.querySelector("." + className);
     console.log(element);
@@ -32,6 +40,7 @@ export function closeModal(className) {
 
 /**
  * 연락처 - 추가
+ * telNumber 숫자 ( ex 01012341234 )
  */
 export function formatTelNumber(telNumber){
     if (!telNumber) return "";
