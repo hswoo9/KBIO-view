@@ -281,7 +281,7 @@ function commonPstDetail(props) {
                               <span>답변</span>
                             </Link>
                         )}
-                        {authrt.mdfcnAuthrt == "Y" && (
+                        {(authrt.mdfcnAuthrt == "Y" || pst.creatrSn == sessionUser?.userSn) && (
                             <Link
                                 to={URL.COMMON_PST_QNA_MODIFY}
                                 mode={CODE.MODE_MODIFY}
@@ -296,7 +296,7 @@ function commonPstDetail(props) {
                               <span>수정</span>
                             </Link>
                         )}
-                        {authrt.delAuthrt == "Y" && (
+                        {(authrt.delAuthrt == "Y" || pst.creatrSn == sessionUser?.userSn) && (
                             <button type="button" className="clickBtn red"
                                     onClick={() => {
                                       setPstDel(pst.pstSn);

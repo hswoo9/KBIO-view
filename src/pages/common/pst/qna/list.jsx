@@ -158,8 +158,9 @@ function commonPstList(props) {
         }
 
         if (modalOpen) {
-            modalOpenEvent()
-            setPst(pst)
+            Swal.fire("비밀글입니다.<br/>작성자 자신만 확인할 수 있습니다.");
+            /*modalOpenEvent()
+            setPst(pst)*/
         }else{
             moveToPstDetail(pst.pstSn)
         }
