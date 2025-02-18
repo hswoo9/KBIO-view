@@ -316,31 +316,29 @@ function commonPstDetail(props) {
                           <li className="name"><p>{pst.tblUser?.kornFlnm}</p></li>
                         </ul>
                       </div>
-                      <ul className="fileBox">
-                        {pst.pstFiles != null && pst.pstFiles.length > 0 && (
-                            <>
-                              {pst.pstFiles.map((file, index) => (
-                                  <li key={index}>
-                                    <a
-                                        onClick={() => fileDownLoad(file.atchFileSn, file.atchFileNm, 'tbl_bbs', pst.bbsSn)}
-                                        style={{cursor: "pointer"}}>
-                                      <div className="icon"></div>
-                                      <p className="name">{file.atchFileNm}</p>
-                                      <span className="size">{(file.atchFileSz / 1024).toFixed(2)} KB</span>
-                                    </a>
-                                  </li>
-                              ))}
-                            </>
-                        )}
-                        {/*{pst.pstFiles != null && pst.pstFiles.length > 0 && (
-                            <button
-                                type="button"
-                                className="clickBtn"
-                                onClick={() => fileZipDownLoad("pst_" + pst.pstSn, pst.pstTtl, 'tbl_bbs', pst.bbsSn)}>
-                              압축
-                            </button>
-                        )}*/}
-                      </ul>
+                      {pst.pstFiles != null && pst.pstFiles.length > 0 && (
+                          <ul className="fileBox">
+                            {pst.pstFiles.map((file, index) => (
+                                <li key={index}>
+                                  <a
+                                      onClick={() => fileDownLoad(file.atchFileSn, file.atchFileNm, 'tbl_bbs', pst.bbsSn)}
+                                      style={{cursor: "pointer"}}>
+                                    <div className="icon"></div>
+                                    <p className="name">{file.atchFileNm}</p>
+                                    <span className="size">{(file.atchFileSz / 1024).toFixed(2)} KB</span>
+                                  </a>
+                                </li>
+                            ))}
+                          </ul>
+                      )}
+                      {/*{pst.pstFiles != null && pst.pstFiles.length > 0 && (
+                          <button
+                              type="button"
+                              className="clickBtn"
+                              onClick={() => fileZipDownLoad("pst_" + pst.pstSn, pst.pstTtl, 'tbl_bbs', pst.bbsSn)}>
+                            압축
+                          </button>
+                      )}*/}
                     </th>
                   </tr>
                 </thead>
