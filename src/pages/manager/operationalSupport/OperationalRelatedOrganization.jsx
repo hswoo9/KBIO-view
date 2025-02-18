@@ -24,7 +24,7 @@ function OperationalRelatedOrganization(props) {
         location.state?.searchDto || {
             pageIndex: 1,
             brno: "",
-            mvnEntNm : "",
+            RelInstNm : "",
             rpsvNm : "",
         }
     );
@@ -96,14 +96,14 @@ function OperationalRelatedOrganization(props) {
                                     </Link>
                                 </td>
                                 <td>
-                                    <Link to={URL.MANAGER_RELATED_MEMBER}
+                                    <NavLink to={URL.MANAGER_RELATED_MEMBER}
                                           state={{relInstSn: item.relInstSn,
                                               rpsvNm : item.rpsvNm,
                                               entTelno : item.entTelno,
                                               clsNm : item.clsNm
                                           }}>
                                         <button type="button" className="listBtn"><span>직원 목록</span></button>
-                                    </Link>
+                                    </NavLink>
                                 </td>
                             </tr>
                         );
@@ -186,7 +186,7 @@ function OperationalRelatedOrganization(props) {
                                         const value = e.target.value;
                                         const optionMap = {
                                             "0":"",
-                                            "1": "mvnEntNm",
+                                            "1": "RelInstNm",
                                             "2": "rpsvNm",
                                             //추가되면 아래로 더 추가
                                         };
@@ -224,7 +224,7 @@ function OperationalRelatedOrganization(props) {
                                     getRcList({
                                         ...searchDto,
                                         pageIndex: 1,
-                                        mvnEntNm : "",
+                                        RelInstNm : "",
                                         rpsvNm : "",
                                     });
                                 }}

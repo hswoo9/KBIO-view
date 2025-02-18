@@ -43,7 +43,7 @@ function OperationalRelatedMember(props) {
 
     const getRelatedMemberList = useCallback(
         (searchDto) =>{
-            const getUrl = "/relInstApi/getresidentMemberList.do";
+            const getUrl = "/relatedApi/getRelatedtMemberList.do";
             const requestOptions = {
                 method: "POST",
                 headers: {
