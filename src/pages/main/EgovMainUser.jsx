@@ -196,14 +196,30 @@ function EgovMainUser(props) {
             <div className="box noticeBox" data-aos="fade-in">
               <div className="topBox" data-aos="fade-in" data-aos-duration="1500">
                 <h2 className="secTitle">공지사항</h2>
-                <a href="#" className="plusBtn">
+                <NavLink
+                    to={URL.COMMON_PST_NORMAL_LIST}
+                    state={{
+                      menuSn: 32,
+                      thisMenuSn: 38,
+                      bbsSn: 1,
+                      menuNmPath: "커뮤니티 > 공지사항"
+                    }}
+                    className="plusBtn">
                   <div className="icon"></div>
-                </a>
+                </NavLink>
               </div>
               <ul className="listBox" data-aos="fade-up" data-aos-duration="1500">
                 {notiList.length > 0 && notiList.map((pst, index) => (
                   <li key={pst.pstSn}>
-                    <a href="#">
+                    <NavLink
+                      to={URL.COMMON_PST_NORMAL_DETAIL}
+                      state={{
+                        pstSn : pst.pstSn,
+                        menuSn: 32,
+                        thisMenuSn: 38,
+                        menuNmPath : "커뮤니티 > 공지사항"
+                      }}
+                    >
                       {pst.upendNtcYn == "Y" ?
                           <span className="cate">공지</span> :
                           <span className="cate etc">일반</span>
@@ -215,7 +231,7 @@ function EgovMainUser(props) {
                       <div className="textBox">
                         <p style={{minHeight : "77px"}} dangerouslySetInnerHTML={{__html: pst.pstCn.replace(/<\/?[^>]+(>|$)/g, " ")}}></p>
                       </div>
-                    </a>
+                    </NavLink>
                   </li>
                 ))}
               </ul>
@@ -223,14 +239,31 @@ function EgovMainUser(props) {
             <div className="box pressBox" data-aos="fade-in">
               <div className="topBox" data-aos="fade-in" data-aos-duration="1500">
                 <h2 className="secTitle">보도자료</h2>
-                <a href="#" className="plusBtn">
+                <NavLink
+                    to={URL.COMMON_PST_NORMAL_LIST}
+                    state={{
+                      menuSn: 32,
+                      thisMenuSn: 62,
+                      bbsSn: 8,
+                      menuNmPath: "커뮤니티 > 보도자료"
+                    }}
+                    className="plusBtn"
+                >
                   <div className="icon"></div>
-                </a>
+                </NavLink>
               </div>
               <ul className="listBox" data-aos="fade-up" data-aos-duration="1500">
                 {pressReleaseList.length > 0 && pressReleaseList.map((pst, index) => (
                     <li key={pst.pstSn}>
-                      <a href="#">
+                      <NavLink
+                        to={URL.COMMON_PST_NORMAL_DETAIL}
+                        state={{
+                          pstSn : pst.pstSn,
+                          menuSn: 32,
+                          thisMenuSn: 62,
+                          menuNmPath : "커뮤니티 > 보도자료"
+                        }}
+                      >
                         {pst.upendNtcYn == "Y" ?
                             <span className="cate">공지</span> :
                             <span className="cate etc">일반</span>
@@ -242,7 +275,7 @@ function EgovMainUser(props) {
                         <div className="textBox">
                           <p style={{minHeight : "77px"}} dangerouslySetInnerHTML={{__html: pst.pstCn.replace(/<\/?[^>]+(>|$)/g, " ")}}></p>
                         </div>
-                      </a>
+                      </NavLink>
                     </li>
                 ))}
               </ul>
