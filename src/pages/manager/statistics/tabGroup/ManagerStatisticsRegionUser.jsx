@@ -21,8 +21,7 @@ import {
 import * as EgovNet from "../../../../api/egovFetch.js";
 import LoadingSpinner from "../../../../components/LoadingSpinner.jsx";
 
-function ManagerStatisticsRegionUser({onLoad}) {
-    const [isLoading, setIsLoading] = useState(true);  // 로딩 상태
+function ManagerStatisticsRegionUser(props) {
 
     const nowDate = new Date();
     const korRegion = {
@@ -115,8 +114,7 @@ function ManagerStatisticsRegionUser({onLoad}) {
     const series = chartData;
 
     const getStatistics = () => {
-        setIsLoading(true);
-
+        props.onCallback("isLoading");
         const searchCategory = document.querySelector(".region #searchCategory").value;
         const startDt = document.querySelector(".region li#" + searchCategory + "Div #startDate").value;
         const endDt = document.querySelector(".region li#" + searchCategory + "Div #endDate").value;
@@ -148,7 +146,6 @@ function ManagerStatisticsRegionUser({onLoad}) {
         };
 
         EgovNet.requestFetch("/statisticsApi/getStatistics.do", requestOptions, function (resp) {
-            console.log(resp)
             resp.result.rs.sort(function(a, b) {
                 var indexA = korRegion[a.region]; // a의 지역 인덱스
                 var indexB = korRegion[b.region]; // b의 지역 인덱스
@@ -253,7 +250,7 @@ function ManagerStatisticsRegionUser({onLoad}) {
         setCategories(newCategories);
         setChartData(newChartData);
         setRegionUserList(dataList);
-        setIsLoading(false);
+        props.onCallback();
     }
 
     useEffect(() => {
@@ -269,9 +266,7 @@ function ManagerStatisticsRegionUser({onLoad}) {
                 }
             `}
             </style>
-            {isLoading &&
-                <LoadingSpinner />
-            }
+
             <div className="cateWrap">
                 <form action="">
                     <ul className="cateList">

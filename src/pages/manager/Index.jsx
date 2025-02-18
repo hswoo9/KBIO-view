@@ -281,7 +281,7 @@ function Index(props) {
                             <NavLink
                                 to={URL.MANAGER_RELATED_ORGANIZATION}
                                 className="tt2">
-                                <span>0</span>
+                                <span>{status.relInstCnt}</span>
                             </NavLink>
                         </li>
                         <li>
