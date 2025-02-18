@@ -27,7 +27,7 @@ function ManagerCodeGroup(props) {
             searchWrd: "",
             cdGroupSn: location.state?.cdGroupSn,
             actvtnYn: "",
-            searchType: "",
+            searchType: "all",
             searchVal: ""
         }
     );
@@ -54,7 +54,7 @@ function ManagerCodeGroup(props) {
         setSearchCondition({
             ...searchCondition,
             actvtnYn: "",
-            searchType: "",
+            searchType: "all",
             searchVal: ""
         })
     }
@@ -233,7 +233,7 @@ function ManagerCodeGroup(props) {
                                                 })
                                             }}
                                     >
-                                        <option value="">전체</option>
+                                        <option value="all">전체</option>
                                         <option value="comCd">코드</option>
                                         <option value="comCdNm">코드명</option>
                                     </select>
