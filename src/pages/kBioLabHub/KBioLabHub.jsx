@@ -23,6 +23,7 @@ function KBioLabHub(props) {
         { state: {
             menuSn : location.state?.menuSn,
             menuNmPath : location.state?.menuNmPath,
+            thisMenuSn: 49,
           } },
         { mode:  CODE.MODE_READ}
     );
@@ -31,7 +32,6 @@ function KBioLabHub(props) {
   return (
       <div id="container" className="container layout">
         <div className="inner">
-          <CommonSubMenu/>
         </div>
       </div>
   );

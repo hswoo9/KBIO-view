@@ -22,6 +22,7 @@ function Community(props) {
         { pathname: URL.COMMON_PST_NORMAL_LIST},
         { state: {
             bbsSn:  1,
+            thisMenuSn: 38,
             menuSn : location.state?.menuSn,
             menuNmPath : location.state?.menuNmPath,
           } },
@@ -32,7 +33,6 @@ function Community(props) {
   return (
       <div id="container" className="container layout">
         <div className="inner">
-          <CommonSubMenu/>
         </div>
       </div>
   );
