@@ -70,6 +70,7 @@ function ManagerStatisticsUser(props) {
     }
 
     const getStatistics = (p, d) => {
+        setIsLoading(true);
         const searchCategory = document.querySelector("#searchCategory").value;
         const startDt = document.querySelector("li#" + searchCategory + "Div #startDate").value;
         const endDt = document.querySelector("li#" + searchCategory + "Div #endDate").value;

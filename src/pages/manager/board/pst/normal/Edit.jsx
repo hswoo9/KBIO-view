@@ -359,7 +359,7 @@ function setPst(props) {
                         <input type="date"
                                id="ntcBgngDt"
                                name="ntcBgngDt"
-                               value={moment(pstDetail.ntcBgngDt).format('YYYY-MM-DD')}
+                               value={moment(pstDetail.ntcBgngDt).format('YYYY-MM-DD') || ""}
                                onChange={(e) =>
                                    setPstDetail({...pstDetail, ntcBgngDt: moment(e.target.value).format('YYYYMMDD')})
                                }
@@ -373,7 +373,7 @@ function setPst(props) {
                         <input type="date"
                                id="ntcEndDate"
                                name="ntcEndDate"
-                               value={moment(pstDetail.ntcEndDate).format('YYYY-MM-DD')}
+                               value={moment(pstDetail.ntcEndDate).format('YYYY-MM-DD') || ""}
                                onChange={(e) =>
                                    setPstDetail({...pstDetail, ntcEndDate: moment(e.target.value).format('YYYYMMDD')})
                                }

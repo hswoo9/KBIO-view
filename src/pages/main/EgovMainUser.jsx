@@ -94,7 +94,8 @@ function EgovMainUser(props) {
   };
 
   const [mvnEntList, setMvnEntList] = useState([]);
-  const [pstList, setPstList] = useState([]);
+  const [notiList, setNotiList] = useState([]);
+  const [pressReleaseList , setPressReleaseList] = useState([]);
 
   useEffect(() => {
     popUpList.forEach((e, i) => {
@@ -124,7 +125,11 @@ function EgovMainUser(props) {
     });
 
     getPstList(1).then((data) => {
-      setPstList(data.pstList);
+      setNotiList(data.pstList);
+    });
+
+    getPstList(8).then((data) => {
+      setPressReleaseList(data.pstList);
     });
 
     AOS.init();
@@ -196,7 +201,7 @@ function EgovMainUser(props) {
                 </a>
               </div>
               <ul className="listBox" data-aos="fade-up" data-aos-duration="1500">
-                {pstList.length > 0 && pstList.map((pst, index) => (
+                {notiList.length > 0 && notiList.map((pst, index) => (
                   <li key={pst.pstSn}>
                     <a href="#">
                       {pst.upendNtcYn == "Y" ?
@@ -208,7 +213,7 @@ function EgovMainUser(props) {
                         <p className="date">{moment(pst.frstCrtDt).format('YYYY-MM-DD')}</p>
                       </div>
                       <div className="textBox">
-                        <p style={{minHeight : "77px"}}>{pst.pstCn.replace(/<\/?[^>]+(>|$)/g, "")}</p>
+                        <p style={{minHeight : "77px"}} dangerouslySetInnerHTML={{__html: pst.pstCn.replace(/<\/?[^>]+(>|$)/g, " ")}}></p>
                       </div>
                     </a>
                   </li>
@@ -223,32 +228,23 @@ function EgovMainUser(props) {
                 </a>
               </div>
               <ul className="listBox" data-aos="fade-up" data-aos-duration="1500">
-                <li>
-                  <a href="#">
-                    <span className="cate etc">기타</span>
-                    <div className="titleBox">
-                      <h3 className="title">[한국보건복지인재원] 국가인적자원개발 컨소시엄 사업 및 찾아가는 교육 안내</h3>
-                      <p className="date">2022.12.30</p>
-                    </div>
-                    <div className="textBox">
-                      <p>한국보건복지인재원에서 국가인적자원개발 컨소시엄 사업의 일환으로 <br/>제약, 화장품, 의료기기 등 바이오헬스 관련 기업의 재직자를 대상으로 직무향상 <br/>교육을
-                        무료로 제공하고 있습니다. 많은 관심 부탁드립니다.</p>
-                    </div>
-                  </a>
-                </li>
-                <li>
-                  <a href="#">
-                    <span className="cate">일반</span>
-                    <div className="titleBox">
-                      <h3 className="title">2024 한-덴 의약바이오 & CMC 혁신 기술포럼 개최 안내 (11.20, 수)</h3>
-                      <p className="date">2022.12.30</p>
-                    </div>
-                    <div className="textBox">
-                      <p>한국과 덴마크의 바이오텍 및 제약 분야 전문가들이 모여 CMC분야의 최신 동향을 살펴보고, 다양한 혁신 주체 간의 소통을 통해 글로벌 협력 방안을 논의할
-                        예정입니다. <br/>많은 관심과 참여 부탁드립니다.</p>
-                    </div>
-                  </a>
-                </li>
+                {pressReleaseList.length > 0 && pressReleaseList.map((pst, index) => (
+                    <li key={pst.pstSn}>
+                      <a href="#">
+                        {pst.upendNtcYn == "Y" ?
+                            <span className="cate">공지</span> :
+                            <span className="cate etc">일반</span>
+                        }
+                        <div className="titleBox">
+                          <h3 className="title">{pst.pstTtl}</h3>
+                          <p className="date">{moment(pst.frstCrtDt).format('YYYY-MM-DD')}</p>
+                        </div>
+                        <div className="textBox">
+                          <p style={{minHeight : "77px"}} dangerouslySetInnerHTML={{__html: pst.pstCn.replace(/<\/?[^>]+(>|$)/g, " ")}}></p>
+                        </div>
+                      </a>
+                    </li>
+                ))}
               </ul>
             </div>
           </div>
