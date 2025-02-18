@@ -31,6 +31,19 @@ function ManagerAccessList(props) {
     const searchValRef = useRef();
     const actvtnYnRef = useRef();
 
+    const searchHandle = () => {
+        getMngrAcsIpList(searchDto);
+    }
+
+    const searchReset = () => {
+        setSearchDto({
+            ...searchDto,
+            actvtnYn: "",
+            searchType: "",
+            searchVal: ""
+        })
+    }
+
     const getMngrAcsIpList = useCallback(
         (searchDto) => {
             const pstListURL = "/mngrAcsIpApi/getMngrAcsIpList.do";
@@ -120,6 +133,7 @@ function ManagerAccessList(props) {
                                         name="actvtnYn"
                                         title="검색유형"
                                         ref={actvtnYnRef}
+                                        value={searchDto.actvtnYn || ""}
                                         onChange={(e) => {
                                             setSearchDto({...searchDto, actvtnYn: e.target.value})
                                         }}
@@ -139,6 +153,7 @@ function ManagerAccessList(props) {
                                         name="searchType"
                                         title="검색유형"
                                         ref={searchTypeRef}
+                                        value={searchDto.searchType || ""}
                                         onChange={(e) => {
                                             setSearchDto({...searchDto, searchType: e.target.value})
                                         }}
@@ -153,10 +168,8 @@ function ManagerAccessList(props) {
                                 <label className="input">
                                     <input
                                         name=""
-                                        defaultValue={
-                                            searchDto && searchDto.searchVal
-                                        }
                                         ref={searchValRef}
+                                        value={searchDto.searchVal || ""}
                                         onChange={(e) => {
                                             setSearchDto({...searchDto, searchVal: e.target.value})
                                         }}
@@ -167,10 +180,14 @@ function ManagerAccessList(props) {
                             </li>
                         </ul>
                         <div className="rightBtn">
-                            <button type="button" className="refreshBtn btn btn1 gray">
+                            <button type="button" className="refreshBtn btn btn1 gray"
+                                    onClick={searchReset}
+                            >
                                 <div className="icon"></div>
                             </button>
-                            <button type="button" className="searchBtn btn btn1 point">
+                            <button type="button" className="searchBtn btn btn1 point"
+                                    onClick={searchHandle}
+                            >
                                 <div className="icon"></div>
                             </button>
                         </div>
