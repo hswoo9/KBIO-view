@@ -87,7 +87,7 @@ function OperationalRelatedOrganization(props) {
                                 <td>{item.clsNm}</td>
                                 <td>{item.actvtnYn === "Y" ? "공개" : "비공개"}</td>
                                 <td>
-                                    <Link to={URL.MANAGER_RESIDENT_MANAGER}
+                                    <Link to={URL.MANAGER_RELATED_MANAGER}
                                           state={{relInstSn: item.relInstSn,
                                               rpsvNm : item.rpsvNm,
                                               entTelno : item.entTelno,
@@ -96,7 +96,7 @@ function OperationalRelatedOrganization(props) {
                                     </Link>
                                 </td>
                                 <td>
-                                    <Link to={URL.MANAGER_RESIDENT_MEMBER}
+                                    <Link to={URL.MANAGER_RELATED_MEMBER}
                                           state={{relInstSn: item.relInstSn,
                                               rpsvNm : item.rpsvNm,
                                               entTelno : item.entTelno,
