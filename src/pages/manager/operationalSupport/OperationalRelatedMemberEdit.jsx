@@ -11,10 +11,11 @@ import Swal from "sweetalert2";
 import base64 from 'base64-js';
 
 
-function OperationResidentMember(props) {
+function OperationRelatedMember(props) {
     console.group("ManagerNormalMemberEdit");
     console.log("[Start] ManagerNormalMemberEdit------------------------------");
     console.log("ManagerNormalMemberEdit [props] : ", props);
+    
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -22,7 +23,7 @@ function OperationResidentMember(props) {
 
     const [searchDto, setSearchDto] = useState(
         {userSn: location.state?.userSn,
-            mvnEntSn:location.state?.mvnEntSn
+            relInstSn:location.state?.relInstSn
         }
     );
 
@@ -33,7 +34,7 @@ function OperationResidentMember(props) {
     const initMode = () => {
         setModeInfo({
             ...modeInfo,
-            editURL: `/mvnEntApi/setMemberMbrStts`,
+            editURL: `/relatedApi/setMemberMbrStts`,
         });
 
         getNormalMember(searchDto);
@@ -53,7 +54,7 @@ function OperationResidentMember(props) {
     };
 
     const getNormalMember = (serachDto) => {
-        const getNormalMemberURL = `/mvnEntApi/getResidentMemberOne.do`;
+        const getNormalMemberURL = `/relatedApi/getRelatedMemberOne.do`;
         const requestOptions = {
             method: "POST",
             headers: {
@@ -290,7 +291,7 @@ function OperationResidentMember(props) {
                                     type="text"
                                     name="brno"
                                     id="brno"
-                                    value={rcDetail.mvnEntNm || ""}
+                                    value={rcDetail.relInstNm || ""}
                                     readOnly
                                 >
                                 </input>
@@ -411,7 +412,7 @@ function OperationResidentMember(props) {
                     <div className="rightBox">
                         <Link
                             to={URL.MANAGER_RESIDENT_MEMBER}
-                            state={{mvnEntSn: rcDetail.mvnEntSn,
+                            state={{relInstSn: rcDetail.relInstSn,
                                 rpsvNm : rcDetail.rpsvNm,
                                 entTelno : rcDetail.entTelno,
                                 clsNm : rcDetail.clsNm
@@ -430,4 +431,4 @@ function OperationResidentMember(props) {
     );
 }
 
-export default OperationResidentMember;
+export default OperationRelatedMember;
