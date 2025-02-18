@@ -271,6 +271,8 @@ function MemberSignUp(props) {
               isResident: true,
               mvnEntSn: businessData.mvnEntSn,
               mvnEntNm: businessData.mvnEntNm,
+              relInstNm: businessData.relInstNm,
+              relInstSn: businessData.relInstSn,
               rpsvNm: businessData.rpsvNm,
               clsNm: businessData.clsNm,
               entTelno: businessData.entTelno,
@@ -1027,7 +1029,7 @@ function MemberSignUp(props) {
                             name="business_name"
                             id="business_name"
                             title="기업명"
-                            value={memberDetail.mvnEntNm || ""}
+                            value={memberDetail.mvnEntNm || memberDetail.relInstNm || ""}
                             readOnly
                         />
                       </label>
