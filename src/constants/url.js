@@ -202,8 +202,8 @@ const URL = {
   RESIDENT_COMPANY_CREATE:"/manager/residentCompanyCreate", //회원관리/입주기업 /입주기업 등록
   RESIDENT_COMPANY_MODIFY:"/manager/residentCompanyModify",
 
-  RELATED_COMPANY_CREATE:"/manager/relatedCompanyCreate", //회원관리/입주기업 /입주기업 등록
-
+  RELATED_COMPANY_CREATE:"/manager/relatedCompanyCreate",
+  RELATED_COMPANY_MODIFY:"/manager/relatedCompanyModify",
 
   //MYPAGE
   MYPAGE_MODIFY: "/mypage/modify", // 고객지원/마이페이지/회원 수정

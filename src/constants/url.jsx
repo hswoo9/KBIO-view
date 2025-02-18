@@ -230,7 +230,8 @@ const URL = {
   RESIDENT_COMPANY_CREATE:"/manager/residentCompanyCreate", //회원관리/입주기업 /입주기업 등록
   RESIDENT_COMPANY_MODIFY:"/manager/residentCompanyModify",
 
-  RELATED_COMPANY_CREATE:"/manager/relatedCompanyCreate", //회원관리/입주기업 /입주기업 등록
+  RELATED_COMPANY_CREATE:"/manager/relatedCompanyCreate", 
+  RELATED_COMPANY_MODIFY:"/manager/relatedCompanyModify",
 
   MANAGER_CMS: "/manager/cms",
   

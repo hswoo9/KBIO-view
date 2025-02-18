@@ -753,6 +753,11 @@ const SecondRoutes = () => {
                   element={<RelatedCompanyCreate mode={CODE.MODE_CREATE}/>}
               />
 
+              <Route
+                  path={URL.RELATED_COMPANY_MODIFY}
+                  element={<RelatedCompanyCreate mode={CODE.MODE_MODIFY}/>}
+              />
+
 
               <Route path={URL.MANAGER_CODE} element={<ManagerCodeList/>}/>
               <Route

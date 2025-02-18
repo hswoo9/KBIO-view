@@ -73,9 +73,9 @@ function OperationalRelatedOrganization(props) {
                                     {item.bzstatNm}
                                 </td>
                                 <td>
-                                    <Link to={{pathname: URL.RESIDENT_COMPANY_MODIFY}}
+                                    <Link to={{pathname: URL.RELATED_COMPANY_MODIFY}}
                                           state={{
-                                              rel: item.relInstSn,
+                                              relInstSn: item.relInstSn,
                                               mode:CODE.MODE_MODIFY
                                           }}
                                     >
