@@ -1,5 +1,6 @@
 import { getComCdList } from "@/components/CommonComponents";
-
+import { NavLink } from "react-router-dom";
+import URL from "@/constants/url";
 import logoWhite from "@/assets/images/logo_white.svg";
 import React, {useEffect, useState} from "react";
 import {getBnrPopupList} from "@/components/main/MainComponents";
@@ -73,7 +74,17 @@ function EgovFooterUser() {
                 <li><a href="#"><span>개인정보 처리방침</span></a></li>
                 <li><a href="#"><span>이용약관</span></a></li>
                 <li><a href="#"><span>이메일무단수집거부</span></a></li>
-                <li><a href="#"><span>오시는길</span></a></li>
+                <li>
+                  <NavLink to={URL.KBIO_LOCATION}
+                           state={{
+                             menuSn: 44,
+                             thisMenuSn: 52,
+                             menuNmPath: "K-BioLabHub > 오시는길"
+                           }}
+                  >
+                    <span>오시는길</span>
+                  </NavLink>
+                </li>
               </ul>
               <address>
                 <div><span className="left">주소</span><span
