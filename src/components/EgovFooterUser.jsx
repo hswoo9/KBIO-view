@@ -1,22 +1,39 @@
 import { getComCdList } from "@/components/CommonComponents";
-
+import { NavLink } from "react-router-dom";
+import URL from "@/constants/url";
 import logoWhite from "@/assets/images/logo_white.svg";
 import React, {useEffect, useState} from "react";
 import {getBnrPopupList} from "@/components/main/MainComponents";
 
 function EgovFooterUser() {
   const [comCdList, setComCdList] = useState([]);
+  const [familySiteList, setFamilySiteList] = useState([]);
   const [bannerList, setBannerList] = useState([]);
 
   useEffect(() => {
-    getBnrPopupList("bnr").then((data) => {
+    /*getBnrPopupList("bnr").then((data) => {
       setBannerList(data.filter(e => e.tblBnrPopup.bnrPopupFrm == "footSlides"));
-    });
+    });*/
   }, []);
 
   useEffect(() => {
     getComCdList(6).then((data) => {
       setComCdList(data);
+    })
+
+    getComCdList(16).then((data) => {
+      if(data != null){
+        let dataList = [];
+        data.forEach(function(item, index){
+          console.log(item);
+          dataList.push(
+              <option value={item.etcMttr1} key={item.comCdSn}>{item.comCdNm}</option>
+          )
+
+        });
+        setFamilySiteList(dataList);
+      }
+
     })
   }, []);
 
@@ -57,7 +74,17 @@ function EgovFooterUser() {
                 <li><a href="#"><span>개인정보 처리방침</span></a></li>
                 <li><a href="#"><span>이용약관</span></a></li>
                 <li><a href="#"><span>이메일무단수집거부</span></a></li>
-                <li><a href="#"><span>오시는길</span></a></li>
+                <li>
+                  <NavLink to={URL.KBIO_LOCATION}
+                           state={{
+                             menuSn: 44,
+                             thisMenuSn: 52,
+                             menuNmPath: "K-BioLabHub > 오시는길"
+                           }}
+                  >
+                    <span>오시는길</span>
+                  </NavLink>
+                </li>
               </ul>
               <address>
                 <div><span className="left">주소</span><span
@@ -72,13 +99,16 @@ function EgovFooterUser() {
             <div className="right">
               <div className="familySiteWrap">
                 <div className="itemBox">
-                  <select className="selectGroup footerSelect">
-                    <option value="0">패밀리 사이트 바로가기</option>
-                    <option value="1">예시1</option>
-                    <option value="2">예시2</option>
-                    <option value="3">예시3</option>
-                    <option value="4">예시4</option>
-                    <option value="5">예시5</option>
+                  <select className="selectGroup footerSelect"
+                    onChange={(e) => {
+                        if (e.target.value != "") {
+                          window.open(e.target.value);
+                        }
+                      }
+                    }
+                  >
+                    <option value="">패밀리 사이트 바로가기</option>
+                    {familySiteList}
                   </select>
                 </div>
               </div>

@@ -18,6 +18,8 @@ import KbioLocation from "@/pages/kBioLabHub/Location";
 import Introduce from "@/pages/introduce/Introduce";
 import IntroduceOperational from "@/pages/introduce/OperationalList";
 import IntroduceOperationalDetail from "@/pages/introduce/OperationalDetail";
+import IntroduceRelated from "@/pages/introduce/RelatedList";
+import IntroduceRelatedDetail from "@/pages/introduce/RelatedDetail";
 import TotalSearch from "@/pages/search/TotalSearch";
 //COMMON
 import CommonError from "@/pages/common/error/commonError";
@@ -155,9 +157,12 @@ import RelatedCompanyCreate from "@/pages/manager/member/RelatedCompanyCreate";
 //입주지원
 import OperationalSupport from "@/pages/manager/operationalSupport/OperationalSupport";
 import OperationalResidentMember from "@/pages/manager/operationalSupport/OperationalResidentMember";
+import OperationalRelatedMember from "@/pages/manager/operationalSupport/OperationalRelatedMember";
 import OperationalRelatedOrganization from "@/pages/manager/operationalSupport/OperationalRelatedOrganization";
 import OperationalResidentManageMember from "@/pages/manager/operationalSupport/OperationalResidentManageMember";
+import OperationalRelatedManageMember from "@/pages/manager/operationalSupport/OperationalRelatedManageMember";
 import OperationResidentMemberEdit from "@/pages/manager/operationalSupport/OperationResidentMemberEdit";
+import OperationalRelatedMemberEdit from "@/pages/manager/operationalSupport/OperationalRelatedMemberEdit";
 import OperationalDifficulties from "@/pages/manager/operationalSupport/diff/OperationalDifficulties";
 import OperationalDifficultiesEdit from "@/pages/manager/operationalSupport/diff/Edit";
 
@@ -343,6 +348,8 @@ const SecondRoutes = () => {
               <Route path={URL.INTRODUCE} element={<Introduce/>}/>
               <Route path={URL.INTRODUCE_OPERATIONAL_LIST} element={<IntroduceOperational/>}/>
               <Route path={URL.INTRODUCE_OPERATIONAL_DETAIL} element={<IntroduceOperationalDetail/>}/>
+              <Route path={URL.INTRODUCE_RELATED_LIST} element={<IntroduceRelated/>}/>
+              <Route path={URL.INTRODUCE_RELATED_DETAIL} element={<IntroduceRelatedDetail/>}/>
 
               {/* COMMON */}
               <Route path={URL.COMMON_CONTENT_VIEW} element={<CommonContentView/>}/>
@@ -754,6 +761,11 @@ const SecondRoutes = () => {
                   element={<RelatedCompanyCreate mode={CODE.MODE_CREATE}/>}
               />
 
+              <Route
+                  path={URL.RELATED_COMPANY_MODIFY}
+                  element={<RelatedCompanyCreate mode={CODE.MODE_MODIFY}/>}
+              />
+
 
               <Route path={URL.MANAGER_CODE} element={<ManagerCodeList/>}/>
               <Route
@@ -812,8 +824,11 @@ const SecondRoutes = () => {
               <Route path={URL.MANAGER_MEMBER_ALL_MEMBER} element={<ManagerAllMember/>}/>
 
               <Route path={URL.MANAGER_RESIDENT_MEMBER} element={<OperationalResidentMember />} />
+              <Route path={URL.MANAGER_RELATED_MEMBER} element={<OperationalRelatedMember />} />
               <Route path={URL.MANAGER_RESIDENT_MANAGER} element={<OperationalResidentManageMember />}/>
+              <Route path={URL.MANAGER_RELATED_MANAGER} element={<OperationalRelatedManageMember />}/>
               <Route path={URL.MANAGER_RESIDENT_MEMBER_EDIT} element={<OperationResidentMemberEdit mode={CODE.MODE_MODIFY}/>}/>
+              <Route path={URL.MANAGER_RELATED_MEMBER_EDIT} element={<OperationalRelatedMemberEdit mode={CODE.MODE_MODIFY}/>}/>
               <Route path={URL.MANAGER_RELATED_ORGANIZATION} element={<OperationalRelatedOrganization />} />
               <Route path={URL.MANAGER_DIFFICULTIES} element={<OperationalDifficulties />} />
               <Route path={URL.MANAGER_DIFFICULTIES_MODIFY} element={<OperationalDifficultiesEdit mode={CODE.MODE_MODIFY}/>} />

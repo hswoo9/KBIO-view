@@ -20,8 +20,11 @@ import {
 } from "date-fns";
 import {Link} from "react-router-dom";
 import * as EgovNet from "../../../api/egovFetch.js";
+import LoadingSpinner from "../../../components/LoadingSpinner.jsx";
 
 function ManagerStatisticsUser(props) {
+    const [isLoading, setIsLoading] = useState(true);  // 로딩 상태
+
     const nowDate = new Date();
 
     const [userCnt, setUserCnt] = useState([])
@@ -64,6 +67,7 @@ function ManagerStatisticsUser(props) {
             resp.result.statisticsUser.forEach(function(v, i){
                 setUserCnt(userCnt => [...userCnt, v.cnt])
             })
+            setIsLoading(false);
         });
     }
 
@@ -74,6 +78,11 @@ function ManagerStatisticsUser(props) {
     return (
         <div id="container" className="container layout cms">
             <ManagerLeftNew/>
+
+            {isLoading &&
+                <LoadingSpinner />
+            }
+
             <div className="inner">
                 <h2 className="pageTitle"><p>사용자통계</p></h2>
                 <div className="cateWrap">

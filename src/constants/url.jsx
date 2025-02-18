@@ -9,6 +9,8 @@ const URL = {
   INTRODUCE: "/introduce",
   INTRODUCE_OPERATIONAL_LIST: "/insi/operationalList",
   INTRODUCE_OPERATIONAL_DETAIL: "/insi/operationaldetail",
+  INTRODUCE_RELATED_LIST: "/insi/relatedList",
+  INTRODUCE_RELATED_DETAIL: "/insi/relateddetail",
   //COMMON
   COMMON_POPUP : "/popup",
   COMMON_CONTENT_VIEW : "/content/view",
@@ -230,15 +232,19 @@ const URL = {
   RESIDENT_COMPANY_CREATE:"/manager/residentCompanyCreate", //회원관리/입주기업 /입주기업 등록
   RESIDENT_COMPANY_MODIFY:"/manager/residentCompanyModify",
 
-  RELATED_COMPANY_CREATE:"/manager/relatedCompanyCreate", //회원관리/입주기업 /입주기업 등록
+  RELATED_COMPANY_CREATE:"/manager/relatedCompanyCreate", 
+  RELATED_COMPANY_MODIFY:"/manager/relatedCompanyModify",
 
   MANAGER_CMS: "/manager/cms",
   
   //운영지원
   MANAGER_OPERATIONAL_SUPPORT: "/manager/operationalSupport", //운영지원/입주기업관리
+  MANAGER_RELATED_MANAGER: "/manager/relatedMemberManage",
   MANAGER_RESIDENT_MANAGER: "/manager/residentMemberManage", //운영지원/입주기업관리/관리자설정
+  MANAGER_RELATED_MEMBER : "/manager/related/member",
   MANAGER_RESIDENT_MEMBER : "/manager/residentMember", //운영지원/입주기업관리/직원목록
   MANAGER_RESIDENT_MEMBER_EDIT : "/manager/residentMemberEdit",  //운영지원/입주기업관리/직원목록/직원상세
+  MANAGER_RELATED_MEMBER_EDIT : "/manager/relatedMemberEdit",  
   MANAGER_RELATED_ORGANIZATION : "/manager/relatedOrganization", //운영지원/유관기관관리
   MANAGER_DIFFICULTIES : "/manager/difficulties", //운영지원/애로사항관리
   MANAGER_DIFFICULTIES_MODIFY : "/manager/difficulties/modifiy", //운영지원/애로사항관리 답변

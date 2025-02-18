@@ -4,7 +4,7 @@ import axios from "axios";
 import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
-
+import { getComCdList } from "@/components/CommonComponents";
 import ManagerLeftNew from "@/components/manager/ManagerLeftHomepage";
 import EgovPaging from "@/components/EgovPaging";
 import CommonEditor from "@/components/CommonEditor";
@@ -18,7 +18,100 @@ function ManagerAccessList(props) {
     const sessionUser = getSessionItem("loginUser");
     const [modeInfo, setModeInfo] = useState({ mode: props.mode });
 
+    const handleTelnoChange = (e) => {
+        const onlyNumbers = e.target.value.replace(/\D/g, "");
+        setOrgchtData({
+            ...orgchtData,
+            telno: onlyNumbers
+        })
+    }
+    const [deptList, setDeptList] = useState([]);
+    const [positionList, setPositionList] = useState([]);
+    const [orgchtData, setOrgchtData] = useState({});
+
     const [emailMode, setEmailMode] = useState("");
+
+    const isFirstRender = useRef(true);
+    const handleChange = (value) => {
+        if(isFirstRender.current){
+            isFirstRender.current = false;
+            return;
+        }
+        setOrgchtData({...orgchtData, tkcgTask: value});
+    };
+
+    const [saveEvent, setSaveEvent] = useState({});
+    useEffect(() => {
+        if(saveEvent.save){
+            if(saveEvent.mode == "save"){
+                saveOrgchtData(orgchtData);
+            }
+            if(saveEvent.mode == "delete"){
+                delOrgchtData(orgchtData);
+            }
+
+        }
+    }, [saveEvent]);
+
+    const saveOrgchtData = useCallback(
+        (orgchtData) => {
+            const requestURL = "/orgchtApi/setOrgcht";
+            const requestOptions = {
+                method: "POST",
+                headers: {
+                    "Content-type": "application/json",
+                },
+                body: JSON.stringify(orgchtData)
+            };
+            EgovNet.requestFetch(
+                requestURL,
+                requestOptions,
+                (resp) => {
+                    if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
+                        navigate(
+                            { pathname: URL.MANAGER_HOMEPAGE_ORGANIZATION_CHART_LIST }
+                        );
+                    } else {
+                        navigate(
+                            { pathname: URL.ERROR },
+                            { state: { msg: resp.resultMessage } }
+                        );
+                    }
+
+                }
+            )
+        }
+    );
+
+    const delOrgchtData = useCallback(
+        (orgchtData) => {
+            const requestURL = "/codeApi/setComCdDel";
+            const requestOptions = {
+                method: "POST",
+                headers: {
+                    "Content-type": "application/json",
+                },
+                body: JSON.stringify(orgchtData)
+            };
+            EgovNet.requestFetch(
+                requestURL,
+                requestOptions,
+                (resp) => {
+                    if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
+                        navigate(
+                            { pathname: URL.MANAGER_HOMEPAGE_ORGANIZATION_CHART_LIST }
+                        );
+                    } else {
+                        navigate(
+                            { pathname: URL.ERROR },
+                            { state: { msg: resp.resultMessage } }
+                        );
+                    }
+
+                }
+            )
+        }
+    );
 
     const saveBtnEvent = () => {
         Swal.fire({
@@ -29,7 +122,11 @@ function ManagerAccessList(props) {
             cancelButtonText: "취소"
         }).then((result) => {
             if(result.isConfirmed) {
-                navigate({ pathname: URL.MANAGER_HOMEPAGE_ORGANIZATION_CHART_LIST });
+                setSaveEvent({
+                    ...saveEvent,
+                    save: true,
+                    mode: "save"
+                });
             } else {
             }
         });
@@ -51,6 +148,101 @@ function ManagerAccessList(props) {
         });
     }
 
+    const initMode = () => {
+        switch (props.mode){
+            case CODE.MODE_CREATE:
+                setModeInfo({
+                    ...modeInfo,
+                    modeTitle: "등록",
+                });
+                break;
+            case CODE.MODE_MODIFY:
+                setModeInfo({
+                    ...modeInfo,
+                    modeTitle: "수정",
+                });
+                break;
+            default:
+                navigate({ pathname: URL.ERROR }, { state: { msg: "" } });
+        }
+        getOrgchtDetail();
+    };
+
+    const getOrgchtDetail = () => {
+        if(modeInfo.mode === CODE.MODE_CREATE){
+            setOrgchtData({
+                creatrSn: sessionUser.userSn,
+                actvtnYn: "Y",
+            });
+            return;
+        }
+
+        const requestURL = '/orgchtApi/getOrgcht';
+        const requestOptions = {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json",
+            },
+            body: JSON.stringify({orgchtSn : location.state?.orgchtSn})
+        };
+        EgovNet.requestFetch(requestURL, requestOptions, function (resp) {
+            if (modeInfo.mode === CODE.MODE_MODIFY) {
+                if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
+                    if(resp.result.orgcht.actvtnYn != null){
+                        if(resp.result.orgcht.actvtnYn == "Y"){
+                            document.getElementById("actvtnYn").checked = true;
+                        }else{
+                            document.getElementById("actvtnYn").checked = false;
+                        }
+                    }
+                    resp.result.orgcht.mdfrSn = sessionUser.userSn;
+                    setOrgchtData(resp.result.orgcht);
+                } else {
+                    navigate(
+                        { pathname: URL.ERROR },
+                        { state: { msg: resp.resultMessage } }
+                    );
+                }
+
+            }
+        });
+
+    }
+
+
+    useEffect(() => {
+        getComCdList(12).then((data) => {
+            if(data != null){
+                let dataList = [];
+                dataList.push(
+                    <option value="" key="no_data">선택</option>
+                )
+                data.forEach(function(item, index){
+                   dataList.push(
+                       <option value={item.comCdSn} key={item.comCdSn}>{item.comCdNm}</option>
+                   )
+                });
+                setDeptList(dataList);
+            }
+        });
+
+        getComCdList(13).then((data) => {
+            if(data != null){
+                let dataList = [];
+                dataList.push(
+                    <option value="" key="no_data">선택</option>
+                )
+                data.forEach(function(item, index){
+                    dataList.push(
+                        <option value={item.comCdSn} key={item.comCdSn}>{item.comCdNm}</option>
+                    )
+                });
+                setPositionList(dataList);
+            }
+        });
+        initMode();
+    }, []);
+
     return (
         <div id="container" className="container layout cms">
             <ManagerLeftNew/>
@@ -67,10 +259,18 @@ function ManagerAccessList(props) {
                         <li className="inputBox type1 width3">
                             <p className="title essential">부서</p>
                             <div className="itemBox">
-                                <select className="selectGroup"
-                                        id=""
+                                <select
+                                    className="selectGroup"
+                                    id="deptSn"
+                                    value={orgchtData.deptSn || ""}
+                                    onChange={(e) =>
+                                        setOrgchtData({
+                                          ...orgchtData,
+                                          deptSn: e.target.value
+                                        })
+                                    }
                                 >
-                                    <option value="N">선택</option>
+                                    {deptList}
                                 </select>
                             </div>
                         </li>
@@ -78,7 +278,13 @@ function ManagerAccessList(props) {
                             <label className="title essential" htmlFor=""><small>이름</small></label>
                             <div className="input">
                                 <input type="text"
-
+                                       value={orgchtData.kornFlnm || ""}
+                                       onChange={(e) =>
+                                           setOrgchtData({
+                                               ...orgchtData,
+                                               kornFlnm: e.target.value
+                                           })
+                                       }
                                 />
                             </div>
                         </li>
@@ -86,17 +292,27 @@ function ManagerAccessList(props) {
                             <p className="title essential">직책</p>
                             <div className="itemBox">
                                 <select className="selectGroup"
-                                        id=""
+                                        id="jbttlSn"
+                                        value={orgchtData.jbttlSn || ""}
+                                        onChange={(e) =>
+                                            setOrgchtData({
+                                                ...orgchtData,
+                                                jbttlSn: e.target.value
+                                            })
+                                        }
                                 >
-                                    <option value="N">선택</option>
+                                    {positionList}
                                 </select>
                             </div>
                         </li>
                         <li className="inputBox type1 width1">
                             <label className="title essential" htmlFor=""><small>전화번호</small></label>
                             <div className="input">
-                                <input type="text"
-
+                                <input
+                                    type="text"
+                                    id="telno"
+                                    value={orgchtData.telno || ""}
+                                    onChange={handleTelnoChange}
                                 />
                             </div>
                         </li>
@@ -131,10 +347,51 @@ function ManagerAccessList(props) {
                             </div>
 
                         </li>
+                        <li className="inputBox type1 width3">
+                            <label className="title" htmlFor="sortSeq"><small>정렬순서</small></label>
+                            <div className="input">
+                                <input type="text"
+                                       id="sortSeq"
+                                       placeholder=""
+                                       value={orgchtData.sortSeq || ""}
+                                       onChange={(e) =>
+                                           setOrgchtData({
+                                               ...orgchtData,
+                                               sortSeq: e.target.value
+                                           })
+                                       }
+                                />
+                                <label htmlFor="actvtnYn" className="toggleSwitch">
+                                    <span className="toggleButton"></span>
+                                </label>
+                            </div>
+                        </li>
+                        <li className="toggleBox width3">
+                            <div className="box">
+                                <p className="title essential">활성여부</p>
+                                <div className="toggleSwithWrap">
+                                    <input type="checkbox"
+                                           id="actvtnYn"
+                                           checked={orgchtData.actvtnYn == "Y"}
+                                           onChange={(e) =>
+                                               setOrgchtData({
+                                                   ...orgchtData,
+                                                   actvtnYn : e.target.checked ? "Y" : "N"
+                                               })
+                                           }
+                                    />
+                                    <label htmlFor="actvtnYn" className="toggleSwitch">
+                                        <span className="toggleButton"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </li>
                         <li className="inputBox type1 width1">
                             <label className="title essential"><small>담당업무</small></label>
                             <div>
                                 <CommonEditor
+                                    value={orgchtData.tkcgTask || ""}
+                                    onChange={handleChange}
                                 />
                             </div>
                         </li>

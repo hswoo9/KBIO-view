@@ -25,8 +25,11 @@ import ManagerLeftNew from "@/components/manager/ManagerLeftNew";
 import {mngrAcsIpChk} from "@/components/CommonComponents.jsx";
 import Swal from "sweetalert2";
 import moment from "moment";
+import LoadingSpinner from "../../components/LoadingSpinner.jsx";
 
 function Index(props) {
+    const [isLoading, setIsLoading] = useState(true);  // 로딩 상태
+
 // mngrAcsIpChk(useNavigate())
     const [status, setStatus] = useState({
         mvnEntCnt : 0,
@@ -230,6 +233,7 @@ function Index(props) {
                     }
                 });
                 setPstList(dataList);
+                setIsLoading(false);
             },
             function (resp) {
                 console.log("err response : ", resp);
@@ -263,6 +267,11 @@ function Index(props) {
     }, [currentMonth]);
     return (
         <div id="container" className="container layout home">
+
+            {isLoading &&
+                <LoadingSpinner />
+            }
+
             <div className="inner">
                 <div className="leftBox">
                     <div className="cont cont01">
@@ -281,7 +290,7 @@ function Index(props) {
                             <NavLink
                                 to={URL.MANAGER_RELATED_ORGANIZATION}
                                 className="tt2">
-                                <span>0</span>
+                                <span>{status.relInstCnt}</span>
                             </NavLink>
                         </li>
                         <li>

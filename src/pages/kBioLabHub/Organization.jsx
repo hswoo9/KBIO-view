@@ -6,6 +6,8 @@ import { getSessionItem, setSessionItem, removeSessionItem } from "@/utils/stora
 import CommonSubMenu from "@/components/CommonSubMenu";
 import {getBnrPopupList} from "@/components/main/MainComponents";
 import AOS from "aos";
+import EgovUserPaging from "@/components/EgovUserPaging";
+import * as ComScript from "@/components/CommonScript";
 
 function KBioLabHub(props) {
   const location = useLocation();
@@ -17,6 +19,16 @@ function KBioLabHub(props) {
   const userSn = getSessionItem("userSn");
 
   const [popUpList, setPopUpList] = useState([]);
+  const [paginationInfo, setPaginationInfo] = useState({});
+  const [orgchtList, setOrgchtList] = useState([]);
+  const [searchCondition, setSearchCondition] = useState(
+      location.state?.searchCondition || {
+        pageIndex: 1,
+        pageSize: 5,
+        searchCnd: "0",
+        searchWrd: "",
+      }
+  );
 
   useEffect(() => {
     popUpList.forEach((e, i) => {
@@ -36,11 +48,61 @@ function KBioLabHub(props) {
     })
   }, [popUpList]);
 
+  const getOrgchtList = useCallback(
+      (searchCondition) => {
+        const requestURL = "/orgchtApi/getOrgchtList.do";
+        const requestOptions = {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify(searchCondition)
+        };
+        EgovNet.requestFetch(
+            requestURL,
+            requestOptions,
+            (resp) => {
+              setPaginationInfo(resp.paginationInfo);
+              let dataList = [];
+              dataList.push(
+                  <tr>
+                    <td colSpan="6" key="noData">검색된 결과가 없습니다.</td>
+                  </tr>
+              );
+
+              resp.result.orgchtList.forEach(function (item, index) {
+                if (index === 0) dataList = []; // 목록 초기화
+
+                dataList.push(
+                    <tr key={item.orgchtSn}
+                    >
+                      <td><p>{item.deptNm}</p></td>
+                      <td><p>{item.deptNm}</p></td>
+                      <td><p>{item.kornFlnm}</p></td>
+                      <td dangerouslySetInnerHTML={{__html: item.tkcgTask}}></td>
+                      <td><a href={`tel:${ComScript.formatTelNumber(item.telno)}`}><span>{ComScript.formatTelNumber(item.telno)}</span></a></td>
+                      <td><a href={`mailto:${item.email}`}><span>{item.email}</span></a></td>
+                    </tr>
+                );
+              });
+              setOrgchtList(dataList);
+            },
+            function (resp) {
+              console.log("err response : ", resp);
+            }
+        )
+      },
+      [orgchtList, searchCondition]
+  );
+
   useEffect(() => {
     getBnrPopupList("popup").then((data) => {
       setPopUpList(data.filter(e => e.tblBnrPopup.bnrPopupKnd == "popup"));
     });
     AOS.init();
+
+    getOrgchtList(searchCondition);
+
   }, []);
 
   return (
@@ -128,67 +190,20 @@ function KBioLabHub(props) {
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                  <td><p>전략기획팀</p></td>
-                  <td><p>단장</p></td>
-                  <td><p>홍길동</p></td>
-                  <td><p>업무분야 내용입니다.</p></td>
-                  <td><a href="tel:02-3780-0221"><span>02-3780-0221</span></a></td>
-                  <td><a href="mailto:hong@tipa.or.kr"><span>hong@tipa.or.kr</span></a></td>
-                </tr>
-                <tr>
-                  <td><p>전략기획팀</p></td>
-                  <td><p>단장</p></td>
-                  <td><p>홍길동</p></td>
-                  <td><p>업무분야 내용입니다.</p></td>
-                  <td><a href="tel:02-3780-0221"><span>02-3780-0221</span></a></td>
-                  <td><a href="mailto:hong@tipa.or.kr"><span>hong@tipa.or.kr</span></a></td>
-                </tr>
-                <tr>
-                  <td><p>전략기획팀</p></td>
-                  <td><p>단장</p></td>
-                  <td><p>홍길동</p></td>
-                  <td><p>업무분야 내용입니다.</p></td>
-                  <td><a href="tel:02-3780-0221"><span>02-3780-0221</span></a></td>
-                  <td><a href="mailto:hong@tipa.or.kr"><span>hong@tipa.or.kr</span></a></td>
-                </tr>
-                <tr>
-                  <td><p>전략기획팀</p></td>
-                  <td><p>단장</p></td>
-                  <td><p>홍길동</p></td>
-                  <td><p>업무분야 내용입니다.</p></td>
-                  <td><a href="tel:02-3780-0221"><span>02-3780-0221</span></a></td>
-                  <td><a href="mailto:hong@tipa.or.kr"><span>hong@tipa.or.kr</span></a></td>
-                </tr>
-                <tr>
-                  <td><p>전략기획팀</p></td>
-                  <td><p>단장</p></td>
-                  <td><p>홍길동</p></td>
-                  <td><p>업무분야 내용입니다.</p></td>
-                  <td><a href="tel:02-3780-0221"><span>02-3780-0221</span></a></td>
-                  <td><a href="mailto:hong@tipa.or.kr"><span>hong@tipa.or.kr</span></a></td>
-                </tr>
-                <tr>
-                  <td><p>전략기획팀</p></td>
-                  <td><p>단장</p></td>
-                  <td><p>홍길동</p></td>
-                  <td><p>업무분야 내용입니다.</p></td>
-                  <td><a href="tel:02-3780-0221"><span>02-3780-0221</span></a></td>
-                  <td><a href="mailto:hong@tipa.or.kr"><span>hong@tipa.or.kr</span></a></td>
-                </tr>
+                {orgchtList}
                 </tbody>
               </table>
             </div>
             <div className="pageWrap">
-              <ul className="pageList">
-                <li className="first arrow disabled"><a href="#"><span>처음</span></a></li>
-                <li className="prev arrow disabled"><a href="#"><span>이전</span></a></li>
-                <li className="now num"><a href="#"><span>1</span></a></li>
-                <li className="num"><a href="#"><span>2</span></a></li>
-                <li className="num"><a href="#"><span>3</span></a></li>
-                <li className="next arrow"><a href="#"><span>다음</span></a></li>
-                <li className="last arrow"><a href="#"><span>마지막</span></a></li>
-              </ul>
+              <EgovUserPaging
+                  pagination={paginationInfo}
+                  moveToPage={(passedPage) => {
+                    /*getPstList({
+                      ...searchCondition,
+                      pageIndex: passedPage
+                    });*/
+                  }}
+              />
             </div>
           </div>
         </div>

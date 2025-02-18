@@ -20,8 +20,10 @@ import {
     subMonths,
     addMonths,
 } from "date-fns";
+import LoadingSpinner from "../../../components/LoadingSpinner.jsx";
 
 function ManagerStatisticsBoard(props) {
+    const [isLoading, setIsLoading] = useState(true);  // 로딩 상태
     const nowDate = new Date();
 
     const [searchDto, setSearchDto] = useState({
@@ -38,11 +40,19 @@ function ManagerStatisticsBoard(props) {
         setTabRenderKey(prev => prev + 1);
     }, [menuIndex, searchDto]);
 
-    const menuList = () => ({
-        0: <Tab key={menuIndex === 0 ? tabRenderKey : 0} searchDto={{ ...searchDto, bbsSn: 1 }} />,
-        1: <Tab key={menuIndex === 1 ? tabRenderKey : 1} searchDto={{ ...searchDto, bbsSn: 5 }} />,
-        2: <Tab key={menuIndex === 2 ? tabRenderKey : 2} searchDto={{ ...searchDto, bbsSn: 7 }} />,
+    const menuList = (callback) => ({
+        0: <Tab key={menuIndex === 0 ? tabRenderKey : 0} searchDto={{ ...searchDto, bbsSn: 1 }} onCallback={callback}/>,
+        1: <Tab key={menuIndex === 1 ? tabRenderKey : 1} searchDto={{ ...searchDto, bbsSn: 5 }} onCallback={callback}/>,
+        2: <Tab key={menuIndex === 2 ? tabRenderKey : 2} searchDto={{ ...searchDto, bbsSn: 7 }} onCallback={callback}/>,
     });
+
+    const handleCallback = (e) => {
+        if(e == "isLoading"){
+            setIsLoading(true);
+        }else{
+            setIsLoading(false);
+        }
+    };
 
     const changeMenu = (menuIndex) => {
         setMenuIndex(menuIndex);
@@ -69,6 +79,11 @@ function ManagerStatisticsBoard(props) {
                 `}
             </style>
             <ManagerLeftNew/>
+
+            {isLoading &&
+                <LoadingSpinner />
+            }
+
             <div className="inner">
                 <h2 className="pageTitle"><p>게시물접속통계</p></h2>
                 <div className="cateWrap">
@@ -133,7 +148,7 @@ function ManagerStatisticsBoard(props) {
                         </ul>
                     </div>
                     <div>
-                        {menuList()[menuIndex]}
+                        {menuList(handleCallback)[menuIndex]}
                     </div>
                 </div>
 

@@ -139,31 +139,29 @@ function commonPstDetail(props) {
                           <li className="name"><p>{pst.tblUser?.kornFlnm}</p></li>
                         </ul>
                       </div>
-                      <ul className="fileBox">
-                        {pst.pstFiles != null && pst.pstFiles.length > 0 && (
-                            <>
-                              {pst.pstFiles.map((file, index) => (
-                                  <li key={index}>
-                                    <a
-                                        onClick={() => fileDownLoad(file.atchFileSn, file.atchFileNm, 'tbl_bbs', pst.bbsSn)}
-                                        style={{cursor: "pointer"}}>
-                                      <div className="icon"></div>
-                                      <p className="name">{file.atchFileNm}</p>
-                                      <span className="size">{(file.atchFileSz / 1024).toFixed(2)} KB</span>
-                                    </a>
-                                  </li>
-                              ))}
-                            </>
-                        )}
-                        {/*{pst.pstFiles != null && pst.pstFiles.length > 0 && (
-                            <button
-                                type="button"
-                                className="clickBtn"
-                                onClick={() => fileZipDownLoad("pst_" + pst.pstSn, pst.pstTtl, 'tbl_bbs', pst.bbsSn)}>
-                              압축
-                            </button>
-                        )}*/}
-                      </ul>
+                      {pst.pstFiles != null && pst.pstFiles.length > 0 && (
+                          <ul className="fileBox">
+                            {pst.pstFiles.map((file, index) => (
+                                <li key={index}>
+                                  <a
+                                      onClick={() => fileDownLoad(file.atchFileSn, file.atchFileNm, 'tbl_bbs', pst.bbsSn)}
+                                      style={{cursor: "pointer"}}>
+                                    <div className="icon"></div>
+                                    <p className="name">{file.atchFileNm}</p>
+                                    <span className="size">{(file.atchFileSz / 1024).toFixed(2)} KB</span>
+                                  </a>
+                                </li>
+                            ))}
+                          </ul>
+                      )}
+                      {/*{pst.pstFiles != null && pst.pstFiles.length > 0 && (
+                          <button
+                              type="button"
+                              className="clickBtn"
+                              onClick={() => fileZipDownLoad("pst_" + pst.pstSn, pst.pstTtl, 'tbl_bbs', pst.bbsSn)}>
+                            압축
+                          </button>
+                      )}*/}
                     </th>
                   </tr>
                 </thead>
@@ -179,38 +177,41 @@ function commonPstDetail(props) {
                     <td>
                       <div className="textBox" dangerouslySetInnerHTML={{__html: pst.pstCn}}>
                       </div>
-
-                      <div className="answerBox">
-                        <div className="titleBox">
-                          <div className="state">
-                            <p>답변</p>
+                      {pst.answer == "Y" && (
+                          <div className="answerBox">
+                            <div className="titleBox">
+                              <div className="state">
+                                <p>답변</p>
+                              </div>
+                              <p className="title">답변 : {answer.pstTtl}</p>
+                              <ul className="bot">
+                                <li>
+                                  <p>{answer != null && answer.frstCrtDt != null ? moment(answer.frstCrtDt).format('YYYY-MM-DD') : ""}</p>
+                                </li>
+                                <li><p>{answer.tblUser?.kornFlnm}</p></li>
+                              </ul>
+                            </div>
+                            <div className="textBox" dangerouslySetInnerHTML={{__html: answer.pstCn}}>
+                            </div>
                           </div>
-                          <p className="title">답변 : {answer.pstTtl}</p>
-                          <ul className="bot">
-                            <li><p>{answer != null && answer.frstCrtDt != null ? moment(answer.frstCrtDt).format('YYYY-MM-DD') : ""}</p></li>
-                            <li><p>{answer.tblUser?.kornFlnm}</p></li>
-                          </ul>
-                        </div>
-                        <div className="textBox" dangerouslySetInnerHTML={{__html: answer.pstCn}}>
-                        </div>
-                      </div>
+                      )}
                     </td>
                   </tr>
                 </tbody>
                 <tfoot>
-                  <tr>
-                    <td>
-                      <ul className="navigationBox">
-                        <li className="prevBtn">
-                            {pstPrevNext.find(i => i.position === "PREV") ? (
-                                <a
-                                    href="#"
-                                    style={{cursor: "pointer"}}
-                                    onClick={() =>
-                                        pstPrevNextSearch(pstPrevNext.find(i => i.position === "PREV").pstSn)
-                                    }
-                                    key="prev"
-                                >
+                <tr>
+                  <td>
+                    <ul className="navigationBox">
+                      <li className="prevBtn">
+                        {pstPrevNext.find(i => i.position === "PREV") ? (
+                            <a
+                                href="#"
+                                style={{cursor: "pointer"}}
+                                onClick={() =>
+                                    pstPrevNextSearch(pstPrevNext.find(i => i.position === "PREV").pstSn)
+                                }
+                                key="prev"
+                            >
                                   <div className="left">
                                     <span>이전글</span>
                                     <i className="icon"></i>
@@ -281,7 +282,7 @@ function commonPstDetail(props) {
                               <span>답변</span>
                             </Link>
                         )}
-                        {authrt.mdfcnAuthrt == "Y" && (
+                        {(authrt.mdfcnAuthrt == "Y" || pst.creatrSn == sessionUser?.userSn) && (
                             <Link
                                 to={URL.COMMON_PST_QNA_MODIFY}
                                 mode={CODE.MODE_MODIFY}
@@ -296,7 +297,7 @@ function commonPstDetail(props) {
                               <span>수정</span>
                             </Link>
                         )}
-                        {authrt.delAuthrt == "Y" && (
+                        {(authrt.delAuthrt == "Y" || pst.creatrSn == sessionUser?.userSn) && (
                             <button type="button" className="clickBtn red"
                                     onClick={() => {
                                       setPstDel(pst.pstSn);
