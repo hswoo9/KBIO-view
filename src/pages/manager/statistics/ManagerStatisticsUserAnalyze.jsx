@@ -24,18 +24,29 @@ import ManagerStatisticsRegionUser from "./tabGroup/ManagerStatisticsRegionUser.
 import LoadingSpinner from "../../../components/LoadingSpinner.jsx";
 
 function ManagerStatisticsUserAnalyze(props) {
+    const [isLoading, setIsLoading] = useState(true);  // 로딩 상태
+
+    const handleCallback = (e) => {
+        if(e == "isLoading"){
+            setIsLoading(true);
+        }else{
+            setIsLoading(false);
+        }
+    };
 
     return (
         <div id="container" className="container layout cms">
             <ManagerLeftNew/>
 
-            {/*<LoadingSpinner/>*/}
+            {isLoading &&
+                <LoadingSpinner />
+            }
 
             <div className="inner period">
-                <ManagerStatisticsPeriodUser/>
+                <ManagerStatisticsPeriodUser onCallback={handleCallback}/>
             </div>
             <div className="inner region">
-                <ManagerStatisticsRegionUser/>
+                <ManagerStatisticsRegionUser onCallback={handleCallback}/>
             </div>
         </div>
     );

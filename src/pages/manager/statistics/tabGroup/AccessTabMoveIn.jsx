@@ -28,7 +28,6 @@ function AccessTabMoveIn(props) {
         };
 
         EgovNet.requestFetch("/statisticsApi/getStatisticsUserAccess.do", requestOptions, function (resp) {
-            console.log(resp)
             resp.result.statisticsUserAccess.forEach(function(v, i){
                 const userCounts = categories.map((day) => {
                     const item = resp.result.statisticsUserAccess.find(v => parseInt(v.day.split("-")[2]) === parseInt(day.slice(0, -1)));
@@ -37,10 +36,12 @@ function AccessTabMoveIn(props) {
 
                 setUserCnt(userCounts)
             })
+            props.onCallback();
         });
     }
 
     useEffect(() => {
+        props.onCallback("isLoading");
         getStatisticsUserAccess()
     }, [searchDto]);
 

@@ -21,8 +21,11 @@ import {
     subMonths,
     addMonths,
 } from "date-fns";
+import LoadingSpinner from "../../../components/LoadingSpinner.jsx";
 
 function ManagerStatisticsAccess(props) {
+    const [isLoading, setIsLoading] = useState(true);  // 로딩 상태
+
     const nowDate = new Date();
 
     const [searchDto, setSearchDto] = useState({
@@ -39,13 +42,21 @@ function ManagerStatisticsAccess(props) {
         setTabRenderKey(prev => prev + 1);
     }, [menuIndex, searchDto]);
 
-    const menuList = () => ({
-        0: <Tab1 key={menuIndex === 0 ? tabRenderKey : 0} searchDto={searchDto} />,
-        1: <Tab2 key={menuIndex === 1 ? tabRenderKey : 1} pageName="입주기업" searchDto={{ ...searchDto, mbrType: 1 }} />,
-        2: <Tab2 key={menuIndex === 2 ? tabRenderKey : 2} pageName="유관기관" searchDto={{ ...searchDto, mbrType: 3 }} />,
-        3: <Tab2 key={menuIndex === 3 ? tabRenderKey : 3} pageName="비입주기업" searchDto={{ ...searchDto, mbrType: 4 }} />,
-        4: <Tab2 key={menuIndex === 4 ? tabRenderKey : 4} pageName="컨설턴트" searchDto={{ ...searchDto, mbrType: 2 }} />,
+    const menuList = (callback) => ({
+        0: <Tab1 key={menuIndex === 0 ? tabRenderKey : 0} searchDto={searchDto} onCallback={callback}  />,
+        1: <Tab2 key={menuIndex === 1 ? tabRenderKey : 1} pageName="입주기업" searchDto={{ ...searchDto, mbrType: 1 }} onCallback={callback}  />,
+        2: <Tab2 key={menuIndex === 2 ? tabRenderKey : 2} pageName="유관기관" searchDto={{ ...searchDto, mbrType: 3 }} onCallback={callback}  />,
+        3: <Tab2 key={menuIndex === 3 ? tabRenderKey : 3} pageName="비입주기업" searchDto={{ ...searchDto, mbrType: 4 }} onCallback={callback}  />,
+        4: <Tab2 key={menuIndex === 4 ? tabRenderKey : 4} pageName="컨설턴트" searchDto={{ ...searchDto, mbrType: 2 }} onCallback={callback}  />,
     });
+
+    const handleCallback = (e) => {
+        if(e == "isLoading"){
+            setIsLoading(true);
+        }else{
+            setIsLoading(false);
+        }
+    };
 
     const changeMenu = (menuIndex) => {
         setMenuIndex(menuIndex);
@@ -72,6 +83,11 @@ function ManagerStatisticsAccess(props) {
                 `}
             </style>
             <ManagerLeftNew/>
+
+            {isLoading &&
+                <LoadingSpinner />
+            }
+
             <div className="inner">
                 <h2 className="pageTitle"><p>접속통계</p></h2>
                 <div className="cateWrap">
@@ -142,7 +158,7 @@ function ManagerStatisticsAccess(props) {
                         </ul>
                     </div>
                     <div>
-                        {menuList()[menuIndex]}
+                        {menuList(handleCallback)[menuIndex]}
                     </div>
                 </div>
 

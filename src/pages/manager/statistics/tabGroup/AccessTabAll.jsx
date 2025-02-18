@@ -77,10 +77,12 @@ function AccessTabAll(props) {
             );
 
             setUserAccessList(dataList);
+            props.onCallback();
         });
     }
 
     useEffect(() => {
+        props.onCallback("isLoading");
         getStatisticsUserAccess()
     }, [searchDto]);
 

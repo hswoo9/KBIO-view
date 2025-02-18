@@ -36,10 +36,12 @@ function AccessTabPst(props) {
 
                 setCnt(userCounts)
             })
+            props.onCallback();
         });
     }
 
     useEffect(() => {
+        props.onCallback("isLoading");
         getStatisticsPstAccess()
     }, [searchDto]);
 
