@@ -14,34 +14,20 @@ import CommonSubMenu from "@/components/CommonSubMenu";
 import CommonEditor from "@/components/CommonEditor";
 
 function MemberMyPageModify(props) {
-    const location = useLocation();
-    const checkRef = useRef([]);
     const navigate = useNavigate();
+    const location = useLocation();
     const sessionUser = getSessionItem("loginUser");
     const sessionUserName = sessionUser?.name;
     const sessionUserSn = sessionUser?.userSn;
     const sessionUsermbrType = sessionUser?.mbrType;
-    const [address, setAddress] = useState("");
-    const [image, setImage] = useState("");
+    const [address, setAddress] = useState({});
+    const [image, setImage] = useState({});
     const [comCdList, setComCdList] = useState([]);
-    
-    console.log(sessionUser);
+    const [cnsltProfileFile, setCnsltProfileFile] = useState(null);
 
-    const [cnsltDetail, setCnsltDetail] = useState({});
+    const [consultDetail, setConsultDetail] = useState({});
 
-    const [memberDetail, setMemberDetail] = useState({
-        kornFlnm: '', // 성명
-        mblTelno: '', // 휴대폰
-        userId: '', // 아이디
-        emailPrefix: '', // 이메일 아이디
-        emailDomain: '', // 이메일 도메인
-        email: '', // 전체 이메일
-        userPw: '', // 비밀번호
-        addr: '', // 주소
-        daddr: '', // 상세주소
-        emlRcptnAgreYn: '', // 메일 수신 동의
-        smsRcptnAgreYn: '' // 문자 수신 동의
-    });
+    const [memberDetail, setMemberDetail] = useState({});
     const [modeInfo, setModeInfo] = useState({mode: props.mode});
     const [searchDto, setSearchDto] = useState({userSn:sessionUserSn});
 
@@ -75,10 +61,11 @@ function MemberMyPageModify(props) {
             emlRcptnAgreYn: value,
         });
     };
-
+/*
     useEffect(() => {
         console.log(memberDetail);
     }, [memberDetail]);
+*/
 
     const handleSmsChange = (e) => {
         const value = e.target.value;
@@ -134,8 +121,8 @@ function MemberMyPageModify(props) {
     useEffect(() => {
         if (memberDetail.email) {
             const emailParts = memberDetail.email.split("@");
-            const emailPrefix = emailParts[0] || "";
-            const emailDomain = emailParts[1] || "";
+            const emailPrefix = emailParts[0];
+            const emailDomain = emailParts[1];
 
             // 기본 제공 도메인 리스트
             const defaultProviders = [
@@ -146,7 +133,6 @@ function MemberMyPageModify(props) {
                 "nate.com",
                 "hanmail.net"
             ];
-
             setMemberDetail((prevState) => ({
                 ...prevState,
                 emailPrefix,
@@ -177,7 +163,7 @@ function MemberMyPageModify(props) {
     };
 
     const getNormalMember = (searchDto) => {
-        const getNormalMemberURL = `/memberApi/getMyPageNormalMember`;
+        const getNormalMemberURL = '/memberApi/getMyPageNormalMember';
         const requestOptions = {
             method: "POST",
             headers: {
@@ -187,11 +173,10 @@ function MemberMyPageModify(props) {
         };
 
         EgovNet.requestFetch(getNormalMemberURL, requestOptions, (resp) => {
-            console.log("Response Received:", resp);  // 응답이 올바르게 들어오는지 확인
             if (modeInfo.mode === CODE.MODE_MODIFY) {
                 const memberData = resp.result.member;
+                const cnsltData = resp.result.cnslttMbr;
 
-                console.log("D Member Data:", memberData);
 
                 const decodedPhoneNumber = memberData.mblTelno ? decodePhoneNumber(memberData.mblTelno) : "";
 
@@ -201,23 +186,29 @@ function MemberMyPageModify(props) {
 
                 if (memberData.email && memberData.email.includes("@")) {
                     const emailParts = memberData.email.split("@");
-                    emailPrefix = emailParts[0] || "";
-                    emailDomain = emailParts[1] || "";
+                    emailPrefix = emailParts[0];
+                    emailDomain = emailParts[1];
                     emailProvider = emailDomain;
                 }
 
-                setMemberDetail((prevState) => ({
-                    ...prevState,
+                setMemberDetail({
                     ...memberData,
                     mblTelno: decodedPhoneNumber,
-                    emailPrefix,
-                    emailDomain,
+                    emailPrefix : emailPrefix,
+                    emailDomain : emailDomain,
                     email: memberData.email,
-                    emailProvider,
+                    emailProvider : emailProvider,
+                });
+
+                setConsultDetail((prevState) => ({
+                    ...prevState,
+                    ...cnsltData,
                 }));
+                console.log("현재 consultDetail:", consultDetail);
             }
         });
     };
+
 
 
     useEffect(() => {
@@ -234,7 +225,7 @@ function MemberMyPageModify(props) {
                     onChange={(e) =>
                         setMemberDetail({...memberDetail, cnsltFld: e.target.value})
                     }
-                    key="commonCodeSelect" // React에서 고유 key 추가
+                    key="commonCodeSelect"
                 >
                     <option value="">전체</option>
                     {dataList.map((item) => (
@@ -250,11 +241,19 @@ function MemberMyPageModify(props) {
     }
 
     const handleChange = (value) => {
-        setMemberDetail({...memberDetail, cnsltSlfint: value});
+        setConsultDetail((prevState) => ({
+            ...prevState,
+            cnsltSlfint: value,
+        }));
     };
 
+    useEffect(() => {
+        console.log("현재 consultDetail:", consultDetail);
+    }, [consultDetail]);
 
     const updateMember = () => {
+        console.log("현재 memberDetail 상태:", memberDetail);
+        console.log("현재 consultDetail:", consultDetail);
         Swal.fire({
             title: "저장하시겠습니까?",
             showCloseButton: true,
@@ -264,11 +263,6 @@ function MemberMyPageModify(props) {
         }).then((result) => {
             if (result.isConfirmed) {
                 if (!memberDetail.emailPrefix || !memberDetail.emailDomain) {
-                    Swal.fire("이메일을 입력해주세요.");
-                    return;
-                }
-
-                if (!memberDetail.email) {
                     Swal.fire("이메일을 입력해주세요.");
                     return;
                 }
@@ -291,8 +285,8 @@ function MemberMyPageModify(props) {
                     return;
                 }
 
-                const emailPrefix = memberDetail.emailPrefix || "";
-                const emailDomain = memberDetail.emailDomain || "";
+                const emailPrefix = memberDetail.emailPrefix;
+                const emailDomain = memberDetail.emailDomain;
                 const email = `${emailPrefix}@${emailDomain}`;
 
                 const updatedMemberDetail = {
@@ -303,38 +297,45 @@ function MemberMyPageModify(props) {
                     emailProvider: emailDomain,
                 };
 
+                const hasConsultData = consultDetail && Object.keys(consultDetail).length > 0;
+
                 setSaveEvent({
                     ...saveEvent,
                     save: true,
                     mode: "save",
-                    memberDetail: updatedMemberDetail
+                    memberDetail: updatedMemberDetail,
+                    consultDetail: hasConsultData ? consultDetail : null
                 });
             } else {
             }
         });
     };
     const [saveEvent, setSaveEvent] = useState({});
+    
     useEffect(() => {
-        if(saveEvent.save){
-            if(saveEvent.mode == "save"){
-                saveMemberModdifyData(memberDetail);
-            }else {
-            }
+        if (saveEvent.save && saveEvent.mode === "save") {
+            saveMemberModifyData(saveEvent.memberDetail, saveEvent.consultDetail);
         }
     }, [saveEvent]);
 
-    const saveMemberModdifyData = useCallback(
-        (MemberDetail) => {
-            const formData = new FormData();
-            for (let key in MemberDetail) {
-                if (MemberDetail[key] != null) {
-                    formData.append(key, MemberDetail[key]);
-                }
+    const saveMemberModifyData = useCallback((memberDetail, consultDetail) => {
+        const formData = new FormData();
+
+        Object.keys(memberDetail).forEach((key) => {
+            if (memberDetail[key] != null) {
+                formData.append(key, memberDetail[key]);
             }
+        });
 
-            console.log("Sending data:", Object.fromEntries(formData.entries()));
+        if (consultDetail && Object.keys(consultDetail).length > 0) {
+            Object.keys(consultDetail).forEach((key) => {
+                if (consultDetail[key] != null) {
+                    formData.append(key, consultDetail[key]);
+                }
+            });
+        }
 
-            const menuListURL = "/memberApi/setMemberMyPageModfiy";
+        const menuListURL = "/memberApi/setMemberMyPageModfiy";
             const requestOptions = {
                 method: "POST",
                 body: formData
@@ -389,7 +390,7 @@ function MemberMyPageModify(props) {
                                     type="text"
                                     name="kornFlnm"
                                     id="kornFlnm"
-                                    value={memberDetail.kornFlnm || ''}
+                                    value={memberDetail.kornFlnm}
                                     readOnly
                                 />
                             </label>
@@ -402,7 +403,7 @@ function MemberMyPageModify(props) {
                                     type="text"
                                     name="mblTelno"
                                     id="mblTelno"
-                                    value={memberDetail.mblTelno || ''}
+                                    value={memberDetail.mblTelno}
                                     readOnly
                                 />
                             </label>
@@ -417,7 +418,7 @@ function MemberMyPageModify(props) {
                                         name="userId"
                                         id="userId"
                                         placeholder="아이디는 6~12자 영문, 숫자만 가능합니다."
-                                        value={memberDetail.userId || ''}
+                                        value={memberDetail.userId}
                                         readOnly
                                     />
                                 </div>
@@ -431,7 +432,7 @@ function MemberMyPageModify(props) {
                                     name="emailPrefix"
                                     id="emailPrefix"
                                     placeholder="이메일 아이디 입력"
-                                    value={memberDetail.emailPrefix || ""}
+                                    value={memberDetail.emailPrefix}
                                     onChange={(e) => setMemberDetail((prev) => ({
                                         ...prev,
                                         emailPrefix: e.target.value,
@@ -477,7 +478,7 @@ function MemberMyPageModify(props) {
                                                     email: `${prev.emailPrefix}@${provider === "direct" ? "" : provider}`
                                                 }));
                                             }}
-                                            value={memberDetail.emailProvider || ""}
+                                            value={memberDetail.emailProvider}
                                             style={{
                                                 padding: '5px',
                                                 flex: 1,
@@ -551,23 +552,18 @@ function MemberMyPageModify(props) {
                                             overflow: "hidden",
                                             backgroundColor: "#f8f8f8"
                                         }}>
-                                            {image ? (
-                                                <img
-                                                    src={image}
-                                                    alt="컨설턴트 사진"
-                                                    style={{width: "100%", height: "100%", objectFit: "cover"}}
-                                                />
-                                            ) : (
-                                                <div style={{
-                                                    width: "100%",
-                                                    height: "100%",
-                                                    display: "flex",
-                                                    alignItems: "center",
-                                                    justifyContent: "center",
-                                                    color: "#999"
-                                                }}>
-                                                </div>
-                                            )}
+                                            <img
+                                                src={
+                                                    cnsltProfileFile
+                                                        ? `http://133.186.250.158${cnsltProfileFile.atchFilePathNm}/${cnsltProfileFile.strgFileNm}.${cnsltProfileFile.atchFileExtnNm}`
+                                                        : "" // 기본 이미지 (필요한 경우)
+                                                }
+                                                alt="컨설턴트사진"
+                                                style={{
+                                                    width: "200px",
+                                                    objectFit: "cover",
+                                                }}
+                                            />
                                         </div>
                                         <div style={{flex: 1}}>
                                             <p style={{color: "#ff4444", fontSize: "14px", marginBottom: "8px"}}>
@@ -594,7 +590,7 @@ function MemberMyPageModify(props) {
                                 <span className="tt1">소개</span>
                                 <div className="input" style={{height: "100%"}}>
                                     <CommonEditor
-                                        value={cnsltDetail.cnsltSlfint || ""}
+                                        value={consultDetail.cnsltSlfint}
                                         onChange={handleChange}
                                     />
                                 </div>
@@ -607,8 +603,8 @@ function MemberMyPageModify(props) {
                                         type="text"
                                         name="consultantPosition"
                                         placeholder="직위를 입력해주세요"
-                                        value={cnsltDetail.jbpsNm || ""}
-                                        onChange={(e) => setCnsltDetail({...cnsltDetail, jbpsNm: e.target.value})}
+                                        value={consultDetail.jbpsNm}
+                                        onChange={(e) => setConsultDetail({...consultDetail, jbpsNm: e.target.value})}
                                     />
                                 </label>
                             </li>
@@ -620,8 +616,8 @@ function MemberMyPageModify(props) {
                                         type="text"
                                         name="consultantExperience"
                                         placeholder="숫자만 입력"
-                                        value={cnsltDetail.crrPrd || ""}
-                                        onChange={(e) => setCnsltDetail({...cnsltDetail, crrPrd: e.target.value})}
+                                        value={consultDetail.crrPrd}
+                                        onChange={(e) => setConsultDetail({...consultDetail, crrPrd: e.target.value})}
                                         style={{width: "120px"}}
                                     />
                                     <span style={{marginLeft: "10px", color: "#333"}}>년</span>
@@ -635,8 +631,8 @@ function MemberMyPageModify(props) {
                                         type="text"
                                         name="consultantAffiliation"
                                         placeholder="소속을 입력해주세요"
-                                        value={cnsltDetail.ogdpNm || ""}
-                                        onChange={(e) => setCnsltDetail({...cnsltDetail, ogdpNm: e.target.value})}
+                                        value={consultDetail.ogdpNm}
+                                        onChange={(e) => setConsultDetail({...consultDetail, ogdpNm: e.target.value})}
                                     />
                                 </label>
                             </li>
@@ -648,9 +644,9 @@ function MemberMyPageModify(props) {
                                         <input
                                             type="text"
                                             name="consultingOption1"
-                                            checked={memberDetail.consultingOption1}
-                                            onChange={(e) => setCnsltDetail({
-                                                ...cnsltDetail,
+                                            checked={consultDetail.consultingOption1}
+                                            onChange={(e) => setConsultDetail({
+                                                ...consultDetail,
                                                 consultingOption1: e.target.checked
                                             })}
                                         />
@@ -660,11 +656,15 @@ function MemberMyPageModify(props) {
 
                             <li className="inputBox type2">
                                 <span className="tt1">자문분야</span>
-                                <label className="input">
-                                    <div className="itemBox" style={{flex: 1}}>
-                                        {getComCdListToHtml(comCdList)}
+                                <div className="input">
+                                    <div style={{
+                                        border: "1px solid #ddd",
+                                        borderRadius: "10px",
+                                        padding: "10px",
+                                    }}>
+                                        {comCdList.find(item => item.comCd === String(consultantDetail.cnsltFld))?.comCdNm || ""}
                                     </div>
-                                </label>
+                                </div>
                             </li>
 
                             <li className="inputBox type2">
@@ -676,9 +676,9 @@ function MemberMyPageModify(props) {
                                                 type="radio"
                                                 name="cnsltActv"
                                                 value="Y"
-                                                checked={cnsltDetail.cnsltActv === "Y"}
+                                                checked={consultDetail.cnsltActv === "Y"}
                                                 onChange={() =>
-                                                    setCnsltDetail({...cnsltDetail, cnsltActv: "Y"})
+                                                    setConsultDetail({...consultDetail, cnsltActv: "Y"})
                                                 }
                                             />
                                             <small>공개</small>
@@ -688,9 +688,9 @@ function MemberMyPageModify(props) {
                                                 type="radio"
                                                 name="cnsltActv"
                                                 value="N"
-                                                checked={cnsltDetail.cnsltActv === "N"}
+                                                checked={consultDetail.cnsltActv === "N"}
                                                 onChange={() =>
-                                                    setCnsltDetail({...cnsltDetail, cnsltActv: "N"})
+                                                    setConsultDetail({...consultDetail, cnsltActv: "N"})
                                                 }
                                             />
                                             <small>비공개</small>
