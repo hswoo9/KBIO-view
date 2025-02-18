@@ -42,7 +42,7 @@ function ManagerExpert(props) {
 
     const getConsultMemberList = useCallback(
         (searchDto) => {
-            const consultMemberListUrl = "/memberApi/getNormalMemberList.do"; //임시로 회원조회 url을 사용하나 나중에 join된 걸 불러와야할듯
+            const consultMemberListUrl = "/consultingApi/getConsultantList.do"; //임시로 회원조회 url을 사용하나 나중에 join된 걸 불러와야할듯
             const requestOptions = {
                 method: "POST",
                 headers: {
@@ -63,28 +63,34 @@ function ManagerExpert(props) {
                         </tr>
                     );
 
-                    resp.result.getNormalMemberList.forEach(function (item, index) {
+                    resp.result.consultantList.forEach(function (item, index) {
                         if (index === 0) dataList = [];
 
-                        const totalItems = resp.result.getNormalMemberList.length;
+                        const totalItems = resp.result.consultantList.length;
                         const itemNumber = totalItems - index;
 
                         dataList.push(
-                            <tr key={item.userSn}>
+                            <tr key={item.tblUser.userSn}>
                                 <td>{itemNumber}</td>
-                                <td></td>
-                                <td>{item.kornFlnm}</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td>{item.actvtnYn === 'Y' ? '공개' :
-                                     item.actvtnYn === 'W' ? '비공개' :
-                                     item.actvtnYn === 'R' ? '비공개' :
-                                     item.actvtnYn === 'C' ? '비공개' :
-                                     item.actvtnYn === 'S' ? '비공개' : ''}
+                                <td>{item.cnsltFldNm}</td>
+                                <td>
+                                    <NavLink to={URL.MANAGER_COUSULTANT_DETAIL}
+                                             state={{userSn : item.tblUser.userSn}}
+                                    >
+                                    {item.tblUser.kornFlnm}
+                                    </NavLink>
                                 </td>
-                                <td></td>
-                                <td></td>
+                                <td>{item.tblCnslttMbr.ogdpNm}</td>
+                                <td>{item.tblCnslttMbr.jbpsNm}</td>
+                                <td>{item.tblCnslttMbr.crrPrd} 년</td>
+                                <td>{item.tblUser.mbrStts === 'Y' ? '공개' :
+                                     item.tblUser.mbrStts === 'W' ? '비공개' :
+                                     item.tblUser.mbrStts === 'R' ? '비공개' :
+                                     item.tblUser.mbrStts === 'C' ? '비공개' :
+                                     item.tblUser.mbrStts === 'S' ? '비공개' : ''}
+                                </td>
+                                <td>{item.cnsltCount} 건</td>
+                                <td>{item.simpleCount} 건</td>
                             </tr>
                         );
                     });
@@ -159,7 +165,7 @@ function ManagerExpert(props) {
                 </div>
                 <div className="contBox board type1 customContBox">
                     <div className="topBox">
-                        <p className="resultText">전체 : <span className="red">1234</span>건 페이지 : <span className="red">1/400</span> </p>
+                        <p className="resultText">전체 : <span className="red">{paginationInfo.totalRecordCount}</span>건 페이지 : <span className="red">{paginationInfo.currentPageNo}/{paginationInfo.totalPageCount}</span> </p>
                         <div className="rightBox">
                             <button type="button" className="btn btn2 downBtn red">
                                 <div className="icon"></div>

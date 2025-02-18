@@ -18,6 +18,8 @@ import KbioLocation from "@/pages/kBioLabHub/Location";
 import Introduce from "@/pages/introduce/Introduce";
 import IntroduceOperational from "@/pages/introduce/OperationalList";
 import IntroduceOperationalDetail from "@/pages/introduce/OperationalDetail";
+import IntroduceRelated from "@/pages/introduce/RelatedList";
+import IntroduceRelatedDetail from "@/pages/introduce/RelatedDetail";
 import TotalSearch from "@/pages/search/TotalSearch";
 //COMMON
 import CommonError from "@/pages/common/error/commonError";
@@ -166,6 +168,7 @@ import OperationalDifficultiesEdit from "@/pages/manager/operationalSupport/diff
 
 //컨설팅지원
 import ManagerExpert from "@/pages/manager/consulting/ManagerExpert";
+import ManagerConsultuntDetail from "@/pages/manager/consulting/ManagerConsultuntDetail";
 import ManagerMatching from "@/pages/manager/consulting/ManagerMatching";
 import ManagerSimpleCnslt from "@/pages/manager/consulting/ManagerSimpleCnslt";
 import ManagerSimpleCnsltDetail from "@/pages/manager/consulting/ManagerSimpleCnsltDetail";
@@ -345,6 +348,8 @@ const SecondRoutes = () => {
               <Route path={URL.INTRODUCE} element={<Introduce/>}/>
               <Route path={URL.INTRODUCE_OPERATIONAL_LIST} element={<IntroduceOperational/>}/>
               <Route path={URL.INTRODUCE_OPERATIONAL_DETAIL} element={<IntroduceOperationalDetail/>}/>
+              <Route path={URL.INTRODUCE_RELATED_LIST} element={<IntroduceRelated/>}/>
+              <Route path={URL.INTRODUCE_RELATED_DETAIL} element={<IntroduceRelatedDetail/>}/>
 
               {/* COMMON */}
               <Route path={URL.COMMON_CONTENT_VIEW} element={<CommonContentView/>}/>
@@ -810,6 +815,7 @@ const SecondRoutes = () => {
               <Route path={URL.MANAGER_IMAGES_POPUP} element={<ManagerImagesPopup/>}/>
               <Route path={URL.MANAGER_OPERATIONAL_SUPPORT} element={<OperationalSupport/>}/>
               <Route path={URL.MANAGER_CONSULTING_EXPERT} element={<ManagerExpert/>}/>
+              <Route path={URL.MANAGER_COUSULTANT_DETAIL} element={<ManagerConsultuntDetail/>}/>
               <Route path={URL.MANAGER_CONSULTING_MATCHING} element={<ManagerMatching/>}/>
               <Route path ={URL.MANAGER_SIMPLE_CONSULTING} element={<ManagerSimpleCnslt/>}/>
               <Route path = {URL.MANAGER_CONSULTING_DETAIL} element={<ManagerCnsltDetail/>}/>
