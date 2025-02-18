@@ -160,6 +160,7 @@ import OperationalRelatedOrganization from "@/pages/manager/operationalSupport/O
 import OperationalResidentManageMember from "@/pages/manager/operationalSupport/OperationalResidentManageMember";
 import OperationalRelatedManageMember from "@/pages/manager/operationalSupport/OperationalRelatedManageMember";
 import OperationResidentMemberEdit from "@/pages/manager/operationalSupport/OperationResidentMemberEdit";
+import OperationRelatedMemberEdit from "@/pages/manager/operationalSupport/OperationRelatedMemberEdit";
 import OperationalDifficulties from "@/pages/manager/operationalSupport/diff/OperationalDifficulties";
 import OperationalDifficultiesEdit from "@/pages/manager/operationalSupport/diff/Edit";
 
@@ -821,6 +822,7 @@ const SecondRoutes = () => {
               <Route path={URL.MANAGER_RESIDENT_MANAGER} element={<OperationalResidentManageMember />}/>
               <Route path={URL.MANAGER_RELATED_MANAGER} element={<OperationalRelatedManageMember />}/>
               <Route path={URL.MANAGER_RESIDENT_MEMBER_EDIT} element={<OperationResidentMemberEdit mode={CODE.MODE_MODIFY}/>}/>
+              <Route path={URL.MANAGER_RELATED_MEMBER_EDIT} element={<OperationRelatedMemberEdit mode={CODE.MODE_MODIFY}/>}/>
               <Route path={URL.MANAGER_RELATED_ORGANIZATION} element={<OperationalRelatedOrganization />} />
               <Route path={URL.MANAGER_DIFFICULTIES} element={<OperationalDifficulties />} />
               <Route path={URL.MANAGER_DIFFICULTIES_MODIFY} element={<OperationalDifficultiesEdit mode={CODE.MODE_MODIFY}/>} />

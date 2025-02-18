@@ -6,12 +6,13 @@ import URL from "@/constants/url";
 import CODE from "@/constants/code";
 
 import ManagerLeft from "@/components/manager/ManagerLeftOperationalSupport";
-import EgovUserPaging from "@/components/EgovUserPaging";
+import EgovPaging from "@/components/EgovPaging";
+import OperationalSupport from "./OperationalSupport.jsx";
 import base64 from 'base64-js';
 
 function OperationalRelatedMember(props) {
     const location = useLocation();
-    const [relatedMemberList, setAuthorityList] = useState([]);
+    const [residentMemberList, setAuthorityList] = useState([]);
     const [searchDto, setSearchDto] = useState(
         {
             pageIndex : 1,
@@ -20,7 +21,7 @@ function OperationalRelatedMember(props) {
             kornFlnm: "",
             userId: ""
         }
-    );
+        );
     const [paginationInfo, setPaginationInfo] = useState({
         currentPageNo: 1,
         firstPageNo: 1,
@@ -39,9 +40,9 @@ function OperationalRelatedMember(props) {
         return new TextDecoder().decode(decodedBytes);
     };
 
-    const getResidentMemberList = useCallback(
+    const getRelatedMemberList = useCallback(
         (searchDto) =>{
-            const getUrl = "/relInstApi/getrelatedMemberList.do";
+            const getUrl = "/relatedApi/getRelatedtMemberList.do";
             const requestOptions = {
                 method: "POST",
                 headers: {
@@ -61,7 +62,7 @@ function OperationalRelatedMember(props) {
                         </tr>
                     );
 
-                    resp.result.getResidentMemberList.forEach(function (item,index){
+                    resp.result.getRelatedMemberList.forEach(function (item,index){
                         if(index === 0) dataList = [];
                         const decodedPhoneNumber = decodePhoneNumber(item.mblTelno);
 
@@ -70,15 +71,15 @@ function OperationalRelatedMember(props) {
                                 <td>{index + 1}</td>
                                 <td>{item.userId}</td>
                                 <td>
-                                    <Link to={URL.MANAGER_RESIDENT_MEMBER_EDIT}
-                                          state={{
-                                              relInstSn: searchDto.relInstSn,
-                                              mode:CODE.MODE_MODIFY,
-                                              userSn: item.userSn
-                                          }}
-                                    >
-                                        {item.kornFlnm}
-                                    </Link>
+                                <Link to={URL.MANAGER_RELATED_MEMBER_EDIT}
+                                      state={{
+                                          relInstSn: searchDto.relInstSn,
+                                          mode:CODE.MODE_MODIFY,
+                                          userSn: item.userSn
+                                      }}
+                                >
+                                {item.kornFlnm}
+                                </Link>
                                 </td>
                                 <td>{decodedPhoneNumber}</td>
                                 <td>{item.email}</td>
@@ -95,18 +96,18 @@ function OperationalRelatedMember(props) {
             )
 
         },
-        [relatedMemberList, searchDto]
+        [residentMemberList, searchDto]
     );
 
     useEffect(() => {
-        getResidentMemberList(searchDto);
+        getRelatedMemberList(searchDto);
     },[]);
 
     return (
         <div id="container" className="container layout cms">
             <ManagerLeft/>
             <div className="inner">
-                <h2 className="pageTitle"><p>유관기관 관리</p></h2>
+                <h2 className="pageTitle"><p>입주기업 관리</p></h2>
                 {/*회사 로고*/}
                 <div className="company_info">
                     <div className="left">
@@ -201,16 +202,16 @@ function OperationalRelatedMember(props) {
                             </tr>
                             </thead>
                             <tbody>
-                            {relatedMemberList}
+                            {residentMemberList}
                             </tbody>
                         </table>
                     </div>
                     {/*페이징, 버튼 영역*/}
                     <div className="pageWrap">
-                        <EgovUserPaging
+                        <EgovPaging
                             pagination={paginationInfo}
                             moveToPage={(passedPage) => {
-                                getResidentMemberList({
+                                getRelatedMemberList({
                                     ...searchDto,
                                     pageIndex: passedPage,
                                 });

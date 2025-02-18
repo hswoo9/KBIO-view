@@ -43,7 +43,7 @@ function OperationalRelatedMember(props) {
 
     const getRelatedMemberList = useCallback(
         (searchDto) =>{
-            const getUrl = "/relInstApi/getresidentMemberList.do";
+            const getUrl = "/relatedApi/getRelatedtMemberList.do";
             const requestOptions = {
                 method: "POST",
                 headers: {
@@ -72,7 +72,7 @@ function OperationalRelatedMember(props) {
                                 <td>{index + 1}</td>
                                 <td>{item.userId}</td>
                                 <td>
-                                    <Link to={URL.MANAGER_RESIDENT_MEMBER_EDIT}
+                                    <Link to={URL.MANAGER_RELATED_MEMBER_EDIT}
                                           state={{
                                               relInstSn: searchDto.relInstSn,
                                               mode:CODE.MODE_MODIFY,
