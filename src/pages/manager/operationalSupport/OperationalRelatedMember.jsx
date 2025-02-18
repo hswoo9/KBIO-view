@@ -208,7 +208,7 @@ function OperationalRelatedMember(props) {
                     </div>
                     {/*페이징, 버튼 영역*/}
                     <div className="pageWrap">
-                        <EgovPaging
+                        <EgovUserPaging
                             pagination={paginationInfo}
                             moveToPage={(passedPage) => {
                                 getResidentMemberList({
