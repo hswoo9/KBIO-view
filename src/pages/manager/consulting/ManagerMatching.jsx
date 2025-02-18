@@ -38,7 +38,6 @@ function ManagerMatching(props) {
     const [cnsltFldList, setCnsltFldList] = useState([]);
     /** 컨설팅 상태 코드 */
     const [cnsltSttsCdList, setCnsltSttsCd] = useState([]);
-
     const [paginationInfo, setPaginationInfo] = useState({});
 
 

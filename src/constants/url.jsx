@@ -245,6 +245,7 @@ const URL = {
 
   //컨설팅지원
   MANAGER_CONSULTING_EXPERT: "/manager/expert",
+  MANAGER_COUSULTANT_DETAIL: "/manager/cnslttDetail",
   MANAGER_CONSULTING_MATCHING: "/manager/matching",
   MANAGER_SIMPLE_CONSULTING: "/manager/simpleconsulting",
   MANAGER_CONSULTING_DETAIL: "/manager/consultingDetail",
