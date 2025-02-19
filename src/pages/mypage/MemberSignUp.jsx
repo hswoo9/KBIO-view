@@ -1494,6 +1494,7 @@ function MemberSignUp(props) {
                           <label className="checkBox type3">
                             <input
                                 type="radio"
+                                className="signUpRadio"
                                 name="cnsltActv"
                                 value="Y"
                                 checked={memberDetail.cnsltActv === "Y"}
@@ -1506,6 +1507,7 @@ function MemberSignUp(props) {
                           <label className="checkBox type3">
                             <input
                                 type="radio"
+                                className="signUpRadio"
                                 name="cnsltActv"
                                 value="N"
                                 checked={memberDetail.cnsltActv === "N"}
@@ -1812,6 +1814,7 @@ function MemberSignUp(props) {
                     <label className="checkBox type3">
                       <input
                           type="radio"
+                          className="signUpRadio"
                           id="receive_mail_yes"
                           name="receive_mail"
                           checked={memberDetail.emlRcptnAgreYn === "Y"}
@@ -1822,6 +1825,7 @@ function MemberSignUp(props) {
                     <label className="checkBox type3">
                       <input
                           type="radio"
+                          className="signUpRadio"
                           id="receive_mail_no"
                           name="receive_mail"
                           checked={memberDetail.emlRcptnAgreYn === "N"}
@@ -1840,6 +1844,7 @@ function MemberSignUp(props) {
                     <label className="checkBox type3">
                       <input
                           type="radio"
+                          className="signUpRadio"
                           id="receive_sms_yes"
                           name="receive_sms"
                           checked={memberDetail.smsRcptnAgreYn === "Y"}
@@ -1850,6 +1855,7 @@ function MemberSignUp(props) {
                     <label className="checkBox type3">
                       <input
                           type="radio"
+                          className="signUpRadio"
                           id="receive_sms_no"
                           name="receive_sms"
                           checked={memberDetail.smsRcptnAgreYn === "N"}
