@@ -37,7 +37,7 @@ input::placeholder {color: #BBBBBB; font-weight: 500;}
 .container .inputBox.type1 .title {color: #999999; font-size: 14px;}
 .container .inputBox.type1 .input {position: relative;}
 .container .inputBox.type1 .input input {padding: .3rem .9rem; width: 100%; box-sizing: border-box; height: 48px; border-radius: .6rem; border:  1px solid #ddd; transition: .5s ease; font-size: .9rem; font-weight: 500; font-family: 'pretendard';}
-.container .inputBox.type1 .input input:placeholder {color:  #bbb;}
+.container .inputBox.type1 .input input::placeholder {color:  #bbb;}
 .container .inputBox.type1 .input textarea {padding: .8rem 1rem; width: 100%; box-sizing: border-box; height: 2.8rem; outline: none; border: none; font-size: .9rem; border-radius: .66rem; border:  1px solid #ddd; transition: .5s ease;}
 .container .inputBox.type1 .input textarea::placeholder {color: #bbb;}
 .container .inputBox.type1 .input input:focus, .container .inputBox.type1 .input textarea:focus {border-color: var(--mainColor); box-shadow: 0 0 8px #04819b24;}
@@ -49,18 +49,26 @@ input::placeholder {color: #BBBBBB; font-weight: 500;}
 .container .inputBox.type1.email .input span {flex: none;}
 .container .inputBox.type1.email .input input, .container .inputBox.type1.email .input .itemBox {width: 100%;}
 .container .inputBox .input .btn {position: absolute; top: 50%; right: .5rem; transform: translateY(-50%); font-size: 12px; background: #999999; border-radius: 8px; color: #fff; padding: 0 .5rem; height: 1.6rem; display: flex; align-items: center; justify-content: center; transition: .5s ease; z-index: 1;}
-.container .inputBox.type2 {position: relative;}
-.container .inputBox.type2 .tt1 {position: absolute; color: #666; font-size: .8rem; font-weight: 600; top: .8rem; left: .9rem; pointer-events: none;}
-.container .inputBox.type2 .input {display: block; width: 100%; height: 4.1rem; border-radius: .9rem; background: #F6F6F6; padding: .7rem .9rem; box-sizing: border-box; padding-top: 2rem;}
-.container .inputBox.type2.noText .input {padding-bottom: 0; padding-top: 0; display: flex; align-items: center;}
-.container .inputBox.type2 .input.flexinput {display: flex; gap: .5rem; align-items: center;}
-.container .inputBox.type2 .input.flexinput > *:not(span, .btn) {width: 100%;}
-.container .inputBox.type2 .input.flexinput > span {flex: none;}
-.container .inputBox.type2 input {width: 100%; box-sizing: border-box; font-size: .9rem; background: transparent;}
-.container .inputBox.type2 .nice-select {background: transparent; border: none; padding: 0 1rem}
-.container .inputBox.type2.white .input {background: #fff;}
-.container .inputBox.type2 .input .btn {top: auto; bottom: .6rem; right: 1rem; transform: none;}
-.container .inputBox.type2 .checkWrap {height: 1.5rem;}
+.inputBox.type2 {position: relative;}
+.inputBox.type2 .tt1 {position: absolute; color: #666; font-size: .8rem; font-weight: 600; top: .8rem; left: 1.2rem; pointer-events: none;}
+.inputBox.type2 .input {display: block; width: 100%; min-height: 4.1rem; border-radius: .9rem; background: #F6F6F6; padding: .7rem 1.2rem; box-sizing: border-box; padding-top: 2.3rem;}
+.inputBox.type2.noText .input {padding-bottom: 0; padding-top: 0; display: flex; align-items: center;}
+.inputBox.type2 .input.flexinput {display: flex; gap: .5rem; align-items: center;}
+.inputBox.type2 .input.flexinput > *:not(span, .btn) {width: 100%;}
+.inputBox.type2 .input.flexinput > span {flex: none;}
+.inputBox.type2 .input input {width: 100%; box-sizing: border-box; font-size: 1rem; background: transparent;}
+.inputBox.type2 .input input::placeholder, .inputBox.type2 .input textarea::placeholder {color: #999999;}
+.inputBox.type2 .input textarea {width: 100%; background: transparent; border: none; padding: 0; font-size: 1rem; font-weight: 500; border-radius: 0; resize: none;}
+.inputBox.type2 .input textarea:focus {outline: none;}
+.inputBox.type2 .nice-select {background: transparent; border: none; padding: 0 1rem}
+.inputBox.type2.white .input {background: #fff;}
+.inputBox.type2 .input .btn {top: auto; bottom: .6rem; right: 1rem; transform: none;}
+.inputBox.type2 .checkWrap {height: 1.5rem;}
+.inputBox.type2.gray {border-radius: .9rem; background: #F6F6F6; padding: .7rem 1.2rem; box-sizing: border-box; padding-top: 2.3rem; color: var(--black);}
+.inputBox.type2 .itemBox .nice-select {background: transparent; border: none; padding: 0;}
+.inputBox.type2 .itemBox .nice-select .current {font-weight: 500; font-size: 1rem;}
+.inputBox.type2 .itemBox .nice-select:after {top: 50%; transform: translateY(-50%);}
+.inputBox.type2 .itemBox .nice-select.open:after {transform: translateY(-50%) rotateX(-180deg);}
 .container .warningText {color: #FE5C4D; font-size: 12px; font-weight: 600; font-family: 'pretendard';}
 .container .itemBox .nice-select {border-radius: .66rem; border:  1px solid #ddd; background: #fff; font-weight: 500; font-family: 'pretendard';}
 
@@ -78,53 +86,53 @@ input::placeholder {color: #BBBBBB; font-weight: 500;}
 
 
 /* 모달 */
-.container .modalCon {display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 150;}
-.container .modalCon.open {display: block; animation: fadeIn 1s ease both;}
-.container .modalCon .bg {position: absolute; width: 100%; height: 100%; top: -100%; left: 0; background: rgba(0, 0, 0, .5); transition: .4s ease; backdrop-filter: blur(8px);}
-.container .modalCon.open .bg {top: 0 !important;}
-.container .modalCon .m-inner {width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;}
-.container .modalCon .boxWrap {position: relative; background: #fff; opacity: 0; transform: scale(.8); transition: .5s ease; max-width: 840px; width: 90%; max-height: calc(100% - 4rem); height: auto; border-radius: 1rem;}
-.container .modalCon.open .boxWrap {opacity: 1; transition-delay: .3s; transform: none;}
-.container .modalCon .boxWrap .top {position: absolute; top: 0; left: 0; width: 100%; padding: 1.35rem; padding-bottom: .9rem; display: flex; gap: 1rem; justify-content: space-between; box-sizing: border-box; z-index: 5;}
-.container .modalCon .boxWrap .top .title {font-size: 1.1rem; font-weight: 700;}
-.container .modalCon .boxWrap .top .close {flex: none; cursor: pointer;}
-.container .modalCon .boxWrap .top .close .icon {width: 24px; height: 24px; background: url(../../assets/images/ico_close.svg) no-repeat center / contain; transition: .5s ease;}
-.container .modalCon .boxWrap .box {width: 100%; height: auto; padding: 1.5rem; box-sizing: border-box; overflow-y: auto; display: flex; gap: .5rem; flex-direction: column; max-height: calc(100vh - 7.5rem);}
-.container .modalCon .boxWrap .top + .box {margin-top: 3.5rem; padding-top: 0;}
-.container .modalCon .boxWrap .box .bot {display: flex; flex-direction: column; gap: .9rem;}
-.container .modalCon .boxWrap .tabWrap {margin-bottom: 1.35rem;}
-.container .modalCon .boxWrap .buttonBox {display: flex; justify-content: center; gap: 8px;}
-.container .modalCon .boxWrap .clickBtn {width: 100px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 16px; background: var(--mainColor); box-sizing: border-box;}
-.container .modalCon .boxWrap .clickBtn.white {background: #fff; border: 1px solid #999999; color: #999999;}
-.container .modalCon .boxWrap .clickBtn.gray {background: #999;}
-.container .modalCon .boxWrap .clickBtn.black {background: var(--black);}
-.container .modalCon .boxWrap .clickBtn.red {background: var(--pointColor2);}
+.modalCon {display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 150;}
+.modalCon.open {display: block; animation: fadeIn 1s ease both;}
+.modalCon .bg {position: absolute; width: 100%; height: 100%; top: -100%; left: 0; background: rgba(0, 0, 0, .5); transition: .4s ease; backdrop-filter: blur(8px);}
+.modalCon.open .bg {top: 0 !important;}
+.modalCon .m-inner {width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;}
+.modalCon .boxWrap {position: relative; background: #fff; opacity: 0; transform: scale(.8); transition: .5s ease; max-width: 840px; width: 90%; max-height: calc(100% - 4rem); height: auto; border-radius: 1rem;}
+.modalCon.open .boxWrap {opacity: 1; transition-delay: .3s; transform: none;}
+.modalCon .boxWrap .top {position: absolute; top: 0; left: 0; width: 100%; padding: 1.35rem; padding-bottom: .9rem; display: flex; gap: 1rem; justify-content: space-between; box-sizing: border-box; z-index: 5;}
+.modalCon .boxWrap .top .title {font-size: 1.1rem; font-weight: 700;}
+.modalCon .boxWrap .top .close {flex: none; cursor: pointer;}
+.modalCon .boxWrap .top .close .icon {width: 24px; height: 24px; background: url(../../assets/images/ico_close.svg) no-repeat center / contain; transition: .5s ease;}
+.modalCon .boxWrap .box {width: 100%; height: auto; padding: 1.5rem; box-sizing: border-box; overflow-y: auto; display: flex; gap: .5rem; flex-direction: column; max-height: calc(100vh - 7.5rem);}
+.modalCon .boxWrap .top + .box {margin-top: 3.5rem; padding-top: 0;}
+.modalCon .boxWrap .box .bot {display: flex; flex-direction: column; gap: .9rem;}
+.modalCon .boxWrap .tabWrap {margin-bottom: 1.35rem;}
+.modalCon .boxWrap .buttonBox {display: flex; justify-content: center; gap: 8px;}
+.modalCon .boxWrap .clickBtn {width: 100px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 16px; background: var(--mainColor); box-sizing: border-box;}
+.modalCon .boxWrap .clickBtn.white {background: #fff; border: 1px solid #999999; color: #999999;}
+.modalCon .boxWrap .clickBtn.gray {background: #999;}
+.modalCon .boxWrap .clickBtn.black {background: var(--black);}
+.modalCon .boxWrap .clickBtn.red {background: var(--pointColor2);}
 
 /* 체크박스 */
-.container .checkWrap {display: flex; flex-wrap: wrap; gap: .6rem;}
-.container .checkBox {display: flex; align-items: center; gap: 8px;}
-.container .checkBox label {display: flex; gap: 6px; align-items: center;}
-.container .checkBox label input {position: relative; width: 20px; height: 20px; -webkit-appearance: none; background: #DDDDDD; border-radius: 50%; flex: none; transition: .5s ease;}
-.container .checkBox label input:checked {background: var(--mainColor);}
-.container .checkBox label input:before {content: ""; position: absolute; width: 100%; height: 100%; background: url(../../assets/images/ico_check_gray.svg) no-repeat center / contain;}
-.container .checkBox label input:checked:before {background-image: url(../../assets/images/ico_check_white.svg)}
-.container .checkBox label small {transition: .5s ease; position: relative; font-size: .8em; font-weight: 500; color: #555;}
-.container .checkBox.type1 input {flex: none; position: relative; width: 20px; height: 20px; font-size: .9rem; -webkit-appearance: none; border: 1px solid #ddd; border-radius: 4px; transition: .5s ease;}
-.container .checkBox.type1 input:checked {background: var(--black); border-color: var(--black);}
-.container .checkBox.type1 input:checked:before {content: ""; position: absolute; width: 100%; height: 100%; background: url(../../assets/images/ico_check_white.svg) no-repeat center / contain;}
-.container .checkBox.type1  small {color: #111; transition: .5s ease; font-weight: 500; font-size: .9rem;}
-.container .checkBox.type2 input {flex: none; position: relative; width: 24px; height: 24px; font-size: .9rem; -webkit-appearance: none; border: 1px solid #ddd; border-radius: 8px; transition: .5s ease;}
-.container .checkBox.type2 input::before {content: ""; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 12px; height: 12px; display: flex; justify-content: center; align-items: center; border-radius: 3px; background: #ddd;}
-.container .checkBox.type2 input:checked {border-color: var(--black);}
-.container .checkBox.type2 input:checked::before {background: var(--black)}
-.container .checkBox.type2 input + small {color: #555; transition: .5s ease; font-weight: 500; font-size: .8rem;}
-.container .checkBox.type2 input:checked + small {color: var(--black)}
-.container .checkBox.type3 input {flex: none; position: relative; width: 18px; height: 18px; font-size: .9rem; -webkit-appearance: none; border: 1px solid #ddd; border-radius: 50%; transition: .5s ease;}
-.container .checkBox.type3 input::before {content: ""; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 12px; height: 12px; display: flex; justify-content: center; align-items: center; border-radius: 50%; background: #ddd;}
-.container .checkBox.type3 input:checked {border-color: var(--black);}
-.container .checkBox.type3 input:checked::before {background: var(--black)}
-.container .checkBox.type3 input + small {color: #555; transition: .5s ease; font-weight: 500; font-size: .8rem;}
-.container .checkBox.type3 input:checked + small {color: var(--black)}
+.checkWrap {display: flex; flex-wrap: wrap; gap: .6rem;}
+.checkBox {display: flex; align-items: center; gap: 8px;}
+.checkBox label {display: flex; gap: 6px; align-items: center;}
+.checkBox label input {position: relative; width: 20px; height: 20px; -webkit-appearance: none; background: #DDDDDD; border-radius: 50%; flex: none; transition: .5s ease;}
+.checkBox label input:checked {background: var(--mainColor);}
+.checkBox label input:before {content: ""; position: absolute; width: 100%; height: 100%; background: url(../../assets/images/ico_check_gray.svg) no-repeat center / contain;}
+.checkBox label input:checked:before {background-image: url(../../assets/images/ico_check_white.svg)}
+.checkBox label small {transition: .5s ease; position: relative; font-size: .8em; font-weight: 500; color: #555;}
+.checkBox.type1 input {flex: none; position: relative; width: 20px; height: 20px; font-size: .9rem; -webkit-appearance: none; border: 1px solid #ddd; border-radius: 4px; transition: .5s ease;}
+.checkBox.type1 input:checked {background: var(--black); border-color: var(--black);}
+.checkBox.type1 input:checked:before {content: ""; position: absolute; width: 100%; height: 100%; background: url(../../assets/images/ico_check_white.svg) no-repeat center / contain;}
+.checkBox.type1  small {color: #111; transition: .5s ease; font-weight: 500; font-size: .9rem;}
+.checkBox.type2 input {flex: none; position: relative; width: 24px; height: 24px; font-size: .9rem; -webkit-appearance: none; border: 1px solid #ddd; border-radius: 8px; transition: .5s ease;}
+.checkBox.type2 input::before {content: ""; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 12px; height: 12px; display: flex; justify-content: center; align-items: center; border-radius: 3px; background: #ddd;}
+.checkBox.type2 input:checked {border-color: var(--black);}
+.checkBox.type2 input:checked::before {background: var(--black)}
+.checkBox.type2 input + small {color: #555; transition: .5s ease; font-weight: 500; font-size: .8rem;}
+.checkBox.type2 input:checked + small {color: var(--black)}
+.checkBox.type3 input {flex: none; position: relative; width: 18px; height: 18px; font-size: .9rem; -webkit-appearance: none; border: 1px solid #ddd; border-radius: 50%; transition: .5s ease;}
+.checkBox.type3 input::before {content: ""; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 12px; height: 12px; display: flex; justify-content: center; align-items: center; border-radius: 50%; background: #ddd;}
+.checkBox.type3 input:checked {border-color: var(--black);}
+.checkBox.type3 input:checked::before {background: var(--black)}
+.checkBox.type3 input + small {color: #555; transition: .5s ease; font-weight: 500; font-size: .8rem;}
+.checkBox.type3 input:checked + small {color: var(--black)}
 
 /* 테이블 */
 .container .tableBox.type1 table thead {border-bottom: 2px solid;}
@@ -160,6 +168,6 @@ input::placeholder {color: #BBBBBB; font-weight: 500;}
 	.container .btn.black:hover {box-shadow: 3px 3px #00000045, inset 2px 2px 10px rgba(255, 255, 255, .4);}
 	.container .btn.white:hover {box-shadow: 3px 3px #99999955, inset 2px 2px 10px rgba(55, 55, 55, .3);}
 	.container .tableBox.type1 table tbody td button:hover {background: #999; color: #fff; box-shadow: 2px 2px #99999945, inset 2px 2px 6px rgba(255, 255, 255, .5); border-color: transparent;}
-	.container .inputBox.type2 .input .btn:hover {box-shadow: none; background: var(--mainColor);}
+	.inputBox.type2 .input .btn:hover {box-shadow: none; background: var(--mainColor);}
 
 }
