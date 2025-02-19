@@ -99,18 +99,20 @@ function MemberMyPageSimple(props) {
                                 </td>
                                 <td>{item.cnsltAplyFldNm}</td>
                                 <td>
-                                    <Link to={{pathname: URL.MEMBER_MYPAGE_SIMPLE_DETAIL}}
-                                          state={{
-                                              cnsltAplySn: item.cnsltAplySn,
-                                              cnsltSttsCd: item.cnsltSttsCd,
-                                              menuSn: location.state?.menuSn,
-                                              menuNmPath: location.state?.menuNmPath,
-                                          }}
-                                          style={{cursor: 'pointer', textDecoration: 'underline'}}
-                                    >
-                                        {item.ttl}
-                                        {item.fileCnt !== 0 && <img src={fileImages} alt="pass images"/>}
-                                    </Link>
+                                    <div style={{textAlign: 'left'}}>
+                                        <Link to={{pathname: URL.MEMBER_MYPAGE_SIMPLE_DETAIL}}
+                                              state={{
+                                                  cnsltAplySn: item.cnsltAplySn,
+                                                  cnsltSttsCd: item.cnsltSttsCd,
+                                                  menuSn: location.state?.menuSn,
+                                                  menuNmPath: location.state?.menuNmPath,
+                                              }}
+                                              style={{cursor: 'pointer', textDecoration: 'underline'}}
+                                        >
+                                            {item.ttl}
+                                            {item.fileCnt !== 0 && <img src={fileImages} alt="pass images"/>}
+                                        </Link>
+                                    </div>
                                 </td>
                                 <td>{moment(item.frstCrtDt).format('YYYY-MM-DD')}</td>
                                 <td>{statusMap[item.cnsltSttsCd] || item.cnsltSttsCd}</td>
