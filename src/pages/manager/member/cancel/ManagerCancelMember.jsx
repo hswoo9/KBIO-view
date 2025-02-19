@@ -238,28 +238,17 @@ function CancelMemberList(props) {
                     <div className="tableBox type1">
                         <table>
                             <caption>회원목록</caption>
-                            <colgroup>
-                                <col width="50px"/>
-                                <col width="100px"/>
-                                <col width="130px"/>
-                                <col width="100px"/>
-                                <col width="150px"/>
-                                <col width="100px"/>
-                                <col width="150px"/>
-                                <col width="150px"/>
-                                <col width="100px"/>
-                            </colgroup>
                             <thead>
                             <tr>
-                                <th>번호</th>
-                                <th>회원분류</th>
-                                <th>아이디</th>
-                                <th>성명</th>
-                                <th>기업명</th>
-                                <th>소셜구분</th>
-                                <th>가입일</th>
-                                <th>최근 접속일시</th>
-                                <th>탈퇴일시</th>
+                                <th className="th1">번호</th>
+                                <th className="th1">회원분류</th>
+                                <th className="th2">아이디</th>
+                                <th className="th2">성명</th>
+                                <th className="th2">기업명</th>
+                                <th className="th1">소셜구분</th>
+                                <th className="th2">가입일</th>
+                                <th className="th2">최근 접속일시</th>
+                                <th className="th2">탈퇴 일시</th>
                             </tr>
                             </thead>
                             <tbody>
