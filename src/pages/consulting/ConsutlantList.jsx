@@ -11,6 +11,7 @@ import moment from "moment";
 import Swal from "sweetalert2";
 import AOS from "aos";
 import * as ComScript from "@/components/CommonScript";
+import notProfile from "@/assets/images/no_profile.png";
 
 function ConsultantList(props) {
     const sessionUser = getSessionItem("loginUser");
@@ -96,13 +97,14 @@ function ConsultantList(props) {
                                          </div>
                                          <p className="intro">소개글</p>
                                      </div>
-                                     <figure className="imgBox">
+                                     <figure className="imgBox customFigure">
                                          <img
                                              src={
                                                  item.tblComFile
                                                      ? `http://133.186.250.158${item.tblComFile.atchFilePathNm}/${item.tblComFile.strgFileNm}.${item.tblComFile.atchFileExtnNm}`
-                                                     : "" // 기본 이미지 (필요한 경우)
+                                                     : notProfile
                                              }
+                                             onError={notProfile}
                                              alt=""
                                          />
                                      </figure>

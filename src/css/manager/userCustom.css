@@ -179,3 +179,7 @@ header .hInner .hTop .alarmWrap.click .close .icon {height: 100%; background: ur
 .signUpRadio{
     width: 18px !important;
 }
+
+.customFigure{
+    height: 150px;
+}
