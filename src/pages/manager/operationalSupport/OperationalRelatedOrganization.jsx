@@ -24,7 +24,7 @@ function OperationalRelatedOrganization(props) {
         location.state?.searchDto || {
             pageIndex: 1,
             brno: "",
-            RelInstNm : "",
+            relInstNm : "",
             rpsvNm : "",
         }
     );
@@ -186,7 +186,7 @@ function OperationalRelatedOrganization(props) {
                                         const value = e.target.value;
                                         const optionMap = {
                                             "0":"",
-                                            "1": "RelInstNm",
+                                            "1": "relInstNm",
                                             "2": "rpsvNm",
                                             //추가되면 아래로 더 추가
                                         };

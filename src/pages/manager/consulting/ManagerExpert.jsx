@@ -12,16 +12,16 @@ import Swal from 'sweetalert2';
 
 /* bootstrip */
 import { getSessionItem } from "@/utils/storage";
+import {getComCdList} from "../../../components/CommonComponents.jsx";
 
 function ManagerExpert(props) {
 
     const [searchDto, setSearchDto] = useState(
         location.state?.searchDto || {
             pageIndex: 1,
-            actvtnYn: "",
-            kornFlnm: "",
-            companyName: "",
-            mbrType: "2",
+            cnsltFld: "",
+            searchType: "",
+            searchVal : "",
         }
     );
     const [paginationInfo, setPaginationInfo] = useState({
@@ -38,11 +38,23 @@ function ManagerExpert(props) {
         totalRecordCount: 158
     });
 
+    const searchTypeRef = useRef();
+    const searchValRef = useRef();
+
     const [consultMemberList, setAuthorityList] = useState([]);
+    /** 컨설팅 분야 코드 */
+    const [cnsltFldList, setCnsltFldList] = useState([]);
+
+    const activeEnter = (e) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            getConsultMemberList(searchDto);
+        }
+    };
 
     const getConsultMemberList = useCallback(
         (searchDto) => {
-            const consultMemberListUrl = "/consultingApi/getConsultantList.do"; //임시로 회원조회 url을 사용하나 나중에 join된 걸 불러와야할듯
+            const consultMemberListUrl = "/consultingApi/getConsultantList.do";
             const requestOptions = {
                 method: "POST",
                 headers: {
@@ -83,11 +95,8 @@ function ManagerExpert(props) {
                                 <td>{item.tblCnslttMbr.ogdpNm}</td>
                                 <td>{item.tblCnslttMbr.jbpsNm}</td>
                                 <td>{item.tblCnslttMbr.crrPrd} 년</td>
-                                <td>{item.tblUser.mbrStts === 'Y' ? '공개' :
-                                     item.tblUser.mbrStts === 'W' ? '비공개' :
-                                     item.tblUser.mbrStts === 'R' ? '비공개' :
-                                     item.tblUser.mbrStts === 'C' ? '비공개' :
-                                     item.tblUser.mbrStts === 'S' ? '비공개' : ''}
+                                <td>{item.tblCnslttMbr.cnsltActv === 'Y' ? '공개' :
+                                     item.tblCnslttMbr.cnsltActv === 'N' ? '비공개' : ''}
                                 </td>
                                 <td>{item.cnsltCount} 건</td>
                                 <td>{item.simpleCount} 건</td>
@@ -105,6 +114,12 @@ function ManagerExpert(props) {
         [consultMemberList, searchDto]
     );
 
+    useEffect(() => {
+        getComCdList(10).then((data) => {
+            setCnsltFldList(data);
+        });
+    }, []);
+
     useEffect(()=>{
         getConsultMemberList(searchDto);
     }, []);
@@ -120,44 +135,83 @@ function ManagerExpert(props) {
                             <li className="inputBox type1">
                                 <p className="title">자문분야</p>
                                 <div className="itemBox">
-                                    <select className="selectGroup">
+                                    <select
+                                        className="selectGroup"
+                                        name="cnsltFld"
+                                        onChange={(e) => {
+                                            setSearchDto({...searchDto, cnsltFld: e.target.value})
+                                        }}
+                                    >
                                         <option value="">전체</option>
-                                        <option value="Y">사용</option>
-                                        <option value="N">미사용</option>
+                                        {cnsltFldList.map((item, index) => (
+                                            <option value={item.comCd} key={item.comCdSn}>{item.comCdNm}</option>
+                                        ))}
                                     </select>
                                 </div>
                             </li>
                             <li className="inputBox type1">
                                 <p className="title">컨설팅 활동</p>
                                 <div className="itemBox">
-                                    <select className="selectGroup">
+                                    <select className="selectGroup"
+                                            name="cnsltActv"
+                                            onChange={(e) => {
+                                                setSearchDto({...searchDto, cnsltActv: e.target.value})
+                                            }}
+                                    >
                                         <option value="">전체</option>
-                                        <option value="1">공개</option>
-                                        <option value="2">비공개</option>
+                                        <option value="Y">공개</option>
+                                        <option value="N">비공개</option>
                                     </select>
                                 </div>
                             </li>
                             <li className="inputBox type1">
                                 <p className="title">키워드</p>
                                 <div className="itemBox">
-                                    <select className="selectGroup">
+                                    <select
+                                        className="selectGroup"
+                                        id="searchType"
+                                        name="searchType"
+                                        title="검색유형"
+                                        ref={searchTypeRef}
+                                        onChange={(e) => {
+                                            setSearchDto({...searchDto, searchType: e.target.value})
+                                        }}
+                                    >
                                         <option value="">전체</option>
-                                        <option value="1">성명</option>
-                                        <option value="2">소속</option>
-                                        <option value="3">직위</option>
+                                        <option value="kornFlnm">성명</option>
+                                        <option value="ogdpNm">소속</option>
+                                        <option value="jbpsNm">직위</option>
                                     </select>
                                 </div>
                             </li>
                             <li className="searchBox inputBox type1">
-                                <label className="input"><input type="text" id="search" name="search"
-                                                                placeholder="검색어를 입력해주세요"/></label>
+                                <label className="input">
+                                    <input
+                                        type="text"
+                                        name="searchVal"
+                                        defaultValue={searchDto.searchVal}
+                                        placeholder=""
+                                        ref={searchValRef}
+                                        onChange={(e) => {
+                                            setSearchDto({...searchDto, searchVal: e.target.value})
+                                        }}
+                                        onKeyDown={activeEnter}
+                                    />
+                                </label>
                             </li>
                         </ul>
                         <div className="rightBtn">
                             <button type="button" className="refreshBtn btn btn1 gray">
                                 <div className="icon"></div>
                             </button>
-                            <button type="button" className="searchBtn btn btn1 point">
+                            <button type="button" className="searchBtn btn btn1 point"
+                                    onClick={() => {
+                                        getConsultMemberList({
+                                            ...searchDto,
+                                            pageIndex: 1,
+                                        });
+                                    }}
+                            >
                                 <div className="icon"></div>
                             </button>
                         </div>

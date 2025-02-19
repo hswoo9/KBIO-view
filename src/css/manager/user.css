@@ -80,13 +80,13 @@ header .hInner .hBot .top .rightBox button .icon {width: 1.5rem; height: 1.5rem;
 header .hInner .hBot .top .rightBox .searchBtn .icon {background-image: url(../../assets/images/ico_search_white.svg);}
 header .hInner .hBot .top .rightBox .sitemapBtn .icon {background-image: url(../../assets/images/ico_sitemap_white.svg);}
 header .hInner .hBot .bot {color: #fff; display: flex; flex-direction: column; gap: .5rem;}
-header .hInner .hBot .bot .lnbBox {display: flex; gap: 1rem;}
+header .hInner .hBot .bot .lnbBox {display: flex; gap: 1rem; align-items: center;}
 header .hInner .hBot .bot .lnbBox .home {position: relative;}
-header .hInner .hBot .bot .lnbBox .home:after {content: ""; width: 4px; height: 4px; border-right: 1px solid #fff; border-top: 1px solid #fff; position: absolute; top: 50%; right: -.5rem; transform: translateY(-50%) rotate(45deg);}
 header .hInner .hBot .bot .lnbBox .home a {color: #fff; display: flex; gap: 4px; align-items: center;}
 header .hInner .hBot .bot .lnbBox .home a .icon {width: 1rem; height: 1rem; background: url(../../assets/images/ico_home_white.svg) no-repeat center / contain;}
-header .hInner .hBot .bot .lnbBox li {font-size: 14px;}
+header .hInner .hBot .bot .lnbBox li {position: relative; font-size: 14px;}
 header .hInner .hBot .bot .lnbBox li:last-child {font-weight: 600;}
+header .hInner .hBot .bot .lnbBox li:not(:last-child):after {content: ""; width: 4px; height: 4px; border-right: 1px solid #fff; border-top: 1px solid #fff; position: absolute; top: 50%; right: -.5rem; transform: translateY(-50%) rotate(45deg);}
 header .hInner .hBot .bot .pageTitle {font-size: clamp(2.5rem, 6vw, 72px); font-weight: 600;}
 
 header.scroll .hInner .hBot {height: auto; padding-bottom: 1rem;}
@@ -123,14 +123,16 @@ footer .inner > .right .snsBox .instagram .icon {background-image: url(../../ass
 footer .inner > .right .snsBox .youtube .icon {background-image: url(../../assets/images/ico_youtube_white.svg);}
 
 .container {padding-top: 23.9rem;}
-.container .inner {padding-top: 1.1rem; padding-bottom: 5.6rem; min-height: 500px;}
+.container .inner {padding-top: 1.1rem; padding-bottom: 5.6rem; min-height: 500px; max-width: 1600px;}
 .container .tabBox.type1 {position: relative; z-index: 1;}
 .container .inner > .tabBox.type1 {margin-bottom:  1.35rem;}
 .container .tabBox.type1 .bg {position: absolute; left: 0; top: 0; background: var(--black); border-radius: 2rem; transition: .5s ease; z-index: -1;}
 .container .tabBox.type1 .bg.hover {background: #11111115; opacity: 0;}
 .container .tabBox.type1 .list {display: flex; flex-wrap: wrap; gap: .2rem; align-items: center;}
 .container .tabBox.type1 .list li a {font-weight: 600; padding: .5rem .8rem; border-radius: 2rem;}
+.container .tabBox.type1 .list li a .small {font-size: .9em; color: #999; margin-left: 3px; font-weight: 400;}
 .container .tabBox.type1 .list li.active a {color: #fff; padding: .9rem 1.35rem; background: var(--black);}
+.container .tabBox.type1 .list li.active a .small {color: #ddd;}
 .container .itemBox.type2 {max-width: 7.6rem; width: 100%;}
 .container .itemBox.type2 .nice-select {border-radius: 3rem; height: 3rem; display: flex; align-items: center;}
 .container .itemBox.type2 .nice-select:after {top: 50%; transform: translateY(-50%);}
@@ -139,13 +141,34 @@ footer .inner > .right .snsBox .youtube .icon {background-image: url(../../asset
 .user .container .inputBox.type1 .input input:focus, .user .container .inputBox.type1 .input textarea:focus {border-color: var(--mainColor3); box-shadow: 0 0 8px #04359B24;}
 .container .essential {position: relative;}
 .container .essential:after {content: "*"; color: #FF5353; vertical-align: top;}
+.container .tableCont.type1 table tbody tr {border-bottom: 1px solid #EEEEEE; position: relative; cursor: pointer;}
+.container .tableCont.type1 table tbody tr:after {content: ""; position: absolute; width: 0%; height: 1px; bottom: -1.5px; left: 0; border-bottom: 1px solid var(--mainColor3); transition: .5s ease;}
 .container .tableCont.type1 table tr > * {padding: .9rem .5em; padding-right: 1rem; letter-spacing: -1px;}
 .container .tableCont.type1 table tr > *:last-child {padding-right: .5rem;}
-.container .tableCont.type1 table thead {border-bottom: 2px solid var(--mainColor3);}
 .container .tableCont.type1 table thead th {height: 2.8rem; color: var(--black); font-weight: 600; font-size: .9rem;}
+.container .tableCont.type1 table tbody {border-top: 2px solid var(--mainColor3);}
 .container .tableCont.type1 table tbody tr {border-bottom: 1px solid #EEEEEE; position: relative; cursor: pointer;}
 .container .tableCont.type1 table tbody tr:after {content: ""; position: absolute; width: 0%; height: 1px; bottom: -1.5px; left: 0; border-bottom: 1px solid var(--mainColor3); transition: .5s ease;}
 .container .tableCont.type1 table tbody td {font-size: 1.1rem;}
+.container .tableCont.type1 table tbody td.cate {color: #555; white-space: nowrap;}
+.inputBox.type2 .fileName {display: flex; flex-direction: column; gap: .9rem; padding: .5rem 0 1.35rem; position: relative;}
+.inputBox.type2 .fileName li {position: relative; display: flex; justify-content: space-between; gap: 2rem;}
+.inputBox.type2 .fileName li:after {content: ""; position: absolute; top: 50%; left: -.3rem; transform: translateY(-50%); width: 0; height: 100%; padding: .3rem; border-radius: .5rem; background: #04359B15; transition: .5s ease; opacity: 0;}
+.inputBox.type2 .fileName li .nameBox {display: flex; gap: .4rem; align-items: center; font-weight: 500;}
+.inputBox.type2 .fileName li .icon {flex: none; width: 1.35rem; height: 1.35rem; background: url(../../assets/images/ico_file_blue.svg) no-repeat center / contain;}
+.inputBox.type2 .fileName li .name {font-size: 1.1rem; overflow: hidden; word-break: break-word; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical;}
+.inputBox.type2 .fileName li .size {font-size: .9rem; font-weight: 500; color: #999999;}
+.inputBox.type2 .fileName li .deletBtn {flex: none; cursor: pointer; position: relative; z-index: 1;}
+.inputBox.type2 .fileName li .deletBtn .icon {width: 1.35rem; height: 1.35rem; background: url(../../assets/images/ico_close.svg) no-repeat center / contain;}
+.inputBox.type2 .uploadBox {position: relative; z-index: 1; padding-top: 1rem; display: flex; align-items: center; text-align: center; gap: .6rem; flex-direction: column;}
+.inputBox.type2 .uploadBox:after {content: ""; position: absolute; width: calc(100% + 2.4rem); left: 50%; transform: translateX(-50%); height: 1px; top: 0; border-bottom: 1px solid #ddd;}
+.inputBox.type2 .uploadBox input {text-indent: -9999px; position: absolute; width: calc(100% + 2.4rem); height: calc(100% + .9rem); top: 0; left: 50%; transform: translateX(-50%); background: transparent; z-index: -1; transition: .5s ease;}
+.inputBox.type2 .uploadBox .text1 {font-weight: 600; font-size: 1.1rem; display: flex; align-items: center; gap: .6rem;}
+.inputBox.type2 .uploadBox .text1 .icon {width: 1.35rem; height: 1.35rem; background: url(../../assets/images/ico_upload_blue.svg) no-repeat center / contain;}
+.inputBox.type2 .uploadBox .text2 {font-size: .8rem; color: #999; font-weight: 500;}
+.inputBox.type2.textBox {padding: .8rem 1.2rem; position: relative; display: flex; flex-direction: column; gap: .5rem; box-sizing: border-box;}
+.inputBox.type2.textBox .title {font-weight: 600; color: #666666; font-size: .8rem;}
+.inputBox.type2.textBox .text {font-weight: 500;}
 
 /* 페이지 번호 */
 .container .pageWrap {margin-top: 2.2rem; opacity: 0;}
@@ -156,6 +179,17 @@ footer .inner > .right .snsBox .youtube .icon {background-image: url(../../asset
 .container .pageWrap .pageList li.arrow.disabled a {opacity: .4; cursor: no-drop;}
 .container .pageWrap .pageList li.num a {width: 2.2rem; height: 2.2rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; font-weight: 600; border: 1px solid #EEEEEE; box-sizing: border-box;}
 .container .pageWrap .pageList li.num.now a {background: var(--black); color: #fff; border-color: var(--black);}
+
+
+/* 체크박스 */
+.container .checkBox.type5 label {position: relative; padding: .2rem .9rem; height: 2.1rem; box-sizing: border-box;}
+.container .checkBox.type5 label input {position: absolute; width: 100%; height: 100%; left: 0; top: 0; border-radius: 3rem; background: #fff; border: 1px solid #ddd; z-index: -1;}
+.container .checkBox.type5 label input:checked {background: var(--mainColor3); border-color: var(--mainColor3);}
+.container .checkBox.type5 label input:before {display: none;}
+.container .checkBox.type5 label .icon {width: 1.35rem; height: 1.35rem; background-position: center; background-repeat: no-repeat; background-size: contain;}
+.container .checkBox.type5 label small {font-size: 1rem; font-weight: 500;}
+.container .checkBox.type5 label input:checked + small, .container .checkBox.type5 label input:checked + .icon + small {color: #fff;}
+
 
 /* 메인 */
 .user.main header {background: transparent;}
@@ -416,6 +450,152 @@ footer .inner > .right .snsBox .youtube .icon {background-image: url(../../asset
 .container .searchFormWrap.type2 form .searchBox .nice-select {border: none;}
 .container .searchFormWrap.type2 form .searchBox input {border: none;}
 
+/* 통합검색 */
+.search .inner2 {display: flex; flex-direction: column; gap: 1.35rem;}
+.search .inner2 .keyword {color: var(--mainColor3);}
+.search .inner2 .searchFormWrap {margin-bottom: 0;}
+.search .inner2 .searchFormWrap form {gap: .9rem;}
+.search .inner2 .searchFormWrap .searchBox .inputBox.type1.date {max-width: 8.5rem; position: relative;}
+.search .inner2 .searchFormWrap .searchBox .inputBox.type1.date .input input {padding-right: 3rem; cursor: pointer;}
+.search .inner2 .searchFormWrap .searchBox .inputBox.type1.date .calenBtn {position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); pointer-events: none;}
+.search .inner2 .searchFormWrap .searchBox .inputBox.type1.date .calenBtn .icon {width: 1.35rem; height: 1.35rem; background: url(../../assets/images/ico_calendar.svg) no-repeat center / contain;}
+.search .inner2 .searchFormWrap .keywrodBox {display: flex; gap: 4%; align-items: flex-start; font-size: .9rem; width: 100%; box-sizing: border-box;}
+.search .inner2 .searchFormWrap .keywrodBox .title {color: #555555; font-weight: 700; flex: none;}
+.search .inner2 .searchFormWrap .keywrodBox .list {display: flex; gap: .3rem .9rem; flex-wrap: wrap;}
+.search .inner2 .searchFormWrap .keywrodBox .list li a {color: var(--mainColor3); font-weight: 600;}
+.search .inner2 .resultBox {font-size: 1.35rem; color: #555; text-align: center; padding: 0 1rem;}
+.search .inner2 .resultBox p strong {color: var(--mainColor3); font-weight: 700;}
+/* .search .inner2 .tabBox {padding: .9rem 0;} */
+.search .inner2 .tableCont.type1 > table .th1 {width: 12%;}
+.search .inner2 .tableCont.type1 > table tbody tr .title .text {display: flex; align-items: center; gap: .5rem;}
+.search .inner2 .tableCont.type1 > table tbody tr .title .text p {font-size: 1.4rem; font-weight: 500; overflow: hidden; word-break: break-word; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; max-width: calc(100% - 1.85rem); transition: .5s ease;}
+.search .inner2 .tableCont.type1 > table tbody tr .title .text i {width: 1.35rem; height: 1.35rem; background-position: center; background-repeat: no-repeat; background-size: contain;}
+.search .inner2 .tableCont.type1 > table tbody tr .title .text .file {background-image: url(../../assets/images/ico_file_blue.svg);}
+.search .inner2 .tableCont.type1 > table tbody tr .title .bot {margin-top: .4rem; font-size: .9rem; color: #555; display: flex; align-items: center; gap: .4rem;}
+.search .inner2 .tableCont.type1 > table tbody tr .state p {white-space: nowrap; display: inline-block; padding: .3rem .8rem; font-size: .8rem; font-weight: 600; color: #fff; border-radius: 3rem;}
+.search .inner2 .clickBtn {max-width: 16.6rem; width: 90%; margin: 0 auto; margin-top: 1.7rem;}
+
+.consultant .inner2 .searchFormWrap {gap: 1.35rem; overflow: hidden; margin-bottom: 3.3rem}
+.consultant .inner2 .searchFormWrap .checkWrap {justify-content: center; padding-top: 1.35rem; position: relative;}
+.consultant .inner2 .searchFormWrap .checkWrap:before {content: ""; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 100vw; height: 1px; border-top: 1px solid #ddd;}
+.consultant .inner2 .profileBox .textBox {width: 100%; display: flex; flex-direction: column; gap: .6rem;}
+.consultant .inner2 .profileBox .textBox .departBox {display: flex; gap: 4px; align-items: center; color: var(--mainColor3); font-size: .8rem; font-weight: 500;}
+.consultant .inner2 .profileBox .textBox .departBox .icon {width: .9rem; height: .9rem; background-position: center; background-size: contain; background-repeat: no-repeat;}
+.consultant .inner2 .profileBox .textBox .nameBox {display: flex; flex-direction: column; gap: 2px;}
+.consultant .inner2 .profileBox .textBox .nameBox .name {font-size: 1.35rem; font-weight: 700;}
+.consultant .inner2 .profileBox .textBox .nameBox .company {color: #999999; font-size: .8rem; font-weight: 500;}
+.consultant .inner2 .profileBox .textBox .intro {color: #555; font-size: .9rem; font-weight: 500; line-height: 160%;}
+.consultant .inner2 .profileBox .imgBox img {vertical-align: bottom;}
+.consultant .inner2 .buttonBox {display: flex; align-items: center; gap: .9rem; width: 100%;}
+.consultant .inner2 .buttonBox .clickBtn {max-width: 10rem; width: 100%; height: 3.3rem; border-radius: .5rem; padding: .5rem; box-sizing: border-box; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.1rem; gap: .4rem;}
+.consultant .inner2 .buttonBox .clickBtn .icon {width: 1.35rem; height: 1.35rem; background-position: center; background-repeat: no-repeat; background-size: contain;}
+.consultant .inner2 .buttonBox .requestBtn {background: var(--black);}
+.consultant .inner2 .buttonBox .requestBtn .icon {background-image: url(../../assets/images/ico_user_consultant_request_white.svg);}
+.consultant .inner2 .buttonBox .contactBtn {background: var(--mainColor3);}
+.consultant .inner2 .buttonBox .contactBtn .icon {background-image: url(../../assets/images/ico_user_consultant_contact_white.svg);}
+
+.consultant .inner2 .listBox {display: flex; flex-wrap: wrap; gap: 2.2rem; overflow-x: hidden;}
+.consultant .inner2 .listBox li {position: relative; width: calc(50% - 1.1rem); padding-bottom: 2.2rem; display: flex; flex-direction: column; gap: 1.35rem;}
+.consultant .inner2 .listBox li:nth-child(odd):after {content: ""; position: absolute; left: 0; bottom: 0; width: clamp(2rem, 100vw, 1260px); height: 1px; border-bottom: 1px solid #eee;}
+.consultant .inner2 .listBox li .profileBox {display: flex; gap: 5%; align-items: flex-start;}
+.consultant .inner2 .listBox li .profileBox .imgBox {flex: none; border-radius: 50%; overflow: hidden; max-width: 150px; width: 35%;}
+.consultant .inner2 .listBox li .botBox {display: flex; justify-content: space-between; gap: 1rem; align-items: center;}
+.consultant .inner2 .listBox li .botBox .moreBtn {position: relative; flex: none; display: flex; align-items: center; gap: .4rem; font-weight: 500;}
+.consultant .inner2 .listBox li .botBox .moreBtn .icon {width: 1.35rem; height: 1.35rem; background: url(../../assets/images/ico_user_consultant_more_icon_gray.svg) no-repeat center / contain; transition: .5s ease;}
+.consultant .inner2 .searchFormWrap .checkWrap .cate1 .icon {background-image: url(../../assets/images/ico_user_consultant_cate01.svg);}
+.consultant .inner2 .searchFormWrap .checkWrap .cate2 .icon {background-image: url(../../assets/images/ico_user_consultant_cate02.svg);}
+.consultant .inner2 .searchFormWrap .checkWrap .cate3 .icon {background-image: url(../../assets/images/ico_user_consultant_cate03.svg);}
+.consultant .inner2 .searchFormWrap .checkWrap .cate4 .icon {background-image: url(../../assets/images/ico_user_consultant_cate04.svg);}
+.consultant .inner2 .searchFormWrap .checkWrap .cate5 .icon {background-image: url(../../assets/images/ico_user_consultant_cate05.svg);}
+.consultant .inner2 .searchFormWrap .checkWrap .cate6 .icon {background-image: url(../../assets/images/ico_user_consultant_cate06.svg);}
+.consultant .inner2 .searchFormWrap .checkWrap .cate7 .icon {background-image: url(../../assets/images/ico_user_consultant_cate07.svg);}
+.consultant .inner2 .searchFormWrap .checkWrap .cate8 .icon {background-image: url(../../assets/images/ico_user_consultant_cate08.svg);}
+.consultant .inner2 .searchFormWrap .checkWrap .cate9 .icon {background-image: url(../../assets/images/ico_user_consultant_cate09.svg);}
+.consultant .inner2 .searchFormWrap .checkWrap .cate10 .icon {background-image: url(../../assets/images/ico_user_consultant_cate10.svg);}
+.consultant .inner2 .searchFormWrap .checkWrap .cate11 .icon {background-image: url(../../assets/images/ico_user_consultant_cate11.svg);}
+.consultant .inner2 .searchFormWrap .checkWrap .cate12 .icon {background-image: url(../../assets/images/ico_user_consultant_cate12.svg);}
+.consultant .inner2 .searchFormWrap .checkWrap .cate13 .icon {background-image: url(../../assets/images/ico_user_consultant_cate13.svg);}
+.consultant .inner2 .searchFormWrap .checkWrap .cate1 input:checked + .icon {background-image: url(../../assets/images/ico_user_consultant_cate01_white.svg);}
+.consultant .inner2 .searchFormWrap .checkWrap .cate2 input:checked + .icon {background-image: url(../../assets/images/ico_user_consultant_cate02_white.svg);}
+.consultant .inner2 .searchFormWrap .checkWrap .cate3 input:checked + .icon {background-image: url(../../assets/images/ico_user_consultant_cate03_white.svg);}
+.consultant .inner2 .searchFormWrap .checkWrap .cate4 input:checked + .icon {background-image: url(../../assets/images/ico_user_consultant_cate04_white.svg);}
+.consultant .inner2 .searchFormWrap .checkWrap .cate5 input:checked + .icon {background-image: url(../../assets/images/ico_user_consultant_cate05_white.svg);}
+.consultant .inner2 .searchFormWrap .checkWrap .cate6 input:checked + .icon {background-image: url(../../assets/images/ico_user_consultant_cate06_white.svg);}
+.consultant .inner2 .searchFormWrap .checkWrap .cate7 input:checked + .icon {background-image: url(../../assets/images/ico_user_consultant_cate07_white.svg);}
+.consultant .inner2 .searchFormWrap .checkWrap .cate8 input:checked + .icon {background-image: url(../../assets/images/ico_user_consultant_cate08_white.svg);}
+.consultant .inner2 .searchFormWrap .checkWrap .cate9 input:checked + .icon {background-image: url(../../assets/images/ico_user_consultant_cate09_white.svg);}
+.consultant .inner2 .searchFormWrap .checkWrap .cate10 input:checked + .icon {background-image: url(../../assets/images/ico_user_consultant_cate10_white.svg);}
+.consultant .inner2 .searchFormWrap .checkWrap .cate11 input:checked + .icon {background-image: url(../../assets/images/ico_user_consultant_cate11_white.svg);}
+.consultant .inner2 .searchFormWrap .checkWrap .cate12 input:checked + .icon {background-image: url(../../assets/images/ico_user_consultant_cate12_white.svg);}
+.consultant .inner2 .searchFormWrap .checkWrap .cate13 input:checked + .icon {background-image: url(../../assets/images/ico_user_consultant_cate13_white.svg);}
+.consultant .inner2 .profileBox .departBox.cate1 .icon {background-image: url(../../assets/images/ico_user_consultant_cate01_blue.svg);}
+.consultant .inner2 .profileBox .departBox.cate2 .icon {background-image: url(../../assets/images/ico_user_consultant_cate02_blue.svg);}
+.consultant .inner2 .profileBox .departBox.cate3 .icon {background-image: url(../../assets/images/ico_user_consultant_cate03_blue.svg);}
+.consultant .inner2 .profileBox .departBox.cate4 .icon {background-image: url(../../assets/images/ico_user_consultant_cate04_blue.svg);}
+.consultant .inner2 .profileBox .departBox.cate5 .icon {background-image: url(../../assets/images/ico_user_consultant_cate05_blue.svg);}
+.consultant .inner2 .profileBox .departBox.cate6 .icon {background-image: url(../../assets/images/ico_user_consultant_cate06_blue.svg);}
+.consultant .inner2 .profileBox .departBox.cate7 .icon {background-image: url(../../assets/images/ico_user_consultant_cate07_blue.svg);}
+.consultant .inner2 .profileBox .departBox.cate8 .icon {background-image: url(../../assets/images/ico_user_consultant_cate08_blue.svg);}
+.consultant .inner2 .profileBox .departBox.cate9 .icon {background-image: url(../../assets/images/ico_user_consultant_cate09_blue.svg);}
+.consultant .inner2 .profileBox .departBox.cate10 .icon {background-image: url(../../assets/images/ico_user_consultant_cate10_blue.svg);}
+.consultant .inner2 .profileBox .departBox.cate11 .icon {background-image: url(../../assets/images/ico_user_consultant_cate11_blue.svg);}
+.consultant .inner2 .profileBox .departBox.cate12 .icon {background-image: url(../../assets/images/ico_user_consultant_cate12_blue.svg);}
+.consultant .inner2 .profileBox .departBox.cate13 .icon {background-image: url(../../assets/images/ico_user_consultant_cate13_blue.svg);}
+.consultant.view .inner2 {position: relative; display: flex; gap: 6%;}
+.consultant.view .inner2 .leftBox > div {padding: 2.2rem 0; border-bottom: 1px solid #ddd;}
+.consultant.view .inner2 .leftBox > div:first-child {padding-top: 0;}
+.consultant.view .inner2 .leftBox > div:last-of-type {border-bottom: none;}
+.consultant.view .inner2 .leftBox .profileBox {display: flex; flex-direction: column; gap: 1.35rem; letter-spacing: -.6px;}
+.consultant.view .inner2 .leftBox .profileBox .name {font-size: 4rem; font-weight: 600;}
+.consultant.view .inner2 .leftBox .profileBox .cent {display: flex; flex-direction: column; gap: .4rem;}
+.consultant.view .inner2 .leftBox .profileBox .cent .company {font-size: 1.35rem; font-weight: 700;}
+.consultant.view .inner2 .leftBox .profileBox .cent .address {color: #555555; font-weight: 500;}
+.consultant.view .inner2 .leftBox .profileBox .tel {display: flex; gap: .9rem; align-items: center;}
+.consultant.view .inner2 .leftBox .profileBox .tel .text {flex: none; width: 4.7rem; color: #555; font-weight: 500;}
+.consultant.view .inner2 .leftBox .profileBox .tel a {font-size: 1.35rem; font-weight: 700;}
+.consultant.view .inner2 .leftBox .introBox ul {display: flex; flex-direction: column; gap: 1.35rem;}
+.consultant.view .inner2 .leftBox .introBox ul li {display: flex; gap: .9rem; align-items: flex-start;}
+.consultant.view .inner2 .leftBox .introBox ul li .left {width: 4.7rem; flex: none; font-size: 1.1rem; font-weight: 600;}
+.consultant.view .inner2 .leftBox .introBox ul li .right {display: flex; flex-direction: column; gap: .9rem; color: #555555; font-weight: 500;}
+.consultant.view .inner2 .leftBox .box .titleWrap {margin-bottom: 1.35rem;}
+.consultant.view .inner2 .leftBox .box .textBox {line-height: 1.6; color: #555; font-weight: 500;}
+.consultant.view .inner2 .leftBox .qualifications .list {display: flex; flex-wrap: wrap; gap: 4.4%;}
+.consultant.view .inner2 .leftBox .qualifications .list li {width: calc(100% / 4 - 3.3%);}
+.consultant.view .inner2 .leftBox .clickBtn {margin: 0 auto; margin-top: 1.1rem; max-width: 16.6rem; width: 90%; background: var(--black); gap: 6%;}
+.consultant.view .inner2 .leftBox .clickBtn .icon {width: 1.35rem; height: 1.35rem; background: url(../../assets/images/ico_list_white.svg) no-repeat center / contain;}
+.consultant.view .inner2 .rightBox {position: sticky; top: 11rem; flex: none; display: flex; flex-direction: column; gap: 1.35rem; max-width: 380px; width: 28%; height: fit-content;}
+.consultant.view .inner2 .rightBox .imgBox {border-radius: .9rem; overflow: hidden;}
+.consultant.view .inner2 .rightBox .buttonBox {display: flex; flex-direction: column;}
+.consultant.view .inner2 .rightBox .buttonBox button {max-width: none;}
+.consultant.view .inner2 .leftBox > * {animation: rightMove 1s ease both;}
+.consultant.view .inner2 .rightBox {animation: upMove 1s ease both;}
+.consultant .modalCon .boxWrap {max-width: 700px; padding: 2.2rem; box-sizing: border-box; min-height: 300px;}
+.consultant .modalCon .boxWrap .titleWrap.type2 {margin-bottom: 1.35rem;}
+.consultant .modalCon .boxWrap .diffiBox {gap: 1.35rem;}
+.consultant .modalCon .boxWrap .diffiBox .cont {max-height: calc(100vh - 19rem); overflow: auto; min-height: 87px;}
+.consultant .modalCon .boxWrap .diffiBox .cont::-webkit-scrollbar {width: 3px;}
+.consultant .modalCon .boxWrap .diffiBox .cont .listBox {flex-wrap: wrap; flex-direction: row; gap: 1.35rem 0;}
+.consultant .modalCon .boxWrap .diffiBox .cont .listBox .inputBox.textBox {width: 50%;}
+.consultant .modalCon .boxWrap .diffiBox .cont .listBox .inputBox {width: 100%;}
+.consultant .modalCon .boxWrap .diffiBox .writeBtn {width: 100%; max-width: none;}
+
+/* 애로사항 */
+.difficulties .inner2 .cont {display: flex; gap: 4.8%;}
+.difficulties .inner2 .cont > * {width: 100%; box-sizing: border-box;}
+.difficulties .inner2 .cont .leftBox {padding: 4.8%; background: url(../../assets/images/user_difficulties_img.jpg) no-repeat 70% center / cover; color: #fff; border-radius: .9rem;}
+.difficulties .inner2 .cont .leftBox .title {font-weight: 600; font-size: 2rem; line-height: 140%;}
+.difficulties .inner2 .cont .leftBox .title:after {content: ""; width: 3.3rem; height: 2px; background: #fff; display: block; margin: 1.35rem 0;}
+.difficulties .inner2 .cont .leftBox .text {line-height: 140%; font-weight: 300; font-size: 1.4rem;}
+.container .diffiBox {display: flex; flex-direction: column; gap: 3.3rem;}
+.container .diffiBox .cont .listBox {display: flex; flex-direction: column; gap: 1.35rem;}
+.container .diffiBox .cont .inputBox.type2.file {overflow: hidden;}
+.container .diffiBox .cont .inputBox.type2 textarea {min-height: 18.2rem;}
+.container .diffiBox .cont .botText {margin-top: 1.35rem; line-height: 140%; text-align: center; word-break: keep-all;}
+.container .diffiBox .cont .botText p {font-size: .8rem; color: #555555; letter-spacing: -.6px;}
+.container .diffiBox .cont .botText p strong {color: var(--black);}
+.container .diffiBox .cont .botText > strong {color: var(--mainColor3); font-weight: 600;}
+.container .diffiBox .writeBtn {max-width: 16.6rem; width: 90%; margin: 0 auto;}
+
 /* 게시판 */
 .board .buttonBox {display: flex; gap: 3.5%; justify-content: center;}
 .board .buttonBox .clickBtn {max-width: 16.7rem; width: 90%; gap: 6%;}
@@ -429,14 +609,15 @@ footer .inner > .right .snsBox .youtube .icon {background-image: url(../../asset
 .board .board_list > table .th1:last-child {width: 8%;}
 .board .board_list > table tr > * {padding: .9rem .5em; padding-right: 1.85rem;}
 .board .board_list > table tr > *:last-child {padding-right: .5rem;}
-.board .board_list > table thead {border-bottom: 2px solid var(--mainColor3);}
 .board .board_list > table thead th {height: 2.8rem; color: var(--black); text-align: center; font-weight: 600;}
+.board .board_list > table tbody {border-top: 2px solid var(--mainColor3);}
 .board .board_list > table tbody tr {border-bottom: 1px solid #EEEEEE; position: relative; cursor: pointer;}
 .board .board_list > table tbody tr:after {content: ""; position: absolute; width: 0%; height: 1px; bottom: -1.5px; left: 0; border-bottom: 1px solid var(--mainColor3); transition: .5s ease;}
 .board .board_list > table tbody tr td:not(.title) {text-align: center; color: #555555; font-weight: 500;}
 .board .board_list > table tbody tr td:not(.title, .hit) {font-size: 1rem;}
 .board .board_list > table tbody tr.notice {background: #04359b06;}
 .board .board_list > table tbody tr.notice .notice p {white-space: nowrap; background: var(--mainColor3); border-radius: 3rem; padding: .3rem .9rem; color: #fff; font-weight: 600; font-size: .8rem; display: inline-block;}
+.board .board_list > table tbody tr .cate {white-space: nowrap;}
 .board .board_list > table tbody tr .title .text {display: flex; align-items: center; gap: .5rem;}
 .board .board_list > table tbody tr .title .text p {font-size: 1.4rem; font-weight: 500; overflow: hidden; word-break: break-word; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; max-width: calc(100% - 1.85rem); transition: .5s ease;}
 .board .board_list > table tbody tr .title .text i {width: 1.35rem; height: 1.35rem; background-position: center; background-repeat: no-repeat; background-size: contain;}
@@ -496,9 +677,9 @@ footer .inner > .right .snsBox .youtube .icon {background-image: url(../../asset
 .board.write .inner2 {display: flex; flex-direction: column; gap: 2.2rem;}
 .board.write .inner2 .textWrap {display: flex; flex-direction: column; gap: .9rem;}
 .board.write .inner2 .textWrap .listBox {display: flex; flex-wrap:  wrap; gap: .9rem;}
-.board.write .inner2 .textWrap .listBox > li {width: 100%; padding: .8rem 1.2rem; border-radius: .9rem; box-sizing: border-box;}
+.board.write .inner2 .textWrap .listBox > li {width: 100%; border-radius: .9rem; box-sizing: border-box;}
 .board.write .inner2 .textWrap .listBox > li.width3 {width: calc(100% / 3 - .6rem);}
-.board.write .inner2 .textWrap .listBox > li.textBox {position: relative; display: flex; flex-direction: column; gap: .5rem;}
+/*.board.write .inner2 .textWrap .listBox > li.textBox {position: relative; display: flex; flex-direction: column; gap: .5rem;}
 .board.write .inner2 .textWrap .listBox > li.textBox .text {font-weight: 500;}
 .board.write .inner2 .textWrap .listBox > li.inputBox {background: #F6F6F6;}
 .board.write .inner2 .textWrap .listBox > li.inputBox .input > input {height: auto; background: transparent; border: none; padding: 0; font-size: 1rem; font-weight: 500; border-radius: 0}
@@ -506,8 +687,8 @@ footer .inner > .right .snsBox .youtube .icon {background-image: url(../../asset
 .board.write .inner2 .textWrap .listBox > li.inputBox .input > input:focus, .board.write .inner2 .textWrap .listBox > li.inputBox .input > textarea:focus {background: transparent; box-shadow: none;}
 .board.write .inner2 .textWrap .listBox > li.inputBox .input textarea {min-height: 12.83rem; background: transparent; border: none; padding: 0; font-size: 1rem; font-weight: 500; border-radius: 0;}
 .board.write .inner2 .textWrap .listBox > li.inputBox .itemBox .nice-select {background: transparent; border: none; padding: 0;}
-.board.write .inner2 .textWrap .listBox > li.inputBox .itemBox .nice-select .current {font-weight: 500; font-size: 1rem;}
-.board.write .inner2 .textWrap .listBox > li .title {font-weight: 600; color: #666666;}
+.board.write .inner2 .textWrap .listBox > li.inputBox .itemBox .nice-select .current {font-weight: 500; font-size: 1rem;}*/
+.board.write .inner2 .textWrap .listBox > li.inputBox .input textarea {min-height: 12.83rem;}
 .board.write .inner2 .textWrap .botText {font-size: .8rem; color: #FF5353; text-align: center;}
 .board.write .inner2 .textWrap .listBox > li .secretBtn {padding: 8px; font-size: 12px; border-radius: 8px; background: #cdcdcd; color: #Fff; transition: .5s ease; display: flex; align-items: center; gap: 6px;}
 .board.write .inner2 .textWrap .listBox > li .secretBtn.click {background: var(--mainColor3);}
@@ -645,6 +826,8 @@ footer .inner > .right .snsBox .youtube .icon {background-image: url(../../asset
 	.container .pageWrap .pageList li.arrow:not(.disabled):hover a {color: var(--mainColor3); text-shadow: 2px 2px #04359B25;}
 	.container .searchFormWrap form .searchBox .searchBtn:hover {background: var(--mainColor3);}
 	.container .searchFormWrap form .searchBox .searchBtn:hover .icon:after {opacity: 1; transform: translate(-50%, -50%);}
+	.container .tableCont.type1 table tbody tr:hover:after {width: 100%;}
+	.container .tableCont.type1 table tbody tr:hover .title .text {color: var(--mainColor3);}
 
 	.user .container .clickBtn:hover {background: var(--mainColor);}
 	.main .slideControl button:not(.slick-disabled):hover:after {transform: translate(-50%, -50%); opacity: 1;}
@@ -668,6 +851,12 @@ footer .inner > .right .snsBox .youtube .icon {background-image: url(../../asset
 	.join .inner .boxWrap .box02 .buttonBox li.naver button:hover {box-shadow: inset 3px 3px 8px rgba(255, 255, 255, .8), 3px 3px #3aae3650;}
 	.join .inner .boxWrap .box02 .buttonBox li.kakao button:hover {box-shadow: inset 3px 3px 8px rgba(255, 255, 255, .8), 3px 3px #fae10080;}
 	.join .inner .boxWrap .box02 .buttonBox li.google button:hover {box-shadow: inset 3px 3px 8px rgba(88, 88, 88, .1), 3px 3px #99999940;}
+
+	.consultant .inner2 .listBox li .botBox .moreBtn:hover {color: var(--mainColor3);}
+	.consultant .inner2 .listBox li .botBox .moreBtn:hover .icon {background-image: url(../../assets/images/ico_user_consultant_more_icon_blue.svg);}
+
+	.container .inputBox.type2 .fileName li:hover:after {width: 100%; opacity: 1;}
+	.container .inputBox.type2 .uploadBox:hover input {background: #04359b17;}
 
 	.board .buttonBox .clickBtn:hover {background: var(--black);}
 	.board .buttonBox .clickBtn.editBtn:hover, .board .buttonBox .writeBtn:hover {background: var(--mainColor3);}
@@ -726,6 +915,8 @@ footer .inner > .right .snsBox .youtube .icon {background-image: url(../../asset
 	.join_step .inner .contBox .inputWrap li {width: calc(100% / 2 - .4rem);}
 	.join_step .inner .contBox .box02 {padding: 1.35rem 1rem;}
 
+	.difficulties .inner2 .box {gap: 2%;}
+
 	.board .board_view > table thead .fileBox li a .name {font-size: 1rem;}
 	.board .board_view > table thead .fileBox li a .size {font-size: .8rem;}
 
@@ -741,6 +932,15 @@ footer .inner > .right .snsBox .youtube .icon {background-image: url(../../asset
 	.location .inner2 .box01 .bus .list li {width: calc(100% / 2 - .7rem);}
 }
 @media screen and (max-width: 900px) {
+	.consultant .inner2 .listBox li {width: 100%; border-bottom: 1px solid #eee;}
+	.consultant .inner2 .listBox li:nth-child(odd):after {display: none;}
+	.consultant.view .inner2 {flex-direction: column-reverse; gap: 3rem;}
+	.consultant.view .inner2 .rightBox {max-width: 270px; width: 75%; position: static;}
+
+	.difficulties .inner2 .box {flex-direction: column; gap: 1.35rem;}
+	.difficulties .inner2 .box .leftBox {position: relative; background-position: center 80%; overflow: hidden; z-index: 1; padding: 2.5rem;}
+	.difficulties .inner2 .box .leftBox:after {content: ""; position: absolute; width: 100%; height: 100%; left: 0; top: 0; background: #00000010; z-index: -1;}
+
 	.business_overview .inner2 .box02 .listBox li {width: 38%;}
 	.business_overview .inner2 .box03 .listBox {gap: 1.2rem}
 	.business_overview .inner2 .box03 .listBox li {width: calc(100% / 2 - .6rem);}
@@ -752,12 +952,15 @@ footer .inner > .right .snsBox .youtube .icon {background-image: url(../../asset
 @media screen and (max-width: 768px) {
 	html {font-size: 16px;}
 
-	.container .searchFormWrap form {flex-direction: column; gap: .5rem;}
-	.container .searchFormWrap form .searchBox {max-width: none; width: 100%; gap: .5rem;}
+	.container .searchFormWrap {margin-bottom: 1rem;}
+	.container .searchFormWrap form {flex-direction: column; gap: .7rem;}
+	.container .searchFormWrap form .searchBox {max-width: none; width: 100%; gap: .7rem .5rem;}
 	.container .searchFormWrap form .itemBox.type2 {max-width: 5.5rem;}
 	.container .searchFormWrap form .itemBox.type2 .nice-select {height: 2.7rem;}
 	.container .searchFormWrap form .searchBox .inputBox.type1 input {height: 2.7rem;}
 	.container .searchFormWrap form .searchBox .searchBtn .icon {width: 2.7rem; height: 2.7rem;}
+
+	.container .tableCont.type1 table tbody {border-top: none;}
 
 	.user .titleWrap.type2 .tt1 {font-size: 1rem;}
 	.user .titleWrap.type2 .tt2 {font-size: 1.2rem;}
@@ -772,6 +975,20 @@ footer .inner > .right .snsBox .youtube .icon {background-image: url(../../asset
 	.join_step .inner .stepWrap li .num {width: 3rem; height: 3rem; font-size: 1.2rem;}
 	.join_step .inner .stepWrap li:not(:last-child) .num:after {width: 2rem; right: -2.5rem;}
 	.join_step .inner .stepWrap li .text {font-size: 1.2rem;}
+
+	.container .searchFormWrap form .searchBox {flex-wrap: wrap;}
+	.container .searchFormWrap form .searchBox .inputBox.type1:not(.date) {width: calc(100% - 3.2rem);}
+	.search .inner2 .tableCont.type1 table tbody tr {display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; padding: 1rem;}
+	.search .inner2 .tableCont.type1 table tbody tr td {display: block;}
+	.search .inner2 .tableCont.type1 table tbody tr td {padding: 0;}
+	.search .inner2 .tableCont.type1 table tbody tr .num {border-radius: 3rem; border: 1px solid #e6e6e6; padding: .2rem .5rem;}
+	.search .inner2 .tableCont.type1 table tbody tr .title {width: 100%;}
+	.search .inner2 .tableCont.type1 table tbody tr .title .text {display: block;}
+	.search .inner2 .tableCont.type1 table tbody tr .title .text p {font-size: 1.35rem; max-width: none; display: inline; overflow: visible; line-height: 1.4;}
+	.search .inner2 .tableCont.type1 table tbody tr .title .text .file {display: inline-block; transform: translateY(.2rem);}
+	.search .inner2 .tableCont.type1 table tbody tr .hit {position: absolute; bottom: 1rem; right: 1rem; display: flex; align-items: center; gap: .3rem; padding: 0;}
+	.search .inner2 .tableCont.type1 table tbody tr .hit:before {content: "조회수 : "; display: inline;}
+
 
 	.board .buttonBox .clickBtn {font-size: 1rem;}
 	.board .board_list > table thead {display: none;}
@@ -823,6 +1040,7 @@ footer .inner > .right .snsBox .youtube .icon {background-image: url(../../asset
 	.organization .inner2 .tableCont table tbody tr {display: flex; flex-wrap: wrap; gap: .5rem 1rem; padding: 1rem; border: 1px solid #eee; border-radius: 1rem; margin-bottom: 1rem; box-shadow: 1px 1px #e9e9e9;}
 	.organization .inner2 .tableCont table tbody tr td {display: block; padding: 0; font-size: .9rem; position: relative;}
 	.organization .inner2 .tableCont table tbody tr td:after {content: ""; position: absolute; top: 50%; transform: translateY(-50%); right: -.5rem; border-right: 1px solid #d9d9d9; width: 1px; height: .5rem;}
+	.organization .inner2 .tableCont table tbody tr td:nth-child(3):after, .organization .inner2 .tableCont table tbody tr td:nth-child(4):after, .organization .inner2 .tableCont table tbody tr td:nth-child(6):after {display: none;}
 	.organization .inner2 .tableCont table tbody tr td:nth-child(4) {font-size: 1rem; width: 100%; color: var(--mainColor3); font-weight: 600;}
 	.organization .inner2 .tableCont table tbody tr td:nth-child(4) p {font-size: 1.35rem; max-width: none; display: inline; overflow: visible; line-height: 1.4;}
 
@@ -842,7 +1060,7 @@ footer .inner > .right .snsBox .youtube .icon {background-image: url(../../asset
 
 	.organization .inner2 .organizationBox .text.type1 {margin: 0 auto; max-width: none;}
 	.organization .inner2 .organizationBox .textWrap {position: relative; padding-bottom: 14rem;}
-	.organization .inner2 .organizationBox .textWrap .text3 {position: absolute; top: 9rem; left: calc(50% - 5rem); transform: translateX(-50%);}
+	.organization .inner2 .organizationBox .textWrap .text3 {position: absolute; top: 9rem; left: calc(50% - 8rem);; transform: translateX(-50%);}
 	.organization .inner2 .organizationBox .textWrap2 {position: static;}
 	.organization .inner2 .organizationBox .textWrap3 {bottom: 0; width: 100%;}
 	.organization .inner2 .organizationBox .text2:before, .organization .inner2 .organizationBox .text2:after {display: none;}
@@ -852,6 +1070,8 @@ footer .inner > .right .snsBox .youtube .icon {background-image: url(../../asset
 	.organization .inner2 .organizationBox .textWrap3 .text.type2:before {width: 7.3rem;}
 	.organization .inner2 .organizationBox .textWrap3 .text.type2:nth-child(1):before {left: calc(50% + 5.2rem);}
 	.organization .inner2 .organizationBox .textWrap3 .text.type2:nth-child(3):before {right: calc(50% + 5.2rem);}
+
+	.consultant .modalCon .boxWrap {padding: 2.2rem 1.2rem;}
 
 	.location .inner2 .box .traffic {flex-direction: column; gap: 1rem;}
 	.location .inner2 .box01 .subway .textBox .list {flex-direction: column;}
@@ -866,10 +1086,10 @@ footer .inner > .right .snsBox .youtube .icon {background-image: url(../../asset
 
 	.container .pageWrap .pageList {gap: 5px;}
 
+	.container .searchFormWrap.type2 form {align-items: flex-start;}
 	.container .searchFormWrap form .searchBox {flex-wrap: wrap;}
 	.container .searchFormWrap form .itemBox.type2 {max-width: 8.5rem; width: calc(50% - .25rem);}
 	.container .searchFormWrap form .searchBox .inputBox.type1 {width: calc(100% - 2.7rem - .5rem);}
-	.container .searchFormWrap.type2 form .searchBox {justify-content: center;}
 
 	.main .sec01 .inner .rightBox .list li {width: 100%;}
 	.main .sec01 .inner .rightBox .list li a {padding: 1rem;}
@@ -878,6 +1098,20 @@ footer .inner > .right .snsBox .youtube .icon {background-image: url(../../asset
 	.main .sec01 .inner .rightBox .list li a .icon img {width: 1.6rem; height: 1.6rem;}
 	.main .sec03 .inner .boxWrap .calendarWrap .calendarBox td:after {width: 3.5rem; height: 3.5rem;}
 	.user .inner .authenBox .selectBox {gap: 10%;}
+
+	.search .inner2 .searchFormWrap .searchBox .itemBox {margin-right: 25%;}
+	.search .inner2 .searchFormWrap .searchBox .inputBox.type1.date {width: calc(100% / 2 - .5rem); max-width: none;}
+
+	.consultant .inner2 .profileBox .textBox .intro br {display: none;}
+	.consultant .inner2 .listBox li .botBox {flex-direction: column; gap: 1.5rem;}
+	.consultant .inner2 .buttonBox {gap: .5rem;}
+	.consultant .inner2 .buttonBox .clickBtn {font-size: 1rem; max-width: none;}
+	.consultant .inner2 .buttonBox .clickBtn .icon {width: 1.1rem; height: 1.1rem;}
+
+	.difficulties .inner2 .box .leftBox {padding: 2rem; word-break: keep-all;}
+	.difficulties .inner2 .box .leftBox .title {font-size: 1.35rem;}
+	.difficulties .inner2 .box .leftBox .text {font-size: 1rem;}
+	.difficulties .inner2 .box .leftBox .text br {display: none;}
 
 	.board .board_view > table thead .fileBox li a {flex-wrap: wrap; gap: 0 .4rem;}
 	.board .board_view > table thead .fileBox li a .name {width: calc(100% - 1.35rem - .4rem);}

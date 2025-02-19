@@ -25,7 +25,10 @@ function ManagerCodeGroup(props) {
             pageIndex: 1,
             searchCnd: "0",
             searchWrd: "",
-            bnrPopupKnd: "popup"
+            bnrPopupKnd: "popup",
+            actvtnYn: "",
+            searchType: "all",
+            searchVal: ""
         }
     );
 
@@ -36,6 +39,26 @@ function ManagerCodeGroup(props) {
 
     const [bnrPopupList, setBnrPopupList] = useState([]);
 
+    const searchHandle = () => {
+        getBnrPopupList(searchCondition);
+    }
+
+    const activeEnter = (e) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            getBnrPopupList(searchCondition);
+        }
+    };
+
+    const searchReset = () => {
+        setSearchCondition({
+            ...searchCondition,
+            actvtnYn: "",
+            searchType: "all",
+            searchVal: ""
+        })
+    }
+    
     const [saveEvent, setSaveEvent] = useState({});
     useEffect(() => {
         if(saveEvent.save){
@@ -182,7 +205,15 @@ function ManagerCodeGroup(props) {
                             <li className="inputBox type1">
                                 <p className="title">상태</p>
                                 <div className="itemBox">
-                                    <select className="selectGroup">
+                                    <select className="selectGroup"
+                                            value={searchCondition.actvtnYn || ""}
+                                            onChange={ (e) => {
+                                                setSearchCondition({
+                                                    ...searchCondition,
+                                                    actvtnYn: e.target.value
+                                                })
+                                            }}
+                                    >
                                         <option value="">전체</option>
                                         <option value="Y">출력</option>
                                         <option value="N">출력안함</option>
@@ -192,22 +223,48 @@ function ManagerCodeGroup(props) {
                             <li className="inputBox type1">
                                 <p className="title">키워드</p>
                                 <div className="itemBox">
-                                    <select className="selectGroup">
-                                        <option value="">전체</option>
-                                        <option value="cdGroup">제목</option>
+                                    <select className="selectGroup"
+                                            value={searchCondition.searchType || ""}
+                                            onChange={ (e) => {
+                                                setSearchCondition({
+                                                    ...searchCondition,
+                                                    searchType: e.target.value
+                                                })
+                                            }}
+                                    >
+                                        <option value="all">전체</option>
+                                        <option value="bnrPopupTtl">제목</option>
                                     </select>
                                 </div>
                             </li>
                             <li className="searchBox inputBox type1">
-                                <label className="input"><input type="text" id="search" name="search"
-                                                                placeholder="검색어를 입력해주세요"/></label>
+                                <label className="input">
+                                    <input
+                                        type="text"
+                                        id="search"
+                                        name="search"
+                                        placeholder="검색어를 입력해주세요"
+                                        value={searchCondition.searchVal || ""}
+                                        onChange={(e) =>
+                                            setSearchCondition({
+                                                ...searchCondition,
+                                                searchVal: e.target.value
+                                            })
+                                        }
+                                        onKeyDown={activeEnter}
+                                    />
+                                </label>
                             </li>
                         </ul>
                         <div className="rightBtn">
-                            <button type="button" className="refreshBtn btn btn1 gray">
+                            <button type="button" className="refreshBtn btn btn1 gray"
+                                    onClick={searchReset}
+                            >
                                 <div className="icon"></div>
                             </button>
-                            <button type="button" className="searchBtn btn btn1 point">
+                            <button type="button" className="searchBtn btn btn1 point"
+                                    onClick={searchHandle}
+                            >
                                 <div className="icon"></div>
                             </button>
                         </div>

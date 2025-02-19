@@ -262,7 +262,7 @@ function MainCalendar() {
             <div className="inner">
                 <h2 className="secTitle">일정현황</h2>
                 <div className="boxWrap">
-                    <div className="calendarWrap leftBox" data-aos="fade-left" data-aos-duration="1500">
+                    <div className="calendarWrap leftBox" data-aos="fade-right" data-aos-duration="1500">
                         <div className="topBox">
                             <button type="button" className="arrowBtn prevBtn"
                                     onClick={() => handlePrevNextChange("prev")}>

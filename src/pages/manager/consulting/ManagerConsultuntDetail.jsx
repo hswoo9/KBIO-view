@@ -28,10 +28,64 @@ function ManagerConsultuntDetail(props) {
     const [consultantDetail, setConsultantDetail] = useState({});
     const [memberDetail, setMemberDetail] = useState({});
     const [cnsltProfileFile, setCnsltProfileFile] = useState(null);
+    const [cnsltCertificateFile , setCnsltCertificateFile] = useState([]);
 
     const decodePhoneNumber = (encodedPhoneNumber) => {
         const decodedBytes = base64.toByteArray(encodedPhoneNumber);
         return new TextDecoder().decode(decodedBytes);
+    };
+
+    const setCnslttMbrActv = (e) =>{
+        console.log("수정된 consultantDetail",consultantDetail);
+        const setCnslttMbrActvUrl = "/consultingApi/setCnslttMbrActv";
+
+        const updatedConsultant = { ...consultantDetail};
+
+
+        Swal.fire({
+            title: "수정하시겠습니까?",
+            showCloseButton: true,
+            showCancelButton: true,
+            confirmButtonText: "예",
+            cancelButtonText: "아니오"
+        }).then((result) => {
+            if(result.isConfirmed) {
+                const requestOptions = {
+                    method: "POST",
+                    headers: {
+                        "Content-type": "application/json",
+                    },
+                    body: JSON.stringify(updatedConsultant),
+                };
+
+                console.log("Request Body:", JSON.stringify(requestOptions));
+
+                EgovNet.requestFetch(setCnslttMbrActvUrl,requestOptions, (resp) =>{
+                    if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
+                        Swal.fire("수정되었습니다.");
+                        window.location.reload();
+                    } else {
+                        alert("ERR : " + resp.resultMessage);
+                    }
+                 });
+
+            }else{
+                //취소
+            }
+        });
+    }
+
+    const handleDownload = (file) => {
+
+        const downloadUrl = `http://133.186.250.158${file.atchFilePathNm}/${file.strgFileNm}.${file.atchFileExtnNm}`; // 실제 파일 경로로 변경
+        console.log("Download URL: ", downloadUrl);
+
+        const a = document.createElement('a');
+        a.href = downloadUrl;
+        a.download = file.atchFileNm; // 파일명을 다운로드할 이름으로 지정
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
     };
     const getConsultantDetail = () => {
         const getConsultantDetailUrl = "/consultingApi/getConsultantDetail.do";
@@ -57,6 +111,10 @@ function ManagerConsultuntDetail(props) {
                     setCnsltProfileFile(resp.result.cnsltProfileFile);
                 }
 
+                if (resp.result.cnsltCertificateFile) {
+                    setCnsltCertificateFile(resp.result.cnsltCertificateFile);
+                }
+
             },
             (error) => {
                 console.error("Error fetching operational detail:", error);
@@ -79,6 +137,7 @@ function ManagerConsultuntDetail(props) {
         switch (tabIndex) {
             case 0:
                 return (
+                    <div>
                     <div className="contBox infoWrap customContBox">
                         {/* 개인정보 탭 내용 */}
                             <ul className="inputWrap">
@@ -244,33 +303,76 @@ function ManagerConsultuntDetail(props) {
                                             borderRadius: "10px",
                                             padding: "10px"
                                         }}>
-                                            {/*{cnsltCertificateFile.length > 0 ? (
+                                            {cnsltCertificateFile.length > 0 ? (
                                                 cnsltCertificateFile.map((file, index) => (
-                                                    <p key={index}>
+                                                    <div key={index} style={{ cursor: "pointer" }} onClick={() => handleDownload(file)}>
                                                         {index + 1}. {file.atchFileNm}
-                                                    </p>
+                                                    </div>
                                                 ))
                                             ) : (
                                                 <p></p>
-                                            )}*/}
+                                            )}
                                         </div>
 
                                     </div>
                                 </li>
 
-                                <li className="inputBox type1 width1">
-                                    <label className="title" style={{cursor :"default"}}>컨설팅 활동</label>
+                                <ul className="box03 inputWrap">
+                                <li className="inputBox type2 white">
                                     <div className="input">
-                                        <div style={{
+                                        <span className="tt1">컨설팅활동</span>
+                                        <div className="checkWrap"
+                                            style={{
                                             border: "1px solid #ddd",
                                             borderRadius: "10px",
                                             padding: "10px"
                                         }}>
-
+                                            <label className="checkBox type3">
+                                            <input
+                                                type="radio"
+                                                value="Y"
+                                                checked={consultantDetail.cnsltActv === "Y"}
+                                                onChange={(e) => setConsultantDetail({...consultantDetail, cnsltActv : e.target.value})}
+                                            />
+                                            공개
+                                            </label>
+                                            <label className="checkBox type3">
+                                            <input
+                                                type="radio"
+                                                value="N"
+                                                checked={consultantDetail.cnsltActv === "N"}
+                                                onChange={(e) => setConsultantDetail({...consultantDetail, cnsltActv : e.target.value})}
+                                            />
+                                            비공개
+                                            </label>
                                         </div>
                                     </div>
                                 </li>
+                                </ul>
+
                             </ul>
+                    </div>
+
+                        {/*버튼영역*/}
+                        <div style={{marginTop : "30px"}} className="pageWrap">
+                            <div className="leftBox">
+                                <button type="button" className="writeBtn clickBtn"
+                                onClick={()=>{setCnslttMbrActv()}}>
+                                    <span>수정</span>
+                                </button>
+                            </div>
+                            <div className="rightBox">
+                                <Link
+                                    to={URL.MANAGER_CONSULTING_EXPERT}
+                                >
+                                    <button type="button" className="clickBtn black">
+                                        <span>목록</span>
+                                    </button>
+                                </Link>
+                            </div>
+
+                        </div>
+                        {/*버튼영역끝*/}
                     </div>
                 );
             case 1:
@@ -325,6 +427,8 @@ function ManagerConsultuntDetail(props) {
                 <div>
                     {renderTabContent(activeTab)} {/* activeTab 값에 따라 콘텐츠를 표시 */}
                 </div>
+
+
 
 
             </div>

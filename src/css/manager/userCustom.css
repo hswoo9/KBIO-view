@@ -135,5 +135,17 @@
     .main .sec01 .bg img {transform: scale(10.05);}
 }
 
+.customUserSelect{
+    background-color: #fff;
+    border-radius: 3rem;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+}
+
+.search .inner2 .searchFormWrap .searchBox .inputBox.type1.date{ max-width : 11rem !important;}
+
+.noneTag{ opacity: 0; position: absolute; width: 0;}
+
 header .hInner .hTop .alarmWrap.click .close {position: absolute; right:  0; z-index: 10; width: 36px; margin-top: 5px; height: 24px; cursor: pointer;}
 header .hInner .hTop .alarmWrap.click .close .icon {height: 100%; background: url(../../assets/images/ico_close.svg) no-repeat center / contain;}
