@@ -24,6 +24,8 @@ function MemberMyPageModify(props) {
     const [image, setImage] = useState({});
     const [comCdList, setComCdList] = useState([]);
     const [cnsltProfileFile, setCnsltProfileFile] = useState(null);
+    const [currentPassword, setCurrentPassword] = useState(''); // 현재 비밀번호 상태
+    const [newPassword, setNewPassword] = useState(''); // 변경할 비밀번호 상태
 
     const [consultDetail, setConsultDetail] = useState({});
 
@@ -177,6 +179,7 @@ function MemberMyPageModify(props) {
                 const memberData = resp.result.member;
                 const cnsltData = resp.result.cnslttMbr;
 
+                console.log("멤버데이터 : ",memberData);
 
                 const decodedPhoneNumber = memberData.mblTelno ? decodePhoneNumber(memberData.mblTelno) : "";
 
@@ -205,6 +208,7 @@ function MemberMyPageModify(props) {
                     ...cnsltData,
                 }));
                 console.log("현재 consultDetail:", consultDetail);
+                console.log("현재 memberDetail:", memberDetail)
             }
         });
     };
@@ -251,6 +255,43 @@ function MemberMyPageModify(props) {
         console.log("현재 consultDetail:", consultDetail);
     }, [consultDetail]);
 
+    const checkPwd = () => {
+        if (!currentPassword) {
+            Swal.fire("현재 비밀번호를 입력해주세요.");
+            return;
+        }
+
+        const checkPwdUrl = '/memberApi/checkPassword.do';
+        const requestOptions = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                userId: memberDetail.userId,
+                userPw: currentPassword,
+            }),
+        };
+
+        console.log("비밀번호 : ", currentPassword);
+        console.log("아이디 : ", memberDetail.userId);
+
+        EgovNet.requestFetch(checkPwdUrl, requestOptions, (resp) => {
+            console.log("백엔드 응답:", resp);
+            if (resp.resultCode == "200") {
+                updateMember();
+            } else {
+                Swal.fire("비밀번호가 틀립니다.");
+                return;
+            }
+        });
+    };
+
+    const validatePassword = (password) => {
+        const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,16}$/;
+        return passwordRegex.test(password);
+    };
+
     const updateMember = () => {
         console.log("현재 memberDetail 상태:", memberDetail);
         console.log("현재 consultDetail:", consultDetail);
@@ -266,14 +307,13 @@ function MemberMyPageModify(props) {
                     Swal.fire("이메일을 입력해주세요.");
                     return;
                 }
-
-                if (!memberDetail.userPw) {
+                /*if (!memberDetail.userPw) {
                     Swal.fire({
                         title: '비밀번호는 8~16자의 영문 대/소문자, 숫자, 특수문자를 사용해 주세요.',
                         text: '비밀번호가 요구 사항에 맞지 않습니다.',
                     });
                     return;
-                }
+                }*/
 
                 if (!memberDetail.addr) {
                     Swal.fire("주소를 입력해주세요.");
@@ -289,12 +329,23 @@ function MemberMyPageModify(props) {
                 const emailDomain = memberDetail.emailDomain;
                 const email = `${emailPrefix}@${emailDomain}`;
 
+                if (newPassword) {
+                    if (!validatePassword(newPassword)) {
+                        Swal.fire({
+                            title: "비밀번호 형식이 올바르지 않습니다.",
+                            text: "비밀번호는 8~16자의 영문 대/소문자, 숫자, 특수문자를 사용해 주세요.",
+                        });
+                        return;
+                    }
+                }
+
                 const updatedMemberDetail = {
                     ...memberDetail,
                     emailPrefix,
                     emailDomain,
                     email,
                     emailProvider: emailDomain,
+                    userPwdRe: newPassword,
                 };
 
                 const hasConsultData = consultDetail && Object.keys(consultDetail).length > 0;
@@ -370,7 +421,7 @@ function MemberMyPageModify(props) {
                 {/* 페이지 내용 표시 */}
                 <form className="contBox">
                     <ul className="inputWrap box01" data-aos="fade-up" data-aos-duration="1500">
-                        <li className="inputBox type2 white">
+                        {/*<li className="inputBox type2 white">
                             <span className="tt1">회원분류</span>
                             <div className="input">
                                 <input
@@ -381,7 +432,7 @@ function MemberMyPageModify(props) {
                                     readOnly
                                 />
                             </div>
-                        </li>
+                        </li>*/}
 
                         <li className="inputBox type2 white">
                             <span className="tt1">성명</span>
@@ -501,15 +552,29 @@ function MemberMyPageModify(props) {
                         </li>
 
                         <li className="inputBox type2">
-                            <span className="tt1">비밀번호</span>
+                            <span className="tt1">비밀번호 확인</span>
                             <label className="input">
                                 <input
                                     type="password"
                                     name="userPw"
                                     id="userPw"
-                                    placeholder="영문자, 숫자, 특수문자 조합으로 8~20자 이내만 가능합니다."
-                                    value={memberDetail.userPw}
-                                    onChange={(e) => setMemberDetail({...memberDetail, userPw: e.target.value})}
+                                    placeholder="현재 비밀번호를 작성해주세요."
+                                    value={currentPassword}
+                                    onChange={(e) => setCurrentPassword(e.target.value)}
+                                />
+                            </label>
+                        </li>
+
+                        <li className="inputBox type2">
+                            <span className="tt1">비밀번호 변경</span>
+                            <label className="input">
+                                <input
+                                    type="password"
+                                    name="newUserPw"
+                                    id="newUserPw"
+                                    placeholder="비밀번호 변경을 원하지 않으시면 작성하지 않으시면 됩니다."
+                                    value={newPassword}
+                                    onChange={(e) => setNewPassword(e.target.value)}
                                 />
                             </label>
                         </li>
@@ -793,7 +858,7 @@ function MemberMyPageModify(props) {
                     </ul>
 
                     <div className="buttonBox">
-                        <button type="button" className="clickBtn black" onClick={updateMember}>
+                        <button type="button" className="clickBtn black" onClick={checkPwd}>
                             <span>수정</span>
                         </button>
                         {/*<button type="button" className="clickBtn white" onClick={() => navigate(URL.LOGIN)}>
