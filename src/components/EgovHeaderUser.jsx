@@ -23,6 +23,9 @@ import '@/css/manager/page.css';
 import userJs from "@/js/userCustom";
 
 import logoWhite from "@/assets/images/logo_white.svg";
+import {useWebSocket} from "../utils/WebSocketProvider.jsx";
+import {getUserMsgList} from "./CommonComponents.jsx";
+import moment from "moment";
 
 function EgovHeader() {
   const KAKAO_CLIENT_ID = import.meta.env.VITE_APP_KAKAO_CLIENTID; // 발급받은 클라이언트 아이디
@@ -64,7 +67,8 @@ function EgovHeader() {
   const sessionUserSe = sessionUser?.userSe;
   const sessionUserSn = sessionUser?.userSn;
   const userSn = getSessionItem("userSn");
-
+  const { userMsgList, setUserMsgList } = useWebSocket();
+  const [msgHtml, setMsgHtml] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [menuList, setMenuList] = useState([]);
@@ -83,6 +87,9 @@ function EgovHeader() {
   const [isToggled, setIsToggled] = useState(false);
   const handleToggle = () => {
     setIsToggled(prevState => !prevState);
+    // getUserMsgList(sessionUserSn).then((data) => {
+    //   setUserMsgList(data)
+    // })
   };
 
   /* 스크롤 이벤트 관련 */
@@ -222,7 +229,6 @@ function EgovHeader() {
   useEffect(() => {
 
     const activeTag = document.getElementsByClassName('activeTag');
-    console.log(activeTag);
     if(activeTag.length){
       const parentTag = activeTag[0].parentElement;
       if(parentTag){
@@ -250,7 +256,6 @@ function EgovHeader() {
     if (data !== null) {
       setUserInfo({ id: data, password: "default", userSe: "USR", loginType: "base"});
     }
-
 
     getMenu(null, 0, userSn).then((data) => {
       let dataList = [];
@@ -370,19 +375,18 @@ function EgovHeader() {
           return;
         }
       }else{
-        console.log("resp",resp)
         setSessionItem("loginUser", {userSn : resp.result.userSn, name : resp.result.userName, id : resp.result.userId, userSe : resp.result.userSe, mbrType : resp.result.mbrType});
         // setSessionItem("userName", resp.userName);
         setSessionItem("jToken", resp.result.jToken);
         setSessionItem("userSn", resp.result.userSn);
         //if (saveIDFlag) setLocalItem(KEY_ID, resultVO?.id);
         if (saveIDFlag) setLocalItem(KEY_ID, resp.result.userId);
-        Swal.fire("로그인 성공");
+        // Swal.fire("로그인 성공");
         $('#id').val("");
         $('#password').val("");
         $('.modalCon').removeClass('open');
         $('html, body').css('overflow', 'visible');
-        navigate("/");
+        window.location.href = "/";
       }
     });
   };
@@ -411,14 +415,12 @@ function EgovHeader() {
         removeSessionItem("loginUser");
         removeSessionItem("jToken");
         removeSessionItem("userSn");
-        Swal.fire("로그아웃되었습니다!");
-        navigate(URL.MAIN);
+        // Swal.fire("로그아웃되었습니다!");
+        // navigate(URL.MAIN);
+        window.location.href = "/";
       }
     });
   };
-
-  console.log("------------------------------EgovHeadeㅁㄴㅇㅁㄴㅇㅁㄴㅇr [End]");
-  console.groupEnd("EgovHeader");
 
   //자동 로그아웃
   const logoutTimer = useRef(null);
@@ -485,6 +487,84 @@ function EgovHeader() {
     });
   }, [window.location.pathname]);
 
+  const userMsgMakeHtml = () => {
+      let dataList = [];
+      dataList.push(
+          <li key="no_data" className="noData">
+              <div style={{height: "2.5rem"}}>
+                <p style={{fontSize: "16px", display: "flex", justifyContent: "center", height: "100%", alignItems: "center"}}>
+                  알림이 없습니다.
+                </p>
+              </div>
+          </li>
+      );
+
+    userMsgList.forEach(function (item, index) {
+      if (index === 0) dataList = [];
+
+      dataList.push(
+          <li key={item.tblUserMsg.msgSn} className={`msg msg${item.tblUserMsg.msgSn}`}>
+            <div className="close" onClick={(e) => {
+              setExpsrYn(e, item.tblUserMsg.msgSn)
+            }}>
+              <div className="icon"></div>
+            </div>
+            <NavLink
+                to={URL.MAIN}
+                style={{height: "auto"}}>
+              <div style={{height: "auto"}}>
+                <p style={{fontSize: "16px", display: "flex", justifyContent: "space-between"}}>
+                  {item.tblUserMsg.msgTtl}
+                </p>
+                <p style={{fontSize: "12px", marginTop: "5px", color: "#555555"}}>
+                  {item.tblUser.kornFlnm} - {moment(item.tblUserMsg.frstCrtDt).format('YYYY-MM-DD hh:mm:ss')}
+                </p>
+              </div>
+            </NavLink>
+          </li>
+      );
+    });
+    setMsgHtml(dataList);
+  }
+
+  const setExpsrYn = (e, msgSn) => {
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({msgSn : msgSn, mdfrSn : sessionUserSn}),
+    };
+
+    EgovNet.requestFetch("/commonApi/setUserMsgExpsrYn", requestOptions, (resp) => {
+      if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
+        e.target.closest("li").classList.add("slide-out");
+
+        setTimeout(() => {
+          e.target.closest("li").remove();
+
+          if(document.querySelectorAll("#alarmUl li.msg").length == 0 && document.querySelectorAll("#alarmUl li.noData").length == 0) {
+            document.getElementById("alarmUl").innerHTML = `
+             <li key="no_data" class="noData">
+              <div style="height: 2.5rem">
+                <p style="font-size: 16px; display:flex; justify-content : center; height: 100%; align-items: center">
+                  알림이 없습니다.
+                </p>
+              </div>
+            </li>`
+          }
+        }, 400);
+      } else {
+        alert("ERR : " + resp.resultMessage);
+      }
+    });
+
+  }
+
+  useEffect(() => {
+    userMsgMakeHtml();
+  }, [userMsgList]);
+
   return (
       // <!-- header -->
       <header className={isScrolled ? 'scroll' : ''}>
@@ -547,6 +627,21 @@ function EgovHeader() {
                 header .checkBox.type3 input:checked::before {background: var(--black)}
                 header .checkBox.type3 input + small {color: #555; transition: .5s ease; font-weight: 500; font-size: .8rem;}
                 header .checkBox.type3 input:checked + small {color: var(--black)}
+                
+                @keyframes slideOutRight {
+                  0% {
+                    transform: translateX(0);
+                    opacity: 1;
+                  }
+                  100% {
+                    transform: translateX(100%);
+                    opacity: 0;
+                  }
+                }
+                
+                .slide-out {
+                  animation: slideOutRight 0.4s ease-out forwards;
+                }
                 `}
         </style>
         <div className="hInner">
@@ -589,19 +684,19 @@ function EgovHeader() {
                   </>
               )}
             </div>
-            <div className={isToggled ? "alarmWrap click" : "alarmWrap"}>
-              <button type="button" className="alarmBtn" onClick={handleToggle}>
-                <div className="icon"></div>
-              </button>
-              <ul className="selectBox">
-                <li><NavLink href="#"><span>알람1</span></NavLink></li>
-                <li><NavLink href="#"><span>알람1</span></NavLink></li>
-                <li><NavLink href="#"><span>알람1</span></NavLink></li>
-                <li><NavLink href="#"><span>알람1</span></NavLink></li>
-                <li><NavLink href="#"><span>알람1</span></NavLink></li>
-                <li><NavLink href="#"><span>알람1</span></NavLink></li>
-              </ul>
-            </div>
+
+            {sessionUserId && (
+              <div className={isToggled ? "alarmWrap click" : "alarmWrap"}>
+                <button type="button" className="alarmBtn" onClick={handleToggle}>
+                  <div className="icon"></div>
+                </button>
+                <ul className="selectBox" id="alarmUl" style={{overflow: "hidden"}}>
+                  {msgHtml}
+                </ul>
+              </div>
+            )}
+
+
             <div className="langBox">
               <div className="itemBox">
                 <select className="selectGroup langSelect">

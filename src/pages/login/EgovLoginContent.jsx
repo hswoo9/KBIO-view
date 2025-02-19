@@ -101,8 +101,9 @@ function EgovLoginContent(props) {
         setSessionItem("userSn", resp.result.userSn);
         //if (saveIDFlag) setLocalItem(KEY_ID, resultVO?.id);
         if (saveIDFlag) setLocalItem(KEY_ID, resp.result.userId);
-        Swal.fire("로그인 성공");
-        navigate("/");
+        // Swal.fire("로그인 성공");
+        // navigate("/");
+        window.location.href = "/";
       }
     });
   };

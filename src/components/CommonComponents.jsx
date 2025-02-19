@@ -393,3 +393,30 @@ export const getBbsInPst = async (bbsNm, bbsTypeNm, actvtnYn, userSn, day) => {
         );
     });
 };
+
+export const getUserMsgList = async (userSn) => {
+    const requestOptions = {
+        method: "POST",
+        headers: {
+            "Content-type": "application/json",
+        },
+        body: JSON.stringify({
+            userSn : userSn,
+        })
+    };
+
+    return new Promise((resolve, reject) => {
+        EgovNet.requestFetch(
+            "/commonApi/getUserMsgList.do",
+            requestOptions,
+            (resp) => {
+                resolve(resp.result.userMsgList);
+            },
+            (error) => {
+                console.log("err response : ", error);
+                reject(error);
+            }
+        );
+    });
+};
+

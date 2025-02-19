@@ -57,9 +57,9 @@ header .hInner .hTop .alarmWrap.click .alarmBtn {background: var(--mainColor3);}
 header .hInner .hTop .alarmWrap .alarmBtn .icon {width: 2rem; height: 2rem; background: url(../../assets/images/ico_alarm.svg) no-repeat center / contain; transition: .5s ease;}
 header .hInner .hTop .alarmWrap.click .alarmBtn .icon {background-image: url(../../assets/images/ico_alarm_white.svg);}
 header .hInner .hTop .alarmWrap .selectBox {position: absolute; width: 16.6rem; background: #fff; right: 0; border-radius: .5rem; box-shadow: 2px 2px 4px #00000060; max-height: 0; overflow-y: auto; transition: .5s ease;}
-header .hInner .hTop .alarmWrap.click .selectBox {max-height: 9.5rem;}
+header .hInner .hTop .alarmWrap.click .selectBox {max-height: 12.5rem;}
 header .hInner .hTop .alarmWrap .selectBox li:not(:last-child) {border-bottom: 1px solid #eee;}
-header .hInner .hTop .alarmWrap .selectBox li a {width: 100%; padding: .5em .7em; height: 2.25rem; display: flex; box-sizing: border-box; font-size: .85rem; align-items: center;}
+header .hInner .hTop .alarmWrap .selectBox li a {width: 100%; padding: .5em .7em; height: 2.25rem; box-sizing: border-box; font-size: .85rem; align-items: center;}
 header .hInner .hTop .alarmWrap .selectBox li a span {overflow: hidden; word-break: break-word; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical;}
 header .hInner .hTop .langBox {}
 header .hInner .hTop .langBox .nice-select {padding: .4rem 2rem .4rem .9rem; width: 4.22rem; box-sizing: border-box; border-radius: 1.6rem; background: var(--black); color: #fff; font-weight: 600;}
