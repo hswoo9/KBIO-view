@@ -1467,11 +1467,12 @@ function MemberSignUp(props) {
                         <div className="checkWrap" style={{display: "flex", gap: "20px"}}>
                             <input
                                 type="text"
-                                name="consultingOption1"
-                                checked={memberDetail.consultingOption1}
+                                name="cnsltArtcl"
+                                placeholder="컨설팅 항목을 입력해주세요."
+                                value={memberDetail.cnsltArtcl || ""}
                                 onChange={(e) => setMemberDetail({
                                   ...memberDetail,
-                                  consultingOption1: e.target.checked
+                                  cnsltArtcl: e.target.value
                                 })}
                             />
                         </div>
@@ -1486,6 +1487,7 @@ function MemberSignUp(props) {
                         </div>
                       </label>
                     </li>
+
 
                     <li className="inputBox type2">
                       <span className="tt1">컨설팅 활동</span>
@@ -1520,6 +1522,18 @@ function MemberSignUp(props) {
                         </div>
                       </div>
                     </li>
+
+                    <li className="inputBox type2">
+                      <span className="tt1">한줄소개</span>
+                      <label className="input">
+                        <input
+                            type="text"
+                            name="consultantAffiliation"
+                            placeholder="한줄 소개를 입력해주세요"
+                        />
+                      </label>
+                    </li>
+
 
                     {/*자격증*/}
                     <li className="inputBox type2 width1">
