@@ -209,20 +209,13 @@ function MemberMyPageDifficulties(props) {
                     <div className="board_list" data-aos="fade-up" data-aos-duration="1500">
                         <table>
                             <caption>간편상담 목록</caption>
-                            <colgroup>
-                                <col width="80"/>
-                                <col width="170"/>
-                                <col width="450"/>
-                                <col width="250"/>
-                                <col width="250"/>
-                            </colgroup>
                             <thead>
                             <tr>
-                                <th>번호</th>
-                                <th>분류</th>
+                                <th className="th1">번호</th>
+                                <th className="th1">분류</th>
                                 <th>제목</th>
-                                <th>신청일</th>
-                                <th>상태</th>
+                                <th className="th1">신청일</th>
+                                <th className="th2">상태</th>
                             </tr>
                             </thead>
                             <tbody>
