@@ -97,7 +97,7 @@ function MemberMyPageConsulting(props) {
                                 <td>
                                     {resp.paginationInfo.totalRecordCount - (resp.paginationInfo.currentPageNo - 1) * resp.paginationInfo.pageSize - index}
                                 </td>
-                                <td>{item.cnsltFld}</td>
+                                <td>{item.cnsltAplyFldNm}</td>
                                 <td>
                                     <Link to={{pathname: URL.MEMBER_MYPAGE_CONSULTING_DETAIL}}
                                           state={{
