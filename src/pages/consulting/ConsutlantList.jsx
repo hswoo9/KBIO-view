@@ -93,7 +93,7 @@ function ConsultantList(props) {
                                          </div>
                                          <div className="nameBox">
                                              <strong className="name">{item.tblUser.kornFlnm}</strong>
-                                             <p className="company">{item.tblCnslttMbr.ogdpNm}</p>
+                                             <p className="company">{item.tblCnslttMbr.ogdpNm} ({item.tblCnslttMbr.jbpsNm})</p>
                                          </div>
                                          <p className="intro">소개글</p>
                                      </div>
@@ -104,7 +104,9 @@ function ConsultantList(props) {
                                                      ? `http://133.186.250.158${item.tblComFile.atchFilePathNm}/${item.tblComFile.strgFileNm}.${item.tblComFile.atchFileExtnNm}`
                                                      : notProfile
                                              }
-                                             onError={notProfile}
+                                             onError={(e) => {
+                                                 e.target.src = notProfile;
+                                             }}
                                              alt=""
                                          />
                                      </figure>
