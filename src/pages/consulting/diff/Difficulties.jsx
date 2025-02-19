@@ -20,8 +20,8 @@ function contentView(props) {
     const acceptFileTypes = 'pdf,hwp,docx,xls,xlsx,ppt';
     const [fileList, setFileList] = useState([]);
     const [dfclMttr, setDfclMttr] = useState({
-        creatrSn : sessionUser.userSn,
-        userSn : sessionUser.userSn
+        creatrSn : sessionUser?.userSn,
+        userSn : sessionUser?.userSn
     });
 
     const handleChange = (value) => {
