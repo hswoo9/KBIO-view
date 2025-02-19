@@ -87,6 +87,7 @@ function EgovHeader() {
   const [isToggled, setIsToggled] = useState(false);
   const handleToggle = () => {
     setIsToggled(prevState => !prevState);
+    document.getElementById("alarmDot").style.display = "none";
     // getUserMsgList(sessionUserSn).then((data) => {
     //   setUserMsgList(data)
     // })
@@ -695,6 +696,7 @@ function EgovHeader() {
               <div className={isToggled ? "alarmWrap click" : "alarmWrap"}>
                 <button type="button" className="alarmBtn" onClick={handleToggle}>
                   <div className="icon"></div>
+                  <span id="alarmDot" className="dot" style={{display:"none"}}></span>
                 </button>
                 <ul className="selectBox" id="alarmUl" style={{overflow: "hidden"}}>
                   {msgHtml}

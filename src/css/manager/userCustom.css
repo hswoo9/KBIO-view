@@ -193,3 +193,31 @@ header .hInner .hTop .alarmWrap.click .close .icon {height: 100%; background: ur
 }
 
 .board .board_list > table .th2 {width: 17%;}
+
+.alarmBtn {
+    position: relative;
+    border: none;
+    background: none;
+    cursor: pointer;
+}
+
+.icon {
+    width: 30px;
+    height: 30px;
+    background: url('/path/to/icon.png') no-repeat center;
+    background-size: contain;
+    position: relative;
+}
+
+/* 빨간색 도트 */
+.dot {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 8px;
+    height: 8px;
+    background-color: red;
+    border-radius: 50%;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+}
+

@@ -33,6 +33,7 @@ export const WebSocketProvider = ({ children }) => {
       getUserMsgList(sessionUserSn).then((data) => {
         setUserMsgList(data)
       })
+      document.getElementById("alarmDot").style.display = "block"
     };
 
     setSocket(socketInstance);
