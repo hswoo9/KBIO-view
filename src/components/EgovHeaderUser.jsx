@@ -113,7 +113,7 @@ function EgovHeader() {
   const handleSignUp = () => {
     const modal = document.querySelector('.loginModal.modalCon');
     if (modal) {
-      modal.style.display = 'none';
+      ComScript.closeModal("loginModal");
     }
     navigate(URL.SIGNUP_CHOICE);
   };
@@ -247,9 +247,9 @@ function EgovHeader() {
     }
     if (idFlag === false) {
       setLocalItem(KEY_ID, "");
-      checkRef.current.className = "f_chk";
+      checkRef.current.className = "checkBox type2 f_chk";
     } else {
-      checkRef.current.className = "f_chk on";
+      checkRef.current.className = "checkBox type2 f_chk on";
     }
 
     let data = getLocalItem(KEY_ID);
@@ -808,10 +808,10 @@ function EgovHeader() {
                 <button type="button" className="loginBtn" onClick={(e) => {submitFormHandler("N")}}><span>로그인</span></button>
                 <ul className="botBtnBox">
                   <li>
-                    <button type="button" className="idBtn" onClick={() => ComScript.openModal("findId")}><span>아이디 찾기</span></button>
+                    <button type="button" className="idBtn" onClick={() => { ComScript.closeModal("loginModal"); ComScript.openModal("findId");}}><span>아이디 찾기</span></button>
                   </li>
                   <li>
-                    <button type="button" className="pwBtn" onClick={() => ComScript.openModal("findPwd")}><span>비밀번호 찾기</span></button>
+                    <button type="button" className="pwBtn" onClick={() => {ComScript.closeModal("loginModal"); ComScript.openModal("findPwd"); }}><span>비밀번호 찾기</span></button>
                   </li>
                   <li>
                     <button type="button" className="signUp" onClick={handleSignUp}><span>회원가입</span></button>
@@ -835,7 +835,7 @@ function EgovHeader() {
             </div>
           </div>
         </div>
-        <div className="findId modalCon">
+        <div className="findId modalCon customUserModal">
           <div className="bg" onClick={() => ComScript.closeModal("findId")}></div>
           <div className="m-inner">
             <div className="boxWrap">
@@ -877,7 +877,7 @@ function EgovHeader() {
             </div>
           </div>
         </div>
-        <div className="findPwd modalCon">
+        <div className="findPwd modalCon customUserModal">
           <div className="bg" onClick={() => ComScript.closeModal("findPwd")}></div>
           <div className="m-inner">
             <div className="boxWrap">

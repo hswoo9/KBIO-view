@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import URL from "@/constants/url";
 import passImage from '@/assets/images/ico_pass.png';
 import mobileImage from '@/assets/images/ico_mobile.png';
+import AOS from "aos";
 
 const EgovIdentityVerification = () => {
     const [isVerified, setIsVerified] = useState(false);
@@ -28,6 +29,10 @@ const EgovIdentityVerification = () => {
             navigate(URL.MYPAGE_CREATE, { state : location.state} );
         }
     };
+
+    useEffect(() => {
+        AOS.init();
+    }, []);
 
     return (
         <div id="container" className="container withdraw join_step">

@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useRef, useCallback} from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { getComCdList } from "../../components/CommonComponents.jsx";
-
+import AOS from "aos";
 import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
@@ -59,7 +59,8 @@ function MemberSignUp(props) {
   useEffect(() => {
     getComCdList(10).then((data) => {
       setComCdList(data);
-    })
+    });
+    AOS.init();
   }, []);
 
   const getComCdListToHtml = (dataList) => {
@@ -1507,10 +1508,10 @@ function MemberSignUp(props) {
             <div className="buttonBox">
               <button type="button" className="clickBtn black" onClick={insertMember}>
                 <span>다음</span>
-              </button>
+              </button>{/*
               <button type="button" className="clickBtn white" onClick={() => navigate(URL.LOGIN)}>
                 <span>뒤로가기</span>
-              </button>
+              </button>*/}
             </div>
           </form>
         </div>

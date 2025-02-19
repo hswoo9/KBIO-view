@@ -34,7 +34,6 @@ function MemberMyPageSimple(props) {
             999: "취소",
         };
 
-
     const [searchDto, setSearchDto] = useState(
         location.state?.searchDto || {
             pageIndex: 1,
@@ -98,24 +97,30 @@ function MemberMyPageSimple(props) {
                                 <td>
                                     {resp.paginationInfo.totalRecordCount - (resp.paginationInfo.currentPageNo - 1) * resp.paginationInfo.pageSize - index}
                                 </td>
-                                <td>{item.cnsltFld}</td>
+                                <td>{item.cnsltAplyFldNm}</td>
                                 <td>
-                                    <Link to={{pathname: URL.MEMBER_MYPAGE_SIMPLE_DETAIL}}
-                                          state={{
-                                              cnsltAplySn: item.cnsltAplySn,
-                                              cnsltSttsCd: item.cnsltSttsCd,
-                                              menuSn: location.state?.menuSn,
-                                              menuNmPath: location.state?.menuNmPath,
-                                          }}
-                                          style={{cursor: 'pointer', textDecoration: 'underline'}}
-                                    >
-                                        {item.ttl}
-                                        {item.fileCnt !== 0 && <img src={fileImages} alt="pass images"/>}
-                                    </Link>
+                                    <div style={{textAlign: 'left'}}>
+                                        <Link to={{pathname: URL.MEMBER_MYPAGE_SIMPLE_DETAIL}}
+                                              state={{
+                                                  cnsltAplySn: item.cnsltAplySn,
+                                                  cnsltSttsCd: item.cnsltSttsCd,
+                                                  menuSn: location.state?.menuSn,
+                                                  menuNmPath: location.state?.menuNmPath,
+                                              }}
+                                              style={{cursor: 'pointer', textDecoration: 'underline'}}
+                                        >
+                                            {item.ttl}
+                                            {item.fileCnt !== 0 && <img src={fileImages} alt="pass images"/>}
+                                        </Link>
+                                    </div>
                                 </td>
                                 <td>{moment(item.frstCrtDt).format('YYYY-MM-DD')}</td>
                                 <td>{statusMap[item.cnsltSttsCd] || item.cnsltSttsCd}</td>
-                                <td></td>
+                                <td>
+                                    {item.cnsltSttsCd === "200" && (
+                                            <span>만족도완료</span>
+                                    )}
+                                </td>
                             </tr>
                         );
                     });
@@ -138,7 +143,7 @@ function MemberMyPageSimple(props) {
     return (
         <div id="container" className="container notice board">
             <div className="inner">
-                <CommonSubMenu/>
+            <CommonSubMenu/>
                 <div className="inner2">
                 <div className="searchFormWrap type1" data-aos="fade-up" data-aos-duration="1500">
                     <form>

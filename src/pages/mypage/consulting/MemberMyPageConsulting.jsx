@@ -97,21 +97,23 @@ function MemberMyPageConsulting(props) {
                                 <td>
                                     {resp.paginationInfo.totalRecordCount - (resp.paginationInfo.currentPageNo - 1) * resp.paginationInfo.pageSize - index}
                                 </td>
-                                <td>{item.cnsltFld}</td>
+                                <td>{item.cnsltAplyFldNm}</td>
                                 <td>
-                                    <Link to={{pathname: URL.MEMBER_MYPAGE_CONSULTING_DETAIL}}
-                                          state={{
-                                              cnsltAplySn: item.cnsltAplySn,
-                                              cnsltSttsCd: item.cnsltSttsCd,
-                                              menuSn: location.state?.menuSn,
-                                              menuNmPath: location.state?.menuNmPath,
+                                    <div style={{textAlign: 'left'}}>
+                                        <Link to={{pathname: URL.MEMBER_MYPAGE_CONSULTING_DETAIL}}
+                                              state={{
+                                                  cnsltAplySn: item.cnsltAplySn,
+                                                  cnsltSttsCd: item.cnsltSttsCd,
+                                                  menuSn: location.state?.menuSn,
+                                                  menuNmPath: location.state?.menuNmPath,
 
-                                          }}
-                                          style={{cursor: 'pointer', textDecoration: 'underline'}}
-                                    >
-                                        {item.ttl}
-                                        {item.fileCnt !== 0 && <img src={fileImages} alt="pass images"/>}
-                                    </Link>
+                                              }}
+                                              style={{cursor: 'pointer', textDecoration: 'underline'}}
+                                        >
+                                            {item.ttl}
+                                            {item.fileCnt !== 0 && <img src={fileImages} alt="pass images"/>}
+                                        </Link>
+                                    </div>
                                 </td>
                                 <td>{moment(item.frstCrtDt).format('YYYY-MM-DD')}</td>
                                 <td>{statusMap[item.cnsltSttsCd] || item.cnsltSttsCd}</td>

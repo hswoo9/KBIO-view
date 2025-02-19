@@ -149,3 +149,28 @@
 
 header .hInner .hTop .alarmWrap.click .close {position: absolute; right:  0; z-index: 10; width: 36px; margin-top: 5px; height: 24px; cursor: pointer;}
 header .hInner .hTop .alarmWrap.click .close .icon {height: 100%; background: url(../../assets/images/ico_close.svg) no-repeat center / contain;}
+
+.user .modalCon .boxWrap .close {position: absolute; top: -2rem; right:  0; z-izndex: 10; width: 24px; height: 24px; cursor: pointer;}
+.user .modalCon .boxWrap .close .icon {height: 100%; background: url(../../assets/images/ico_close_white.svg) no-repeat center / contain;}
+.user .customUserModal .boxWrap .box{
+    margin-top: 0;
+    max-height: calc(100vh - 4rem);
+    gap: .9rem;
+}
+
+
+.user .customUserModal .boxWrap {overflow: visible; max-width: 420px;}
+.user .customUserModal .boxWrap .close {position: absolute; top: -2rem; right:  0; z-izndex: 10; width: 24px; height: 24px; cursor: pointer;}
+.user .customUserModal .boxWrap .close .icon {height: 100%; background: url(../../assets/images/ico_close_white.svg) no-repeat center / contain;}
+.user .customUserModal .boxWrap .box {margin-top: 0; max-height: calc(100vh - 4rem); gap: .9rem;}
+.user .customUserModal .boxWrap .box .logo {max-width: 140px; width: 60%; margin: 0 auto; margin-bottom: .3rem;}
+.user .customUserModal .boxWrap .box .logo img {width: 100%; object-fit: contain;}
+.user .customUserModal .boxWrap .box .inputWrap {display: flex; flex-direction: column; gap: .9rem;}
+.user .customUserModal .boxWrap .box .checkBox.type2 input[type="checkbox"]::before {background: #fff;}
+.user .customUserModal .boxWrap .box .checkBox.type2 input[type="checkbox"]:checked::before {background: var(--black);}
+.user .customUserModal .boxWrap .box .checkBox.type2 input[type="checkbox"] + small {color: #111;}
+.user .customUserModal .boxWrap .box .loginBtn {width: 100%; height: 3rem; flex: none; border-radius: .5rem; display: flex; align-items: center; justify-content: center; background: var(--black); color: #fff; font-size: 1.1rem; font-weight: 600; transition: .5s ease;}
+.user .customUserModal .boxWrap .box .botBtnBox {display: flex; gap: 1rem; justify-content: center;}
+.user .customUserModal .boxWrap .box .botBtnBox li {position: relative;}
+.user .customUserModal .boxWrap .box .botBtnBox li button {font-size: .9rem; font-weight: 500; transition: .5s ease;}
+.user .customUserModal .boxWrap .box .botBtnBox li:not(:last-child):after {content: ""; position: absolute; top: 50%; transform: translateY(-50%); right: -.5rem; width: 1px; height: .9rem; background: #ddd;}
