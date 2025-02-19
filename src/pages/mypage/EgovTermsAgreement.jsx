@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import URL from "@/constants/url";
+import AOS from "aos";
 
 const EgovTermsAgreement = () => {
     const [isAgreed, setIsAgreed] = useState(false);
@@ -32,6 +33,10 @@ const EgovTermsAgreement = () => {
         }
 
     };
+
+    useEffect(() => {
+        AOS.init();
+    }, []);
 
     return (
         <div id="container" className="container withdraw join_step">
