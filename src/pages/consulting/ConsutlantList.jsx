@@ -22,7 +22,8 @@ function ConsultantList(props) {
             cnsltFld : "",
             searchType: "",
             searchVal : "",
-            userSn : sessionUser ? sessionUser.userSn : ""
+            userSn : sessionUser ? sessionUser.userSn : "",
+            usedByGeneral : "Y"  //사용자페이지의 경우 비공개인 컨설턴트는 내보내지 않음
         }
     );
     const [comCdList, setComCdList] = useState([]);
@@ -178,7 +179,7 @@ function ConsultantList(props) {
                         value=""
                         checked
                         onChange={(e) =>
-                            setSearchDto({...searchDto, cnsltFld: e.target.value})
+                            setSearchDto({...searchDto, cnsltFld: ""})
                         }
                     />전체</label>
             )
