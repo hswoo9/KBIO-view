@@ -248,6 +248,7 @@ import MemberMyPageDifficultiesDetail from '@/pages/mypage/MemberMyPageDifficult
 import MemberMyPageDifficultiesModify from '@/pages/mypage/MemberMyPageDifficultiesModify';
 import MemberMyPageCancel from '@/pages/mypage/MemberMyPageCancel';
 import MemberMyPageIndentity from '@/pages/mypage/MemberMyPageIdentity';
+import MemberMyPageMsgList from '@/pages/mypage/MemberMyPageMsgList';
 
 import * as EgovNet from "@/api/egovFetch"; // jwt토큰 위조 검사 때문에 추가
 import initPage from "@/js/ui";
@@ -606,6 +607,7 @@ const SecondRoutes = () => {
               <Route path={URL.MEMBER_MYPAGE_DIFFICULTIES} element={<MemberMyPageDifficulties/>}/>
               <Route path={URL.MEMBER_MYPAGE_DIFFICULTIES_DETAIL} element={<MemberMyPageDifficultiesDetail/>}/>
               <Route path={URL.MEMBER_MYPAGE_DIFFICULTIES_MODIFY} element={<MemberMyPageDifficultiesModify/>}/>
+              <Route path={URL.MEMBER_MYPAGE_MSG_LIST} element={<MemberMyPageMsgList/>}/>
 
               <Route path={URL.MEMBER_MYPAGE_CANCEL} element={<MemberMyPageCancel/>}/>
               <Route path={URL.MEMBER_MYPAGE_IDENTITY} element={<MemberMyPageIndentity/>}/>

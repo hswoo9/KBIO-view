@@ -510,14 +510,20 @@ function EgovHeader() {
               <div className="icon"></div>
             </div>
             <NavLink
-                to={URL.MAIN}
-                style={{height: "auto"}}>
+                to={URL.MEMBER_MYPAGE_MSG_LIST}
+                state={{
+                  menuSn: 53,
+                  thisMenuSn: 63,
+                  menuNmPath: "마이페이지 > 알림내역"
+                }}
+                style={{height: "auto"}}
+                onClick={handleToggle}>
               <div style={{height: "auto"}}>
                 <p style={{fontSize: "16px", display: "flex", justifyContent: "space-between"}}>
                   {item.tblUserMsg.msgTtl}
                 </p>
                 <p style={{fontSize: "12px", marginTop: "5px", color: "#555555"}}>
-                  {item.tblUser.kornFlnm} - {moment(item.tblUserMsg.frstCrtDt).format('YYYY-MM-DD hh:mm:ss')}
+                  {item.tblUser.kornFlnm} - {moment(item.tblUserMsg.frstCrtDt).format('YYYY-MM-DD HH:mm:ss')}
                 </p>
               </div>
             </NavLink>

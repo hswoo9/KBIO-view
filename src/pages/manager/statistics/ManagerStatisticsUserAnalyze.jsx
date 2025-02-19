@@ -25,14 +25,27 @@ import LoadingSpinner from "../../../components/LoadingSpinner.jsx";
 
 function ManagerStatisticsUserAnalyze(props) {
     const [isLoading, setIsLoading] = useState(true);  // 로딩 상태
+    const [loadingCnt, setLoadingCnt] = useState(0);
 
     const handleCallback = (e) => {
         if(e == "isLoading"){
-            setIsLoading(true);
+            setLoadingCnt(prev => prev != 0 ? prev - 1 : prev);
         }else{
-            setIsLoading(false);
+            setLoadingCnt(prev => prev + 1);
         }
     };
+
+    const loadingCntChk = () => {
+        if(loadingCnt == 2){
+            setIsLoading(false);
+        }else{
+            setIsLoading(true);
+        }
+    }
+
+    useEffect(() => {
+        loadingCntChk();
+    }, [loadingCnt]);
 
     return (
         <div id="container" className="container layout cms">

@@ -231,6 +231,7 @@ const URL = {
   MEMBER_MYPAGE_DIFFICULTIES_MODIFY : "/member/mypage/difficulties/modify",
   MEMBER_MYPAGE_CANCEL : "/member/mypage/cancel",
   MEMBER_MYPAGE_IDENTITY : "/member/mypage/identity",
+  MEMBER_MYPAGE_MSG_LIST : "/member/mypage/msgList",
 
   MANAGER_CMS: "/manager/cms",
 

@@ -19,7 +19,6 @@ import {
     addMonths,
 } from "date-fns";
 import * as EgovNet from "../../../../api/egovFetch.js";
-import LoadingSpinner from "../../../../components/LoadingSpinner.jsx";
 
 function ManagerStatisticsRegionUser(props) {
 
@@ -45,10 +44,8 @@ function ManagerStatisticsRegionUser(props) {
     }
     const [regionUserList, setRegionUserList] = useState([]);
 
-    const [chartData, setChartData] = useState({})
-    const [chartLabels, setChartLabels] = useState([])
+    const [series, setSeries] = useState([])
     const [categories, setCategories] = useState([]);
-
     const currentYear = format(nowDate, "yyyy");
 
     const [searchDto, setSearchDto] = useState({
@@ -111,8 +108,6 @@ function ManagerStatisticsRegionUser(props) {
         }]
     };
 
-    const series = chartData;
-
     const getStatistics = () => {
         props.onCallback("isLoading");
         const searchCategory = document.querySelector(".region #searchCategory").value;
@@ -163,8 +158,7 @@ function ManagerStatisticsRegionUser(props) {
 
     const regionUserListMake = (rs) => {
         setCategories([])
-        setChartLabels([])
-        setChartData({})
+        setSeries([])
 
         let dataList = [];
         dataList.push(
@@ -180,7 +174,7 @@ function ManagerStatisticsRegionUser(props) {
         let totalMbrType4 = 0;
 
         let newCategories = [];
-        let newChartData = [];
+        let newSeries = [];
 
         rs.forEach(function (item, index) {
             if (index === 0) dataList = []; // 목록 초기화
@@ -224,7 +218,7 @@ function ManagerStatisticsRegionUser(props) {
                     </tr>
                 );
                 newCategories.push(item.korRegionName);
-                newChartData.push(
+                newSeries.push(
                     mbrType1Cnt +
                     mbrType2Cnt +
                     mbrType3Cnt +
@@ -246,9 +240,8 @@ function ManagerStatisticsRegionUser(props) {
                 <td colSpan="2"></td>
             </tr>
         );
-
         setCategories(newCategories);
-        setChartData(newChartData);
+        setSeries(newSeries);
         setRegionUserList(dataList);
         props.onCallback();
     }

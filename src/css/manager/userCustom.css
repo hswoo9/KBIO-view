@@ -174,3 +174,14 @@ header .hInner .hTop .alarmWrap.click .close .icon {height: 100%; background: ur
 .user .customUserModal .boxWrap .box .botBtnBox li {position: relative;}
 .user .customUserModal .boxWrap .box .botBtnBox li button {font-size: .9rem; font-weight: 500; transition: .5s ease;}
 .user .customUserModal .boxWrap .box .botBtnBox li:not(:last-child):after {content: ""; position: absolute; top: 50%; transform: translateY(-50%); right: -.5rem; width: 1px; height: .9rem; background: #ddd;}
+
+.userMsgList .contentRow {
+    color: #666666;
+    line-height: 1.6;
+    font-weight: 500;
+}
+.userMsgList .contentRow.open {
+    animation: opacityMove 1s ease both
+}
+
+.board .board_list > table .th2 {width: 17%;}
