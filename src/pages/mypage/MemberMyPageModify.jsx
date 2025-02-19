@@ -805,6 +805,7 @@ function MemberMyPageModify(props) {
                                             id="receive_mail_yes"
                                             name="receive_mail"
                                             value="Y"
+                                            className="signUpRadio"
                                             checked={memberDetail.emlRcptnAgreYn === "Y"}
                                             onChange={handleMailChange}
                                         />
@@ -816,6 +817,7 @@ function MemberMyPageModify(props) {
                                             id="receive_mail_no"
                                             name="receive_mail"
                                             value="N"
+                                            className="signUpRadio"
                                             checked={memberDetail.emlRcptnAgreYn === "N"}
                                             onChange={handleMailChange}
                                         />
@@ -835,6 +837,7 @@ function MemberMyPageModify(props) {
                                             id="receive_sms_yes"
                                             name="receive_sms"
                                             value="Y"
+                                            className="signUpRadio"
                                             checked={memberDetail.smsRcptnAgreYn === "Y"}
                                             onChange={handleSmsChange}
                                         />
@@ -846,6 +849,7 @@ function MemberMyPageModify(props) {
                                             id="receive_sms_no"
                                             name="receive_sms"
                                             value="N"
+                                            className="signUpRadio"
                                             checked={memberDetail.smsRcptnAgreYn === "N"}
                                             onChange={handleSmsChange}
                                         />
