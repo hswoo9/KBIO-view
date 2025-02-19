@@ -115,10 +115,14 @@ function MemberMyPageSimple(props) {
                                     </div>
                                 </td>
                                 <td>{moment(item.frstCrtDt).format('YYYY-MM-DD')}</td>
-                                <td>{statusMap[item.cnsltSttsCd] || item.cnsltSttsCd}</td>
+                                <td className="state">
+                                    <p className={["101", "999"].includes(String(item.cnsltSttsCd)) ? "waiting" : "complete"}>
+                                        {statusMap[item.cnsltSttsCd] || item.cnsltSttsCd}
+                                    </p>
+                                </td>
                                 <td>
                                     {item.cnsltSttsCd === "200" && (
-                                            <span>만족도완료</span>
+                                        <span>만족도완료</span>
                                     )}
                                 </td>
                             </tr>

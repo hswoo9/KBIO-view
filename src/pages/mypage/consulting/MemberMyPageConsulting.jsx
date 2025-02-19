@@ -114,7 +114,11 @@ function MemberMyPageConsulting(props) {
                                     </div>
                                 </td>
                                 <td>{moment(item.frstCrtDt).format('YYYY-MM-DD')}</td>
-                                <td>{statusMap[item.cnsltSttsCd] || item.cnsltSttsCd}</td>
+                                <td className="state">
+                                    <p className={["101", "999"].includes(String(item.cnsltSttsCd)) ? "waiting" : "complete"}>
+                                        {statusMap[item.cnsltSttsCd] || item.cnsltSttsCd}
+                                    </p>
+                                </td>
                                 <td></td>
                             </tr>
                         );
