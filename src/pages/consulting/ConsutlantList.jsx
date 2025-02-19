@@ -12,12 +12,19 @@ import Swal from "sweetalert2";
 import AOS from "aos";
 import * as ComScript from "@/components/CommonScript";
 import notProfile from "@/assets/images/no_profile.png";
+import ConsultingModal from "@/components/ConsultingModal";
+
 
 function ConsultantList(props) {
     const sessionUser = getSessionItem("loginUser");
     const userSn = getSessionItem("userSn");
     const location = useLocation();
     const navigate = useNavigate();
+
+    const [modalData, setModalData] = useState({});
+    useEffect(() => {
+    }, [modalData]);
+
     const [searchDto, setSearchDto] = useState(
         location.state?.searchDto || {
             pageIndex: 1,
@@ -43,9 +50,18 @@ function ConsultantList(props) {
         }
     };
 
-    const editClick = (cnsltSe, userSn) => {
+    const editClick = (cnsltSe, userSn, name) => {
         if(sessionUser){
-            navigate(
+            
+            setModalData({
+                ...modalData,
+                cnsltSe : cnsltSe,
+                cnslttUserSn : userSn,
+                userSn : sessionUser?.userSn,
+                kornFlnm: name
+            });
+            ComScript.openModal("requestModal");
+            /*navigate(
                 { pathname : URL.CONSULTING_CREATE },
                 {
                     state : {
@@ -55,7 +71,7 @@ function ConsultantList(props) {
                         menuSn : location.state?.menuSn,
                         menuNmPath : location.state?.menuNmPath,
                     }
-                });
+                });*/
         }else{
             Swal.fire("로그인이 필요한 서비스 입니다.").then((result) => {
                 if(result.isConfirmed) {
@@ -113,11 +129,11 @@ function ConsultantList(props) {
                                  </div>
                                  <div className="botBox">
                                      <div className="buttonBox">
-                                         <button type="button" className="clickBtn requestBtn" onClick={() => editClick(26, item.tblUser.userSn)}>
+                                         <button type="button" className="clickBtn requestBtn" onClick={() => editClick(26, item.tblUser.userSn, item.tblUser.kornFlnm)}>
                                              <div className="icon"></div>
                                              <span>컨설팅 의뢰</span>
                                          </button>
-                                         <button type="button" className="clickBtn contactBtn" onClick={() => editClick(27, item.tblUser.userSn)}>
+                                         <button type="button" className="clickBtn contactBtn" onClick={() => editClick(27, item.tblUser.userSn, item.tblUser.kornFlnm)}>
                                              <div className="icon"></div>
                                              <span>간편 상담</span>
                                          </button>
@@ -352,6 +368,7 @@ function ConsultantList(props) {
                     </div>
                 </div>
             </div>
+            <ConsultingModal data={modalData} />
         </div>
     );
 }

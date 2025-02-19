@@ -976,7 +976,7 @@ footer .inner > .right .snsBox .youtube .icon {background-image: url(../../asset
 	.join_step .inner .stepWrap li:not(:last-child) .num:after {width: 2rem; right: -2.5rem;}
 	.join_step .inner .stepWrap li .text {font-size: 1.2rem;}
 
-	.container .searchFormWrap form .searchBox {flex-wrap: wrap;}
+	.container.search .searchFormWrap form .searchBox {flex-wrap: wrap;}
 	.container .searchFormWrap form .searchBox .inputBox.type1:not(.date) {width: calc(100% - 3.2rem);}
 	.search .inner2 .tableCont.type1 table tbody tr {display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; padding: 1rem;}
 	.search .inner2 .tableCont.type1 table tbody tr td {display: block;}
