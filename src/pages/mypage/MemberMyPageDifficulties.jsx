@@ -219,7 +219,6 @@ function MemberMyPageDifficulties(props) {
                                 <th>제목</th>
                                 <th>신청일</th>
                                 <th>상태</th>
-                                <th>만족도</th>
                             </tr>
                             </thead>
                             <tbody>
