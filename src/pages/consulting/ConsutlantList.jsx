@@ -2,14 +2,15 @@ import React, {useState, useEffect, useCallback, useRef} from "react";
 import {Link, NavLink, useLocation, useNavigate} from "react-router-dom";
 import * as EgovNet from "@/api/egovFetch";
 import 'moment/locale/ko';
-import EgovPaging from "@/components/EgovPaging";
+import EgovUserPaging from "@/components/EgovUserPaging";
 import URL from "@/constants/url";
 import CommonSubMenu from "@/components/CommonSubMenu";
-
 import {getSessionItem} from "../../utils/storage.js";
 import {getComCdList} from "../../components/CommonComponents.jsx";
 import moment from "moment";
 import Swal from "sweetalert2";
+import AOS from "aos";
+import * as ComScript from "@/components/CommonScript";
 
 function ConsultantList(props) {
     const sessionUser = getSessionItem("loginUser");
@@ -55,10 +56,11 @@ function ConsultantList(props) {
                     }
                 });
         }else{
-            Swal.fire("로그인이 필요한 서비스 입니다.");
-            document.getElementsByClassName("loginModal").item(0).classList.add("open")
-            document.documentElement.style.overflow = 'hidden';
-            document.body.style.overflow = 'hidden';
+            Swal.fire("로그인이 필요한 서비스 입니다.").then((result) => {
+                if(result.isConfirmed) {
+                    ComScript.openModal("loginModal");
+                }
+            });
         }
     }
 
@@ -81,20 +83,70 @@ function ConsultantList(props) {
 
                      resp.result.consultantList.forEach(function (item, index) {
                          dataList.push(
-                             <div key={item.tblUser.userSn} style={{
-                                 display: 'flex',
-                                 padding: '20px',
-                                 border: '1px solid #ddd',
-                                 marginBottom: '15px',
-                                 borderRadius: '8px',
-                             }}>
-                                 <div style={{display: 'flex', gap: '20px', width: '100%'}}>
-                                     <div style={{
-                                         width: '100px',
-                                         height: '100px',
-                                         overflow: 'hidden',
-                                     }}>
+                             <li key={item.tblUser.userSn}>
+                                 <div className="profileBox">
+                                     <div className="textBox">
+                                         <div className="departBox cate4">
+                                             <div className="icon"></div>
+                                             <p className="text">분류</p>
+                                         </div>
+                                         <div className="nameBox">
+                                             <strong className="name">{item.tblUser.kornFlnm}</strong>
+                                             <p className="company">{item.tblCnslttMbr.ogdpNm}</p>
+                                         </div>
+                                         <p className="intro">소개글</p>
+                                     </div>
+                                     <figure className="imgBox">
                                          <img
+                                             src={
+                                                 item.tblComFile
+                                                     ? `http://133.186.250.158${item.tblComFile.atchFilePathNm}/${item.tblComFile.strgFileNm}.${item.tblComFile.atchFileExtnNm}`
+                                                     : "" // 기본 이미지 (필요한 경우)
+                                             }
+                                             alt=""
+                                         />
+                                     </figure>
+                                 </div>
+                                 <div className="botBox">
+                                     <div className="buttonBox">
+                                         <button type="button" className="clickBtn requestBtn" onClick={() => editClick(26, item.tblUser.userSn)}>
+                                             <div className="icon"></div>
+                                             <span>컨설팅 의뢰</span>
+                                         </button>
+                                         <button type="button" className="clickBtn contactBtn" onClick={() => editClick(27, item.tblUser.userSn)}>
+                                             <div className="icon"></div>
+                                             <span>간편 상담</span>
+                                         </button>
+                                     </div>
+                                     <NavLink to={URL.CONSULTANT_DETAIL}
+                                              state={{
+                                                  userSn: item.tblUser.userSn,
+                                                  menuSn : location.state?.menuSn,
+                                                  menuNmPath : location.state?.menuNmPath,
+                                              }}
+                                              className="moreBtn"
+                                     >
+                                         <span>더 알아보기</span>
+                                         <div className="icon"></div>
+                                     </NavLink>
+                                 </div>
+                             </li>
+
+
+                         /*<div key={item.tblUser.userSn} style={{
+                             display: 'flex',
+                             padding: '20px',
+                             border: '1px solid #ddd',
+                             marginBottom: '15px',
+                             borderRadius: '8px',
+                         }}>
+                             <div style={{display: 'flex', gap: '20px', width: '100%'}}>
+                                 <div style={{
+                                     width: '100px',
+                                     height: '100px',
+                                     overflow: 'hidden',
+                                 }}>
+                                 <img
                                              src={
                                                  item.tblComFile
                                                      ? `http://133.186.250.158${item.tblComFile.atchFilePathNm}/${item.tblComFile.strgFileNm}.${item.tblComFile.atchFileExtnNm}`
@@ -153,7 +205,7 @@ function ConsultantList(props) {
                                          </div>
                                      </div>
                                  </div>
-                             </div>
+                             </div>*/
                          );
                      });
                      setConsultantList(dataList);
@@ -171,30 +223,38 @@ function ConsultantList(props) {
         let htmlData = [];
         if(dataList != null && dataList.length > 0) {
             htmlData.push(
-                <label className="checkBox type2" key="all">
-                    <input
-                        type="radio"
-                        name="cnsltFld"
-                        key="all"
-                        value=""
-                        checked
-                        onChange={(e) =>
-                            setSearchDto({...searchDto, cnsltFld: ""})
-                        }
-                    />전체</label>
-            )
-            dataList.forEach(function (item, index) {
-                htmlData.push(
-                    <label className="checkBox type2" key={item.comCd}>
+                <div className="checkBox type5" key="all">
+                    <label>
                         <input
                             type="radio"
                             name="cnsltFld"
-                            key={item.comCd}
-                            value={item.comCd}
+                            key="all"
+                            value=""
                             onChange={(e) =>
-                                setSearchDto({...searchDto, cnsltFld: e.target.value})
+                                setSearchDto({...searchDto, cnsltFld: ""})
                             }
-                        />{item.comCdNm}</label>
+                        />
+                        <small>전체</small>
+                    </label>
+                </div>
+            )
+            dataList.forEach(function (item, index) {
+                htmlData.push(
+                    <div className={`checkBox type5 cate${index+1}`} key={item.comCd}>
+                        <label>
+                            <input
+                                type="radio"
+                                name="cnsltFld"
+                                key={item.comCd}
+                                value={item.comCd}
+                                onChange={(e) =>
+                                    setSearchDto({...searchDto, cnsltFld: e.target.value})
+                                }
+                            />
+                            <div className="icon"></div>
+                            <small>{item.comCdNm}</small>
+                        </label>
+                    </div>
                 )
             });
         }
@@ -204,81 +264,79 @@ function ConsultantList(props) {
     useEffect(() => {
         getComCdList(10).then((data) => {
             setComCdList(data);
-        })
+        });
+        AOS.init();
     }, []);
-
 
     useEffect(() => {
         getConsultantList(searchDto);
     }, [comCdList]);
 
     return (
-        <div id="container" className="container layout">
+        <div id="container" className="container consultant">
             <div className="inner">
                 <CommonSubMenu/>
-                <div className="cateWrap inputBox type1" style={{flexDirection: "row"}}>
-                    <div className="rating-options">
-                        {getComCdListToHtml(comCdList)}
+                <div className="inner2">
+                    <div className="searchFormWrap type2" data-aos="fade-up" data-aos-duration="1500">
+                        <form>
+                            <div className="searchBox">
+                                <div className="itemBox type2">
+                                    <select
+                                        id="searchType"
+                                        name="searchType"
+                                        className="selectGroup customUserSelect"
+                                        title="검색유형"
+                                        ref={searchTypeRef}
+                                        onChange={(e) => {
+                                            setSearchDto({...searchDto, searchType: e.target.value})
+                                        }}
+                                    >
+                                        <option value="">전체</option>
+                                        <option value="kornFlnm">성명</option>
+                                        <option value="ogdpNm">소속</option>
+                                    </select>
+                                </div>
+                                <div className="inputBox type1">
+                                    <label className="input">
+                                        <input
+                                            type="text"
+                                            name="searchVal"
+                                            defaultValue={
+                                                searchDto && searchDto.searchVal
+                                            }
+                                            placeholder=""
+                                            ref={searchValRef}
+                                            onChange={(e) => {
+                                                setSearchDto({...searchDto, searchVal: e.target.value})
+                                            }}
+                                            onKeyDown={activeEnter}
+                                            placeholder="검색어를 입력해주세요."
+                                        />
+                                    </label>
+                                </div>
+                                <button type="button" className="searchBtn"
+                                        onClick={() => {
+                                            getConsultantList({
+                                                ...searchDto,
+                                                pageIndex: 1,
+                                                searchType: searchTypeRef.current.value,
+                                                searchVal: searchValRef.current.value,
+                                            });
+                                        }}
+                                >
+                                    <div className="icon"></div>
+                                </button>
+                            </div>
+                            <div className="checkWrap">
+                                {getComCdListToHtml(comCdList)}
+                            </div>
+                        </form>
                     </div>
-                </div>
-                <div className="cateWrap inputBox type1" style={{flexDirection: "row"}}>
-
-                    <div className="itemBox" style={{width: "7%"}}>
-                        <select
-                            id="searchType"
-                            name="searchType"
-                            title="검색유형"
-                            ref={searchTypeRef}
-                            style={{width: "50%"}}
-                            onChange={(e) => {
-                                setSearchDto({...searchDto, searchType: e.target.value})
-                            }}
-                        >
-                            <option value="">전체</option>
-                            <option value="kornFlnm">성명</option>
-                            <option value="ogdpNm">소속</option>
-                        </select>
-                    </div>
-                    <div className="itemBox">
-                        <label className="input">
-                            <input type="text"
-                                   name="searchVal"
-                                   defaultValue={
-                                       searchDto && searchDto.searchVal
-                                   }
-                                   placeholder=""
-                                   ref={searchValRef}
-                                   onChange={(e) => {
-                                       setSearchDto({...searchDto, searchVal: e.target.value})
-                                   }}
-                                   onKeyDown={activeEnter}
-                            />
-                        </label>
-                    </div>
-                    <div className="rightBtn">
-                        <button type="button"
-                                className="searchBtn btn btn1 point"
-                                onClick={() => {
-                                    getConsultantList({
-                                        ...searchDto,
-                                        pageIndex: 1,
-                                        searchType: searchTypeRef.current.value,
-                                        searchVal: searchValRef.current.value,
-                                    });
-                                }}
-                                style={{color: "#fff", width: "100px"}}
-                        >
-                            조회
-                        </button>
-                    </div>
-                </div>
-                <div className="contBox board type1 customContBox">
-                    <div className="topBox"></div>
-                    <div className="tableBox type1">
+                    <ul className="listBox" data-aos="fade-up" data-aos-duration="1500">
                         {consultantList}
-                    </div>
+                    </ul>
                     <div className="pageWrap">
-                        <EgovPaging
+                        <EgovUserPaging
                             pagination={paginationInfo}
                             moveToPage={(passedPage) => {
                                 getConsultantList({
