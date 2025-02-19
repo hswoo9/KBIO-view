@@ -85,38 +85,39 @@ function MemberMyPageDifficulties(props) {
                                 <td>{item.dfclMttrFldNm}</td>
                                 <td>
                                     {item.answer === "Y" ? (
-                                        <div style={{ textAlign: 'left' }}>
-                                        <Link to={{pathname: URL.MEMBER_MYPAGE_DIFFICULTIES_DETAIL}}
-                                              state={{
-                                                  dfclMttrSn: item.dfclMttrSn,
-                                                  menuSn : location.state?.menuSn,
-                                                  menuNmPath : location.state?.menuNmPath
+                                        <div style={{textAlign: 'left'}}>
+                                            <Link to={{pathname: URL.MEMBER_MYPAGE_DIFFICULTIES_DETAIL}}
+                                                  state={{
+                                                      dfclMttrSn: item.dfclMttrSn,
+                                                      menuSn: location.state?.menuSn,
+                                                      menuNmPath: location.state?.menuNmPath
 
-                                              }}
-                                              style={{cursor: 'pointer', textDecoration: 'underline'}}
-                                        >
-                                            {item.ttl}
-                                            {item.fileCnt !== 0 && <img src={fileImages} alt="pass images"/>}
+                                                  }}
+                                                  style={{cursor: 'pointer', textDecoration: 'underline'}}
+                                            >
+                                                {item.ttl}
+                                                {item.fileCnt !== 0 && <img src={fileImages} alt="pass images"/>}
 
-                                        </Link>
+                                            </Link>
                                         </div>
                                     ) : (
-                                        <div style={{ textAlign: 'left' }}>
-                                        <Link to={{pathname: URL.MEMBER_MYPAGE_DIFFICULTIES_MODIFY}}
-                                              state={{
-                                                  dfclMttrSn: item.dfclMttrSn,
-                                                  menuSn : location.state?.menuSn,
-                                                  menuNmPath : location.state?.menuNmPath
-                                              }}
-                                              style={{cursor: 'pointer', textDecoration: 'underline'}}
-                                        >
-                                            {item.ttl}
-                                        </Link>
+                                        <div style={{textAlign: 'left'}}>
+                                            <Link to={{pathname: URL.MEMBER_MYPAGE_DIFFICULTIES_MODIFY}}
+                                                  state={{
+                                                      dfclMttrSn: item.dfclMttrSn,
+                                                      menuSn: location.state?.menuSn,
+                                                      menuNmPath: location.state?.menuNmPath
+                                                  }}
+                                                  style={{cursor: 'pointer', textDecoration: 'underline'}}
+                                            >
+                                                {item.ttl}
+                                            </Link>
                                         </div>
                                     )}
                                 </td>
                                 <td>{moment(item.frstCrtDt).format('YYYY-MM-DD')}</td>
-                                <td>{item.answer == "Y" ? "답변완료" : "답변대기"}</td>
+                                <td className="state">{item.answer === "Y" ? (<p className="complete">답변완료</p>) : (
+                                    <p className="waiting">답변대기</p>)}</td>
                             </tr>
                         );
                     });
@@ -208,20 +209,13 @@ function MemberMyPageDifficulties(props) {
                     <div className="board_list" data-aos="fade-up" data-aos-duration="1500">
                         <table>
                             <caption>간편상담 목록</caption>
-                            <colgroup>
-                                <col width="80"/>
-                                <col width="170"/>
-                                <col width="450"/>
-                                <col width="250"/>
-                                <col width="250"/>
-                            </colgroup>
                             <thead>
                             <tr>
-                                <th>번호</th>
-                                <th>분류</th>
+                                <th className="th1">번호</th>
+                                <th className="th1">분류</th>
                                 <th>제목</th>
-                                <th>신청일</th>
-                                <th>상태</th>
+                                <th className="th1">신청일</th>
+                                <th className="th2">상태</th>
                             </tr>
                             </thead>
                             <tbody>

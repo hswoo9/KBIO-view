@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation, Link, NavLink } from "react-router-dom";
 import * as EgovNet from "@/api/egovFetch";
 import CommonSubMenu from "@/components/CommonSubMenu";
+import ConsultingModal from "@/components/ConsultingModal";
 import URL from "@/constants/url";
 import Swal from "sweetalert2";
 import {getSessionItem} from "../../utils/storage.js";
@@ -23,10 +24,21 @@ function ConsultantDetail(props) {
     const [memberDetail, setMemberDetail] = useState(null);
     const [cnsltProfileFile, setCnsltProfileFile] = useState(null);
 
-
-    const editClick = (cnsltSe, userSn) => {
+    const [modalData, setModalData] = useState({});
+    useEffect(() => {
+    }, [modalData]);
+    const editClick = (cnsltSe) => {
         if(sessionUser){
-            navigate(
+            setModalData({
+                ...modalData,
+                cnsltSe : cnsltSe,
+                cnslttUserSn : memberDetail?.userSn,
+                userSn : sessionUser?.userSn,
+                kornFlnm: memberDetail?.kornFlnm
+            })
+            ComScript.openModal("requestModal");
+            
+            /*navigate(
                 { pathname : URL.CONSULTING_CREATE },
                 {
                     state : {
@@ -36,7 +48,7 @@ function ConsultantDetail(props) {
                         menuSn : location.state?.menuSn,
                         menuNmPath : location.state?.menuNmPath,
                     }
-                });
+                });*/
         }else{
             Swal.fire("로그인이 필요한 서비스 입니다.").then((result) => {
                 if(result.isConfirmed) {
@@ -201,13 +213,13 @@ function ConsultantDetail(props) {
                         </div>
                         <div className="buttonBox">
                             <button type="button" className="clickBtn requestBtn"
-                                    onClick={() => editClick(26, memberDetail.userSn)}
+                                    onClick={() => editClick(26)}
                             >
                                 <div className="icon"></div>
                                 <span>컨설팅 의뢰</span>
                             </button>
                             <button type="button" className="clickBtn contactBtn"
-                                    onClick={() => editClick(27, memberDetail.userSn)}
+                                    onClick={() => editClick(27)}
                             >
                                 <div className="icon"></div>
                                 <span>간편 상담</span>
@@ -216,167 +228,7 @@ function ConsultantDetail(props) {
                     </div>
                 </div>
             </div>
-            <div className="requestModal modalCon">
-                <div className="bg"></div>
-                <div className="m-inner">
-                    <div className="boxWrap">
-                        <div className="close">
-                            <div className="icon"></div>
-                        </div>
-                        <div className="titleWrap type2">
-                            <p className="tt1">컨설팅의뢰</p>
-                        </div>
-                        <form className="diffiBox">
-                            <div className="cont">
-                                <ul className="listBox">
-                                    <li className="inputBox type2 textBox">
-                                        <p className="title">컨설턴트명</p>
-                                        <p className="text">박대성</p>
-                                    </li>
-                                    <li className="inputBox type2 textBox">
-                                        <p className="title">분야</p>
-                                        <p className="text">마케팅</p>
-                                    </li>
-                                    <li className="inputBox type2">
-                                        <label htmlFor="request_title" className="tt1 essential">제목</label>
-                                        <div className="input">
-                                            <input type="text" name="request_title" id="request_title" title="제목"
-                                                   placeholder="제목을 입력해주세요"/>
-                                        </div>
-                                    </li>
-                                    <li className="inputBox type2">
-                                        <label htmlFor="request_text" className="tt1 essential">의뢰내용</label>
-                                        <div className="input">
-                                            <textarea type="text" name="request_text" id="request_text" title="내용"
-                                                      placeholder="의뢰내용을 1000자 이내로 작성해주세요."></textarea>
-                                        </div>
-                                    </li>
-                                    <li className="inputBox type2 gray file">
-                                        <p className="tt1 essential">첨부파일</p>
-                                        <ul className="fileName">
-                                            <li>
-                                                <div className="nameBox">
-                                                    <div className="icon"></div>
-                                                    <p className="name">첨부파일</p>
-                                                    <span className="size">(654.79kb)</span>
-                                                </div>
-                                                <button type="button" className="deletBtn">
-                                                    <div className="icon"></div>
-                                                </button>
-                                            </li>
-                                            <li>
-                                                <div className="nameBox">
-                                                    <div className="icon"></div>
-                                                    <p className="name">첨부파일</p>
-                                                    <span className="size">(654.79kb)</span>
-                                                </div>
-                                                <button type="button" className="deletBtn">
-                                                    <div className="icon"></div>
-                                                </button>
-                                            </li>
-                                        </ul>
-                                        <label className="uploadBox">
-                                            <input type="file" id="request_file_upload" name="file_upload"
-                                                   accept=".pdf, .hwp, .docx, .xls, .ppt"/>
-                                            <div className="text1">
-                                                <div className="icon"></div>
-                                                <strong>첨부파일 업로드</strong></div>
-                                            <p className="text2">첨부파일은 PDF, HWP, Docx, xls, PPT 형식만 가능하며 최대 10MB 까지만
-                                                지원</p>
-                                        </label>
-                                    </li>
-                                </ul>
-                                <div className="botText">
-                                    <p>자문위원이 답변을 등록 할 경우 수정이 불가하오니 수정사항이 있으시면 <strong>“답변대기중”</strong> 일때 수정하시기 바랍니다.
-                                    </p>
-                                    <strong>빠른 시간안에 답변을 드리도록 하겠습니다</strong>
-                                </div>
-                            </div>
-                            <button type="button" className="clickBtn black writeBtn"><span>등록</span></button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <div className="contactModal modalCon">
-                <div className="bg"></div>
-                <div className="m-inner">
-                    <div className="boxWrap">
-                        <div className="close">
-                            <div className="icon"></div>
-                        </div>
-                        <div className="titleWrap type2">
-                            <p className="tt1">간편상담</p>
-                        </div>
-                        <form className="diffiBox">
-                            <div className="cont">
-                                <ul className="listBox">
-                                    <li className="inputBox type2 textBox">
-                                        <p className="title">컨설턴트명</p>
-                                        <p className="text">박대성</p>
-                                    </li>
-                                    <li className="inputBox type2 textBox">
-                                        <p className="title">분야</p>
-                                        <p className="text">마케팅</p>
-                                    </li>
-                                    <li className="inputBox type2">
-                                        <label htmlFor="contact_title" className="tt1 essential">제목</label>
-                                        <div className="input">
-                                            <input type="text" name="contact_title" id="contact_title" title="제목"
-                                                   placeholder="제목을 입력해주세요"/>
-                                        </div>
-                                    </li>
-                                    <li className="inputBox type2">
-                                        <label htmlFor="contact_text" className="tt1 essential">상담내용</label>
-                                        <div className="input">
-                                            <textarea type="text" name="contact_text" id="contact_text" title="내용"
-                                                      placeholder="상담내용을 1000자 이내로 작성해주세요."></textarea>
-                                        </div>
-                                    </li>
-                                    <li className="inputBox type2 gray file">
-                                        <p className="tt1 essential">첨부파일</p>
-                                        <ul className="fileName">
-                                            <li>
-                                                <div className="nameBox">
-                                                    <div className="icon"></div>
-                                                    <p className="name">첨부파일</p>
-                                                    <span className="size">(654.79kb)</span>
-                                                </div>
-                                                <button type="button" className="deletBtn">
-                                                    <div className="icon"></div>
-                                                </button>
-                                            </li>
-                                            <li>
-                                                <div className="nameBox">
-                                                    <div className="icon"></div>
-                                                    <p className="name">첨부파일</p>
-                                                    <span className="size">(654.79kb)</span>
-                                                </div>
-                                                <button type="button" className="deletBtn">
-                                                    <div className="icon"></div>
-                                                </button>
-                                            </li>
-                                        </ul>
-                                        <label className="uploadBox">
-                                            <input type="file" id="contact_file_upload" name="file_upload"
-                                                   accept=".pdf, .hwp, .docx, .xls, .ppt"/>
-                                            <div className="text1">
-                                                <div className="icon"></div>
-                                                <strong>첨부파일 업로드</strong></div>
-                                            <p className="text2">첨부파일은 PDF, HWP, Docx, xls, PPT 형식만 가능하며 최대 10MB 까지만
-                                                지원</p>
-                                        </label>
-                                    </li>
-                                </ul>
-                                <div className="botText">
-                                    <p>답변을 등록 할 경우 수정이 불가하오니 수정사항이 있으시면 <strong>“답변대기중”</strong> 일때 수정하시기 바랍니다.</p>
-                                    <strong>빠른 시간안에 답변을 드리도록 하겠습니다</strong>
-                                </div>
-                            </div>
-                            <button type="button" className="clickBtn black writeBtn"><span>등록</span></button>
-                        </form>
-                    </div>
-                </div>
-            </div>
+            <ConsultingModal data={modalData} />
         </div>
     );
 

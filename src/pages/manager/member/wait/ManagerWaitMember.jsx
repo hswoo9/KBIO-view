@@ -352,46 +352,34 @@ function WaitMemberList(props) {
                     <div className="tableBox type1">
                         <table>
                             <caption>회원목록</caption>
-                            <colgroup>
-                                <col width="50px"/>
-                                <col width="100px"/>
-                                <col width="130px"/>
-                                <col width="100px"/>
-                                <col width="150px"/>
-                                <col width="100px"/>
-                                <col width="150px"/>
-                                <col width="180px"/>
-                                {/*<col width="80px"/>
-                                <col width="80px"/>*/}
-                            </colgroup>
                             <thead>
                             <tr>
-                                <th>번호</th>
-                                <th>회원분류</th>
-                                <th>아이디</th>
-                                <th>성명</th>
-                                <th>기업명</th>
-                                <th>소셜구분</th>
-                                <th>가입일</th>
-                                <th colSpan="2" style={{textAlign: 'center'}}>승인여부</th>
+                                <th className="th1">번호</th>
+                                <th className="th1">회원분류</th>
+                                <th className="th2">아이디</th>
+                                <th className="th2">성명</th>
+                                <th className="th2">기업명</th>
+                                <th className="th1">소셜구분</th>
+                                <th className="th2">가입일</th>
+                                <th colSpan="2" style={{textAlign: 'center'}} className="th1">승인여부</th>
                             </tr>
                             </thead>
-                            <tbody>
-                            {waitMemberList}
-                            </tbody>
-                        </table>
-                    </div>
-                    <div className="pageWrap">
-                        <EgovPaging
-                            pagination={paginationInfo}
-                            moveToPage={(passedPage) => {
-                                getwaitMemberList({
-                                    ...searchDto,
-                                    pageIndex: passedPage,
-                                });
-                            }}
-                        />
-                        {/*<NavLink to={URL.MANAGER_NORMAL_MEMBER_CREATE}>
+                        <tbody>
+                        {waitMemberList}
+                        </tbody>
+                    </table>
+                </div>
+                <div className="pageWrap">
+                    <EgovPaging
+                        pagination={paginationInfo}
+                        moveToPage={(passedPage) => {
+                            getwaitMemberList({
+                                ...searchDto,
+                                pageIndex: passedPage,
+                            });
+                        }}
+                    />
+                    {/*<NavLink to={URL.MANAGER_NORMAL_MEMBER_CREATE}>
                             <button type="button" className="writeBtn clickBtn">
                                 <span>등록</span>
                             </button>

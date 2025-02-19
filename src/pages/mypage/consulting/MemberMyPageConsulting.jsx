@@ -114,7 +114,11 @@ function MemberMyPageConsulting(props) {
                                     </div>
                                 </td>
                                 <td>{moment(item.frstCrtDt).format('YYYY-MM-DD')}</td>
-                                <td>{statusMap[item.cnsltSttsCd] || item.cnsltSttsCd}</td>
+                                <td className="state">
+                                    <p className={["101", "999"].includes(String(item.cnsltSttsCd)) ? "waiting" : "complete"}>
+                                        {statusMap[item.cnsltSttsCd] || item.cnsltSttsCd}
+                                    </p>
+                                </td>
                                 <td></td>
                             </tr>
                         );
@@ -211,23 +215,15 @@ function MemberMyPageConsulting(props) {
                     </div>
                     <div className="board_list" data-aos="fade-up" data-aos-duration="1500">
                         <table>
-                            <caption>컨설팅 목록</caption>
-                            <colgroup>
-                                <col width="80"/>
-                                <col width="170"/>
-                                <col width="450"/>
-                                <col width="250"/>
-                                <col width="250"/>
-                                <col width="150"/>
-                            </colgroup>
+                            <caption>컨설팅의뢰 내역</caption>
                             <thead>
                             <tr>
-                                <th>번호</th>
-                                <th>분류</th>
+                                <th className="th1">번호</th>
+                                <th className="th1">분류</th>
                                 <th>제목</th>
-                                <th>신청일</th>
-                                <th>상태</th>
-                                <th>만족도</th>
+                                <th className="th1">신청일</th>
+                                <th className="th1">상태</th>
+                                <th className="th1">만족도</th>
                             </tr>
                             </thead>
                             <tbody>
