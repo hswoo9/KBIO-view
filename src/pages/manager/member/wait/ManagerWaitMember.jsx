@@ -18,16 +18,20 @@ import { getSessionItem } from "@/utils/storage";
 import moment from "moment/moment.js";
 
 function WaitMemberList(props) {
+    const userStatusRef = useRef();
+    const searchTypeRef = useRef();
+    const searchValRef = useRef();
     const navigate = useNavigate();
     const location = useLocation();
     const [searchDto, setSearchDto] = useState(
         location.state?.searchDto || {
             pageIndex: 1,
-            emplyrId: "",
+            userId: "",
             searchWrd: "",
             mbrStts: "",
-            userType: "",
-            userNm: "",
+            searchType: "",
+            searchVal : "",
+            kornFlnm: "",
         }
     );
     const [paginationInfo, setPaginationInfo] = useState({});
@@ -243,21 +247,17 @@ function WaitMemberList(props) {
                                 <div className="itemBox">
                                     <select
                                         className="selectGroup"
-                                        ref={userTypeRef}
+                                        name="mbrType"
                                         onChange={(e) => {
-                                            getwaitMemberList({
-                                                ...searchDto,
-                                                pageIndex: 1,
-                                                userType: userTypeRef.current.value,
-                                                userNm: userNmRef.current.value,
-                                            });
+                                            setSearchDto({...searchDto, mbrType: e.target.value})
                                         }}
                                     >
                                         <option value="">전체</option>
                                         <option value="1">입주기업</option>
-                                        <option value="2">유관기관</option>
-                                        <option value="3">비입주기업</option>
-                                        <option value="4">컨설턴트</option>
+                                        <option value="3">유관기관</option>
+                                        <option value="4">비입주기업</option>
+                                        <option value="2">컨설턴트</option>
+                                        <option value="9">관리자</option>
                                     </select>
                                 </div>
                             </li>
@@ -267,23 +267,30 @@ function WaitMemberList(props) {
                                 <div className="itemBox">
                                     <select
                                         className="selectGroup"
+                                        id="searchType"
+                                        name="searchType"
+                                        title="검색유형"
+                                        ref={searchTypeRef}
+                                        onChange={(e) => {
+                                            setSearchDto({...searchDto, searchType: e.target.value})
+                                        }}
                                     >
                                         <option value="">전체</option>
-                                        <option value="">아이디</option>
-                                        <option value="">성명</option>
-                                        <option value="">기업명</option>
+                                        <option value="userId">아이디</option>
+                                        <option value="kornFlnm">성명</option>
                                     </select>
                                 </div>
                             </li>
-                            <li className="searchBox inputBox type1">
+                            <li className="searchBox inputBox type1" style={{width: "100%"}}>
                                 <label className="input">
                                     <input
                                         type="text"
-                                        defaultValue={searchDto && searchDto.userNm}
-                                        placeholder="검색어를 입력해주세요"
-                                        ref={userNmRef}
+                                        name="searchVal"
+                                        defaultValue={searchDto.searchVal}
+                                        placeholder=""
+                                        ref={searchValRef}
                                         onChange={(e) => {
-                                            setSearchDto({...searchDto, userNm: e.target.value});
+                                            setSearchDto({...searchDto, searchVal: e.target.value})
                                         }}
                                         onKeyDown={activeEnter}
                                     />
@@ -296,17 +303,19 @@ function WaitMemberList(props) {
                                 className="refreshBtn btn btn1 gray"
                                 onClick={(e) => {
                                     e.preventDefault();
-                                    userTypeRef.current.value = "";
-                                    userNmRef.current.value = "";
-                                    setSearchDto({
+                                    searchTypeRef.current.value = "";
+                                    searchValRef.current.value = "";
+
+                                    const initialSearchDto = {
                                         pageIndex: 1,
-                                        emplyrId: "",
-                                        searchWrd: "",
                                         mbrStts: "",
-                                        userType: "",
-                                        userNm: "",
-                                    });
-                                    getwaitMemberList({});
+                                        kornFlnm: "",
+                                        userId: "",
+                                        searchType: "",
+                                        searchWrd: "",
+                                    };
+                                    setSearchDto(initialSearchDto);
+                                    getwaitMemberList(initialSearchDto);
                                 }}
                             >
                                 <div className="icon"></div>
@@ -318,9 +327,7 @@ function WaitMemberList(props) {
                                     e.preventDefault();
                                     getwaitMemberList({
                                         ...searchDto,
-                                        pageIndex: 1,
-                                        userType: userTypeRef.current.value,
-                                        userNm: userNmRef.current.value,
+                                        pageIndex: 1
                                     });
                                 }}
                             >
@@ -333,7 +340,8 @@ function WaitMemberList(props) {
                 <div className="contBox board type1 customContBox">
                     <div className="topBox">
                         <p className="resultText">전체 : <span className="red">{paginationInfo.totalRecordCount}</span>건
-                            페이지 : <span className="red">{paginationInfo.currentPageNo}/{paginationInfo.totalPageCount}</span>
+                            페이지 : <span
+                                className="red">{paginationInfo.currentPageNo}/{paginationInfo.totalPageCount}</span>
                         </p>
                         <div className="rightBox">
                             <button type="button" className="btn btn2 downBtn red">

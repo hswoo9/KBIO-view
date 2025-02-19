@@ -20,7 +20,7 @@ import moment from "moment/moment.js";
 function NormalMemberList(props) {
     const userStatusRef = useRef();
     const searchTypeRef = useRef();
-    const searchWrdRef = useRef();
+    const searchValRef = useRef();
     const navigate = useNavigate();
     const location = useLocation();
     const [searchDto, setSearchDto] = useState(
@@ -29,8 +29,9 @@ function NormalMemberList(props) {
             mbrStts: "",
             kornFlnm: "",
             userId: "",
-            companyName: "",
             searchType: "",
+            searchVal : "",
+            mbrType: "",
         }
     );
     const [paginationInfo, setPaginationInfo] = useState({});
@@ -207,20 +208,9 @@ function NormalMemberList(props) {
                                 <div className="itemBox">
                                     <select
                                         className="selectGroup"
-                                        ref={userTypeRef}
+                                        name="mbrType"
                                         onChange={(e) => {
-                                            setSearchDto({
-                                                ...searchDto,
-                                                pageIndex: 1,
-                                                userType: userTypeRef.current.value,
-                                                mbrType: e.target.value,
-                                            });
-                                            getnormalMemberList({
-                                                ...searchDto,
-                                                pageIndex: 1,
-                                                userType: userTypeRef.current.value,
-                                                mbrType: e.target.value,
-                                            });
+                                            setSearchDto({...searchDto, mbrType: e.target.value})
                                         }}
                                     >
                                         <option value="">전체</option>
@@ -237,20 +227,9 @@ function NormalMemberList(props) {
                                 <div className="itemBox">
                                     <select
                                         className="selectGroup"
-                                        ref={userStatusRef}
+                                        name="mbrStts"
                                         onChange={(e) => {
-                                            setSearchDto({
-                                                ...searchDto,
-                                                pageIndex: 1,
-                                                userType: userTypeRef.current.value,
-                                                mbrStts: e.target.value,
-                                            });
-                                            getnormalMemberList({
-                                                ...searchDto,
-                                                pageIndex: 1,
-                                                userType: userTypeRef.current.value,
-                                                mbrStts: e.target.value,
-                                            });
+                                            setSearchDto({...searchDto, mbrStts: e.target.value})
                                         }}
                                     >
                                         <option value="">전체</option>
@@ -267,39 +246,30 @@ function NormalMemberList(props) {
                                 <div className="itemBox">
                                     <select
                                         className="selectGroup"
-                                        ref={searchWrdRef}
+                                        id="searchType"
+                                        name="searchType"
+                                        title="검색유형"
+                                        ref={searchTypeRef}
                                         onChange={(e) => {
-                                            setSearchDto({
-                                                ...searchDto,
-                                                pageIndex: 1,
-                                                searchType: e.target.value,
-                                            });
+                                            setSearchDto({...searchDto, searchType: e.target.value})
                                         }}
                                     >
                                         <option value="">전체</option>
                                         <option value="userId">아이디</option>
                                         <option value="kornFlnm">성명</option>
-                                        <option value="companyName">기업명</option>
                                     </select>
                                 </div>
                             </li>
-                            <li className="searchBox inputBox type1">
+                            <li className="searchBox inputBox type1" style={{width: "100%"}}>
                                 <label className="input">
                                     <input
                                         type="text"
-                                        value={searchDto[searchDto.searchType] || ""}
-                                        placeholder="검색어를 입력해주세요"
-                                        ref={searchTypeRef}
+                                        name="searchVal"
+                                        defaultValue={searchDto.searchVal}
+                                        placeholder=""
+                                        ref={searchValRef}
                                         onChange={(e) => {
-                                            setSearchDto({
-                                                ...searchDto,
-                                                [searchDto.searchType]: e.target.value,
-                                            });
-                                            getnormalMemberList({
-                                                ...searchDto,
-                                                [searchDto.searchType]: e.target.value,
-                                                pageIndex: 1,
-                                            });
+                                            setSearchDto({...searchDto, searchVal: e.target.value})
                                         }}
                                         onKeyDown={activeEnter}
                                     />
@@ -322,7 +292,6 @@ function NormalMemberList(props) {
                                         mbrStts: "",
                                         kornFlnm: "",
                                         userId: "",
-                                        companyName: "",
                                         searchType: "",
                                         searchWrd: "",
                                     };
@@ -339,10 +308,7 @@ function NormalMemberList(props) {
                                     e.preventDefault();
                                     getnormalMemberList({
                                         ...searchDto,
-                                        pageIndex: 1,
-                                        userType: userTypeRef.current.value,
-                                        searchType: searchTypeRef.current.value,
-                                        mbrStts: userStatusRef.current.value,
+                                        pageIndex: 1
                                     });
                                 }}
                             >

@@ -18,10 +18,8 @@ import { getSessionItem } from "@/utils/storage";
 import moment from "moment/moment.js";
 
 function ManagerPrivacyList(props) {
-    const searchWrdRef = useRef();
     const location = useLocation();
     const sessionUser = getSessionItem("loginUser");
-    const useYnRef = useRef();
     const searchTypeRef = useRef();
     const searchValRef = useRef();
     const [searchDto, setSearchDto] = useState(
