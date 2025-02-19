@@ -204,21 +204,14 @@ function ManagerTermsList(props) {
                     <div className="topBox"></div>
                     <div className="tableBox type1">
                         <table>
-                            <caption>조직도목록</caption>
-                            <colgroup>
-                                <col width="80px"/>
-                                <col width="600px"/>
-                                <col width="200px"/>
-                                <col width="250px"/>
-                                <col width="150px"/>
-                            </colgroup>
+                            <caption>이용약관목록</caption>
                             <thead>
                             <tr>
-                                <th>번호</th>
+                                <th className="th2">번호</th>
                                 <th>제목</th>
-                                <th>등록자</th>
-                                <th>등록일</th>
-                                <th>사용여부</th>
+                                <th className="th2">등록자</th>
+                                <th className="th2">등록일</th>
+                                <th className="th2">사용여부</th>
                             </tr>
                             </thead>
                             <tbody>
