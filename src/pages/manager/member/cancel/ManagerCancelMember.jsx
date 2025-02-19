@@ -25,24 +25,12 @@ function CancelMemberList(props) {
             pageIndex: 1,
             emplyrId: "",
             searchWrd: "",
-            actvtnYn: "",
+            mbrStts: "",
             userType: "",
             userNm: "",
         }
     );
-    const [paginationInfo, setPaginationInfo] = useState({
-        currentPageNo: 1,
-        firstPageNo: 1,
-        firstPageNoOnPageList: 1,
-        firstRecordIndex: 0,
-        lastPageNo: 1,
-        lastPageNoOnPageList: 1,
-        lastRecordIndex: 10,
-        pageSize: 10,
-        recordCountPerPage: 10,
-        totalPageCount: 15,
-        totalRecordCount: 158
-    });
+    const [paginationInfo, setPaginationInfo] = useState({});
     const userTypeRef = useRef();
     const userNmRef = useRef();
     const [CancelMemberList, setAuthorityList] = useState([]);
@@ -199,7 +187,7 @@ function CancelMemberList(props) {
                                         pageIndex: 1,
                                         emplyrId: "",
                                         searchWrd: "",
-                                        actvtnYn: "",
+                                        mbrStts: "",
                                         userType: "",
                                         userNm: "",
                                     });

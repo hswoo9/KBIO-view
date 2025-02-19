@@ -348,7 +348,7 @@ function Index(props) {
                             <NavLink
                                 to={URL.MANAGER_APPROVAL_MEMBER}
                                 className="tt2">
-                                <span>{status.activeYCnt}</span>
+                                <span>{status.mbrSttsYCnt}</span>
                             </NavLink>
                         </li>
                         <li>
@@ -356,7 +356,7 @@ function Index(props) {
                             <NavLink
                                 to={URL.MANAGER_WAIT_MEMBER}
                                 className="tt2">
-                                <span>{status.activeWCnt}</span>
+                                <span>{status.mbrSttsWCnt}</span>
                             </NavLink>
                         </li>
                         <li>
@@ -364,7 +364,7 @@ function Index(props) {
                             <NavLink
                                 to={URL.MANAGER_REJECT_MEMBER}
                                 className="tt2">
-                                <span>{status.activeRCnt}</span>
+                                <span>{status.mbrSttsRCnt}</span>
                             </NavLink>
                         </li>
                         <li>
@@ -372,7 +372,7 @@ function Index(props) {
                             <NavLink
                                 to={URL.MANAGER_STOP_MEMBER}
                                 className="tt2">
-                                <span>{status.activeSCnt}</span>
+                                <span>{status.mbrSttsSCnt}</span>
                             </NavLink>
                         </li>
                     </ul>
