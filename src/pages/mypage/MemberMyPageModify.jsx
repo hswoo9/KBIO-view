@@ -746,6 +746,7 @@ function MemberMyPageModify(props) {
                                                 type="radio"
                                                 name="cnsltActv"
                                                 value="Y"
+                                                className="signUpRadio"
                                                 checked={consultDetail.cnsltActv === "Y"}
                                                 onChange={() =>
                                                     setConsultDetail({...consultDetail, cnsltActv: "Y"})
@@ -758,6 +759,7 @@ function MemberMyPageModify(props) {
                                                 type="radio"
                                                 name="cnsltActv"
                                                 value="N"
+                                                className="signUpRadio"
                                                 checked={consultDetail.cnsltActv === "N"}
                                                 onChange={() =>
                                                     setConsultDetail({...consultDetail, cnsltActv: "N"})
