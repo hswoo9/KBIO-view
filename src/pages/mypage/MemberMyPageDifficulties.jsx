@@ -85,6 +85,7 @@ function MemberMyPageDifficulties(props) {
                                 <td>{item.dfclMttrFldNm}</td>
                                 <td>
                                     {item.answer === "Y" ? (
+                                        <div style={{ textAlign: 'left' }}>
                                         <Link to={{pathname: URL.MEMBER_MYPAGE_DIFFICULTIES_DETAIL}}
                                               state={{
                                                   dfclMttrSn: item.dfclMttrSn,
@@ -98,7 +99,9 @@ function MemberMyPageDifficulties(props) {
                                             {item.fileCnt !== 0 && <img src={fileImages} alt="pass images"/>}
 
                                         </Link>
+                                        </div>
                                     ) : (
+                                        <div style={{ textAlign: 'left' }}>
                                         <Link to={{pathname: URL.MEMBER_MYPAGE_DIFFICULTIES_MODIFY}}
                                               state={{
                                                   dfclMttrSn: item.dfclMttrSn,
@@ -109,6 +112,7 @@ function MemberMyPageDifficulties(props) {
                                         >
                                             {item.ttl}
                                         </Link>
+                                        </div>
                                     )}
                                 </td>
                                 <td>{moment(item.frstCrtDt).format('YYYY-MM-DD')}</td>
@@ -210,7 +214,6 @@ function MemberMyPageDifficulties(props) {
                                 <col width="450"/>
                                 <col width="250"/>
                                 <col width="250"/>
-                                <col width="150"/>
                             </colgroup>
                             <thead>
                             <tr>
@@ -219,7 +222,6 @@ function MemberMyPageDifficulties(props) {
                                 <th>제목</th>
                                 <th>신청일</th>
                                 <th>상태</th>
-                                <th>만족도</th>
                             </tr>
                             </thead>
                             <tbody>

@@ -101,7 +101,6 @@ function setRejectMember(props) {
                     },
                     body: JSON.stringify({
                         ...memberDetail,
-                        actvtnYn: "Y",
                         userSn: userSn
                     }),
                 };
@@ -193,11 +192,11 @@ function setRejectMember(props) {
                                 <input
                                     type="text"
                                     value={
-                                        memberDetail.actvtnYn === 'Y' ? '정상회원' :
-                                        memberDetail.actvtnYn === 'W' ? '대기회원' :
-                                        memberDetail.actvtnYn === 'R' ? '반려회원' :
-                                        memberDetail.actvtnYn === 'S' ? '정지회원' :
-                                        memberDetail.actvtnYn === 'C' ? '탈퇴회원' : ''
+                                        memberDetail.mbrStts === 'Y' ? '정상회원' :
+                                        memberDetail.mbrStts === 'W' ? '대기회원' :
+                                        memberDetail.mbrStts === 'R' ? '반려회원' :
+                                        memberDetail.mbrStts === 'S' ? '정지회원' :
+                                        memberDetail.mbrStts === 'C' ? '탈퇴회원' : ''
                                     }
                                     readOnly
                                 />

@@ -97,6 +97,11 @@ function ManagerPrivacyList(props) {
                                 <td>{item.creatr}</td>
                                 <td>{new Date(item.frstCrtDt).toISOString().split("T")[0]}</td>
                                 <td>{item.useYn === "Y" ? "사용중" : "사용안함"}</td>
+                                <td>
+                                    {item.cnsltSttsCd === "200" && (
+                                        <span>만족도완료</span>
+                                    )}
+                                </td>
                             </tr>
                         );
                     });

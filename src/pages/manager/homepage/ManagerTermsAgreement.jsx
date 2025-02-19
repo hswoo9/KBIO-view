@@ -22,11 +22,14 @@ function ManagerTermsList(props) {
     const location = useLocation();
     const sessionUser = getSessionItem("loginUser");
     const useYnRef = useRef();
+    const searchTypeRef = useRef();
+    const searchValRef = useRef();
     const [searchDto, setSearchDto] = useState(
         location.state?.searchDto || {
             pageIndex: 1,
             searchCnd: "0",
-            searchWrd: "",
+            searchVal : "",
+            searchType: "",
             useYn: "",
             utztnTrmsKnd: 2,
         }
@@ -123,18 +126,9 @@ function ManagerTermsList(props) {
                                 <p className="title">사용여부</p>
                                 <div className="itemBox">
                                     <select className="selectGroup"
-                                            ref={useYnRef}
+                                            name="useYn"
                                             onChange={(e) => {
-                                                setSearchDto({
-                                                    ...searchDto,
-                                                    pageIndex: 1,
-                                                    useYn: e.target.value,
-                                                });
-                                                gettermsAgreementList({
-                                                    ...searchDto,
-                                                    pageIndex: 1,
-                                                    useYn: e.target.value,
-                                                });
+                                                setSearchDto({...searchDto, useYn: e.target.value})
                                             }}
                                     >
                                         <option value="">전체</option>
@@ -143,17 +137,53 @@ function ManagerTermsList(props) {
                                     </select>
                                 </div>
                             </li>
-                            <li className="searchBox inputBox type1">
-                                <p className="title">이름</p>
-                                <label className="input"><input type="text" id="search" name="search"
-                                                                placeholder="검색어를 입력해주세요"/></label>
+                            <li className="inputBox type1" style={{width: "25%"}}>
+                                <p className="title">키워드</p>
+                                <div className="itemBox">
+                                    <select
+                                        className="selectGroup"
+                                        id="searchType"
+                                        name="searchType"
+                                        title="검색유형"
+                                        ref={searchTypeRef}
+                                        onChange={(e) => {
+                                            setSearchDto({...searchDto, searchType: e.target.value})
+                                        }}
+                                    >
+                                        <option value="">전체</option>
+                                        <option value="utztnTrmsCn">제목</option>
+                                        <option value="utztnTrmsTtl">내용</option>
+                                    </select>
+                                </div>
+                            </li>
+                            <li className="searchBox inputBox type1" style={{width: "100%"}}>
+                                <label className="input">
+                                    <input
+                                        type="text"
+                                        name="searchVal"
+                                        defaultValue={searchDto.searchVal}
+                                        placeholder=""
+                                        ref={searchValRef}
+                                        onChange={(e) => {
+                                            setSearchDto({...searchDto, searchVal: e.target.value})
+                                        }}
+                                        onKeyDown={activeEnter}
+                                    />
+                                </label>
                             </li>
                         </ul>
                         <div className="rightBtn">
                             <button type="button" className="refreshBtn btn btn1 gray">
                                 <div className="icon"></div>
                             </button>
-                            <button type="button" className="searchBtn btn btn1 point">
+                            <button type="button" className="searchBtn btn btn1 point"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        gettermsAgreementList({
+                                            ...searchDto,
+                                            pageIndex: 1
+                                        });
+                                    }}>
                                 <div className="icon"></div>
                             </button>
                         </div>

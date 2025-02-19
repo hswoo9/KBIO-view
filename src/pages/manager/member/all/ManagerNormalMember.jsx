@@ -26,7 +26,7 @@ function NormalMemberList(props) {
     const [searchDto, setSearchDto] = useState(
         location.state?.searchDto || {
             pageIndex: 1,
-            actvtnYn: "",
+            mbrStts: "",
             kornFlnm: "",
             userId: "",
             companyName: "",
@@ -148,11 +148,11 @@ function NormalMemberList(props) {
                                 <td>{new Date(item.frstCrtDt).toISOString().split("T")[0]}</td>
                                 <td></td>
                                 <td>
-                                    {item.actvtnYn === 'Y' ? '정상회원' :
-                                    item.actvtnYn === 'W' ? '대기회원' :
-                                    item.actvtnYn === 'R' ? '반려회원' :
-                                    item.actvtnYn === 'C' ? '정지회원' :
-                                    item.actvtnYn === 'S' ? '탈퇴회원' : ''}
+                                    {item.mbrStts === 'Y' ? '정상회원' :
+                                    item.mbrStts === 'W' ? '대기회원' :
+                                    item.mbrStts === 'R' ? '반려회원' :
+                                    item.mbrStts === 'C' ? '정지회원' :
+                                    item.mbrStts === 'S' ? '탈퇴회원' : ''}
                                 </td>
                                 {/*<td>{item.replyPosblYn}</td>
                                 <td>{item.answerPosblYn}</td>
@@ -243,13 +243,13 @@ function NormalMemberList(props) {
                                                 ...searchDto,
                                                 pageIndex: 1,
                                                 userType: userTypeRef.current.value,
-                                                actvtnYn: e.target.value,
+                                                mbrStts: e.target.value,
                                             });
                                             getnormalMemberList({
                                                 ...searchDto,
                                                 pageIndex: 1,
                                                 userType: userTypeRef.current.value,
-                                                actvtnYn: e.target.value,
+                                                mbrStts: e.target.value,
                                             });
                                         }}
                                     >
@@ -319,7 +319,7 @@ function NormalMemberList(props) {
 
                                     const initialSearchDto = {
                                         pageIndex: 1,
-                                        actvtnYn: "",
+                                        mbrStts: "",
                                         kornFlnm: "",
                                         userId: "",
                                         companyName: "",
@@ -342,7 +342,7 @@ function NormalMemberList(props) {
                                         pageIndex: 1,
                                         userType: userTypeRef.current.value,
                                         searchType: searchTypeRef.current.value,
-                                        actvtnYn: userStatusRef.current.value,
+                                        mbrStts: userStatusRef.current.value,
                                     });
                                 }}
                             >
