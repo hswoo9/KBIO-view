@@ -12,6 +12,7 @@ import base64 from 'base64-js';
 import { getSessionItem } from "@/utils/storage";
 import CommonSubMenu from "@/components/CommonSubMenu";
 import CommonEditor from "@/components/CommonEditor";
+import notProfile from "@/assets/images/no_profile.png";
 
 function MemberMyPageModify(props) {
     const navigate = useNavigate();
@@ -192,6 +193,10 @@ function MemberMyPageModify(props) {
                     emailPrefix = emailParts[0];
                     emailDomain = emailParts[1];
                     emailProvider = emailDomain;
+                }
+
+                if (resp.result.cnsltProfileFile) {
+                    setCnsltProfileFile(resp.result.cnsltProfileFile);
                 }
 
                 setMemberDetail({
@@ -621,15 +626,15 @@ function MemberMyPageModify(props) {
                                                 src={
                                                     cnsltProfileFile
                                                         ? `http://133.186.250.158${cnsltProfileFile.atchFilePathNm}/${cnsltProfileFile.strgFileNm}.${cnsltProfileFile.atchFileExtnNm}`
-                                                        : "" // 기본 이미지 (필요한 경우)
+                                                        : notProfile
                                                 }
-                                                alt="컨설턴트사진"
-                                                style={{
-                                                    width: "200px",
-                                                    objectFit: "cover",
+                                                onError={(e) => {
+                                                    e.target.src = notProfile;
                                                 }}
+                                                alt="컨설턴트사진"
                                             />
                                         </div>
+
                                         <div style={{flex: 1}}>
                                             <p style={{color: "#ff4444", fontSize: "14px", marginBottom: "8px"}}>
                                                 - 대표 사진 등록시 상세, 목록, 축소 이미지에 자동 리사이징되어 들어갑니다.
@@ -741,6 +746,7 @@ function MemberMyPageModify(props) {
                                                 type="radio"
                                                 name="cnsltActv"
                                                 value="Y"
+                                                className="signUpRadio"
                                                 checked={consultDetail.cnsltActv === "Y"}
                                                 onChange={() =>
                                                     setConsultDetail({...consultDetail, cnsltActv: "Y"})
@@ -753,6 +759,7 @@ function MemberMyPageModify(props) {
                                                 type="radio"
                                                 name="cnsltActv"
                                                 value="N"
+                                                className="signUpRadio"
                                                 checked={consultDetail.cnsltActv === "N"}
                                                 onChange={() =>
                                                     setConsultDetail({...consultDetail, cnsltActv: "N"})
@@ -805,6 +812,7 @@ function MemberMyPageModify(props) {
                                             id="receive_mail_yes"
                                             name="receive_mail"
                                             value="Y"
+                                            className="signUpRadio"
                                             checked={memberDetail.emlRcptnAgreYn === "Y"}
                                             onChange={handleMailChange}
                                         />
@@ -816,6 +824,7 @@ function MemberMyPageModify(props) {
                                             id="receive_mail_no"
                                             name="receive_mail"
                                             value="N"
+                                            className="signUpRadio"
                                             checked={memberDetail.emlRcptnAgreYn === "N"}
                                             onChange={handleMailChange}
                                         />
@@ -835,6 +844,7 @@ function MemberMyPageModify(props) {
                                             id="receive_sms_yes"
                                             name="receive_sms"
                                             value="Y"
+                                            className="signUpRadio"
                                             checked={memberDetail.smsRcptnAgreYn === "Y"}
                                             onChange={handleSmsChange}
                                         />
@@ -846,6 +856,7 @@ function MemberMyPageModify(props) {
                                             id="receive_sms_no"
                                             name="receive_sms"
                                             value="N"
+                                            className="signUpRadio"
                                             checked={memberDetail.smsRcptnAgreYn === "N"}
                                             onChange={handleSmsChange}
                                         />

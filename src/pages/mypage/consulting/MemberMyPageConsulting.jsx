@@ -41,8 +41,6 @@ function MemberMyPageConsulting(props) {
             cnsltSe : 26,
             startDt : "",
             endDt : "",
-            answerYn: "",
-            dfclMttrFld : "",
             searchType: "",
             searchVal : "",
             userSn: sessionUser?.userSn || "",
@@ -185,10 +183,8 @@ function MemberMyPageConsulting(props) {
                                 <div className="inputBox type1">
                                     <label className="input">
                                         <input type="text"
-                                               name=""
-                                               defaultValue={
-                                                   searchDto && searchDto.searchVal
-                                               }
+                                               name="searchVal"
+                                               defaultValue={searchDto.searchVal}
                                                placeholder=""
                                                ref={searchValRef}
                                                onChange={(e) => {
@@ -200,12 +196,11 @@ function MemberMyPageConsulting(props) {
                                 </div>
                                 <button type="button"
                                         className="searchBtn"
-                                        onClick={() => {
+                                        onClick={(e) => {
+                                            e.preventDefault();
                                             getSimpleList({
                                                 ...searchDto,
                                                 pageIndex: 1,
-                                                searchType: searchTypeRef.current.value,
-                                                searchVal: searchValRef.current.value,
                                             });
                                         }}
                                 >
