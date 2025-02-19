@@ -328,6 +328,7 @@ const SecondRoutes = () => {
 
   const requestUrl = window.location.pathname.split("/")[1];
   return (
+      <WebSocketProvider>
         <div id="wrap" className={requestUrl === "manager" ? "admin" : "user"}>
           {
             requestUrl === "manager" ? (<ManagerTop/>) :
@@ -335,7 +336,6 @@ const SecondRoutes = () => {
             requestUrl === "commonError" ? "" : (<EgovHeaderUser/>)
           }
 
-          <WebSocketProvider>
             <Routes>
               {/* MAIN */}
               <Route path={URL.MAIN} element={<EgovMainUser/>}/>
@@ -864,7 +864,7 @@ const SecondRoutes = () => {
 
               <Route path={URL.COMMON_ERROR} element={<CommonError/>}/>
             </Routes>
-          </WebSocketProvider>
+
 
           {
             requestUrl === "manager" ? "" :
@@ -872,6 +872,7 @@ const SecondRoutes = () => {
             requestUrl === "commonError" ? "" :  (<EgovFooterUser/>)
           }
         </div>
+      </WebSocketProvider>
   );
 };
 

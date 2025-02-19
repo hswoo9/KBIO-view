@@ -48,8 +48,9 @@ function EgovHeader() {
         removeSessionItem("loginUser");
         removeSessionItem("jToken");
         removeSessionItem("userSn");
-        Swal.fire("로그아웃되었습니다!");
-        navigate(URL.MAIN);
+        // Swal.fire("로그아웃되었습니다!");
+        // navigate(URL.MAIN);
+        window.location.href = "/";
       }
     });
   };

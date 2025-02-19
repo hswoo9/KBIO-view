@@ -1,7 +1,9 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import SockJS from 'sockjs-client';
 import Swal from "sweetalert2";
+import * as EgovNet from "@/api/egovFetch";
 import {getSessionItem} from "./storage.js";
+import {getUserMsgList} from "../components/CommonComponents.jsx";
 
 const WebSocketContext = createContext();
 
@@ -9,7 +11,8 @@ export const WebSocketProvider = ({ children }) => {
   const sessionUserSn = getSessionItem("loginUser") == null ? null : getSessionItem("loginUser").userSn;
   const [socket, setSocket] = useState(null);  // WebSocket 상태
   const [isConnected, setIsConnected] = useState(false); // 연결 상태
-  const [notifications, setNotifications] = useState([]);
+  const [notification, setNotification] = useState([]);
+  const [userMsgList, setUserMsgList] = useState([]);
   const connectWebSocket = () => {
     if (!sessionUserSn) return;
 
@@ -26,35 +29,37 @@ export const WebSocketProvider = ({ children }) => {
     };
 
     socketInstance.onmessage = (e) => {
-      const notification = JSON.parse(e.data);
-      setNotifications((prev) => [...prev, notification]);
-      alert(
-          "알림왔습니다.\n" +
-          "제목 : " +
-          notification.msgTtl +
-          "\n" +
-          "내용 : " +
-          notification.msgCn
-      );
+      setNotification(JSON.parse(e.data));
+      getUserMsgList(sessionUserSn).then((data) => {
+        setUserMsgList(data)
+      })
     };
 
     setSocket(socketInstance);
   }
 
-    useEffect(() => {
-      connectWebSocket();
+  useEffect(() => {
+    connectWebSocket();
 
-      return () => {
-        if (socket) {
-          socket.close();
-        }
-      };
+    return () => {
+      if (socket) {
+        socket.close();
+      }
+    };
   }, []); // 컴포넌트가 마운트될 때만 실행
 
+  useEffect(() => {
+    if (sessionUserSn){
+      getUserMsgList(sessionUserSn).then((data) => {
+        setUserMsgList(data)
+      })
+    }
+  }, []);
+
   return (
-      <WebSocketContext.Provider value={{ socket, notifications, isConnected }}>
-        {children}
-      </WebSocketContext.Provider>
+    <WebSocketContext.Provider value={{ socket, notification, userMsgList, setUserMsgList,isConnected }}>
+      {children}
+    </WebSocketContext.Provider>
   );
 };
 
@@ -90,3 +95,4 @@ export const sendMessageFn = (sock, sendType, dsptchUserSn, rcptnUserSn, msgTtl,
     console.log('WebSocket 연결이 열려 있지 않습니다.');
   }
 };
+

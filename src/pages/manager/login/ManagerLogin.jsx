@@ -119,7 +119,7 @@ function ManagerLogin(props) {
         setSessionItem("userSn", resp.result.userSn);
         //if (saveIDFlag) setLocalItem(KEY_ID, resultVO?.id);
         if (saveIDFlag) setLocalItem(KEY_ID, resp.result.userId);
-        Swal.fire("로그인 성공");
+        // Swal.fire("로그인 성공");
         document.getElementById("commonTop").style.display = "flex";
         navigate(URL.MANAGER);
       }

@@ -134,3 +134,6 @@
 @media screen and (max-width: 768px) {
     .main .sec01 .bg img {transform: scale(10.05);}
 }
+
+header .hInner .hTop .alarmWrap.click .close {position: absolute; right:  0; z-index: 10; width: 36px; margin-top: 5px; height: 24px; cursor: pointer;}
+header .hInner .hTop .alarmWrap.click .close .icon {height: 100%; background: url(../../assets/images/ico_close.svg) no-repeat center / contain;}
