@@ -13,6 +13,7 @@ function RelatedList() {
     const navigate = useNavigate();
     const userSn = getSessionItem("userSn");
     const [paginationInfo, setPaginationInfo] = useState({});
+    const [selectedOption, setSelectedOption] = useState("");
     const [relatedList, setAuthorityList] = useState([]);
     const [searchDto, setSearchDto] = useState({
         category: "",
@@ -20,6 +21,13 @@ function RelatedList() {
         keyword: "",
         pageIndex: 1,
     });
+
+    const activeEnter = (e) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            getRelatedList(searchDto);
+        }
+    };
 
     const getRelatedList = useCallback(
         (searchDto) => {
@@ -109,8 +117,12 @@ function RelatedList() {
     }, []);
 
     const handleSearch = () => {
-        setSearchDto({...searchDto, pageIndex: 1});
-        getRelatedList(searchDto);
+
+        setSearchDto((prev) => {
+            const updatedSearchDto = { ...prev, [selectedOption]: prev[selectedOption] || "" , pageIndex: 1  };
+            getRelatedList(updatedSearchDto); // 여기서 검색 실행
+            return updatedSearchDto;
+        });
     };
 
     return (
@@ -125,7 +137,7 @@ function RelatedList() {
                                 </div>
                             </div>
                             <div className="searchBox">
-                                <div className="itemBox type2">
+                                {/* <div className="itemBox type2">
                                     <select
                                         className="niceSelectCustom"
                                         onChange={(e) => setSearchDto({...searchDto, category: e.target.value})}
@@ -134,16 +146,23 @@ function RelatedList() {
                                         <option value="Y">사용</option>
                                         <option value="N">미사용</option>
                                     </select>
-                                </div>
+                                </div>*/}
                                 <div className="itemBox type2">
-                                    <select
-                                        className="niceSelectCustom"
-                                        onChange={(e) => setSearchDto({...searchDto, keywordType: e.target.value})}
-                                    >
-                                        <option value="">전체</option>
-                                        <option value="1">성명</option>
-                                        <option value="2">소속</option>
-                                        <option value="3">직위</option>
+                                    <select className="niceSelectCustom" onChange={(e) => {
+                                        const value = e.target.value;
+                                        const optionMap = {
+                                            "0": "",
+                                            "1": "relInstNm",
+                                            "2": "rpsvNm",
+                                            //추가되면 아래로 더 추가
+                                        };
+
+                                        setSelectedOption(optionMap[value] || "");
+                                        setSearchDto(prev => ({...prev, [optionMap[value] || ""]: ""}));
+                                    }}>
+                                        <option value="0">전체</option>
+                                        <option value="1">기업명</option>
+                                        <option value="2">대표자</option>
                                     </select>
                                 </div>
                                 <div className="inputBox type1">
@@ -153,13 +172,20 @@ function RelatedList() {
                                             id="board_search"
                                             name="board_search"
                                             placeholder="검색어를 입력해주세요."
-                                            onChange={(e) => setSearchDto({...searchDto, keyword: e.target.value})}
+                                            value={searchDto[selectedOption] || ""}
+                                            onChange={(e) => {
+                                                setSearchDto({...searchDto, [selectedOption]: e.target.value});
+                                            }}
+                                            onKeyDown={activeEnter}
                                         />
                                     </label>
                                 </div>
-                                <button type="button" className="searchBtn" onClick={handleSearch}>
-                                    <div className="icon"></div>
-                                </button>
+                                <div className="rightBtn">
+                                    <button type="button" className="searchBtn btn btn1 point"
+                                            onClick={handleSearch}>
+                                        <div className="icon"></div>
+                                    </button>
+                                </div>
                             </div>
                         </form>
                     </div>
