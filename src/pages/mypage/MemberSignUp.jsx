@@ -291,7 +291,6 @@ function MemberSignUp(props) {
     console.log("acbges",acbges);
     console.log("selectedAcbgFiles",selectedAcbgFiles);
 
-    debugger
     return;
   }
 
@@ -1524,13 +1523,39 @@ function MemberSignUp(props) {
                     </li>
 
                     <li className="inputBox type2">
-                      <span className="tt1">한줄소개</span>
+                      <span className="tt1">간략 소개</span>
                       <label className="input">
-                        <input
-                            type="text"
+                        {/*<input
+                            type="textarea"
                             name="consultantAffiliation"
                             placeholder="한줄 소개를 입력해주세요"
-                        />
+                            value={memberDetail.rmrkCn || ""}
+                            onChange={(e) => setMemberDetail({
+                              ...memberDetail,
+                              rmrkCn: e.target.value
+                            })}
+                        />*/}
+                        <textarea
+                            style={{height:"100px"}}
+                            name="consultantAffiliation"
+                            placeholder="최대 3줄, 100자 이내만 입력 가능합니다."
+                            value={memberDetail.rmrkCn || ""}
+                            maxLength={100}
+                            onChange={(e) => {
+                              let value = e.target.value;
+                              const lines = value.split("\n");
+                              if (lines.length > 3) {
+                                value = lines.slice(0, 3).join("\n");
+                              }
+                              setMemberDetail({
+                                ...memberDetail,
+                                rmrkCn: value,
+                              });
+                            }}
+                        ></textarea>
+                        <div style={{ textAlign: "right", fontSize: "0.9em", color: "#666" }}>
+                          {(memberDetail.rmrkCn || "").length} / 100
+                        </div>
                       </label>
                     </li>
 

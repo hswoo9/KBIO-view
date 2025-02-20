@@ -103,15 +103,22 @@ function ConsultantList(props) {
                              <li key={item.tblUser.userSn}>
                                  <div className="profileBox">
                                      <div className="textBox">
-                                         <div className="departBox cate4">
+                                         <div className={`departBox cate${parseInt(item.tblCnslttMbr.cnsltFld, 10) - 100}`}>
                                              <div className="icon"></div>
-                                             <p className="text">분류</p>
+                                             <p className="text">{item.cnsltFldNm}</p>
                                          </div>
                                          <div className="nameBox">
                                              <strong className="name">{item.tblUser.kornFlnm}</strong>
                                              <p className="company">{item.tblCnslttMbr.ogdpNm} ({item.tblCnslttMbr.jbpsNm})</p>
                                          </div>
-                                         <p className="intro">소개글</p>
+                                         <p
+                                             className="intro"
+                                             style={{height:"70px"}}
+                                             dangerouslySetInnerHTML={{
+                                                 __html: (item.tblCnslttMbr.rmrkCn || "").replace(/\n/g, "<br>")
+                                             }}
+                                         ></p>
+
                                      </div>
                                      <figure className="imgBox customFigure">
                                          <img
@@ -250,9 +257,13 @@ function ConsultantList(props) {
                             name="cnsltFld"
                             key="all"
                             value=""
-                            onChange={(e) =>
+                            onChange={(e) =>{
                                 setSearchDto({...searchDto, cnsltFld: ""})
-                            }
+                                getConsultantList({
+                                    ...searchDto,
+                                    cnsltFld : ""
+                                });
+                            }}
                         />
                         <small>전체</small>
                     </label>
@@ -267,9 +278,14 @@ function ConsultantList(props) {
                                 name="cnsltFld"
                                 key={item.comCd}
                                 value={item.comCd}
-                                onChange={(e) =>
+                                onChange={(e) =>{
+                                    const newValue = e.target.value;
                                     setSearchDto({...searchDto, cnsltFld: e.target.value})
-                                }
+                                    getConsultantList({
+                                       ...searchDto,
+                                       cnsltFld : newValue
+                                    });
+                                }}
                             />
                             <div className="icon"></div>
                             <small>{item.comCdNm}</small>
