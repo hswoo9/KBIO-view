@@ -251,7 +251,7 @@ function ManagerTop() {
             </ul>
           </div>
           <div className="rightBox">
-            <p className="tt1">{sessionUserName}님, 안녕하세요</p>
+            <p className="tt1">{sessionUserName}</p>
             <button type="button" className="logoutBtn" onClick={logOutHandler}><span>로그아웃</span>
               <div className="icon"></div>
             </button>
