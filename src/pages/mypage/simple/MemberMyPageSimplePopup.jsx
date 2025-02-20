@@ -22,7 +22,7 @@ function MemberMyPageSimplePopup() {
     const acceptFileTypes = 'pdf,hwp,docx,xls,xlsx,ppt';
 
     const onDrop = useCallback((acceptedFiles) => {
-        const allowedExtensions = acceptFileTypes.split(','); // 허용된 확장자 목록
+        const allowedExtensions = acceptFileTypes.split(',');
         const validFiles = acceptedFiles.filter((file) => {
             const fileExtension = file.name.split(".").pop().toLowerCase();
             return allowedExtensions.includes(fileExtension);
@@ -83,26 +83,19 @@ function MemberMyPageSimplePopup() {
 
     useEffect(() => {
         const item = JSON.parse(localStorage.getItem('popupData'));
+        console.log(item)
         if (item) {
-            if (item.mode === CODE.MODE_CREATE) {
-                setSimplePopupModify({
-                    content: '',
-                    simpleFiles: [],
-                    cn: ''
-                });
-            } else {
                 setSimplePopupModify({
                     ...item,
                     content: item.cn || '',
-                    simpleFiles: item.simpleFiles || [],
+                    simpleFiles: item.simpleFiles,
                 });
 
-                // 파일 리스트가 존재하면 기존 파일을 fileList에 넣어줌
-                if (item.simpleFiles && item.simpleFiles.length > 0) {
+                /*if (item.simpleFiles && item.simpleFiles.length > 0) {
                     setFileList(item.simpleFiles);
-                }
+                }*/
             }
-        }
+
     }, []);
 
     const handleChange = (e) => {
@@ -171,8 +164,8 @@ function MemberMyPageSimplePopup() {
             </div>
 
             {/* 첨부파일 */}
-            <div style={{ marginBottom: "15px" }}>
-                <label style={{ fontWeight: "bold" }}>첨부파일</label>
+            <div style={{marginBottom: "15px"}}>
+                <label style={{fontWeight: "bold"}}>첨부파일</label>
                 <div {...getRootProps({
                     style: {
                         border: "2px dashed #cccccc",
@@ -186,20 +179,20 @@ function MemberMyPageSimplePopup() {
                 </div>
 
                 {simplePopupModify.simpleFiles.length > 0 && (
-                    <ul style={{ paddingLeft: "20px" }}>
+                    <ul style={{marginBottom: "20px"}}>
                         {simplePopupModify.simpleFiles.map((file, index) => {
                             const fileSize = Number(file.atchFileSz); // 숫자로 변환
                             return (
-                                <li key={index} style={{ marginBottom: "5px" }}>
+                                <li key={index} style={{marginBottom: "5px"}}>
                                     <span
                                         onClick={() => fileDownLoad(file.atchFileSn, file.atchFileNm)}
-                                        style={{ cursor: "pointer" }}
+                                        style={{cursor: "pointer"}}
                                     >
                                         {file.atchFileNm} - {(fileSize && fileSize > 0) ? (fileSize / 1024).toFixed(2) : '0.00'} KB
                                     </span>
                                     <button
-                                        onClick={() => setFileDel(file.atchFileSn)} // 삭제 버튼 클릭 시 처리할 함수
-                                        style={{ marginLeft: '10px', color: 'red' }}
+                                        onClick={() => setFileDel(file.atchFileSn)}
+                                        style={{marginLeft: '10px', color: 'red'}}
                                     >
                                         삭제
                                     </button>
@@ -208,7 +201,23 @@ function MemberMyPageSimplePopup() {
                         })}
                     </ul>
                 )}
-                
+                {fileList.length > 0 && (
+                    <ul>
+                        {fileList.map((file, index) => (
+                            <li key={index}>
+                                {file.name} - {(file.size / 1024).toFixed(2)} KB
+
+                                <button
+                                    onClick={() => handleDeleteFile(index)}
+                                    style={{marginLeft: '10px', color: 'red'}}
+                                >
+                                    삭제
+                                </button>
+                            </li>
+                        ))}
+                    </ul>
+                )}
+                <span className="warningText"></span>
             </div>
 
             <button onClick={handleSave} style={{

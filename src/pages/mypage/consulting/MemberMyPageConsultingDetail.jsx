@@ -74,6 +74,7 @@ function MemberMyPageConsultingDetail(props) {
                         if (index === 0) dataList =[];
 
                         const files = resp.result.filesByDsctnSn[item.cnsltDsctnSn] || [];
+                        item.simpleFiles = files
 
                         const isLatest = item.cnsltAplySn === latestItem.cnsltAplySn;
                         const isOwnComment = item.creatrSn === sessionUser.userSn;
@@ -252,14 +253,7 @@ function MemberMyPageConsultingDetail(props) {
     }
 
     const handleEditClick = (item) => {
-
-        const files = filesByDsctnSn[item.cnsltDsctnSn] || [];
-        const popupData = {
-            ...item,
-            simpleFiles: files
-        };
-
-        localStorage.setItem('popupData', JSON.stringify(popupData));
+        localStorage.setItem('popupData', JSON.stringify(item));
         window.open(`/popup/simple`, "_blank", "width=800,height=530");
     };
 
