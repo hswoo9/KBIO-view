@@ -30,7 +30,7 @@ const MemberSignupChoice = () => {
 
                 {/* Layout */}
                 <div className="boxWrap">
-                    <div className="box box01" data-aos="fade-left" data-aos-duration="1500">
+                    <div className="box box01" data-aos="fade-right" data-aos-duration="1500">
                         <strong className="tt1">홈페이지 회원</strong>
                         <p className="tt2">K-바이오 랩허브 홈페이지 회원으로 <br/>가입신청을 진행합니다</p>
                         <button
