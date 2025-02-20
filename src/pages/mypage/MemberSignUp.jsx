@@ -231,8 +231,8 @@ function MemberSignUp(props) {
 
       if(allowedExtensions.includes(fileExtension)){
         let fileName = e.target.files[0].name;
-        if(fileName.length > 30){
-          fileName = fileName.slice(0, 30) + "...";
+        if(fileName.length > 10){
+          fileName = fileName.slice(0, 10) + "...";
         }
         if(document.getElementById(id + index)){
           document.getElementById(id + index).textContent = fileName;
