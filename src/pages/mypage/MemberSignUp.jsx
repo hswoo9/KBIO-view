@@ -1599,10 +1599,10 @@ function MemberSignUp(props) {
                       <div className="input" style={{height: "100%"}}>
                         <div style={{display: "flex", flexDirection: "column", gap: "10px"}}>
                           <div className="certificate-header">
-                            <span className="">자격증명</span>
-                            <span className="">발급기관</span>
-                            <span className="">취득일</span>
-                            <span className="">파일 업로드</span>
+                            <span className="widthGroup29">자격증명</span>
+                            <span className="widthGroup29">발급기관</span>
+                            <span className="widthGroup29">취득일</span>
+                            <span className="widthGroup29">파일 업로드</span>
                           </div>
                           {certificates.map((cert,index) => (
                               <div
@@ -1618,8 +1618,7 @@ function MemberSignUp(props) {
                                     type="text"
                                     name="qlfcLcnsNm"
                                     placeholder="자격증명을 입력하세요"
-                                    className="f_input2"
-                                    style={{width: "29%"}}
+                                    className="f_input2 widthGroup29"
                                     value={cert.qlfcLcnsNm}
                                     onChange={(e) => handleInputChange(e, cert.id , "cert" , "qlfcLcnsNm")}
                                 />
@@ -1627,8 +1626,7 @@ function MemberSignUp(props) {
                                     type="text"
                                     name="pblcnInstNm"
                                     placeholder="발급기관을 입력하세요"
-                                    className="f_input2"
-                                    style={{width: "29%"}}
+                                    className="f_input2 widthGroup29"
                                     value={cert.pblcnInstNm}
                                     onChange={(e) => handleInputChange(e, cert.id , "cert" , "pblcnInstNm")}
                                 />
@@ -1636,8 +1634,7 @@ function MemberSignUp(props) {
                                     type="date"
                                     name="acqsYmd"
                                     placeholder="취득일"
-                                    className="f_input2 "
-                                    style={{width: "29%"}}
+                                    className="f_input2 widthGroup29"
                                     value={formatDate(cert.acqsYmd)}
                                     onChange={(e) => handleInputChange(e, cert.id , "cert" , "acqsYmd")}
                                 />
@@ -1646,9 +1643,8 @@ function MemberSignUp(props) {
                                     display: "flex",
                                     alignItems: "center",
                                     gap: "10px",
-                                    width: "29%"
                                   }}
-                                  className=""
+                                  className="widthGroup29"
                                 >
                                   <p className="file_name" id={`cert${index}`} style={{width: "50%"}}></p>
                                   <label className="fileLabel">파일 선택
@@ -1685,10 +1681,10 @@ function MemberSignUp(props) {
                       <div className="input" style={{height: "100%"}}>
                         <div style={{display: "flex", flexDirection: "column", gap: "10px"}}>
                           <div className="certificate-header">
-                            <span>근무처</span>
-                            <span>직위</span>
-                            <span>근무기간</span>
-                            <span>파일 업로드</span>
+                            <span className="widthGroup29">근무처</span>
+                            <span className="widthGroup29">직위</span>
+                            <span className="widthGroup29">근무기간</span>
+                            <span className="widthGroup29">파일 업로드</span>
                           </div>
                           {careers.map((career,index) => (
                               <div
@@ -1704,8 +1700,7 @@ function MemberSignUp(props) {
                                     type="text"
                                     name="ogdpCoNm"
                                     placeholder="근무처를 입력하세요"
-                                    className="f_input2"
-                                    style={{width: "29%"}}
+                                    className="f_input2 widthGroup29"
                                     value={career.ogdpCoNm}
                                     onChange={(e) => handleInputChange(e, career.id, "career", "ogdpCoNm")}
                                 />
@@ -1713,36 +1708,38 @@ function MemberSignUp(props) {
                                     type="text"
                                     name="ogdpJbpsNm"
                                     placeholder="직위를 입력하세요"
-                                    className="f_input2"
-                                    style={{width: "29%"}}
+                                    className="f_input2 widthGroup29"
                                     value={career.ogdpJbpsNm}
                                     onChange={(e) => handleInputChange(e, career.id, "career", "ogdpJbpsNm")}
                                 />
-                                <input
-                                    type="date"
-                                    name="jncmpYmd"
-                                    placeholder="입사일자"
-                                    className="f_input2"
-                                    style={{width: "14%"}}
-                                    value={formatDate(career.jncmpYmd)}
-                                    onChange={(e) => handleInputChange(e, career.id, "career", "jncmpYmd")}
-                                />~&nbsp;
-                                <input
-                                    type="date"
-                                    name="rsgntnYmd"
-                                    placeholder="퇴사일자"
-                                    className="f_input2"
-                                    style={{width: "14%"}}
-                                    value={formatDate(career.rsgntnYmd)}
-                                    onChange={(e) => handleInputChange(e, career.id, "career", "rsgntnYmd")}
-                                />
+                                <div
+                                    className="widthGroup29"
+                                >
+                                  <input
+                                      type="date"
+                                      name="jncmpYmd"
+                                      placeholder="입사일자"
+                                      className="f_input2 widthGroup45"
+                                      value={formatDate(career.jncmpYmd)}
+                                      onChange={(e) => handleInputChange(e, career.id, "career", "jncmpYmd")}
+                                  />~&nbsp;
+                                  <input
+                                      type="date"
+                                      name="rsgntnYmd"
+                                      placeholder="퇴사일자"
+                                      className="f_input2 widthGroup45"
+                                      value={formatDate(career.rsgntnYmd)}
+                                      onChange={(e) => handleInputChange(e, career.id, "career", "rsgntnYmd")}
+                                  />
+                                </div>
+
                                 <div
                                     style={{
                                       display: "flex",
                                       alignItems: "center",
                                       gap: "10px",
-                                      width: "29%"
                                     }}
+                                    className="widthGroup29"
                                 >
                                   <p className="file_name" id={`career${index}`} style={{width: "50%"}}></p>
                                   <label className="fileLabel">파일 선택
@@ -1780,12 +1777,12 @@ function MemberSignUp(props) {
                       <div className="input" style={{height: "100%"}}>
                         <div style={{display: "flex", flexDirection: "column", gap: "10px"}}>
                           <div className="certificate-header">
-                            <span>학교명</span>
-                            <span>학과</span>
-                            <span>전공</span>
-                            <span>학위</span>
-                            <span>졸업일자</span>
-                            <span>파일 업로드</span>
+                            <span className="widthGroup29">학교명</span>
+                            <span className="widthGroup29">학과</span>
+                            <span className="widthGroup29">전공</span>
+                            <span className="widthGroup29">학위</span>
+                            <span className="widthGroup29">졸업일자</span>
+                            <span className="widthGroup29">파일 업로드</span>
                           </div>
                           {acbges.map((acbg, index) => (
                               <div
@@ -1801,8 +1798,7 @@ function MemberSignUp(props) {
                                     type="text"
                                     name="schlNm"
                                     placeholder="학교명을 입력하세요"
-                                    className="f_input2"
-                                    style={{ width: "29%" }}
+                                    className="f_input2 widthGroup29"
                                     value={acbg.schlNm}
                                     onChange={(e) => handleInputChange(e, acbg.id , "acbg" , "schlNm")}
                                 />
@@ -1810,8 +1806,7 @@ function MemberSignUp(props) {
                                     type="text"
                                     name="scsbjtNm"
                                     placeholder="학과를 입력하세요"
-                                    className="f_input2"
-                                    style={{ width: "29%" }}
+                                    className="f_input2 widthGroup29"
                                     value={acbg.scsbjtNm}
                                     onChange={(e) => handleInputChange(e, acbg.id , "acbg" , "scsbjtNm")}
                                 />
@@ -1819,8 +1814,7 @@ function MemberSignUp(props) {
                                     type="text"
                                     name="mjrNm"
                                     placeholder="전공을 입력하세요"
-                                    className="f_input2"
-                                    style={{ width: "29%" }}
+                                    className="f_input2 widthGroup29"
                                     value={acbg.mjrNm}
                                     onChange={(e) => handleInputChange(e, acbg.id , "acbg" , "mjrNm")}
                                 />
@@ -1828,8 +1822,7 @@ function MemberSignUp(props) {
                                     type="text"
                                     name="dgrNm"
                                     placeholder="학위를 입력하세요"
-                                    className="f_input2"
-                                    style={{ width: "29%" }}
+                                    className="f_input2 widthGroup29"
                                     value={acbg.dgrNm}
                                     onChange={(e) => handleInputChange(e, acbg.id , "acbg" , "dgrNm")}
                                 />
@@ -1837,8 +1830,7 @@ function MemberSignUp(props) {
                                     type="date"
                                     name="grdtnYmd"
                                     placeholder="졸업일자"
-                                    className="f_input2"
-                                    style={{ width: "29%" }}
+                                    className="f_input2 widthGroup29"
                                     value={formatDate(acbg.grdtnYmd)}
                                     onChange={(e) => handleInputChange(e, acbg.id , "acbg" , "grdtnYmd")}
                                 />
@@ -1847,8 +1839,8 @@ function MemberSignUp(props) {
                                       display: "flex",
                                       alignItems: "center",
                                       gap: "10px",
-                                      width: "29%"
                                     }}
+                                    className="widthGroup29"
                                 >
                                   <p className="file_name" id={`acbg${index}`} style={{width: "50%"}}></p>
                                   <label className="fileLabel">파일 선택
