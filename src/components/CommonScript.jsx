@@ -4,7 +4,6 @@
  */
 export function openModal(className) {
     const element = document.querySelector("." + className);
-    console.log(element);
     if(element){
         const htmlElement = document.querySelector("html");
         const bodyElement = document.querySelector("body");
@@ -24,7 +23,6 @@ export function openModal(className) {
  */
 export function closeModal(className) {
     const element = document.querySelector("." + className);
-    console.log(element);
     if(element){
         const htmlElement = document.querySelector("html");
         const bodyElement = document.querySelector("body");

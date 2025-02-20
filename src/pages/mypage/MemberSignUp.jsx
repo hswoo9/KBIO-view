@@ -18,7 +18,6 @@ function MemberSignUp(props) {
   const checkRef = useRef([]);
   const signupType = location.state?.signupType;
 
-  console.log("EgovMypageEdit [location] : ", location);
   //const uniqId = location.state?.uniqId || "";
   const [modeInfo, setModeInfo] = useState({ mode: props.mode });
   //const [memberDetail, setMemberDetail] = useState({});
@@ -41,12 +40,6 @@ function MemberSignUp(props) {
     script.async = true;
 
     script.onload = () => {
-      console.log("카카오 주소 검색 API가 로드되었습니다.");
-
-      // 여기서 type 콘솔에 찍기
-      if (location.state?.signupType) {
-        console.log("Signup Type: ", location.state.signupType);
-      }
     };
 
     document.body.appendChild(script);
@@ -180,7 +173,6 @@ function MemberSignUp(props) {
           updatedFiles[num - 1] = file; // 배열의 인덱스를 이용해 해당 자격증 파일을 추가
           return updatedFiles;
         });
-        console.log("Selected Files:", Array.from(e.target.files));
       }else{
         Swal.fire({
           title: "허용되지 않은 확장자입니다.",
@@ -261,7 +253,6 @@ function MemberSignUp(props) {
       await EgovNet.requestFetch(checkBusinessURL, reqOptions, async function (resp) {
         if (resp.resultCode === 200) {
           const businessData = resp.result.businessData;
-          console.log("로컬 데이터:", businessData);
           Swal.fire({
             text: "해당 기업은 K-바이오 랩허브 입주기업입니다.",
           });
@@ -304,7 +295,6 @@ function MemberSignUp(props) {
               });
 
               const businessData = response.data[0];
-              console.log("공공포털 데이터:", businessData);
 
               const businessStatus = response.data.data[0]?.b_stt_cd;
 
@@ -326,7 +316,6 @@ function MemberSignUp(props) {
                 });
               }
             } catch (error) {
-              console.error("공공 API 요청 실패:", error);
               Swal.fire({
                 text: "공공 API 요청 중 문제가 발생했습니다.",
               });
@@ -338,13 +327,11 @@ function MemberSignUp(props) {
           });
         }
       }, function (error) {
-        console.error("로컬 데이터 요청 실패:", error);
         Swal.fire({
           text: "로컬 데이터 요청 중 문제가 발생했습니다.",
         });
       });
     } catch (error) {
-      console.error("에러 발생:", error);
       Swal.fire({
         text: "오류가 발생했습니다.",
       });
@@ -421,8 +408,6 @@ function MemberSignUp(props) {
             snsId: location.state.snsId,
           });
         }
-        console.log("snsType:", location.state.snsType);
-        console.log("snsId:", location.state.snsId);
       }
 
       return;
@@ -598,16 +583,6 @@ function MemberSignUp(props) {
        */
       formData.append("userInfo", JSON.stringify(memberDetail));
 
-      console.log("Selected Files:", selectedFiles);
-      console.log("Selected Image Files:", selectedImgFile);
-
-
-      if(formData != null) {
-          for (let [key, value] of formData.entries()) {
-            console.log(`${key}:`, value);
-          }
-      }
-
       const reqOptions = {
         method: "POST",
         /*headers: {
@@ -620,9 +595,6 @@ function MemberSignUp(props) {
       };
 
       EgovNet.requestFetch(insertMemURL, reqOptions, (resp)=> {
-        console.log("Result Code:", resp.resultCode);
-        console.log("Expected Code:", CODE.RCV_SUCCESS);
-
         if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
           setMemberDetail({
             ...memberDetail,
@@ -644,9 +616,6 @@ function MemberSignUp(props) {
     initMode();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  console.log("------------------------------EgovMypageEdit [End]");
-  console.groupEnd("EgovMypageEdit");
 
   return (
       <div id="container" className="container join_step step2">

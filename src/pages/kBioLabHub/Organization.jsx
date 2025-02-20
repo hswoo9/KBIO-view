@@ -99,7 +99,7 @@ function KBioLabHub(props) {
               setOrgchtList(dataList);
             },
             function (resp) {
-              console.log("err response : ", resp);
+
             }
         )
       },

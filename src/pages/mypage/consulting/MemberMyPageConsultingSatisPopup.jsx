@@ -16,9 +16,6 @@ function MemberMyPageSimpleStaisPopup() {
     const sessionUser = getSessionItem("loginUser");
     const [isDataLoaded, setIsDataLoaded] = useState(false);
 
-    console.log("받은 cnsltAplySn:", cnsltAplySn);
-    console.log("sessionUser :", sessionUser);
-
     const [ratings, setRatings] = useState({
         전문성: 0,
         응답성: 0,
@@ -40,8 +37,6 @@ function MemberMyPageSimpleStaisPopup() {
         };
 
         EgovNet.requestFetch(getSatisPopupURL, requestOptions, function (resp) {
-            console.log("서버 응답:", resp);
-
             if (!resp || !resp.result || !resp.result.ratings) return;
 
             const resultArray = resp.result.ratings;
@@ -70,7 +65,6 @@ function MemberMyPageSimpleStaisPopup() {
     };
 
     useEffect(() => {
-        console.log("업데이트된 ratings:", ratings);
     }, [ratings]);
 
 
@@ -118,7 +112,6 @@ function MemberMyPageSimpleStaisPopup() {
                     window.close();
 
                 } catch (error) {
-                    console.error("Error:", error);
                     Swal.fire({
                         title: "등록에 실패했습니다.",
                         icon: "error",

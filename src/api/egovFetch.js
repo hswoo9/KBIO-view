@@ -11,9 +11,6 @@ export function getQueryString(params) {
 }
 
 export function requestFetch(url, requestOptions, handler, errorHandler) {
-  console.groupCollapsed("requestFetch");
-  console.log("requestFetch [URL] : ", SERVER_URL + url);
-  console.log("requestFetch [requestOption] : ", requestOptions);
 
   // Login 했을경우 JWT 설정
   const sessionUser = getSessionItem("loginUser");
@@ -39,7 +36,6 @@ export function requestFetch(url, requestOptions, handler, errorHandler) {
   fetch(SERVER_URL + url, requestOptions)
     .then((response) => {
       // response Stream. Not completion object
-      //console.log("requestFetch [Response Stream] ", response);
       return response.json();
     })
     .then((resp) => {
@@ -53,17 +49,13 @@ export function requestFetch(url, requestOptions, handler, errorHandler) {
       }
     })
     .then((resp) => {
-      console.groupCollapsed("requestFetch.then()");
-      console.log("requestFetch [response] ", resp);
       if (typeof handler === "function") {
         handler(resp);
       } else {
-        console.log("egov fetch handler not assigned!");
+
       }
-      console.groupEnd("requestFetch.then()");
     })
     .catch((error) => {
-      console.error("There was an error!", error);
       if (error === "TypeError: Failed to fetch") {
         alert("서버와의 연결이 원활하지 않습니다. 서버를 확인하세요.");
       }
@@ -71,12 +63,9 @@ export function requestFetch(url, requestOptions, handler, errorHandler) {
       if (typeof errorHandler === "function") {
         errorHandler(error);
       } else {
-        console.error("egov error handler not assigned!");
         alert("ERR : " + error.message);
       }
     })
     .finally(() => {
-      console.log("requestFetch finally end");
-      console.groupEnd("requestFetch");
     });
 }

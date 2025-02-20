@@ -122,7 +122,7 @@ const MainSwiper = ({data}) => {
                     setAuthorityList(dataList);
                 },
                 (resp) => {
-                    console.log("err response : ", resp);
+
                 }
             );
         }, [searchCondition]);

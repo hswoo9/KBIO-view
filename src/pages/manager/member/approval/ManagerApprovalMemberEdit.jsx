@@ -175,9 +175,6 @@ function setApprovalMember(props) {
         initMode();
     }, []);
 
-    console.log("------------------------------EgovAdminMemberEdit [End]");
-    console.groupEnd("EgovAdminMemberEdit");
-
     return (
         <div id="container" className="container layout cms">
             <ManagerLeft/>

@@ -91,7 +91,7 @@ function OperationalRelatedMember(props) {
 
                 },
                 function (resp) {
-                    console.log("err response : ", resp);
+
                 }
             )
 

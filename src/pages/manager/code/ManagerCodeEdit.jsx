@@ -26,7 +26,6 @@ function ManagerCodeEdit(props) {
 
   const [cdDetail, setCdDetail] = useState({});
   useEffect(() => {
-    console.log(cdDetail);
   }, [cdDetail]);
 
   const [saveEvent, setSaveEvent] = useState({});

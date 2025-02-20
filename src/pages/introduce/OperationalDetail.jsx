@@ -32,7 +32,7 @@ function OperationalDetail() {
                 setOperationalDetail(resp.result.operational);
             },
             (error) => {
-                console.error("Error fetching operational detail:", error);
+
             }
         );
     };

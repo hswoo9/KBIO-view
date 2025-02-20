@@ -18,7 +18,6 @@ import { getSessionItem } from "@/utils/storage";
 
 function ManagerCodeGroup(props) {
     const location = useLocation();
-    console.log(location);
     const sessionUser = getSessionItem("loginUser");
     const [searchCondition, setSearchCondition] = useState(
         location.state?.searchCondition || {
@@ -87,7 +86,6 @@ function ManagerCodeGroup(props) {
                 //취소
             }
         });
-        console.log(comCdSn);
     }
 
     const delCdGroupData = useCallback(
@@ -184,7 +182,7 @@ function ManagerCodeGroup(props) {
                     setCodeList(dataList);
                 },
                 function (resp) {
-                    console.log("err response : ", resp);
+
                 }
             )
         },

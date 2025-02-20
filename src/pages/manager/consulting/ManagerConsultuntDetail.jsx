@@ -36,7 +36,6 @@ function ManagerConsultuntDetail(props) {
     };
 
     const setCnslttMbrActv = (e) =>{
-        console.log("수정된 consultantDetail",consultantDetail);
         const setCnslttMbrActvUrl = "/consultingApi/setCnslttMbrActv";
 
         const updatedConsultant = { ...consultantDetail};
@@ -58,8 +57,6 @@ function ManagerConsultuntDetail(props) {
                     body: JSON.stringify(updatedConsultant),
                 };
 
-                console.log("Request Body:", JSON.stringify(requestOptions));
-
                 EgovNet.requestFetch(setCnslttMbrActvUrl,requestOptions, (resp) =>{
                     if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
                         Swal.fire("수정되었습니다.");
@@ -78,7 +75,6 @@ function ManagerConsultuntDetail(props) {
     const handleDownload = (file) => {
 
         const downloadUrl = `http://133.186.250.158${file.atchFilePathNm}/${file.strgFileNm}.${file.atchFileExtnNm}`; // 실제 파일 경로로 변경
-        console.log("Download URL: ", downloadUrl);
 
         const a = document.createElement('a');
         a.href = downloadUrl;
@@ -117,7 +113,7 @@ function ManagerConsultuntDetail(props) {
 
             },
             (error) => {
-                console.error("Error fetching operational detail:", error);
+
             }
         );
     };

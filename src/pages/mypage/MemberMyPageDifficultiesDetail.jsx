@@ -35,7 +35,6 @@ function MemberMyPageDifficultiesDetail(props) {
                 setDifficultiesDetail(resp.result.difficulties);
             },
             (error) => {
-                console.error("Error fetching difficulties detail:", error);
             }
         );
     };

@@ -163,7 +163,6 @@ function EgovHeader() {
         }
       });
     } catch (error) {
-      console.error("비밀번호 찾기 요청 실패:", error);
       Swal.fire({
         title: "오류 발생",
         text: "서버와 통신 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.",
@@ -219,7 +218,6 @@ function EgovHeader() {
         }
       });
     } catch (error) {
-      console.error("ID 찾기 요청 실패:", error);
       Swal.fire({
         title: "오류 발생",
         text: "서버와 통신 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.",

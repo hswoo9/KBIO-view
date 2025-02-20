@@ -109,7 +109,7 @@ function commonPstDetail(props) {
 
             },
             function (resp) {
-              console.log("err response : ", resp);
+
             }
         )
       }, [pstCmntList]

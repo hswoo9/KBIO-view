@@ -101,7 +101,7 @@ function RelatedList() {
                     setAuthorityList(dataList);
                 },
                 (resp) => {
-                    console.log("err response : ", resp);
+
                 }
             );
         },

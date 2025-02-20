@@ -75,7 +75,7 @@ function ManagerCodeEdit(props) {
               setComCdGroupList(resp.result.cdGroupList);
             },
             function (resp) {
-              console.log("err response : ", resp);
+
             }
         )
       },

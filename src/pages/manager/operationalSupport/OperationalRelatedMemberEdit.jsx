@@ -12,11 +12,6 @@ import base64 from 'base64-js';
 
 
 function OperationRelatedMember(props) {
-    console.group("ManagerNormalMemberEdit");
-    console.log("[Start] ManagerNormalMemberEdit------------------------------");
-    console.log("ManagerNormalMemberEdit [props] : ", props);
-    
-
     const navigate = useNavigate();
     const location = useLocation();
     const checkRef = useRef([]);
@@ -102,8 +97,6 @@ function OperationRelatedMember(props) {
                     body: JSON.stringify(updatedDto),
                 };
 
-                console.log("Request Body:", JSON.stringify(requestOptions));
-
                 EgovNet.requestFetch(modeInfo.editURL, requestOptions, (resp) => {
                     if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
                         Swal.fire("수정되었습니다.");
@@ -120,12 +113,6 @@ function OperationRelatedMember(props) {
             }
         });
     };
-
-
-
-
-    console.log("------------------------------EgovAdminMemberEdit [End]");
-    console.groupEnd("EgovAdminMemberEdit");
 
     return (
         <div id="container" className="container layout cms">

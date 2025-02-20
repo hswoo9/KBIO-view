@@ -28,8 +28,6 @@ function ManagerAuthorityGroupUsers(props) {
 
     const [saveData, setSaveData] = useState({});
     useEffect(() => {
-        console.log("=-=-=-=-=-=-=-=-=");
-        console.log(saveData);
         if(saveData.authrtGroupUserSn != null){
             setMenuAuthGroupUserSave(saveData);
         }
@@ -68,7 +66,6 @@ function ManagerAuthorityGroupUsers(props) {
 
     const [selectAuthoritySn, setSelectAuthoritySn] = useState({});
     useEffect(() => {
-        console.log(selectAuthoritySn);
         if(selectAuthoritySn.authrtGroupSn != null){
             getAuthorityGroupUserList(selectAuthoritySn);
         }
@@ -101,9 +98,6 @@ function ManagerAuthorityGroupUsers(props) {
 
     const [authrtGroupUserSns, setAuthrtGroupUserSns] = useState({});
     useEffect(() => {
-        console.log("----------------------------");
-        console.log("?");
-        console.log(authrtGroupUserSns);
         if(authrtGroupUserSns.authrtGroupUserSns != null && authrtGroupUserSns.authrtGroupUserSns.length > 0){
             setMenuAuthGroupUserDel(authrtGroupUserSns);
         }
@@ -205,16 +199,11 @@ function ManagerAuthorityGroupUsers(props) {
                                     }
                                 );
                                 const userData = userDataList.find( i => String(i.userSn) === String(item.value));
-                                console.log(userDataList);
-                                console.log(userData);
                             }
                         }
                     }
                 });
                 if(selectUserArr.length > 0){
-                    console.log("-----------------------------");
-                    console.log(selectUserArr);
-                    console.log("-----------------------------");
                     const params = {
                         authrtGroupUsers : selectUserArr
                     }
@@ -244,7 +233,6 @@ function ManagerAuthorityGroupUsers(props) {
                     )
 
                 }
-                console.log(selectAuthoritySn);
             } else {
                 //취소
                 modelCloseEvent();
@@ -320,7 +308,7 @@ function ManagerAuthorityGroupUsers(props) {
                     setUserList(dataList);
                 },
                 function (resp) {
-                    console.log("err response : ", resp);
+
                 }
             );
         },
@@ -341,8 +329,6 @@ function ManagerAuthorityGroupUsers(props) {
                 requestURL,
                 requestOptions,
                 (resp) => {
-                    console.log("=-=-=-=-=-=-=-=-=-=-=-=-=-=");
-                    console.log(resp.result.menuAuthGroupUser);
                     let simpleDatas = [];
                     let dataList = [];
                     dataList.push(
@@ -395,7 +381,7 @@ function ManagerAuthorityGroupUsers(props) {
                     setAuthorityGroupUserList(dataList);
                 },
                 function (resp) {
-                    console.log("err response : ", resp);
+
                 }
             )
         },
@@ -445,7 +431,7 @@ function ManagerAuthorityGroupUsers(props) {
                     setAuthorityList(dataList);
                 },
                 function (resp) {
-                    console.log("err response : ", resp);
+
                 }
             )
         },

@@ -70,7 +70,6 @@ const TotalSearch = () => {
 
     const [paginationInfo, setPaginationInfo] = useState({});
     useEffect(() => {
-        console.log(paginationInfo);
     }, [paginationInfo]);
 
     const [searchDataList, setSearchDataList] = useState([]);
@@ -182,7 +181,7 @@ const TotalSearch = () => {
                     setSearchDataList(dataList);
                 },
                 function (resp) {
-                    console.log("err response : ", resp);
+
                 }
             )
         },

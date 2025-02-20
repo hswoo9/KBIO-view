@@ -26,10 +26,6 @@ function Templates(props) {
           }
         }
     );
-
-
-    console.log("response:", response);
-    console.log("response.data:", response.data);
   }
 
   //첨부파일 관련
@@ -44,24 +40,14 @@ function Templates(props) {
       formData.append("files", file);
     });
 
-    for (let [key, value] of formData.entries()) {
-      console.log(key, value); // FormData 내용 확인
-    }
-
     const requestOptions = {
       method: "POST",
       body: formData
     };
 
     EgovNet.requestFetch(`/fileCheck`, requestOptions, function (resp) {
-      console.log("--------------------------------------------");
-      console.log(resp);
-      console.log("--------------------------------------------");
       if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
-        console.log(resp);
       } else {
-        console.log("ERROR");
-        console.log(resp);
       }
     });
   }

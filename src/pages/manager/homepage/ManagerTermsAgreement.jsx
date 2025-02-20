@@ -63,8 +63,6 @@ function ManagerTermsList(props) {
                 termsAgreementListURL,
                 requestOptions,
                 (resp) => {
-                    console.log("Response:", resp);
-                    console.log("Data List:", resp.result?.getTermsAgreementList);
                     setPaginationInfo(resp.paginationInfo);
                     let dataList = [];
                     dataList.push(
@@ -103,7 +101,7 @@ function ManagerTermsList(props) {
                     settermsAgreementList(dataList);
                 },
                 function (resp) {
-                    console.log("err response : ", resp);
+
                 }
             )
         },

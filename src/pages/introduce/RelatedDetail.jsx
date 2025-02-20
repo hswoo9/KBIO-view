@@ -32,7 +32,7 @@ function RelatedDetail() {
                 setRelInstDetail(resp.result.related);
             },
             (error) => {
-                console.error("Error fetching related detail:", error);
+
             }
         );
     };

@@ -85,7 +85,6 @@ function ManagerCodeGroup(props) {
                 //취소
             }
         });
-        console.log(cdGroupSn);
     }
 
     const delCdGroupData = useCallback(
@@ -200,7 +199,7 @@ function ManagerCodeGroup(props) {
                     setCodeGroupList(dataList);
                 },
                 function (resp) {
-                    console.log("err response : ", resp);
+
                 }
             )
         },

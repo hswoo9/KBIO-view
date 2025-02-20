@@ -23,7 +23,6 @@ const CommonEditor = memo(({ value, onChange}) => {
                        };
                        EgovNet.requestFetch("/commonApi/setCkEditorFiles", requestOptions, (resp) => {
                            if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
-                               console.log(resp);
                                 resolve({
                                     default: window.location.origin + resp.result.files[0].atchFilePathNm +
                                         resp.result.files[0].strgFileNm + "." +

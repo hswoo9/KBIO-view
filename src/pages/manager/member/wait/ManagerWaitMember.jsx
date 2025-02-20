@@ -223,7 +223,7 @@ function WaitMemberList(props) {
                     setAuthorityList(dataList);
                 },
                 function (resp) {
-                    console.log("err response : ", resp);
+
                 }
             );
         },

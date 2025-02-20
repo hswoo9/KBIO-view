@@ -97,8 +97,6 @@ function ManagerTop() {
       });
     }
 
-    console.log(location.pathname)
-
     const requestOptions = {
       method: "POST",
       headers: {

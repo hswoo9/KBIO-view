@@ -61,7 +61,6 @@ function ManagerCnslttCnsltList({ cnsltSe, userSn }) {
                 body: JSON.stringify(searchDto)
             };
 
-            console.log("searchDto",searchDto);
             EgovNet.requestFetch(
                 cnlstListURL,
                 requestOptions,
@@ -117,7 +116,7 @@ function ManagerCnslttCnsltList({ cnsltSe, userSn }) {
                     setPaginationInfo(resp.paginationInfo);
                 },
                 function (resp) {
-                    console.log("err response : ", resp);
+
                 }
             )
         },

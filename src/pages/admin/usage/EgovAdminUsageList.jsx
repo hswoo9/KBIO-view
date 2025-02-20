@@ -10,12 +10,7 @@ import EgovPaging from "@/components/EgovPaging";
 import { itemIdxByPage } from "@/utils/calc";
 
 function EgovAdminUsageList(props) {
-  console.group("EgovAdminUsageList");
-  console.log("[Start] EgovAdminUsageList ------------------------------");
-  console.log("EgovAdminUsageList [props] : ", props);
-
   const location = useLocation();
-  console.log("EgovAdminUsageList [location] : ", location);
 
   const cndRef = useRef();
   const wrdRef = useRef();
@@ -34,8 +29,6 @@ function EgovAdminUsageList(props) {
 
   const retrieveList = useCallback(
     (srchCnd) => {
-      console.groupCollapsed("EgovAdminUsageList.retrieveList()");
-
       const retrieveListURL = "/bbsUseInf" + EgovNet.getQueryString(srchCnd);
 
       const requestOptions = {
@@ -95,10 +88,9 @@ function EgovAdminUsageList(props) {
           setListTag(mutListTag);
         },
         function (resp) {
-          console.log("err response : ", resp);
+
         }
       );
-      console.groupEnd("EgovAdminUsageList.retrieveList()");
     },
     [listTag]
   );
@@ -107,9 +99,6 @@ function EgovAdminUsageList(props) {
     retrieveList(searchCondition);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  console.log("------------------------------EgovAdminUsageList [End]");
-  console.groupEnd("EgovAdminUsageList");
 
   return (
     <div className="container">

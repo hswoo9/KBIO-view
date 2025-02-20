@@ -24,8 +24,6 @@ function MemberMyPageConsultingDetail(props) {
     const [simpleDetail, setSimpleDetail] = useState(null);
 
     useEffect(() => {
-        console.log("컴포넌트가 마운트되었습니다.");
-        console.log("초기 searchDto:", searchDto);
 
         const handleStorageChange = (event) => {
             if (event.key === "refreshCnsltDsctnList") {
@@ -38,8 +36,6 @@ function MemberMyPageConsultingDetail(props) {
             window.removeEventListener("storage", handleStorageChange);
         };
     }, []);
-
-    console.log(searchDto.cnsltSttsCd)
 
     const getSimpleDetail = () => {
         if (!searchDto.cnsltAplySn) return;
@@ -74,13 +70,10 @@ function MemberMyPageConsultingDetail(props) {
 
                     setLatestCreator(latestItem.creatrSn);
 
-                    console.log("최신 :",latestItem);
-
                     resp.result.cnsltDsctnList.forEach(function (item, index) {
                         if (index === 0) dataList =[];
 
                         const files = resp.result.filesByDsctnSn[item.cnsltDsctnSn] || [];
-                        console.log("file : ", files);
 
                         const isLatest = item.cnsltAplySn === latestItem.cnsltAplySn;
                         const isOwnComment = item.creatrSn === sessionUser.userSn;
@@ -159,7 +152,6 @@ function MemberMyPageConsultingDetail(props) {
                 setCnsltDsctnList(dataList);
             },
             (error) => {
-                console.error("Error fetching simple detail:", error);
             }
         );
     };
@@ -262,14 +254,11 @@ function MemberMyPageConsultingDetail(props) {
     const handleEditClick = (item) => {
 
         const files = filesByDsctnSn[item.cnsltDsctnSn] || [];
-        console.log(files)
-        console.log("item 객체 확인:", item);
         const popupData = {
             ...item,
             simpleFiles: files
         };
 
-        console.log("팝업에 전달될 데이터:", popupData);
         localStorage.setItem('popupData', JSON.stringify(popupData));
         window.open(`/popup/simple`, "_blank", "width=800,height=530");
     };

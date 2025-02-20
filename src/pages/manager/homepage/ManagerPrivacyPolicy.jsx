@@ -61,8 +61,6 @@ function ManagerPrivacyList(props) {
                 privacyPolicyListURL,
                 requestOptions,
                 (resp) => {
-                    console.log("Response:", resp);
-                    console.log("Data List:", resp.result?.getPrivacyPolicyList);
                     setPaginationInfo(resp.paginationInfo);
                     let dataList = [];
                     dataList.push(
@@ -106,7 +104,7 @@ function ManagerPrivacyList(props) {
                     setprivacyPolicyList(dataList);
                 },
                 function (resp) {
-                    console.log("err response : ", resp);
+
                 }
             )
         },

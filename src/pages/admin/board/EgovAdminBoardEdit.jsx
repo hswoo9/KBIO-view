@@ -9,15 +9,9 @@ import { default as EgovLeftNav } from "@/components/leftmenu/EgovLeftNavAdmin";
 import EgovRadioButtonGroup from "@/components/EgovRadioButtonGroup";
 
 function EgovAdminBoardEdit(props) {
-  console.group("EgovAdminBoardEdit");
-  console.log("[Start] EgovAdminBoardEdit ------------------------------");
-  console.log("EgovAdminBoardEdit [props] : ", props);
-
   const navigate = useNavigate();
   const location = useLocation();
   const checkRef = useRef([]);
-
-  console.log("EgovAdminBoardEdit [location] : ", location);
 
   const replyPosblAtRadioGroup = [
     { value: "Y", label: "가능" },
@@ -161,7 +155,6 @@ function EgovAdminBoardEdit(props) {
 
       for (let key in boardDetail) {
         formData.append(key, boardDetail[key]);
-        //console.log("boardDetail [%s] ", key, boardDetail[key]);
       }
 
       if (formValidator(formData)) {
@@ -217,7 +210,6 @@ function EgovAdminBoardEdit(props) {
     };
 
     EgovNet.requestFetch(deleteBoardURL, requestOptions, (resp) => {
-      console.log("====>>> board delete= ", resp);
       if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
         alert("게시글이 삭제되었습니다.");
         navigate(URL.ADMIN_BOARD, { replace: true });
@@ -236,9 +228,6 @@ function EgovAdminBoardEdit(props) {
     initMode();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  console.log("------------------------------EgovAdminBoardEdit [End]");
-  console.groupEnd("EgovAdminBoardEdit");
 
   return (
     <div className="container">

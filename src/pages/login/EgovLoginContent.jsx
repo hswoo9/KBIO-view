@@ -94,7 +94,6 @@ function EgovLoginContent(props) {
         Swal.fire(resp.resultMessage);
         return;
       }else{
-        console.log("resp",resp)
         setSessionItem("loginUser", {userSn : resp.result.userSn, name : resp.result.userName, id : resp.result.userId, userSe : resp.result.userSe});
         // setSessionItem("userName", resp.userName);
         setSessionItem("jToken", resp.result.jToken);

@@ -80,7 +80,7 @@ function ConsultantDetail(props) {
 
             },
             (error) => {
-                console.error("Error fetching operational detail:", error);
+
             }
         );
     };

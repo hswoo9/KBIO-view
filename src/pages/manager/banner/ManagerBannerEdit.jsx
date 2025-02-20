@@ -30,12 +30,10 @@ function ManagerBannerEdit(props) {
 
   const [bnrPopupDetail, setBnrPopupDetail] = useState({});
   useEffect(() => {
-    console.log(bnrPopupDetail);
   }, [bnrPopupDetail]);
 
   const [comCdGroupList, setComCdGroupList] = useState([]);
   useEffect(() => {
-    console.log(comCdGroupList);
   }, [comCdGroupList]);
 
   const [saveEvent, setSaveEvent] = useState({});
@@ -53,7 +51,6 @@ function ManagerBannerEdit(props) {
   const [acceptFileTypes, setAcceptFileTypes] = useState('jpg,jpeg,png,gif,bmp,tiff,tif,webp,svg,ico,heic,avif');
   const [selectedFiles, setSelectedFiles] = useState([]);
   useEffect(() => {
-    console.log(selectedFiles);
   }, [selectedFiles]);
 
   const handleFileChange = (e) => {
@@ -98,7 +95,6 @@ function ManagerBannerEdit(props) {
       cancelButtonText: "취소"
     }).then((result) => {
       if(result.isConfirmed) {
-        console.log(bnrPopupDetail);
         if(bnrPopupDetail.bnrPopupTtl == null){
           Swal.fire("배너제목이 없습니다.");
           return;
@@ -180,7 +176,6 @@ function ManagerBannerEdit(props) {
 
   const delBnrPopupData = useCallback(
       (bnrPopupDetail) => {
-        console.log(bnrPopupDetail);
         const menuListURL = "/bannerPopupApi/setBnrPopupDel";
         const requestOptions = {
           method: "POST",
@@ -301,7 +296,7 @@ function ManagerBannerEdit(props) {
               setComCdGroupList(resp.result.cdGroupList);
             },
             function (resp) {
-              console.log("err response : ", resp);
+
             }
         )
       },
@@ -309,7 +304,6 @@ function ManagerBannerEdit(props) {
   )
 
   const dataListToOptionHtml = (data, filterField, filterData) => {
-    console.log(" CALL dataListToOptionHtml : " + filterField + " , " + filterData);
     if(data != null){
       if(data.length > 0){
         const returnList = [];

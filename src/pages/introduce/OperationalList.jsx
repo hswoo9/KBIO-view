@@ -101,7 +101,7 @@ function OperationalList() {
                     setAuthorityList(dataList);
                 },
                 (resp) => {
-                    console.log("err response : ", resp);
+
                 }
             );
         },

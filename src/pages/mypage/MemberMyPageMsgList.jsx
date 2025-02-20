@@ -87,7 +87,7 @@ function MemberMyPageMsgList(props) {
                 }
             },
             function (resp) {
-                console.log("err response : ", resp);
+
             }
         )
     }
@@ -153,7 +153,7 @@ function MemberMyPageMsgList(props) {
                     setPaginationInfo(resp.paginationInfo);
                 },
                 function (resp) {
-                    console.log("err response : ", resp);
+
                 }
             )
         },

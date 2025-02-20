@@ -95,7 +95,7 @@ function ManagerBbs(props) {
                     setBbsList(dataList);
                 },
                 function (resp) {
-                    console.log("err response : ", resp);
+
                 }
             )
         },

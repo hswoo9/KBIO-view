@@ -25,7 +25,6 @@ function EgovFooterUser() {
       if(data != null){
         let dataList = [];
         data.forEach(function(item, index){
-          console.log(item);
           dataList.push(
               <option value={item.etcMttr1} key={item.comCdSn}>{item.comCdNm}</option>
           )

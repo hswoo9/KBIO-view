@@ -22,10 +22,7 @@ function Menu(props) {
 
         EgovNet.requestFetch(`/menu/getMenuTreeList`, requestOptions, function (resp) {
             if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
-                console.log(resp);
             } else {
-                console.log("ERROR");
-                console.log(resp);
             }
         });
     }
