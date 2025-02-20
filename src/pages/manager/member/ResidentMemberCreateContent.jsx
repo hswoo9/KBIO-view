@@ -62,11 +62,19 @@ function ResidentMemberCreateContent(props){
         setResidentDetail({...residentDetail, bzentyExpln: value});
     };
 
+    const handleChangeHstry = (value) => {
+        if(isFirstRender.current){
+            isFirstRender.current = false;
+            return;
+        }
+        setResidentDetail({...residentDetail, mainHstry: value});
+    };
+
+
     //수정 시 데이터 조회
     const getRc = (searchDto) =>{
         // 등록 시 조회 안함
         if (modeInfo.mode === CODE.MODE_CREATE) {
-            
             return;
         }
 
@@ -80,9 +88,12 @@ function ResidentMemberCreateContent(props){
         };
 
         EgovNet.requestFetch(getRcURL, requestOptions, function (resp){
+
             if(modeInfo.mode === CODE.MODE_MODIFY){
                 setResidentDetail(resp.result.rc);
+                console.log("residentDetail",residentDetail);
             }
+
         });
 
 
@@ -586,10 +597,10 @@ function ResidentMemberCreateContent(props){
                     <li className="inputBox type1">
                         <label className="title essential" htmlFor=""><small>주요이력</small></label>
                         <div className="input">
-                            <textarea
-                                type="text"
-                            >
-                            </textarea>
+                            <CommonEditor
+                            value={residentDetail.mainHstry || ""}
+                            onChange={handleChangeHstry}
+                            />
                         </div>
                     </li>
                     {/*증빙자료*/}
