@@ -334,6 +334,7 @@ function MemberMyPageConsultingDetail(props) {
                                 {searchDto.cnsltSttsCd === "999" ? (
                                     <>
                                         <NavLink to={URL.MEMBER_MYPAGE_CONSULTING}
+                                                 style={{width:'100%'}}
                                                  state={{
                                                      menuSn : location.state?.menuSn,
                                                      menuNmPath : location.state?.menuNmPath
@@ -350,6 +351,7 @@ function MemberMyPageConsultingDetail(props) {
                                             <span>취소</span>
                                         </button>
                                         <NavLink to={URL.MEMBER_MYPAGE_CONSULTING}
+                                                 style={{width:'100%'}}
                                                  state={{
                                                      menuSn : location.state?.menuSn,
                                                      menuNmPath : location.state?.menuNmPath
@@ -367,6 +369,7 @@ function MemberMyPageConsultingDetail(props) {
                                             <span>만족도 조사</span>
                                         </button>
                                         <NavLink to={URL.MEMBER_MYPAGE_CONSULTING}
+                                                 style={{width:'100%'}}
                                                  state={{
                                                      menuSn : location.state?.menuSn,
                                                      menuNmPath : location.state?.menuNmPath
@@ -380,6 +383,7 @@ function MemberMyPageConsultingDetail(props) {
                                     // 사용자가 로그인했을 때 마지막 작성자가 사용자일 경우
                                     <>
                                         <NavLink to={URL.MEMBER_MYPAGE_CONSULTING}
+                                                 style={{width:'100%'}}
                                                  state={{
                                                      menuSn : location.state?.menuSn,
                                                      menuNmPath : location.state?.menuNmPath
@@ -401,6 +405,7 @@ function MemberMyPageConsultingDetail(props) {
                                             <span>처리완료</span>
                                         </button>
                                         <NavLink to={URL.MEMBER_MYPAGE_CONSULTING}
+                                                 style={{width:'100%'}}
                                                  state={{
                                                      menuSn : location.state?.menuSn,
                                                      menuNmPath : location.state?.menuNmPath
@@ -418,6 +423,7 @@ function MemberMyPageConsultingDetail(props) {
                                             <span>등록</span>
                                         </button>
                                         <NavLink to={URL.MEMBER_MYPAGE_CONSULTING}
+                                                 style={{width:'100%'}}
                                                  state={{
                                                      menuSn : location.state?.menuSn,
                                                      menuNmPath : location.state?.menuNmPath
@@ -430,6 +436,7 @@ function MemberMyPageConsultingDetail(props) {
                                 ) : (
                                     // 컨설턴트가 로그인했을 때 마지막 작성자가 컨설턴트일 경우
                                     <NavLink to={URL.MEMBER_MYPAGE_CONSULTING}
+                                             style={{width:'100%'}}
                                              state={{
                                                  menuSn : location.state?.menuSn,
                                                  menuNmPath : location.state?.menuNmPath
