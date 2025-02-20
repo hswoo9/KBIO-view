@@ -634,7 +634,14 @@ function ResidentMemberCreateContent(props){
                         <div className="box">
                             <p className="title essential">공개여부</p>
                             <div className="toggleSwithWrap">
-                                <input type="checkbox" id="actvtnYn" hidden/>
+                                <input type="checkbox" id="actvtnYn" hidden
+                                       checked={residentDetail.actvtnYn === "Y"}
+                                       onChange={(e) =>
+                                           setResidentDetail({
+                                               ...residentDetail,
+                                               actvtnYn: e.target.checked ? "Y" : "N",
+                                           })
+                                       }/>
                                 <label htmlFor="actvtnYn" className="toggleSwitch">
                                     <span className="toggleButton"></span>
                                 </label>
