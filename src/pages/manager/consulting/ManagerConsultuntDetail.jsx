@@ -326,6 +326,7 @@ function ManagerConsultuntDetail(props) {
                                             <label className="checkBox type3">
                                             <input
                                                 type="radio"
+                                                className="signUpRadio"
                                                 value="Y"
                                                 checked={consultantDetail.cnsltActv === "Y"}
                                                 onChange={(e) => setConsultantDetail({...consultantDetail, cnsltActv : e.target.value})}
@@ -335,6 +336,7 @@ function ManagerConsultuntDetail(props) {
                                             <label className="checkBox type3">
                                             <input
                                                 type="radio"
+                                                className="signUpRadio"
                                                 value="N"
                                                 checked={consultantDetail.cnsltActv === "N"}
                                                 onChange={(e) => setConsultantDetail({...consultantDetail, cnsltActv : e.target.value})}

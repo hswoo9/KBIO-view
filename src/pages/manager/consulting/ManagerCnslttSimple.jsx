@@ -107,7 +107,7 @@ function ManagerCnslttSimple({ cnsltSe, userSn }) {
                                         }
                                     })()}
                                 </td>
-                                <td>{item.dgstfnArtcl || "미등록"}</td>
+                                <td>{item.dgstfnCnt > 0 ? "등록" : "미등록"}</td>
                             </tr>
                         );
                     });
