@@ -53,8 +53,6 @@ function MemberMyPageSimpleDetail(props) {
             requestOptions,
             function (resp) {
                 setSimpleDetail({ ...resp.result.simple });
-                console.log(resp)
-                console.log(resp.result.filesByDsctnSn)
                 if (resp.result.filesByDsctnSn) {
                     setFilesByDsctnSn(resp.result.filesByDsctnSn);
                 }

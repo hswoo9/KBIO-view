@@ -83,7 +83,6 @@ function MemberMyPageSimplePopup() {
 
     useEffect(() => {
         const item = JSON.parse(localStorage.getItem('popupData'));
-        console.log(item)
         if (item) {
                 setSimplePopupModify({
                     ...item,
