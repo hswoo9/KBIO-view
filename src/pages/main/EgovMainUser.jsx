@@ -209,7 +209,7 @@ function EgovMainUser(props) {
                 </NavLink>
               </div>
               <ul className="listBox" data-aos="fade-up" data-aos-duration="1500">
-                {notiList.length > 0 && notiList.map((pst, index) => (
+                {notiList.length > 0 && notiList.slice(0, 2).map((pst, index) => (
                   <li key={pst.pstSn}>
                     <NavLink
                       to={URL.COMMON_PST_NORMAL_DETAIL}
@@ -253,7 +253,7 @@ function EgovMainUser(props) {
                 </NavLink>
               </div>
               <ul className="listBox" data-aos="fade-up" data-aos-duration="1500">
-                {pressReleaseList.length > 0 && pressReleaseList.map((pst, index) => (
+                {pressReleaseList.length > 0 && pressReleaseList.slice(0, 2).map((pst, index) => (
                     <li key={pst.pstSn}>
                       <NavLink
                         to={URL.COMMON_PST_NORMAL_DETAIL}

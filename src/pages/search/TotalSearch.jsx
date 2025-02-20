@@ -287,9 +287,9 @@ const TotalSearch = () => {
                             <div className="keywrodBox">
                                 <strong className="title">추천키워드</strong>
                                 <ul className="list">
-                                    <li><a href="#"><span>#의료</span></a></li>
+                                    {/*<li><a href="#"><span>#의료</span></a></li>
                                     <li><a href="#"><span>#바이오</span></a></li>
-                                    <li><a href="#"><span>#약품</span></a></li>
+                                    <li><a href="#"><span>#약품</span></a></li>*/}
                                 </ul>
                             </div>
                         </form>
@@ -313,10 +313,6 @@ const TotalSearch = () => {
                     <div className="tableCont type1" data-aos="fade-up" data-aos-duration="1500">
                         <table>
                             <caption>통합검색</caption>
-                            <colgroup>
-                                <col className="th1"/>
-                                <col className="th2"/>
-                            </colgroup>
                             <thead>
                             <tr>
                                 <th></th>

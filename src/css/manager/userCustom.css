@@ -133,6 +133,9 @@
 
 @media screen and (max-width: 768px) {
     .main .sec01 .bg img {transform: scale(10.05);}
+    .difficulties .inner2 .cont{display: block !important;}
+    .difficulties .inner2 .cont .leftBox{margin-bottom: 25px;}
+    header .hInner .hBot .bot .pageTitle{font-size: clamp(2.0rem, 6vw, 72px) !important;}
 }
 
 .customUserSelect{
