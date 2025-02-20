@@ -394,7 +394,7 @@ export const getBbsInPst = async (bbsNm, bbsTypeNm, actvtnYn, userSn, day) => {
     });
 };
 
-export const getUserMsgList = async (userSn) => {
+export const getUserMsgTopList = async (userSn) => {
     const requestOptions = {
         method: "POST",
         headers: {
@@ -407,10 +407,10 @@ export const getUserMsgList = async (userSn) => {
 
     return new Promise((resolve, reject) => {
         EgovNet.requestFetch(
-            "/commonApi/getUserMsgList.do",
+            "/userMsgApi/getUserMsgTopList.do",
             requestOptions,
             (resp) => {
-                resolve(resp.result.userMsgList);
+                resolve(resp.result.userMsgTopList);
             },
             (error) => {
 

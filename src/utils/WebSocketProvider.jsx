@@ -3,7 +3,7 @@ import SockJS from 'sockjs-client';
 import Swal from "sweetalert2";
 import * as EgovNet from "@/api/egovFetch";
 import {getSessionItem} from "./storage.js";
-import {getUserMsgList} from "../components/CommonComponents.jsx";
+import {getUserMsgTopList} from "../components/CommonComponents.jsx";
 
 const WebSocketContext = createContext();
 
@@ -12,7 +12,7 @@ export const WebSocketProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);  // WebSocket 상태
   const [isConnected, setIsConnected] = useState(false); // 연결 상태
   const [notification, setNotification] = useState([]);
-  const [userMsgList, setUserMsgList] = useState([]);
+  const [userMsgTopList, setUserMsgTopList] = useState([]);
   const connectWebSocket = () => {
     if (!sessionUserSn) return;
 
@@ -30,8 +30,8 @@ export const WebSocketProvider = ({ children }) => {
 
     socketInstance.onmessage = (e) => {
       setNotification(JSON.parse(e.data));
-      getUserMsgList(sessionUserSn).then((data) => {
-        setUserMsgList(data)
+      getUserMsgTopList(sessionUserSn).then((data) => {
+        setUserMsgTopList(data)
       })
       document.getElementById("alarmDot").style.display = "block"
     };
@@ -51,14 +51,14 @@ export const WebSocketProvider = ({ children }) => {
 
   useEffect(() => {
     if (sessionUserSn){
-      getUserMsgList(sessionUserSn).then((data) => {
-        setUserMsgList(data)
+      getUserMsgTopList(sessionUserSn).then((data) => {
+        setUserMsgTopList(data)
       })
     }
   }, []);
 
   return (
-    <WebSocketContext.Provider value={{ socket, notification, userMsgList, setUserMsgList,isConnected }}>
+    <WebSocketContext.Provider value={{ socket, notification, userMsgTopList, setUserMsgTopList,isConnected }}>
       {children}
     </WebSocketContext.Provider>
   );
