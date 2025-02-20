@@ -1429,7 +1429,7 @@ function MemberSignUp(props) {
                       </div>
                     </li>
 
-                    <li className="inputBox type2">
+                    <li className="inputBox type2" style={{maxWidth : '99%'}}>
                       <span className="tt1">소개</span>
                       {/*<label className="input" style={{height: "100%"}}>*/}
                         <div className="input" style={{height: "100%"}}>

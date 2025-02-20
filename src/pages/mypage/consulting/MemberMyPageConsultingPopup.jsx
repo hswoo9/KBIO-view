@@ -98,9 +98,9 @@ function MemberMyPageSimplePopup() {
                 });
 
                 // 파일 리스트가 존재하면 기존 파일을 fileList에 넣어줌
-                if (item.simpleFiles && item.simpleFiles.length > 0) {
+                /*if (item.simpleFiles && item.simpleFiles.length > 0) {
                     setFileList(item.simpleFiles);
-                }
+                }*/
             }
         }
     }, []);
@@ -208,7 +208,22 @@ function MemberMyPageSimplePopup() {
                         })}
                     </ul>
                 )}
+                {fileList.length > 0 && (
+                    <ul>
+                        {fileList.map((file, index) => (
+                            <li key={index}>
+                                {file.name} - {(file.size / 1024).toFixed(2)} KB
 
+                                <button
+                                    onClick={() => handleDeleteFile(index)}
+                                    style={{marginLeft: '10px', color: 'red'}}
+                                >
+                                    삭제
+                                </button>
+                            </li>
+                        ))}
+                    </ul>
+                )}
             </div>
 
             <button onClick={handleSave} style={{

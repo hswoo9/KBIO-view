@@ -696,7 +696,7 @@ function EgovHeader() {
                   <div className="icon alarmIcon"></div>
                   <span id="alarmDot" className="dot" style={{display:"none"}}></span>
                 </button>
-                <ul className="selectBox" id="alarmUl" style={{overflow: "hidden"}}>
+                <ul className="selectBox" id="alarmUl" style={{overflowX: "hidden"}}>
                   {msgHtml}
                 </ul>
               </div>
