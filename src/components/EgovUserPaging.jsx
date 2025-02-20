@@ -1,7 +1,7 @@
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 
 function EgovPaging(props) {
-
+    const location = useLocation();
   let paginationTag = [];
 
   if (props.pagination === undefined) {
@@ -27,6 +27,12 @@ function EgovPaging(props) {
             onClick={() => {
               props.moveToPage(1);
             }}
+            state={{
+                bbsSn: location.state?.bbsSn,
+                menuSn: location.state?.menuSn,
+                menuNmPath: location.state?.menuNmPath,
+                thisMenuSn: location.state?.thisMenuSn,
+            }}
           >
               <span>처음</span>
           </NavLink>
@@ -42,6 +48,12 @@ function EgovPaging(props) {
             onClick={() => {
               props.moveToPage(prevPageIndex);
             }}
+            state={{
+                bbsSn: location.state?.bbsSn,
+                menuSn: location.state?.menuSn,
+                menuNmPath: location.state?.menuNmPath,
+                thisMenuSn: location.state?.thisMenuSn,
+            }}
           >
               <span>이전</span>
           </NavLink>
@@ -55,7 +67,7 @@ function EgovPaging(props) {
         // 현재 페이지
         const currentPage = (
           <li key={i} className="num now">
-            <NavLink><span>{i}</span></NavLink>
+            <a href="javascript:void(0)"><span>{i}</span></a>
           </li>
         );
         paginationTag.push(currentPage);
@@ -66,6 +78,12 @@ function EgovPaging(props) {
             <NavLink
               onClick={() => {
                 props.moveToPage(i);
+              }}
+              state={{
+                  bbsSn: location.state?.bbsSn,
+                  menuSn: location.state?.menuSn,
+                  menuNmPath: location.state?.menuNmPath,
+                  thisMenuSn: location.state?.thisMenuSn,
               }}
             >
                 <span>{i}</span>
@@ -87,6 +105,12 @@ function EgovPaging(props) {
             onClick={() => {
               props.moveToPage(nextPageIndex);
             }}
+            state={{
+                bbsSn: location.state?.bbsSn,
+                menuSn: location.state?.menuSn,
+                menuNmPath: location.state?.menuNmPath,
+                thisMenuSn: location.state?.thisMenuSn,
+            }}
           >
               <span>
                   다음
@@ -102,6 +126,12 @@ function EgovPaging(props) {
           <NavLink
             onClick={() => {
               props.moveToPage(totalPageCount);
+            }}
+            state={{
+                bbsSn: location.state?.bbsSn,
+                menuSn: location.state?.menuSn,
+                menuNmPath: location.state?.menuNmPath,
+                thisMenuSn: location.state?.thisMenuSn,
             }}
           >
               <span>마지막</span>
