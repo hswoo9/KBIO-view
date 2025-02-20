@@ -10,6 +10,9 @@ import * as ComScript from "@/components/CommonScript";
 import notProfile from "@/assets/images/no_profile.png";
 
 import user_consultant_img3 from "@/assets/images/user_consultant_img3.jpg";
+import base64 from 'base64-js';
+import {getComCdList} from "../../components/CommonComponents.jsx";
+import AOS from "aos";
 
 function ConsultantDetail(props) {
     const sessionUser = getSessionItem("loginUser");
@@ -20,9 +23,11 @@ function ConsultantDetail(props) {
         userSn: location.state?.userSn || "",
     });
 
-    const [consultantDetail, setConsultantDetail] = useState(null);
-    const [memberDetail, setMemberDetail] = useState(null);
+    const [comCdList, setComCdList] = useState([]);
+    const [consultantDetail, setConsultantDetail] = useState({});
+    const [memberDetail, setMemberDetail] = useState({});
     const [cnsltProfileFile, setCnsltProfileFile] = useState(null);
+    const [cnsltCertificateFile, setCnsltCertificateFile] = useState([]);
     const [cnsltCrr, setCnsltCrr] = useState([]);
     const [cnsltCert, setCnsltCert] = useState([]);
     const [cnsltAcbg, setCnsltAcbg] = useState([]);
@@ -62,6 +67,40 @@ function ConsultantDetail(props) {
             });
         }
     }
+
+
+    const decodePhoneNumber = (encodedPhoneNumber) => {
+        if (!encodedPhoneNumber) return "";
+        try {
+            const decodedBytes = base64.toByteArray(encodedPhoneNumber);
+            return new TextDecoder().decode(decodedBytes);
+        } catch (error) {
+            console.error("전화번호 디코딩 오류:", error);
+            return "";
+        }
+    };
+
+
+
+    const formatPhoneNumber = (phoneNumber) => {
+        // 숫자 이외의 문자는 제거
+        const cleaned = phoneNumber.replace(/\D/g, "");
+
+        // 02 로 시작하면 02-XXXX-XXXX 형태, 그 외에는 3자리-4자리-4자리 형태로 변환
+        if (cleaned.startsWith("02")) {
+            // 02는 2자리이므로 뒤에 3~4자리와 4자리를 나눔
+            return cleaned.replace(/(\d{2})(\d{3,4})(\d{4})/, "$1-$2-$3");
+        } else {
+            return cleaned.replace(/(\d{3})(\d{3,4})(\d{4})/, "$1-$2-$3");
+        }
+    };
+
+
+    const decodeAndFormatPhoneNumber = (encodedPhoneNumber) => {
+        const decoded = decodePhoneNumber(encodedPhoneNumber);
+        return formatPhoneNumber(decoded);
+    };
+
     const getConsultantDetail = () => {
         const getConsultantDetailUrl = "/consultingApi/getConsultantDetail.do";
         const requestOptions = {
@@ -76,15 +115,11 @@ function ConsultantDetail(props) {
             getConsultantDetailUrl,
             requestOptions,
             (resp) => {
-                setConsultantDetail(resp.result.consultant);
-                setMemberDetail(resp.result.memberDetail);
+                setConsultantDetail({...resp.result.consultant});
+                setMemberDetail({...resp.result.memberDetail});
 
                 if (resp.result.cnsltProfileFile) {
                     setCnsltProfileFile(resp.result.cnsltProfileFile);
-                }
-
-                if (resp.result.tblQlfcLcnsList) {
-                    setCnsltCert(resp.result.tblQlfcLcnsList);
                 }
 
                 if (resp.result.tblCrrList) {
@@ -95,12 +130,29 @@ function ConsultantDetail(props) {
                     setCnsltAcbg(resp.result.tblAcbgList);
                 }
 
+                if (resp.result.tblQlfcLcnsList) {
+                    setCnsltCert(resp.result.tblQlfcLcnsList);
+                }
+
+                if (resp.result.cnsltCertificateFile) {
+                    setCnsltCertificateFile(resp.result.cnsltCertificateFile);
+                    console.log("cnsltCertificateFile",cnsltCertificateFile);
+                }
+
             },
             (error) => {
 
             }
         );
     };
+
+    useEffect(() => {
+        getComCdList(10).then((data) => {
+            setComCdList(data);
+        });
+        console.log("comCd",comCdList);
+        AOS.init();
+    }, []);
 
     useEffect(() => {
         getConsultantDetail();
@@ -117,11 +169,13 @@ function ConsultantDetail(props) {
                             <strong className="name">{memberDetail?.kornFlnm}</strong>
                             <div className="cent">
                                 <p className="company">{consultantDetail?.ogdpNm} ({consultantDetail?.jbpsNm})</p>
-                                <p className="address">경기도 성남시 수정구 산성대로 10 (9층)</p>
+                                <p className="address">{memberDetail?.addr} {memberDetail?.daddr}</p>
                             </div>
                             <div className="tel">
                                 <p className="text">연락처</p>
-                                <a href="tel:02-1234-5678"><span>02-1234-5678</span></a>
+                                <a href={`tel:${decodeAndFormatPhoneNumber(memberDetail?.mblTelno)}`}>
+                                    <span>{decodeAndFormatPhoneNumber(memberDetail?.mblTelno)}</span>
+                                </a>
                             </div>
                         </div>
                         <div className="introBox">
@@ -148,10 +202,11 @@ function ConsultantDetail(props) {
                                 <li>
                                     <strong className="left">경력</strong>
                                     <div className="right">
+                                        <p>(현) {consultantDetail?.ogdpNm} ({consultantDetail?.jbpsNm})</p>
                                         {cnsltCrr.length > 0 ? (
-                                            cnsltCrr.map((item, index) => <p key={index}>{item.ogdpCoNm}</p>)
+                                            cnsltCrr.map((item, index) => <p key={index}>(전) {item.ogdpCoNm} ({item.jbgdNm})</p>)
                                         ) : (
-                                            <p>{consultantDetail?.crrPrd || "-"} 년</p>
+                                            <p>경력 정보가 없습니다.</p>
                                         )}
                                     </div>
                                 </li>
@@ -160,7 +215,7 @@ function ConsultantDetail(props) {
                                     <strong className="left">학력</strong>
                                     <div className="right">
                                         {cnsltAcbg.length > 0 ? (
-                                            cnsltAcbg.map((item, index) => <p key={index}>{item.schlNm}</p>)
+                                            cnsltAcbg.map((item, index) => <p key={index}>{item.schlNm} {item.scsbjtNm} {item.dgrNm}</p>)
                                         ) : (
                                             <p>학력 사항이 없습니다.</p>
                                         )}
@@ -173,18 +228,36 @@ function ConsultantDetail(props) {
                                 <p className="tt1">자격증</p>
                             </div>
                             <ul className="list">
-                                <li>
-                                    <figure><img src={user_consultant_img3} alt="images"/></figure>
-                                </li>
-                                <li>
-                                    <figure><img src={user_consultant_img3} alt="images"/></figure>
-                                </li>
-                                <li>
-                                    <figure><img src={user_consultant_img3} alt="images"/></figure>
-                                </li>
-                                <li>
-                                    <figure><img src={user_consultant_img3} alt="images"/></figure>
-                                </li>
+                                {cnsltCertificateFile.length > 0 ? (
+                                    cnsltCertificateFile.map((item, index) => (
+                                        <li key={item.atchFileSn ? item.atchFileSn : index}>
+                                            <figure>
+                                                {item.atchFileSn ? (
+                                                    item.atchFileExtnNm.toLowerCase() === "pdf" ? (
+                                                        // PDF 파일을 iframe으로 표시
+                                                        <iframe
+                                                            src={`http://133.186.250.158${item.atchFilePathNm}/${item.strgFileNm}.${item.atchFileExtnNm}`}
+                                                            width="150px"
+                                                            height="200px"
+                                                            title="PDF Preview">
+                                                        </iframe>
+                                                    ) : (
+                                                        // 이미지 파일을 img 태그로 표시
+                                                        <img
+                                                            src={`http://133.186.250.158${item.atchFilePathNm}/${item.strgFileNm}.${item.atchFileExtnNm}`}
+                                                            style={{width:"150px", height:"200px", marginBottom:"10px"}}
+                                                            alt="image"
+                                                        />
+                                                    )
+                                                ) : (
+                                                    <img src={user_consultant_img3} alt="Default Image" />
+                                                )}
+                                            </figure>
+                                        </li>
+                                    ))
+                                ) : (
+                                    <li> <span style={{width:"170px"}}>자격증 정보가 없습니다. </span> </li>
+                                )}
                             </ul>
                         </div>
                         <div className="box overview">
@@ -228,9 +301,12 @@ function ConsultantDetail(props) {
                             />
                         </figure>
                         <div className="textBox">
-                            <div className="departBox cate4">
+                            <div className={`departBox cate${parseInt(consultantDetail.cnsltFld, 10) - 100}`}>
                                 <div className="icon"></div>
-                                <p className="text">분야</p></div>
+                                <p className="text">
+                                    {comCdList.find(item => item.comCd === String(consultantDetail.cnsltFld))?.comCdNm || ""}
+                                </p>
+                            </div>
                             <div className="nameBox">
                                 <strong className="name">{memberDetail?.kornFlnm}</strong>
                                 <p className="company">{consultantDetail?.ogdpNm}({consultantDetail?.jbpsNm})</p>

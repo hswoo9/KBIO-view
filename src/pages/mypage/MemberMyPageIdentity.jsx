@@ -93,7 +93,14 @@ const MemberMyPageIdentity = () => {
                             <p>간편인증을 이용하기 위해서는 [휴대폰 본인확인]이 필요합니다.</p>
                             <p>모바일 신분증앱에서 모바일 신분증을 등록 후 사용할 수 있습니다.</p>
                         </div>
+                        <NavLink to={URL.MEMBER_MYPAGE_CANCEL}
+                                 style={{width: "100%"}}
+                                 state={{
+                                     menuSn : location.state?.menuSn,
+                                     menuNmPath : location.state?.menuNmPath
+                                 }}>
                         <button type="button" className="clickBtn black"><span>뒤로가기</span></button>
+                        </NavLink>
                     </div>
                 </div>
             </div>

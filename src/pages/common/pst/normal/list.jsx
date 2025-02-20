@@ -70,7 +70,7 @@ function commonPstList(props) {
                     setBbs(resp.result.bbs);
                     let dataList = [];
                     dataList.push(
-                        <tr>
+                        <tr key="noData">
                             <td colSpan={resp.result.bbs.atchFileYn == "Y" ? "5" : "4"}>검색된 결과가 없습니다.</td>
                         </tr>
                     );
