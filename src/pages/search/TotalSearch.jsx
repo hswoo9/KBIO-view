@@ -87,6 +87,13 @@ const TotalSearch = () => {
         });
     }
 
+    const activeEnter = (e) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            getSearchDataList(searchCondition);
+        }
+    };
+
     const getSearchDataList = useCallback(
         (searchCondition) => {
             const requestURL = "/searchApi/getSearchDataListPage.do";
@@ -275,6 +282,7 @@ const TotalSearch = () => {
                                                     searchVal: e.target.value
                                                 })
                                             }}
+                                            onKeyDown={activeEnter}
                                         />
                                     </label>
                                 </div>
@@ -307,7 +315,7 @@ const TotalSearch = () => {
                                 className="small">({paginationInfo.totalRecordCount || 0}건)</span></a></li>
                             {/*<li><a href="#"><span>예약신청</span><span className="small">(16건)</span></a></li>
                             <li><a href="#"><span>컨설팅</span><span className="small">(20건)</span></a></li>*/}
-                            <li><a href="#"><span>커뮤니티</span><span className="small">({paginationInfo.totalRecordCount || 0}건)</span></a></li>
+                            {/*<li><a href="#"><span>커뮤니티</span><span className="small">({paginationInfo.totalRecordCount || 0}건)</span></a></li>*/}
                         </ul>
                     </div>
                     <div className="tableCont type1" data-aos="fade-up" data-aos-duration="1500">
