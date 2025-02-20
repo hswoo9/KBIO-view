@@ -13,7 +13,7 @@
 	src: url('../../font/esamanru-Bold.woff') format('woff');
 }
 
-html {scroll-behavior: smooth; font-size: 18px; min-width: 320px;}
+html {scroll-behavior: smooth; font-size: 18px; min-width: 340px;}
 #wrap {width: 100%; letter-spacing: -.3px;} a {color: var(--black);}
 body, select, input,textarea, button {color: var(--black); font-family:'pretendard', sans-serif; letter-spacing: -.3px; font-size: 1rem;}
 input {font-size: .9rem;}
@@ -57,9 +57,9 @@ header .hInner .hTop .alarmWrap.click .alarmBtn {background: var(--mainColor3);}
 header .hInner .hTop .alarmWrap .alarmBtn .icon {width: 2rem; height: 2rem; background: url(../../assets/images/ico_alarm.svg) no-repeat center / contain; transition: .5s ease;}
 header .hInner .hTop .alarmWrap.click .alarmBtn .icon {background-image: url(../../assets/images/ico_alarm_white.svg);}
 header .hInner .hTop .alarmWrap .selectBox {position: absolute; width: 16.6rem; background: #fff; right: 0; border-radius: .5rem; box-shadow: 2px 2px 4px #00000060; max-height: 0; overflow-y: auto; transition: .5s ease;}
-header .hInner .hTop .alarmWrap.click .selectBox {max-height: 12.5rem;}
+header .hInner .hTop .alarmWrap.click .selectBox {max-height: 9.5rem;}
 header .hInner .hTop .alarmWrap .selectBox li:not(:last-child) {border-bottom: 1px solid #eee;}
-header .hInner .hTop .alarmWrap .selectBox li a {width: 100%; padding: .5em .7em; height: 2.25rem; box-sizing: border-box; font-size: .85rem; align-items: center;}
+header .hInner .hTop .alarmWrap .selectBox li a {width: 100%; padding: .5em .7em; height: 2.25rem; display: flex; box-sizing: border-box; font-size: .85rem; align-items: center;}
 header .hInner .hTop .alarmWrap .selectBox li a span {overflow: hidden; word-break: break-word; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical;}
 header .hInner .hTop .langBox {}
 header .hInner .hTop .langBox .nice-select {padding: .4rem 2rem .4rem .9rem; width: 4.22rem; box-sizing: border-box; border-radius: 1.6rem; background: var(--black); color: #fff; font-weight: 600;}
@@ -151,7 +151,11 @@ footer .inner > .right .snsBox .youtube .icon {background-image: url(../../asset
 .container .tableCont.type1 table tbody tr:after {content: ""; position: absolute; width: 0%; height: 1px; bottom: -1.5px; left: 0; border-bottom: 1px solid var(--mainColor3); transition: .5s ease;}
 .container .tableCont.type1 table tbody td {font-size: 1.1rem;}
 .container .tableCont.type1 table tbody td.cate {color: #555; white-space: nowrap;}
-.inputBox.type2 .fileName {display: flex; flex-direction: column; gap: .9rem; padding: .5rem 0 1.35rem; position: relative;}
+.inputBox.type1.date {max-width: 8.5rem; position: relative;}
+.inputBox.type1.date .input input {padding-right: 3rem; cursor: pointer;}
+.inputBox.type1.date .calenBtn {position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); pointer-events: none;}
+.inputBox.type1.date .calenBtn .icon {width: 1.35rem; height: 1.35rem; background: url(../../assets/images/ico_calendar.svg) no-repeat center / contain;}
+.inputBox.type2 .fileName {display: flex; flex-wrap: wrap; gap: .9rem; padding: .5rem 0 1.35rem; position: relative;}
 .inputBox.type2 .fileName li {position: relative; display: flex; justify-content: space-between; gap: 2rem;}
 .inputBox.type2 .fileName li:after {content: ""; position: absolute; top: 50%; left: -.3rem; transform: translateY(-50%); width: 0; height: 100%; padding: .3rem; border-radius: .5rem; background: #04359B15; transition: .5s ease; opacity: 0;}
 .inputBox.type2 .fileName li .nameBox {display: flex; gap: .4rem; align-items: center; font-weight: 500;}
@@ -160,6 +164,7 @@ footer .inner > .right .snsBox .youtube .icon {background-image: url(../../asset
 .inputBox.type2 .fileName li .size {font-size: .9rem; font-weight: 500; color: #999999;}
 .inputBox.type2 .fileName li .deletBtn {flex: none; cursor: pointer; position: relative; z-index: 1;}
 .inputBox.type2 .fileName li .deletBtn .icon {width: 1.35rem; height: 1.35rem; background: url(../../assets/images/ico_close.svg) no-repeat center / contain;}
+.inputBox.type2.file {overflow: hidden;}
 .inputBox.type2 .uploadBox {position: relative; z-index: 1; padding-top: 1rem; display: flex; align-items: center; text-align: center; gap: .6rem; flex-direction: column;}
 .inputBox.type2 .uploadBox:after {content: ""; position: absolute; width: calc(100% + 2.4rem); left: 50%; transform: translateX(-50%); height: 1px; top: 0; border-bottom: 1px solid #ddd;}
 .inputBox.type2 .uploadBox input {text-indent: -9999px; position: absolute; width: calc(100% + 2.4rem); height: calc(100% + .9rem); top: 0; left: 50%; transform: translateX(-50%); background: transparent; z-index: -1; transition: .5s ease;}
@@ -169,6 +174,12 @@ footer .inner > .right .snsBox .youtube .icon {background-image: url(../../asset
 .inputBox.type2.textBox {padding: .8rem 1.2rem; position: relative; display: flex; flex-direction: column; gap: .5rem; box-sizing: border-box;}
 .inputBox.type2.textBox .title {font-weight: 600; color: #666666; font-size: .8rem;}
 .inputBox.type2.textBox .text {font-weight: 500;}
+.inputBox.type2.business_num .flexinput {gap: 1.2rem;}
+.inputBox.type2.business_num label {position: relative;}
+.inputBox.type2.business_num label:not(:nth-child(3)):after {content: "-"; position: absolute; right: -.75rem;}
+.modalCon .boxWrap .close {position: absolute; top: -2rem; right:  0; z-index: 10; width: 24px; height: 24px; cursor: pointer;}
+.modalCon .boxWrap .close:after {content: ""; width: 100%; height: 100%; padding: .2rem; border-radius: 50%; border: 1px solid #fff; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0; transition: .5s ease;}
+.modalCon .boxWrap .close .icon {height: 100%; background: url(../../assets/images/ico_close_white.svg) no-repeat center / contain;}
 
 /* 페이지 번호 */
 .container .pageWrap {margin-top: 2.2rem; opacity: 0;}
@@ -189,7 +200,11 @@ footer .inner > .right .snsBox .youtube .icon {background-image: url(../../asset
 .container .checkBox.type5 label .icon {width: 1.35rem; height: 1.35rem; background-position: center; background-repeat: no-repeat; background-size: contain;}
 .container .checkBox.type5 label small {font-size: 1rem; font-weight: 500;}
 .container .checkBox.type5 label input:checked + small, .container .checkBox.type5 label input:checked + .icon + small {color: #fff;}
-
+.container .checkBox.type6 input {position: relative; width: 20px; height: 20px; border-radius: 4px; border: 1px solid #ddd; margin-top: 1px;}
+.container .checkBox.type6 input:before {content: ""; position: absolute; width: 100%; height: 100%;}
+.container .checkBox.type6 input:checked {background: var(--mainColor3); border-color: var(--mainColor3)}
+.container .checkBox.type6 input:checked:before {background: url(../../assets/images/ico_check_white.svg) no-repeat center / contain;}
+.container .checkBox.type6 input + small {font-size: .9rem; color: #111; font-weight: 500; width: 48px;}
 
 /* 메인 */
 .user.main header {background: transparent;}
@@ -343,21 +358,19 @@ footer .inner > .right .snsBox .youtube .icon {background-image: url(../../asset
 @keyframes flowRolling {0% {transform: translateX(0); -webkit-transform: translateX(0);} 100% {transform: translateX(-100%); -webkit-transform: translateX(-100%);}}
 
 .user .container .clickBtn {height: 3.3rem; font-size: 1.1rem;}
-.user .container .warningText {padding-left: 1rem; margin-top: .2rem;}
+.user .container .warningText {padding-left: 1rem; margin-top: .2rem; line-height: 140%;}
 .user .titleWrap.type1 {margin-bottom: 3.3rem; text-align: center;}
 .user .titleWrap.type1 .tt1 {position: relative; font-size: 1.1rem; font-weight: 600;}
 .user .titleWrap.type1 .tt1:after {content: ""; display: block; width: 4px; height: 4px; background: var(--black); margin: .9rem auto;}
 .user .titleWrap.type1 .tt2 {font-size: 1.7rem; font-weight: 500; word-break: keep-all;}
 .user .titleWrap.type2 {margin-bottom: 2.2rem; text-align: center;}
-.user .titleWrap.type2 .tt1 {position: relative; font-size: 1.35rem; font-weight: 600;}
+.user .titleWrap.type2 .tt1 {position: relative; font-size: 1.35rem; font-weight: 700;}
 .user .titleWrap.type2 .tt1:after {content: ""; display: block; width: 1.35rem; height: 2px; background: var(--black); margin: .9rem auto 0;}
 .user .titleWrap.type2 .tt2 {font-size: 1.5rem; font-weight: 500; word-break: keep-all; color: #555555; letter-spacing: -1px; margin-top: .9rem;}
 .user .titleWrap.type2.left .tt1 {text-align: left;}
 .user .titleWrap.type2.left .tt1:after {margin-right: auto; margin-left: 0;}
 
 .user .loginModal.modalCon .boxWrap {overflow: visible; max-width: 420px;}
-.user .loginModal.modalCon .boxWrap .close {position: absolute; top: -2rem; right:  0; z-izndex: 10; width: 24px; height: 24px; cursor: pointer;}
-.user .loginModal.modalCon .boxWrap .close .icon {height: 100%; background: url(../../assets/images/ico_close_white.svg) no-repeat center / contain;}
 .user .loginModal.modalCon .boxWrap .box {margin-top: 0; max-height: calc(100vh - 4rem); gap: .9rem;}
 .user .loginModal.modalCon .boxWrap .box .logo {max-width: 140px; width: 60%; margin: 0 auto; margin-bottom: .3rem;}
 .user .loginModal.modalCon .boxWrap .box .logo img {width: 100%; object-fit: contain;}
@@ -413,24 +426,13 @@ footer .inner > .right .snsBox .youtube .icon {background-image: url(../../asset
 .join_step .inner .stepWrap li .text {font-size: 1.5rem; font-weight: 500; color: #999; text-align: center; word-break: keep-all;}
 .join_step .inner .stepWrap li.active .text {color: var(--black);}
 .join_step .inner .contBox {display: flex; flex-direction: column; gap: 2.2rem;}
-.join_step .inner .contBox .inputWrap {display: flex; flex-wrap: wrap; gap: 1.35rem;}
-.join_step .inner .contBox .inputWrap > li {width: calc(100% / 2 - .675rem);}
+.join_step .inner .contBox .inputWrap {display: flex; flex-wrap: wrap; gap: 1.35rem 2.8%;}
+.join_step .inner .contBox .inputWrap > li {width: calc(100% / 2 - 1.4%);}
 .join_step .inner .contBox .box02 {border-radius: 1.6rem; border: 1px solid #eee; display: flex; flex-direction: column; gap: 2.22rem; padding: 2.22rem; align-items: center; justify-content: center}
-.join_step .inner .contBox .box02 .inputBox.type2.business_num .flexinput {gap: 1.2rem;}
-.join_step .inner .contBox .box02 .inputBox.type2.business_num label {position: relative;}
-.join_step .inner .contBox .box02 .inputBox.type2.business_num label:not(:nth-child(3)):after {content: "-"; position: absolute; right: -.75rem;}
 .join_step .inner .buttonBox {display: flex; flex-direction: column; max-width: 29.4rem; width: 85%; margin: 0 auto;}
-.join_step .inner .buttonBox button {width: 100%;}
+.join_step .inner .buttonBox button {width: 100%; max-width: none;}
 .join_step .inner .buttonBox button.clickBtn.white {border: none;}
 
-
-/* 회원탈퇴 */
-.withdraw .inner .titleWrap.type1 {margin-bottom: 2.2rem;}
-.withdraw .inner .topTextBox {text-align: center; margin-bottom: 2.2rem;}
-.withdraw .inner .topTextBox p {color: #555555; font-size: 1.1rem;}
-.withdraw .inner .topTextBox p:first-child {margin-bottom: .5rem;}
-.withdraw .inner .topTextBox .checkBox.type1 {justify-content: center; margin-top: 2.2rem; flex-wrap: wrap;}
-.withdraw .inner .topTextBox .checkBox.type1 small {word-break: keep-all;}
 
 /* 검색 */
 .container .searchFormWrap {margin-bottom: .5rem; position: relative; z-index: 1;}
@@ -455,17 +457,13 @@ footer .inner > .right .snsBox .youtube .icon {background-image: url(../../asset
 .search .inner2 .keyword {color: var(--mainColor3);}
 .search .inner2 .searchFormWrap {margin-bottom: 0;}
 .search .inner2 .searchFormWrap form {gap: .9rem;}
-.search .inner2 .searchFormWrap .searchBox .inputBox.type1.date {max-width: 8.5rem; position: relative;}
-.search .inner2 .searchFormWrap .searchBox .inputBox.type1.date .input input {padding-right: 3rem; cursor: pointer;}
-.search .inner2 .searchFormWrap .searchBox .inputBox.type1.date .calenBtn {position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); pointer-events: none;}
-.search .inner2 .searchFormWrap .searchBox .inputBox.type1.date .calenBtn .icon {width: 1.35rem; height: 1.35rem; background: url(../../assets/images/ico_calendar.svg) no-repeat center / contain;}
 .search .inner2 .searchFormWrap .keywrodBox {display: flex; gap: 4%; align-items: flex-start; font-size: .9rem; width: 100%; box-sizing: border-box;}
 .search .inner2 .searchFormWrap .keywrodBox .title {color: #555555; font-weight: 700; flex: none;}
 .search .inner2 .searchFormWrap .keywrodBox .list {display: flex; gap: .3rem .9rem; flex-wrap: wrap;}
 .search .inner2 .searchFormWrap .keywrodBox .list li a {color: var(--mainColor3); font-weight: 600;}
 .search .inner2 .resultBox {font-size: 1.35rem; color: #555; text-align: center; padding: 0 1rem;}
 .search .inner2 .resultBox p strong {color: var(--mainColor3); font-weight: 700;}
-/* .search .inner2 .tabBox {padding: .9rem 0;} */
+/*.search .inner2 .tabBox {padding: .9rem 0;}*/
 .search .inner2 .tableCont.type1 > table .th1 {width: 12%;}
 .search .inner2 .tableCont.type1 > table tbody tr .title .text {display: flex; align-items: center; gap: .5rem;}
 .search .inner2 .tableCont.type1 > table tbody tr .title .text p {font-size: 1.4rem; font-weight: 500; overflow: hidden; word-break: break-word; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; max-width: calc(100% - 1.85rem); transition: .5s ease;}
@@ -475,13 +473,56 @@ footer .inner > .right .snsBox .youtube .icon {background-image: url(../../asset
 .search .inner2 .tableCont.type1 > table tbody tr .state p {white-space: nowrap; display: inline-block; padding: .3rem .8rem; font-size: .8rem; font-weight: 600; color: #fff; border-radius: 3rem;}
 .search .inner2 .clickBtn {max-width: 16.6rem; width: 90%; margin: 0 auto; margin-top: 1.7rem;}
 
+
+/*  입주기관 소개  */
+.resident .inner .board_list table .th2 {width: 19%;}
+.resident .inner .board_list table tbody .cate p {font-size: .8rem; font-weight: 700; background: #04359B20; display: inline-block; padding: .4rem .9rem; border-radius: 3rem; color: var(--mainColor3)}
+.resident .inner .board_list table tbody .title .bot {gap: .3rem 1.35rem; flex-wrap: wrap;}
+.resident .inner .board_list table tbody .title .bot li {display: flex; gap: .4rem;}
+.resident .inner .board_list table tbody .title .bot li .left {color: #999;}
+.resident .inner .board_list table tbody .title .bot li .right {color: #555;}
+.resident_view .inner2 .profileWrap {display: flex; align-items: center; gap: 4%; justify-content: space-between; padding-bottom: 2.2rem; border-bottom: 2px solid var(--mainColor3);}
+.resident_view .inner2 .profileWrap .profileBox {display: flex; gap: 4%; align-items: flex-start; width: 100%;}
+.resident_view .inner2 .profileWrap .profileBox .imgBox {flex: none; max-width: 13.3rem; width: 35%; border: 1px solid #EEEEEE; height: 9.4rem; display: flex; align-items: center; justify-content: center; padding: 3%; box-sizing: border-box;}
+.resident_view .inner2 .profileWrap .profileBox .imgBox img {vertical-align: bottom;}
+.resident_view .inner2 .profileWrap .profileBox .textBox {width: 100%; display: flex; flex-direction: column; gap: .6rem;}
+.resident_view .inner2 .profileWrap .profileBox .textBox .nameBox {display: flex; flex-direction: column; gap: 6px;}
+.resident_view .inner2 .profileWrap .profileBox .textBox .nameBox .name {font-size: 1.35rem; font-weight: 700;}
+.resident_view .inner2 .profileWrap .profileBox .textBox .nameBox .address {color: #999999; font-size: .8rem; font-weight: 500;}
+.resident_view .inner2 .profileWrap .profileBox .textBox .intro {font-size: .9rem; font-weight: 500; line-height: 160%;}
+.resident_view .inner2 .profileWrap .clickBtn {flex: none; max-width: 10rem; width: 20%;}
+.resident_view .inner2 .infoWrap {margin-bottom: 2.2rem;}
+.resident_view .inner2 .infoWrap .infoBox .list > li {width: calc(50% - .675rem); display: flex; gap: .9rem;}
+.resident_view .inner2 .infoWrap .left {font-weight: 600; font-size: 1.1rem; min-width: 4.8rem; flex: none;}
+.resident_view .inner2 .infoWrap .left .blue {font-size: .9rem; font-weight: 500; color: var(--mainColor3)}
+.resident_view .inner2 .infoWrap .right {color: #555555; font-weight: 500; width: 100%;}
+.resident_view .inner2 .infoWrap .right a {color: #555;}
+.resident_view .inner2 .infoWrap > div {padding: 2.2rem 0; border-bottom: 1px solid #DDDDDD;}
+.resident_view .inner2 .infoWrap .infoBox .list {display: flex; flex-wrap: wrap; gap: 1.35rem;}
+.resident_view .inner2 .infoWrap .infoBox2 {display: flex; gap: .9rem;}
+.resident_view .inner2 .infoWrap .infoBox2 .right {display: flex; flex-direction: column; gap: .9rem; line-height: 140%;}
+
+.container .departBox .icon {width: 1.35rem; height: 1.35rem; background-position: center; background-size: contain; background-repeat: no-repeat;}
+.container .departBox.cate1 .icon {background-image: url(../../assets/images/ico_user_consultant_cate01_blue.svg);}
+.container .departBox.cate2 .icon {background-image: url(../../assets/images/ico_user_consultant_cate02_blue.svg);}
+.container .departBox.cate3 .icon {background-image: url(../../assets/images/ico_user_consultant_cate03_blue.svg);}
+.container .departBox.cate4 .icon {background-image: url(../../assets/images/ico_user_consultant_cate04_blue.svg);}
+.container .departBox.cate5 .icon {background-image: url(../../assets/images/ico_user_consultant_cate05_blue.svg);}
+.container .departBox.cate6 .icon {background-image: url(../../assets/images/ico_user_consultant_cate06_blue.svg);}
+.container .departBox.cate7 .icon {background-image: url(../../assets/images/ico_user_consultant_cate07_blue.svg);}
+.container .departBox.cate8 .icon {background-image: url(../../assets/images/ico_user_consultant_cate08_blue.svg);}
+.container .departBox.cate9 .icon {background-image: url(../../assets/images/ico_user_consultant_cate09_blue.svg);}
+.container .departBox.cate10 .icon {background-image: url(../../assets/images/ico_user_consultant_cate10_blue.svg);}
+.container .departBox.cate11 .icon {background-image: url(../../assets/images/ico_user_consultant_cate11_blue.svg);}
+.container .departBox.cate12 .icon {background-image: url(../../assets/images/ico_user_consultant_cate12_blue.svg);}
+.container .departBox.cate13 .icon {background-image: url(../../assets/images/ico_user_consultant_cate13_blue.svg);}
 .consultant .inner2 .searchFormWrap {gap: 1.35rem; overflow: hidden; margin-bottom: 3.3rem}
 .consultant .inner2 .searchFormWrap .checkWrap {justify-content: center; padding-top: 1.35rem; position: relative;}
 .consultant .inner2 .searchFormWrap .checkWrap:before {content: ""; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 100vw; height: 1px; border-top: 1px solid #ddd;}
 .consultant .inner2 .profileBox .textBox {width: 100%; display: flex; flex-direction: column; gap: .6rem;}
 .consultant .inner2 .profileBox .textBox .departBox {display: flex; gap: 4px; align-items: center; color: var(--mainColor3); font-size: .8rem; font-weight: 500;}
 .consultant .inner2 .profileBox .textBox .departBox .icon {width: .9rem; height: .9rem; background-position: center; background-size: contain; background-repeat: no-repeat;}
-.consultant .inner2 .profileBox .textBox .nameBox {display: flex; flex-direction: column; gap: 2px;}
+.consultant .inner2 .profileBox .textBox .nameBox {display: flex; flex-direction: column; gap: 6px;}
 .consultant .inner2 .profileBox .textBox .nameBox .name {font-size: 1.35rem; font-weight: 700;}
 .consultant .inner2 .profileBox .textBox .nameBox .company {color: #999999; font-size: .8rem; font-weight: 500;}
 .consultant .inner2 .profileBox .textBox .intro {color: #555; font-size: .9rem; font-weight: 500; line-height: 160%;}
@@ -528,19 +569,6 @@ footer .inner > .right .snsBox .youtube .icon {background-image: url(../../asset
 .consultant .inner2 .searchFormWrap .checkWrap .cate11 input:checked + .icon {background-image: url(../../assets/images/ico_user_consultant_cate11_white.svg);}
 .consultant .inner2 .searchFormWrap .checkWrap .cate12 input:checked + .icon {background-image: url(../../assets/images/ico_user_consultant_cate12_white.svg);}
 .consultant .inner2 .searchFormWrap .checkWrap .cate13 input:checked + .icon {background-image: url(../../assets/images/ico_user_consultant_cate13_white.svg);}
-.consultant .inner2 .profileBox .departBox.cate1 .icon {background-image: url(../../assets/images/ico_user_consultant_cate01_blue.svg);}
-.consultant .inner2 .profileBox .departBox.cate2 .icon {background-image: url(../../assets/images/ico_user_consultant_cate02_blue.svg);}
-.consultant .inner2 .profileBox .departBox.cate3 .icon {background-image: url(../../assets/images/ico_user_consultant_cate03_blue.svg);}
-.consultant .inner2 .profileBox .departBox.cate4 .icon {background-image: url(../../assets/images/ico_user_consultant_cate04_blue.svg);}
-.consultant .inner2 .profileBox .departBox.cate5 .icon {background-image: url(../../assets/images/ico_user_consultant_cate05_blue.svg);}
-.consultant .inner2 .profileBox .departBox.cate6 .icon {background-image: url(../../assets/images/ico_user_consultant_cate06_blue.svg);}
-.consultant .inner2 .profileBox .departBox.cate7 .icon {background-image: url(../../assets/images/ico_user_consultant_cate07_blue.svg);}
-.consultant .inner2 .profileBox .departBox.cate8 .icon {background-image: url(../../assets/images/ico_user_consultant_cate08_blue.svg);}
-.consultant .inner2 .profileBox .departBox.cate9 .icon {background-image: url(../../assets/images/ico_user_consultant_cate09_blue.svg);}
-.consultant .inner2 .profileBox .departBox.cate10 .icon {background-image: url(../../assets/images/ico_user_consultant_cate10_blue.svg);}
-.consultant .inner2 .profileBox .departBox.cate11 .icon {background-image: url(../../assets/images/ico_user_consultant_cate11_blue.svg);}
-.consultant .inner2 .profileBox .departBox.cate12 .icon {background-image: url(../../assets/images/ico_user_consultant_cate12_blue.svg);}
-.consultant .inner2 .profileBox .departBox.cate13 .icon {background-image: url(../../assets/images/ico_user_consultant_cate13_blue.svg);}
 .consultant.view .inner2 {position: relative; display: flex; gap: 6%;}
 .consultant.view .inner2 .leftBox > div {padding: 2.2rem 0; border-bottom: 1px solid #ddd;}
 .consultant.view .inner2 .leftBox > div:first-child {padding-top: 0;}
@@ -569,15 +597,16 @@ footer .inner > .right .snsBox .youtube .icon {background-image: url(../../asset
 .consultant.view .inner2 .rightBox .buttonBox button {max-width: none;}
 .consultant.view .inner2 .leftBox > * {animation: rightMove 1s ease both;}
 .consultant.view .inner2 .rightBox {animation: upMove 1s ease both;}
-.consultant .modalCon .boxWrap {max-width: 700px; padding: 2.2rem; box-sizing: border-box; min-height: 300px;}
-.consultant .modalCon .boxWrap .titleWrap.type2 {margin-bottom: 1.35rem;}
-.consultant .modalCon .boxWrap .diffiBox {gap: 1.35rem;}
-.consultant .modalCon .boxWrap .diffiBox .cont {max-height: calc(100vh - 19rem); overflow: auto; min-height: 87px;}
-.consultant .modalCon .boxWrap .diffiBox .cont::-webkit-scrollbar {width: 3px;}
-.consultant .modalCon .boxWrap .diffiBox .cont .listBox {flex-wrap: wrap; flex-direction: row; gap: 1.35rem 0;}
-.consultant .modalCon .boxWrap .diffiBox .cont .listBox .inputBox.textBox {width: 50%;}
-.consultant .modalCon .boxWrap .diffiBox .cont .listBox .inputBox {width: 100%;}
-.consultant .modalCon .boxWrap .diffiBox .writeBtn {width: 100%; max-width: none;}
+.modalCon.diffiModal .boxWrap {max-width: 700px; padding: 2.2rem; box-sizing: border-box; min-height: 300px;}
+.modalCon.diffiModal .boxWrap .titleWrap.type2 {margin-bottom: 1.35rem;}
+.modalCon.diffiModal .boxWrap .diffiBox {gap: 1.35rem;}
+.modalCon.diffiModal .boxWrap .diffiBox .cont {max-height: calc(100vh - 19rem); overflow: auto; min-height: 87px;}
+.modalCon.diffiModal .boxWrap .diffiBox .cont::-webkit-scrollbar {width: 3px;}
+.modalCon.diffiModal .boxWrap .diffiBox .cont .listBox {flex-wrap: wrap; flex-direction: row; gap: 1.35rem 0;}
+.modalCon.diffiModal .boxWrap .diffiBox .cont .listBox .inputBox.textBox {width: 50%;}
+.modalCon.diffiModal .boxWrap .diffiBox .cont .listBox .inputBox {width: 100%;}
+.modalCon.diffiModal .boxWrap .diffiBox .writeBtn {width: 100%; max-width: none;}
+.modalCon.diffiModal .boxWrap .diffiBox .inputBox.type2 .fileName {flex-direction: column;}
 
 /* 애로사항 */
 .difficulties .inner2 .cont {display: flex; gap: 4.8%;}
@@ -588,7 +617,6 @@ footer .inner > .right .snsBox .youtube .icon {background-image: url(../../asset
 .difficulties .inner2 .cont .leftBox .text {line-height: 140%; font-weight: 300; font-size: 1.4rem;}
 .container .diffiBox {display: flex; flex-direction: column; gap: 3.3rem;}
 .container .diffiBox .cont .listBox {display: flex; flex-direction: column; gap: 1.35rem;}
-.container .diffiBox .cont .inputBox.type2.file {overflow: hidden;}
 .container .diffiBox .cont .inputBox.type2 textarea {min-height: 18.2rem;}
 .container .diffiBox .cont .botText {margin-top: 1.35rem; line-height: 140%; text-align: center; word-break: keep-all;}
 .container .diffiBox .cont .botText p {font-size: .8rem; color: #555555; letter-spacing: -.6px;}
@@ -597,69 +625,71 @@ footer .inner > .right .snsBox .youtube .icon {background-image: url(../../asset
 .container .diffiBox .writeBtn {max-width: 16.6rem; width: 90%; margin: 0 auto;}
 
 /* 게시판 */
-.board .buttonBox {display: flex; gap: 3.5%; justify-content: center;}
-.board .buttonBox .clickBtn {max-width: 16.7rem; width: 90%; gap: 6%;}
-.board .buttonBox .clickBtn .icon {width: 1.35rem; height: 1.35rem; background-position: center; background-repeat: no-repeat; background-size: contain;}
-.board .buttonBox .listBtn {background: var(--black);}
-.board .buttonBox .listBtn .icon {background-image: url(../../assets/images/ico_list_white.svg)}
-.board .buttonBox .editBtn, .board .buttonBox .writeBtn {background: var(--mainColor3);}
-.board .buttonBox .editBtn .icon, .board .buttonBox .writeBtn .icon {background-image: url(../../assets/images/ico_edit_white.svg)}
-.board .buttonBox .cancelBtn {background: #FF5353;}
-.board .board_list > table .th1 {width: 9.2%;}
-.board .board_list > table .th1:last-child {width: 8%;}
-.board .board_list > table tr > * {padding: .9rem .5em; padding-right: 1.85rem;}
-.board .board_list > table tr > *:last-child {padding-right: .5rem;}
-.board .board_list > table thead th {height: 2.8rem; color: var(--black); text-align: center; font-weight: 600;}
-.board .board_list > table tbody {border-top: 2px solid var(--mainColor3);}
-.board .board_list > table tbody tr {border-bottom: 1px solid #EEEEEE; position: relative; cursor: pointer;}
-.board .board_list > table tbody tr:after {content: ""; position: absolute; width: 0%; height: 1px; bottom: -1.5px; left: 0; border-bottom: 1px solid var(--mainColor3); transition: .5s ease;}
-.board .board_list > table tbody tr td:not(.title) {text-align: center; color: #555555; font-weight: 500;}
-.board .board_list > table tbody tr td:not(.title, .hit) {font-size: 1rem;}
-.board .board_list > table tbody tr.notice {background: #04359b06;}
-.board .board_list > table tbody tr.notice .notice p {white-space: nowrap; background: var(--mainColor3); border-radius: 3rem; padding: .3rem .9rem; color: #fff; font-weight: 600; font-size: .8rem; display: inline-block;}
-.board .board_list > table tbody tr .cate {white-space: nowrap;}
-.board .board_list > table tbody tr .title .text {display: flex; align-items: center; gap: .5rem;}
-.board .board_list > table tbody tr .title .text p {font-size: 1.4rem; font-weight: 500; overflow: hidden; word-break: break-word; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; max-width: calc(100% - 1.85rem); transition: .5s ease;}
-.board .board_list > table tbody tr .title .text i {width: 1.35rem; height: 1.35rem; background-position: center; background-repeat: no-repeat; background-size: contain;}
-.board .board_list > table tbody tr .title .text .file {background-image: url(../../assets/images/ico_file_blue.svg);}
-.board .board_list > table tbody tr .title .text .lock {background-image: url(../../assets/images/ico_lock_blue.svg);}
-.board .board_list > table tbody tr .title .bot {margin-top: .4rem; font-size: .9rem; color: #555; display: flex; align-items: center; gap: .4rem;}
-.board .board_list > table tbody tr .state p {white-space: nowrap; display: inline-block; padding: .3rem .8rem; font-size: .8rem; font-weight: 600; color: #fff; border-radius: 3rem;}
-.board .board_list > table tbody tr .state p.waiting {background: #999999;}
-.board .board_list > table tbody tr .state p.complete {background: var(--mainColor3);}
+.container .buttonBox {display: flex; gap: 3.5%; justify-content: center;}
+.container .buttonBox .clickBtn {max-width: 16.7rem; width: 90%; gap: 6%;}
+.container .buttonBox .clickBtn .icon {width: 1.35rem; height: 1.35rem; background-position: center; background-repeat: no-repeat; background-size: contain;}
+.container .buttonBox .listBtn {background: var(--black) !important;}
+.container .buttonBox .listBtn .icon {background-image: url(../../assets/images/ico_list_white.svg)}
+.container .buttonBox .editBtn, .container .buttonBox .writeBtn, .container .buttonBox .surveyBtn {background: var(--mainColor3) !important;}
+.container .buttonBox .editBtn .icon, .container .buttonBox .writeBtn .icon {background-image: url(../../assets/images/ico_edit_white.svg)}
+.container .buttonBox .surveyBtn .icon {background-image: url(../../assets/images/ico_star_white.svg)}
+.container .buttonBox .cancelBtn, .container .buttonBox .completeBtn {background: #FF5353 !important;}
+.container .board_list > table .th1 {width: 9.2%;}
+.container .board_list > table .th1:last-child {width: 8%;}
+.container .board_list > table tr > * {padding: .9rem .5em; padding-right: 1.85rem;}
+.container .board_list > table tr > *:last-child {padding-right: .5rem;}
+.container .board_list > table thead th {height: 2.8rem; color: var(--black); text-align: center; font-weight: 600;}
+.container .board_list > table tbody {border-top: 2px solid var(--mainColor3);}
+.container .board_list > table tbody tr {border-bottom: 1px solid #EEEEEE; position: relative; cursor: pointer;}
+.container .board_list > table tbody tr:after {content: ""; position: absolute; width: 0%; height: 1px; bottom: -1.5px; left: 0; border-bottom: 1px solid var(--mainColor3); transition: .5s ease;}
+.container .board_list > table tbody tr td:not(.title) {text-align: center; color: #555555; font-weight: 500;}
+.container .board_list > table tbody tr td:not(.title, .hit) {font-size: 1rem;}
+.container .board_list > table tbody tr.notice {background: #04359b06;}
+.container .board_list > table tbody tr.notice .notice p {white-space: nowrap; background: var(--mainColor3); border-radius: 3rem; padding: .3rem .9rem; color: #fff; font-weight: 600; font-size: .8rem; display: inline-block;}
+.container .board_list > table tbody tr .cate {white-space: nowrap;}
+.container .board_list > table tbody tr .title .text {display: flex; align-items: center; gap: .5rem;}
+.container .board_list > table tbody tr .title .text p {font-size: 1.4rem; font-weight: 500; overflow: hidden; word-break: break-word; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; max-width: calc(100% - 1.85rem); transition: .5s ease;}
+.container .board_list > table tbody tr .title .text i {width: 1.35rem; height: 1.35rem; background-position: center; background-repeat: no-repeat; background-size: contain;}
+.container .board_list > table tbody tr .title .text .file {background-image: url(../../assets/images/ico_file_blue.svg);}
+.container .board_list > table tbody tr .title .text .lock {background-image: url(../../assets/images/ico_lock_blue.svg);}
+.container .board_list > table tbody tr .title .bot {margin-top: .4rem; font-size: .9rem; color: #555; display: flex; align-items: center; gap: .4rem;}
+.container .board_list > table tbody tr .state p {white-space: nowrap; display: inline-block; padding: .3rem .8rem; font-size: .8rem; font-weight: 600; color: #fff; border-radius: 3rem;}
+.container .board_list > table tbody tr .state p.waiting {background: #999999;}
+.container .board_list > table tbody tr .state p.complete {background: var(--mainColor3);}
 
-.board .board_view > table tr > * {padding: 0;}
-.board .board_view > table .titleBox {padding: .9rem 0; display: flex; flex-direction: column; gap: .4rem; color: var(--black);}
-.board .board_view > table .titleBox .notice p, .board .board_view > table .titleBox .state p  {white-space: nowrap; background: var(--mainColor3); border-radius: 3rem; padding: .3rem .9rem; color: #fff; font-weight: 600; font-size: .8rem; display: inline-block;}
-.board .board_view > table .titleBox .state.waiting p {background: #999999;}
-.board .board_view > table .titleBox .title {font-size: 1.5rem; font-weight: 500; word-break: keep-all;}
-.board .board_view > table .titleBox .bot {display: flex; gap: 1.8rem; color: #555555; font-size: .9rem; font-weight: 500;}
-.board .board_view > table .titleBox .bot li {position: relative;}
-.board .board_view > table .titleBox .bot li:not(:last-child):after {content: ""; position: absolute; top: 50%; right: -.9rem; width: 1px; height: .8rem; background: #ddd; transform: translateY(-50%);}
-.board .board_view > table thead .titleBox {border-bottom: 2px solid var(--mainColor3); text-align: center; align-items: center;}
-.board .board_view > table thead .fileBox {padding: 1.35rem 4%; display: flex; flex-wrap: wrap; gap: .9rem; border-bottom: 1px solid #EEEEEE;}
-.board .board_view > table thead .fileBox li {min-width: calc(50% - .45rem);}
-.board .board_view > table thead .fileBox li a {display: flex; gap: .4rem; align-items: center; position: relative;}
-.board .board_view > table thead .fileBox li a:after {content: ""; position: absolute; top: 50%; left: -.3rem; transform: translateY(-50%); width: 0; height: 100%; padding: .3rem; border-radius: .5rem; background: #04359B15; transition: .5s ease; opacity: 0;}
-.board .board_view > table thead .fileBox li a .icon {flex: none; width: 1.35rem; height: 1.35rem; background: url(../../assets/images/ico_file_blue.svg) no-repeat center / contain;}
-.board .board_view > table thead .fileBox li a .name {font-size: 1.1rem; overflow: hidden; word-break: break-word; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical;}
-.board .board_view > table thead .fileBox li a .size {font-size: .9rem; font-weight: 500; color: #999999;}
-.board .board_view > table tbody {border-bottom: 1px solid #999;}
-.board .board_view > table tbody tr td {padding: 2.2rem 4%;}
-.board .board_view > table tbody tr td .textBox { line-height: 1.6; display: flex; flex-direction: column; gap: 1.7rem; min-height: 11.1rem;}
-.board .board_view > table tbody .answerBox {background: #F6F6F6; border-radius: .9rem; padding: 1.35rem 5%;}
-.board .board_view > table tbody .answerBox .titleBox {padding-bottom: .9rem; border-bottom: 1px solid #999;}
-.board .board_view > table tbody .answerBox .titleBox .state p {background: var(--black);}
-.board .board_view > table tbody .answerBox .textBox {padding-top: 1.35rem; font-size: 1.35rem; font-weight: 500; line-height: 1.6;}
-.board .board_view > table tfoot tr td {padding: 2.2rem 1rem 0;}
-.board .board_view > table tfoot .navigationBox {display: flex; flex-direction: column; gap: .9rem;}
-.board .board_view > table tfoot .navigationBox li {width: 100%;}
-.board .board_view > table tfoot .navigationBox li a {width: 100%; padding: 1.35rem 4%; display: flex; align-items: center; gap: 4%; border-radius: 4rem; background: #f6f6f6; box-sizing: border-box;}
-.board .board_view > table tfoot .navigationBox li a .left {flex: none; display: flex; gap: .9rem; font-size: 1.1rem; align-items: center;}
-.board .board_view > table tfoot .navigationBox li a .left .icon {flex: none; width: 1.35rem; height: 1.35rem; background: url(../../assets/images/ico_arrow_up.svg) no-repeat center / contain;}
-.board .board_view > table tfoot .navigationBox li.nextBtn a .left .icon {transform: rotateX(180deg);}
-.board .board_view > table tfoot .navigationBox li a .name {width: 100%; overflow: hidden; word-break: break-word; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; color: #555; font-size: 1.1rem; font-weight: 500;}
-.board .board_view > table tfoot .navigationBox + .buttonBox {margin-top: 2.2rem;}
+.container .board_view > table tr > * {padding: 0;}
+.container .board_view > table .titleBox {padding: .9rem 0; display: flex; flex-direction: column; gap: .4rem; color: var(--black);}
+.container .board_view > table .titleBox .notice p, .container .board_view > table .titleBox .state p  {white-space: nowrap; background: var(--mainColor3); border-radius: 3rem; padding: .3rem .9rem; color: #fff; font-weight: 600; font-size: .8rem; display: inline-block;}
+.container .board_view > table .titleBox .state.waiting p {background: #999999;}
+.container .board_view > table .titleBox .state.cancel p {background: var(--black);}
+.container .board_view > table .titleBox .title {font-size: 1.5rem; font-weight: 500; word-break: keep-all;}
+.container .board_view > table .titleBox .bot {display: flex; gap: 1.8rem; color: #555555; font-size: .9rem; font-weight: 500;}
+.container .board_view > table .titleBox .bot li {position: relative;}
+.container .board_view > table .titleBox .bot li:not(:last-child):after {content: ""; position: absolute; top: 50%; right: -.9rem; width: 1px; height: .8rem; background: #ddd; transform: translateY(-50%);}
+.container .board_view > table thead .titleBox {border-bottom: 2px solid var(--mainColor3); text-align: center; align-items: center;}
+.container .board_view > table thead .fileBox {padding: 1.35rem 4%; display: flex; flex-wrap: wrap; gap: .9rem; border-bottom: 1px solid #EEEEEE;}
+.container .board_view > table thead .fileBox li {min-width: calc(50% - .45rem);}
+.container .board_view > table thead .fileBox li a {display: flex; gap: .4rem; align-items: center; position: relative;}
+.container .board_view > table thead .fileBox li a:after {content: ""; position: absolute; top: 50%; left: -.3rem; transform: translateY(-50%); width: 0; height: 100%; padding: .3rem; border-radius: .5rem; background: #04359B15; transition: .5s ease; opacity: 0;}
+.container .board_view > table thead .fileBox li a .icon {flex: none; width: 1.35rem; height: 1.35rem; background: url(../../assets/images/ico_file_blue.svg) no-repeat center / contain;}
+.container .board_view > table thead .fileBox li a .name {font-size: 1.1rem; overflow: hidden; word-break: break-word; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical;}
+.container .board_view > table thead .fileBox li a .size {font-size: .9rem; font-weight: 500; color: #999999;}
+.container .board_view > table tbody {border-bottom: 1px solid #999;}
+.container .board_view > table tbody tr td {padding: 2.2rem 4%;}
+.container .board_view > table tbody tr td .textBox { line-height: 1.6; display: flex; flex-direction: column; gap: 1.7rem; min-height: 11.1rem;}
+.container .board_view > table tbody .answerBox {background: #F6F6F6; border-radius: .9rem; padding: 1.35rem 5%;}
+.container .board_view > table tbody .answerBox .titleBox {padding-bottom: .9rem; border-bottom: 1px solid #999;}
+.container .board_view > table tbody .answerBox .titleBox .state p {background: var(--black);}
+.container .board_view > table tbody .answerBox .textBox {padding-top: 1.35rem; font-size: 1.35rem; font-weight: 500; line-height: 1.6;}
+.container .board_view > table tfoot tr td {padding: 2.2rem 1rem 0;}
+.container .board_view > table tfoot .navigationBox {display: flex; flex-direction: column; gap: .9rem;}
+.container .board_view > table tfoot .navigationBox li {width: 100%;}
+.container .board_view > table tfoot .navigationBox li a {width: 100%; padding: 1.35rem 4%; display: flex; align-items: center; gap: 4%; border-radius: 4rem; background: #f6f6f6; box-sizing: border-box;}
+.container .board_view > table tfoot .navigationBox li a .left {flex: none; display: flex; gap: .9rem; font-size: 1.1rem; align-items: center;}
+.container .board_view > table tfoot .navigationBox li a .left .icon {flex: none; width: 1.35rem; height: 1.35rem; background: url(../../assets/images/ico_arrow_up.svg) no-repeat center / contain;}
+.container .board_view > table tfoot .navigationBox li.nextBtn a .left .icon {transform: rotateX(180deg);}
+.container .board_view > table tfoot .navigationBox li a .name {width: 100%; overflow: hidden; word-break: break-word; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; color: #555; font-size: 1.1rem; font-weight: 500;}
+.container .board_view > table tfoot .navigationBox + .buttonBox {margin-top: 2.2rem;}
 .board .board_view .satisfactionBox {margin-top: 2.2rem; background: #04359B06; border-radius: .9rem; padding: 1.35rem; display: flex; flex-direction: column; align-items: center; gap: .9rem;}
 .board .board_view .satisfactionBox .title {color: #555555; font-size: 1.35rem; font-weight: 600; text-align: center; word-break: keep-all;}
 .board .board_view .satisfactionBox .checkWrap {justify-content: center; min-height: 2.2rem; align-items: center;}
@@ -814,6 +844,144 @@ footer .inner > .right .snsBox .youtube .icon {background-image: url(../../asset
 .location .inner2 .box .traffic:nth-child(2).aos-animate {animation-delay: .1s}
 .location .inner2 .box .traffic.aos-animate .textBox > * {animation: rightMove 1s ease both;}
 
+/* 컨설팅 내역 */
+.mypage_consultant .inner2 .searchFormWrap form .searchBox {max-width: 58rem; width: 90%;}
+.mypage_consultant .inner2 .searchFormWrap form .searchBox .dateWrap {display: flex; gap: .4rem; align-items: center; max-width: 18.6rem; width: 100%;}
+.mypage_consultant .inner2 .searchFormWrap form .searchBox .dateWrap input {min-width: 7.5rem;}
+.mypage_consultant .inner2 .searchFormWrap form .searchBox .dateWrap > span {flex: none; color: #999;}
+.mypage_consultant .inner2 .board_list .th1 {width: 9.2%;}
+.mypage_consultant .inner2 .board_list .th1:last-child {width: 8%;}
+.mypage_consultant .inner2 .board_list .state p {width: 4.3rem; height: 1.6rem; border-radius: 3rem; display: flex; align-items: center; justify-content: center; padding: 3px; box-sizing: border-box; font-size: .8rem;}
+.mypage_consultant .inner2 .board_list .state.waiting p {background: #04359b20; color: var(--mainColor3);}
+.mypage_consultant .inner2 .board_list .state.complete p {background: var(--mainColor3); color: #fff;}
+.mypage_consultant .inner2 .board_list .state.resolved p {background: #999999; color: #fff;}
+.mypage_consultant .inner2 .board_list .satisfaction p {width: 5.1rem; height: 1.6rem; border-radius: 3rem; background: #111; color: #fff; display: flex; align-items: center; justify-content: center; padding: 3px; box-sizing: border-box; font-size: .8rem;}
+.mypage_consultant.view .inner2 {display: flex; flex-direction: column; gap: 2.2rem;}
+.mypage_consultant.view .inner2 .profileWrap {display: flex; align-items: center; gap: 4%; justify-content: space-between; padding-bottom: 2.2rem; border-bottom: 2px solid var(--mainColor3);}
+.mypage_consultant.view .inner2 .profileWrap .profileBox {display: flex; gap: 4%; align-items: flex-start; width: 100%;}
+.mypage_consultant.view .inner2 .profileWrap .profileBox .imgBox {border-radius: 50%; overflow: hidden; flex: none; max-width: 8.3rem; width: 30%;}
+.mypage_consultant.view .inner2 .profileWrap .profileBox .imgBox img {vertical-align: bottom;}
+.mypage_consultant.view .inner2 .profileWrap .profileBox .textBox {width: 100%; display: flex; flex-direction: column; gap: .6rem;}
+.mypage_consultant.view .inner2 .profileWrap .profileBox .textBox .departBox {display: flex; gap: 4px; align-items: center; color: var(--mainColor3); font-size: .8rem; font-weight: 500;}
+.mypage_consultant.view .inner2 .profileWrap .profileBox .textBox .departBox .icon {width: .9rem; height: .9rem; background-position: center; background-size: contain; background-repeat: no-repeat;}
+.mypage_consultant.view .inner2 .profileWrap .profileBox .textBox .nameBox {display: flex; flex-direction: column; gap: 2px;}
+.mypage_consultant.view .inner2 .profileWrap .profileBox .textBox .nameBox .name {font-size: 1.35rem; font-weight: 700;}
+.mypage_consultant.view .inner2 .profileWrap .profileBox .textBox .nameBox .company {color: #999999; font-size: .8rem; font-weight: 500;}
+.mypage_consultant.view .inner2 .profileWrap .profileBox .textBox .intro {color: #555; font-size: .9rem; font-weight: 500; line-height: 160%;}
+.mypage_consultant.view .inner2 .profileWrap .clickBtn {flex: none; max-width: 10rem; width: 20%;}
+.mypage_consultant.view .inner2 .chatWrap {padding-bottom: 2.2rem; border-bottom: 1px solid #999999}
+.mypage_consultant.view .inner2 .chatWrap .state {display: inline-block; margin-bottom: .6rem;}
+.mypage_consultant.view .inner2 .chatWrap .state p {padding: .35rem .9rem; border-radius: 3rem; box-sizing: border-box; font-size: .8rem;}
+.mypage_consultant.view .inner2 .chatWrap .state.complete p {background: #999999; color: #fff;}
+.mypage_consultant.view .inner2 .chatWrap .chatBox {display: flex; flex-direction: column; gap: .8rem;}
+.mypage_consultant.view .inner2 .chatWrap .chatBox > * {max-width: 82%;}
+.mypage_consultant.view .inner2 .chatWrap .chatBox .box {display: flex; align-items: flex-end; gap: 4px;}
+.mypage_consultant.view .inner2 .chatWrap .chatBox .chatText {position: relative; border-radius: .8rem; padding: .9rem 1.35rem; display: flex; flex-direction: column; gap: .9rem;}
+.mypage_consultant.view .inner2 .chatWrap .chatBox .chatText:before {content: ""; position: absolute; top: 3px; width: 8px; height: 12px; background: url(../../assets/images/ico_user_chat_sky.svg) no-repeat center / contain;}
+.mypage_consultant.view .inner2 .chatWrap .chatBox .chatText .text {color: #555555; font-weight: 500; line-height: 140%;}
+.mypage_consultant.view .inner2 .chatWrap .chatBox .chatText .fileBox {display: flex; flex-direction: column; gap: .9rem;}
+.mypage_consultant.view .inner2 .chatWrap .chatBox .chatText .fileBox li {min-width: calc(50% - .45rem);}
+.mypage_consultant.view .inner2 .chatWrap .chatBox .chatText .fileBox li a {display: flex; gap: .4rem; align-items: center; position: relative;}
+.mypage_consultant.view .inner2 .chatWrap .chatBox .chatText .fileBox li a:after {content: ""; position: absolute; top: 50%; left: -.3rem; transform: translateY(-50%); width: 0; height: 100%; padding: .3rem; border-radius: .5rem; background: #04359B15; transition: .5s ease; opacity: 0;}
+.mypage_consultant.view .inner2 .chatWrap .chatBox .chatText .fileBox li a .icon {flex: none; width: 1.35rem; height: 1.35rem; background: url(../../assets/images/ico_file_blue.svg) no-repeat center / contain;}
+.mypage_consultant.view .inner2 .chatWrap .chatBox .chatText .fileBox li a .name {font-size: 1.1rem; overflow: hidden; word-break: break-word; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; font-weight: 500;}
+.mypage_consultant.view .inner2 .chatWrap .chatBox .chatText .fileBox li a .size {font-size: .9rem; font-weight: 500; color: #999999;}
+.mypage_consultant.view .inner2 .chatWrap .chatBox .time {flex: none; font-size: .8rem; color: #00000050; font-weight: 500;}
+.mypage_consultant.view .inner2 .chatWrap .questionBox {position: relative; text-align: right; margin-left: auto;}
+.mypage_consultant.view .inner2 .chatWrap .questionBox .chatText {background: #F0F3F9; align-items: flex-end;}
+.mypage_consultant.view .inner2 .chatWrap .questionBox .chatText:before {right: -3px;}
+.mypage_consultant.view .inner2 .chatWrap .editBtn {position: absolute; top: 0; left: 0;}
+.mypage_consultant.view .inner2 .chatWrap .editBtn .icon {width: 1.35rem; height: 1.35rem; background: url(../../assets/images/ico_pencil_gray.svg) no-repeat center / contain;}
+.mypage_consultant.view .inner2 .chatWrap .answerBox {text-align: left; display: flex; align-items: flex-start; gap: .4rem;}
+.mypage_consultant.view .inner2 .chatWrap .answerBox .profileBox {border-radius: 50%; overflow: hidden; width: 2.2rem; flex: none;}
+.mypage_consultant.view .inner2 .chatWrap .answerBox .profileBox img {vertical-align: bottom;}
+.mypage_consultant.view .inner2 .chatWrap .answerBox .rightBox {display: flex; flex-direction: column; gap: .3rem; width: 100%;}
+.mypage_consultant.view .inner2 .chatWrap .answerBox .rightBox > .name {color: #00000050; font-size: .8rem; font-weight: 500;}
+.mypage_consultant.view .inner2 .chatWrap .answerBox .chatText {background: #F6F6F6;}
+.mypage_consultant.view .inner2 .chatWrap .answerBox .chatText:before {left: -3px; background-image: url(../../assets/images/ico_user_chat_gray.svg);}
+.mypage_consultant.view .inner2 .buttonBox {padding: 0 4%;}
+.mypage_consultant.view .inner2 .buttonBox .completeBtn {margin-right: auto;}
+
+.mypage_consultant .surveyModal .boxWrap {max-width: 550px; padding: 2.2rem; box-sizing: border-box; min-height: 300px;}
+.mypage_consultant .surveyModal .boxWrap .titleWrap.type2 {margin-bottom: 1.35rem;}
+.mypage_consultant .surveyModal .boxWrap .surveyBox {display: flex; flex-direction: column; gap: 1.35rem;}
+.mypage_consultant .surveyModal .boxWrap .surveyBox .cont {max-height: calc(100vh - 19rem); overflow: auto; min-height: 87px;}
+.mypage_consultant .surveyModal .boxWrap .surveyBox .list {display: flex; flex-direction: column; gap: .9rem;}
+.mypage_consultant .surveyModal .boxWrap .surveyBox .list li {display: flex; justify-content: space-between; gap: 1rem; align-items: center;}
+.mypage_consultant .surveyModal .boxWrap .surveyBox .list li .title {flex: none; font-size: 1.1rem; font-weight: 600;}
+.mypage_consultant .surveyModal .boxWrap .surveyBox .starBox {display: flex; gap: .3rem;}
+.mypage_consultant .surveyModal .boxWrap .surveyBox .starBox .icon {width: clamp(1.7rem, 8vw, 2.2rem); height: clamp(1.7rem, 8vw, 2.2rem); background: url(../../assets/images/ico_star_gray.svg) no-repeat center / contain; cursor: pointer;}
+.mypage_consultant .surveyModal .boxWrap .surveyBox .starBox .icon.click {background-image: url(../../assets/images/ico_star_blue.svg);}
+.mypage_consultant .surveyModal .boxWrap .surveyBox .writeBtn {width: 100%; max-width: none;}
+
+
+/* 애로사항 내역 */
+.mypage_difficulties .inner2 .searchFormWrap form .searchBox {max-width: 58rem; width: 90%;}
+.mypage_difficulties .inner2 .board_list .th1 {width: 9.2%;}
+.mypage_difficulties .inner2 .board_list .th1:last-child {width: 8%;}
+.mypage_difficulties .inner2 .board_list .state p {padding: .35rem .9rem; border-radius: 3rem; box-sizing: border-box; font-size: .8rem;}
+.mypage_difficulties .inner2 .board_list .state.waiting p {background: #04359b20; color: var(--mainColor3);}
+.mypage_difficulties .inner2 .board_list .state.complete p {background: var(--mainColor3); color: #fff;}
+.mypage_difficulties .inner2 .board_list .state.cancel p {background: var(--black); color: #fff;}
+.mypage_difficulties .inner2 .board_view > table .titleBox .state.waiting p {background: #04359b20; color: var(--mainColor3);}
+.mypage_difficulties .inner2 .board_view > table .buttonBox .cancelBtn {margin-right: auto;}
+
+/* 개인정보 입력 */
+.mypage_information .inner2 {display: flex; flex-direction: column; gap: 3.3rem;}
+.mypage_information .inner2 .inputBox.type2 .btn {background: var(--black);}
+.mypage_information .inner2 .listBox {display: flex; flex-wrap: wrap; gap: 1.35rem 2.8%;}
+.mypage_information .inner2 .listBox > li {width: calc(50% - 1.4%);}
+.mypage_information .inner2 .listBox > li.width1 {width: 100%;}
+.mypage_information .inner2 .inforBox .listBox > li:nth-child(9) {margin-left: 51.5%;}
+.mypage_information .inner2 .consultantBox {border-top: 1px solid #ddd; padding-top: 2.2rem;}
+.mypage_information .inner2 .consultantBox .profileImg {display: flex; flex-direction: column; gap: .9rem; text-align: center; align-items: center; margin-bottom: 2.2rem;}
+.mypage_information .inner2 .consultantBox .profileImg label {position: relative; display: block; position: relative; width: 8.3rem; height: 8.3rem; overflow: hidden; border-radius: 1.7rem;}
+.mypage_information .inner2 .consultantBox .profileImg:not(.upload) label {transition: .5s ease; background: #F6F6F6; display: flex; flex-direction: column; gap: .3rem; gap: .4rem; align-items: center; justify-content: center;}
+.mypage_information .inner2 .consultantBox .profileImg:not(.upload) label .icon {width: 2.2rem; height: 2.2rem; background: url(../../assets/images/ico_user_information_plus_blue.svg) no-repeat center / contain; transition: .5s ease;}
+.mypage_information .inner2 .consultantBox .profileImg:not(.upload) label small {font-weight: 500;}
+.mypage_information .inner2 .consultantBox .profileImg.upload .icon {position: absolute; top: 50%; left: 50%; width: 2.2rem; height: 2.2rem; background: url(../../assets/images/ico_user_information_close_white.svg) no-repeat center / contain; opacity: 0; transform: translate(-50%, -50%) scale(.8); opacity: 0; transition: .5s ease;}
+.mypage_information .inner2 .consultantBox .profileImg label input {cursor: pointer; position: absolute; width: 100%; height: 100%; top: 0; left: 0; text-indent: -9999px;}
+.mypage_information .inner2 .consultantBox .profileImg label img {position: absolute; width: 100%; height: 100%; object-fit: cover; top: 50%; left: 50%; transform: translate(-50%, -50%); transition: .5s ease;}
+.mypage_information .inner2 .consultantBox .profileImg .text {font-size: .8rem; color: #555; line-height: 120%; font-weight: 500;}
+.mypage_information .inner2 .consultantBox .listBox .checkWrap {gap: 1.2rem; height: auto;}
+.mypage_information .inner2 .consultantBox .listBox .checkWrap .checkBox.type6 {width: auto;}
+.mypage_information .inner2 .consultantBox .listBox .inputBox.type2 .fileName li {width: calc(50% - .45rem);}
+.mypage_information .inner2 .consultantBox .listBox .inputBox.type2.upload .noData {font-size: 1.35rem; color: #999; padding: .5rem 0 1.35rem; text-align: center;}
+.mypage_information .inner2 .consultantBox .listBox .inputBox.type2.upload .uploadName {padding: .5rem 0 1.35rem; display: flex; flex-direction: column; gap: .9rem;}
+.mypage_information .inner2 .consultantBox .listBox .inputBox.type2.upload .uploadName .nameBox {position: relative; width: fit-content; max-width: 100%;}
+.mypage_information .inner2 .consultantBox .listBox .inputBox.type2.upload .uploadName .nameBox label {position: relative;}
+.mypage_information .inner2 .consultantBox .listBox .inputBox.type2.upload .uploadName .nameBox p.name {max-width: 100%; background: transparent; font-size: 1.1rem; font-weight: 500; box-sizing: border-box; border-radius: 2rem; padding: .4rem .9rem; padding-right: 2rem; border: 1px solid #ddd;}
+.mypage_information .inner2 .consultantBox .listBox .inputBox.type2.upload .uploadName .nameBox input {min-width: 10rem; max-width: 100%; background: transparent; font-size: 1.1rem; font-weight: 500; box-sizing: border-box; border-radius: 2rem; padding: .4rem .9rem; padding-right: 2rem; border: 1px solid #ddd;}
+.mypage_information .inner2 .consultantBox .listBox .inputBox.type2.upload .uploadName .deletBtn {position: absolute; right: .5rem; top: 50%; transform: translateY(-50%); z-index: 1;}
+.mypage_information .inner2 .consultantBox .listBox .inputBox.type2.upload .uploadName .deletBtn .icon {width: 1.35rem; height: 1.35rem; background: url(../../assets/images/ico_close.svg) no-repeat center / contain;}
+.mypage_information .inner2 .consultantBox .listBox .inputBox.type2.upload .uploadBox {width: calc(100% + 2.4rem); margin-left: -1.2rem; margin-bottom: -.7rem; height: 3.1rem; padding: 0; flex-direction: row; justify-content: center; gap: .6rem; font-weight: 600; font-size: 1.1rem; transition: .5s ease;}
+.mypage_information .inner2 .consultantBox .listBox .inputBox.type2.upload .uploadBox:after {width: 100%;}
+.mypage_information .inner2 .consultantBox .listBox .inputBox.type2.upload .uploadBox .icon {width: 1.35rem; height: 1.35rem; background: url(../../assets/images/ico_plus_blue.svg) no-repeat center / contain;}
+.mypage_information .inner2 .consultantBox .inputBox textarea {min-height: 12.8rem;}
+.mypage_information .inner2 .buttonBox {display: flex; flex-direction: column; max-width: 29.4rem; width: 85%; margin: 0 auto;}
+.mypage_information .inner2 .buttonBox button {width: 100%; max-width: none;}
+.mypage_information .inner2 .buttonBox button.clickBtn.white {border: none;}
+
+
+/* 회원탈퇴 */
+.withdraw .inner .titleWrap.type1 {margin-bottom: 2.2rem;}
+.withdraw .inner .topTextBox {text-align: center; margin-bottom: 2.2rem;}
+.withdraw .inner .topTextBox p {color: #555555; font-size: 1.1rem;}
+.withdraw .inner .topTextBox p:first-child {margin-bottom: .5rem;}
+.withdraw .inner .topTextBox .checkBox.type1 {justify-content: center; margin-top: 2.2rem; flex-wrap: wrap;}
+.withdraw .inner .topTextBox .checkBox.type1 small {word-break: keep-all;}
+.withdraw.step2 .inner2 {display: flex; flex-direction: column; gap: 3.3rem; align-items: center;}
+.withdraw.step2 .inner2 .titleWrap.type1 {margin-bottom: 0;}
+.withdraw.step2 .inner .listBox {display: flex; flex-direction: column; gap: 1.35rem; max-width: 610px; width: 100%;}
+.withdraw.step2 .inner .clickBtn {max-width: 29.4rem; width: 90%; background: var(--black);}
+.withdraw.step3 .inner2 {display: flex; flex-direction: column; gap: 3.3rem; text-align: center; align-items: center;}
+.withdraw.step3 .inner .imgBox {border-radius: 50%; overflow: hidden; margin: 0 auto; max-width: 18.8rem; width: 70%;}
+.withdraw.step3 .inner .imgBox img {vertical-align: bottom;}
+.withdraw.step3 .inner .textBox {display: flex; flex-direction: column; gap: .9rem;}
+.withdraw.step3 .inner .textBox .title {font-size: 1.5rem; font-weight: 500;}
+.withdraw.step3 .inner .textBox .text {color: #555; line-height: 120%; font-size: 1.1rem; word-break: keep-all;}
+.withdraw.step3 .inner .clickBtn {max-width: 29.4rem; width: 90%; background: var(--black);}
+
 @media screen and (min-width: 1025px) {
 	header .hInner .hBot .top nav .dep li a:hover:after {width: 100%; opacity: 1;}
 	header .hInner .hTop .logBox button:hover {color: var(--mainColor);}
@@ -828,6 +996,7 @@ footer .inner > .right .snsBox .youtube .icon {background-image: url(../../asset
 	.container .searchFormWrap form .searchBox .searchBtn:hover .icon:after {opacity: 1; transform: translate(-50%, -50%);}
 	.container .tableCont.type1 table tbody tr:hover:after {width: 100%;}
 	.container .tableCont.type1 table tbody tr:hover .title .text {color: var(--mainColor3);}
+	.modalCon .boxWrap .close:hover:after {opacity: 1;}
 
 	.user .container .clickBtn:hover {background: var(--mainColor);}
 	.main .slideControl button:not(.slick-disabled):hover:after {transform: translate(-50%, -50%); opacity: 1;}
@@ -854,6 +1023,7 @@ footer .inner > .right .snsBox .youtube .icon {background-image: url(../../asset
 
 	.consultant .inner2 .listBox li .botBox .moreBtn:hover {color: var(--mainColor3);}
 	.consultant .inner2 .listBox li .botBox .moreBtn:hover .icon {background-image: url(../../assets/images/ico_user_consultant_more_icon_blue.svg);}
+	.resident_view .inner2 .infoWrap .right a:hover {color: var(--mainColor3); text-shadow: 2px 2px #04359B25;}
 
 	.container .inputBox.type2 .fileName li:hover:after {width: 100%; opacity: 1;}
 	.container .inputBox.type2 .uploadBox:hover input {background: #04359b17;}
@@ -861,15 +1031,23 @@ footer .inner > .right .snsBox .youtube .icon {background-image: url(../../asset
 	.board .buttonBox .clickBtn:hover {background: var(--black);}
 	.board .buttonBox .clickBtn.editBtn:hover, .board .buttonBox .writeBtn:hover {background: var(--mainColor3);}
 	.board .buttonBox .clickBtn.cancelBtn:hover {background: #ff5353;}
-	.board .board_list > table tbody tr:hover:after {width: 100%;}
-	.board .board_list > table tbody tr:hover .title .text {color: var(--mainColor3);}
-	.board .board_view > table thead .fileBox li a:hover {color: var(--mainColor3);}
-	.board .board_view > table thead .fileBox li a:hover:after {width: 100%; opacity: 1;}
-	.board .board_view > table tfoot .navigationBox li a:hover {background: #04359b15;}
-	.board .board_view > table tfoot .navigationBox li a:hover .name {color: var(--mainColor3);}
+	.container .board_list > table tbody tr:hover:after {width: 100%;}
+	.container .board_list > table tbody tr:hover .title .text {color: var(--mainColor3);}
+	.container .board_view > table thead .fileBox li a:hover {color: var(--mainColor3);}
+	.container .board_view > table thead .fileBox li a:hover:after {width: 100%; opacity: 1;}
+	.container .board_view > table tfoot .navigationBox li a:hover {background: #04359b15;}
+	.container .board_view > table tfoot .navigationBox li a:hover .name {color: var(--mainColor3);}
 	.board.write .inner2 .textWrap .listBox > li .secretBtn:hover {box-shadow: none;}
 
 	.organization .inner2 .tableCont table tbody tr td a:hover {color: var(--mainColor3)}
+
+	.mypage_consultant.view .inner2 .chatWrap .chatBox .chatText .fileBox li a:hover:after {width: 100%; opacity: 1;}
+	.mypage_information .inner2 .consultantBox .listBox .inputBox.type2.upload .uploadBox:hover {background: #04359b15;}
+	.mypage_information .inner2 .consultantBox .profileImg.upload:hover img {filter: blur(4px)}
+	.mypage_information .inner2 .consultantBox .profileImg.upload:hover .icon {transform: translate(-50%, -50%); opacity: 1;}
+	.mypage_information .inner2 .consultantBox .profileImg:not(.upload) label:hover {background: var(--mainColor3); color: #fff;}
+	.mypage_information .inner2 .consultantBox .profileImg:not(.upload) label:hover .icon {background-image: url(../../assets/images/ico_user_information_plus_white.svg);}
+	.mypage_information .inner2 .buttonBox button.clickBtn.white:hover {background: #fff; color: #111; box-shadow: none;}
 }
 
 @media screen and (max-width: 1400px) {
@@ -880,6 +1058,8 @@ footer .inner > .right .snsBox .youtube .icon {background-image: url(../../asset
 	footer .inner {gap: 4%; font-size: .9rem;}
 	footer .inner > .center .linkBox {gap: 2rem;}
 	footer .inner > .center .linkBox li:not(:last-child):after {right: -1.1rem;}
+
+	.mypage_information .inner2 .consultantBox .listBox .checkWrap {gap: .5rem 1rem;}
 }
 @media screen and (max-width: 1024px) {
 	html {font-size: 16.5px;}
@@ -917,8 +1097,8 @@ footer .inner > .right .snsBox .youtube .icon {background-image: url(../../asset
 
 	.difficulties .inner2 .box {gap: 2%;}
 
-	.board .board_view > table thead .fileBox li a .name {font-size: 1rem;}
-	.board .board_view > table thead .fileBox li a .size {font-size: .8rem;}
+	.container .board_view > table thead .fileBox li a .name {font-size: 1rem;}
+	.container .board_view > table thead .fileBox li a .size {font-size: .8rem;}
 
 	.business_overview .inner2 .box01 .listBox li .text br {display: none;}
 
@@ -930,8 +1110,25 @@ footer .inner > .right .snsBox .youtube .icon {background-image: url(../../asset
 	.organization .inner2 .organizationBox .textWrap3 .text.type2:nth-child(3):before {right: calc(50% + 5.1rem);}
 
 	.location .inner2 .box01 .bus .list li {width: calc(100% / 2 - .7rem);}
+
+	.mypage_consultant .inner2 .searchFormWrap form {flex-direction: column; gap: 1rem;}
+	.mypage_consultant .inner2 .searchFormWrap form .searchBox {flex-wrap: wrap; gap: .6rem; width: 100%; max-width: none;}
+	.mypage_consultant .inner2 .searchFormWrap form .searchBox > .inputBox.type1 {width: calc(100% - 3.6rem);}
+
+	.mypage_difficulties .inner2 .searchFormWrap form {flex-direction: column; gap: 1rem;}
+	.mypage_difficulties .inner2 .searchFormWrap form .searchBox {flex-wrap: wrap; gap: .6rem; width: 100%; max-width: none;}
+	.mypage_difficulties .inner2 .searchFormWrap form .searchBox > .inputBox.type1 {width: calc(100% - 3.6rem);}
+
+	.mypage_information .inner2 .consultantBox .listBox .inputBox.type2.white {width: 100%;}
+
 }
 @media screen and (max-width: 900px) {
+	.resident_view .inner2 .profileWrap {flex-direction: column; align-items: flex-start; gap: 1.35rem;}
+	.resident_view .inner2 .profileWrap .profileBox {flex-direction: column; gap: 1rem;}
+	.resident_view .inner2 .profileWrap .profileBox .imgBox {width: 35%;}
+	.resident_view .inner2 .profileWrap .clickBtn {margin-left: auto; width: 40%; font-size: 1rem; height: 3rem;}
+	.resident_view .inner2 .infoWrap .infoBox .list > li {width: 100%;}
+
 	.consultant .inner2 .listBox li {width: 100%; border-bottom: 1px solid #eee;}
 	.consultant .inner2 .listBox li:nth-child(odd):after {display: none;}
 	.consultant.view .inner2 {flex-direction: column-reverse; gap: 3rem;}
@@ -948,6 +1145,15 @@ footer .inner > .right .snsBox .youtube .icon {background-image: url(../../asset
 	.business_overview .inner2 .box05 .listBox li {width: calc(100% / 2 - .6rem);}
 
 	.location .inner2 .box01 .subway .textBox .list {gap: 1.2rem; flex-wrap: wrap;}
+
+	.mypage_information .inner2 .listBox {gap: .9rem;}
+	.mypage_information .inner2 .listBox > li {width: 100%;}
+	.mypage_information .inner2 .inforBox .listBox > li:nth-child(7) {order: 1;}
+	.mypage_information .inner2 .inforBox .listBox > li:nth-child(6), .mypage_information .inner2 .inforBox .listBox > li:nth-child(n+8) {order: 2;}
+	.mypage_information .inner2 .inforBox .listBox > li:nth-child(9) {margin: 0;}
+	.mypage_information .inner2 .consultantBox .listBox .inputBox.type2 .fileName li {width: 100%;}
+	.mypage_information .inner2 .companyBox .inputBox.type2:nth-child(6), .mypage_information .inner2 .companyBox .inputBox.type2:nth-child(8) {order: 1;}
+
 }
 @media screen and (max-width: 768px) {
 	html {font-size: 16px;}
@@ -971,12 +1177,13 @@ footer .inner > .right .snsBox .youtube .icon {background-image: url(../../asset
 
 	.join .inner .boxWrap {flex-direction: column; gap: 2rem;}
 	.join_step .inner .contBox .inputWrap li {width: 100%;}
+	.join_step .inner .contBox .inputWrap li:nth-child(6) {order: 6;}
 	.join_step .inner .stepWrap {gap: 2rem;}
 	.join_step .inner .stepWrap li .num {width: 3rem; height: 3rem; font-size: 1.2rem;}
 	.join_step .inner .stepWrap li:not(:last-child) .num:after {width: 2rem; right: -2.5rem;}
 	.join_step .inner .stepWrap li .text {font-size: 1.2rem;}
 
-	.container.search .searchFormWrap form .searchBox {flex-wrap: wrap;}
+	.container .searchFormWrap form .searchBox {flex-wrap: wrap;}
 	.container .searchFormWrap form .searchBox .inputBox.type1:not(.date) {width: calc(100% - 3.2rem);}
 	.search .inner2 .tableCont.type1 table tbody tr {display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; padding: 1rem;}
 	.search .inner2 .tableCont.type1 table tbody tr td {display: block;}
@@ -989,21 +1196,23 @@ footer .inner > .right .snsBox .youtube .icon {background-image: url(../../asset
 	.search .inner2 .tableCont.type1 table tbody tr .hit {position: absolute; bottom: 1rem; right: 1rem; display: flex; align-items: center; gap: .3rem; padding: 0;}
 	.search .inner2 .tableCont.type1 table tbody tr .hit:before {content: "조회수 : "; display: inline;}
 
+	.resident .inner .board_list table tbody td:nth-child(2) {width: 100%; text-align: left;}
+
 
 	.board .buttonBox .clickBtn {font-size: 1rem;}
-	.board .board_list > table thead {display: none;}
-	.board .board_list > table tbody tr {display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; padding: 1rem;}
-	.board .board_list > table tbody tr td {display: block;}
-	.board .board_list > table tbody tr td {padding: 0;}
-	.board .board_list > table tbody tr .num {border-radius: 3rem; border: 1px solid #e6e6e6; padding: .2rem .5rem;}
-	.board .board_list > table tbody tr .title {width: 100%;}
-	.board .board_list > table tbody tr .title .text {display: block;}
-	.board .board_list > table tbody tr .title .text p {font-size: 1.35rem; max-width: none; display: inline; overflow: visible; line-height: 1.4;}
-	.board .board_list > table tbody tr .title .text .file {display: inline-block; transform: translateY(.2rem);}
-	.board .board_list > table tbody tr .hit {position: absolute; bottom: 1rem; right: 1rem; display: flex; align-items: center; gap: .3rem; padding: 0;}
-	.board .board_list > table tbody tr .hit:before {content: "조회수 : "; display: inline;}
-	.board .board_view > table tfoot .navigationBox li a {padding: 1rem 1rem; border-radius: 1rem; flex-direction: column; gap: .35rem; align-items: flex-start;}
-	.board .board_view > table tfoot .navigationBox li a .left {gap: .5rem; font-size: 1rem;}
+	.container .board_list > table thead {display: none;}
+	.container .board_list > table tbody tr {display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; padding: 1rem;}
+	.container .board_list > table tbody tr td {display: block;}
+	.container .board_list > table tbody tr td {padding: 0;}
+	.container .board_list > table tbody tr .num {border-radius: 3rem; border: 1px solid #e6e6e6; padding: .2rem .5rem;}
+	.container .board_list > table tbody tr .title {width: 100%;}
+	.container .board_list > table tbody tr .title .text {display: block;}
+	.container .board_list > table tbody tr .title .text p {font-size: 1.35rem; max-width: none; display: inline; overflow: visible; line-height: 1.4;}
+	.container .board_list > table tbody tr .title .text .file {display: inline-block; transform: translateY(.2rem);}
+	.container .board_list > table tbody tr .hit {position: absolute; bottom: 1rem; right: 1rem; display: flex; align-items: center; gap: .3rem; padding: 0;}
+	.container .board_list > table tbody tr .hit:before {content: "조회수 : "; display: inline;}
+	.container .board_view > table tfoot .navigationBox li a {padding: 1rem 1rem; border-radius: 1rem; flex-direction: column; gap: .35rem; align-items: flex-start;}
+	.container .board_view > table tfoot .navigationBox li a .left {gap: .5rem; font-size: 1rem;}
 
 	.business_overview .inner2 .box .listBox li .title {font-size: 1.1rem;}
 	.business_overview .inner2 .box .listBox li .text {font-size: .95rem;}
@@ -1044,8 +1253,21 @@ footer .inner > .right .snsBox .youtube .icon {background-image: url(../../asset
 	.organization .inner2 .tableCont table tbody tr td:nth-child(4) {font-size: 1rem; width: 100%; color: var(--mainColor3); font-weight: 600;}
 	.organization .inner2 .tableCont table tbody tr td:nth-child(4) p {font-size: 1.35rem; max-width: none; display: inline; overflow: visible; line-height: 1.4;}
 
+
+	.mypage_consultant .inner2 .searchFormWrap form .searchBox .itemBox.type2 {max-width: 7rem;}
+	.mypage_consultant .inner2 .searchFormWrap form .searchBox > .inputBox.type1 {width: calc(100% - 3.7rem);}
+	.mypage_consultant.view .inner2 .chatWrap .chatBox > * {max-width: 100%;}
+	.mypage_consultant.view .inner2 .chatWrap .chatBox .chatText .fileBox li a {flex-wrap: wrap; gap: .2rem .4rem;}
+	.mypage_consultant.view .inner2 .chatWrap .chatBox .chatText .fileBox li a .name {max-width: calc(100% - 1.35rem - .4rem);}
+	.mypage_consultant.view .inner2 .chatWrap .chatBox .chatText .fileBox li a .size {font-size: .8rem;}
+
+
+	.mypage_difficulties .inner2 .searchFormWrap form .searchBox .itemBox.type2 {max-width: none; width: calc(100% / 3 - .4rem);}
+	.mypage_difficulties .inner2 .searchFormWrap form .searchBox > .inputBox.type1 {width: calc(100% - 3.7rem);}
+
 }
 @media screen and (max-width: 640px) {
+
 	.business_overview .inner2 .box02 .titleWrap.type2 {margin-bottom: 1.5rem;}
 	.business_overview .inner2 .box02 .listWrap {padding: 0;}
 	.business_overview .inner2 .box02 .listWrap .logoBox {width: clamp(3rem, 42vw, 12rem); height: clamp(3rem, 42vw, 12rem); padding: 2rem;}
@@ -1076,6 +1298,17 @@ footer .inner > .right .snsBox .youtube .icon {background-image: url(../../asset
 	.location .inner2 .box .traffic {flex-direction: column; gap: 1rem;}
 	.location .inner2 .box01 .subway .textBox .list {flex-direction: column;}
 	.location .inner2 .box01 .bus .list li {width: 100%;}
+
+	.mypage_consultant .inner2 .searchFormWrap form .searchBox .itemBox.type2 {width: calc(50% - .3rem); max-width: none;}
+	.mypage_consultant .inner2 .searchFormWrap form .searchBox .dateWrap {width: 100%; max-width: none; order: 1;}
+	.mypage_consultant .inner2 .searchFormWrap form .searchBox .dateWrap .inputBox.type1.date {max-width: none;}
+	.mypage_consultant .inner2 .searchFormWrap form .searchBox .itemBox.type2:nth-child(3) {order: 0;}
+	.mypage_consultant .inner2 .searchFormWrap form .searchBox > .inputBox.type1, .mypage_consultant .inner2 .searchFormWrap form .searchBox .searchBtn {order: 2;}
+
+	.mypage_consultant.view .inner2 .profileWrap {flex-direction: column; align-items: flex-start;}
+	.mypage_consultant.view .inner2 .profileWrap .profileBox {flex-direction: column; gap: 1rem;}
+	.mypage_consultant.view .inner2 .profileWrap .profileBox .imgBox {width: 35%;}
+	.mypage_consultant.view .inner2 .profileWrap .clickBtn {margin-left: auto; width: 40%; font-size: 1rem; height: 3rem;}
 }
 @media screen and (max-width: 480px) {
 	html {font-size: 15px;}
@@ -1089,7 +1322,7 @@ footer .inner > .right .snsBox .youtube .icon {background-image: url(../../asset
 	.container .searchFormWrap.type2 form {align-items: flex-start;}
 	.container .searchFormWrap form .searchBox {flex-wrap: wrap;}
 	.container .searchFormWrap form .itemBox.type2 {max-width: 8.5rem; width: calc(50% - .25rem);}
-	.container .searchFormWrap form .searchBox .inputBox.type1 {width: calc(100% - 2.7rem - .5rem);}
+	.container .searchFormWrap form .searchBox > .inputBox.type1 {width: calc(100% - 2.7rem - .5rem);}
 
 	.main .sec01 .inner .rightBox .list li {width: 100%;}
 	.main .sec01 .inner .rightBox .list li a {padding: 1rem;}
@@ -1102,6 +1335,10 @@ footer .inner > .right .snsBox .youtube .icon {background-image: url(../../asset
 	.search .inner2 .searchFormWrap .searchBox .itemBox {margin-right: 25%;}
 	.search .inner2 .searchFormWrap .searchBox .inputBox.type1.date {width: calc(100% / 2 - .5rem); max-width: none;}
 
+	.resident_view .inner2 .infoWrap .left {width: 100%;}
+	.resident_view .inner2 .infoWrap .infoBox .list > li, .resident_view .inner2 .infoWrap .infoBox2 {flex-direction: column; gap: .5rem;}
+
+
 	.consultant .inner2 .profileBox .textBox .intro br {display: none;}
 	.consultant .inner2 .listBox li .botBox {flex-direction: column; gap: 1.5rem;}
 	.consultant .inner2 .buttonBox {gap: .5rem;}
@@ -1113,9 +1350,9 @@ footer .inner > .right .snsBox .youtube .icon {background-image: url(../../asset
 	.difficulties .inner2 .box .leftBox .text {font-size: 1rem;}
 	.difficulties .inner2 .box .leftBox .text br {display: none;}
 
-	.board .board_view > table thead .fileBox li a {flex-wrap: wrap; gap: 0 .4rem;}
-	.board .board_view > table thead .fileBox li a .name {width: calc(100% - 1.35rem - .4rem);}
-	.board .board_view > table thead .fileBox li a .size {margin-left: auto;}
+	.container .board_view > table thead .fileBox li a {flex-wrap: wrap; gap: 0 .4rem;}
+	.container .board_view > table thead .fileBox li a .name {width: calc(100% - 1.35rem - .4rem);}
+	.container .board_view > table thead .fileBox li a .size {margin-left: auto;}
 	.board.write .inner2 .textWrap .listBox > li.width3 {width: 100%;}
 	.board.write .inner2 .textWrap .listBox > li.inputBox .input > input {padding-right: 0 !important;}
 	.board.write .inner2 .textWrap .listBox > li .secretBtn {margin: .5rem 0 0 auto; position: static; transform: none;}
@@ -1128,11 +1365,10 @@ footer .inner > .right .snsBox .youtube .icon {background-image: url(../../asset
 
 	.organization .inner2 .organizationBox .textWrap3 {gap: .5rem;}
 
-
 }
 @media screen and (max-width: 400px) {
 	.container .pageWrap .pageList li.num:nth-child(n+6) {display: none;}
-	.board .board_list > table tbody tr .hit {bottom: auto; top: 1.45rem;}
+	.container .board_list > table tbody tr .hit {bottom: auto; top: 1.45rem;}
 	.organization .inner2 .organizationBox .textWrap .text3 {padding: 1rem .5rem; top: 8.5rem;}
 	.organization .inner2 .organizationBox .textWrap {padding-bottom: 16rem;}
 	.organization .inner2 .organizationBox .textWrap3 {flex-direction: column;}

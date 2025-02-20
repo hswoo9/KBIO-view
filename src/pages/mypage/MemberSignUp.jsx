@@ -127,6 +127,9 @@ function MemberSignUp(props) {
   const [acceptFileTypes, setAcceptFileTypes] = useState('jpg,jpeg,png,gif,bmp,tiff,tif,webp,svg,ico,heic,avif');
   const [selectedImgFile, setSelectedImgFile] = useState([]);
   const [selectedFiles, setSelectedFiles] = useState([]);
+  const [selectedCertFiles, setSelectedCertFiles] = useState([]);
+  const [selectedCareerFiles, setSelectedCareerFiles] = useState([]);
+  const [selectedAcbgFiles, setSelectedAcbgFiles] = useState([]);
 
   const allowedImgExtensions = acceptImgFileTypes.split(',');
   const allowedExtensions = acceptFileTypes.split(',');
@@ -155,8 +158,63 @@ function MemberSignUp(props) {
 
   };
 
-  //컨설턴트 자격증
-  const handleFileChange = (e, num) => {
+  //자격증정보
+  const [certificates, setCertificates] = useState([]);
+  const addCertificate = () => {
+    const newId = `certificate_${Date.now()}`;
+    setCertificates([...certificates, { id: newId, qlfcLcnsNm : "", pblcnInstNm : "", acqsYmd : "" }]);
+  };
+  const removeCertificate = (id) => {
+    setCertificates(certificates.filter((cert) => cert.id !== id));
+  };
+
+  //경력정보
+  const [careers, setCareer] = useState([]);
+  const addCareer = () => {
+    const newId = `career_${Date.now()}`;
+    setCareer([...careers, { id: newId, ogdpCoNm : "", ogdpJbpsNm : "", jncmpYmd: "", rsgntnYmd: ""}]);
+  };
+  const removeCareer = (id) => {
+    setCareer(careers.filter((career) => career.id !== id));
+  };
+
+  //학력정보
+  const [acbges, setAcbg] = useState([]);
+  const addAcbg = () => {
+    const newId = `career_${Date.now()}`;
+    setAcbg([...acbges, { id: newId, schlNm : "", scsbjtNm : "", mjrNm: "", dgrNm : "", grdtnYmd : "" }]);
+  };
+  const removeAcbg = (id) => {
+    setAcbg(acbges.filter((acbg) => acbg.id !== id));
+  };
+
+  const handleInputChange = (e, id, type, field) => {
+    let { value } = e.target;
+
+    if (e.target.type === "date") {
+      value = value.replace(/-/g, ""); // '-' 제거
+    }
+
+    const updateList = (list, setList) => {
+      const updatedList = list.map(item =>
+          item.id === id ? { ...item, [field]: value } : item
+      );
+      setList(updatedList);
+      console.log(updatedList); // 변환된 값 확인
+    };
+
+    if (type === "cert") updateList(certificates, setCertificates);
+    if (type === "career") updateList(careers, setCareer);
+    if (type === "acbg") updateList(acbges, setAcbg);
+  };
+
+  const formatDate = (dateString) => {
+    if (!dateString) return "";
+    return dateString.replace(/(\d{4})(\d{2})(\d{2})/, "$1-$2-$3");
+  };
+
+  //컨설턴트 증빙파일들
+  const handleFileChange = (e, id, index) => {
     const file = e.target.files[0];
     const fileExtension = e.target.files[0].name.split(".").pop().toLowerCase();
 
@@ -168,11 +226,39 @@ function MemberSignUp(props) {
         if(fileName.length > 30){
           fileName = fileName.slice(0, 30) + "...";
         }
-        setSelectedFiles((prevFiles) => {
+
+        /**여기에 받아온 id를 앞의 이름과 date번호로 분리해서 자격,경력,학력별로 저장**/
+
+        if (id === "cert") {
+          /*setSelectedCertFiles((prev) => {
+            const updatedFiles = [...prev];
+            updatedFiles[parseInt(id.replace("cert", ""), 10) - 1] = file;
+            return updatedFiles;
+          });*/
+          setSelectedCertFiles((prevFiles) => {
+            const updatedFiles = [...prevFiles]; // 기존 배열 복사
+            updatedFiles[index] = file; // 배열의 인덱스를 이용해 해당 자격증 파일을 추가
+            return updatedFiles;
+          });
+        } else if (id === "career") {
+          setSelectedCareerFiles((prevFiles) => {
+            const updatedFiles = [...prevFiles]; // 기존 배열 복사
+            updatedFiles[index] = file; // 배열의 인덱스를 이용해 해당 자격증 파일을 추가
+            return updatedFiles;
+          });
+        } else if (id === "acbg") {
+          setSelectedAcbgFiles((prevFiles) => {
+            const updatedFiles = [...prevFiles]; // 기존 배열 복사
+            updatedFiles[index] = file; // 배열의 인덱스를 이용해 해당 자격증 파일을 추가
+            return updatedFiles;
+          });
+        }
+
+        /*setSelectedFiles((prevFiles) => {
           const updatedFiles = [...prevFiles]; // 기존 배열 복사
-          updatedFiles[num - 1] = file; // 배열의 인덱스를 이용해 해당 자격증 파일을 추가
+          updatedFiles[id - 1] = file; // 배열의 인덱스를 이용해 해당 자격증 파일을 추가
           return updatedFiles;
-        });
+        });*/
       }else{
         Swal.fire({
           title: "허용되지 않은 확장자입니다.",
@@ -186,6 +272,18 @@ function MemberSignUp(props) {
       );
     }
 
+  }
+
+  const confirm = () => {
+    console.log("certificates",certificates);
+    console.log("selectedCertFiles",selectedCertFiles);
+    console.log("careers",careers);
+    console.log("selectedCareerFiles",selectedCareerFiles);
+    console.log("acbges",acbges);
+    console.log("selectedAcbgFiles",selectedAcbgFiles);
+
+    debugger
+    return;
   }
 
 
@@ -565,8 +663,18 @@ function MemberSignUp(props) {
     formValidator(memberDetail).then((isValid) => {
       if (!isValid) return; // 검증 실패 시 함수 종료
 
-      selectedFiles.map((file) => {
+      /*selectedFiles.map((file) => {
         formData.append("files", file);
+      });*/
+
+      selectedCertFiles.map((file) => {
+        formData.append("certFiles", file);
+      });
+      selectedCareerFiles.map((file) => {
+        formData.append("careerFiles", file);
+      });
+      selectedAcbgFiles.map((file) => {
+        formData.append("acbgFiles", file);
       });
 
       selectedImgFile.map((file) => {
@@ -582,6 +690,9 @@ function MemberSignUp(props) {
       }
        */
       formData.append("userInfo", JSON.stringify(memberDetail));
+      formData.append("certInfo", JSON.stringify(certificates));
+      formData.append("careerInfo", JSON.stringify(careers));
+      formData.append("acbgInfo", JSON.stringify(acbges));
 
       const reqOptions = {
         method: "POST",
@@ -1324,11 +1435,12 @@ function MemberSignUp(props) {
                         <div className="checkWrap" style={{display: "flex", gap: "20px"}}>
                             <input
                                 type="text"
-                                name="consultingOption1"
-                                checked={memberDetail.consultingOption1}
+                                name="cnsltArtcl"
+                                placeholder="컨설팅 항목을 입력해주세요."
+                                value={memberDetail.cnsltArtcl || ""}
                                 onChange={(e) => setMemberDetail({
                                   ...memberDetail,
-                                  consultingOption1: e.target.checked
+                                  cnsltArtcl: e.target.value
                                 })}
                             />
                         </div>
@@ -1344,6 +1456,7 @@ function MemberSignUp(props) {
                       </label>
                     </li>
 
+
                     <li className="inputBox type2">
                       <span className="tt1">컨설팅 활동</span>
                       <div className="input">
@@ -1351,6 +1464,7 @@ function MemberSignUp(props) {
                           <label className="checkBox type3">
                             <input
                                 type="radio"
+                                className="signUpRadio"
                                 name="cnsltActv"
                                 value="Y"
                                 checked={memberDetail.cnsltActv === "Y"}
@@ -1363,6 +1477,7 @@ function MemberSignUp(props) {
                           <label className="checkBox type3">
                             <input
                                 type="radio"
+                                className="signUpRadio"
                                 name="cnsltActv"
                                 value="N"
                                 checked={memberDetail.cnsltActv === "N"}
@@ -1376,41 +1491,299 @@ function MemberSignUp(props) {
                       </div>
                     </li>
 
-
                     <li className="inputBox type2">
+                      <span className="tt1">한줄소개</span>
+                      <label className="input">
+                        <input
+                            type="text"
+                            name="consultantAffiliation"
+                            placeholder="한줄 소개를 입력해주세요"
+                        />
+                      </label>
+                    </li>
+
+
+                    {/*자격증*/}
+                    <li className="inputBox type2 width1">
                       <span className="tt1">자격증</span>
                       <div className="input" style={{height: "100%"}}>
                         <div style={{display: "flex", flexDirection: "column", gap: "10px"}}>
-                          {[1, 2, 3].map((num) => (
-                              <div key={num} className="flexinput"
-                                   style={{display: "flex", alignItems: "center", gap: "10px"}}>
+                          <div
+                              className="certificate-header"
+                              style={{
+                                display: "grid",
+                                gridTemplateColumns: "1fr 1fr 1fr 1fr auto",
+                                gap: "10px",
+                                /*textAlign: "left",*/
+                                paddingBottom: "5px",
+                                borderBottom: "1px solid #000",
+                              }}>
+                            <span>자격증명</span>
+                            <span>발급기관</span>
+                            <span>취득일</span>
+                            <span>파일 업로드</span>
+                          </div>
+                          {certificates.map((cert,index) => (
+                              <div
+                                  key={cert.id}
+                                  className="flexinput"
+                                  style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: "10px",
+                                  }}
+                              >
                                 <input
                                     type="text"
-                                    name={`consultantCertificates${num}`}
+                                    name="qlfcLcnsNm"
                                     placeholder="자격증명을 입력하세요"
                                     className="f_input2"
-                                    style={{width: "40%"}}
+                                    style={{ width: "29%" }}
+                                    value={cert.qlfcLcnsNm}
+                                    onChange={(e) => handleInputChange(e, cert.id , "cert" , "qlfcLcnsNm")}
                                 />
-                                {/*<input
-                                    type="file"
-                                    name={`consultantCertificatesFile${num}`}
-                                    accept=".pdf,.jpg,.jpeg,.png"
-                                    style={{flex: 1}}
-                                    onChange={handleFileChange}
-                                />*/}
-                                <p className="file_name" id={`fileNamePTag${num}`}></p>
+                                <input
+                                    type="text"
+                                    name="pblcnInstNm"
+                                    placeholder="발급기관을 입력하세요"
+                                    className="f_input2"
+                                    value={cert.pblcnInstNm}
+                                    style={{ width: "29%" }}
+                                    onChange={(e) => handleInputChange(e, cert.id , "cert" , "pblcnInstNm")}
+                                />
+                                <input
+                                    type="date"
+                                    name="acqsYmd"
+                                    placeholder="취득일"
+                                    className="f_input2"
+                                    style={{ width: "29%" }}
+                                    value={formatDate(cert.acqsYmd)}
+                                    onChange={(e) => handleInputChange(e, cert.id , "cert" , "acqsYmd")}
+                                />
+                                <p className="file_name" id={`CertFileNamePTag${cert.id}`}></p>
                                 <label>
-                                  <input type="file"
-                                         name={`selectedFile${num}`}
-                                         id={`formFile${num}`}
-                                         onChange={(e) => handleFileChange(e, num)}
+                                  <input
+                                      type="file"
+                                      name={`selectedCertFile${index}`}
+                                      id={`formCertFile${index}`}
+                                      onChange={(e) => handleFileChange(e, "cert", index)}
                                   />
                                 </label>
+                                <button type="button" style={{width : "10%"}} onClick={() => removeCertificate(cert.id)}>
+                                  삭제
+                                </button>
                               </div>
                           ))}
+                          <button
+                              type="button"
+                              className="writeBtn clickBtn"
+                              style={{width : "10%" , height:"30px", }}
+                              onClick={addCertificate}
+                          >
+                            추가
+                          </button>
                         </div>
                       </div>
                     </li>
+                    {/*자격증끝*/}
+
+                    {/*경력상세*/}
+                    <li className="inputBox type2 width1">
+                      <span className="tt1">경력 상세</span>
+                      <div className="input" style={{height: "100%"}}>
+                        <div style={{display: "flex", flexDirection: "column", gap: "10px"}}>
+                          <div
+                              className="certificate-header"
+                              style={{
+                                display: "grid",
+                                gridTemplateColumns: "1fr 1fr 1fr 1fr auto",
+                                gap: "10px",
+                                /*textAlign: "left",*/
+                                paddingBottom: "5px",
+                                borderBottom: "1px solid #000",
+                              }}>
+                            <span>근무처</span>
+                            <span>직위</span>
+                            <span>근무기간</span>
+                            <span>파일 업로드</span>
+                          </div>
+                          {careers.map((career,index) => (
+                              <div
+                                  key={career.id}
+                                  className="flexinput"
+                                  style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: "10px",
+                                  }}
+                              >
+                                <input
+                                    type="text"
+                                    name="ogdpCoNm"
+                                    placeholder="근무처를 입력하세요"
+                                    className="f_input2"
+                                    style={{ width: "29%" }}
+                                    value={career.ogdpCoNm}
+                                    onChange={(e) => handleInputChange(e, career.id , "career" , "ogdpCoNm")}
+                                />
+                                <input
+                                    type="text"
+                                    name="ogdpJbpsNm"
+                                    placeholder="직위를 입력하세요"
+                                    className="f_input2"
+                                    style={{ width: "29%" }}
+                                    value={career.ogdpJbpsNm}
+                                    onChange={(e) => handleInputChange(e, career.id , "career" , "ogdpJbpsNm")}
+                                />
+                                <input
+                                    type="date"
+                                    name="jncmpYmd"
+                                    placeholder="입사일자"
+                                    className="f_input2"
+                                    style={{ width: "14%" }}
+                                    value={formatDate(career.jncmpYmd)}
+                                    onChange={(e) => handleInputChange(e, career.id , "career" , "jncmpYmd")}
+                                />~&nbsp;
+                                <input
+                                    type="date"
+                                    name="rsgntnYmd"
+                                    placeholder="퇴사일자"
+                                    className="f_input2"
+                                    style={{ width: "14%" }}
+                                    value={formatDate(career.rsgntnYmd)}
+                                    onChange={(e) => handleInputChange(e, career.id , "career" , "rsgntnYmd")}
+                                />
+                                <p className="file_name" id={`careerFileNamePTag${career.id}`}></p>
+                                <label>
+                                  <input
+                                      type="file"
+                                      name={`selectedCareerFile${index}`}
+                                      id={`formCareerFile${index}`}
+                                      onChange={(e) => handleFileChange(e, "career", index)}
+                                  />
+                                </label>
+                                <button type="button" style={{width : "10%"}} onClick={() => removeCareer(career.id)}>
+                                  삭제
+                                </button>
+                              </div>
+                          ))}
+                          <button
+                              type="button"
+                              className="writeBtn clickBtn"
+                              style={{width : "10%" , height:"30px", }}
+                              onClick={addCareer}
+                          >
+                            추가
+                          </button>
+                        </div>
+                      </div>
+                    </li>
+                    {/*경력상세 끝*/}
+
+                    {/*학력*/}
+                    <li className="inputBox type2 width1">
+                      <span className="tt1">학력 상세</span>
+                      <div className="input" style={{height: "100%"}}>
+                        <div style={{display: "flex", flexDirection: "column", gap: "10px"}}>
+                          <div
+                              className="certificate-header"
+                              style={{
+                                display: "grid",
+                                gridTemplateColumns: "1fr 1fr 1fr 1fr 1fr 1fr auto",
+                                gap: "10px",
+                                /*textAlign: "left",*/
+                                paddingBottom: "5px",
+                                borderBottom: "1px solid #000",
+                              }}>
+                            <span>학교명</span>
+                            <span>학과</span>
+                            <span>전공</span>
+                            <span>학위</span>
+                            <span>졸업일자</span>
+                            <span>파일 업로드</span>
+                          </div>
+                          {acbges.map((acbg, index) => (
+                              <div
+                                  key={acbg.id}
+                                  className="flexinput"
+                                  style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: "10px",
+                                  }}
+                              >
+                                <input
+                                    type="text"
+                                    name="schlNm"
+                                    placeholder="학교명을 입력하세요"
+                                    className="f_input2"
+                                    style={{ width: "29%" }}
+                                    value={acbg.schlNm}
+                                    onChange={(e) => handleInputChange(e, acbg.id , "acbg" , "schlNm")}
+                                />
+                                <input
+                                    type="text"
+                                    name="scsbjtNm"
+                                    placeholder="학과를 입력하세요"
+                                    className="f_input2"
+                                    style={{ width: "29%" }}
+                                    value={acbg.scsbjtNm}
+                                    onChange={(e) => handleInputChange(e, acbg.id , "acbg" , "scsbjtNm")}
+                                />
+                                <input
+                                    type="text"
+                                    name="mjrNm"
+                                    placeholder="전공을 입력하세요"
+                                    className="f_input2"
+                                    style={{ width: "29%" }}
+                                    value={acbg.mjrNm}
+                                    onChange={(e) => handleInputChange(e, acbg.id , "acbg" , "mjrNm")}
+                                />
+                                <input
+                                    type="text"
+                                    name="dgrNm"
+                                    placeholder="학위를 입력하세요"
+                                    className="f_input2"
+                                    style={{ width: "29%" }}
+                                    value={acbg.dgrNm}
+                                    onChange={(e) => handleInputChange(e, acbg.id , "acbg" , "dgrNm")}
+                                />
+                                <input
+                                    type="date"
+                                    name="grdtnYmd"
+                                    placeholder="졸업일자"
+                                    className="f_input2"
+                                    style={{ width: "29%" }}
+                                    value={formatDate(acbg.grdtnYmd)}
+                                    onChange={(e) => handleInputChange(e, acbg.id , "acbg" , "grdtnYmd")}
+                                />
+                                <p className="file_name" id={`acbgFileNamePTag${acbg.id}`}></p>
+                                <label>
+                                  <input
+                                      type="file"
+                                      name={`selectedAcbgFile${index}`}
+                                      id={`formAcbgFile${index}`}
+                                      onChange={(e) => handleFileChange(e, "acbg", index)}
+                                  />
+                                </label>
+                                <button type="button" style={{width : "10%"}} onClick={() => removeAcbg(acbg.id)}>
+                                  삭제
+                                </button>
+                              </div>
+                          ))}
+                          <button
+                              type="button"
+                              className="writeBtn clickBtn"
+                              style={{width : "10%" , height:"30px", }}
+                              onClick={addAcbg}
+                          >
+                            추가
+                          </button>
+                        </div>
+                      </div>
+                    </li>
+                    {/*학력끝*/}
+
                   </ul>
               )}
             </div>
@@ -1423,6 +1796,7 @@ function MemberSignUp(props) {
                     <label className="checkBox type3">
                       <input
                           type="radio"
+                          className="signUpRadio"
                           id="receive_mail_yes"
                           name="receive_mail"
                           checked={memberDetail.emlRcptnAgreYn === "Y"}
@@ -1433,6 +1807,7 @@ function MemberSignUp(props) {
                     <label className="checkBox type3">
                       <input
                           type="radio"
+                          className="signUpRadio"
                           id="receive_mail_no"
                           name="receive_mail"
                           checked={memberDetail.emlRcptnAgreYn === "N"}
@@ -1451,6 +1826,7 @@ function MemberSignUp(props) {
                     <label className="checkBox type3">
                       <input
                           type="radio"
+                          className="signUpRadio"
                           id="receive_sms_yes"
                           name="receive_sms"
                           checked={memberDetail.smsRcptnAgreYn === "Y"}
@@ -1461,6 +1837,7 @@ function MemberSignUp(props) {
                     <label className="checkBox type3">
                       <input
                           type="radio"
+                          className="signUpRadio"
                           id="receive_sms_no"
                           name="receive_sms"
                           checked={memberDetail.smsRcptnAgreYn === "N"}
@@ -1475,6 +1852,7 @@ function MemberSignUp(props) {
             </ul>
 
             <div className="buttonBox">
+              <button onClick={confirm}>확인</button>
               <button type="button" className="clickBtn black" onClick={insertMember}>
                 <span>다음</span>
               </button>{/*

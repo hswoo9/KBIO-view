@@ -118,10 +118,10 @@ function MemberMyPageSimple(props) {
                                         {statusMap[item.cnsltSttsCd] || item.cnsltSttsCd}
                                     </p>
                                 </td>
-                                <td>
-                                    {item.cnsltSttsCd === "200" && (
-                                        <span>만족도완료</span>
-                                    )}
+                                <td className="state">
+                                    <p className={item.cnsltSttsCd === "200" ? "complete" : "waiting"}>
+                                        <span>{item.cnsltSttsCd === "200" ? "만족도완료" : "만족도대기"}</span>
+                                    </p>
                                 </td>
                             </tr>
                         );
@@ -226,7 +226,7 @@ function MemberMyPageSimple(props) {
                                     <th className="th1">번호</th>
                                     <th className="th1">분류</th>
                                     <th>제목</th>
-                                    <th className="th1">신청일</th>
+                                    <th className="th2">신청일</th>
                                     <th className="th1">상태</th>
                                     <th className="th1">만족도</th>
                                 </tr>

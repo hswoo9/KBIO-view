@@ -23,6 +23,10 @@ function ConsultantDetail(props) {
     const [consultantDetail, setConsultantDetail] = useState(null);
     const [memberDetail, setMemberDetail] = useState(null);
     const [cnsltProfileFile, setCnsltProfileFile] = useState(null);
+    const [cnsltCrr, setCnsltCrr] = useState([]);
+    const [cnsltCert, setCnsltCert] = useState([]);
+    const [cnsltAcbg, setCnsltAcbg] = useState([]);
+
 
     const [modalData, setModalData] = useState({});
     useEffect(() => {
@@ -78,6 +82,18 @@ function ConsultantDetail(props) {
                     setCnsltProfileFile(resp.result.cnsltProfileFile);
                 }
 
+                if (resp.result.tblQlfcLcnsList) {
+                    setCnsltCert(resp.result.tblQlfcLcnsList);
+                }
+
+                if (resp.result.tblCrrList) {
+                    setCnsltCrr(resp.result.tblCrrList);
+                }
+
+                if (resp.result.tblAcbgList) {
+                    setCnsltAcbg(resp.result.tblAcbgList);
+                }
+
             },
             (error) => {
 
@@ -103,7 +119,7 @@ function ConsultantDetail(props) {
                                 <p className="address">경기도 성남시 수정구 산성대로 10 (9층)</p>
                             </div>
                             <div className="tel">
-                                <p className="text">사무실 전화</p>
+                                <p className="text">연락처</p>
                                 <a href="tel:02-1234-5678"><span>02-1234-5678</span></a>
                             </div>
                         </div>
@@ -131,14 +147,22 @@ function ConsultantDetail(props) {
                                 <li>
                                     <strong className="left">경력</strong>
                                     <div className="right">
-                                        <p>{consultantDetail?.crrPrd || "-"} 년</p>
+                                        {cnsltCrr.length > 0 ? (
+                                            cnsltCrr.map((item, index) => <p key={index}>{item.ogdpCoNm}</p>)
+                                        ) : (
+                                            <p>{consultantDetail?.crrPrd || "-"} 년</p>
+                                        )}
                                     </div>
                                 </li>
+
                                 <li>
                                     <strong className="left">학력</strong>
                                     <div className="right">
-                                        <p>학</p>
-                                        <p>력</p>
+                                        {cnsltAcbg.length > 0 ? (
+                                            cnsltAcbg.map((item, index) => <p key={index}>{item.schlNm}</p>)
+                                        ) : (
+                                            <p>학력 사항이 없습니다.</p>
+                                        )}
                                     </div>
                                 </li>
                             </ul>
