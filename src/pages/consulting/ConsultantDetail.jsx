@@ -231,19 +231,22 @@ function ConsultantDetail(props) {
                                 {cnsltCertificateFile.length > 0 ? (
                                     cnsltCertificateFile.map((item, index) => (
                                         <li key={item.atchFileSn ? item.atchFileSn : index}>
-                                            <figure>
+                                            <figure style={{width:"100%", height:"100%"}}>
                                                 {item.atchFileSn ? (
                                                     item.atchFileExtnNm.toLowerCase() === "pdf" ? (
                                                         // PDF 파일을 iframe으로 표시
                                                         <iframe
                                                             src={`http://133.186.250.158${item.atchFilePathNm}/${item.strgFileNm}.${item.atchFileExtnNm}`}
-                                                            width="150px"
+                                                            width="100%"
+                                                            height="100%"
                                                             title="PDF Preview">
                                                         </iframe>
                                                     ) : (
                                                         // 이미지 파일을 img 태그로 표시
                                                         <img
                                                             src={`http://133.186.250.158${item.atchFilePathNm}/${item.strgFileNm}.${item.atchFileExtnNm}`}
+                                                            width="100%"
+                                                            height="100%"
                                                             alt="image"
                                                         />
                                                     )
