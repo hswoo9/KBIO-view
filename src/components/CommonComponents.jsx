@@ -420,3 +420,44 @@ export const getUserMsgTopList = async (userSn) => {
     });
 };
 
+/**
+ * 사용자 메뉴조회 (트리구조)
+ * @param upperMenuSn 상위메뉴 일련번호
+ * @param menuSeq 메뉴 뎁스
+ * @returns {Promise<unknown>}
+ * 조회 예시
+ * const [menuList, setMenuList] = useState([]);
+ *
+ * useEffect(() => {
+ *     getMenu().then((data) => {
+ *         setMenuList(data);
+ *     })
+ * }, []);
+ */
+export const getMenuOnTree = async (upperMenuSn, menuSeq, userSn) => {
+    const requestOptions = {
+        method: "POST",
+        headers: {
+            "Content-type": "application/json",
+        },
+        body: JSON.stringify({
+            upperMenuSn : upperMenuSn,
+            menuSeq : menuSeq,
+            userSn : userSn
+        })
+    };
+
+    return new Promise((resolve, reject) => {
+        EgovNet.requestFetch(
+            "/commonApi/getMenuOnTree.do",
+            requestOptions,
+            (resp) => {
+                resolve(resp.result.menuList);
+            },
+            (error) => {
+
+                reject(error);
+            }
+        );
+    });
+};

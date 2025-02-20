@@ -259,3 +259,6 @@ header .hInner .hTop .alarmWrap.click .close .icon {height: 100%; background: ur
 
 .widthGroup29{ width: 29% !important;}
 .widthGroup45{ width: 45% !important;}
+
+header .hInner .hBot{transition: .4s linear !important;}
+.container{transition: .4s linear !important;}

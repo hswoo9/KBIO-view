@@ -20,7 +20,7 @@ function ResidentMemberCreateContent(props){
     const [acceptFileTypes, setAcceptFileTypes] = useState('jpg,jpeg,png,gif,bmp,tiff,tif,webp,svg,ico,heic,avif');
     const [selectedFiles, setSelectedFiles] = useState([]);
     const [imgFile, setImgFile] = useState("");
-    const isFirstRender = useRef(true);
+    //const isFirstRender = useRef(true);
 
 
     const initMode = () => {
@@ -54,19 +54,27 @@ function ResidentMemberCreateContent(props){
         }
     };
 
-    const handleChange = (value) => {
-        if(isFirstRender.current){
-            isFirstRender.current = false;
+    const isFirstRender = {
+        bzentyExpln: useRef(true),
+        mainHstry: useRef(true)
+    };
+
+    const handleChangeField = (fieldName, value) => {
+        if (isFirstRender[fieldName].current) {
+            isFirstRender[fieldName].current = false;
             return;
         }
-        setResidentDetail({...residentDetail, bzentyExpln: value});
+        setResidentDetail(prev => ({
+            ...prev,
+            [fieldName]: value
+        }));
     };
+
 
     //수정 시 데이터 조회
     const getRc = (searchDto) =>{
         // 등록 시 조회 안함
         if (modeInfo.mode === CODE.MODE_CREATE) {
-            
             return;
         }
 
@@ -80,9 +88,12 @@ function ResidentMemberCreateContent(props){
         };
 
         EgovNet.requestFetch(getRcURL, requestOptions, function (resp){
+
             if(modeInfo.mode === CODE.MODE_MODIFY){
                 setResidentDetail(resp.result.rc);
+                console.log("residentDetail",residentDetail);
             }
+
         });
 
 
@@ -159,6 +170,11 @@ function ResidentMemberCreateContent(props){
             }
         }
     }, [residentDetail]);
+
+    useEffect(() => {
+        console.log("Updated residentDetail:", residentDetail);
+    }, [residentDetail]);
+
 
     useEffect(() => {
     }, [selectedFiles]);
@@ -289,6 +305,11 @@ function ResidentMemberCreateContent(props){
 
         const formData = new FormData();
 
+        //로고
+        selectedFiles.map((file) => {
+            formData.append("files", file);
+        })
+
         for (let key in residentDetail) {
             formData.append(key, residentDetail[key]);
         }
@@ -303,10 +324,11 @@ function ResidentMemberCreateContent(props){
             if(result.isConfirmed) {
                 requestOptions = {
                     method: "POST",
-                    headers: {
+                    /*headers: {
                         "Content-type": "application/json",
-                    },
-                    body: JSON.stringify(residentDetail),
+                    },*/
+                    //body: JSON.stringify(residentDetail),
+                    body: formData
                 };
 
                 EgovNet.requestFetch(modeInfo.editURL, requestOptions, (resp) => {
@@ -578,7 +600,7 @@ function ResidentMemberCreateContent(props){
                         <div className="input">
                             <CommonEditor
                                 value={residentDetail.bzentyExpln || ""}
-                                onChange={handleChange}
+                                onChange={(value) => handleChangeField("bzentyExpln", value)}
                             />
                         </div>
                     </li>
@@ -586,10 +608,10 @@ function ResidentMemberCreateContent(props){
                     <li className="inputBox type1">
                         <label className="title essential" htmlFor=""><small>주요이력</small></label>
                         <div className="input">
-                            <textarea
-                                type="text"
-                            >
-                            </textarea>
+                            <CommonEditor
+                            value={residentDetail.mainHstry || ""}
+                            onChange={(value) => handleChangeField("mainHstry", value)}
+                            />
                         </div>
                     </li>
                     {/*증빙자료*/}
@@ -612,7 +634,14 @@ function ResidentMemberCreateContent(props){
                         <div className="box">
                             <p className="title essential">공개여부</p>
                             <div className="toggleSwithWrap">
-                                <input type="checkbox" id="actvtnYn" hidden/>
+                                <input type="checkbox" id="actvtnYn" hidden
+                                       checked={residentDetail.actvtnYn === "Y"}
+                                       onChange={(e) =>
+                                           setResidentDetail({
+                                               ...residentDetail,
+                                               actvtnYn: e.target.checked ? "Y" : "N",
+                                           })
+                                       }/>
                                 <label htmlFor="actvtnYn" className="toggleSwitch">
                                     <span className="toggleButton"></span>
                                 </label>

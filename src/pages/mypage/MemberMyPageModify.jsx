@@ -40,46 +40,56 @@ function MemberMyPageModify(props) {
     const [selectedCareerFiles, setSelectedCareerFiles] = useState([]);
     const [selectedAcbgFiles, setSelectedAcbgFiles] = useState([]);
 
-    const [cnsltCrr, setCnsltCrr] = useState([]);
-    const [cnsltCert, setCnsltCert] = useState([]);
-    const [cnsltAcbg, setCnsltAcbg] = useState([]);
 
 
     const [certificates, setCertificates] = useState([]);
     const addCertificate = () => {
-        const newId = `cert_${Date.now()}`;
-        setCertificates([...certificates, { id: newId, qlfcLcnsNm: "", pblcnInstNm: "", acqsYmd: "" }]);
+        const newId = `certificate_${Date.now()}`;
+        setCertificates([...certificates, { key: newId , qlfcLcnsNm: "", pblcnInstNm: "", acqsYmd: "" }]);
     };
 
     const removeCertificate = (id) => {
-        setCertificates(certificates.filter(cert => cert.id !== id));
+        setCertificates(certificates.filter(cert => cert.key !== id));
     };
 
 
     const [careers, setCareer] = useState([]);
     const addCareer = () => {
         const newId = `career_${Date.now()}`;
-        setCareer([...careers, { id: newId, ogdpCoNm : "", ogdpJbpsNm : "", jncmpYmd: "", rsgntnYmd: ""}]);
+        setCareer([...careers, { key: newId, ogdpCoNm : "", jbgdNm : "", jncmpYmd: "", rsgntnYmd: ""}]);
     };
-    const removeCareer = (id) => {
-        setCareer(careers.filter((career) => career.id !== id));
+    const removeCareer = (key) => {
+        setCareer(careers.filter((career) => career.key !== key));
     };
 
     const [acbges, setAcbg] = useState([]);
     const addAcbg = () => {
-        const newId = `career_${Date.now()}`;
-        setAcbg([...acbges, { id: newId, schlNm : "", scsbjtNm : "", mjrNm: "", dgrNm : "", grdtnYmd : "" }]);
+        const newId = `acbg_${Date.now()}`;
+        setAcbg([...acbges, { key: newId, schlNm : "", scsbjtNm : "", mjrNm: "", dgrNm : "", grdtnYmd : "" }]);
     };
-    const removeAcbg = (id) => {
-        setAcbg(acbges.filter((acbg) => acbg.id !== id));
+    const removeAcbg = (key) => {
+        setAcbg(acbges.filter((acbg) => acbg.key !== key));
     };
 
     const handleInputChange = (e, id, type, field) => {
-        const { value } = e.target;
-        const updatedCertificates = certificates.map(cert =>
-            cert.id === id ? { ...cert, [field]: value } : cert
-        );
-        setCertificates(updatedCertificates);
+        let { value } = e.target;
+
+        if (e.target.type === "date") {
+            value = value.replace(/-/g, ""); // '-' 제거
+        }
+
+        const updateList = (list, setList) => {
+            console.log(list)
+            const updatedList = list.map(item =>
+                item.key === id ? { ...item, [field]: value } : item
+            );
+            setList(updatedList);
+            console.log(updatedList); // 변환된 값 확인
+        };
+
+        if (type === "cert") updateList(certificates, setCertificates);
+        if (type === "career") updateList(careers, setCareer);
+        if (type === "acbg") updateList(acbges, setAcbg);
     };
 
 
@@ -285,7 +295,9 @@ function MemberMyPageModify(props) {
 
                 if (resp.result.tblQlfcLcnsList) {
                     setCertificates(resp.result.tblQlfcLcnsList.map(item => ({
-                        id: `cert_${item.qlfcLcnsSn}`,
+                        key: item.qlfcLcnsSn,
+                        qlfcLcnsSn: item.qlfcLcnsSn,
+                        userSn: sessionUserSn,
                         qlfcLcnsNm: item.qlfcLcnsNm,
                         pblcnInstNm: item.pblcnInstNm,
                         acqsYmd: item.acqsYmd
@@ -294,19 +306,24 @@ function MemberMyPageModify(props) {
 
                 if (resp.result.tblAcbgList) {
                     setAcbg(resp.result.tblAcbgList.map(item => ({
-                        id: `acbg_${item.acbgSn}`,
+                        key: item.acbgSn,
+                        acbgSn: item.acbgSn,
+                        userSn: sessionUserSn,
                         schlNm: item.schlNm,
                         scsbjtNm: item.scsbjtNm,
                         mjrNm: item.mjrNm,
-                        grdtnYmd: item.grdtnYmd
+                        grdtnYmd: item.grdtnYmd,
+                        dgrNm: item.dgrNm
                     })));
                 }
 
                 if (resp.result.tblCrrList) {
                     setCareer(resp.result.tblCrrList.map(item => ({
-                        id: `career_${item.crrSn}`,
+                        key: item.crrSn,
+                        crrSn: item.crrSn,
+                        userSn: sessionUserSn,
                         ogdpCoNm: item.ogdpCoNm,
-                        ogdpJbpsNm: item.ogdpDeptNm,
+                        jbgdNm: item.jbgdNm,
                         jncmpYmd: item.jncmpYmd,
                         rsgntnYmd: item.rsgntnYmd
                     })));
@@ -508,26 +525,38 @@ function MemberMyPageModify(props) {
 
                 const hasConsultData = consultDetail && Object.keys(consultDetail).length > 0;
 
+                const hasCertData = certificates && certificates.length > 0 ? certificates : null;
+                const hasCrrData = careers && careers.length > 0 ? careers : null;
+                const hasAcbgData = acbges && acbges.length > 0 ? acbges : null;
+
                 setSaveEvent({
                     ...saveEvent,
                     save: true,
                     mode: "save",
                     memberDetail: updatedMemberDetail,
-                    consultDetail: hasConsultData ? consultDetail : null
+                    consultDetail: hasConsultData ? consultDetail : null,
+                    hasCertData: hasCertData,
+                    hasCrrData: hasCrrData,
+                    hasAcbgData: hasAcbgData
                 });
+                
+                
+                
+                
             } else {
             }
         });
     };
     const [saveEvent, setSaveEvent] = useState({});
-    
+
     useEffect(() => {
+        console.log(saveEvent)
         if (saveEvent.save && saveEvent.mode === "save") {
-            saveMemberModifyData(saveEvent.memberDetail, saveEvent.consultDetail);
+            saveMemberModifyData(saveEvent.memberDetail, saveEvent.consultDetail, saveEvent.hasCertData, saveEvent.hasCrrData, saveEvent.hasAcbgData);
         }
     }, [saveEvent]);
 
-    const saveMemberModifyData = useCallback((memberDetail, consultDetail) => {
+    const saveMemberModifyData = useCallback((memberDetail, consultDetail, hasCertData, hasCrrData, hasAcbgData) => {
         const formData = new FormData();
 
         Object.keys(memberDetail).forEach((key) => {
@@ -544,32 +573,93 @@ function MemberMyPageModify(props) {
             });
         }
 
-        const menuListURL = "/memberApi/setMemberMyPageModfiy";
-            const requestOptions = {
-                method: "POST",
-                body: formData
-            };
+        if (hasCertData) {
+            // formData.append("hasCertData", JSON.stringify(hasCertData))
+            hasCertData.forEach((item, index) => {
+                formData.append("hasCertData", JSON.stringify(item))
+                // Object.keys(item).forEach((key) => {
+                //     formData.append(`hasCertData[${index}].${key}`, item[key]);
+                // });
+            });
+        }
 
-            EgovNet.requestFetch(
-                menuListURL,
-                requestOptions,
-                (resp) => {
-                    if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
-                        Swal.fire({
-                            text: resp.resultMessage,
-                            confirmButtonText: '확인'
-                        });
-                        navigate({ pathname: URL.LOGIN });
-                    } else {
-                        navigate(
-                            { pathname: URL.ERROR },
-                            { state: { msg: resp.resultMessage } }
-                        );
-                    }
+        if (hasCrrData) {
+            // formData.append("hasCertData", JSON.stringify(hasCertData))
+            hasCrrData.forEach((item, index) => {
+                formData.append("hasCrrData", JSON.stringify(item))
+                // Object.keys(item).forEach((key) => {
+                //     formData.append(`hasCertData[${index}].${key}`, item[key]);
+                // });
+            });
+        }
+
+        if (hasAcbgData) {
+            // formData.append("hasCertData", JSON.stringify(hasCertData))
+            hasAcbgData.forEach((item, index) => {
+                formData.append("hasAcbgData", JSON.stringify(item))
+                // Object.keys(item).forEach((key) => {
+                //     formData.append(`hasCertData[${index}].${key}`, item[key]);
+                // });
+            });
+        }
+
+       /* if (hasAcbgData) {
+            // formData.append("hasCertData", JSON.stringify(hasCertData))
+            hasAcbgData.forEach((item, index) => {
+                formData.append("hasAcbgData", JSON.stringify(item))
+                // Object.keys(item).forEach((key) => {
+                //     formData.append(`hasCertData[${index}].${key}`, item[key]);
+                // });
+            });
+        }
+
+        if (hasCrrData) {
+            hasCrrData.forEach((item, index) => {
+                Object.keys(item).forEach((key) => {
+                    formData.append(`hasCrrData[${index}].${key}`, item[key]);
+                });
+            });
+        }
+
+        if (hasAcbgData) {
+            hasAcbgData.forEach((item, index) => {
+                Object.keys(item).forEach((key) => {
+                    formData.append(`hasAcbgData[${index}].${key}`, item[key]);
+                });
+            });
+        }
+*/
+        /*for (let [key, value] of formData.entries()) {
+            console.log(key, value); // FormData 내용 확인
+        }*/
+
+        const menuListURL = "/memberApi/setMemberMyPageModfiy";
+        const requestOptions = {
+            method: "POST",
+            body: formData
+        };
+
+        EgovNet.requestFetch(
+            menuListURL,
+            requestOptions,
+            (resp) => {
+                if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
+                    Swal.fire({
+                        text: resp.resultMessage,
+                        confirmButtonText: '확인'
+                    });
+                    navigate({ pathname: URL.LOGIN });
+                    window.location.reload()
+                } else {
+                    navigate(
+                        { pathname: URL.ERROR },
+                        { state: { msg: resp.resultMessage } }
+                    );
                 }
-            );
-        },
-    );
+            }
+        );
+    }, []);
+
 
     return (
         <div id="container" className="container ithdraw join_step">
@@ -967,7 +1057,7 @@ function MemberMyPageModify(props) {
                                         </div>
                                         {certificates.map((cert, index) => (
                                             <div
-                                                key={cert.id}
+                                                key={cert.key}
                                                 className="flexinput"
                                                 style={{
                                                     display: "flex",
@@ -982,7 +1072,7 @@ function MemberMyPageModify(props) {
                                                     className="f_input2"
                                                     style={{width: "29%"}}
                                                     value={cert.qlfcLcnsNm}
-                                                    onChange={(e) => handleInputChange(e, cert.id, "cert", "qlfcLcnsNm")}
+                                                    onChange={(e) => handleInputChange(e, cert.key, "cert", "qlfcLcnsNm")}
                                                 />
                                                 <input
                                                     type="text"
@@ -991,7 +1081,7 @@ function MemberMyPageModify(props) {
                                                     className="f_input2"
                                                     value={cert.pblcnInstNm}
                                                     style={{width: "29%"}}
-                                                    onChange={(e) => handleInputChange(e, cert.id, "cert", "pblcnInstNm")}
+                                                    onChange={(e) => handleInputChange(e, cert.key, "cert", "pblcnInstNm")}
                                                 />
                                                 <input
                                                     type="date"
@@ -1000,10 +1090,10 @@ function MemberMyPageModify(props) {
                                                     className="f_input2"
                                                     style={{width: "29%"}}
                                                     value={formatDate(cert.acqsYmd)}
-                                                    onChange={(e) => handleInputChange(e, cert.id, "cert", "acqsYmd")}
+                                                    onChange={(e) => handleInputChange(e, cert.key, "cert", "acqsYmd")}
                                                 />
                                                 {selectedCertFiles.length > 0 && selectedCertFiles[index] ? (
-                                                    <p className="file_name" id={`CertFileNamePTag${cert.id}`}
+                                                    <p className="file_name" id={`CertFileNamePTag${cert.key}`}
                                                        style={{width: "20%"}}>
                                                         <span
                                                             onClick={() => fileDownLoad(selectedCertFiles[index].atchFileSn, selectedCertFiles[index].atchFileNm)}
@@ -1030,7 +1120,7 @@ function MemberMyPageModify(props) {
                                                 )}
 
                                                 <button type="button" style={{width: "10%"}}
-                                                        onClick={() => removeCertificate(cert.id)}>
+                                                        onClick={() => removeCertificate(cert.key)}>
                                                     삭제
                                                 </button>
                                             </div>
@@ -1067,7 +1157,7 @@ function MemberMyPageModify(props) {
                                         </div>
                                         {careers.map((career, index) => (
                                             <div
-                                                key={career.id}
+                                                key={career.key}
                                                 className="flexinput"
                                                 style={{
                                                     display: "flex",
@@ -1082,16 +1172,16 @@ function MemberMyPageModify(props) {
                                                     className="f_input2"
                                                     style={{width: "29%"}}
                                                     value={career.ogdpCoNm || ""}
-                                                    onChange={(e) => handleInputChange(e, career.id, "career", "ogdpCoNm")}
+                                                    onChange={(e) => handleInputChange(e, career.key, "career", "ogdpCoNm")}
                                                 />
                                                 <input
                                                     type="text"
-                                                    name="ogdpJbpsNm"
+                                                    name="jbgdNm"
                                                     placeholder="직위를 입력하세요"
                                                     className="f_input2"
                                                     style={{width: "29%"}}
-                                                    value={career.ogdpJbpsNm || ""}
-                                                    onChange={(e) => handleInputChange(e, career.id, "career", "ogdpJbpsNm")}
+                                                    value={career.jbgdNm || ""}
+                                                    onChange={(e) => handleInputChange(e, career.key, "career", "jbgdNm")}
                                                 />
                                                 <input
                                                     type="date"
@@ -1100,7 +1190,7 @@ function MemberMyPageModify(props) {
                                                     className="f_input2"
                                                     style={{width: "14%"}}
                                                     value={formatDate(career.jncmpYmd) || ""}
-                                                    onChange={(e) => handleInputChange(e, career.id, "career", "jncmpYmd")}
+                                                    onChange={(e) => handleInputChange(e, career.key, "career", "jncmpYmd")}
                                                 />~&nbsp;
                                                 <input
                                                     type="date"
@@ -1109,10 +1199,10 @@ function MemberMyPageModify(props) {
                                                     className="f_input2"
                                                     style={{width: "14%"}}
                                                     value={formatDate(career.rsgntnYmd) || ""}
-                                                    onChange={(e) => handleInputChange(e, career.id, "career", "rsgntnYmd")}
+                                                    onChange={(e) => handleInputChange(e, career.key, "career", "rsgntnYmd")}
                                                 />
                                                 {selectedCareerFiles.length > 0 && selectedCareerFiles[index] ? (
-                                                    <p className="file_name" id={`careerFileNamePTag${career.id}`}
+                                                    <p className="file_name" id={`careerFileNamePTag${career.key}`}
                                                        style={{width: "20%"}}>
                             <span
                                 onClick={() => fileDownLoad(selectedCareerFiles[index].atchFileSn, selectedCareerFiles[index].atchFileNm)}
@@ -1138,7 +1228,7 @@ function MemberMyPageModify(props) {
                                                     </label>
                                                 )}
                                                 <button type="button" style={{width: "10%"}}
-                                                        onClick={() => removeCareer(career.id)}>
+                                                        onClick={() => removeCareer(career.key)}>
                                                     삭제
                                                 </button>
                                             </div>
@@ -1177,7 +1267,7 @@ function MemberMyPageModify(props) {
                                         </div>
                                         {acbges.map((acbg, index) => (
                                             <div
-                                                key={acbg.id}
+                                                key={acbg.key}
                                                 className="flexinput"
                                                 style={{
                                                     display: "flex",
@@ -1192,7 +1282,7 @@ function MemberMyPageModify(props) {
                                                     className="f_input2"
                                                     style={{width: "29%"}}
                                                     value={acbg.schlNm || ""}
-                                                    onChange={(e) => handleInputChange(e, acbg.id, "acbg", "schlNm")}
+                                                    onChange={(e) => handleInputChange(e, acbg.key, "acbg", "schlNm")}
                                                 />
                                                 <input
                                                     type="text"
@@ -1201,7 +1291,7 @@ function MemberMyPageModify(props) {
                                                     className="f_input2"
                                                     style={{width: "29%"}}
                                                     value={acbg.scsbjtNm || ""}
-                                                    onChange={(e) => handleInputChange(e, acbg.id, "acbg", "scsbjtNm")}
+                                                    onChange={(e) => handleInputChange(e, acbg.key, "acbg", "scsbjtNm")}
                                                 />
                                                 <input
                                                     type="text"
@@ -1210,7 +1300,7 @@ function MemberMyPageModify(props) {
                                                     className="f_input2"
                                                     style={{width: "29%"}}
                                                     value={acbg.mjrNm || ""}
-                                                    onChange={(e) => handleInputChange(e, acbg.id, "acbg", "mjrNm")}
+                                                    onChange={(e) => handleInputChange(e, acbg.key, "acbg", "mjrNm")}
                                                 />
                                                 <input
                                                     type="text"
@@ -1219,7 +1309,7 @@ function MemberMyPageModify(props) {
                                                     className="f_input2"
                                                     style={{width: "29%"}}
                                                     value={acbg.dgrNm || ""}
-                                                    onChange={(e) => handleInputChange(e, acbg.id, "acbg", "dgrNm")}
+                                                    onChange={(e) => handleInputChange(e, acbg.key, "acbg", "dgrNm")}
                                                 />
                                                 <input
                                                     type="date"
@@ -1228,10 +1318,10 @@ function MemberMyPageModify(props) {
                                                     className="f_input2"
                                                     style={{width: "29%"}}
                                                     value={formatDate(acbg.grdtnYmd) || ""}
-                                                    onChange={(e) => handleInputChange(e, acbg.id, "acbg", "grdtnYmd")}
+                                                    onChange={(e) => handleInputChange(e, acbg.key, "acbg", "grdtnYmd")}
                                                 />
                                                 {selectedAcbgFiles.length > 0 && selectedAcbgFiles[index] ? (
-                                                    <p className="file_name" id={`acbgFileNamePTag${acbg.id}`}
+                                                    <p className="file_name" id={`acbgFileNamePTag${acbg.key}`}
                                                        style={{width: "20%"}}>
                             <span
                                 onClick={() => fileDownLoad(selectedAcbgFiles[index].atchFileSn, selectedAcbgFiles[index].atchFileNm)}
@@ -1257,7 +1347,7 @@ function MemberMyPageModify(props) {
                                                     </label>
                                                 )}
                                                 <button type="button" style={{width: "10%"}}
-                                                        onClick={() => removeAcbg(acbg.id)}>
+                                                        onClick={() => removeAcbg(acbg.key)}>
                                                     삭제
                                                 </button>
                                             </div>
