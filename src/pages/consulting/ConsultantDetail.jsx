@@ -10,6 +10,7 @@ import * as ComScript from "@/components/CommonScript";
 import notProfile from "@/assets/images/no_profile.png";
 
 import user_consultant_img3 from "@/assets/images/user_consultant_img3.jpg";
+import base64 from 'base64-js';
 
 function ConsultantDetail(props) {
     const sessionUser = getSessionItem("loginUser");
@@ -20,9 +21,10 @@ function ConsultantDetail(props) {
         userSn: location.state?.userSn || "",
     });
 
-    const [consultantDetail, setConsultantDetail] = useState(null);
-    const [memberDetail, setMemberDetail] = useState(null);
+    const [consultantDetail, setConsultantDetail] = useState({});
+    const [memberDetail, setMemberDetail] = useState({});
     const [cnsltProfileFile, setCnsltProfileFile] = useState(null);
+    const [cnsltCertificateFile, setCnsltCertificateFile] = useState([]);
     const [cnsltCrr, setCnsltCrr] = useState([]);
     const [cnsltCert, setCnsltCert] = useState([]);
     const [cnsltAcbg, setCnsltAcbg] = useState([]);
@@ -62,6 +64,40 @@ function ConsultantDetail(props) {
             });
         }
     }
+
+
+    const decodePhoneNumber = (encodedPhoneNumber) => {
+        if (!encodedPhoneNumber) return "";
+        try {
+            const decodedBytes = base64.toByteArray(encodedPhoneNumber);
+            return new TextDecoder().decode(decodedBytes);
+        } catch (error) {
+            console.error("전화번호 디코딩 오류:", error);
+            return "";
+        }
+    };
+
+
+
+    const formatPhoneNumber = (phoneNumber) => {
+        // 숫자 이외의 문자는 제거
+        const cleaned = phoneNumber.replace(/\D/g, "");
+
+        // 02 로 시작하면 02-XXXX-XXXX 형태, 그 외에는 3자리-4자리-4자리 형태로 변환
+        if (cleaned.startsWith("02")) {
+            // 02는 2자리이므로 뒤에 3~4자리와 4자리를 나눔
+            return cleaned.replace(/(\d{2})(\d{3,4})(\d{4})/, "$1-$2-$3");
+        } else {
+            return cleaned.replace(/(\d{3})(\d{3,4})(\d{4})/, "$1-$2-$3");
+        }
+    };
+
+
+    const decodeAndFormatPhoneNumber = (encodedPhoneNumber) => {
+        const decoded = decodePhoneNumber(encodedPhoneNumber);
+        return formatPhoneNumber(decoded);
+    };
+
     const getConsultantDetail = () => {
         const getConsultantDetailUrl = "/consultingApi/getConsultantDetail.do";
         const requestOptions = {
@@ -76,8 +112,8 @@ function ConsultantDetail(props) {
             getConsultantDetailUrl,
             requestOptions,
             (resp) => {
-                setConsultantDetail(resp.result.consultant);
-                setMemberDetail(resp.result.memberDetail);
+                setConsultantDetail({...resp.result.consultant});
+                setMemberDetail({...resp.result.memberDetail});
 
                 if (resp.result.cnsltProfileFile) {
                     setCnsltProfileFile(resp.result.cnsltProfileFile);
@@ -117,11 +153,13 @@ function ConsultantDetail(props) {
                             <strong className="name">{memberDetail?.kornFlnm}</strong>
                             <div className="cent">
                                 <p className="company">{consultantDetail?.ogdpNm} ({consultantDetail?.jbpsNm})</p>
-                                <p className="address">경기도 성남시 수정구 산성대로 10 (9층)</p>
+                                <p className="address">{memberDetail?.addr} {memberDetail?.daddr}</p>
                             </div>
                             <div className="tel">
                                 <p className="text">연락처</p>
-                                <a href="tel:02-1234-5678"><span>02-1234-5678</span></a>
+                                <a href={`tel:${decodeAndFormatPhoneNumber(memberDetail?.mblTelno)}`}>
+                                    <span>{decodeAndFormatPhoneNumber(memberDetail?.mblTelno)}</span>
+                                </a>
                             </div>
                         </div>
                         <div className="introBox">

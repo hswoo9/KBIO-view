@@ -274,16 +274,7 @@ function MemberSignUp(props) {
 
   }
 
-  const confirm = () => {
-    console.log("certificates",certificates);
-    console.log("selectedCertFiles",selectedCertFiles);
-    console.log("careers",careers);
-    console.log("selectedCareerFiles",selectedCareerFiles);
-    console.log("acbges",acbges);
-    console.log("selectedAcbgFiles",selectedAcbgFiles);
 
-    return;
-  }
 
 
   const searchAddress = () => {
@@ -1940,7 +1931,6 @@ function MemberSignUp(props) {
             </ul>
 
             <div className="buttonBox">
-              <button onClick={confirm}>확인</button>
               <button type="button" className="clickBtn black" onClick={insertMember}>
                 <span>다음</span>
               </button>{/*
