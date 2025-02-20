@@ -305,6 +305,11 @@ function ResidentMemberCreateContent(props){
 
         const formData = new FormData();
 
+        //로고
+        selectedFiles.map((file) => {
+            formData.append("files", file);
+        })
+
         for (let key in residentDetail) {
             formData.append(key, residentDetail[key]);
         }
@@ -319,10 +324,11 @@ function ResidentMemberCreateContent(props){
             if(result.isConfirmed) {
                 requestOptions = {
                     method: "POST",
-                    headers: {
+                    /*headers: {
                         "Content-type": "application/json",
-                    },
-                    body: JSON.stringify(residentDetail),
+                    },*/
+                    //body: JSON.stringify(residentDetail),
+                    body: formData
                 };
 
                 EgovNet.requestFetch(modeInfo.editURL, requestOptions, (resp) => {
