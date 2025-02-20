@@ -185,7 +185,7 @@ function contentView(props) {
                                             </select>
                                         </div>
                                     </li>
-                                    <li className="inputBox type2">
+                                    <li className="inputBox type2" style={{maxWidth: "99%"}}>
                                         <label htmlFor="text" className="tt1 essential">애로사항 내용</label>
                                         <div className="input">
                                             <CommonEditor
