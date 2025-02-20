@@ -12,12 +12,7 @@ import { itemIdxByPage } from "@/utils/calc";
 import { getSessionItem } from "@/utils/storage";
 
 function EgovNoticeList(props) {
-  console.group("EgovNoticeList");
-  console.log("[Start] EgovNoticeList ------------------------------");
-  console.log("EgovNoticeList [props] : ", props);
-
   const location = useLocation();
-  console.log("EgovNoticeList [location] : ", location);
 
   const cndRef = useRef();
   const wrdRef = useRef();
@@ -44,7 +39,6 @@ function EgovNoticeList(props) {
   const [listTag, setListTag] = useState([]);
 
   const retrieveList = useCallback((searchCondition) => {
-    console.groupCollapsed("EgovNoticeList.retrieveList()");
 
     const retrieveListURL = "/board" + EgovNet.getQueryString(searchCondition);
     const requestOptions = {
@@ -110,10 +104,9 @@ function EgovNoticeList(props) {
         setListTag(mutListTag);
       },
       function (resp) {
-        console.log("err response : ", resp);
+
       }
     );
-    console.groupEnd("EgovNoticeList.retrieveList()");
   }, []);
 
   useEffect(() => {
@@ -121,8 +114,6 @@ function EgovNoticeList(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  console.log("------------------------------EgovNoticeList [End]");
-  console.groupEnd("EgovNoticeList");
   return (
     <div className="container">
       <div className="c_wrap">

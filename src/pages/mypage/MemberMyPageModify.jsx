@@ -64,11 +64,6 @@ function MemberMyPageModify(props) {
             emlRcptnAgreYn: value,
         });
     };
-/*
-    useEffect(() => {
-        console.log(memberDetail);
-    }, [memberDetail]);
-*/
 
     const handleSmsChange = (e) => {
         const value = e.target.value;
@@ -107,11 +102,6 @@ function MemberMyPageModify(props) {
         script.async = true;
 
         script.onload = () => {
-            console.log("카카오 주소 검색 API가 로드되었습니다.");
-
-            if (location.state?.signupType) {
-                console.log("Signup Type: ", location.state.signupType);
-            }
         };
 
         document.body.appendChild(script);
@@ -180,8 +170,6 @@ function MemberMyPageModify(props) {
                 const memberData = resp.result.member;
                 const cnsltData = resp.result.cnslttMbr;
 
-                console.log("멤버데이터 : ",memberData);
-
                 const decodedPhoneNumber = memberData.mblTelno ? decodePhoneNumber(memberData.mblTelno) : "";
 
                 let emailPrefix = "";
@@ -212,8 +200,6 @@ function MemberMyPageModify(props) {
                     ...prevState,
                     ...cnsltData,
                 }));
-                console.log("현재 consultDetail:", consultDetail);
-                console.log("현재 memberDetail:", memberDetail)
             }
         });
     };
@@ -257,7 +243,6 @@ function MemberMyPageModify(props) {
     };
 
     useEffect(() => {
-        console.log("현재 consultDetail:", consultDetail);
     }, [consultDetail]);
 
     const checkPwd = () => {
@@ -278,11 +263,7 @@ function MemberMyPageModify(props) {
             }),
         };
 
-        console.log("비밀번호 : ", currentPassword);
-        console.log("아이디 : ", memberDetail.userId);
-
         EgovNet.requestFetch(checkPwdUrl, requestOptions, (resp) => {
-            console.log("백엔드 응답:", resp);
             if (resp.resultCode == "200") {
                 updateMember();
             } else {
@@ -298,8 +279,6 @@ function MemberMyPageModify(props) {
     };
 
     const updateMember = () => {
-        console.log("현재 memberDetail 상태:", memberDetail);
-        console.log("현재 consultDetail:", consultDetail);
         Swal.fire({
             title: "저장하시겠습니까?",
             showCloseButton: true,

@@ -90,8 +90,6 @@ function MemberMyPageSimple(props) {
 
                     resp.result.consultantList.forEach(function (item, index) {
                         if (index === 0) dataList = [];
-                        console.log("item:",item)
-
                         dataList.push(
                             <tr key={item.cnsltAplySn}>
                                 <td>
@@ -132,7 +130,7 @@ function MemberMyPageSimple(props) {
                     setPaginationInfo(resp.paginationInfo);
                 },
                 function (resp) {
-                    console.log("err response : ", resp);
+
                 }
             );
 

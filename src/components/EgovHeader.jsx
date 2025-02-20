@@ -12,8 +12,6 @@ import { getSessionItem, setSessionItem, removeSessionItem } from "@/utils/stora
 import Swal from 'sweetalert2';
 
 function EgovHeader() {
-  console.group("EgovHeader");
-  console.log("[Start] EgovHeader ------------------------------");
 
   const sessionUser = getSessionItem("loginUser");
   const sessionUserId = sessionUser?.id;
@@ -54,9 +52,6 @@ function EgovHeader() {
       }
     });
   };
-
-  console.log("------------------------------EgovHeader [End]");
-  console.groupEnd("EgovHeader");
 
   //자동 로그아웃
   const logoutTimer = useRef(null);

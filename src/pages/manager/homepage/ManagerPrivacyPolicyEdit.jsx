@@ -45,12 +45,10 @@ function ManagerPrivacyPolicyEdit(props) {
     });
 
     useEffect(() => {
-        console.log(privacyPolicyDetail);
     }, [privacyPolicyDetail]);
 
     const [comCdGroupList, setComCdGroupList] = useState([]);
     useEffect(() => {
-        console.log(comCdGroupList);
     }, [comCdGroupList]);
 
     const [saveEvent, setSaveEvent] = useState({});
@@ -68,7 +66,6 @@ function ManagerPrivacyPolicyEdit(props) {
 
     const delPrivacyPolicyData = useCallback(
         (privacyPolicyDetail) => {
-            console.log(privacyPolicyDetail);
             const privacyPolicyURL = "/utztnApi/setPrivacyPolicyDel";
             const requestOptions = {
                 method: "POST",
@@ -216,7 +213,6 @@ function ManagerPrivacyPolicyEdit(props) {
         };
 
         EgovNet.requestFetch(getPrivacyPolicyURL, requestOptions, function (resp) {
-            console.log(resp);
             if (modeInfo.mode === CODE.MODE_MODIFY) {
                 if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
                     resp.result.tblUtztnTrms.mdfrSn = sessionUser.userSn;

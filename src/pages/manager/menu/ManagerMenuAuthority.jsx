@@ -18,9 +18,6 @@ import { getSessionItem } from "@/utils/storage";
 
 function ManagerMenuAuthority(props) {
     const sessionUser = getSessionItem("loginUser");
-    console.group("ManagerMenuAuthority");
-    console.log("[Start] ManagerMenuAuthority ------------------------------");
-    console.log("ManagerMenuAuthority [props] : ", props);
 
     const location = useLocation();
 
@@ -52,13 +49,11 @@ function ManagerMenuAuthority(props) {
 
     const [selectAuthority, setSelectAuthority] = useState({});
     useEffect(() => {
-        console.log(selectAuthority);
         getMenuAuthGroup(selectAuthority);
     }, [selectAuthority]);
 
     const [selectAuthorityCheckGroup, setSelectAuthorityCheckGroup] = useState([]);
     useEffect(() => {
-        console.log(selectAuthorityCheckGroup);
         setAuthrtGroupSns({
             ...authrtGroupSns,
             authrtGroupSns : selectAuthorityCheckGroup
@@ -72,7 +67,6 @@ function ManagerMenuAuthority(props) {
 
     const [authorityGroup, setAuthorityGroup] = useState({});
     useEffect(() => {
-        console.log(authorityGroup);
         if(authorityGroup.btnType != null){
             saveAuthorityGroup(authorityGroup);
         }
@@ -345,13 +339,10 @@ function ManagerMenuAuthority(props) {
                             </tr>
                         );
                     });
-                    console.log("---------------------------");
-                    console.log(dataList);
-                    console.log("---------------------------");
                     setAuthorityList(dataList);
                 },
                 function (resp) {
-                    console.log("err response : ", resp);
+
                 }
             )
         },
@@ -372,7 +363,6 @@ function ManagerMenuAuthority(props) {
                 menuListURL,
                 requestOptions,
                 (resp) => {
-                    console.log(resp.result);
                     if(resp.result.menuAuthGroup != null){
                         setAuthorityGroup(resp.result.menuAuthGroup);
                         if(resp.result.menuAuthGroup.inqAuthrt == "Y"){
@@ -416,7 +406,7 @@ function ManagerMenuAuthority(props) {
                     }
                 },
                 function (resp) {
-                    console.log("err response : ", resp);
+
                 }
             )
         }/*,
@@ -437,7 +427,6 @@ function ManagerMenuAuthority(props) {
                 menuListURL,
                 requestOptions,
                 (resp) => {
-                    console.log(resp);
                     setSaveMode({mode:"insert"});
                     setMenuDetail({});
                     setSearchDto({
@@ -507,7 +496,6 @@ function ManagerMenuAuthority(props) {
                 menuListURL,
                 requestOptions,
                 (resp) => {
-                    console.log(resp);
                     if(resp.result.menu != null){
                         setSaveMode({mode: "update"});
                         resp.result.menu.mdfrSn = sessionUser.userSn;

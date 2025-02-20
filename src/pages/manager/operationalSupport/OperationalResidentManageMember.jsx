@@ -95,7 +95,7 @@ function OperationalResidentMember(props) {
 
                 },
                 function (resp) {
-                    console.log("err response : ", resp);
+
                 }
             )
 

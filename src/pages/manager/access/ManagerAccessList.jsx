@@ -98,7 +98,7 @@ function ManagerAccessList(props) {
                     setMngrAcsIpList(dataList);
                 },
                 function (resp) {
-                    console.log("err response : ", resp);
+
                 }
             )
         },

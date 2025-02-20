@@ -125,7 +125,7 @@ function MemberMyPageDifficulties(props) {
                     setPaginationInfo(resp.paginationInfo);
                 },
                 function (resp) {
-                    console.log("err response : ", resp);
+
                 }
             );
 

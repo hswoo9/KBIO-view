@@ -50,7 +50,6 @@ function Index(props) {
 
     // 연도 및 월 변경 핸들러
     const handleYearChange = (e) => {
-        console.log(setYear(currentMonth, parseInt(e.target.value, 10)));
         setCurrentMonth(setYear(currentMonth, parseInt(e.target.value, 10)));
     };
 
@@ -236,7 +235,7 @@ function Index(props) {
                 setIsLoading(false);
             },
             function (resp) {
-                console.log("err response : ", resp);
+
             }
         )
     };

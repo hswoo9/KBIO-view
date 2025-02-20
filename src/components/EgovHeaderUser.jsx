@@ -24,7 +24,7 @@ import userJs from "@/js/userCustom";
 
 import logoWhite from "@/assets/images/logo_white.svg";
 import {useWebSocket} from "../utils/WebSocketProvider.jsx";
-import {getUserMsgList} from "./CommonComponents.jsx";
+import {getUserMsgTopList} from "./CommonComponents.jsx";
 import moment from "moment";
 
 function EgovHeader() {
@@ -67,7 +67,7 @@ function EgovHeader() {
   const sessionUserSe = sessionUser?.userSe;
   const sessionUserSn = sessionUser?.userSn;
   const userSn = getSessionItem("userSn");
-  const { userMsgList, setUserMsgList } = useWebSocket();
+  const { userMsgTopList, setUserMsgTopList } = useWebSocket();
   const [msgHtml, setMsgHtml] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -88,8 +88,8 @@ function EgovHeader() {
   const handleToggle = () => {
     setIsToggled(prevState => !prevState);
     document.getElementById("alarmDot").style.display = "none";
-    // getUserMsgList(sessionUserSn).then((data) => {
-    //   setUserMsgList(data)
+    // getUserMsgTopList(sessionUserSn).then((data) => {
+    //   setUserMsgTopList(data)
     // })
   };
 
@@ -163,7 +163,6 @@ function EgovHeader() {
         }
       });
     } catch (error) {
-      console.error("비밀번호 찾기 요청 실패:", error);
       Swal.fire({
         title: "오류 발생",
         text: "서버와 통신 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.",
@@ -219,7 +218,6 @@ function EgovHeader() {
         }
       });
     } catch (error) {
-      console.error("ID 찾기 요청 실패:", error);
       Swal.fire({
         title: "오류 발생",
         text: "서버와 통신 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.",
@@ -488,7 +486,7 @@ function EgovHeader() {
     });
   }, [window.location.pathname]);
 
-  const userMsgMakeHtml = () => {
+  const userMsgTopMakeHtml = () => {
       let dataList = [];
       dataList.push(
           <li key="no_data" className="noData">
@@ -500,7 +498,7 @@ function EgovHeader() {
           </li>
       );
 
-    userMsgList.forEach(function (item, index) {
+    userMsgTopList.forEach(function (item, index) {
       if (index === 0) dataList = [];
 
       dataList.push(
@@ -543,7 +541,7 @@ function EgovHeader() {
       body: JSON.stringify({msgSn : msgSn, mdfrSn : sessionUserSn}),
     };
 
-    EgovNet.requestFetch("/commonApi/setUserMsgExpsrYn", requestOptions, (resp) => {
+    EgovNet.requestFetch("/userMsgApi/setUserMsgExpsrYn", requestOptions, (resp) => {
       if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
         e.target.closest("li").classList.add("slide-out");
 
@@ -569,8 +567,8 @@ function EgovHeader() {
   }
 
   useEffect(() => {
-    userMsgMakeHtml();
-  }, [userMsgList]);
+    userMsgTopMakeHtml();
+  }, [userMsgTopList]);
 
   return (
       // <!-- header -->

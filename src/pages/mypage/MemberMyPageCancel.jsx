@@ -39,7 +39,6 @@ const EgovMyPage = () => {
 
 
     const checkUser =() => {
-        console.log("User Info: ", userInfo);
         if(!passwordRef.current.value){
             Swal.fire("비밀번호를 입력해주세요.");
             passwordRef.current.focus();
@@ -60,7 +59,6 @@ const EgovMyPage = () => {
                 Swal.fire(resp.resultMessage);
                 return;
             }else{
-                console.log("resp",resp)
                 navigate(URL.MEMBER_MYPAGE_IDENTITY, {
                     state: {
                         menuSn: location.state?.menuSn,

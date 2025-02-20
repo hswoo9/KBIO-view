@@ -112,7 +112,7 @@ function OperationalRelatedOrganization(props) {
 
                 },
                 function (resp) {
-                    console.log("err response : ", resp);
+
                 }
             )
         },
@@ -125,7 +125,6 @@ function OperationalRelatedOrganization(props) {
 
     function formatTelNo(telNo) {
         if (!telNo || telNo.length < 12) {
-            console.error("Invalid brno length or undefined value.");
             return telNo;
         }
 

@@ -26,7 +26,6 @@ function ManagerCodeGroupEdit(props) {
 
   const [cdGroupDetail, setCdGroupDetail] = useState({});
   useEffect(() => {
-    console.log(cdGroupDetail);
   }, [cdGroupDetail]);
 
   const [saveEvent, setSaveEvent] = useState({});

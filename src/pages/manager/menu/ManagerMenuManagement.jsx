@@ -36,7 +36,6 @@ function Index(props) {
 
     const [menuDetail, setMenuDetail] = useState({});
     useEffect(() => {
-        console.log(menuDetail);
     }, [menuDetail]);
 
     const [saveMenuData, setSaveMenuData] = useState({});
@@ -84,7 +83,6 @@ function Index(props) {
     const [menuList, setMenuList] = useState([]);
 
     const upperMenuChange = (e, menuSeq) => {
-        console.log(e.target.value);
         const filterMenuList = [];
         if(e.target.value != 0 && e.target.value != "" && menuSeq == 1){
             setMenuDetail({
@@ -382,7 +380,6 @@ function Index(props) {
                 menuListURL,
                 requestOptions,
                 (resp) => {
-                    console.log(resp);
                     setSaveMode({mode:"insert"});
                     setMenuDetail({});
                     setSearchDto({
@@ -497,7 +494,7 @@ function Index(props) {
                     setBbsList(dataList);
                 },
                 function (resp) {
-                    console.log("err response : ", resp);
+
                 }
             )
         },

@@ -12,13 +12,8 @@ import EgovAttachFile from "@/components/EgovAttachFile";
 import bbsFormVaildator from "@/utils/bbsFormVaildator";
 
 function EgovAdminGalleryEdit(props) {
-  console.group("EgovAdminGalleryEdit");
-  console.log("------------------------------");
-  console.log("EgovAdminGalleryEdit [props] : ", props);
-
   const navigate = useNavigate();
   const location = useLocation();
-  console.log("EgovAdminGalleryEdit [location] : ", location);
 
   const bbsId = location.state?.bbsId || GALLERY_BBS_ID;
   const nttId = location.state?.nttId || "";
@@ -115,7 +110,6 @@ function EgovAdminGalleryEdit(props) {
     const formData = new FormData();
     for (let key in boardDetail) {
       formData.append(key, boardDetail[key]);
-      //console.log("boardDetail [%s] ", key, boardDetail[key]);
     }
 
     if (bbsFormVaildator(formData)) {
@@ -160,8 +154,6 @@ function EgovAdminGalleryEdit(props) {
     intMode();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  console.groupEnd("EgovAdminGalleryEdit");
 
   return (
     <div className="container">
@@ -233,10 +225,6 @@ function EgovAdminGalleryEdit(props) {
                 masterBoard.fileAtchPosblAt === "Y" && (
                   <EgovAttachFile
                     fnChangeFile={(attachfile) => {
-                      console.log(
-                        "====>>> Changed attachfile file = ",
-                        attachfile
-                      );
                       const arrayConcat = { ...boardDetail }; // 기존 단일 파일 업로드에서 다중파일 객체 추가로 변환(아래 for문으로)
                       for (let i = 0; i < attachfile.length; i++) {
                         arrayConcat[`file_${i}`] = attachfile[i];
@@ -244,7 +232,6 @@ function EgovAdminGalleryEdit(props) {
                       setBoardDetail(arrayConcat);
                     }}
                     fnDeleteFile={(deletedFile) => {
-                      console.log("====>>> Delete deletedFile = ", deletedFile);
                       setBoardAttachFiles(deletedFile);
                     }}
                     boardFiles={boardAttachFiles}

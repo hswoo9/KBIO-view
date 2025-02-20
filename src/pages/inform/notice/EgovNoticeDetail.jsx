@@ -12,13 +12,8 @@ import EgovAttachFile from "@/components/EgovAttachFile";
 import { getSessionItem } from "@/utils/storage";
 
 function EgovNoticeDetail(props) {
-  console.group("EgovNoticeDetail");
-  console.log("------------------------------");
-  console.log("EgovNoticeDetail [props] : ", props);
-
   const navigate = useNavigate();
   const location = useLocation();
-  console.log("EgovNoticeDetail [location] : ", location);
   //관리자 권한 체크때문에 추가(아래)
   const sessionUser = getSessionItem("loginUser");
   const sessionUserSe = sessionUser?.userSe;
@@ -59,7 +54,6 @@ function EgovNoticeDetail(props) {
     };
 
     EgovNet.requestFetch(deleteBoardURL, requestOptions, (resp) => {
-      console.log("====>>> board delete= ", resp);
       if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
         alert("게시글이 삭제되었습니다.");
         navigate(URL.INFORM_NOTICE, { replace: true });
@@ -76,8 +70,6 @@ function EgovNoticeDetail(props) {
     retrieveDetail();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  console.groupEnd("EgovNoticeDetail");
 
   return (
     <div className="container">

@@ -44,7 +44,7 @@ export const getMenu = async (upperMenuSn, menuSeq, userSn) => {
                 resolve(resp.result.menuList);
             },
             (error) => {
-                console.log("err response : ", error);
+
                 reject(error);
             }
         );
@@ -83,7 +83,7 @@ export const getLeftMenu = async (menuSn) => {
                 resolve(resp.result.leftMenuList);
             },
             (error) => {
-                console.log("err response : ", error);
+
                 reject(error); // 에러 시 reject
             }
         );
@@ -120,7 +120,7 @@ export const getComCdList = async (cdGroupSn) => {
                 resolve(resp.result.comCdList); // 성공 시 데이터를 resolve
             },
             (error) => {
-                console.log("err response : ", error);
+
                 reject(error); // 에러 시 reject
             }
         );
@@ -225,7 +225,7 @@ export const mngrAcsIpChk = (navigate) => {
             }
         },
         function (resp) {
-            console.log("err response : ", resp);
+
         }
     )
 }
@@ -387,14 +387,14 @@ export const getBbsInPst = async (bbsNm, bbsTypeNm, actvtnYn, userSn, day) => {
                 resolve(resp.result.bbsList);
             },
             (error) => {
-                console.log("err response : ", error);
+
                 reject(error);
             }
         );
     });
 };
 
-export const getUserMsgList = async (userSn) => {
+export const getUserMsgTopList = async (userSn) => {
     const requestOptions = {
         method: "POST",
         headers: {
@@ -407,13 +407,13 @@ export const getUserMsgList = async (userSn) => {
 
     return new Promise((resolve, reject) => {
         EgovNet.requestFetch(
-            "/commonApi/getUserMsgList.do",
+            "/userMsgApi/getUserMsgTopList.do",
             requestOptions,
             (resp) => {
-                resolve(resp.result.userMsgList);
+                resolve(resp.result.userMsgTopList);
             },
             (error) => {
-                console.log("err response : ", error);
+
                 reject(error);
             }
         );

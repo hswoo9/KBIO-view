@@ -263,9 +263,6 @@ const RootRoutes = () => {
 
   //리액트에서 사이트관리자에 접근하는 토큰값 위변조 방지용으로 서버에서 비교하는 함수 추가
   const jwtAuthentication = useCallback(() => {
-    console.group("jwtAuthentication");
-    console.log("[Start] jwtAuthentication ------------------------------");
-
     const jwtAuthURL = "/jwtAuthAPI";
     let requestOptions = {
       method: "POST",
@@ -278,9 +275,6 @@ const RootRoutes = () => {
         setMounted(true); // 이 값으로 true 일 때만 페이지를 렌더링이 되는 변수 사용.
       }
     });
-
-    console.log("------------------------------jwtAuthentication [End]");
-    console.groupEnd("jwtAuthentication");
   }, []);
 
   //시스템관리 메뉴인 /admin/으로 시작하는 URL은 모두 로그인이 필요하도록 코드추가(아래)

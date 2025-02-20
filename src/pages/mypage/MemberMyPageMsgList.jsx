@@ -73,7 +73,7 @@ function MemberMyPageMsgList(props) {
             body: JSON.stringify({msgSn : msgSn, mdfrSn : sessionUserSn})
         };
         EgovNet.requestFetch(
-            "/commonApi/setMsgConfirm",
+            "/userMsgApi/setMsgConfirm",
             requestOptions,
             (resp) => {
                 if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
@@ -87,7 +87,7 @@ function MemberMyPageMsgList(props) {
                 }
             },
             function (resp) {
-                console.log("err response : ", resp);
+
             }
         )
     }
@@ -102,7 +102,7 @@ function MemberMyPageMsgList(props) {
                 body: JSON.stringify(searchDto)
             };
             EgovNet.requestFetch(
-                "/memberApi/getUserMsgList.do",
+                "/userMsgApi/getUserMsgList.do",
                 requestOptions,
                 (resp) => {
                     if(document.querySelectorAll(".contentRow ")){
@@ -153,7 +153,7 @@ function MemberMyPageMsgList(props) {
                     setPaginationInfo(resp.paginationInfo);
                 },
                 function (resp) {
-                    console.log("err response : ", resp);
+
                 }
             )
         },

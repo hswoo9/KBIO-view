@@ -78,7 +78,7 @@ function ResidentCompanyList(){
 
                 },
                 function (resp) {
-                    console.log("err response : ", resp);
+
                 }
             )
         },
@@ -91,7 +91,6 @@ function ResidentCompanyList(){
 
     function formatBrno(brno) {
         if (!brno || brno.length < 10) {
-            console.error("Invalid brno length or undefined value.");
             return brno;
         }
 

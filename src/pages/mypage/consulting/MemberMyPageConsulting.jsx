@@ -88,7 +88,6 @@ function MemberMyPageConsulting(props) {
 
                     resp.result.consultantList.forEach(function (item, index) {
                         if (index === 0) dataList = [];
-                        console.log(item)
 
                         dataList.push(
                             <tr key={item.cnsltAplySn}>
@@ -131,7 +130,7 @@ function MemberMyPageConsulting(props) {
                     setPaginationInfo(resp.paginationInfo);
                 },
                 function (resp) {
-                    console.log("err response : ", resp);
+
                 }
             );
 

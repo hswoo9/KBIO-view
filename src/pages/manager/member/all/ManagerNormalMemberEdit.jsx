@@ -12,10 +12,6 @@ import base64 from 'base64-js';
 
 
 function setNormalMember(props) {
-    console.group("ManagerNormalMemberEdit");
-    console.log("[Start] ManagerNormalMemberEdit------------------------------");
-    console.log("ManagerNormalMemberEdit [props] : ", props);
-
     const navigate = useNavigate();
     const location = useLocation();
     const checkRef = useRef([]);
@@ -138,9 +134,6 @@ function setNormalMember(props) {
     useEffect(() => {
         initMode();
     }, []);
-
-    console.log("------------------------------EgovAdminMemberEdit [End]");
-    console.groupEnd("EgovAdminMemberEdit");
 
     return (
         <div id="container" className="container layout cms">

@@ -28,7 +28,7 @@ function CommonPopup(props) {
                     setBnrPopup(resp.result.tblBnrPopup)
                 },
                 function (resp) {
-                    console.log("err response : ", resp);
+
                 }
             )
         },

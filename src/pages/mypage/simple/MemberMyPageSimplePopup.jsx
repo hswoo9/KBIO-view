@@ -83,7 +83,6 @@ function MemberMyPageSimplePopup() {
 
     useEffect(() => {
         const item = JSON.parse(localStorage.getItem('popupData'));
-        console.log("로컬스토리지에서 불러온 데이터:", item);
         if (item) {
             if (item.mode === CODE.MODE_CREATE) {
                 setSimplePopupModify({
@@ -112,14 +111,11 @@ function MemberMyPageSimplePopup() {
     };
 
     const handleEditorChange = (value) => {
-        console.log("Editor 변경된 값:", value);
         setSimplePopupModify({ ...simplePopupModify, content: value, cn: value });
     };
 
     const handleSave = () => {
         const formData = new FormData();
-
-        console.log("저장할 데이터:", simplePopupModify.cn);
 
         for (let key in simplePopupModify) {
             if (simplePopupModify[key] != null && key !== "simpleFiles") {
@@ -192,7 +188,6 @@ function MemberMyPageSimplePopup() {
                 {simplePopupModify.simpleFiles.length > 0 && (
                     <ul style={{ paddingLeft: "20px" }}>
                         {simplePopupModify.simpleFiles.map((file, index) => {
-                            console.log("파일 정보:", file); // 파일 정보 출력
                             const fileSize = Number(file.atchFileSz); // 숫자로 변환
                             return (
                                 <li key={index} style={{ marginBottom: "5px" }}>

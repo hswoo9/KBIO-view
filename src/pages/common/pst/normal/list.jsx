@@ -66,7 +66,6 @@ function commonPstList(props) {
                 pstListURL,
                 requestOptions,
                 (resp) => {
-                    console.log(resp.result.authrt)
                     setAuthrt(resp.result.authrt)
                     setBbs(resp.result.bbs);
                     let dataList = [];
@@ -153,7 +152,7 @@ function commonPstList(props) {
                     setPaginationInfo(resp.paginationInfo);
                 },
                 function (resp) {
-                    console.log("err response : ", resp);
+
                 }
             )
         },

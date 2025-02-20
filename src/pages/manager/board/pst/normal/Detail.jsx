@@ -46,7 +46,6 @@ function setPst(props) {
   /** 대댓글, 수정 */
   const [pstSubCmnt, setPstSubCmnt] = useState(initialCommentState); // 현재 활성화된 답글 입력창 ID
   useEffect(() => {
-    console.log(pstSubCmnt);
   }, [pstSubCmnt])
   /** 댓글 */
   const [pstCmnt, setPstCmnt] = useState(initialCommentState)
@@ -111,7 +110,7 @@ function setPst(props) {
 
             },
             function (resp) {
-              console.log("err response : ", resp);
+
             }
         )
       }, [pstCmntList]
@@ -167,7 +166,6 @@ function setPst(props) {
   const handleSubmit = (type) => {
 
     let pstCmntSubmit = type === "sub" ? pstSubCmnt : pstCmnt;
-    console.log(pstCmntSubmit);
     if (!pstCmntSubmit.cmntCn) {
       alert("댓글을 입력해주세요.");
       return;

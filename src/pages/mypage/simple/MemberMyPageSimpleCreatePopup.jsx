@@ -15,9 +15,6 @@ function MemberMyPageSimpleCreatePopup() {
     const cnsltAplySn = params.get("cnsltAplySn");
     const sessionUser = getSessionItem("loginUser");
 
-    console.log("받은 cnsltAplySn:", cnsltAplySn);
-    console.log("sessionUser :", sessionUser)
-
     const [simplePopupModify, setSimplePopupModify] = useState({
         creatrSn : sessionUser.userSn,
         dsctnSe: sessionUser.mbrType === 2 ? 1 : 0,
@@ -25,7 +22,6 @@ function MemberMyPageSimpleCreatePopup() {
         cnsltAplySn : cnsltAplySn,
     });
 
-     console.log(simplePopupModify)
     const [fileList, setFileList] = useState([]);
     const acceptFileTypes = 'pdf,hwp,docx,xls,xlsx,ppt';
 
@@ -59,7 +55,6 @@ function MemberMyPageSimpleCreatePopup() {
 
 
     const handleEditorChange = (value) => {
-        console.log("Editor 변경된 값:", value);
         setSimplePopupModify({ ...simplePopupModify, cn: value });
     };
 

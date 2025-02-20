@@ -1,8 +1,6 @@
 import { Link, NavLink } from "react-router-dom";
 
 function EgovPaging(props) {
-  console.groupCollapsed("EgovPaging");
-  console.log("EgovPaging [props] : ", props);
 
   let paginationTag = [];
 
@@ -113,8 +111,6 @@ function EgovPaging(props) {
       paginationTag.push(lastPageTag);
     //}
   }
-  console.log("paginationTag", paginationTag);
-  console.groupEnd("EgovPaging");
 
   return (
       <>

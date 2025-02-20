@@ -67,10 +67,6 @@ function RelatedCompanyCreate(props){
 
     //수정 시 데이터 조회
     const getRc = (searchDto) =>{
-        console.log("state : ",searchDto);
-        console.log("mode : ",modeInfo.mode);
-
-        // 등록 시 조회 안함
         if (modeInfo.mode === CODE.MODE_CREATE) {
 
             return;
@@ -88,9 +84,6 @@ function RelatedCompanyCreate(props){
         EgovNet.requestFetch(getRcURL, requestOptions, function (resp){
             if(modeInfo.mode === CODE.MODE_MODIFY){
                 setRelatedDetail(resp.result.rc);
-
-
-                console.log("resp.result.rc",resp.result.rc);
             }
         });
 
@@ -145,7 +138,6 @@ function RelatedCompanyCreate(props){
         script.async = true;
 
         script.onload = () => {
-            console.log("카카오 주소 검색 API가 로드되었습니다.");
         };
 
         document.body.appendChild(script);
@@ -179,8 +171,6 @@ function RelatedCompanyCreate(props){
         //const businessNumber = `${relatedDetail.brno1}-${relatedDetail.brno2}-${relatedDetail.brno3}`;
         const businessNumber = `${relatedDetail.brno}`;
 
-        console.log(businessNumber);
-
         if (!businessNumber || businessNumber.includes("--")) {
             alert("사업자 등록번호를 정확히 입력하세요.");
             return;
@@ -195,7 +185,6 @@ function RelatedCompanyCreate(props){
             });
 
             const businessData = response.data.data[0];
-            console.log(businessData);
 
             const businessStatus = response.data.data[0]?.b_stt_cd;
 
@@ -215,7 +204,6 @@ function RelatedCompanyCreate(props){
             }
 
         } catch (error) {
-            console.error("Error fetching business status:", error);
             alert("사업자 등록번호 조회에 실패했습니다.");
         }
     };

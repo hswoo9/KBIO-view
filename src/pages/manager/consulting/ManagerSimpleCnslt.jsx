@@ -122,7 +122,7 @@ function ManagerSimpleCnslt(props) {
                     setPaginationInfo(resp.paginationInfo);
                 },
                 function (resp) {
-                    console.log("err response : ", resp);
+
                 }
             )
         },
@@ -139,7 +139,6 @@ function ManagerSimpleCnslt(props) {
     useEffect(() => {
         getComCdList(14).then((data) => {
             setCnsltSttsCd(data);
-            console.log("cnsltSttsCd : " , cnsltSttsCdList);
         })
     }, []);
 

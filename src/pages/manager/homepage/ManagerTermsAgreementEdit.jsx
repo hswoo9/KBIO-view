@@ -45,7 +45,6 @@ function ManagerTermsAgreementEdit(props) {
     );
 
     useEffect(() => {
-        console.log(termsAgreementDetail);
     }, [termsAgreementDetail]);
 
     const [saveEvent, setSaveEvent] = useState({});
@@ -148,7 +147,6 @@ function ManagerTermsAgreementEdit(props) {
 
     const delTermsAgreementData = useCallback(
         (termsAgreementDetail) => {
-            console.log(termsAgreementDetail);
             const termsAgreementURL = "/utztnApi/setTermsAgreementDel";
             const requestOptions = {
                 method: "POST",
@@ -209,7 +207,6 @@ function ManagerTermsAgreementEdit(props) {
         };
 
         EgovNet.requestFetch(getTermsAgreemetURL, requestOptions, function (resp) {
-            console.log(resp);
             if (modeInfo.mode === CODE.MODE_MODIFY) {
                 if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
                     resp.result.tblUtztnTrms.mdfrSn = sessionUser.userSn;

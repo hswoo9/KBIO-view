@@ -42,7 +42,6 @@ function ManagerCnslttSimpleDtl({ item, onBack }){
     const handleDownload = (file) => {
 
         const downloadUrl = `http://133.186.250.158${file.atchFilePathNm}/${file.strgFileNm}.${file.atchFileExtnNm}`; // 실제 파일 경로로 변경
-        console.log("Download URL: ", downloadUrl);
 
         const a = document.createElement('a');
         a.href = downloadUrl;
@@ -165,7 +164,6 @@ function ManagerCnslttSimpleDtl({ item, onBack }){
                             '테스트';
 
     const initMode = () => {
-        console.log("searchDto",searchDto);
         getCnsltDetail(searchDto);
     };
 

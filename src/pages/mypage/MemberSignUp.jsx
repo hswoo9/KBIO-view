@@ -18,7 +18,6 @@ function MemberSignUp(props) {
   const checkRef = useRef([]);
   const signupType = location.state?.signupType;
 
-  console.log("EgovMypageEdit [location] : ", location);
   //const uniqId = location.state?.uniqId || "";
   const [modeInfo, setModeInfo] = useState({ mode: props.mode });
   //const [memberDetail, setMemberDetail] = useState({});
@@ -41,12 +40,6 @@ function MemberSignUp(props) {
     script.async = true;
 
     script.onload = () => {
-      console.log("카카오 주소 검색 API가 로드되었습니다.");
-
-      // 여기서 type 콘솔에 찍기
-      if (location.state?.signupType) {
-        console.log("Signup Type: ", location.state.signupType);
-      }
     };
 
     document.body.appendChild(script);
@@ -266,8 +259,6 @@ function MemberSignUp(props) {
           updatedFiles[id - 1] = file; // 배열의 인덱스를 이용해 해당 자격증 파일을 추가
           return updatedFiles;
         });*/
-
-        console.log("Selected Files:", Array.from(e.target.files));
       }else{
         Swal.fire({
           title: "허용되지 않은 확장자입니다.",
@@ -359,7 +350,6 @@ function MemberSignUp(props) {
       await EgovNet.requestFetch(checkBusinessURL, reqOptions, async function (resp) {
         if (resp.resultCode === 200) {
           const businessData = resp.result.businessData;
-          console.log("로컬 데이터:", businessData);
           Swal.fire({
             text: "해당 기업은 K-바이오 랩허브 입주기업입니다.",
           });
@@ -402,7 +392,6 @@ function MemberSignUp(props) {
               });
 
               const businessData = response.data[0];
-              console.log("공공포털 데이터:", businessData);
 
               const businessStatus = response.data.data[0]?.b_stt_cd;
 
@@ -424,7 +413,6 @@ function MemberSignUp(props) {
                 });
               }
             } catch (error) {
-              console.error("공공 API 요청 실패:", error);
               Swal.fire({
                 text: "공공 API 요청 중 문제가 발생했습니다.",
               });
@@ -436,13 +424,11 @@ function MemberSignUp(props) {
           });
         }
       }, function (error) {
-        console.error("로컬 데이터 요청 실패:", error);
         Swal.fire({
           text: "로컬 데이터 요청 중 문제가 발생했습니다.",
         });
       });
     } catch (error) {
-      console.error("에러 발생:", error);
       Swal.fire({
         text: "오류가 발생했습니다.",
       });
@@ -519,8 +505,6 @@ function MemberSignUp(props) {
             snsId: location.state.snsId,
           });
         }
-        console.log("snsType:", location.state.snsType);
-        console.log("snsId:", location.state.snsId);
       }
 
       return;
@@ -594,52 +578,115 @@ function MemberSignUp(props) {
         form.append(key, formData[key]);
       });
 
-      if (!form.get("userId")) {
-        alert("회원ID는 필수 값입니다.");
+      const userId = form.get("userId");
+      if (!userId) {
+        Swal.fire("회원ID는 필수 값입니다.");
         return resolve(false);
       }
 
+      const userIdRegex = /^[a-zA-Z0-9\-_]{6,12}$/;
+      if (!userIdRegex.test(userId)) {
+        Swal.fire("아이디는 6~12자 영문, 숫자, '-', '_' 만 가능합니다.");
+        return resolve(false);
+      }
+
+      const userPw = form.get("userPw");
+      if (!userPw) {
+        Swal.fire("비밀번호는 필수 값입니다.");
+        return resolve(false);
+      }
+
+      const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?/~_`|-]).{8,20}$/;
+      if (!passwordRegex.test(userPw)) {
+        Swal.fire("비밀번호는 영문자, 숫자, 특수문자 조합으로 8~20자리 이내여야 합니다.");
+        return resolve(false);
+      }
+
+      const passwordChk = form.get("password_chk");
+      if (!passwordChk) {
+        Swal.fire("비밀번호 확인은 필수 값입니다.");
+        return resolve(false);
+      }
+
+      if (userPw !== passwordChk) {
+        Swal.fire("비밀번호가 일치하지 않습니다.");
+        return resolve(false);
+      }
+
+      const kornFlnm = form.get("kornFlnm");
+      if (!kornFlnm) {
+        Swal.fire("성명은 필수 값입니다.");
+        return resolve(false);
+      }
+
+      const mberNmRegex = /^[a-zA-Zㄱ-ㅎ가-힣]+$/;
+      if (!mberNmRegex.test(kornFlnm)) {
+        Swal.fire("성명은 한글 또는 영문자만 사용 가능합니다.");
+        return resolve(false);
+      }
+
+      const mblTelno = form.get("mblTelno");
+      if (!mblTelno) {
+        Swal.fire("전화번호는 필수 값입니다.");
+        return resolve(false);
+      }
+
+      const phonenumRegex = /^\d{11}$/;
+      if (!phonenumRegex.test(mblTelno)) {
+        Swal.fire("전화번호는 11자리 숫자만 입력 가능합니다.");
+        return resolve(false);
+      }
+
+      const email = form.get("email");
+      if (!email) {
+        Swal.fire("이메일은 필수 값입니다.");
+        return resolve(false);
+      }
+
+      const emailProvider = form.get("emailProvider")
+      if (!emailProvider) {
+        Swal.fire("도메인은 필수 값입니다.");
+        return resolve(false);
+      }
+
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      if (!emailRegex.test(email)) {
+        Swal.fire("올바른 이메일 형식을 입력해주세요.");
+        return resolve(false);
+      }
+
+      const addr = form.get("addr");
+      if (!addr) {
+        Swal.fire("주소는 필수 값입니다.");
+        return resolve(false);
+      }
+
+      const daddr = form.get("daddr");
+      if (!daddr) {
+        Swal.fire("상세주소는 필수 값입니다.");
+        return resolve(false);
+      }
+
+      const mbrType = form.get("mbrType");
+      if (!mbrType) {
+        Swal.fire("회원 유형을 선택해주세요.");
+        return resolve(false);
+      }
+
+      if (!memberDetail.emlRcptnAgreYn) {
+        Swal.fire("메일 수신 여부를 선택해 주세요.");
+        return resolve(false);
+      }
+
+      if (!memberDetail.smsRcptnAgreYn) {
+        Swal.fire("문자 수신 여부를 선택해 주세요.");
+        return resolve(false);
+      }
+
+
       checkIdDplct().then((res) => {
         if (res > 0) {
-          alert("중복된 아이디입니다. 다른 아이디를 사용해주세요.");
-          return resolve(false);
-        }
-
-        if (!form.get("userPw")) {
-          alert("비밀번호는 필수 값입니다.");
-          return resolve(false);
-        }
-
-        const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?/~_`|-]).{8,20}$/;
-        if (!passwordRegex.test(form.get("userPw"))) {
-          alert("비밀번호는 영문자, 숫자, 특수문자 조합으로 8~20자리 이내여야 합니다.");
-          return resolve(false);
-        }
-
-        if (form.get("password_chk") !== form.get("userPw")) {
-          alert("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
-          return resolve(false);
-        }
-
-        if (!form.get("kornFlnm")) {
-          alert("성명은 필수 값입니다.");
-          return resolve(false);
-        }
-
-        const mberNmRegex = /^[a-zA-Zㄱ-ㅎ가-힣]+$/;
-        if (!mberNmRegex.test(form.get("kornFlnm"))) {
-          alert("성명은 한글 또는 영문자만 사용 가능합니다.");
-          return resolve(false);
-        }
-
-        if (!form.get("mblTelno")) {
-          alert("전화번호는 필수 값입니다.");
-          return resolve(false);
-        }
-
-        const phonenumRegex = /^[0-9\-]+$/;
-        if (!phonenumRegex.test(form.get("mblTelno"))) {
-          alert("전화번호는 숫자와 하이픈(-)만 포함할 수 있습니다.");
+          Swal.fire("중복된 아이디입니다. 다른 아이디를 사용해주세요.");
           return resolve(false);
         }
 
@@ -709,16 +756,6 @@ function MemberSignUp(props) {
       formData.append("careerInfo", JSON.stringify(careers));
       formData.append("acbgInfo", JSON.stringify(acbges));
 
-      console.log("Selected Files:", selectedFiles);
-      console.log("Selected Image Files:", selectedImgFile);
-
-
-      if(formData != null) {
-          for (let [key, value] of formData.entries()) {
-            console.log(`${key}:`, value);
-          }
-      }
-
       const reqOptions = {
         method: "POST",
         /*headers: {
@@ -731,9 +768,6 @@ function MemberSignUp(props) {
       };
 
       EgovNet.requestFetch(insertMemURL, reqOptions, (resp)=> {
-        console.log("Result Code:", resp.resultCode);
-        console.log("Expected Code:", CODE.RCV_SUCCESS);
-
         if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
           setMemberDetail({
             ...memberDetail,
@@ -755,9 +789,6 @@ function MemberSignUp(props) {
     initMode();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  console.log("------------------------------EgovMypageEdit [End]");
-  console.groupEnd("EgovMypageEdit");
 
   return (
       <div id="container" className="container join_step step2">
@@ -1840,7 +1871,7 @@ function MemberSignUp(props) {
                       </div>
                     </li>
                     {/*학력끝*/}
-                    
+
                   </ul>
               )}
             </div>

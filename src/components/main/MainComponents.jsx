@@ -38,7 +38,7 @@ export const getBnrPopupList = async (bnrPopupKnd) => {
                 resolve(resp.result.bnrPopupList);
             },
             (error) => {
-                console.log("err response : ", error);
+
                 reject(error);
             }
         );
@@ -66,7 +66,7 @@ export const getMvnEntList = async () => {
                 resolve(resp.result.mvnEntList);
             },
             (error) => {
-                console.log("err response : ", error);
+
                 reject(error);
             }
         );
@@ -94,7 +94,7 @@ export const getPstList = async (bbsSn) => {
                 });
             },
             (error) => {
-                console.log("err response : ", error);
+
                 reject(error);
             }
         );

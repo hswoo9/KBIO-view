@@ -23,7 +23,6 @@ function ManagerLeftNew() {
 
   useEffect(() => {
     const activeTag = document.getElementsByClassName('activeTag');
-    console.log(activeTag);
     if(activeTag.length){
       const parentTag = activeTag[0].parentElement;
       if(parentTag){
@@ -194,7 +193,6 @@ function ManagerLeftNew() {
               $(document).off('.nice_select');
             }
           } else {
-            console.log('Method "' + method + '" does not exist.')
           }
           return this;
         }
