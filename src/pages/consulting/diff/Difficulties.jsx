@@ -123,6 +123,7 @@ function contentView(props) {
         if(!sessionUser){
             Swal.fire("로그인이 필요한 서비스 입니다.").then((result) => {
                 if(result.isConfirmed) {
+                    navigate("/");
                     ComScript.openModal("loginModal");
                 }
             });

@@ -1,13 +1,16 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Link, NavLink, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import * as EgovNet from "@/api/egovFetch";
-import EgovPaging from "@/components/EgovPaging";
 import { getSessionItem } from "@/utils/storage";
 import moment from "moment/moment.js";
 import URL from "@/constants/url";
 import CommonSubMenu from "@/components/CommonSubMenu";
+import AOS from "aos";
+import EgovUserPaging from "@/components/EgovUserPaging";
+
 function OperationalList() {
     const location = useLocation();
+    const navigate = useNavigate();
     const userSn = getSessionItem("userSn");
     const [paginationInfo, setPaginationInfo] = useState({});
     const [operationalList, setAuthorityList] = useState([]);
@@ -38,64 +41,56 @@ function OperationalList() {
 
                     resp.result.getOperationalList.forEach(function (item, index) {
                         dataList.push(
-                            <div key={item.mvnEntSn} style={{
-                                display: 'flex',
-                                padding: '20px',
-                                border: '1px solid #ddd',
-                                marginBottom: '15px',
-                                borderRadius: '8px',
-                            }}>
-                                <div style={{display: 'flex', gap: '20px', width: '100%'}}>
-                                    <div style={{
-                                        width: '100px',
-                                        height: '100px',
-                                        overflow: 'hidden',
-                                    }}>
-                                        <img src="/src/assets/images/ico_logo_kakao.svg" alt="" style={{
-                                            width: '100%',
-                                            height: '100%',
-                                            objectFit: 'cover',
-                                        }}/>
+                            <tr key={item.mvnEntSn}
+                                onClick={ () => {
+                                    navigate(
+                                        { pathname: URL.INTRODUCE_OPERATIONAL_DETAIL },
+                                        { state: {
+                                                mvnEntSn: item.mvnEntSn,
+                                                menuSn : location.state?.menuSn,
+                                                menuNmPath : location.state?.menuNmPath,
+                                            } },
+                                    );
+                                }}
+                            >
+                                <td className="cate">
+                                    <p>의약품</p>
+                                </td>
+                                <td>
+                                    <figure>
+                                        <img src="/src/assets/images/ico_logo_kakao.svg" alt="" />
+                                    </figure>
+                                </td>
+                                <td className="title">
+                                    <div className="text">
+                                        <p>{item.mvnEntNm}</p>
                                     </div>
+                                    <ul className="bot">
+                                        <li>
+                                            <p className="left">대표성함</p>
+                                            <strong>{item.rpsvNm}</strong>
+                                        </li>
+                                        <li>
+                                            <p className="left">대표전화</p>
+                                            <strong>{item.entTelno}</strong>
+                                        </li>
+                                        <li>
+                                            <p className="left">홈페이지</p>
+                                            <strong>
+                                                <a href={item.hmpgAddr} target="_blank" rel="noopener noreferrer"
+                                                   style={{
+                                                       color: '#007bff',
+                                                       textDecoration: 'none',
+                                                   }}>
+                                                    {item.hmpgAddr}
+                                                </a>
+                                            </strong>
+                                        </li>
+                                    </ul>
+                                </td>
+                                <td className="satisfaction"></td>
+                            </tr>
 
-                                    <div style={{flex: 1}}>
-                                        <p style={{
-                                            marginTop: '20px',
-                                            fontSize: '30px',
-                                            fontWeight: 'bold',
-                                            marginBottom: '10px',
-                                        }}>
-                                            <NavLink to={URL.INTRODUCE_OPERATIONAL_DETAIL}
-                                                  state={{
-                                                      mvnEntSn: item.mvnEntSn,
-                                                      menuSn : location.state?.menuSn,
-                                                      menuNmPath : location.state?.menuNmPath,
-                                                  }}>
-                                                {item.mvnEntNm}
-                                            </NavLink>
-                                        </p>
-
-                                        <p style={{
-                                            marginTop: '10px',
-                                            fontSize: '14px',
-                                            color: '#555',
-                                            lineHeight: '1.6',
-                                        }}>
-                                            <span style={{fontWeight: 'bold'}}>대표 성함:</span> {item.rpsvNm}
-                                            <span style={{margin: '0 5px'}}>|</span>
-                                            <span style={{fontWeight: 'bold'}}>대표전화:</span> {item.entTelno}
-                                            <span style={{margin: '0 5px'}}>|</span>
-                                            <span style={{fontWeight: 'bold'}}>홈페이지:</span>
-                                            <a href={item.hmpgAddr} target="_blank" rel="noopener noreferrer" style={{
-                                                color: '#007bff',
-                                                textDecoration: 'none',
-                                            }}>
-                                                {item.hmpgAddr}
-                                            </a>
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
                         );
                     });
                     setAuthorityList(dataList);
@@ -110,6 +105,7 @@ function OperationalList() {
 
     useEffect(() => {
         getOperationalList(searchDto);
+        AOS.init();
     }, []);
 
     const handleSearch = () => {
@@ -118,81 +114,67 @@ function OperationalList() {
     };
 
     return (
-        <div id="container" className="container layout">
+        <div id="container" className="container resident">
             <div className="inner">
                 <CommonSubMenu/>
-                <h2 className="pageTitle">
-                    <p>입주기업 소개</p>
-                </h2>
-
-                <div className="cateWrap">
-                    <ul className="cateList" style={{display: "flex", flexWrap: "wrap", gap: "10px"}}>
-                        <li className="inputBox type1" style={{flex: "1 10%"}}>
-                            <p className="title">분류</p>
-                            <div className="itemBox">
-                                <select
-                                    className="selectGroup"
-                                    onChange={(e) => setSearchDto({...searchDto, category: e.target.value})}
-                                    style={{padding: "5px", width: "100%"}}
-                                >
-                                    <option value="">전체</option>
-                                    <option value="Y">사용</option>
-                                    <option value="N">미사용</option>
-                                </select>
+                <div className="inner2">
+                    <div className="searchFormWrap type1" data-aos="fade-up" data-aos-duration="1500">
+                        <form>
+                            <div className="totalBox">
+                                <div className="total"><p>총 <strong>{paginationInfo.totalRecordCount}</strong>건</p></div>
                             </div>
-                        </li>
-                        <li className="inputBox type1" style={{flex: "1 10%"}}>
-                            <p className="title">키워드</p>
-                            <div className="itemBox">
-                                <select
-                                    className="selectGroup"
-                                    onChange={(e) => setSearchDto({...searchDto, keywordType: e.target.value})}
-                                    style={{padding: "5px", width: "100%"}}
-                                >
-                                    <option value="">전체</option>
-                                    <option value="1">성명</option>
-                                    <option value="2">소속</option>
-                                    <option value="3">직위</option>
-                                </select>
+                            <div className="searchBox">
+                                <div className="itemBox type2">
+                                    <select
+                                        className="niceSelectCustom"
+                                        onChange={(e) => setSearchDto({...searchDto, category: e.target.value})}
+                                    >
+                                        <option value="">전체</option>
+                                        <option value="Y">사용</option>
+                                        <option value="N">미사용</option>
+                                    </select>
+                                </div>
+                                <div className="itemBox type2">
+                                    <select
+                                        className="niceSelectCustom"
+                                        onChange={(e) => setSearchDto({...searchDto, keywordType: e.target.value})}
+                                    >
+                                        <option value="">전체</option>
+                                        <option value="1">성명</option>
+                                        <option value="2">소속</option>
+                                        <option value="3">직위</option>
+                                    </select>
+                                </div>
+                                <div className="inputBox type1">
+                                    <label className="input">
+                                        <input
+                                            type="text"
+                                            id="board_search"
+                                            name="board_search"
+                                            placeholder="검색어를 입력해주세요."
+                                            onChange={(e) => setSearchDto({...searchDto, keyword: e.target.value})}
+                                        />
+                                    </label>
+                                </div>
+                                <button type="button" className="searchBtn" onClick={handleSearch}>
+                                    <div className="icon"></div>
+                                </button>
                             </div>
-                        </li>
-                        <li className="searchBox inputBox type1" style={{flex: "1 40%", marginTop: "25px"}}>
-                            <label className="input">
-                                <input
-                                    type="text"
-                                    placeholder="검색어를 입력해주세요"
-                                    onChange={(e) => setSearchDto({...searchDto, keyword: e.target.value})}
-                                    style={{width: "100%", padding: "5px"}}
-                                />
-                            </label>
-                        </li>
-                        <div className="rightBtn" style={{display: "flex", gap: "10px", marginTop: "25px"}}>
-                            <button className="searchBtn btn btn1 point" onClick={handleSearch} style={{
-                                padding: '20px',
-                                backgroundColor: '#007bff',
-                                color: 'white',
-                                border: 'none',
-                                borderRadius: '4px',
-                                cursor: 'pointer',
-                                width: "100%",
-                            }}>
-                                검색
-                            </button>
-                        </div>
-                    </ul>
-                </div>
-
-                <div className="contBox board type1 customContBox">
-                    <div className="topBox">
-                        <p className="resultText">
-                            Total <span className="red">{paginationInfo.totalRecordCount}</span>
-                        </p>
+                        </form>
                     </div>
-                    <div className="companyList">
-                        {operationalList}
+                    <div className="board_list" data-aos="fade-up" data-aos-duration="1500">
+                        <table>
+                            <caption>입주기관리스트</caption>
+                            <thead>
+                                <tr></tr>
+                            </thead>
+                            <tbody>
+                            {operationalList}
+                            </tbody>
+                        </table>
                     </div>
                     <div className="pageWrap">
-                        <EgovPaging
+                        <EgovUserPaging
                             pagination={paginationInfo}
                             moveToPage={(passedPage) => {
                                 getOperationalList({
