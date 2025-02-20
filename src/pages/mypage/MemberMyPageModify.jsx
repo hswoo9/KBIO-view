@@ -246,8 +246,8 @@ function MemberMyPageModify(props) {
     }, [consultDetail]);
 
     const checkPwd = () => {
-        if (!newPassword) {
-            Swal.fire("새 비밀번호를 입력해주세요.");
+        if (!currentPassword) {
+            Swal.fire("현재 비밀번호를 입력해주세요.");
             return;
         }
 
@@ -761,7 +761,7 @@ function MemberMyPageModify(props) {
                                         }}
                                     ></textarea>
                                     <div style={{textAlign: "right", fontSize: "0.9em", color: "#666"}}>
-                                        {(memberDetail.rmrkCn || "").length} / 100
+                                        {(consultDetail.rmrkCn || "").length} / 100
                                     </div>
                                 </label>
                             </li>
