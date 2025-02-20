@@ -23,6 +23,8 @@ function OperationalList() {
         keywordType: "",
         keyword: "",
         pageIndex: 1,
+        searchType: "",
+        searchVal : "",
     });
 
     const activeEnter = (e) => {
@@ -111,22 +113,15 @@ function OperationalList() {
                 }
             );
         },
-        [searchDto]
+        [operationalList,searchDto]
     );
+
+
 
     useEffect(() => {
         getOperationalList(searchDto);
-        AOS.init();
     }, []);
 
-    const handleSearch = () => {
-
-        setSearchDto((prev) => {
-            const updatedSearchDto = { ...prev, [selectedOption]: prev[selectedOption] || "" , pageIndex: 1  };
-            getOperationalList(updatedSearchDto); // 여기서 검색 실행
-            return updatedSearchDto;
-        });
-    };
 
     return (
         <div id="container" className="container resident">
@@ -136,7 +131,8 @@ function OperationalList() {
                     <div className="searchFormWrap type1" data-aos="fade-up" data-aos-duration="1500">
                         <form>
                             <div className="totalBox">
-                                <div className="total"><p>총 <strong>{paginationInfo.totalRecordCount}</strong>건</p></div>
+                                <div className="total"><p>총 <strong>{paginationInfo.totalRecordCount}</strong>건</p>
+                                </div>
                             </div>
                             <div className="searchBox">
                                 {/*<div className="itemBox type2">
@@ -150,33 +146,30 @@ function OperationalList() {
                                     </select>
                                 </div>*/}
                                 <div className="itemBox type2">
-                                    <select className="niceSelectCustom" onChange={(e) => {
-                                        const value = e.target.value;
-                                        const optionMap = {
-                                            "0": "",
-                                            "1": "mvnEntNm",
-                                            "2": "rpsvNm",
-                                            //추가되면 아래로 더 추가
-                                        };
-
-                                        setSelectedOption(optionMap[value] || "");
-                                        setSearchDto(prev => ({...prev, [optionMap[value] || ""]: ""}));
-                                    }}>
-                                        <option value="0">전체</option>
-                                        <option value="1">기업명</option>
-                                        <option value="2">대표자</option>
+                                    <select className="niceSelectCustom"
+                                            id="searchType"
+                                            name="searchType"
+                                            title="검색유형"
+                                            ref={searchTypeRef}
+                                            onChange={(e) => {
+                                                setSearchDto({...searchDto, searchType: e.target.value})
+                                            }}
+                                    >
+                                        <option value="">전체</option>
+                                        <option value="mvnEntNm">기업명</option>
+                                        <option value="rpsvNm">대표자</option>
                                     </select>
                                 </div>
                                 <div className="inputBox type1">
                                     <label className="input">
                                         <input
                                             type="text"
-                                            id="board_search"
-                                            name="board_search"
-                                            placeholder="검색어를 입력해주세요."
-                                            value={searchDto[selectedOption] || ""}
+                                            name="searchVal"
+                                            defaultValue={searchDto.searchVal}
+                                            placeholder=""
+                                            ref={searchValRef}
                                             onChange={(e) => {
-                                                setSearchDto({...searchDto, [selectedOption]: e.target.value});
+                                                setSearchDto({...searchDto, searchVal: e.target.value})
                                             }}
                                             onKeyDown={activeEnter}
                                         />
@@ -184,7 +177,13 @@ function OperationalList() {
                                 </div>
                                 <div className="rightBtn">
                                     <button type="button" className="searchBtn btn btn1 point"
-                                            onClick={handleSearch}>
+                                            onClick={() => {
+                                                getOperationalList({
+                                                    ...searchDto,
+                                                    pageIndex: 1
+                                                });
+                                            }}
+                                    >
                                         <div className="icon"></div>
                                     </button>
                                 </div>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, {useState, useEffect, useCallback, useRef} from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import * as EgovNet from "@/api/egovFetch";
 import { getSessionItem } from "@/utils/storage";
@@ -15,11 +15,18 @@ function RelatedList() {
     const [paginationInfo, setPaginationInfo] = useState({});
     const [selectedOption, setSelectedOption] = useState("");
     const [relatedList, setAuthorityList] = useState([]);
+
+
+    const searchTypeRef = useRef();
+    const searchValRef = useRef();
+
     const [searchDto, setSearchDto] = useState({
         category: "",
         keywordType: "",
         keyword: "",
         pageIndex: 1,
+        searchType: "",
+        searchVal : "",
     });
 
     const activeEnter = (e) => {
@@ -109,21 +116,13 @@ function RelatedList() {
                 }
             );
         },
-        [searchDto]
+        [relatedList,searchDto]
     );
 
     useEffect(() => {
         getRelatedList(searchDto);
     }, []);
 
-    const handleSearch = () => {
-
-        setSearchDto((prev) => {
-            const updatedSearchDto = { ...prev, [selectedOption]: prev[selectedOption] || "" , pageIndex: 1  };
-            getRelatedList(updatedSearchDto); // 여기서 검색 실행
-            return updatedSearchDto;
-        });
-    };
 
     return (
         <div id="container" className="container resident">
@@ -148,33 +147,30 @@ function RelatedList() {
                                     </select>
                                 </div>*/}
                                 <div className="itemBox type2">
-                                    <select className="niceSelectCustom" onChange={(e) => {
-                                        const value = e.target.value;
-                                        const optionMap = {
-                                            "0": "",
-                                            "1": "relInstNm",
-                                            "2": "rpsvNm",
-                                            //추가되면 아래로 더 추가
-                                        };
-
-                                        setSelectedOption(optionMap[value] || "");
-                                        setSearchDto(prev => ({...prev, [optionMap[value] || ""]: ""}));
-                                    }}>
-                                        <option value="0">전체</option>
-                                        <option value="1">기업명</option>
-                                        <option value="2">대표자</option>
+                                    <select className="niceSelectCustom"
+                                            id="searchType"
+                                            name="searchType"
+                                            title="검색유형"
+                                            ref={searchTypeRef}
+                                            onChange={(e) => {
+                                                setSearchDto({...searchDto, searchType: e.target.value})
+                                            }}
+                                    >
+                                        <option value="">전체</option>
+                                        <option value="relInstNm">기업명</option>
+                                        <option value="rpsvNm">대표자</option>
                                     </select>
                                 </div>
                                 <div className="inputBox type1">
                                     <label className="input">
                                         <input
                                             type="text"
-                                            id="board_search"
-                                            name="board_search"
-                                            placeholder="검색어를 입력해주세요."
-                                            value={searchDto[selectedOption] || ""}
+                                            name="searchVal"
+                                            defaultValue={searchDto.searchVal}
+                                            placeholder=""
+                                            ref={searchValRef}
                                             onChange={(e) => {
-                                                setSearchDto({...searchDto, [selectedOption]: e.target.value});
+                                                setSearchDto({...searchDto, searchVal: e.target.value})
                                             }}
                                             onKeyDown={activeEnter}
                                         />
@@ -182,7 +178,13 @@ function RelatedList() {
                                 </div>
                                 <div className="rightBtn">
                                     <button type="button" className="searchBtn btn btn1 point"
-                                            onClick={handleSearch}>
+                                            onClick={() => {
+                                                getRelatedList({
+                                                    ...searchDto,
+                                                    pageIndex: 1
+                                                });
+                                            }}
+                                    >
                                         <div className="icon"></div>
                                     </button>
                                 </div>
