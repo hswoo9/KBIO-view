@@ -220,3 +220,12 @@ header .hInner .hTop .alarmWrap.click .close .icon {height: 100%; background: ur
     box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
 }
 
+.consultant .modalCon .boxWrap {max-width: 700px; padding: 2.2rem; box-sizing: border-box; min-height: 300px;}
+.consultant .modalCon .boxWrap .titleWrap.type2 {margin-bottom: 1.35rem;}
+.consultant .modalCon .boxWrap .diffiBox {gap: 1.35rem;}
+.consultant .modalCon .boxWrap .diffiBox .cont {max-height: calc(100vh - 19rem); overflow: auto; min-height: 87px;}
+.consultant .modalCon .boxWrap .diffiBox .cont::-webkit-scrollbar {width: 3px;}
+.consultant .modalCon .boxWrap .diffiBox .cont .listBox {flex-wrap: wrap; flex-direction: row; gap: 1.35rem 0;}
+.consultant .modalCon .boxWrap .diffiBox .cont .listBox .inputBox.textBox {width: 50%;}
+.consultant .modalCon .boxWrap .diffiBox .cont .listBox .inputBox {width: 100%;}
+.consultant .modalCon .boxWrap .diffiBox .writeBtn {width: 100%; max-width: none;}
