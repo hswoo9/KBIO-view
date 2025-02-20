@@ -145,7 +145,7 @@
 
 .search .inner2 .searchFormWrap .searchBox .inputBox.type1.date{ max-width : 11rem !important;}
 
-.noneTag{ opacity: 0; position: absolute; width: 0;}
+.noneTag{ opacity: 0 !important; position: absolute !important; width: 0 !important;}
 
 header .hInner .hTop .alarmWrap.click .close {position: absolute; right:  0; z-index: 10; width: 36px; margin-top: 5px; height: 24px; cursor: pointer;}
 header .hInner .hTop .alarmWrap.click .close .icon {height: 100%; background: url(../../assets/images/ico_close.svg) no-repeat center / contain;}
@@ -192,7 +192,7 @@ header .hInner .hTop .alarmWrap.click .close .icon {height: 100%; background: ur
     animation: opacityMove 1s ease both
 }
 
-.board .board_list > table .th2 {width: 17%;}
+.board .board_list > table .th2 {width: 18%;}
 
 .alarmBtn {
     position: relative;
@@ -229,3 +229,36 @@ header .hInner .hTop .alarmWrap.click .close .icon {height: 100%; background: ur
 .consultant .modalCon .boxWrap .diffiBox .cont .listBox .inputBox.textBox {width: 50%;}
 .consultant .modalCon .boxWrap .diffiBox .cont .listBox .inputBox {width: 100%;}
 .consultant .modalCon .boxWrap .diffiBox .writeBtn {width: 100%; max-width: none;}
+
+.fileLabel {
+    float: right;
+    width: 3rem;
+    font-size: 12px;
+    background: #999999;
+    border-radius: 8px;
+    color: #fff;
+    padding: 0 .5rem;
+    height: 1.6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: .5s ease;
+    z-index: 1;
+    cursor: pointer;
+}
+
+.fileLabel:hover {box-shadow: none; background: var(--mainColor);}
+
+.certificate-header{
+    display: flex;
+    justify-content: space-around;
+    gap: 10px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #000;
+}
+
+.widthGroup29{ width: 29% !important;}
+.widthGroup45{ width: 45% !important;}
+
+header .hInner .hBot{transition: .4s linear !important;}
+.container{transition: .4s linear !important;}

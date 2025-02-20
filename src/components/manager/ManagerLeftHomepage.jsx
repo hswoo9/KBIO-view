@@ -467,6 +467,15 @@ function ManagerLeftHomepage() {
             <ul className="dep">
               <li>
                 <NavLink
+                    to={URL.MANAGER_ALARM}
+                    className={({isActive}) => (isActive ? "activeTag" : "")}
+                >
+                  <div className="icon"></div>
+                  <p>알림관리</p>
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
                     to={URL.MANAGER_HOMEPAGE_ORGANIZATION_CHART_LIST}
                     className={({isActive}) => (isActive ? "activeTag" : "")}
                 >

@@ -178,6 +178,8 @@ import ManagerAllMember from "@/pages/manager/member/all/ManagerNormalMember";
 
 //홈페이지관리
 import ManagerMainView from "@/pages/manager/homepage/ManagerMainView";
+
+import ManagerAlarm from "@/pages/manager/homepage/ManagerAlarm";
 import ManagerOrganizationChartList from "@/pages/manager/homepage/ManagerOrganizationChartList";
 import ManagerOrganizationChartEdit from "@/pages/manager/homepage/ManagerOrganizationChartEdit";
 import ManagerPrivacyPolicy from "@/pages/manager/homepage/ManagerPrivacyPolicy";
@@ -832,6 +834,8 @@ const SecondRoutes = () => {
 
                 <Route path={URL.MANAGER_HOMEPAGE} element={<ManagerMainView/>}/>
               <Route path={URL.MANAGER_HOMEPAGE_MAIN_VIEW} element={<ManagerMainView/>}/>
+
+              <Route path={URL.MANAGER_ALARM} element={<ManagerAlarm/>}/>
               <Route path={URL.MANAGER_HOMEPAGE_ORGANIZATION_CHART_LIST} element={<ManagerOrganizationChartList/>}/>
               <Route path={URL.MANAGER_HOMEPAGE_ORGANIZATION_CHART_CREATE} element={<ManagerOrganizationChartEdit mode={CODE.MODE_CREATE}/>}/>
               <Route path={URL.MANAGER_HOMEPAGE_ORGANIZATION_CHART_MODIFY} element={<ManagerOrganizationChartEdit mode={CODE.MODE_MODIFY}/>}/>

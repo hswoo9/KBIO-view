@@ -216,6 +216,14 @@ function MemberSignUp(props) {
   //컨설턴트 증빙파일들
   const handleFileChange = (e, id, index) => {
     const file = e.target.files[0];
+    if(!file){
+      Swal.fire(
+          `선택된 파일이 없습니다.`
+      );
+      if(document.getElementById(id + index)){
+        document.getElementById(id + index).textContent = "";
+      }
+    }
     const fileExtension = e.target.files[0].name.split(".").pop().toLowerCase();
 
     const allowedExtensions = acceptFileTypes.split(',');
@@ -223,8 +231,11 @@ function MemberSignUp(props) {
 
       if(allowedExtensions.includes(fileExtension)){
         let fileName = e.target.files[0].name;
-        if(fileName.length > 30){
-          fileName = fileName.slice(0, 30) + "...";
+        if(fileName.length > 10){
+          fileName = fileName.slice(0, 10) + "...";
+        }
+        if(document.getElementById(id + index)){
+          document.getElementById(id + index).textContent = fileName;
         }
 
         /**여기에 받아온 id를 앞의 이름과 date번호로 분리해서 자격,경력,학력별로 저장**/
@@ -1587,20 +1598,11 @@ function MemberSignUp(props) {
                       <span className="tt1">자격증</span>
                       <div className="input" style={{height: "100%"}}>
                         <div style={{display: "flex", flexDirection: "column", gap: "10px"}}>
-                          <div
-                              className="certificate-header"
-                              style={{
-                                display: "grid",
-                                gridTemplateColumns: "1fr 1fr 1fr 1fr auto",
-                                gap: "10px",
-                                /*textAlign: "left",*/
-                                paddingBottom: "5px",
-                                borderBottom: "1px solid #000",
-                              }}>
-                            <span>자격증명</span>
-                            <span>발급기관</span>
-                            <span>취득일</span>
-                            <span>파일 업로드</span>
+                          <div className="certificate-header">
+                            <span className="widthGroup29">자격증명</span>
+                            <span className="widthGroup29">발급기관</span>
+                            <span className="widthGroup29">취득일</span>
+                            <span className="widthGroup29">파일 업로드</span>
                           </div>
                           {certificates.map((cert,index) => (
                               <div
@@ -1616,8 +1618,7 @@ function MemberSignUp(props) {
                                     type="text"
                                     name="qlfcLcnsNm"
                                     placeholder="자격증명을 입력하세요"
-                                    className="f_input2"
-                                    style={{ width: "29%" }}
+                                    className="f_input2 widthGroup29"
                                     value={cert.qlfcLcnsNm}
                                     onChange={(e) => handleInputChange(e, cert.id , "cert" , "qlfcLcnsNm")}
                                 />
@@ -1625,32 +1626,40 @@ function MemberSignUp(props) {
                                     type="text"
                                     name="pblcnInstNm"
                                     placeholder="발급기관을 입력하세요"
-                                    className="f_input2"
+                                    className="f_input2 widthGroup29"
                                     value={cert.pblcnInstNm}
-                                    style={{ width: "29%" }}
                                     onChange={(e) => handleInputChange(e, cert.id , "cert" , "pblcnInstNm")}
                                 />
                                 <input
                                     type="date"
                                     name="acqsYmd"
                                     placeholder="취득일"
-                                    className="f_input2"
-                                    style={{ width: "29%" }}
+                                    className="f_input2 widthGroup29"
                                     value={formatDate(cert.acqsYmd)}
                                     onChange={(e) => handleInputChange(e, cert.id , "cert" , "acqsYmd")}
                                 />
-                                <p className="file_name" id={`CertFileNamePTag${cert.id}`}></p>
-                                <label>
-                                  <input
-                                      type="file"
-                                      name={`selectedCertFile${index}`}
-                                      id={`formCertFile${index}`}
-                                      onChange={(e) => handleFileChange(e, "cert", index)}
-                                  />
-                                </label>
-                                <button type="button" style={{width : "10%"}} onClick={() => removeCertificate(cert.id)}>
-                                  삭제
-                                </button>
+                                <div
+                                  style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: "10px",
+                                  }}
+                                  className="widthGroup29"
+                                >
+                                  <p className="file_name" id={`cert${index}`} style={{width: "50%"}}></p>
+                                  <label className="fileLabel">파일 선택
+                                    <input
+                                        type="file"
+                                        name={`selectedCertFile${index}`}
+                                        id={`formCertFile${index}`}
+                                        className="noneTag"
+                                        onChange={(e) => handleFileChange(e, "cert", index)}
+                                    />
+                                  </label>
+                                  <button type="button" className="fileLabel" onClick={() => removeCertificate(cert.id)}>
+                                    삭제
+                                  </button>
+                                </div>
                               </div>
                           ))}
                           <button
@@ -1671,20 +1680,11 @@ function MemberSignUp(props) {
                       <span className="tt1">경력 상세</span>
                       <div className="input" style={{height: "100%"}}>
                         <div style={{display: "flex", flexDirection: "column", gap: "10px"}}>
-                          <div
-                              className="certificate-header"
-                              style={{
-                                display: "grid",
-                                gridTemplateColumns: "1fr 1fr 1fr 1fr auto",
-                                gap: "10px",
-                                /*textAlign: "left",*/
-                                paddingBottom: "5px",
-                                borderBottom: "1px solid #000",
-                              }}>
-                            <span>근무처</span>
-                            <span>직위</span>
-                            <span>근무기간</span>
-                            <span>파일 업로드</span>
+                          <div className="certificate-header">
+                            <span className="widthGroup29">근무처</span>
+                            <span className="widthGroup29">직위</span>
+                            <span className="widthGroup29">근무기간</span>
+                            <span className="widthGroup29">파일 업로드</span>
                           </div>
                           {careers.map((career,index) => (
                               <div
@@ -1700,56 +1700,68 @@ function MemberSignUp(props) {
                                     type="text"
                                     name="ogdpCoNm"
                                     placeholder="근무처를 입력하세요"
-                                    className="f_input2"
-                                    style={{ width: "29%" }}
+                                    className="f_input2 widthGroup29"
                                     value={career.ogdpCoNm}
-                                    onChange={(e) => handleInputChange(e, career.id , "career" , "ogdpCoNm")}
+                                    onChange={(e) => handleInputChange(e, career.id, "career", "ogdpCoNm")}
                                 />
                                 <input
                                     type="text"
                                     name="ogdpJbpsNm"
                                     placeholder="직위를 입력하세요"
-                                    className="f_input2"
-                                    style={{ width: "29%" }}
+                                    className="f_input2 widthGroup29"
                                     value={career.ogdpJbpsNm}
-                                    onChange={(e) => handleInputChange(e, career.id , "career" , "ogdpJbpsNm")}
+                                    onChange={(e) => handleInputChange(e, career.id, "career", "ogdpJbpsNm")}
                                 />
-                                <input
-                                    type="date"
-                                    name="jncmpYmd"
-                                    placeholder="입사일자"
-                                    className="f_input2"
-                                    style={{ width: "14%" }}
-                                    value={formatDate(career.jncmpYmd)}
-                                    onChange={(e) => handleInputChange(e, career.id , "career" , "jncmpYmd")}
-                                />~&nbsp;
-                                <input
-                                    type="date"
-                                    name="rsgntnYmd"
-                                    placeholder="퇴사일자"
-                                    className="f_input2"
-                                    style={{ width: "14%" }}
-                                    value={formatDate(career.rsgntnYmd)}
-                                    onChange={(e) => handleInputChange(e, career.id , "career" , "rsgntnYmd")}
-                                />
-                                <p className="file_name" id={`careerFileNamePTag${career.id}`}></p>
-                                <label>
+                                <div
+                                    className="widthGroup29"
+                                >
                                   <input
-                                      type="file"
-                                      name={`selectedCareerFile${index}`}
-                                      id={`formCareerFile${index}`}
-                                      onChange={(e) => handleFileChange(e, "career", index)}
+                                      type="date"
+                                      name="jncmpYmd"
+                                      placeholder="입사일자"
+                                      className="f_input2 widthGroup45"
+                                      value={formatDate(career.jncmpYmd)}
+                                      onChange={(e) => handleInputChange(e, career.id, "career", "jncmpYmd")}
+                                  />~&nbsp;
+                                  <input
+                                      type="date"
+                                      name="rsgntnYmd"
+                                      placeholder="퇴사일자"
+                                      className="f_input2 widthGroup45"
+                                      value={formatDate(career.rsgntnYmd)}
+                                      onChange={(e) => handleInputChange(e, career.id, "career", "rsgntnYmd")}
                                   />
-                                </label>
-                                <button type="button" style={{width : "10%"}} onClick={() => removeCareer(career.id)}>
-                                  삭제
-                                </button>
+                                </div>
+
+                                <div
+                                    style={{
+                                      display: "flex",
+                                      alignItems: "center",
+                                      gap: "10px",
+                                    }}
+                                    className="widthGroup29"
+                                >
+                                  <p className="file_name" id={`career${index}`} style={{width: "50%"}}></p>
+                                  <label className="fileLabel">파일 선택
+                                    <input
+                                        type="file"
+                                        name={`selectedCareerFile${index}`}
+                                        id={`formCareerFile${index}`}
+                                        className="noneTag"
+                                        onChange={(e) => handleFileChange(e, "career", index)}
+                                    />
+                                  </label>
+                                  <button type="button" className="fileLabel"
+                                          onClick={() => removeCareer(career.id)}>
+                                    삭제
+                                  </button>
+                                </div>
                               </div>
                           ))}
                           <button
                               type="button"
                               className="writeBtn clickBtn"
-                              style={{width : "10%" , height:"30px", }}
+                              style={{width: "10%", height: "30px",}}
                               onClick={addCareer}
                           >
                             추가
@@ -1764,22 +1776,13 @@ function MemberSignUp(props) {
                       <span className="tt1">학력 상세</span>
                       <div className="input" style={{height: "100%"}}>
                         <div style={{display: "flex", flexDirection: "column", gap: "10px"}}>
-                          <div
-                              className="certificate-header"
-                              style={{
-                                display: "grid",
-                                gridTemplateColumns: "1fr 1fr 1fr 1fr 1fr 1fr auto",
-                                gap: "10px",
-                                /*textAlign: "left",*/
-                                paddingBottom: "5px",
-                                borderBottom: "1px solid #000",
-                              }}>
-                            <span>학교명</span>
-                            <span>학과</span>
-                            <span>전공</span>
-                            <span>학위</span>
-                            <span>졸업일자</span>
-                            <span>파일 업로드</span>
+                          <div className="certificate-header">
+                            <span className="widthGroup29">학교명</span>
+                            <span className="widthGroup29">학과</span>
+                            <span className="widthGroup29">전공</span>
+                            <span className="widthGroup29">학위</span>
+                            <span className="widthGroup29">졸업일자</span>
+                            <span className="widthGroup29">파일 업로드</span>
                           </div>
                           {acbges.map((acbg, index) => (
                               <div
@@ -1795,8 +1798,7 @@ function MemberSignUp(props) {
                                     type="text"
                                     name="schlNm"
                                     placeholder="학교명을 입력하세요"
-                                    className="f_input2"
-                                    style={{ width: "29%" }}
+                                    className="f_input2 widthGroup29"
                                     value={acbg.schlNm}
                                     onChange={(e) => handleInputChange(e, acbg.id , "acbg" , "schlNm")}
                                 />
@@ -1804,8 +1806,7 @@ function MemberSignUp(props) {
                                     type="text"
                                     name="scsbjtNm"
                                     placeholder="학과를 입력하세요"
-                                    className="f_input2"
-                                    style={{ width: "29%" }}
+                                    className="f_input2 widthGroup29"
                                     value={acbg.scsbjtNm}
                                     onChange={(e) => handleInputChange(e, acbg.id , "acbg" , "scsbjtNm")}
                                 />
@@ -1813,8 +1814,7 @@ function MemberSignUp(props) {
                                     type="text"
                                     name="mjrNm"
                                     placeholder="전공을 입력하세요"
-                                    className="f_input2"
-                                    style={{ width: "29%" }}
+                                    className="f_input2 widthGroup29"
                                     value={acbg.mjrNm}
                                     onChange={(e) => handleInputChange(e, acbg.id , "acbg" , "mjrNm")}
                                 />
@@ -1822,8 +1822,7 @@ function MemberSignUp(props) {
                                     type="text"
                                     name="dgrNm"
                                     placeholder="학위를 입력하세요"
-                                    className="f_input2"
-                                    style={{ width: "29%" }}
+                                    className="f_input2 widthGroup29"
                                     value={acbg.dgrNm}
                                     onChange={(e) => handleInputChange(e, acbg.id , "acbg" , "dgrNm")}
                                 />
@@ -1831,29 +1830,39 @@ function MemberSignUp(props) {
                                     type="date"
                                     name="grdtnYmd"
                                     placeholder="졸업일자"
-                                    className="f_input2"
-                                    style={{ width: "29%" }}
+                                    className="f_input2 widthGroup29"
                                     value={formatDate(acbg.grdtnYmd)}
                                     onChange={(e) => handleInputChange(e, acbg.id , "acbg" , "grdtnYmd")}
                                 />
-                                <p className="file_name" id={`acbgFileNamePTag${acbg.id}`}></p>
-                                <label>
-                                  <input
-                                      type="file"
-                                      name={`selectedAcbgFile${index}`}
-                                      id={`formAcbgFile${index}`}
-                                      onChange={(e) => handleFileChange(e, "acbg", index)}
-                                  />
-                                </label>
-                                <button type="button" style={{width : "10%"}} onClick={() => removeAcbg(acbg.id)}>
-                                  삭제
-                                </button>
+                                <div
+                                    style={{
+                                      display: "flex",
+                                      alignItems: "center",
+                                      gap: "10px",
+                                    }}
+                                    className="widthGroup29"
+                                >
+                                  <p className="file_name" id={`acbg${index}`} style={{width: "50%"}}></p>
+                                  <label className="fileLabel">파일 선택
+                                    <input
+                                        type="file"
+                                        name={`selectedAcbgFile${index}`}
+                                        id={`formAcbgFile${index}`}
+                                        className="noneTag"
+                                        onChange={(e) => handleFileChange(e, "acbg", index)}
+                                    />
+                                  </label>
+                                  <button type="button" className="fileLabel"
+                                          onClick={() => removeAcbg(acbg.id)}>
+                                    삭제
+                                  </button>
+                                </div>
                               </div>
                           ))}
                           <button
                               type="button"
                               className="writeBtn clickBtn"
-                              style={{width : "10%" , height:"30px", }}
+                              style={{width: "10%", height: "30px",}}
                               onClick={addAcbg}
                           >
                             추가
@@ -1869,7 +1878,7 @@ function MemberSignUp(props) {
 
             <ul className="box03 inputWrap" data-aos="fade-up" data-aos-duration="1500">
               <li className="inputBox type2 white">
-                <div className="input">
+              <div className="input">
                   <span className="tt1">메일수신</span>
                   <div className="checkWrap">
                     <label className="checkBox type3">

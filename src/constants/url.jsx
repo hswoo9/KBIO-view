@@ -263,6 +263,7 @@ const URL = {
   MANAGER_HOMEPAGE: "/manager/homepage",
   MANAGER_HOMEPAGE_MAIN_VIEW: "/manager/mainView",
 
+  MANAGER_ALARM: "/manager/alarm",
   MANAGER_HOMEPAGE_ORGANIZATION_CHART_LIST: "/manager/organizationChart/list",
   MANAGER_HOMEPAGE_ORGANIZATION_CHART_CREATE: "/manager/organizationChart/create",
   MANAGER_HOMEPAGE_ORGANIZATION_CHART_MODIFY: "/manager/organizationChart/modify",
