@@ -187,11 +187,7 @@ function ManagerCnslttSimpleDtl({ item, onBack }){
                     <li className="inputBox type1 width1">
                         <label className="title" style={{cursor :"default"}}>회원분류</label>
                         <div className="input">
-                            <div style={{
-                                border: "1px solid #ddd",
-                                borderRadius: "10px",
-                                padding: "10px"
-                            }}>
+                            <div>
                                 {memberTypeLabel}
                             </div>
                         </div>
@@ -199,11 +195,7 @@ function ManagerCnslttSimpleDtl({ item, onBack }){
                     <li className="inputBox type1 width1">
                         <label className="title" style={{cursor :"default"}}>신청자</label>
                         <div className="input">
-                            <div style={{
-                                border: "1px solid #ddd",
-                                borderRadius: "10px",
-                                padding: "10px"
-                            }}>{userDetail.kornFlnm}
+                            <div>{userDetail.kornFlnm}
                             </div>
                         </div>
                     </li>
@@ -211,11 +203,7 @@ function ManagerCnslttSimpleDtl({ item, onBack }){
                     <li className="inputBox type1 width2">
                         <label className="title" style={{cursor :"default"}}>기업명</label>
                         <div className="input">
-                            <div style={{
-                                border: "1px solid #ddd",
-                                borderRadius: "10px",
-                                padding: "10px"
-                            }}>
+                            <div>
 
                             </div>
                         </div>
@@ -223,11 +211,7 @@ function ManagerCnslttSimpleDtl({ item, onBack }){
                     <li className="inputBox type1 width2">
                         <label className="title" style={{cursor :"default"}}>산업</label>
                         <div className="input">
-                            <div style={{
-                                border: "1px solid #ddd",
-                                borderRadius: "10px",
-                                padding: "10px"
-                            }}>
+                            <div>
                             </div>
                         </div>
                     </li>

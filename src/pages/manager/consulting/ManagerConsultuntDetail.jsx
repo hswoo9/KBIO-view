@@ -140,11 +140,7 @@ function ManagerConsultuntDetail(props) {
                                 <li className="inputBox type1 width1">
                                     <label className="title" style={{cursor :"default"}}>자문분야</label>
                                     <div className="input">
-                                        <div style={{
-                                            border: "1px solid #ddd",
-                                            borderRadius: "10px",
-                                            padding: "10px",
-                                        }}>
+                                        <div>
                                             {comCdList.find(item => item.comCd === String(consultantDetail.cnsltFld))?.comCdNm || ""}
                                         </div>
                                     </div>
@@ -153,12 +149,7 @@ function ManagerConsultuntDetail(props) {
                                 <li className="inputBox type1 width1">
                                     <label className="title" style={{cursor :"default"}}>사진</label>
                                     <div className="input">
-                                        <div style={{
-                                            border: "1px solid #ddd",
-                                            borderRadius: "10px",
-                                            padding: "10px",
-                                            display:"inline-block"
-                                        }}>
+                                        <div>
                                             <img
                                                 src={
                                                     cnsltProfileFile
@@ -178,11 +169,7 @@ function ManagerConsultuntDetail(props) {
                                 <li className="inputBox type1 width2">
                                     <label className="title" style={{cursor :"default"}}>성명</label>
                                     <div className="input">
-                                        <div style={{
-                                            border: "1px solid #ddd",
-                                            borderRadius: "10px",
-                                            padding: "10px"
-                                        }}>
+                                        <div>
                                             {memberDetail.kornFlnm || ""}
                                         </div>
                                     </div>
@@ -191,11 +178,7 @@ function ManagerConsultuntDetail(props) {
                                 <li className="inputBox type1 width2">
                                     <label className="title" style={{cursor :"default"}}>휴대폰</label>
                                     <div className="input">
-                                        <div style={{
-                                            border: "1px solid #ddd",
-                                            borderRadius: "10px",
-                                            padding: "10px"
-                                        }}>
+                                        <div>
                                             {memberDetail.mblTelno || ""}
                                         </div>
                                     </div>
@@ -204,11 +187,7 @@ function ManagerConsultuntDetail(props) {
                                 <li className="inputBox type1 width1">
                                     <label className="title" style={{cursor :"default"}}>이메일</label>
                                     <div className="input">
-                                        <div style={{
-                                            border: "1px solid #ddd",
-                                            borderRadius: "10px",
-                                            padding: "10px"
-                                        }}>
+                                        <div>
                                             {memberDetail.email || ""}
                                         </div>
                                     </div>
@@ -217,11 +196,7 @@ function ManagerConsultuntDetail(props) {
                                 <li className="inputBox type1 width2">
                                     <label className="title" style={{cursor :"default"}}>주소</label>
                                     <div className="input">
-                                        <div style={{
-                                            border: "1px solid #ddd",
-                                            borderRadius: "10px",
-                                            padding: "10px"
-                                        }}>
+                                        <div>
                                             {`${memberDetail.addr || ''} ${memberDetail.daddr || ''}`}
                                         </div>
                                     </div>
@@ -231,11 +206,7 @@ function ManagerConsultuntDetail(props) {
                                 <li className="inputBox type1 width2">
                                     <label className="title" style={{cursor :"default"}}>소속</label>
                                     <div className="input">
-                                        <div style={{
-                                            border: "1px solid #ddd",
-                                            borderRadius: "10px",
-                                            padding: "10px"
-                                        }}>
+                                        <div>
                                             {consultantDetail.ogdpNm || ""}
                                         </div>
                                     </div>
@@ -244,11 +215,7 @@ function ManagerConsultuntDetail(props) {
                                 <li className="inputBox type1 width2">
                                     <label className="title" style={{cursor :"default"}}>직위</label>
                                     <div className="input">
-                                        <div style={{
-                                            border: "1px solid #ddd",
-                                            borderRadius: "10px",
-                                            padding: "10px"
-                                        }}>
+                                        <div>
                                             {consultantDetail.jbpsNm || ""}
                                         </div>
                                     </div>
@@ -257,11 +224,7 @@ function ManagerConsultuntDetail(props) {
                                 <li className="inputBox type1 width2">
                                     <label className="title" style={{cursor :"default"}}>경력</label>
                                     <div className="input">
-                                        <div style={{
-                                            border: "1px solid #ddd",
-                                            borderRadius: "10px",
-                                            padding: "10px"
-                                        }}>
+                                        <div>
                                             {`${consultantDetail.crrPrd || ''} 년`}
                                         </div>
                                     </div>
@@ -270,22 +233,14 @@ function ManagerConsultuntDetail(props) {
                                 <li className="inputBox type1 width1">
                                     <label className="title" style={{cursor :"default"}}>컨설팅항목</label>
                                     <div className="input">
-                                        <div style={{
-                                            border: "1px solid #ddd",
-                                            borderRadius: "10px",
-                                            padding: "10px"
-                                        }}>
+                                        <div>
+                                            {consultantDetail.cnsltArtcl || ""}
                                         </div>
                                     </div>
                                 </li>
                                 <li className="inputBox type1 width1">
                                     <label className="title" style={{cursor :"default"}}>소개</label>
                                     <div className="input"
-                                         style={{
-                                             border: "1px solid #ddd",
-                                             borderRadius: "10px",
-                                             padding: "10px"
-                                         }}
                                          dangerouslySetInnerHTML={{__html: consultantDetail.cnsltSlfint}}>
                                     </div>
                                 </li>
@@ -294,11 +249,7 @@ function ManagerConsultuntDetail(props) {
                                 <li className="inputBox type1 width1">
                                     <label className="title" style={{cursor :"default"}}>자격증</label>
                                     <div className="input">
-                                        <div style={{
-                                            border: "1px solid #ddd",
-                                            borderRadius: "10px",
-                                            padding: "10px"
-                                        }}>
+                                        <div>
                                             {cnsltCertificateFile.length > 0 ? (
                                                 cnsltCertificateFile.map((file, index) => (
                                                     <div key={index} style={{ cursor: "pointer" }} onClick={() => handleDownload(file)}>
@@ -318,11 +269,11 @@ function ManagerConsultuntDetail(props) {
                                     <div className="input">
                                         <span className="tt1">컨설팅활동</span>
                                         <div className="checkWrap"
-                                            style={{
-                                            border: "1px solid #ddd",
-                                            borderRadius: "10px",
-                                            padding: "10px"
-                                        }}>
+                                             style={{
+                                                 border: "1px solid #ddd",
+                                                 borderRadius: "10px",
+                                                 padding: "10px",
+                                             }}>
                                             <label className="checkBox type3">
                                             <input
                                                 type="radio"

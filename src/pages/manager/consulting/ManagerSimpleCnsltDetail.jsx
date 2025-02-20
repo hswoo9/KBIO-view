@@ -281,11 +281,7 @@ function ManagerSimpleCnsltDetail(props) {
                                 }}>
                                     {consulttDtl.cnsltFld || ""}
                                 </div>*/}
-                                <div style={{
-                                    border: "1px solid #ddd",
-                                    borderRadius: "10px",
-                                    padding: "10px",
-                                }}>
+                                <div>
                                     {comCdList.find(item => item.comCd === String(consulttDtl.cnsltFld))?.comCdNm || ""}
                                 </div>
                             </div>
@@ -294,12 +290,7 @@ function ManagerSimpleCnsltDetail(props) {
                         <li className="inputBox type1 width1">
                             <label className="title" style={{cursor :"default"}}>사진</label>
                             <div className="input">
-                                <div style={{
-                                    border: "1px solid #ddd",
-                                    borderRadius: "10px",
-                                    padding: "10px",
-                                    display:"inline-block"
-                                }}>
+                                <div>
                                     <img
                                         src={
                                             cnsltProfileFile
@@ -319,11 +310,7 @@ function ManagerSimpleCnsltDetail(props) {
                         <li className="inputBox type1 width2">
                             <label className="title" style={{cursor :"default"}}>성명</label>
                             <div className="input">
-                                <div style={{
-                                    border: "1px solid #ddd",
-                                    borderRadius: "10px",
-                                    padding: "10px"
-                                }}>
+                                <div>
                                     {consulttUser.kornFlnm || ""}
                                 </div>
                             </div>
@@ -332,11 +319,7 @@ function ManagerSimpleCnsltDetail(props) {
                         <li className="inputBox type1 width2">
                             <label className="title" style={{cursor :"default"}}>휴대폰</label>
                             <div className="input">
-                                <div style={{
-                                    border: "1px solid #ddd",
-                                    borderRadius: "10px",
-                                    padding: "10px"
-                                }}>
+                                <div>
                                     {consulttUser.mblTelno || ""}
                                 </div>
                             </div>
@@ -345,11 +328,7 @@ function ManagerSimpleCnsltDetail(props) {
                         <li className="inputBox type1 width1">
                             <label className="title" style={{cursor :"default"}}>이메일</label>
                             <div className="input">
-                                <div style={{
-                                    border: "1px solid #ddd",
-                                    borderRadius: "10px",
-                                    padding: "10px"
-                                }}>
+                                <div>
                                     {consulttUser.email || ""}
                                 </div>
                             </div>
@@ -358,11 +337,7 @@ function ManagerSimpleCnsltDetail(props) {
                         <li className="inputBox type1 width2">
                             <label className="title" style={{cursor :"default"}}>주소</label>
                             <div className="input">
-                                <div style={{
-                                    border: "1px solid #ddd",
-                                    borderRadius: "10px",
-                                    padding: "10px"
-                                }}>
+                                <div>
                                     {`${consulttUser.addr || ''} ${consulttUser.daddr || ''}`}
                                 </div>
                             </div>
@@ -372,11 +347,7 @@ function ManagerSimpleCnsltDetail(props) {
                         <li className="inputBox type1 width2">
                             <label className="title" style={{cursor :"default"}}>소속</label>
                             <div className="input">
-                                <div style={{
-                                    border: "1px solid #ddd",
-                                    borderRadius: "10px",
-                                    padding: "10px"
-                                }}>
+                                <div>
                                     {consulttDtl.ogdpNm || ""}
                                 </div>
                             </div>
@@ -385,11 +356,7 @@ function ManagerSimpleCnsltDetail(props) {
                         <li className="inputBox type1 width2">
                             <label className="title" style={{cursor :"default"}}>직위</label>
                             <div className="input">
-                                <div style={{
-                                    border: "1px solid #ddd",
-                                    borderRadius: "10px",
-                                    padding: "10px"
-                                }}>
+                                <div>
                                     {consulttDtl.jbpsNm || ""}
                                 </div>
                             </div>
@@ -398,11 +365,7 @@ function ManagerSimpleCnsltDetail(props) {
                         <li className="inputBox type1 width2">
                             <label className="title" style={{cursor :"default"}}>경력</label>
                             <div className="input">
-                                <div style={{
-                                    border: "1px solid #ddd",
-                                    borderRadius: "10px",
-                                    padding: "10px"
-                                }}>
+                                <div>
                                     {`${consulttDtl.crrPrd || ''} 년`}
                                 </div>
                             </div>
@@ -411,22 +374,13 @@ function ManagerSimpleCnsltDetail(props) {
                         <li className="inputBox type1 width1">
                             <label className="title" style={{cursor :"default"}}>컨설팅항목</label>
                             <div className="input">
-                                <div style={{
-                                    border: "1px solid #ddd",
-                                    borderRadius: "10px",
-                                    padding: "10px"
-                                }}>
+                                <div>
                                 </div>
                             </div>
                         </li>
                         <li className="inputBox type1 width1">
                             <label className="title" style={{cursor :"default"}}>소개</label>
                             <div className="input"
-                                 style={{
-                                     border: "1px solid #ddd",
-                                     borderRadius: "10px",
-                                     padding: "10px"
-                                 }}
                                  dangerouslySetInnerHTML={{__html: consulttDtl.cnsltSlfint}}>
                             </div>
                         </li>
@@ -435,11 +389,7 @@ function ManagerSimpleCnsltDetail(props) {
                         <li className="inputBox type1 width1">
                             <label className="title" style={{cursor :"default"}}>자격증</label>
                             <div className="input">
-                                <div style={{
-                                    border: "1px solid #ddd",
-                                    borderRadius: "10px",
-                                    padding: "10px"
-                                }}>
+                                <div>
                                     {cnsltCertificateFile.length > 0 ? (
                                         cnsltCertificateFile.map((file, index) => (
                                             <p key={index}>
@@ -465,11 +415,7 @@ function ManagerSimpleCnsltDetail(props) {
                         <li className="inputBox type1 width1">
                             <label className="title" style={{cursor :"default"}}>회원분류</label>
                             <div className="input">
-                                <div style={{
-                                    border: "1px solid #ddd",
-                                    borderRadius: "10px",
-                                    padding: "10px"
-                                }}>
+                                <div>
                                     {memberTypeLabel}
                                 </div>
                             </div>
@@ -477,11 +423,7 @@ function ManagerSimpleCnsltDetail(props) {
                         <li className="inputBox type1 width1">
                             <label className="title" style={{cursor :"default"}}>신청자</label>
                             <div className="input">
-                                <div style={{
-                                    border: "1px solid #ddd",
-                                    borderRadius: "10px",
-                                    padding: "10px"
-                                }}>{userDetail.kornFlnm}
+                                <div>{userDetail.kornFlnm}
                                 </div>
                             </div>
                         </li>
@@ -489,11 +431,7 @@ function ManagerSimpleCnsltDetail(props) {
                         <li className="inputBox type1 width2">
                             <label className="title" style={{cursor :"default"}}>기업명</label>
                             <div className="input">
-                                <div style={{
-                                    border: "1px solid #ddd",
-                                    borderRadius: "10px",
-                                    padding: "10px"
-                                }}>
+                                <div>
 
                                 </div>
                             </div>
@@ -501,11 +439,7 @@ function ManagerSimpleCnsltDetail(props) {
                         <li className="inputBox type1 width2">
                             <label className="title" style={{cursor :"default"}}>산업</label>
                             <div className="input">
-                                <div style={{
-                                    border: "1px solid #ddd",
-                                    borderRadius: "10px",
-                                    padding: "10px"
-                                }}>
+                                <div>
                                 </div>
                             </div>
                         </li>
