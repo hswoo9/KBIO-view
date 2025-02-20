@@ -246,8 +246,8 @@ function MemberMyPageModify(props) {
     }, [consultDetail]);
 
     const checkPwd = () => {
-        if (!currentPassword) {
-            Swal.fire("현재 비밀번호를 입력해주세요.");
+        if (!newPassword) {
+            Swal.fire("새 비밀번호를 입력해주세요.");
             return;
         }
 
@@ -291,13 +291,11 @@ function MemberMyPageModify(props) {
                     Swal.fire("이메일을 입력해주세요.");
                     return;
                 }
-                /*if (!memberDetail.userPw) {
-                    Swal.fire({
-                        title: '비밀번호는 8~16자의 영문 대/소문자, 숫자, 특수문자를 사용해 주세요.',
-                        text: '비밀번호가 요구 사항에 맞지 않습니다.',
-                    });
+
+                if (newPassword && !validatePassword(newPassword)) {
+                    Swal.fire("비밀번호는 8자 이상, 16자 이하이며, 최소 1개의 숫자, 문자, 특수문자를 포함해야 합니다.");
                     return;
-                }*/
+                }
 
                 if (!memberDetail.addr) {
                     Swal.fire("주소를 입력해주세요.");
@@ -313,15 +311,6 @@ function MemberMyPageModify(props) {
                 const emailDomain = memberDetail.emailDomain;
                 const email = `${emailPrefix}@${emailDomain}`;
 
-                if (newPassword) {
-                    if (!validatePassword(newPassword)) {
-                        Swal.fire({
-                            title: "비밀번호 형식이 올바르지 않습니다.",
-                            text: "비밀번호는 8~16자의 영문 대/소문자, 숫자, 특수문자를 사용해 주세요.",
-                        });
-                        return;
-                    }
-                }
 
                 const updatedMemberDetail = {
                     ...memberDetail,
