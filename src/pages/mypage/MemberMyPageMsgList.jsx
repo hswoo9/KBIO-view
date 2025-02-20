@@ -132,7 +132,7 @@ function MemberMyPageMsgList(props) {
                                     {resp.paginationInfo.totalRecordCount - (resp.paginationInfo.currentPageNo - 1) * resp.paginationInfo.pageSize - index}
                                 </td>
                                 <td className="title">{item.tblUserMsg.msgTtl}</td>
-                                <td>{item.tblUser.kornFlnm}</td>
+                                <td>{item.dsptchUser.kornFlnm}</td>
                                 <td>{moment(item.tblUserMsg.frstCrtDt).format('YYYY-MM-DD HH:mm:ss')}</td>
                                 <td className="state">
                                     {item.tblUserMsg.rcptnIdntyYn === "Y" ? (<p className="complete">확인</p>) : (
@@ -193,7 +193,7 @@ function MemberMyPageMsgList(props) {
                                         <option value="">전체</option>
                                         <option value="msgTtl">제목</option>
                                         <option value="msgCn">내용</option>
-                                        <option value="kornFlnm">보낸사람</option>
+                                        <option value="kornFlnm">발신자</option>
                                     </select>
                                 </div>
                                 <div className="inputBox type1">
@@ -234,7 +234,7 @@ function MemberMyPageMsgList(props) {
                             <tr>
                                 <th className="th1">번호</th>
                                 <th>제목</th>
-                                <th className="th1">보낸사람</th>
+                                <th className="th1">발신자</th>
                                 <th className="th2">수신일시</th>
                                 <th className="th1">확인여부</th>
                                 <th className="th2">확인일시</th>

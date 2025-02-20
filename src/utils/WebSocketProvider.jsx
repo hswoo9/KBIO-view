@@ -78,9 +78,9 @@ export const useWebSocket = () => {
  * @param title = 제목
  * @param content = 내용
  */
-export const sendMessageFn = (sock, sendType, dsptchUserSn, rcptnUserSn, msgTtl, msgCn) => {
+export const sendMessageFn = (sock, sendType, dsptchUserSn, rcptnUserSns, msgTtl, msgCn) => {
   if (sock && sock.readyState === WebSocket.OPEN) {
-    if(sendType == "private" && (rcptnUserSn == null || rcptnUserSn == "")){
+    if(sendType == "private" && (rcptnUserSns == null || rcptnUserSns == "")){
       Swal.fire("수신자를 입력해주세요.");
       return;
     }
@@ -88,10 +88,20 @@ export const sendMessageFn = (sock, sendType, dsptchUserSn, rcptnUserSn, msgTtl,
     sock.send(JSON.stringify({
       sendType,
       dsptchUserSn,
-      rcptnUserSn,
+      rcptnUserSns,
       msgTtl,
       msgCn,
     }));
+
+    // 메시지가 전송된 후 서버에서 응답을 받으면 알림 표시
+    sock.onmessage = (event) => {
+      const response = JSON.parse(event.data);
+      if (response.status === "success") {
+        Swal.fire("메시지가 전송되었습니다.");
+      } else {
+        Swal.fire("메시지 전송에 실패했습니다.");
+      }
+    };
   } else {
     console.log('WebSocket 연결이 열려 있지 않습니다.');
   }

@@ -192,7 +192,7 @@ header .hInner .hTop .alarmWrap.click .close .icon {height: 100%; background: ur
     animation: opacityMove 1s ease both
 }
 
-.board .board_list > table .th2 {width: 17%;}
+.board .board_list > table .th2 {width: 18%;}
 
 .alarmBtn {
     position: relative;

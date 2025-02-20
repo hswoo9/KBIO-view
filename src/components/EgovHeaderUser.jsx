@@ -522,7 +522,7 @@ function EgovHeader() {
                   {item.tblUserMsg.msgTtl}
                 </p>
                 <p style={{fontSize: "12px", marginTop: "5px", color: "#555555"}}>
-                  {item.tblUser.kornFlnm} - {moment(item.tblUserMsg.frstCrtDt).format('YYYY-MM-DD HH:mm:ss')}
+                  {item.dsptchUser.kornFlnm} - {moment(item.tblUserMsg.frstCrtDt).format('YYYY-MM-DD HH:mm:ss')}
                 </p>
               </div>
             </NavLink>

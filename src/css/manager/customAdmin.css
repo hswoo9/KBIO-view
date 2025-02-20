@@ -435,3 +435,29 @@ input.width3{ width: calc(100% / 3 - .6rem) !important; }
 .container .pageWrap .pageList li.next.active:hover a {background-image: url(@/assets/images/ico_page_next_point.svg);}
 .container .pageWrap .pageList li.last.active:hover a {background-image: url(@/assets/images/ico_page_last_point.svg);}
 
+.scrollable-tbody {
+    display: block;
+    max-height: 300px; /* 원하는 높이 지정 */
+    min-height: 300px;
+    overflow-y: auto;
+}
+
+.scrollable-tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+
+.fixed-thead {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+
+.alarmSend {
+    display: none;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
