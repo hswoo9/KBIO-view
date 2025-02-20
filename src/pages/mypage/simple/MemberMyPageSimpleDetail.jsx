@@ -16,7 +16,7 @@ function MemberMyPageSimpleDetail(props) {
     const [paginationInfo, setPaginationInfo] = useState({});
     const [latestCreator, setLatestCreator] = useState(null);
 
-    const [filesByDsctnSn, setFilesByDsctnSn] = useState([]);
+    const [filesByDsctnSn, setFilesByDsctnSn] = useState({});
     const [searchDto, setSearchDto] = useState({
         cnsltAplySn: location.state?.cnsltAplySn || "",
         cnsltSttsCd: location.state?.cnsltSttsCd || "",
@@ -53,7 +53,6 @@ function MemberMyPageSimpleDetail(props) {
             requestOptions,
             function (resp) {
                 setSimpleDetail({ ...resp.result.simple });
-
                 if (resp.result.filesByDsctnSn) {
                     setFilesByDsctnSn(resp.result.filesByDsctnSn);
                 }
@@ -72,7 +71,8 @@ function MemberMyPageSimpleDetail(props) {
                     resp.result.cnsltDsctnList.forEach(function (item, index) {
                         if (index === 0) dataList =[];
 
-                        const files = resp.result.filesByDsctnSn[item.cnsltDsctnSn] || [];
+                        const files = resp.result.filesByDsctnSn[item.cnsltDsctnSn];
+                        item.simpleFiles = files
 
                         const isLatest = item.cnsltAplySn === latestItem.cnsltAplySn;
                         const isOwnComment = item.creatrSn === sessionUser.userSn;
@@ -251,14 +251,7 @@ function MemberMyPageSimpleDetail(props) {
     }
 
     const handleEditClick = (item) => {
-
-        const files = filesByDsctnSn[item.cnsltDsctnSn] || [];
-        const popupData = {
-            ...item,
-            simpleFiles: files
-        };
-
-        localStorage.setItem('popupData', JSON.stringify(popupData));
+        localStorage.setItem('popupData', JSON.stringify(item));
         window.open(`/popup/simple`, "_blank", "width=800,height=530");
     };
 
