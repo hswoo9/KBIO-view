@@ -238,14 +238,12 @@ function ConsultantDetail(props) {
                                                         <iframe
                                                             src={`http://133.186.250.158${item.atchFilePathNm}/${item.strgFileNm}.${item.atchFileExtnNm}`}
                                                             width="150px"
-                                                            height="200px"
                                                             title="PDF Preview">
                                                         </iframe>
                                                     ) : (
                                                         // 이미지 파일을 img 태그로 표시
                                                         <img
                                                             src={`http://133.186.250.158${item.atchFilePathNm}/${item.strgFileNm}.${item.atchFileExtnNm}`}
-                                                            style={{width:"150px", height:"200px", marginBottom:"10px"}}
                                                             alt="image"
                                                         />
                                                     )
