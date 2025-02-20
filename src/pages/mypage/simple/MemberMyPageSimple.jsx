@@ -82,6 +82,7 @@ function MemberMyPageSimple(props) {
                 (resp) => {
                     setPaginationInfo(resp.paginationInfo);
                     let dataList = [];
+
                     dataList.push(
                         <tr key="noData">
                             <td colSpan="6">검색된 결과가 없습니다.</td>
