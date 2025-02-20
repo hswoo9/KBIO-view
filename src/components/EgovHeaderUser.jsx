@@ -3,7 +3,7 @@ import React, {useEffect, useRef, useState} from "react";
 
 import * as EgovNet from "@/api/egovFetch";
 import * as ComScript from "@/components/CommonScript";
-import {getMenu } from "@/components/CommonComponents";
+import {getMenu, getMenuOnTree } from "@/components/CommonComponents";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
 import logo from "@/assets/images/logo.svg";
@@ -82,6 +82,7 @@ function EgovHeader() {
   const [loginVO, setLoginVO] = useState({});
   const [saveIDFlag, setSaveIDFlag] = useState(false);
 
+  const [siteMapMenu, setSiteMapMenu] = useState([]);
 
   /* 알림창 관련 */
   const [isToggled, setIsToggled] = useState(false);
@@ -225,12 +226,49 @@ function EgovHeader() {
     }
   };
 
+  const makerSubMenu = (data) => {
+    let returnHtml = [];
+    returnHtml.push(
+        <li key="noData">
+          <NavLink
+              to={"#"}
+              className="title2"
+          >
+            <span>-</span>
+          </NavLink>
+        </li>
+    )
+    if (data) {
+      data.forEach(function (item, index) {
+        if (index === 0) returnHtml = [];
+        returnHtml.push(
+            <li key={item.menuSn}>
+              <NavLink
+                  to={item.menuPathNm}
+                  state={{
+                    menuSn: item.upperMenuSn,
+                    thisMenuSn: item.menuSn,
+                    bbsSn: item.bbsSn,
+                    menuNmPath: item.menuNmPath
+                  }}
+                  className="title2"
+                  onClick={() => {ComScript.closeModal("sitemap")}}
+              >
+                <span>{item.menuNm}</span>
+              </NavLink>
+            </li>
+        )
+      });
+    }
+    return returnHtml;
+  }
+
   useEffect(() => {
 
     const activeTag = document.getElementsByClassName('activeTag');
-    if(activeTag.length){
+    if (activeTag.length) {
       const parentTag = activeTag[0].parentElement;
-      if(parentTag){
+      if (parentTag) {
         parentTag.className = "active";
       }
     }
@@ -256,12 +294,43 @@ function EgovHeader() {
       setUserInfo({ id: data, password: "default", userSe: "USR", loginType: "base"});
     }
 
-    getMenu(null, 0, userSn).then((data) => {
+    getMenuOnTree(null, null, userSn).then((data) => {
       let dataList = [];
       if(data != null){
+        console.log(data);
         data.forEach(function(item, index){
           if (index === 0) dataList = [];
           if(item.menuType == "n"){
+            dataList.push(
+                <li key={item.menuSn}>
+                  <NavLink
+                      to={item.menuPathNm}
+                      state={{
+                        menuSn: item.menuSn,
+                        menuNmPath: item.menuNmPath,
+                      }}
+                      className="title"
+                      onClick={() => {ComScript.closeModal("sitemap")}}
+                  >
+                    <span>{item.menuNm}</span>
+                  </NavLink>
+                  <ul className="dep2">
+                    {item.childTblMenu && makerSubMenu(item.childTblMenu)}
+                  </ul>
+                </li>
+            )
+          }
+        });
+        setSiteMapMenu(dataList);
+      }
+    });
+
+    getMenu(null, 0, userSn).then((data) => {
+      let dataList = [];
+      if (data != null) {
+        data.forEach(function (item, index) {
+          if (index === 0) dataList = [];
+          if (item.menuType == "n") {
             dataList.push(
                 <li key={item.menuSn}>
                   <NavLink
@@ -761,7 +830,7 @@ function EgovHeader() {
               <div className="icon"></div>
             </div>
             <ul className="dep">
-              <li>
+              {/*<li>
                 <a href="#" className="title"><span>기관소개</span></a>
                 <ul className="dep2">
                   <li><a href="#" className="title2"><span>입주기관 소개</span></a></li>
@@ -793,7 +862,8 @@ function EgovHeader() {
                   <li><a href="#" className="title2"><span>조직도</span></a></li>
                   <li><a href="#" className="title2"><span>오시는길</span></a></li>
                 </ul>
-              </li>
+              </li>*/}
+              {siteMapMenu}
             </ul>
           </div>
         </div>
