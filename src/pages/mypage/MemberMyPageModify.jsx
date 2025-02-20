@@ -740,6 +740,33 @@ function MemberMyPageModify(props) {
                             </li>
 
                             <li className="inputBox type2">
+                                <span className="tt1">간략 소개</span>
+                                <label className="input">
+                                    <textarea
+                                        style={{height: "100px"}}
+                                        name="consultantAffiliation"
+                                        placeholder="최대 3줄, 100자 이내만 입력 가능합니다."
+                                        value={consultDetail.rmrkCn || ""}
+                                        maxLength={100}
+                                        onChange={(e) => {
+                                            let value = e.target.value;
+                                            const lines = value.split("\n");
+                                            if (lines.length > 3) {
+                                                value = lines.slice(0, 3).join("\n");
+                                            }
+                                            setConsultDetail({
+                                                ...consultDetail,
+                                                rmrkCn: value,
+                                            });
+                                        }}
+                                    ></textarea>
+                                    <div style={{textAlign: "right", fontSize: "0.9em", color: "#666"}}>
+                                        {(memberDetail.rmrkCn || "").length} / 100
+                                    </div>
+                                </label>
+                            </li>
+
+                            {/*<li className="inputBox type2">
                                 <span className="tt1">자격증</span>
                                 <div className="input" style={{height: "100%"}}>
                                     <div style={{display: "flex", flexDirection: "column", gap: "10px"}}>
@@ -765,7 +792,7 @@ function MemberMyPageModify(props) {
                                         ))}
                                     </div>
                                 </div>
-                            </li>
+                            </li>*/}
                         </ul>
 
                     )}
