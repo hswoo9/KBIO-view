@@ -579,52 +579,115 @@ function MemberSignUp(props) {
         form.append(key, formData[key]);
       });
 
-      if (!form.get("userId")) {
-        alert("회원ID는 필수 값입니다.");
+      const userId = form.get("userId");
+      if (!userId) {
+        Swal.fire("회원ID는 필수 값입니다.");
         return resolve(false);
       }
 
+      const userIdRegex = /^[a-zA-Z0-9\-_]{6,12}$/;
+      if (!userIdRegex.test(userId)) {
+        Swal.fire("아이디는 6~12자 영문, 숫자, '-', '_' 만 가능합니다.");
+        return resolve(false);
+      }
+
+      const userPw = form.get("userPw");
+      if (!userPw) {
+        Swal.fire("비밀번호는 필수 값입니다.");
+        return resolve(false);
+      }
+
+      const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?/~_`|-]).{8,20}$/;
+      if (!passwordRegex.test(userPw)) {
+        Swal.fire("비밀번호는 영문자, 숫자, 특수문자 조합으로 8~20자리 이내여야 합니다.");
+        return resolve(false);
+      }
+
+      const passwordChk = form.get("password_chk");
+      if (!passwordChk) {
+        Swal.fire("비밀번호 확인은 필수 값입니다.");
+        return resolve(false);
+      }
+
+      if (userPw !== passwordChk) {
+        Swal.fire("비밀번호가 일치하지 않습니다.");
+        return resolve(false);
+      }
+
+      const kornFlnm = form.get("kornFlnm");
+      if (!kornFlnm) {
+        Swal.fire("성명은 필수 값입니다.");
+        return resolve(false);
+      }
+
+      const mberNmRegex = /^[a-zA-Zㄱ-ㅎ가-힣]+$/;
+      if (!mberNmRegex.test(kornFlnm)) {
+        Swal.fire("성명은 한글 또는 영문자만 사용 가능합니다.");
+        return resolve(false);
+      }
+
+      const mblTelno = form.get("mblTelno");
+      if (!mblTelno) {
+        Swal.fire("전화번호는 필수 값입니다.");
+        return resolve(false);
+      }
+
+      const phonenumRegex = /^\d{11}$/;
+      if (!phonenumRegex.test(mblTelno)) {
+        Swal.fire("전화번호는 11자리 숫자만 입력 가능합니다.");
+        return resolve(false);
+      }
+
+      const email = form.get("email");
+      if (!email) {
+        Swal.fire("이메일은 필수 값입니다.");
+        return resolve(false);
+      }
+
+      const emailProvider = form.get("emailProvider")
+      if (!emailProvider) {
+        Swal.fire("도메인은 필수 값입니다.");
+        return resolve(false);
+      }
+
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      if (!emailRegex.test(email)) {
+        Swal.fire("올바른 이메일 형식을 입력해주세요.");
+        return resolve(false);
+      }
+
+      const addr = form.get("addr");
+      if (!addr) {
+        Swal.fire("주소는 필수 값입니다.");
+        return resolve(false);
+      }
+
+      const daddr = form.get("daddr");
+      if (!daddr) {
+        Swal.fire("상세주소는 필수 값입니다.");
+        return resolve(false);
+      }
+
+      const mbrType = form.get("mbrType");
+      if (!mbrType) {
+        Swal.fire("회원 유형을 선택해주세요.");
+        return resolve(false);
+      }
+
+      if (!memberDetail.emlRcptnAgreYn) {
+        Swal.fire("메일 수신 여부를 선택해 주세요.");
+        return resolve(false);
+      }
+
+      if (!memberDetail.smsRcptnAgreYn) {
+        Swal.fire("문자 수신 여부를 선택해 주세요.");
+        return resolve(false);
+      }
+
+
       checkIdDplct().then((res) => {
         if (res > 0) {
-          alert("중복된 아이디입니다. 다른 아이디를 사용해주세요.");
-          return resolve(false);
-        }
-
-        if (!form.get("userPw")) {
-          alert("비밀번호는 필수 값입니다.");
-          return resolve(false);
-        }
-
-        const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?/~_`|-]).{8,20}$/;
-        if (!passwordRegex.test(form.get("userPw"))) {
-          alert("비밀번호는 영문자, 숫자, 특수문자 조합으로 8~20자리 이내여야 합니다.");
-          return resolve(false);
-        }
-
-        if (form.get("password_chk") !== form.get("userPw")) {
-          alert("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
-          return resolve(false);
-        }
-
-        if (!form.get("kornFlnm")) {
-          alert("성명은 필수 값입니다.");
-          return resolve(false);
-        }
-
-        const mberNmRegex = /^[a-zA-Zㄱ-ㅎ가-힣]+$/;
-        if (!mberNmRegex.test(form.get("kornFlnm"))) {
-          alert("성명은 한글 또는 영문자만 사용 가능합니다.");
-          return resolve(false);
-        }
-
-        if (!form.get("mblTelno")) {
-          alert("전화번호는 필수 값입니다.");
-          return resolve(false);
-        }
-
-        const phonenumRegex = /^[0-9\-]+$/;
-        if (!phonenumRegex.test(form.get("mblTelno"))) {
-          alert("전화번호는 숫자와 하이픈(-)만 포함할 수 있습니다.");
+          Swal.fire("중복된 아이디입니다. 다른 아이디를 사용해주세요.");
           return resolve(false);
         }
 
