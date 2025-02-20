@@ -693,7 +693,7 @@ function EgovHeader() {
             {sessionUserId && (
               <div className={isToggled ? "alarmWrap click" : "alarmWrap"}>
                 <button type="button" className="alarmBtn" onClick={handleToggle}>
-                  <div className="icon"></div>
+                  <div className="icon alarmIcon"></div>
                   <span id="alarmDot" className="dot" style={{display:"none"}}></span>
                 </button>
                 <ul className="selectBox" id="alarmUl" style={{overflow: "hidden"}}>
