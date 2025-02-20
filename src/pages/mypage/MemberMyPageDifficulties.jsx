@@ -69,7 +69,7 @@ function MemberMyPageDifficulties(props) {
                     setPaginationInfo(resp.paginationInfo);
                     let dataList = [];
                     dataList.push(
-                        <tr>
+                        <tr key="noData">
                             <td colSpan="5">애로사항 내역이 없습니다.</td>
                         </tr>
                     );

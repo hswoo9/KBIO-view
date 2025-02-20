@@ -114,7 +114,7 @@ function MemberMyPageMsgList(props) {
 
                     let dataList = [];
                     dataList.push(
-                        <tr>
+                        <tr key="noData">
                             <td colSpan="6">알림내역이 없습니다.</td>
                         </tr>
                     );

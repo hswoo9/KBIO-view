@@ -83,7 +83,7 @@ function MemberMyPageSimple(props) {
                     setPaginationInfo(resp.paginationInfo);
                     let dataList = [];
                     dataList.push(
-                        <tr>
+                        <tr key="noData">
                             <td colSpan="6">검색된 결과가 없습니다.</td>
                         </tr>
                     );
