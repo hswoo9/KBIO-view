@@ -11,6 +11,8 @@ import notProfile from "@/assets/images/no_profile.png";
 
 import user_consultant_img3 from "@/assets/images/user_consultant_img3.jpg";
 import base64 from 'base64-js';
+import {getComCdList} from "../../components/CommonComponents.jsx";
+import AOS from "aos";
 
 function ConsultantDetail(props) {
     const sessionUser = getSessionItem("loginUser");
@@ -21,6 +23,7 @@ function ConsultantDetail(props) {
         userSn: location.state?.userSn || "",
     });
 
+    const [comCdList, setComCdList] = useState([]);
     const [consultantDetail, setConsultantDetail] = useState({});
     const [memberDetail, setMemberDetail] = useState({});
     const [cnsltProfileFile, setCnsltProfileFile] = useState(null);
@@ -133,6 +136,7 @@ function ConsultantDetail(props) {
 
                 if (resp.result.cnsltCertificateFile) {
                     setCnsltCertificateFile(resp.result.cnsltCertificateFile);
+                    console.log("cnsltCertificateFile",cnsltCertificateFile);
                 }
 
             },
@@ -141,6 +145,14 @@ function ConsultantDetail(props) {
             }
         );
     };
+
+    useEffect(() => {
+        getComCdList(10).then((data) => {
+            setComCdList(data);
+        });
+        console.log("comCd",comCdList);
+        AOS.init();
+    }, []);
 
     useEffect(() => {
         getConsultantDetail();
@@ -190,10 +202,11 @@ function ConsultantDetail(props) {
                                 <li>
                                     <strong className="left">경력</strong>
                                     <div className="right">
+                                        <p>(현) {consultantDetail?.ogdpNm} ({consultantDetail?.jbpsNm})</p>
                                         {cnsltCrr.length > 0 ? (
-                                            cnsltCrr.map((item, index) => <p key={index}>{item.ogdpCoNm}</p>)
+                                            cnsltCrr.map((item, index) => <p key={index}>(전) {item.ogdpCoNm} ({item.jbgdNm})</p>)
                                         ) : (
-                                            <p>{consultantDetail?.crrPrd || "-"} 년</p>
+                                            <p>경력 정보가 없습니다.</p>
                                         )}
                                     </div>
                                 </li>
@@ -202,7 +215,7 @@ function ConsultantDetail(props) {
                                     <strong className="left">학력</strong>
                                     <div className="right">
                                         {cnsltAcbg.length > 0 ? (
-                                            cnsltAcbg.map((item, index) => <p key={index}>{item.schlNm}</p>)
+                                            cnsltAcbg.map((item, index) => <p key={index}>{item.schlNm} {item.scsbjtNm} {item.dgrNm}</p>)
                                         ) : (
                                             <p>학력 사항이 없습니다.</p>
                                         )}
@@ -217,22 +230,24 @@ function ConsultantDetail(props) {
                             <ul className="list">
                                 {cnsltCertificateFile.length > 0 ? (
                                     cnsltCertificateFile.map((item, index) => (
-                                        <li key={item.tblComFile ? item.tblComFile.atchFileSn : index}>
+                                        <li key={item.atchFileSn ? item.atchFileSn : index}>
                                             <figure>
-                                                {item.tblComFile ? (
-                                                    item.tblComFile.atchFileExtnNm.toLowerCase() === "pdf" ? (
+                                                {item.atchFileSn ? (
+                                                    item.atchFileExtnNm.toLowerCase() === "pdf" ? (
                                                         // PDF 파일을 iframe으로 표시
                                                         <iframe
-                                                            src={`http://133.186.250.158${item.tblComFile.atchFilePathNm}/${item.tblComFile.strgFileNm}.${item.tblComFile.atchFileExtnNm}`}
-                                                            width="100%"
-                                                            height="500px"
+                                                            src={`http://133.186.250.158${item.atchFilePathNm}/${item.strgFileNm}.${item.atchFileExtnNm}`}
+                                                            width="150px"
+                                                            height="200px"
                                                             title="PDF Preview">
                                                         </iframe>
                                                     ) : (
                                                         // 이미지 파일을 img 태그로 표시
                                                         <img
-                                                            src={`http://133.186.250.158${item.tblComFile.atchFilePathNm}/${item.tblComFile.strgFileNm}.${item.tblComFile.atchFileExtnNm}`}
-                                                            alt="Uploaded File" />
+                                                            src={`http://133.186.250.158${item.atchFilePathNm}/${item.strgFileNm}.${item.atchFileExtnNm}`}
+                                                            style={{width:"150px", height:"200px", marginBottom:"10px"}}
+                                                            alt="image"
+                                                        />
                                                     )
                                                 ) : (
                                                     <img src={user_consultant_img3} alt="Default Image" />
@@ -241,10 +256,8 @@ function ConsultantDetail(props) {
                                         </li>
                                     ))
                                 ) : (
-                                    <li> <span>자격증 정보가 없습니다. </span> </li>
+                                    <li> <span style={{width:"170px"}}>자격증 정보가 없습니다. </span> </li>
                                 )}
-
-
                             </ul>
                         </div>
                         <div className="box overview">
@@ -288,9 +301,12 @@ function ConsultantDetail(props) {
                             />
                         </figure>
                         <div className="textBox">
-                            <div className="departBox cate4">
+                            <div className={`departBox cate${parseInt(consultantDetail.cnsltFld, 10) - 100}`}>
                                 <div className="icon"></div>
-                                <p className="text">분야</p></div>
+                                <p className="text">
+                                    {comCdList.find(item => item.comCd === String(consultantDetail.cnsltFld))?.comCdNm || ""}
+                                </p>
+                            </div>
                             <div className="nameBox">
                                 <strong className="name">{memberDetail?.kornFlnm}</strong>
                                 <p className="company">{consultantDetail?.ogdpNm}({consultantDetail?.jbpsNm})</p>

@@ -97,6 +97,7 @@ function ConsultantList(props) {
                 requestOptions,
                 (resp) => {
                     setPaginationInfo(resp.paginationInfo);
+                    console.log("consiltantList",resp.result.consultantList);
                      let dataList = [];
 
                      resp.result.consultantList.forEach(function (item, index) {
@@ -238,6 +239,7 @@ function ConsultantList(props) {
                      });
                      setConsultantList(dataList);
                      setPaginationInfo(resp.paginationInfo);
+
                 },
                 function (resp) {
 
