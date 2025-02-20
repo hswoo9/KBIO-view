@@ -163,7 +163,7 @@ function ConsultantDetail(props) {
         <div id="container" className="container consultant view">
             <div className="inner">
                 <CommonSubMenu/>
-                <div className="inner2">
+                <div className="inner2" style={{justifyContent: "space-between"}}>
                     <div className="leftBox">
                         <div className="profileBox">
                             <strong className="name">{memberDetail?.kornFlnm}</strong>
