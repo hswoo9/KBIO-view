@@ -214,7 +214,7 @@ function MemberMyPageDifficulties(props) {
                                 <th className="th1">번호</th>
                                 <th className="th1">분류</th>
                                 <th>제목</th>
-                                <th className="th1">신청일</th>
+                                <th className="th2">신청일</th>
                                 <th className="th2">상태</th>
                             </tr>
                             </thead>
