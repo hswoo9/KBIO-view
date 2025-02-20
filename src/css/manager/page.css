@@ -57,7 +57,6 @@ input::placeholder {color: #BBBBBB; font-weight: 500;}
 .inputBox.type2 .input.flexinput > *:not(span, .btn) {width: 100%;}
 .inputBox.type2 .input.flexinput > span {flex: none;}
 .inputBox.type2 .input input {width: 100%; box-sizing: border-box; font-size: 1rem; background: transparent;}
-.inputBox.type2 .input .checkBox input {width: 18px;}
 .inputBox.type2 .input input::placeholder, .inputBox.type2 .input textarea::placeholder {color: #999999;}
 .inputBox.type2 .input textarea {width: 100%; background: transparent; border: none; padding: 0; font-size: 1rem; font-weight: 500; border-radius: 0; resize: none;}
 .inputBox.type2 .input textarea:focus {outline: none;}

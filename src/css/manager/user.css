@@ -470,7 +470,7 @@ footer .inner > .right .snsBox .youtube .icon {background-image: url(../../asset
 .search .inner2 .tableCont.type1 > table tbody tr .title .text i {width: 1.35rem; height: 1.35rem; background-position: center; background-repeat: no-repeat; background-size: contain;}
 .search .inner2 .tableCont.type1 > table tbody tr .title .text .file {background-image: url(../../assets/images/ico_file_blue.svg);}
 .search .inner2 .tableCont.type1 > table tbody tr .title .bot {margin-top: .4rem; font-size: .9rem; color: #555; display: flex; align-items: center; gap: .4rem;}
-.search .inner2 .tableCont.type1 > table tbody tr .state p {white-space: nowrap; display: inline-block; pa.container .searchFormWrap formdding: .3rem .8rem; font-size: .8rem; font-weight: 600; color: #fff; border-radius: 3rem;}
+.search .inner2 .tableCont.type1 > table tbody tr .state p {white-space: nowrap; display: inline-block; padding: .3rem .8rem; font-size: .8rem; font-weight: 600; color: #fff; border-radius: 3rem;}
 .search .inner2 .clickBtn {max-width: 16.6rem; width: 90%; margin: 0 auto; margin-top: 1.7rem;}
 
 
@@ -653,7 +653,7 @@ footer .inner > .right .snsBox .youtube .icon {background-image: url(../../asset
 .container .board_list > table tbody tr .title .text .file {background-image: url(../../assets/images/ico_file_blue.svg);}
 .container .board_list > table tbody tr .title .text .lock {background-image: url(../../assets/images/ico_lock_blue.svg);}
 .container .board_list > table tbody tr .title .bot {margin-top: .4rem; font-size: .9rem; color: #555; display: flex; align-items: center; gap: .4rem;}
-.container .board_list > table tbody tr .state p {white-space: nowrap; display: inline-block; pa.container .searchFormWrap formdding: .3rem .8rem; font-size: .8rem; font-weight: 600; color: #fff; border-radius: 3rem;}
+.container .board_list > table tbody tr .state p {white-space: nowrap; display: inline-block; padding: .3rem .8rem; font-size: .8rem; font-weight: 600; color: #fff; border-radius: 3rem;}
 .container .board_list > table tbody tr .state p.waiting {background: #999999;}
 .container .board_list > table tbody tr .state p.complete {background: var(--mainColor3);}
 
@@ -1332,7 +1332,7 @@ footer .inner > .right .snsBox .youtube .icon {background-image: url(../../asset
 	.main .sec03 .inner .boxWrap .calendarWrap .calendarBox td:after {width: 3.5rem; height: 3.5rem;}
 	.user .inner .authenBox .selectBox {gap: 10%;}
 
-	.search .inner2 .searchFormWrap .searchBox .itemBox {margin-right: 25%; mas-}
+	.search .inner2 .searchFormWrap .searchBox .itemBox {margin-right: 25%;}
 	.search .inner2 .searchFormWrap .searchBox .inputBox.type1.date {width: calc(100% / 2 - .5rem); max-width: none;}
 
 	.resident_view .inner2 .infoWrap .left {width: 100%;}
