@@ -20,7 +20,7 @@ function ResidentMemberCreateContent(props){
     const [acceptFileTypes, setAcceptFileTypes] = useState('jpg,jpeg,png,gif,bmp,tiff,tif,webp,svg,ico,heic,avif');
     const [selectedFiles, setSelectedFiles] = useState([]);
     const [imgFile, setImgFile] = useState("");
-    const isFirstRender = useRef(true);
+    //const isFirstRender = useRef(true);
 
 
     const initMode = () => {
@@ -54,20 +54,20 @@ function ResidentMemberCreateContent(props){
         }
     };
 
-    const handleChange = (value) => {
-        if(isFirstRender.current){
-            isFirstRender.current = false;
-            return;
-        }
-        setResidentDetail({...residentDetail, bzentyExpln: value});
+    const isFirstRender = {
+        bzentyExpln: useRef(true),
+        mainHstry: useRef(true)
     };
 
-    const handleChangeHstry = (value) => {
-        if(isFirstRender.current){
-            isFirstRender.current = false;
+    const handleChangeField = (fieldName, value) => {
+        if (isFirstRender[fieldName].current) {
+            isFirstRender[fieldName].current = false;
             return;
         }
-        setResidentDetail({...residentDetail, mainHstry: value});
+        setResidentDetail(prev => ({
+            ...prev,
+            [fieldName]: value
+        }));
     };
 
 
@@ -170,6 +170,11 @@ function ResidentMemberCreateContent(props){
             }
         }
     }, [residentDetail]);
+
+    useEffect(() => {
+        console.log("Updated residentDetail:", residentDetail);
+    }, [residentDetail]);
+
 
     useEffect(() => {
     }, [selectedFiles]);
@@ -589,7 +594,7 @@ function ResidentMemberCreateContent(props){
                         <div className="input">
                             <CommonEditor
                                 value={residentDetail.bzentyExpln || ""}
-                                onChange={handleChange}
+                                onChange={(value) => handleChangeField("bzentyExpln", value)}
                             />
                         </div>
                     </li>
@@ -599,7 +604,7 @@ function ResidentMemberCreateContent(props){
                         <div className="input">
                             <CommonEditor
                             value={residentDetail.mainHstry || ""}
-                            onChange={handleChangeHstry}
+                            onChange={(value) => handleChangeField("mainHstry", value)}
                             />
                         </div>
                     </li>
