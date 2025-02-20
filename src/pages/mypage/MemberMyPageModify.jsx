@@ -425,7 +425,7 @@ function MemberMyPageModify(props) {
                                     type="text"
                                     name="kornFlnm"
                                     id="kornFlnm"
-                                    value={memberDetail.kornFlnm}
+                                    value={memberDetail.kornFlnm || ""}
                                     readOnly
                                 />
                             </label>
@@ -438,7 +438,7 @@ function MemberMyPageModify(props) {
                                     type="text"
                                     name="mblTelno"
                                     id="mblTelno"
-                                    value={memberDetail.mblTelno}
+                                    value={memberDetail.mblTelno || ""}
                                     readOnly
                                 />
                             </label>
@@ -453,7 +453,7 @@ function MemberMyPageModify(props) {
                                         name="userId"
                                         id="userId"
                                         placeholder="아이디는 6~12자 영문, 숫자만 가능합니다."
-                                        value={memberDetail.userId}
+                                        value={memberDetail.userId || ""}
                                         readOnly
                                     />
                                 </div>
@@ -467,7 +467,7 @@ function MemberMyPageModify(props) {
                                     name="emailPrefix"
                                     id="emailPrefix"
                                     placeholder="이메일 아이디 입력"
-                                    value={memberDetail.emailPrefix}
+                                    value={memberDetail.emailPrefix || ""}
                                     onChange={(e) => setMemberDetail((prev) => ({
                                         ...prev,
                                         emailPrefix: e.target.value,
@@ -481,7 +481,7 @@ function MemberMyPageModify(props) {
                                         <input
                                             type="text"
                                             placeholder="도메인 입력"
-                                            value={memberDetail.emailDomain}
+                                            value={memberDetail.emailDomain || ""}
                                             onChange={(e) => {
                                                 const updatedEmailDomain = e.target.value;
                                                 setMemberDetail({
@@ -513,7 +513,7 @@ function MemberMyPageModify(props) {
                                                     email: `${prev.emailPrefix}@${provider === "direct" ? "" : provider}`
                                                 }));
                                             }}
-                                            value={memberDetail.emailProvider}
+                                            value={memberDetail.emailProvider || ""}
                                             style={{
                                                 padding: '5px',
                                                 flex: 1,
@@ -543,7 +543,7 @@ function MemberMyPageModify(props) {
                                     name="userPw"
                                     id="userPw"
                                     placeholder="현재 비밀번호를 작성해주세요."
-                                    value={currentPassword}
+                                    value={currentPassword || ""}
                                     onChange={(e) => setCurrentPassword(e.target.value)}
                                 />
                             </label>
@@ -557,7 +557,7 @@ function MemberMyPageModify(props) {
                                     name="newUserPw"
                                     id="newUserPw"
                                     placeholder="비밀번호 변경을 원하지 않으시면 작성하지 않으시면 됩니다."
-                                    value={newPassword}
+                                    value={newPassword || ""}
                                     onChange={(e) => setNewPassword(e.target.value)}
                                 />
                             </label>
@@ -566,7 +566,7 @@ function MemberMyPageModify(props) {
                         <li className="inputBox type2">
                             <span className="tt1">주소</span>
                             <label className="input" style={{paddingRight: "6rem"}}>
-                                <input type="text" name="addr" id="addr" readOnly value={memberDetail.addr}/>
+                                <input type="text" name="addr" id="addr" readOnly value={memberDetail.addr || ""}/>
                                 <button type="button" className="addressBtn btn" onClick={searchAddress}>
                                     <span>주소검색</span>
                                 </button>
@@ -581,7 +581,7 @@ function MemberMyPageModify(props) {
                                     name="daddr"
                                     id="daddr"
                                     placeholder="상세주소를 입력해주세요"
-                                    value={memberDetail.daddr}
+                                    value={memberDetail.daddr || ""}
                                     onChange={(e) => setMemberDetail({...memberDetail, daddr: e.target.value})}
                                 />
                             </label>
@@ -639,7 +639,7 @@ function MemberMyPageModify(props) {
                                 <span className="tt1">소개</span>
                                 <div className="input" style={{height: "100%"}}>
                                     <CommonEditor
-                                        value={consultDetail.cnsltSlfint}
+                                        value={consultDetail.cnsltSlfint || ""}
                                         onChange={handleChange}
                                     />
                                 </div>
@@ -652,7 +652,7 @@ function MemberMyPageModify(props) {
                                         type="text"
                                         name="consultantPosition"
                                         placeholder="직위를 입력해주세요"
-                                        value={consultDetail.jbpsNm}
+                                        value={consultDetail.jbpsNm || ""}
                                         onChange={(e) => setConsultDetail({...consultDetail, jbpsNm: e.target.value})}
                                     />
                                 </label>
@@ -665,7 +665,7 @@ function MemberMyPageModify(props) {
                                         type="text"
                                         name="consultantExperience"
                                         placeholder="숫자만 입력"
-                                        value={consultDetail.crrPrd}
+                                        value={consultDetail.crrPrd || ""}
                                         onChange={(e) => setConsultDetail({...consultDetail, crrPrd: e.target.value})}
                                         style={{width: "120px"}}
                                     />
@@ -680,7 +680,7 @@ function MemberMyPageModify(props) {
                                         type="text"
                                         name="consultantAffiliation"
                                         placeholder="소속을 입력해주세요"
-                                        value={consultDetail.ogdpNm}
+                                        value={consultDetail.ogdpNm || ""}
                                         onChange={(e) => setConsultDetail({...consultDetail, ogdpNm: e.target.value})}
                                     />
                                 </label>
