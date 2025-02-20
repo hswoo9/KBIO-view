@@ -119,16 +119,20 @@ function ConsultantDetail(props) {
                     setCnsltProfileFile(resp.result.cnsltProfileFile);
                 }
 
-                if (resp.result.tblQlfcLcnsList) {
-                    setCnsltCert(resp.result.tblQlfcLcnsList);
-                }
-
                 if (resp.result.tblCrrList) {
                     setCnsltCrr(resp.result.tblCrrList);
                 }
 
                 if (resp.result.tblAcbgList) {
                     setCnsltAcbg(resp.result.tblAcbgList);
+                }
+
+                if (resp.result.tblQlfcLcnsList) {
+                    setCnsltCert(resp.result.tblQlfcLcnsList);
+                }
+
+                if (resp.result.cnsltCertificateFile) {
+                    setCnsltCertificateFile(resp.result.cnsltCertificateFile);
                 }
 
             },
@@ -211,18 +215,36 @@ function ConsultantDetail(props) {
                                 <p className="tt1">자격증</p>
                             </div>
                             <ul className="list">
-                                <li>
-                                    <figure><img src={user_consultant_img3} alt="images"/></figure>
-                                </li>
-                                <li>
-                                    <figure><img src={user_consultant_img3} alt="images"/></figure>
-                                </li>
-                                <li>
-                                    <figure><img src={user_consultant_img3} alt="images"/></figure>
-                                </li>
-                                <li>
-                                    <figure><img src={user_consultant_img3} alt="images"/></figure>
-                                </li>
+                                {cnsltCertificateFile.length > 0 ? (
+                                    cnsltCertificateFile.map((item, index) => (
+                                        <li key={item.tblComFile ? item.tblComFile.atchFileSn : index}>
+                                            <figure>
+                                                {item.tblComFile ? (
+                                                    item.tblComFile.atchFileExtnNm.toLowerCase() === "pdf" ? (
+                                                        // PDF 파일을 iframe으로 표시
+                                                        <iframe
+                                                            src={`http://133.186.250.158${item.tblComFile.atchFilePathNm}/${item.tblComFile.strgFileNm}.${item.tblComFile.atchFileExtnNm}`}
+                                                            width="100%"
+                                                            height="500px"
+                                                            title="PDF Preview">
+                                                        </iframe>
+                                                    ) : (
+                                                        // 이미지 파일을 img 태그로 표시
+                                                        <img
+                                                            src={`http://133.186.250.158${item.tblComFile.atchFilePathNm}/${item.tblComFile.strgFileNm}.${item.tblComFile.atchFileExtnNm}`}
+                                                            alt="Uploaded File" />
+                                                    )
+                                                ) : (
+                                                    <img src={user_consultant_img3} alt="Default Image" />
+                                                )}
+                                            </figure>
+                                        </li>
+                                    ))
+                                ) : (
+                                    <li> <span>자격증 정보가 없습니다. </span> </li>
+                                )}
+
+
                             </ul>
                         </div>
                         <div className="box overview">

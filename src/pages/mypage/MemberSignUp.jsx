@@ -124,7 +124,7 @@ function MemberSignUp(props) {
   };
 
   const [acceptImgFileTypes, setAcceptImgFileTypes] = useState('jpg,jpeg,png');
-  const [acceptFileTypes, setAcceptFileTypes] = useState('jpg,jpeg,png,gif,bmp,tiff,tif,webp,svg,ico,heic,avif');
+  const [acceptFileTypes, setAcceptFileTypes] = useState('jpg,jpeg,png,gif,bmp,tiff,tif,webp,svg,ico,heic,avif,pdf');
   const [selectedImgFile, setSelectedImgFile] = useState([]);
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [selectedCertFiles, setSelectedCertFiles] = useState([]);
