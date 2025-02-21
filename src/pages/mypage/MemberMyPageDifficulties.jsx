@@ -79,9 +79,6 @@ function MemberMyPageDifficulties(props) {
 
                         dataList.push(
                             <tr key={item.dfclMttrSn}>
-                                <td>
-                                    {resp.paginationInfo.totalRecordCount - (resp.paginationInfo.currentPageNo - 1) * resp.paginationInfo.pageSize - index}
-                                </td>
                                 <td>{item.dfclMttrFldNm}</td>
                                 <td>
                                     {item.answer === "Y" ? (
@@ -115,9 +112,10 @@ function MemberMyPageDifficulties(props) {
                                         </div>
                                     )}
                                 </td>
-                                <td>{moment(item.frstCrtDt).format('YYYY-MM-DD')}</td>
-                                <td className="state">{item.answer === "Y" ? (<p className="complete">답변완료</p>) : (
-                                    <p className="waiting">답변대기</p>)}</td>
+                                {/*<td>{moment(item.frstCrtDt).format('YYYY-MM-DD')}</td>*/}
+                                <td className={`state ${item.answer === "Y" ? "complete" : "waiting"}`}>
+                                    <p>{item.answer === "Y" ? "답변완료" : "답변대기"}</p>
+                                </td>
                             </tr>
                         );
                     });
@@ -139,7 +137,7 @@ function MemberMyPageDifficulties(props) {
 
 
     return (
-        <div id="container" className="container notice board">
+        <div id="container" className="container mypage_difficulties">
             <div className="inner">
                 <CommonSubMenu/>
                 <div className="inner2">
@@ -149,24 +147,6 @@ function MemberMyPageDifficulties(props) {
                                 <div className="total"><p>총 <strong>{paginationInfo.totalRecordCount}</strong>건</p></div>
                             </div>
                             <div className="searchBox" >
-                                {/*<div className="itemBox type2">
-                                    <select
-                                        id="activeYn"
-                                        name="activeYn"
-                                        title="사용여부"
-                                        className="niceSelectCustom">
-                                        <option value="">전체</option>
-                                        <option value="Y">사용</option>
-                                        <option value="N">미사용</option>
-                                    </select>
-                                </div>
-                                <div className="itemBox type2">
-                                    <select className="niceSelectCustom">
-                                        <option value="">전체</option>
-                                        <option value="1">공개</option>
-                                        <option value="2">비공개</option>
-                                    </select>
-                                </div>*/}
                                 <div className="itemBox type2">
                                     <select className="niceSelectCustom">
                                         <option value="">전체</option>
@@ -178,6 +158,7 @@ function MemberMyPageDifficulties(props) {
                                     <label className="input">
                                         <input type="text"
                                                name=""
+                                               placeholder="검색어를 입력해주세요."
                                                defaultValue={
                                                    searchDto && searchDto.searchVal
                                                }
@@ -211,10 +192,8 @@ function MemberMyPageDifficulties(props) {
                             <caption>간편상담 목록</caption>
                             <thead>
                             <tr>
-                                <th className="th1">번호</th>
-                                <th className="th1">분류</th>
+                                <th className="th1">분야</th>
                                 <th>제목</th>
-                                <th className="th2">신청일</th>
                                 <th className="th2">상태</th>
                             </tr>
                             </thead>
