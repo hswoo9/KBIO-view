@@ -249,6 +249,7 @@ import MemberMyPageDifficulties from '@/pages/mypage/MemberMyPageDifficulties';
 import MemberMyPageDifficultiesDetail from '@/pages/mypage/MemberMyPageDifficultiesDetail';
 import MemberMyPageDifficultiesModify from '@/pages/mypage/MemberMyPageDifficultiesModify';
 import MemberMyPageCancel from '@/pages/mypage/MemberMyPageCancel';
+import MemberMyPageCompleteCancel from '@/pages/mypage/MemberMyPageCompleteCancel';
 import MemberMyPageIndentity from '@/pages/mypage/MemberMyPageIdentity';
 import MemberMyPageMsgList from '@/pages/mypage/MemberMyPageMsgList';
 
@@ -606,6 +607,7 @@ const SecondRoutes = () => {
               <Route path={URL.MEMBER_MYPAGE_MSG_LIST} element={<MemberMyPageMsgList/>}/>
 
               <Route path={URL.MEMBER_MYPAGE_CANCEL} element={<MemberMyPageCancel/>}/>
+              <Route path={URL.MEMBER_MYPAGE_COMPLETE_CANCEL} element={<MemberMyPageCompleteCancel/>}/>
               <Route path={URL.MEMBER_MYPAGE_IDENTITY} element={<MemberMyPageIndentity/>}/>
               <Route path={URL.COMPLETE_MEMBER} element={<EgovCompleteMember/>}/>
               <Route path={URL.SIGNUP_CHOICE} element={<MemberSignupChoice/>}/>
