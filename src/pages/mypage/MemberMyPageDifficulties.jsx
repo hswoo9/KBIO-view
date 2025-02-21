@@ -77,8 +77,6 @@ function MemberMyPageDifficulties(props) {
                     resp.result.diffList.forEach(function (item, index) {
                         if (index === 0) dataList = []; // 목록 초기화
 
-                        console.log(item)
-
                         dataList.push(
                             <tr key={item.dfclMttrSn}>
                                 <td>{item.dfclMttrFldNm}</td>
