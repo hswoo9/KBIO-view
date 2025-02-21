@@ -396,7 +396,7 @@ const TotalSearch = () => {
                             </tbody>
                         </table>
                     </div>
-                    <a href="#" className="clickBtn black"
+                    <a className="clickBtn black" style={{cursor: "pointer"}}
                         onClick={pageUnitAddEvent}
                     ><span>더보기</span></a>
                 </div>
