@@ -8,6 +8,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import CommonEditor from "@/components/CommonEditor";
 import {useDropzone} from "react-dropzone";
+import { getSessionItem } from "@/utils/storage";
 
 
 
@@ -22,6 +23,7 @@ function ResidentMemberCreateContent(props){
     const [selectedFiles, setSelectedFiles] = useState([]);
     const [imgFile, setImgFile] = useState("");
     const [fileList, setFileList] = useState([]);
+    const sessionUser = getSessionItem("loginUser");
 
 
     //const isFirstRender = useRef(true);
@@ -44,9 +46,9 @@ function ResidentMemberCreateContent(props){
 
     const acceptAtchFileTypes = 'pdf,hwp,docx,xls,ppt';
 
-    const onDrop = useCallback((acceptAtchFileTypes) => {
+    const onDrop = useCallback((acceptAtchFiles) => {
         const allowedExtensions = acceptAtchFileTypes.split(','); // 허용된 확장자 목록
-        const validFiles = acceptAtchFileTypes.filter((file) => {
+        const validFiles = acceptAtchFiles.filter((file) => {
             const fileExtension = file.name.split(".").pop().toLowerCase();
             return allowedExtensions.includes(fileExtension);
         });
@@ -55,7 +57,7 @@ function ResidentMemberCreateContent(props){
             setFileList((prevFiles) => [...prevFiles, ...validFiles]); // 유효한 파일만 추가
         }
 
-        if (validFiles.length !== acceptAtchFileTypes.length) {
+        if (validFiles.length !== acceptAtchFiles.length) {
             Swal.fire(
                 `허용되지 않은 파일 유형이 포함되어 있습니다! (허용 파일: ${acceptAtchFileTypes})`
             );
@@ -71,6 +73,42 @@ function ResidentMemberCreateContent(props){
     const handleDeleteFile = (index) => {
         const updatedFileList = fileList.filter((_, i) => i !== index);
         setFileList(updatedFileList);  // 파일 리스트 업데이트
+    };
+
+    const handleDeleteAtchFile = (index, atchFileSn) => {
+        Swal.fire({
+            title: "삭제한 파일은 복구할 수 없습니다.\n그래도 삭제하시겠습니까?",
+            showCloseButton: true,
+            showCancelButton: true,
+            confirmButtonText: "확인",
+            cancelButtonText: "취소"
+        }).then((result) => {
+            if(result.isConfirmed) {
+                const requestOptions = {
+                    method: "POST",
+                    headers: {
+                        "Content-type": "application/json",
+                    },
+                    body:  JSON.stringify({
+                        atchFileSn: atchFileSn,
+                    }),
+                };
+
+                EgovNet.requestFetch("/commonApi/setFileDel", requestOptions, (resp) => {
+                    if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
+                        Swal.fire("삭제되었습니다.");
+                        const updatedFileList = fileList.filter((_, i) => i !== index);
+                        setFileList(updatedFileList);  // 파일 리스트 업데이트
+                    } else {
+                        Swal.fire("삭제 중 문제가 발생하였습니다.");
+                        return;
+                    }
+                });
+            } else {
+            }
+        });
+
+
     };
 
     const splitEmail = (email) =>{
@@ -125,10 +163,16 @@ function ResidentMemberCreateContent(props){
         EgovNet.requestFetch(getRcURL, requestOptions, function (resp){
 
             if(modeInfo.mode === CODE.MODE_MODIFY){
-                setResidentDetail(resp.result.rc);
+                setResidentDetail({...resp.result.rc,
+                                        mdfrSn : sessionUser.userSn,
+                                        mdfcnDt: new Date().toISOString()});
 
                 if(resp.result.logoFile){
                     setSelectedFiles(resp.result.logoFile);
+                }
+
+                if(resp.result.mvnEntAtchFile){
+                    setFileList(resp.result.mvnEntAtchFile);
                 }
             }
 
@@ -140,7 +184,7 @@ function ResidentMemberCreateContent(props){
 
     const handleFileChange = (e) => {
 
-        if(residentDetail.tblComFiles != null && residentDetail.tblComFiles.length > 0){
+        if(selectedFiles != null && selectedFiles.length > 0){
             Swal.fire("기존 파일 삭제 후 첨부가 가능합니다.");
             e.target.value = null;
             return false;
@@ -177,6 +221,39 @@ function ResidentMemberCreateContent(props){
         }
     };
 
+
+    const setFileDel = (atchFileSn) => {
+        Swal.fire({
+            title: "삭제한 파일은 복구할 수 없습니다.\n그래도 삭제하시겠습니까?",
+            showCloseButton: true,
+            showCancelButton: true,
+            confirmButtonText: "확인",
+            cancelButtonText: "취소"
+        }).then((result) => {
+            if(result.isConfirmed) {
+                const requestOptions = {
+                    method: "POST",
+                    headers: {
+                        "Content-type": "application/json",
+                    },
+                    body:  JSON.stringify({
+                        atchFileSn: atchFileSn,
+                    }),
+                };
+
+                EgovNet.requestFetch("/commonApi/setFileDel", requestOptions, (resp) => {
+                    if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
+                        Swal.fire("삭제되었습니다.");
+                        setSelectedFiles([]);
+                    } else {
+                    }
+                });
+            } else {
+                //취소
+            }
+        });
+    }
+
     useEffect(() => {
         initMode();
         const script = document.createElement("script");
@@ -209,9 +286,9 @@ function ResidentMemberCreateContent(props){
         }
     }, [residentDetail]);
 
-    useEffect(() => {
-        console.log("Updated residentDetail:", residentDetail);
-    }, [residentDetail]);
+    /*useEffect(() => {
+        console.log("sessionUser:", sessionUser);
+    }, sessionUser);*/
 
 
     useEffect(() => {
@@ -348,6 +425,10 @@ function ResidentMemberCreateContent(props){
             formData.append("files", file);
         })
 
+        fileList.map((file) => {
+            formData.append("mvnEntAtchFiles",file);
+        })
+
         for (let key in residentDetail) {
             formData.append(key, residentDetail[key]);
         }
@@ -430,9 +511,23 @@ function ResidentMemberCreateContent(props){
                     </li>
                     {/*로고*/}
                     <li className="inputBox type1 width3 file">
-                        <p className="title essential">파일선택</p>
+                        <p className="title essential">로고파일선택</p>
                         <div className="input">
-                            <p className="file_name" id="fileNamePTag"></p>
+                            {selectedFiles&& selectedFiles.atchFileSn ? (
+                                        <p className="file_name" id="fileNamePTag">
+                                            {selectedFiles.atchFileNm} - {(selectedFiles.atchFileSz / 1024).toFixed(2)} KB
+
+                                            <button type="button" className="deletBtn white"
+                                                    onClick={() => setFileDel(selectedFiles.atchFileSn)}  // 삭제 버튼 클릭 시 처리할 함수
+                                                    style={{marginLeft: '10px', color: 'red'}}
+                                            >
+                                                삭제
+                                            </button>
+                                        </p>
+                            ) : (
+                                    <p className="file_name" id="fileNamePTag"></p>
+                            )}
+                            {/*<p className="file_name" id="fileNamePTag"></p>
                             <label>
                             <small className="text btn">파일 선택</small>
                             <input
@@ -441,10 +536,21 @@ function ResidentMemberCreateContent(props){
                                 id="logo"
                                 onChange={handleFileChange}
                             />
+                            </label>*/}
+                            <label>
+                                <small className="text btn">파일 선택</small>
+                                <input
+                                    type="file"
+                                    name="logo"
+                                    id="logo"
+                                    onChange={handleFileChange}
+                                />
                             </label>
                         </div>
                         <span className="warningText">gif,png,jpg 파일 / 권장 사이즈 : 500px * 500px / 용량 : 10M 이하</span>
                     </li>
+
+
                     {/*대표자명*/}
                     <li className="inputBox type1 width3">
                         <label className="title essential" htmlFor="rpsvNm"><small>대표자</small></label>
@@ -681,20 +787,32 @@ function ResidentMemberCreateContent(props){
                         </div>
                         {fileList.length > 0 && (
                             <ul>
-                                {fileList.map((file, index) => (
-                                    <li key={index}>
-                                        {file.name} - {(file.size / 1024).toFixed(2)} KB
-
-                                        <button
-                                            onClick={() => handleDeleteFile(index)}  // 삭제 버튼 클릭 시 처리할 함수
-                                            style={{marginLeft: '10px', color: 'red'}}
-                                        >
-                                            삭제
-                                        </button>
-                                    </li>
-                                ))}
+                                {fileList.map((file, index) =>
+                                    file.atchFileSn ? (
+                                        <li key={index}>
+                                            {file.atchFileNm} - {(file.atchFileSz/ 1024).toFixed(2)} KB
+                                            <button
+                                                onClick={() => handleDeleteAtchFile(index,file.atchFileSn)}
+                                                style={{ marginLeft: '10px', color: 'red' }}
+                                            >
+                                                삭제
+                                            </button>
+                                        </li>
+                                    ) : (
+                                        <li key={index}>
+                                            {file.name} - {(file.size / 1024).toFixed(2)} KB
+                                            <button
+                                                onClick={() => handleDeleteFile(index)}
+                                                style={{ marginLeft: '10px', color: 'red' }}
+                                            >
+                                                삭제
+                                            </button>
+                                        </li>
+                                    )
+                                )}
                             </ul>
                         )}
+
                         <span className="warningText">첨부파일은 PDF,HWP,Docx, xls,PPT형식만 가능하며 최대 10MB까지만 지원</span>
                     </li>
 
