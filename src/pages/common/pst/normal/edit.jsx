@@ -333,8 +333,8 @@ function setCommonPst(props) {
                                    setPst({
                                      ...pst,
                                      upendNtcYn: e.target.checked ? "Y" : "N",
-                                     ntcBgngDt: !e.target.checked ? null : pst.ntcBgngDt,
-                                     ntcEndDate: !e.target.checked ? null : pst.ntcEndDate,
+                                     ntcBgngDt: moment(document.getElementById("ntcBgngDt").value).format('YYYYMMDD'),
+                                     ntcEndDate: moment(document.getElementById("ntcBgngDt").value).format('YYYYMMDD'),
                                    })
                                    setIsDatePickerEnabled(e.target.checked);
                                  }}

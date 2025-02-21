@@ -102,7 +102,7 @@ function EgovMainUser(props) {
       const popUp = e.tblBnrPopup;
       if(!localStorage.getItem(popUp.bnrPopupSn) || Date.now() > localStorage.getItem(popUp.bnrPopupSn)){
         window.open(
-            `/popup?bnrPopupSn=${popUp.bnrPopupSn}`, // 여기에 원하는 URL 입력
+            `/popup?bnrPopupSn=${popUp.bnrPopupSn}`,
             `${popUp.bnrPopupSn}`,
             `width=${popUp.popupWdthSz},
             height=${popUp.popupVrtcSz},
@@ -120,10 +120,6 @@ function EgovMainUser(props) {
       setPopUpList(data.filter(e => e.tblBnrPopup.bnrPopupKnd == "popup"));
     });
 
-    getMvnEntList().then((data) => {
-      setMvnEntList(data);
-    });
-
     getPstList(1).then((data) => {
       setNotiList(data.pstList);
     });
@@ -139,7 +135,7 @@ function EgovMainUser(props) {
       <div id="container" className="container main">
         <div className="sec01">
           <div className="bg bgSlide">
-            <div className="slide"><img src={user_main_sec01_slide01} alt="images" loading="lazy"/></div>
+          <div className="slide"><img src={user_main_sec01_slide01} alt="images" loading="lazy"/></div>
           </div>
           <div className="inner">
             <MainSlider/>
@@ -209,7 +205,7 @@ function EgovMainUser(props) {
                 </NavLink>
               </div>
               <ul className="listBox" data-aos="fade-up" data-aos-duration="1500">
-                {notiList.length > 0 && notiList.slice(0, 2).map((pst, index) => (
+                {notiList.length > 0 && notiList.map((pst, index) => (
                   <li key={pst.pstSn}>
                     <NavLink
                       to={URL.COMMON_PST_NORMAL_DETAIL}
@@ -253,7 +249,7 @@ function EgovMainUser(props) {
                 </NavLink>
               </div>
               <ul className="listBox" data-aos="fade-up" data-aos-duration="1500">
-                {pressReleaseList.length > 0 && pressReleaseList.slice(0, 2).map((pst, index) => (
+                {pressReleaseList.length > 0 && pressReleaseList.map((pst, index) => (
                     <li key={pst.pstSn}>
                       <NavLink
                         to={URL.COMMON_PST_NORMAL_DETAIL}

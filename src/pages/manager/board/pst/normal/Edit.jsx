@@ -341,9 +341,10 @@ function setPst(props) {
                                    setPstDetail({
                                      ...pstDetail,
                                      upendNtcYn: e.target.checked ? "Y" : "N",
-                                     ntcBgngDt: !e.target.checked ? null : pstDetail.ntcBgngDt,
-                                     ntcEndDate: !e.target.checked ? null : pstDetail.ntcEndDate,
+                                     ntcBgngDt: moment(document.getElementById("ntcBgngDt").value).format('YYYYMMDD'),
+                                     ntcEndDate: moment(document.getElementById("ntcBgngDt").value).format('YYYYMMDD'),
                                    })
+
                                    setIsDatePickerEnabled(e.target.checked);
                                  }}
                           />

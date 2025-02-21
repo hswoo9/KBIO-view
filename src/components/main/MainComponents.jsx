@@ -73,6 +73,11 @@ export const getMvnEntList = async () => {
     });
 };
 
+/**
+ * 게시글 조회
+ * @param bbsSn
+ * @returns {Promise<unknown>}
+ */
 export const getPstList = async (bbsSn) => {
     const requestOptions = {
         method: "POST",
