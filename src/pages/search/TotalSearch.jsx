@@ -31,8 +31,11 @@ const TotalSearch = () => {
     const startDtRef = useRef(null);
     const endDtRef = useRef(null);
     const [selectedStartDate, setSelectedStartDate] = useState(moment(searchCondition.searchStartDt).format("YYYY년 MM월 DD일"));
+    useEffect(() => {
+    }, [selectedStartDate]);
     const [selectedEndDate, setSelectedEndDate] = useState(moment(searchCondition.searchEndDt).format("YYYY년 MM월 DD일"));
-
+    useEffect(() => {
+    }, [selectedEndDate]);
     const handleOpenStartDatePicker = () => {
         if (startDtRef.current) {
             startDtRef.current.showPicker();
@@ -51,21 +54,49 @@ const TotalSearch = () => {
     }, [searchCondition.searchEndDt]);
 
     const handleStartDtChange = (e) => {
-        const formattedDate = moment(e.target.value).format("YYYY년 MM월 DD일");
-        setSelectedStartDate(formattedDate);
-        setSearchCondition({
-            ...searchCondition,
-            searchStartDt: moment(e.target.value).format("YYYY-MM-DD") + "T00:00:00"
+        const selectedDate = moment(e.target.value);
+        const formattedDate = selectedDate.format("YYYY년 MM월 DD일");
+
+        setSearchCondition(prev => {
+            const prevEndDt = moment(prev.searchEndDt);
+            const newEndDt = selectedDate.isAfter(prevEndDt)
+                ? selectedDate.format("YYYY-MM-DD") + "T00:00:00"
+                : prev.searchEndDt;
+
+            return {
+                ...prev,
+                searchStartDt: selectedDate.format("YYYY-MM-DD") + "T00:00:00",
+                searchEndDt: newEndDt
+            };
         });
+
+        setSelectedStartDate(formattedDate);
+        if (selectedDate.isAfter(moment(searchCondition.searchEndDt))) {
+            setSelectedEndDate(formattedDate);
+        }
     }
 
     const handleEndDtChange = (e) => {
-        const formattedDate = moment(e.target.value).format("YYYY년 MM월 DD일");
-        setSelectedEndDate(formattedDate);
-        setSearchCondition({
-            ...searchCondition,
-            searchEndDt: moment(e.target.value).format("YYYY-MM-DD") + "T00:00:00"
+        const selectedDate = moment(e.target.value);
+        const formattedDate = selectedDate.format("YYYY년 MM월 DD일");
+
+        setSearchCondition(prev => {
+            const prevStartDt = moment(prev.searchStartDt);
+            const newStartDt = selectedDate.isBefore(prevStartDt)
+                ? selectedDate.format("YYYY-MM-DD") + "T00:00:00"
+                : prev.searchStartDt;
+
+            return {
+                ...prev,
+                searchStartDt: newStartDt,
+                searchEndDt: selectedDate.format("YYYY-MM-DD") + "T00:00:00"
+            };
         });
+
+        setSelectedEndDate(formattedDate);
+        if (selectedDate.isBefore(moment(searchCondition.searchStartDt))) {
+            setSelectedStartDate(formattedDate);
+        }
     }
 
     const [paginationInfo, setPaginationInfo] = useState({});
@@ -136,7 +167,7 @@ const TotalSearch = () => {
                                         );
                                     }}
                                 >
-                                    <td className="cate">
+                                    <td className="cate th1">
                                         <p>{item.menuNmPath}</p>
                                     </td>
                                     <td className="title">
@@ -167,7 +198,7 @@ const TotalSearch = () => {
                                         );
                                     }}
                                 >
-                                    <td className="cate">
+                                    <td className="cate th1">
                                         <p>{item.menuNmPath}</p>
                                     </td>
                                     <td className="title">
