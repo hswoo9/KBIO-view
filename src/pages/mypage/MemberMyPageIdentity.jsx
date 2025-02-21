@@ -5,7 +5,6 @@ import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
 import 'moment/locale/ko';
-import ManagerLeft from "@/components/manager/ManagerLeftMember";
 import EgovRadioButtonGroup from "@/components/EgovRadioButtonGroup";
 import Swal from "sweetalert2";
 import base64 from 'base64-js';
@@ -43,7 +42,12 @@ const MemberMyPageIdentity = () => {
             if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
                 removeSessionItem("loginUser");
                 Swal.fire("회원탈퇴가 완료되었습니다.");
-                navigate(URL.LOGIN);
+                navigate(URL.MEMBER_MYPAGE_COMPLETE_CANCEL, {
+                    state: {
+                        menuSn: location.state?.menuSn,
+                        menuNmPath: location.state?.menuNmPath
+                    }
+                });
             } else {
                 Swal.fire("ERR : " + resp.resultMessage);
             }

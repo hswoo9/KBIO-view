@@ -7,6 +7,7 @@ import CODE from "@/constants/code";
 import axios from "axios";
 import Swal from "sweetalert2";
 import CommonEditor from "@/components/CommonEditor";
+import {useDropzone} from "react-dropzone";
 
 
 
@@ -20,6 +21,9 @@ function ResidentMemberCreateContent(props){
     const [acceptFileTypes, setAcceptFileTypes] = useState('jpg,jpeg,png,gif,bmp,tiff,tif,webp,svg,ico,heic,avif');
     const [selectedFiles, setSelectedFiles] = useState([]);
     const [imgFile, setImgFile] = useState("");
+    const [fileList, setFileList] = useState([]);
+
+
     //const isFirstRender = useRef(true);
 
 
@@ -37,6 +41,37 @@ function ResidentMemberCreateContent(props){
     //이메일 도메인 구분
     const [selectedDomain, setSelectedDomain] = useState(""); // 선택된 이메일 도메인
     const [isCustom, setIsCustom] = useState(false); // 직접 입력 여부
+
+    const acceptAtchFileTypes = 'pdf,hwp,docx,xls,ppt';
+
+    const onDrop = useCallback((acceptAtchFileTypes) => {
+        const allowedExtensions = acceptAtchFileTypes.split(','); // 허용된 확장자 목록
+        const validFiles = acceptAtchFileTypes.filter((file) => {
+            const fileExtension = file.name.split(".").pop().toLowerCase();
+            return allowedExtensions.includes(fileExtension);
+        });
+
+        if (validFiles.length > 0) {
+            setFileList((prevFiles) => [...prevFiles, ...validFiles]); // 유효한 파일만 추가
+        }
+
+        if (validFiles.length !== acceptAtchFileTypes.length) {
+            Swal.fire(
+                `허용되지 않은 파일 유형이 포함되어 있습니다! (허용 파일: ${acceptAtchFileTypes})`
+            );
+        }
+
+    }, [acceptAtchFileTypes]);
+
+    const { getRootProps, getInputProps } = useDropzone({
+        onDrop,
+        multiple: true,
+    });
+
+    const handleDeleteFile = (index) => {
+        const updatedFileList = fileList.filter((_, i) => i !== index);
+        setFileList(updatedFileList);  // 파일 리스트 업데이트
+    };
 
     const splitEmail = (email) =>{
         if (!email || !email.includes("@")) return "";
@@ -91,7 +126,10 @@ function ResidentMemberCreateContent(props){
 
             if(modeInfo.mode === CODE.MODE_MODIFY){
                 setResidentDetail(resp.result.rc);
-                console.log("residentDetail",residentDetail);
+
+                if(resp.result.logoFile){
+                    setSelectedFiles(resp.result.logoFile);
+                }
             }
 
         });
@@ -614,10 +652,11 @@ function ResidentMemberCreateContent(props){
                             />
                         </div>
                     </li>
+
                     {/*증빙자료*/}
-                    <li className="inputBox type1 width3 file">
+                    <li className="inputBox type1 width1 file">
                         <p className="title essential">증빙자료</p>
-                        <div className="input">
+                        {/*<div className="input">
                             <p className="file_name" id="fileNamePTag"></p>
                             <label>
                             <small className="text btn">파일 선택</small>
@@ -626,9 +665,39 @@ function ResidentMemberCreateContent(props){
                                 onChange={handleFileChange}
                             />
                             </label>
+                        </div>*/}
+                        <div
+                            {...getRootProps({
+                                style: {
+                                    border: "2px dashed #cccccc",
+                                    padding: "20px",
+                                    textAlign: "center",
+                                    cursor: "pointer",
+                                },
+                            })}
+                        >
+                            <input {...getInputProps()} />
+                            <p>파일을 이곳에 드롭하거나 클릭하여 업로드하세요</p>
                         </div>
+                        {fileList.length > 0 && (
+                            <ul>
+                                {fileList.map((file, index) => (
+                                    <li key={index}>
+                                        {file.name} - {(file.size / 1024).toFixed(2)} KB
+
+                                        <button
+                                            onClick={() => handleDeleteFile(index)}  // 삭제 버튼 클릭 시 처리할 함수
+                                            style={{marginLeft: '10px', color: 'red'}}
+                                        >
+                                            삭제
+                                        </button>
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
                         <span className="warningText">첨부파일은 PDF,HWP,Docx, xls,PPT형식만 가능하며 최대 10MB까지만 지원</span>
                     </li>
+
                     {/* 공개여부 */}
                     <li className="toggleBox width3">
                         <div className="box">

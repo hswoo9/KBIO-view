@@ -31,8 +31,11 @@ const TotalSearch = () => {
     const startDtRef = useRef(null);
     const endDtRef = useRef(null);
     const [selectedStartDate, setSelectedStartDate] = useState(moment(searchCondition.searchStartDt).format("YYYY년 MM월 DD일"));
+    useEffect(() => {
+    }, [selectedStartDate]);
     const [selectedEndDate, setSelectedEndDate] = useState(moment(searchCondition.searchEndDt).format("YYYY년 MM월 DD일"));
-
+    useEffect(() => {
+    }, [selectedEndDate]);
     const handleOpenStartDatePicker = () => {
         if (startDtRef.current) {
             startDtRef.current.showPicker();
@@ -50,22 +53,56 @@ const TotalSearch = () => {
     useEffect(() => {
     }, [searchCondition.searchEndDt]);
 
+    useEffect(() => {
+        if(searchCondition.nowSearch){
+            getSearchDataList(searchCondition);
+        }
+    }, [searchCondition.nowSearch]);
+
     const handleStartDtChange = (e) => {
-        const formattedDate = moment(e.target.value).format("YYYY년 MM월 DD일");
-        setSelectedStartDate(formattedDate);
-        setSearchCondition({
-            ...searchCondition,
-            searchStartDt: moment(e.target.value).format("YYYY-MM-DD") + "T00:00:00"
+        const selectedDate = moment(e.target.value);
+        const formattedDate = selectedDate.format("YYYY년 MM월 DD일");
+
+        setSearchCondition(prev => {
+            const prevEndDt = moment(prev.searchEndDt);
+            const newEndDt = selectedDate.isAfter(prevEndDt)
+                ? selectedDate.format("YYYY-MM-DD") + "T00:00:00"
+                : prev.searchEndDt;
+
+            return {
+                ...prev,
+                searchStartDt: selectedDate.format("YYYY-MM-DD") + "T00:00:00",
+                searchEndDt: newEndDt
+            };
         });
+
+        setSelectedStartDate(formattedDate);
+        if (selectedDate.isAfter(moment(searchCondition.searchEndDt))) {
+            setSelectedEndDate(formattedDate);
+        }
     }
 
     const handleEndDtChange = (e) => {
-        const formattedDate = moment(e.target.value).format("YYYY년 MM월 DD일");
-        setSelectedEndDate(formattedDate);
-        setSearchCondition({
-            ...searchCondition,
-            searchEndDt: moment(e.target.value).format("YYYY-MM-DD") + "T00:00:00"
+        const selectedDate = moment(e.target.value);
+        const formattedDate = selectedDate.format("YYYY년 MM월 DD일");
+
+        setSearchCondition(prev => {
+            const prevStartDt = moment(prev.searchStartDt);
+            const newStartDt = selectedDate.isBefore(prevStartDt)
+                ? selectedDate.format("YYYY-MM-DD") + "T00:00:00"
+                : prev.searchStartDt;
+
+            return {
+                ...prev,
+                searchStartDt: newStartDt,
+                searchEndDt: selectedDate.format("YYYY-MM-DD") + "T00:00:00"
+            };
         });
+
+        setSelectedEndDate(formattedDate);
+        if (selectedDate.isBefore(moment(searchCondition.searchStartDt))) {
+            setSelectedStartDate(formattedDate);
+        }
     }
 
     const [paginationInfo, setPaginationInfo] = useState({});
@@ -73,6 +110,7 @@ const TotalSearch = () => {
     }, [paginationInfo]);
 
     const [searchDataList, setSearchDataList] = useState([]);
+    const [suggestionKeyWord, setSuggestionKeyWord] = useState([]);
 
     const [menuIndex, setMenuIndex] = useState({ menu : 0});
     const tabMenuList = {
@@ -108,7 +146,30 @@ const TotalSearch = () => {
                 requestURL,
                 requestOptions,
                 (resp) => {
+                    console.log(resp);
                     setPaginationInfo(resp.paginationInfo);
+                    if(resp.result.returnSrchKywd != null){
+                        let kywdList = [];
+                        resp.result.returnSrchKywd.forEach(function(item, index){
+                            kywdList.push(
+                                <li key={item.srchKywdSn}>
+                                    <a
+                                        onClick={() => {
+                                            setSearchCondition({
+                                                ...searchCondition,
+                                                searchVal: item.kywd,
+                                                nowSearch: true
+                                            });
+                                        }}
+                                        style={{cursor: "pointer"}}
+                                    >
+                                        <span>#{item.kywd}</span>
+                                    </a>
+                                </li>
+                            )
+                        });
+                        setSuggestionKeyWord(kywdList);
+                    }
                     let dataList = [];
                     dataList.push(
                         <tr key="no_data">
@@ -136,7 +197,7 @@ const TotalSearch = () => {
                                         );
                                     }}
                                 >
-                                    <td className="cate">
+                                    <td className="cate th1">
                                         <p>{item.menuNmPath}</p>
                                     </td>
                                     <td className="title">
@@ -167,7 +228,7 @@ const TotalSearch = () => {
                                         );
                                     }}
                                 >
-                                    <td className="cate">
+                                    <td className="cate th1">
                                         <p>{item.menuNmPath}</p>
                                     </td>
                                     <td className="title">
@@ -185,6 +246,10 @@ const TotalSearch = () => {
                         }
 
                     });
+                    setSearchCondition({
+                        ...searchCondition,
+                        nowSearch: false
+                    })
                     setSearchDataList(dataList);
                 },
                 function (resp) {
@@ -274,6 +339,7 @@ const TotalSearch = () => {
                                             id="board_search"
                                             name="board_search"
                                             placeholder="검색어를 입력해주세요."
+                                            value={searchCondition.searchVal || ""}
                                             ref={kwdRef}
                                             onChange={(e) => {
                                                 kwdRef.current.value = e.target.value;
@@ -295,9 +361,7 @@ const TotalSearch = () => {
                             <div className="keywrodBox">
                                 <strong className="title">추천키워드</strong>
                                 <ul className="list">
-                                    {/*<li><a href="#"><span>#의료</span></a></li>
-                                    <li><a href="#"><span>#바이오</span></a></li>
-                                    <li><a href="#"><span>#약품</span></a></li>*/}
+                                    {suggestionKeyWord}
                                 </ul>
                             </div>
                         </form>
@@ -332,7 +396,7 @@ const TotalSearch = () => {
                             </tbody>
                         </table>
                     </div>
-                    <a href="#" className="clickBtn black"
+                    <a className="clickBtn black" style={{cursor: "pointer"}}
                         onClick={pageUnitAddEvent}
                     ><span>더보기</span></a>
                 </div>

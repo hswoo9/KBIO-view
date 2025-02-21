@@ -13,6 +13,7 @@ import base64 from 'base64-js';
 function OperationalResidentMember(props) {
     const location = useLocation();
     const [residentMemberList, setAuthorityList] = useState([]);
+    const [selectedFiles, setSelectedFiles] = useState([]);
     const [searchDto, setSearchDto] = useState(
         {
             pageIndex : 1,
@@ -55,6 +56,10 @@ function OperationalResidentMember(props) {
                 requestOptions,
                 (resp) => {
                     setPaginationInfo(resp.paginationInfo);
+
+                    if(resp.result.logoFile){
+                        setSelectedFiles(resp.result.logoFile);
+                    }
                     let dataList = [];
                     dataList.push(
                         <tr>
@@ -103,6 +108,10 @@ function OperationalResidentMember(props) {
         getResidentMemberList(searchDto);
     },[]);
 
+    /*useEffect(() => {
+        console.log("Updated logofile:", selectedFiles);
+    }, [selectedFiles]);*/
+
     return (
         <div id="container" className="container layout cms">
             <ManagerLeft/>
@@ -113,6 +122,16 @@ function OperationalResidentMember(props) {
                     <div className="left">
                         <figure className="logo">
                             {/*기업 로고 이미지 추가할 것*/}
+                            {selectedFiles && selectedFiles.atchFileSn ? (
+                                <img
+                                    src={`http://133.186.250.158${selectedFiles.atchFilePathNm}/${selectedFiles.strgFileNm}.${selectedFiles.atchFileExtnNm}`}
+                                    alt="image"
+                                />
+                            ) : (
+                                <img src="" alt="defaultImage" />
+                            )}
+
+
                         </figure>
                         <p className="name" id="mvnEntNm"></p>
                     </div>
