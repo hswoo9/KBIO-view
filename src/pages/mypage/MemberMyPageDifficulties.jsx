@@ -96,7 +96,7 @@ function MemberMyPageDifficulties(props) {
                                                   style={{cursor: 'pointer', textDecoration: 'underline'}}
                                             >
                                                 {item.ttl}
-                                                {item.fileCnt !== 0 && <img src={fileImages} alt="pass images"/>}
+                                                {item.fileCnt !== 0 && item.fileCnt != null && <img src={fileImages} alt="pass images"/>}
 
                                             </Link>
                                         </div>

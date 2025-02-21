@@ -70,22 +70,21 @@ const EgovMyPage = () => {
     }
 
     return (
-        <div id="container" className="container ithdraw join_step">
+        <div id="container" className="container withdraw step2">
             <div className="inner">
                 <CommonSubMenu/>
 
-
-                <div className="titleWrap type1" data-aos="fade-up" data-aos-duration="1500">
-                    <strong className="tt2">회원 탈퇴</strong>
-                    <p className="tt1">K-BIO LabHub회원탈퇴를 진행하려면 가입하신 방법에 따라 “실명확인” 후 회원탈퇴가 가능합니다.
-                        <br/>입력한 정보는 회원탈퇴 이외의 목적으로 사용하지 않습니다.</p>
-                </div>
-                <div className="boxWrap" data-aos="fade-up" data-aos-duration="1500" >
-                    <form className="box">
-                        <ul className="inputWrap" style={{width: "30%", display: "block", margin: "0 auto"}}>
-                            <li className="inputBox type2" style={{marginBottom: "15px"}}>
-                                <span className="tt1">아이디</span>
-                                <label className="input">
+                <div className="inner2" data-aos="fade-up" data-aos-duration="1500">
+                    <div className="titleWrap type1">
+                        <p className="tt1">회원 탈퇴</p>
+                        <strong className="tt2">K-BIO LabHub회원탈퇴를 진행하려면 가입하신 방법에 따라 “실명확인” 후 회원탈퇴가 가능합니다. <br/>입력한 정보는
+                            회원탈퇴
+                            이외의 목적으로 사용하지 않습니다.</strong>
+                    </div>
+                        <ul className="listBox" style={{width : "200%"}}>
+                            <li className="inputBox type2 textBox">
+                                <p className="title">아이디</p>
+                                <p className="text">
                                     <input
                                         type="text"
                                         name="id"
@@ -96,11 +95,11 @@ const EgovMyPage = () => {
                                         onKeyDown={activeEnter}
                                         readOnly
                                     />
-                                </label>
+                                </p>
                             </li>
                             <li className="inputBox type2">
-                                <span className="tt1">비밀번호</span>
-                                <label className="input">
+                                <label className="tt1">비밀번호 입력</label>
+                                <div className="input">
                                     <input
                                         type="password"
                                         name="password"
@@ -113,20 +112,17 @@ const EgovMyPage = () => {
                                         ref={passwordRef}
                                         onKeyDown={activeEnter}
                                     />
-                                </label>
+                                </div>
                             </li>
                         </ul>
-                        <div className="buttonBox" style={{ width: "20%"}}>
-                            <button type="button" className="clickBtn black" onClick={checkUser} style={{ marginTop:"45px"}}>
-                                <span>확인</span>
-                            </button>
-                        </div>
-                    </form>
+                        <button type="button" className="clickBtn" onClick={checkUser}>
+                            <span>확인</span>
+                        </button>
                 </div>
             </div>
         </div>
-)
-;
+    )
+        ;
 };
 
 export default EgovMyPage;
