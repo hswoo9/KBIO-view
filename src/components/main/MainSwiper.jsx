@@ -7,6 +7,7 @@ import user_main_sec02_logo02 from "@/assets/images/user_main_sec02_logo02.png";
 import user_main_sec02_logo03 from "@/assets/images/user_main_sec02_logo03.png";
 import user_main_sec02_logo04 from "@/assets/images/user_main_sec02_logo04.png";
 import user_main_sec02_logo05 from "@/assets/images/user_main_sec02_logo05.png";
+import {getMvnEntList} from "./MainComponents.jsx";
 
 const MainSwiper = ({data}) => {
     const swiperRef = useRef(null);
@@ -21,14 +22,6 @@ const MainSwiper = ({data}) => {
             return !prev;
         });
     }
-
-    const prevClickHandler = () => {
-        swiperRef.current.swiper.slidePrev();
-    };
-
-    const nextClickHandler = () => {
-        swiperRef.current.swiper.nextEl();
-    };
 
     const swiperSettings = {
         modules: [Autoplay, Navigation],
@@ -64,71 +57,49 @@ const MainSwiper = ({data}) => {
 
     /* 입주기업 데이터 */
     const [operationalList, setAuthorityList] = useState([]);
-    const [searchCondition, setSearchCondition] = useState(
-        {
-            actvtnYn: "Y"
-        }
-    );
+    const getOperationalList = (data) => {
+        let dataList = [];
 
-    const getOperationalList = useCallback(
-        (searchCondition) => {
-            const requestUrl = "/introduceApi/getOperationalAllList.do";
-            const requestOptions = {
-                method: "POST",
-                headers: {
-                    "Content-type": "application/json",
-                },
-                body: JSON.stringify(searchCondition),
-            };
-            EgovNet.requestFetch(
-                requestUrl,
-                requestOptions,
-                (resp) => {
-                    let operationalList = resp.result.operationalList;
-                    let dataList = [];
-                    {/* TODO :
-                        기업별 이미지 맞춰서 수정
-                        기업소개 현재는 에디터로 되어있는데 어떤 문구 보여줄건지 정의 필요                    
-                    
-                    */}
-                    resp.result.operationalList.forEach(function (item, index) {
-                        dataList.push(
-                            <SwiperSlide className="swiper-slide" key={item.mvnEntSn}>
-                                <figure className="logoBox"><img src={user_main_sec02_logo01} alt={item.mvnEntNm} loading="lazy"/>
-                                </figure>
-                                <div className="textBox">
-                                    <h3 className="tt1">{item.mvnEntNm}</h3>
-                                    <p className="tt2">혁신적인 기술력과 신뢰를 바탕으로 <br/>바이오 산업의 미래를 열어가고 있습니다</p>
-                                </div>
-                                <a href={item.hmpgAddr} target="_blank" rel="noopener noreferrer" className="linkBtn" key={item.mvnEntSn}><span>바로가기</span></a>
-                            </SwiperSlide>
-                        );
-                    });
-                    if(dataList.length < 5 && dataList.length > 1){
-                        operationalList.forEach(function(item, index) {
-                            dataList.push(
-                                <SwiperSlide className="swiper-slide" key={item.mvnEntSn + 100}>
-                                    <figure className="logoBox"><img src={user_main_sec02_logo01} alt={item.mvnEntNm} loading="lazy"/>
-                                    </figure>
-                                    <div className="textBox">
-                                        <h3 className="tt1">{item.mvnEntNm}</h3>
-                                        <p className="tt2">혁신적인 기술력과 신뢰를 바탕으로 <br/>바이오 산업의 미래를 열어가고 있습니다</p>
-                                    </div>
-                                    <a href={item.hmpgAddr} target="_blank" rel="noopener noreferrer" className="linkBtn"  key={item.mvnEntSn + 100}><span>바로가기</span></a>
-                                </SwiperSlide>
-                            )
-                        })
-                    }
-                    setAuthorityList(dataList);
-                },
-                (resp) => {
+        {/* TODO :
+                기업별 이미지 맞춰서 수정
+                기업소개 현재는 에디터로 되어있는데 어떤 문구 보여줄건지 정의 필요
+        */}
 
-                }
+        data.forEach(function (item, index) {
+            dataList.push(
+                <SwiperSlide className="swiper-slide" key={item.mvnEntSn}>
+                    <figure className="logoBox"><img src={user_main_sec02_logo01} alt={item.mvnEntNm} loading="lazy"/>
+                    </figure>
+                    <div className="textBox">
+                        <h3 className="tt1">{item.mvnEntNm}</h3>
+                        <p className="tt2">혁신적인 기술력과 신뢰를 바탕으로 <br/>바이오 산업의 미래를 열어가고 있습니다</p>
+                    </div>
+                    <a href={item.hmpgAddr} target="_blank" rel="noopener noreferrer" className="linkBtn" key={item.mvnEntSn}><span>바로가기</span></a>
+                </SwiperSlide>
             );
-        }, [searchCondition]);
+        });
+        if(dataList.length < 5 && dataList.length > 1){
+            data.forEach(function(item, index) {
+                dataList.push(
+                    <SwiperSlide className="swiper-slide" key={item.mvnEntSn + 100}>
+                        <figure className="logoBox"><img src={user_main_sec02_logo01} alt={item.mvnEntNm} loading="lazy"/>
+                        </figure>
+                        <div className="textBox">
+                            <h3 className="tt1">{item.mvnEntNm}</h3>
+                            <p className="tt2">혁신적인 기술력과 신뢰를 바탕으로 <br/>바이오 산업의 미래를 열어가고 있습니다</p>
+                        </div>
+                        <a href={item.hmpgAddr} target="_blank" rel="noopener noreferrer" className="linkBtn"  key={item.mvnEntSn + 100}><span>바로가기</span></a>
+                    </SwiperSlide>
+                )
+            })
+        }
+        setAuthorityList(dataList);
+    }
 
     useEffect(() => {
-        getOperationalList(searchCondition);
+        getMvnEntList().then((data) => {
+            getOperationalList(data);
+        });
     }, []);
 
     return (
