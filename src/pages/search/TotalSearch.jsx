@@ -53,6 +53,12 @@ const TotalSearch = () => {
     useEffect(() => {
     }, [searchCondition.searchEndDt]);
 
+    useEffect(() => {
+        if(searchCondition.nowSearch){
+            getSearchDataList(searchCondition);
+        }
+    }, [searchCondition.nowSearch]);
+
     const handleStartDtChange = (e) => {
         const selectedDate = moment(e.target.value);
         const formattedDate = selectedDate.format("YYYY년 MM월 DD일");
@@ -104,6 +110,7 @@ const TotalSearch = () => {
     }, [paginationInfo]);
 
     const [searchDataList, setSearchDataList] = useState([]);
+    const [suggestionKeyWord, setSuggestionKeyWord] = useState([]);
 
     const [menuIndex, setMenuIndex] = useState({ menu : 0});
     const tabMenuList = {
@@ -139,7 +146,30 @@ const TotalSearch = () => {
                 requestURL,
                 requestOptions,
                 (resp) => {
+                    console.log(resp);
                     setPaginationInfo(resp.paginationInfo);
+                    if(resp.result.returnSrchKywd != null){
+                        let kywdList = [];
+                        resp.result.returnSrchKywd.forEach(function(item, index){
+                            kywdList.push(
+                                <li key={item.srchKywdSn}>
+                                    <a
+                                        onClick={() => {
+                                            setSearchCondition({
+                                                ...searchCondition,
+                                                searchVal: item.kywd,
+                                                nowSearch: true
+                                            });
+                                        }}
+                                        style={{cursor: "pointer"}}
+                                    >
+                                        <span>#{item.kywd}</span>
+                                    </a>
+                                </li>
+                            )
+                        });
+                        setSuggestionKeyWord(kywdList);
+                    }
                     let dataList = [];
                     dataList.push(
                         <tr key="no_data">
@@ -216,6 +246,10 @@ const TotalSearch = () => {
                         }
 
                     });
+                    setSearchCondition({
+                        ...searchCondition,
+                        nowSearch: false
+                    })
                     setSearchDataList(dataList);
                 },
                 function (resp) {
@@ -305,6 +339,7 @@ const TotalSearch = () => {
                                             id="board_search"
                                             name="board_search"
                                             placeholder="검색어를 입력해주세요."
+                                            value={searchCondition.searchVal || ""}
                                             ref={kwdRef}
                                             onChange={(e) => {
                                                 kwdRef.current.value = e.target.value;
@@ -326,9 +361,7 @@ const TotalSearch = () => {
                             <div className="keywrodBox">
                                 <strong className="title">추천키워드</strong>
                                 <ul className="list">
-                                    {/*<li><a href="#"><span>#의료</span></a></li>
-                                    <li><a href="#"><span>#바이오</span></a></li>
-                                    <li><a href="#"><span>#약품</span></a></li>*/}
+                                    {suggestionKeyWord}
                                 </ul>
                             </div>
                         </form>
