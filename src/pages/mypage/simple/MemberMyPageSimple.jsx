@@ -105,6 +105,7 @@ function MemberMyPageSimple(props) {
                                               state={{
                                                   cnsltAplySn: item.cnsltAplySn,
                                                   cnsltSttsCd: item.cnsltSttsCd,
+                                                  cnslttUserSn : item.cnslttUserSn,
                                                   menuSn: location.state?.menuSn,
                                                   menuNmPath: location.state?.menuNmPath,
                                               }}
