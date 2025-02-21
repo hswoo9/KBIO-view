@@ -502,7 +502,7 @@ function ManagerLeftStatistics() {
                 </NavLink>
               </li>
 
-              <li>
+              {/*<li>
                 <NavLink
                     to={URL.MANAGER_STATISTICS_USER_ANALYZE}
                     className={({isActive}) => (isActive ? "activeTag" : "")}
@@ -528,7 +528,7 @@ function ManagerLeftStatistics() {
                   <div className="icon"></div>
                   <p>사용자기기</p>
                 </NavLink>
-              </li>
+              </li>*/}
             </ul>
           </nav>
         </div>
