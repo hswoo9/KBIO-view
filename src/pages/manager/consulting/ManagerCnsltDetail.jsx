@@ -70,31 +70,28 @@ function ManagerCnsltDetail(props) {
         };
 
         EgovNet.requestFetch(getCnsltDetailUrl, requestOptions, function (resp) {
+            
+            //컨설턴트관련 정보
+            const decodedPhoneNumber = decodePhoneNumber(resp.result.consulttUser.mblTelno);
 
-
-
-            /*setConsulttUser({
+            setConsulttUser({
                 ...resp.result.consulttUser,
-                mblTelno: decodedPhoneNumber
-            });*/
-
-            if (resp.result.consulttUser && resp.result.consulttUser.cnslttUserSn) {
-                const decodedPhoneNumber = decodePhoneNumber(resp.result.consulttUser.mblTelno);
-
-                setConsulttUser({
-                    ...resp.result.consulttUser,
-                    mblTelno: decodedPhoneNumber,
-                });
-            }
-
+                mblTelno: decodedPhoneNumber,
+            });
 
 
             setConsulttDtl({
                 ...resp.result.consulttDtl
             });
+            
+            //컨설턴트관련정보끝
+
+
             setUserDetail({
                 ...resp.result.userDetail
             });
+
+
             if (resp.result.cnsltCertificateFile) {
                 setCnsltCertificateFile(resp.result.cnsltCertificateFile);
             }
