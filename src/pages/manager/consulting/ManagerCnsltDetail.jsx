@@ -16,6 +16,7 @@ import base64 from 'base64-js';
 import { getSessionItem } from "@/utils/storage";
 import {getComCdList} from "../../../components/CommonComponents.jsx";
 import moment from "moment/moment.js";
+import notProfile from "@/assets/images/no_profile.png";
 
 function ManagerCnsltDetail(props) {
 
@@ -70,111 +71,110 @@ function ManagerCnsltDetail(props) {
         };
 
         EgovNet.requestFetch(getCnsltDetailUrl, requestOptions, function (resp) {
-            
-            //컨설턴트관련 정보
-            const decodedPhoneNumber = decodePhoneNumber(resp.result.consulttUser.mblTelno);
+            if(resp.result.consulttUser != null){
+                //컨설턴트관련 정보
+                const decodedPhoneNumber = decodePhoneNumber(resp.result.consulttUser.mblTelno);
 
-            setConsulttUser({
-                ...resp.result.consulttUser,
-                mblTelno: decodedPhoneNumber,
-            });
-
-
-            setConsulttDtl({
-                ...resp.result.consulttDtl
-            });
-            
-            //컨설턴트관련정보끝
-
-
-            setUserDetail({
-                ...resp.result.userDetail
-            });
-
-
-            if (resp.result.cnsltCertificateFile) {
-                setCnsltCertificateFile(resp.result.cnsltCertificateFile);
-            }
-
-            if (resp.result.cnsltProfileFile) {
-                setCnsltProfileFile({
-                    ...resp.result.cnsltProfileFile
+                setConsulttUser({
+                    ...resp.result.consulttUser,
+                    mblTelno: decodedPhoneNumber,
                 });
-            }
-            if (resp.result.userCompDetail) {
-                setUserCompDetail({
-                    ...resp.result.userCompDetail
+
+
+                setConsulttDtl({
+                    ...resp.result.consulttDtl
                 });
-            }
 
-            if (resp.result.filesByDsctnSn) {
-                setFilesByDsctnSn(resp.result.filesByDsctnSn);
-            }
+                //컨설턴트관련정보끝
 
-            if(resp.result.cnsltDgstfnList) {
-                setcnsltDgstfnList(resp.result.cnsltDgstfnList);
-            }
 
-            setCnslt({
-                ...resp.result.cnslt
-            });
+                setUserDetail({
+                    ...resp.result.userDetail
+                });
 
-            let dataList = [];
-            dataList.push(
-                <p>내역이 없습니다.</p>
-            );
 
-            /*resp.result.cnsltDsctnList.forEach(function (item,index){
-                if(index === 0) dataList =[];
+                if (resp.result.cnsltCertificateFile) {
+                    setCnsltCertificateFile(resp.result.cnsltCertificateFile);
+                }
 
+                if (resp.result.cnsltProfileFile) {
+                    setCnsltProfileFile({
+                        ...resp.result.cnsltProfileFile
+                    });
+                }
+                if (resp.result.userCompDetail) {
+                    setUserCompDetail({
+                        ...resp.result.userCompDetail
+                    });
+                }
+
+                if (resp.result.filesByDsctnSn) {
+                    setFilesByDsctnSn(resp.result.filesByDsctnSn);
+                }
+
+                if(resp.result.cnsltDgstfnList) {
+                    setcnsltDgstfnList(resp.result.cnsltDgstfnList);
+                }
+
+                setCnslt({
+                    ...resp.result.cnslt
+                });
+
+                let dataList = [];
                 dataList.push(
-                    <div className="input"
-                         style={{
-                             display: "flex",
-                             justifyContent: "center",
-                             alignItems: "center",
-                             gap : "20px"
-                         }}>
-                    <div
-                        style={{order: item.dsctnSe === "0" ? 1 : 2,  border: "1px solid #333", borderRadius: "10px" , padding : "10px", width : "80%"}}
-                    >
-                        <div dangerouslySetInnerHTML={{__html: item.cn}}>
-                        </div>
-                        <p style={{textAlign : "right"}}
-                        >{moment(item.frstCrtDt).format('YYYY.MM.DD  HH:MM')}</p>
-                    </div>
-                    <div
-                        style={{order: item.dsctnSe === "0" ? 1 : 2, border: "1px solid #333", borderRadius: "20px", padding : "10px", width : "7%"}}
-                    >
-                        <p style={{textAlign : "center"}}
-                        >{item.dsctnSe === "0" ? "신청자" : "컨설턴트"}</p>
-                    </div>
-                    </div>
+                    <p>내역이 없습니다.</p>
                 );
-            });*/
 
+                /*resp.result.cnsltDsctnList.forEach(function (item,index){
+                    if(index === 0) dataList =[];
 
-            resp.result.cnsltDsctnList.forEach(function (item, index) {
-                if (index === 0) dataList = [];
-
-                const files = resp.result.filesByDsctnSn[item.cnsltDsctnSn] || []; // 해당 cnsltDsctnSn의 파일 리스트 가져오기
-
-                dataList.push(
-                    <div className="input"
-                         style={{
-                             display: "flex",
-                             justifyContent: "center",
-                             alignItems: "center",
-                             gap: "20px"
-                         }}>
+                    dataList.push(
+                        <div className="input"
+                             style={{
+                                 display: "flex",
+                                 justifyContent: "center",
+                                 alignItems: "center",
+                                 gap : "20px"
+                             }}>
                         <div
-                            style={{ order: item.dsctnSe === "0" ? 1 : 2, border: "1px solid #333", borderRadius: "10px", padding: "10px", width: "80%" }}
+                            style={{order: item.dsctnSe === "0" ? 1 : 2,  border: "1px solid #333", borderRadius: "10px" , padding : "10px", width : "80%"}}
                         >
-                            <div dangerouslySetInnerHTML={{ __html: item.cn }}>
+                            <div dangerouslySetInnerHTML={{__html: item.cn}}>
                             </div>
-                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "10px" }}>
-                            {/* 파일 리스트 추가 */}
-                            {/*{files.length > 0 && (
+                            <p style={{textAlign : "right"}}
+                            >{moment(item.frstCrtDt).format('YYYY.MM.DD  HH:MM')}</p>
+                        </div>
+                        <div
+                            style={{order: item.dsctnSe === "0" ? 1 : 2, border: "1px solid #333", borderRadius: "20px", padding : "10px", width : "7%"}}
+                        >
+                            <p style={{textAlign : "center"}}
+                            >{item.dsctnSe === "0" ? "신청자" : "컨설턴트"}</p>
+                        </div>
+                        </div>
+                    );
+                });*/
+
+                resp.result.cnsltDsctnList.forEach(function (item, index) {
+                    if (index === 0) dataList = [];
+
+                    const files = resp.result.filesByDsctnSn[item.cnsltDsctnSn] || []; // 해당 cnsltDsctnSn의 파일 리스트 가져오기
+
+                    dataList.push(
+                        <div className="input"
+                             style={{
+                                 display: "flex",
+                                 justifyContent: "center",
+                                 alignItems: "center",
+                                 gap: "20px"
+                             }}>
+                            <div
+                                style={{ order: item.dsctnSe === "0" ? 1 : 2, border: "1px solid #333", borderRadius: "10px", padding: "10px", width: "80%" }}
+                            >
+                                <div dangerouslySetInnerHTML={{ __html: item.cn }}>
+                                </div>
+                                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "10px" }}>
+                                    {/* 파일 리스트 추가 */}
+                                    {/*{files.length > 0 && (
                                 <p style={{ textAlign: "left" }}>
                                     {files.map((file, fileIndex) => (
                                         <span key={fileIndex}
@@ -183,32 +183,37 @@ function ManagerCnsltDetail(props) {
                                     ))}
                                 </p>
                             )}*/}
-                            <p style={{ textAlign: "left" }}>
-                                <label className="title" style={{cursor :"default"}}>첨부파일</label>
-                                {files.map((file, fileIndex) => (
-                                    <div key={fileIndex} style={{ cursor: "pointer" }} onClick={() => handleDownload(file)}>
-                                        {fileIndex + 1}. {file.atchFileNm}
-                                    </div>
-                                ))}
-                            </p>
+                                    <p style={{ textAlign: "left" }}>
+                                        <label className="title" style={{cursor :"default"}}>첨부파일</label>
+                                        {files.map((file, fileIndex) => (
+                                            <div key={fileIndex} style={{ cursor: "pointer" }} onClick={() => handleDownload(file)}>
+                                                {fileIndex + 1}. {file.atchFileNm}
+                                            </div>
+                                        ))}
+                                    </p>
 
-                            {/*날짜*/}
-                            <p style={{ textAlign: "right" }}>
-                                {moment(item.frstCrtDt).format('YYYY.MM.DD  HH:MM')}
-                            </p>
+                                    {/*날짜*/}
+                                    <p style={{ textAlign: "right" }}>
+                                        {moment(item.frstCrtDt).format('YYYY.MM.DD  HH:MM')}
+                                    </p>
+                                </div>
+                            </div>
+                            <div
+                                style={{ order: item.dsctnSe === "0" ? 2 : 1, border: "1px solid #333", borderRadius: "20px", padding: "10px", width: "7%" }}
+                            >
+                                <p style={{ textAlign: "center" }}>
+                                    {item.dsctnSe === "0" ? "신청자" : "컨설턴트"}
+                                </p>
                             </div>
                         </div>
-                        <div
-                            style={{ order: item.dsctnSe === "0" ? 2 : 1, border: "1px solid #333", borderRadius: "20px", padding: "10px", width: "7%" }}
-                        >
-                            <p style={{ textAlign: "center" }}>
-                                {item.dsctnSe === "0" ? "신청자" : "컨설턴트"}
-                            </p>
-                        </div>
-                    </div>
-                );
-            });
-            setCnsltDsctnList(dataList);
+                    );
+                });
+                setCnsltDsctnList(dataList);
+            }
+
+
+
+
 
 
         });
@@ -281,6 +286,9 @@ function ManagerCnsltDetail(props) {
                                         style={{
                                             width: "200px",
                                             objectFit: "cover",
+                                        }}
+                                        onError={(e) => {
+                                            e.target.src = notProfile;
                                         }}
                                     />
                                 </div>
