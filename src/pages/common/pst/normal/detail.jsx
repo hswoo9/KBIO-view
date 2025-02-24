@@ -141,6 +141,9 @@ function commonPstDetail(props) {
               { pathname : URL.COMMON_PST_NORMAL_LIST},
               { state: {
                   bbsSn: bbs.bbsSn,
+                  thisMenuSn : location.state?.thisMenuSn,
+                  menuSn : location.state?.menuSn,
+                  menuNmPath : location.state?.menuNmPath,
                 }
               }
             );
@@ -298,40 +301,40 @@ function commonPstDetail(props) {
               <table>
                 <caption>게시판 상세</caption>
                 <thead>
-                  <tr>
-                    <th>
-                      <div className="titleBox">
-                        <div className="title">
-                          <p>
-                            {bbs.pstCtgryYn == "Y" && comCdList.length > 0 && (
-                                <>
-                                  {comCdList.find(e => e.comCdSn == pst.pstClsf).comCdNm}
-                                </>
-                            )}
-                          </p>
-                        </div>
-                        <strong className="title">{pst.pstTtl}</strong>
-                        <ul className="bot">
-                          <li className="date"><p>{moment(pst.frstCrtDt).format('YYYY-MM-DD')}</p></li>
-                          <li className="name"><p>{pst.tblUser?.kornFlnm}</p></li>
-                        </ul>
+                <tr>
+                  <th>
+                    <div className="titleBox">
+                      <div className="title">
+                        <p>
+                          {bbs.pstCtgryYn == "Y" && comCdList.length > 0 && (
+                              <>
+                                {comCdList.find(e => e.comCdSn == pst.pstClsf).comCdNm}
+                              </>
+                          )}
+                        </p>
                       </div>
-                      {pst.pstFiles != null && pst.pstFiles.length > 0 && (
-                          <ul className="fileBox">
-                            {pst.pstFiles.map((file, index) => (
-                                <li key={index}>
-                                  <a
-                                      onClick={() => fileDownLoad(file.atchFileSn, file.atchFileNm, 'tbl_bbs', pst.bbsSn)}
-                                      style={{cursor: "pointer"}}>
-                                    <div className="icon"></div>
-                                    <p className="name">{file.atchFileNm}</p>
-                                    <span className="size">{(file.atchFileSz / 1024).toFixed(2)} KB</span>
-                                  </a>
-                                </li>
-                            ))}
-                          </ul>
-                      )}
-                      {/*{pst.pstFiles != null && pst.pstFiles.length > 0 && (
+                      <strong className="title">{pst.pstTtl}</strong>
+                      <ul className="bot">
+                        <li className="date"><p>{moment(pst.frstCrtDt).format('YYYY-MM-DD')}</p></li>
+                        <li className="name"><p>{pst.tblUser?.kornFlnm}</p></li>
+                      </ul>
+                    </div>
+                    {pst.pstFiles != null && pst.pstFiles.length > 0 && (
+                        <ul className="fileBox">
+                          {pst.pstFiles.map((file, index) => (
+                              <li key={index}>
+                                <a
+                                    onClick={() => fileDownLoad(file.atchFileSn, file.atchFileNm, 'tbl_bbs', pst.bbsSn)}
+                                    style={{cursor: "pointer"}}>
+                                  <div className="icon"></div>
+                                  <p className="name">{file.atchFileNm}</p>
+                                  <span className="size">{(file.atchFileSz / 1024).toFixed(2)} KB</span>
+                                </a>
+                              </li>
+                          ))}
+                        </ul>
+                    )}
+                    {/*{pst.pstFiles != null && pst.pstFiles.length > 0 && (
                           <button
                               type="button"
                               className="clickBtn"
@@ -339,23 +342,28 @@ function commonPstDetail(props) {
                             압축
                           </button>
                       )}*/}
-                    </th>
-                  </tr>
+                    {pst.linkUrlAddr && (
+                      <div className="titleBox">
+                        <ul className="bot" style={{width:"95%"}}>
+                          <li className="date">
+                            <p>관련링크</p>
+                          </li>
+                          <li className="name"><NavLink to={pst.linkUrlAddr} target={"_blank"}>
+                            {pst.linkUrlAddr ? pst.linkUrlAddr : ""}
+                          </NavLink></li>
+                        </ul>
+                      </div>
+                    )}
+                  </th>
+                </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>
-                      <NavLink to={pst.linkUrlAddr} target={"_blank"}>
-                        {pst.linkUrlAddr ? "외부링크 " + pst.linkUrlAddr : ""}
-                      </NavLink>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div className="textBox" dangerouslySetInnerHTML={{__html: pst.pstCn}}>
-                      </div>
-                    </td>
-                  </tr>
+                <tr>
+                  <td>
+                    <div className="textBox" dangerouslySetInnerHTML={{__html: pst.pstCn}}>
+                    </div>
+                  </td>
+                </tr>
                 </tbody>
                 <tfoot>
                 <tr>
@@ -428,6 +436,9 @@ function commonPstDetail(props) {
                                 bbsSn: pst.bbsSn,
                                 pstGroup: pst.pstGroup,
                                 upPstSn: pst.pstSn,
+                                menuSn: location.state?.menuSn,
+                                menuNmPath: location.state?.menuNmPath,
+                                thisMenuSn : location.state?.thisMenuSn,
                               }}
                           >
                             <button type="button" className="clickBtn">
@@ -462,6 +473,7 @@ function commonPstDetail(props) {
                             bbsSn: bbs.bbsSn,
                             menuSn: location.state?.menuSn,
                             menuNmPath: location.state?.menuNmPath,
+                            thisMenuSn : location.state?.thisMenuSn,
                           }}
                           className="clickBtn listBtn"
                       >

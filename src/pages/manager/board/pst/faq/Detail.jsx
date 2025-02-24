@@ -141,7 +141,7 @@ function setPst(props) {
                     </li>
                 )}
                 <li className="inputBox type1 width1">
-                  <label className="title"><small>외부링크</small></label>
+                  <label className="title"><small>관련링크</small></label>
                   <div className="input">{pstDetail.linkUrlAddr}</div>
                 </li>
                 <li className="inputBox type1 width1">

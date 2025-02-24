@@ -245,6 +245,7 @@ function setCommonPst(props) {
                     bbsSn: bbs.bbsSn,
                     menuSn: location.state?.menuSn,
                     menuNmPath: location.state?.menuNmPath,
+                    thisMenuSn : location.state?.thisMenuSn,
                   }
                 }
             );
@@ -287,6 +288,7 @@ function setCommonPst(props) {
                     bbsSn: bbs.bbsSn,
                     menuSn: location.state?.menuSn,
                     menuNmPath: location.state?.menuNmPath,
+                    thisMenuSn : location.state?.thisMenuSn,
                   }
                 }
             );
@@ -360,7 +362,7 @@ function setCommonPst(props) {
                   </div>
                 </li>
                 <li className="inputBox type1">
-                  <label htmlFor="q&a_title" className="title">외부링크</label>
+                  <label htmlFor="q&a_title" className="title">관련링크</label>
                   <div className="input">
                     <input
                         type="text"
@@ -482,6 +484,7 @@ function setCommonPst(props) {
                     bbsSn: bbs.bbsSn,
                     menuSn: location.state?.menuSn,
                     menuNmPath: location.state?.menuNmPath,
+                    thisMenuSn : location.state?.thisMenuSn,
                   }}
                   className="clickBtn listBtn"
               >

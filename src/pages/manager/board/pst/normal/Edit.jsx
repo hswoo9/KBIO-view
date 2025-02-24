@@ -478,7 +478,7 @@ function setPst(props) {
                   </li>
               )}
               <li className="inputBox type1 width1">
-                <label className="title" htmlFor="linkUrlAddr"><small>외부링크</small></label>
+                <label className="title" htmlFor="linkUrlAddr"><small>관련링크</small></label>
                 <div className="input">
                   <input type="text"
                          name="linkUrlAddr"

@@ -87,6 +87,9 @@ function commonPstDetail(props) {
               { pathname : URL.COMMON_PST_QNA_LIST},
               { state: {
                   bbsSn: bbs.bbsSn,
+                  menuSn: location.state?.menuSn,
+                  menuNmPath: location.state?.menuNmPath,
+                  thisMenuSn : location.state?.thisMenuSn,
                 }
               }
             );
@@ -162,17 +165,23 @@ function commonPstDetail(props) {
                             압축
                           </button>
                       )}*/}
+
+                      {pst.linkUrlAddr && (
+                          <div className="titleBox">
+                            <ul className="bot" style={{width:"95%"}}>
+                              <li className="date">
+                                <p>관련링크</p>
+                              </li>
+                              <li className="name"><NavLink to={pst.linkUrlAddr} target={"_blank"}>
+                                {pst.linkUrlAddr ? pst.linkUrlAddr : ""}
+                              </NavLink></li>
+                            </ul>
+                          </div>
+                      )}
                     </th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>
-                      <NavLink to={pst.linkUrlAddr} target={"_blank"}>
-                        {pst.linkUrlAddr ? "외부링크 " + pst.linkUrlAddr : ""}
-                      </NavLink>
-                    </td>
-                  </tr>
                   <tr>
                     <td>
                       <div className="textBox" dangerouslySetInnerHTML={{__html: pst.pstCn}}>
@@ -275,6 +284,7 @@ function commonPstDetail(props) {
                                   upPrvtPswd: pst.prvtPswd,
                                   menuSn: location.state?.menuSn,
                                   menuNmPath: location.state?.menuNmPath,
+                                  thisMenuSn : location.state?.thisMenuSn,
                                 }}
                                 className="clickBtn editBtn"
                             >
@@ -290,6 +300,7 @@ function commonPstDetail(props) {
                                   pstSn: pst.pstSn,
                                   menuSn: location.state?.menuSn,
                                   menuNmPath: location.state?.menuNmPath,
+                                  thisMenuSn : location.state?.thisMenuSn,
                                 }}
                                 className="clickBtn editBtn"
                             >
@@ -312,6 +323,7 @@ function commonPstDetail(props) {
                               bbsSn: bbs.bbsSn,
                               menuSn: location.state?.menuSn,
                               menuNmPath: location.state?.menuNmPath,
+                              thisMenuSn : location.state?.thisMenuSn,
                             }}
                             className="clickBtn listBtn"
                         >

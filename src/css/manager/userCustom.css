@@ -268,8 +268,38 @@ header .hInner .hBot{transition: .4s linear !important;}
 
 button:focus { outline: 2px solid black;}
 
+.cursorTag { cursor: pointer;}
+
+
+.userFooter .modalCon .boxWrap {max-width: 700px; padding: 2.2rem; box-sizing: border-box; min-height: 300px;}
+.userFooter .modalCon .boxWrap .titleWrap.type2 {margin-bottom: 1.35rem;}
+.userFooter .modalCon .boxWrap .diffiBox {gap: 1.35rem;}
+.userFooter .modalCon .boxWrap .diffiBox .cont {max-height: calc(100vh - 19rem); overflow: auto; min-height: 87px;}
+.userFooter .modalCon .boxWrap .diffiBox .cont::-webkit-scrollbar {width: 3px;}
+.userFooter .modalCon .boxWrap .diffiBox .cont .listBox {flex-wrap: wrap; flex-direction: row; gap: 1.35rem 0;}
+.userFooter .modalCon .boxWrap .diffiBox .cont .listBox .inputBox.textBox {width: 50%;}
+.userFooter .modalCon .boxWrap .diffiBox .cont .listBox .inputBox {width: 100%;}
+.userFooter .modalCon .boxWrap .diffiBox .writeBtn {width: 100%; max-width: none;}
+
+
+.userFooter .diffiBox{
+    display: flex;
+    flex-direction: column;
+    gap: 1.35rem;
+}
+
+.fontColorCustom{
+    color: var(--black);
+}
+
+.userFooter .innerDiv .privacyPolicyModal .inputBox.type2.textBox .text{
+    color: var(--black);
+}
+
 .main .sec02 .inner .institution_swiper .swiper-slide .textBox .tt2 {min-height: 50px;
     overflow: hidden;
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;}
+
+.container .board_view > table thead .fileBox {flex-direction: column;}

@@ -134,6 +134,7 @@ function commonPstList(props) {
                     pstSn:  pstSn,
                     menuSn : location.state?.menuSn,
                     menuNmPath : location.state?.menuNmPath,
+                    thisMenuSn : location.state?.thisMenuSn,
                 } },
             { mode:  CODE.MODE_READ}
         );
