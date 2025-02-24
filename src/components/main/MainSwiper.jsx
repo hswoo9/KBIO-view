@@ -1,12 +1,6 @@
 import React, {useState, useRef, useEffect, useCallback} from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination, Navigation } from 'swiper/modules';
-import * as EgovNet from "@/api/egovFetch";
-import user_main_sec02_logo01 from "@/assets/images/user_main_sec02_logo01.png";
-import user_main_sec02_logo02 from "@/assets/images/user_main_sec02_logo02.png";
-import user_main_sec02_logo03 from "@/assets/images/user_main_sec02_logo03.png";
-import user_main_sec02_logo04 from "@/assets/images/user_main_sec02_logo04.png";
-import user_main_sec02_logo05 from "@/assets/images/user_main_sec02_logo05.png";
 import {getMvnEntList} from "./MainComponents.jsx";
 
 const MainSwiper = ({data}) => {
@@ -59,40 +53,70 @@ const MainSwiper = ({data}) => {
     const [operationalList, setAuthorityList] = useState([]);
     const getOperationalList = (data) => {
         let dataList = [];
-
+        console.log(data);
         {/* TODO :
                 기업별 이미지 맞춰서 수정
-                기업소개 현재는 에디터로 되어있는데 어떤 문구 보여줄건지 정의 필요
         */}
-
         data.forEach(function (item, index) {
             dataList.push(
-                <SwiperSlide className="swiper-slide" key={item.mvnEntSn}>
-                    <figure className="logoBox"><img src={user_main_sec02_logo01} alt={item.mvnEntNm} loading="lazy"/>
+                <SwiperSlide className="swiper-slide" key={item.tblMvnEnt.mvnEntSn}>
+                    <figure className="logoBox">
+                        <img
+                            src={`${window.location.protocol}//133.186.250.158${item.tblComFile.atchFilePathNm}/${item.tblComFile.strgFileNm}.${item.tblComFile.atchFileExtnNm}`}
+                            alt={item.tblMvnEnt.mvnEntNm}
+                            loading="lazy"
+                        />
                     </figure>
                     <div className="textBox">
-                        <h3 className="tt1">{item.mvnEntNm}</h3>
-                        <p className="tt2">혁신적인 기술력과 신뢰를 바탕으로 <br/>바이오 산업의 미래를 열어가고 있습니다</p>
+                        <h3 className="tt1">{item.tblMvnEnt.mvnEntNm}</h3>
+                        <p className="tt2" dangerouslySetInnerHTML={{__html: item.bzentyExpln || "기업소개가 없습니다."}}></p>
                     </div>
-                    <a href={item.hmpgAddr} target="_blank" rel="noopener noreferrer" className="linkBtn" key={item.mvnEntSn}><span>바로가기</span></a>
+                    <a href={item.tblMvnEnt.hmpgAddr} target="_blank" rel="noopener noreferrer" className="linkBtn" key={item.tblMvnEnt.mvnEntSn}><span>바로가기</span></a>
                 </SwiperSlide>
             );
         });
         if(dataList.length < 5 && dataList.length > 1){
             data.forEach(function(item, index) {
                 dataList.push(
-                    <SwiperSlide className="swiper-slide" key={item.mvnEntSn + 100}>
-                        <figure className="logoBox"><img src={user_main_sec02_logo01} alt={item.mvnEntNm} loading="lazy"/>
+                    <SwiperSlide className="swiper-slide" key={item.tblMvnEnt.mvnEntSn + 100}>
+                        <figure className="logoBox">
+                            <img
+                                src={`${window.location.protocol}//133.186.250.158${item.tblComFile.atchFilePathNm}/${item.tblComFile.strgFileNm}.${item.tblComFile.atchFileExtnNm}`}
+                                alt={item.tblMvnEnt.mvnEntNm}
+                                loading="lazy"
+                            />
                         </figure>
                         <div className="textBox">
-                            <h3 className="tt1">{item.mvnEntNm}</h3>
-                            <p className="tt2">혁신적인 기술력과 신뢰를 바탕으로 <br/>바이오 산업의 미래를 열어가고 있습니다</p>
+                            <h3 className="tt1">{item.tblMvnEnt.mvnEntNm}</h3>
+                            <p className="tt2" dangerouslySetInnerHTML={{__html: item.tblMvnEnt.bzentyExpln || "기업소개가 없습니다."}}></p>
                         </div>
-                        <a href={item.hmpgAddr} target="_blank" rel="noopener noreferrer" className="linkBtn"  key={item.mvnEntSn + 100}><span>바로가기</span></a>
+                        <a href={item.tblMvnEnt.hmpgAddr} target="_blank" rel="noopener noreferrer" className="linkBtn"  key={item.tblMvnEnt.mvnEntSn + 100}><span>바로가기</span></a>
                     </SwiperSlide>
                 )
             })
         }
+
+        if(dataList.length < 5 && dataList.length > 1){
+            data.forEach(function(item, index) {
+                dataList.push(
+                    <SwiperSlide className="swiper-slide" key={item.tblMvnEnt.mvnEntSn + 1000}>
+                        <figure className="logoBox">
+                            <img
+                                src={`${window.location.protocol}//133.186.250.158${item.tblComFile.atchFilePathNm}/${item.tblComFile.strgFileNm}.${item.tblComFile.atchFileExtnNm}`}
+                                alt={item.tblMvnEnt.mvnEntNm}
+                                loading="lazy"
+                            />
+                        </figure>
+                        <div className="textBox">
+                            <h3 className="tt1">{item.tblMvnEnt.mvnEntNm}</h3>
+                            <p className="tt2" dangerouslySetInnerHTML={{__html: item.tblMvnEnt.bzentyExpln || "기업소개가 없습니다."}}></p>
+                        </div>
+                        <a href={item.tblMvnEnt.hmpgAddr} target="_blank" rel="noopener noreferrer" className="linkBtn"  key={item.tblMvnEnt.mvnEntSn + 1000}><span>바로가기</span></a>
+                    </SwiperSlide>
+                )
+            })
+        }
+
         setAuthorityList(dataList);
     }
 

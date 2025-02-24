@@ -297,7 +297,6 @@ function EgovHeader() {
     getMenuOnTree(null, null, userSn).then((data) => {
       let dataList = [];
       if(data != null){
-        console.log(data);
         data.forEach(function(item, index){
           if (index === 0) dataList = [];
           if(item.menuType == "n"){

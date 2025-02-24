@@ -267,3 +267,9 @@ header .hInner .hBot{transition: .4s linear !important;}
 .container{transition: .4s linear !important;}
 
 button:focus { outline: 2px solid black;}
+
+.main .sec02 .inner .institution_swiper .swiper-slide .textBox .tt2 {min-height: 50px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;}
