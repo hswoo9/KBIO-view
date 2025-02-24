@@ -25,7 +25,7 @@ function ManagerCodeGroup(props) {
             searchCnd: "0",
             searchWrd: "",
             bnrPopupKnd: "popup",
-            actvtnYn: "",
+            useYn: "",
             searchType: "all",
             searchVal: ""
         }
@@ -204,11 +204,11 @@ function ManagerCodeGroup(props) {
                                 <p className="title">상태</p>
                                 <div className="itemBox">
                                     <select className="selectGroup"
-                                            value={searchCondition.actvtnYn || ""}
+                                            value={searchCondition.useYn || ""}
                                             onChange={ (e) => {
                                                 setSearchCondition({
                                                     ...searchCondition,
-                                                    actvtnYn: e.target.value
+                                                    useYn: e.target.value
                                                 })
                                             }}
                                     >

@@ -7,7 +7,7 @@ import CODE from "@/constants/code";
 
 import ManagerLeftNew from "@/components/manager/ManagerLeftNew";
 import EgovPaging from "@/components/EgovPaging";
-
+import moment from "moment/moment.js";
 import Swal from 'sweetalert2';
 
 /* bootstrip */
@@ -25,7 +25,7 @@ function ManagerCodeGroup(props) {
             searchCnd: "0",
             searchWrd: "",
             bnrPopupKnd: "bnr",
-            actvtnYn: "",
+            useYn: "",
             searchType: "all",
             searchVal: ""
         }
@@ -61,7 +61,7 @@ function ManagerCodeGroup(props) {
     const searchReset = () => {
         setSearchCondition({
             ...searchCondition,
-            actvtnYn: "",
+            useYn: "",
             searchType: "all",
             searchVal: ""
         })
@@ -151,6 +151,15 @@ function ManagerCodeGroup(props) {
                                 </td>
                                 <td>{item.bnrPopupKnd}</td>
                                 <td>{item.bnrPopupTtl}</td>
+                                <td>
+                                    {item.popupBgngDt && item.useYn === "Y" &&
+                                        <>
+                                            {moment(item.popupBgngDt).format("YYYY-MM-DD HH:mm")}
+                                            <br />
+                                            {moment(item.popupEndDt).format("YYYY-MM-DD HH:mm")}
+                                        </>
+                                    }
+                                </td>
                                 <td>{item.bnrPopupFrm}</td>
                                 <td>{item.useYn === "Y" ? "출력" : "출력안함"}</td>
                                 <td>
@@ -168,9 +177,9 @@ function ManagerCodeGroup(props) {
                                 </td>
                                 <td>
                                     <button type="button"
-                                      onClick={() => {
-                                          delBtnEvent(item.bnrPopupSn);
-                                      }}
+                                            onClick={() => {
+                                                delBtnEvent(item.bnrPopupSn);
+                                            }}
                                     >
                                         삭제
                                     </button>
@@ -204,11 +213,11 @@ function ManagerCodeGroup(props) {
                                 <p className="title">상태</p>
                                 <div className="itemBox">
                                     <select className="selectGroup"
-                                            value={searchCondition.actvtnYn || ""}
+                                            value={searchCondition.useYn || ""}
                                             onChange={ (e) => {
                                                 setSearchCondition({
                                                     ...searchCondition,
-                                                    actvtnYn: e.target.value
+                                                    useYn: e.target.value
                                                 })
                                             }}
                                     >
@@ -275,9 +284,10 @@ function ManagerCodeGroup(props) {
                         <table>
                             <caption>코드목록</caption>
                             <colgroup>
-                            <col width="50px"/>
+                                <col width="50px"/>
                                 <col width="150px"/>
                                 <col/>
+                                <col width="200"/>
                                 <col width="150px"/>
                                 <col width="100px"/>
                                 <col width="100px"/>
@@ -288,6 +298,7 @@ function ManagerCodeGroup(props) {
                                 <th>번호</th>
                                 <th>그룹명</th>
                                 <th>배너제목</th>
+                                <th>공개기간</th>
                                 <th>배너형식</th>
                                 <th>상태</th>
                                 <th>수정</th>

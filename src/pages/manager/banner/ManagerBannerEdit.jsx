@@ -13,19 +13,20 @@ import BtTable from 'react-bootstrap/Table';
 import BTButton from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { getSessionItem } from "@/utils/storage";
+import moment from "moment/moment.js";
 
 function ManagerBannerEdit(props) {
   const navigate = useNavigate();
   const location = useLocation();
   const checkRef = useRef([]);
   const sessionUser = getSessionItem("loginUser");
-
+  const [isDatePickerEnabled, setIsDatePickerEnabled] = useState(true);
   const [searchDto, setSearchDto] = useState(
       {
         search: "",
       }
   );
-
+  const [customDisplay, setCustomDisplay] = useState("none")
   const [modeInfo, setModeInfo] = useState({ mode: props.mode });
 
   const [bnrPopupDetail, setBnrPopupDetail] = useState({});
@@ -99,11 +100,29 @@ function ManagerBannerEdit(props) {
           Swal.fire("배너제목이 없습니다.");
           return;
         }
-        if($("#formFile").val() == null || $("#formFile").val() == ""
-        && (bnrPopupDetail.tblComFile == null || bnrPopupDetail.tblComFile == "")
-        ){
-          Swal.fire("첨부된 파일이 없습니다.");
-          return;
+        if(bnrPopupDetail.bnrPopupFrm != "mainTopSlides"){
+          if($("#formFile").val() == null || $("#formFile").val() == ""
+          && (bnrPopupDetail.tblComFile == null || bnrPopupDetail.tblComFile == "")
+          ){
+            Swal.fire("첨부된 파일이 없습니다.");
+            return;
+          }
+        }else{
+          if((bnrPopupDetail.bnrPopupTtl.split("^").length - 1) +
+              (bnrPopupDetail.bnrCn.split("^").length - 1) > 5){
+            Swal.fire("제목과 내용의 줄 바꿈은 5번을 초과할 수 없습니다.");
+            return;
+          }
+        }
+
+        if(bnrPopupDetail.useYn == "Y"){
+          if(!bnrPopupDetail.popupBgngDt){
+            Swal.fire("공개 시작일을 선택해주세요.");
+            return;
+          }else if(!bnrPopupDetail.popupEndDt){
+            Swal.fire("공개 종료일을 선택해주세요.");
+            return;
+          }
         }
 
         setSaveEvent({
@@ -257,14 +276,32 @@ function ManagerBannerEdit(props) {
             $.each($("input[name='bnrPopupFrm']"), function(item, index){
               if(this.value == resp.result.tblBnrPopup.bnrPopupFrm){
                 $(this).prop("checked", true);
+
+                const base = document.querySelectorAll(".base")
+                if(this.value != "mainTopSlides"){
+                  setCustomDisplay("none")
+                  document.querySelector("li.mainTopSlides").style.display = "none"
+                    base.forEach((item) => {
+                      item.style.display = "block";
+                    });
+                }else{
+                  setCustomDisplay("block")
+                    document.querySelector("li.mainTopSlides").style.display = "flex"
+                    base.forEach((item) => {
+                      item.style.display = "none";
+                    });
+                  }
               }
             });
           }
+
           if(resp.result.tblBnrPopup.useYn != null){
             if(resp.result.tblBnrPopup.useYn == "Y"){
               document.getElementById("useYn").checked = true;
+              setIsDatePickerEnabled(true);
             }else{
               document.getElementById("useYn").checked = false;
+              setIsDatePickerEnabled(false);
             }
           }
         } else {
@@ -363,6 +400,46 @@ function ManagerBannerEdit(props) {
     });
   }
 
+  const dateCheck = (e) => {
+    if(e.target.id == "popupBgngDt"){
+      const startDt = moment(e.target.value).format('YYYY-MM-DD HH:mm');
+      const endDt = moment(document.getElementById("popupEndDt").value).format('YYYY-MM-DD HH:mm');
+      if(startDt > endDt){
+        document.getElementById("popupEndDt").value = e.target.value;
+      }
+    }else{
+      const startDt = moment(document.getElementById("popupBgngDt").value).format('YYYY-MM-DD HH:mm');
+      const endDt = moment(e.target.value).format('YYYY-MM-DD HH:mm');
+      if(startDt > endDt){
+        document.getElementById("popupBgngDt").value = e.target.value;
+      }
+    }
+    setBnrPopupDetail({
+      ...bnrPopupDetail,
+      popupBgngDt: document.getElementById("popupBgngDt").value,
+      popupEndDt: document.getElementById("popupEndDt").value
+    });
+  }
+
+  const bnrPopupFrmChange = (e) => {
+    const base = document.querySelectorAll(".base")
+    if(e.target.value != "mainTopSlides"){
+      setCustomDisplay("none")
+      document.querySelector("li.mainTopSlides").style.display = "none"
+      base.forEach((item) => {
+        item.style.display = "block";
+      });
+    }else{
+      setCustomDisplay("block")
+      document.querySelector("li.mainTopSlides").style.display = "flex"
+      base.forEach((item) => {
+        item.style.display = "none";
+      });
+    }
+
+    setBnrPopupDetail({...bnrPopupDetail, bnrPopupFrm: e.target.value})
+  }
+
   useEffect(() => {
     getComCdList(searchDto);
     initMode();
@@ -395,6 +472,7 @@ function ManagerBannerEdit(props) {
                          }
                          ref={(el) => (checkRef.current[0] = el)}
                   />
+                  <span className="warningText mainTopSlides" style={{fontSize: "14px", display: customDisplay}}>줄 바꿈 기호 [^]</span>
                 </div>
               </li>
               <li className="inputBox type1 width1">
@@ -405,10 +483,18 @@ function ManagerBannerEdit(props) {
                       <input type="radio"
                              id="bnrPopupFrm1"
                              name="bnrPopupFrm"
+                             value="mainTopSlides"
+                             onChange={bnrPopupFrmChange}
+                             ref={(el) => (checkRef.current[0] = el)}
+                      />
+                      <small>메인 상단 슬라이드 배너</small>
+                    </label>
+                    <label>
+                      <input type="radio"
+                             id="bnrPopupFrm1"
+                             name="bnrPopupFrm"
                              value="mainSlides"
-                             onChange={(e) =>
-                                 setBnrPopupDetail({...bnrPopupDetail, bnrPopupFrm: e.target.value})
-                             }
+                             onChange={bnrPopupFrmChange}
                              ref={(el) => (checkRef.current[0] = el)}
                       />
                       <small>메인 슬라이드 배너</small>
@@ -418,9 +504,7 @@ function ManagerBannerEdit(props) {
                              id="bnrPopupFrm1"
                              name="bnrPopupFrm"
                              value="footSlides"
-                             onChange={(e) =>
-                                 setBnrPopupDetail({...bnrPopupDetail, bnrPopupFrm: e.target.value})
-                             }
+                             onChange={bnrPopupFrmChange}
                              ref={(el) => (checkRef.current[0] = el)}
                       />
                       <small>하단 슬라이드 배너</small>
@@ -428,7 +512,7 @@ function ManagerBannerEdit(props) {
                   </li>
                 </ul>
               </li>
-              <li className="inputBox type1 width3 file">
+              <li className="inputBox type1 width3 file base">
                 <p className="title essential">파일선택</p>
                 <div className="input">
                   <p className="file_name" id="fileNamePTag"></p>
@@ -444,26 +528,42 @@ function ManagerBannerEdit(props) {
                 <span className="warningText">gif,png,jpg 파일 / 권장 사이즈 : 500px * 500px / 용량 : 10M 이하</span>
               </li>
 
-              <li className="inputBox type1 width2 file">
+              <li className="inputBox type1 width2 file base">
                 <p className="title">파일삭제</p>
                 <div className="input">
-                {bnrPopupDetail != null && bnrPopupDetail.tblComFile != null && (
-                    <>
-                      <p className="file_name">{bnrPopupDetail.tblComFile.atchFileNm} - {(bnrPopupDetail.tblComFile.atchFileSz / 1024).toFixed(2)} KB
-                        <button type="button" className="clickBtn gray"
-                                onClick={() => setFileDel(bnrPopupDetail.tblComFile.atchFileSn)}  // 삭제 버튼 클릭 시 처리할 함수
-                                style={{marginLeft: '10px', color: 'red'}}
-                        >
-                          삭제
-                        </button>
-                      </p>
-                    </>
-                )}
+                  {bnrPopupDetail != null && bnrPopupDetail.tblComFile != null && (
+                      <>
+                        <p className="file_name">{bnrPopupDetail.tblComFile.atchFileNm} - {(bnrPopupDetail.tblComFile.atchFileSz / 1024).toFixed(2)} KB
+                          <button type="button" className="clickBtn gray"
+                                  onClick={() => setFileDel(bnrPopupDetail.tblComFile.atchFileSn)}  // 삭제 버튼 클릭 시 처리할 함수
+                                  style={{marginLeft: '10px', color: 'red'}}
+                          >
+                            삭제
+                          </button>
+                        </p>
+                      </>
+                  )}
                 </div>
                 <span className="warningText"></span>
               </li>
-              <li className="inputBox type1 width3">
-                <label className="title essential" htmlFor="bnrPopupUrlAddr"><small>배너링크</small></label>
+
+              <li className="inputBox type1 width1 mainTopSlides" style={{display:"none"}}>
+                <label className="title essential" htmlFor="bnrCn"><small>내용</small></label>
+                <div className="input">
+                  <input type="text"
+                         id="bnrCn"
+                         placeholder=""
+                         maxLength="256"
+                         value={bnrPopupDetail.bnrCn}
+                         onChange={(e) =>
+                             setBnrPopupDetail({...bnrPopupDetail, bnrCn: e.target.value})
+                         }
+                  />
+                  <span className="warningText" style={{fontSize: "14px"}}>줄 바꿈 기호 [^]</span>
+                </div>
+              </li>
+              <li className="inputBox type1 width2">
+              <label className="title essential" htmlFor="bnrPopupUrlAddr"><small>배너링크</small></label>
                 <div className="input">
                   <input type="text"
                          id="bnrPopupUrlAddr"
@@ -497,15 +597,41 @@ function ManagerBannerEdit(props) {
                   <div className="toggleSwithWrap">
                     <input type="checkbox"
                            id="useYn"
-                           onChange={(e) =>
-                               setBnrPopupDetail({...bnrPopupDetail, useYn: e.target.checked ? "Y" : "N"})
-                           }
+                           onChange={(e) => {
+                             setBnrPopupDetail({...bnrPopupDetail, useYn: e.target.checked ? "Y" : "N"})
+                             setIsDatePickerEnabled(e.target.checked);
+                           }}
                            ref={(el) => (checkRef.current[0] = el)}
                     />
                     <label htmlFor="useYn" className="toggleSwitch">
                       <span className="toggleButton"></span>
                     </label>
                   </div>
+                </div>
+              </li>
+
+              <li className="inputBox type1 width3">
+                <label className="title" htmlFor="ntcBgngDt"><small>공개 시작일</small></label>
+                <div className="input">
+                  <input type="datetime-local"
+                         id="popupBgngDt"
+                         name="popupBgngDt"
+                         value={bnrPopupDetail.popupBgngDt}
+                         onChange={dateCheck}
+                         disabled={!isDatePickerEnabled}
+                  />
+                </div>
+              </li>
+              <li className="inputBox type1 width3">
+                <label className="title" htmlFor="ntcEndDate"><small>공개 종료일</small></label>
+                <div className="input">
+                  <input type="datetime-local"
+                         id="popupEndDt"
+                         name="popupEndDt"
+                         value={bnrPopupDetail.popupEndDt}
+                         onChange={dateCheck}
+                         disabled={!isDatePickerEnabled}
+                  />
                 </div>
               </li>
             </ul>
