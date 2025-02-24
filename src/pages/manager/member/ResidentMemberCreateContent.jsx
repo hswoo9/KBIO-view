@@ -80,6 +80,11 @@ function ResidentMemberCreateContent(props){
         setFileList(updatedFileList);  // 파일 리스트 업데이트
     };
 
+    const formatYmdForInput = (dateStr) => {
+        if (!dateStr || dateStr.length !== 8) return "";
+        return `${dateStr.slice(0, 4)}-${dateStr.slice(4, 6)}-${dateStr.slice(6, 8)}`;
+    };
+
     const handleDeleteAtchFile = (index, atchFileSn) => {
         Swal.fire({
             title: "삭제한 파일은 복구할 수 없습니다.\n그래도 삭제하시겠습니까?",
@@ -447,6 +452,13 @@ function ResidentMemberCreateContent(props){
         if (!residentDetail.entTelno) {
             alert("대표번호는 필수 값입니다.");
             return false;
+        }
+
+        if(residentDetail.actvtnYn === 'Y'){
+            if(!residentDetail.rlsBgngYmd || !residentDetail.rlsEndYmd){
+                alert("공개기한을 선택해주세요.")
+                return false;
+            }
         }
 
 
@@ -896,6 +908,48 @@ function ResidentMemberCreateContent(props){
                                 </label>
                             </div>
                         </div>
+
+                        {residentDetail.actvtnYn === "Y" && (
+                        <li className="dateWrap"
+                        style={{backgroundColor:"#F7F7F7"}}>
+                            <label className="title essential" htmlFor=""><small>공개기한</small></label>
+                        <div className="input" >
+                            <input
+                                type="date"
+                                style={{backgroundColor:"#F7F7F7"}}
+                                name="rlsBgngYmd"
+                                placeholder="공개시작일자"
+                                className="f_input2 widthGroup45"
+                                value={formatYmdForInput(residentDetail.rlsBgngYmd) || ""}
+                                onChange={(e) => {
+                                    const selectedDate = e.target.value;
+                                    const formattedDate = selectedDate.replace(/-/g, '');
+                                    setResidentDetail({
+                                        ...residentDetail,
+                                        rlsBgngYmd: formattedDate,
+                                    });
+                                }}
+                            />~&nbsp;
+                            <input
+                                type="date"
+                                style={{backgroundColor:"#F7F7F7"}}
+                                name="rlsEndYmd"
+                                placeholder="공개종료일자"
+                                className="f_input2 widthGroup45"
+                                value={formatYmdForInput(residentDetail.rlsEndYmd) || ""}
+                                onChange={(e) => {
+                                    const selectedDate = e.target.value;
+                                    const formattedDate = selectedDate.replace(/-/g, '');
+                                    setResidentDetail({
+                                        ...residentDetail,
+                                        rlsEndYmd: formattedDate,
+                                    });
+                                }}
+                            />
+                        </div>
+                        </li>
+                        )}
+
                         <span className="warningText">
                             On : 기관소개 메뉴에 기관 정보가 노출됩니다.
                             <br/>

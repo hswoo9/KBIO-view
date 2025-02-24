@@ -68,7 +68,6 @@ function OperationalSupport(props) {
                 requestOptions,
                 (resp) => {
                     setPaginationInfo(resp.paginationInfo);
-                    console.log("rcList",resp.result.rcList);
                     let dataList = [];
                     rcList.push(
                         <tr>
@@ -142,9 +141,7 @@ function OperationalSupport(props) {
         })
     }, []);
 
-    useEffect(() => {
-        console.log("rcList :", rcList);
-    }, [rcList]);
+
 
     function formatTelNo(telNo) {
         if (!telNo || telNo.length < 12) {
