@@ -117,6 +117,23 @@ function ManagerCodeGroup(props) {
         }
     );
 
+    const popStatus = (useYn, popupBgngDt, popupEndDt) => {
+        const now = moment(new Date()).format("YYYY-MM-DD HH:mm")
+        const startDt = moment(popupBgngDt).format("YYYY-MM-DD HH:mm")
+        const endDt = moment(popupEndDt).format("YYYY-MM-DD HH:mm")
+
+        if(useYn == "Y"){
+            if(startDt <= now && now <= endDt){
+                return "출력"
+            }else{
+                return "출력안함"
+            }
+        }else{
+            return "출력안함"
+        }
+    }
+
+
     const getBnrPopupList = useCallback(
         (searchCondition) => {
             const menuListURL = "/bannerPopupApi/getBnrPopupListOnPage.do";
@@ -147,32 +164,33 @@ function ManagerCodeGroup(props) {
                                 <td onClick={(e) => {e.stopPropagation()}}>
                                     {resp.paginationInfo.totalRecordCount - (resp.paginationInfo.currentPageNo - 1) * resp.paginationInfo.pageSize - index}
                                 </td>
-                                <td>{moment(item.popupBgngDt).format('YYYY-MM-DD HH:mm')}<br/>{moment(item.popupEndDt).format('YYYY-MM-DD HH:mm')}</td>
                                 <td>{item.bnrPopupTtl}</td>
+                                <td>{moment(item.popupBgngDt).format('YYYY-MM-DD HH:mm')}<br/>{moment(item.popupEndDt).format('YYYY-MM-DD HH:mm')}</td>
                                 <td>{item.popupPstnUpend}</td>
                                 <td>{item.popupPstnWdth}</td>
                                 <td>{item.popupWdthSz} X {item.popupVrtcSz}</td>
                                 <td>{item.npagYn === "Y" ? "새창" : "현재창"}</td>
-                                <td>{item.useYn === "Y" ? "출력" : "출력안함"}</td>
+                                <td>{popStatus(item.useYn, item.popupBgngDt, item.popupEndDt)}</td>
                                 <td>
-                                    <Link
-                                        to={{ pathname: URL.MANAGER_POPUP_MODIFY }}
-                                        state={{
-                                            bnrPopupSn : item.bnrPopupSn
-                                        }}
-                                        key={item.bnrPopupSn}
-                                    >
-                                        <button type="button">수정</button>
-                                    </Link>
-                                </td>
-                                <td>
-                                    <button type="button"
-                                            onClick={() => {
-                                                delBtnEvent(item.bnrPopupSn);
+                                    <div style={{display:"flex", gap: "5px"}}>
+                                        <Link
+                                            to={{pathname: URL.MANAGER_POPUP_MODIFY}}
+                                            state={{
+                                                bnrPopupSn: item.bnrPopupSn
                                             }}
-                                    >
-                                        삭제
-                                    </button>
+                                            key={item.bnrPopupSn}
+                                        >
+                                            <button type="button">수정</button>
+                                        </Link>
+
+                                        <button type="button"
+                                                onClick={() => {
+                                                    delBtnEvent(item.bnrPopupSn);
+                                                }}
+                                        >
+                                            삭제
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                         );
@@ -275,19 +293,27 @@ function ManagerCodeGroup(props) {
                         <table>
                             <caption>팝업목록</caption>
                             <colgroup>
+                                <col width="50px"/>
+                                <col/>
+                                <col width="200"/>
+                                <col width="150px"/>
+                                <col width="100px"/>
+                                <col width="100px"/>
+                                <col width="100px"/>
+                                <col width="100px"/>
+                                <col width="100px"/>
                             </colgroup>
                             <thead>
                             <tr>
-                                <th>번호</th>
-                                <th>팝업설정 기간</th>
+                            <th>번호</th>
                                 <th>제목</th>
+                                <th>팝업설정 기간</th>
                                 <th>TOP</th>
                                 <th>LEFT</th>
                                 <th>팝업크기</th>
                                 <th>출력방식</th>
                                 <th>상태</th>
-                                <th>수정</th>
-                                <th>삭제</th>
+                                <th>관리</th>
                             </tr>
                             </thead>
                             <tbody>
