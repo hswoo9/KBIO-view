@@ -9,6 +9,7 @@ import Swal from "sweetalert2";
 import CommonEditor from "@/components/CommonEditor";
 import {useDropzone} from "react-dropzone";
 import { getSessionItem } from "@/utils/storage";
+import {getComCdList} from "../../../components/CommonComponents.jsx";
 
 
 
@@ -24,6 +25,10 @@ function ResidentMemberCreateContent(props){
     const [imgFile, setImgFile] = useState("");
     const [fileList, setFileList] = useState([]);
     const sessionUser = getSessionItem("loginUser");
+    /*기업분류*/
+    const [comCdList, setComCdList] = useState([]);
+    /*기업업종*/
+    const [comCdTpbizList, setComCdTpbizList] = useState([]);
 
 
     //const isFirstRender = useRef(true);
@@ -311,6 +316,18 @@ function ResidentMemberCreateContent(props){
     useEffect(() => {
     }, [selectedFiles]);
 
+    useEffect(() => {
+        getComCdList(17).then((data) => {
+            setComCdList(data);
+        })
+    }, []);
+
+    //setComCdTpbizList
+    useEffect(() => {
+        getComCdList(18).then((data) => {
+            setComCdTpbizList(data);
+        })
+    }, []);
 
     //사업자번호 상태 확인
     const kbioauth = async () => {
@@ -409,6 +426,10 @@ function ResidentMemberCreateContent(props){
                 alert("이메일 주소를 입력해주세요.");
                 return false;
             }
+        }
+        if(!residentDetail.entClsf) {
+            alert("기업분류를 선택해주세요.");
+            return false;
         }
 
         /*if (!residentDetail.clsNm) {
@@ -509,13 +530,21 @@ function ResidentMemberCreateContent(props){
                     <li className="inputBox type1 width3">
                         <label className="title essential" htmlFor="mvnEntType"><small>분류</small></label>
                         <div className="itemBox">
-                            <select className="selectGroup">
-                                <option value="0">전체</option>
-                                <option value="1">예시1</option>
-                                <option value="2">예시2</option>
-                                <option value="3">예시3</option>
-                                <option value="4">예시4</option>
-                                <option value="5">예시5</option>
+                            <select className="selectGroup"
+                                    id="entClsf"
+                                    value={residentDetail.entClsf || ""}
+                                    onChange={(e) =>
+                                            setResidentDetail({...residentDetail,entClsf : e.target.value})
+                            }
+                            >
+                                <option value="">선택</option>
+                                {comCdList.map((item, index) => (
+                                    <option key={item.comCd}
+                                            value={item.comCd}
+                                    >
+                                        {item.comCdNm}
+                                    </option>
+                                ))}
                             </select>
                         </div>
                     </li>
@@ -672,13 +701,21 @@ function ResidentMemberCreateContent(props){
                     <li className="inputBox type1 width3">
                         <label className="title essential" htmlFor="clsNm"><small>업종</small></label>
                         <div className="itemBox">
-                            <select className="selectGroup">
-                                <option value="0">전체</option>
-                                <option value="1">예시1</option>
-                                <option value="2">예시2</option>
-                                <option value="3">예시3</option>
-                                <option value="4">예시4</option>
-                                <option value="5">예시5</option>
+                            <select className="selectGroup"
+                                    id="entClsf"
+                                    value={residentDetail.entTpbiz || ""}
+                                    onChange={(e) =>
+                                        setResidentDetail({...residentDetail,entTpbiz : e.target.value})
+                                    }
+                            >
+                                <option value="">선택</option>
+                                {comCdTpbizList.map((item, index) => (
+                                    <option key={item.comCd}
+                                            value={item.comCd}
+                                    >
+                                        {item.comCdNm}
+                                    </option>
+                                ))}
                             </select>
                         </div>
                     </li>
