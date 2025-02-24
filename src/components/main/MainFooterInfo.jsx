@@ -2,11 +2,11 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import * as EgovNet from "@/api/egovFetch";
 import * as ComScript from "@/components/CommonScript";
 
-const MainFooterInfo = () => {
+const MainFooterInfo = ({ value }) => {
 
     const [searchCondition, setSearchCondition] = useState(
         location.state?.searchCondition || {
-            utztnTrmsKnd: "1",
+            utztnTrmsKnd: String(value),
         }
     );
     const [dataList, setDataList] = useState([]);
@@ -24,11 +24,13 @@ const MainFooterInfo = () => {
     const makerOption = (data) => {
         let resultList = [];
         data.forEach(function(item, index){
-            resultList.push(
-                <option value={item.utztnTrmsSn} key={item.utztnTrmsSn}>
-                    {item.utztnTrmsTtl}
-                </option>
-            );
+            if(item.utztnTrmsKnd == value){
+                resultList.push(
+                    <option value={item.utztnTrmsSn} key={item.utztnTrmsSn}>
+                        {item.utztnTrmsTtl}
+                    </option>
+                );
+            }
         });
         return resultList;
     }
@@ -70,6 +72,12 @@ const MainFooterInfo = () => {
         getDataList(searchCondition);
     }, []);
 
+    useEffect(() => {
+        const selectedValue = String(value);
+        const selectedItem = dataList.find(item => item.utztnTrmsKnd === selectedValue);
+        setViewData(selectedItem);
+    }, [value]);
+
     return (
         <div className="privacyPolicyModal modalCon">
             <div className="bg" onClick={() => ComScript.closeModal("privacyPolicyModal")}></div>
@@ -79,7 +87,7 @@ const MainFooterInfo = () => {
                         <div className="icon"></div>
                     </div>
                     <div className="titleWrap type2">
-                        <p className="tt1 fontColorCustom">개인정보처리방침</p>
+                        <p className="tt1 fontColorCustom">{value == "1" ? "개인정보처리방침" : "이용약관"}</p>
                     </div>
                     <form className="diffiBox">
                         <div className="cont">
