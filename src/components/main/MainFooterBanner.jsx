@@ -48,12 +48,6 @@ const MainFooterBanner = ({data}) => {
 
     }, []);
 
-    /*useEffect(() => {
-        if(wrapRef.current && listRef.current){
-            flowBannerAct();
-        }
-    }, [wrapRef.current, listRef.current]);*/
-
     useEffect(() => {
         function handleResize() {
             setWindowSize(getWindowSize());
@@ -68,9 +62,6 @@ const MainFooterBanner = ({data}) => {
     const flowBannerAct = () => {
         const wrap = wrapRef.current;
         const list = listRef.current;
-        console.log(wrap);
-        console.log(list);
-        console.log(listRef.current.children);
         if(listRef.current.children.length > 0){
             let liCount = list.children.length;
             const originalItems = Array.from(list.children); // 기존 li 목록 복사
