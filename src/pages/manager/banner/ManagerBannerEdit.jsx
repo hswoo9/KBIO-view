@@ -270,9 +270,23 @@ function ManagerBannerEdit(props) {
             $.each($("input[name='bnrPopupFrm']"), function(item, index){
               if(this.value == resp.result.tblBnrPopup.bnrPopupFrm){
                 $(this).prop("checked", true);
+
+                const base = document.querySelectorAll(".base")
+                if(this.value != "mainTopSlides"){
+                  document.querySelector("li.mainTopSlides").style.display = "none"
+                    base.forEach((item) => {
+                      item.style.display = "block";
+                    });
+                }else{
+                    document.querySelector("li.mainTopSlides").style.display = "flex"
+                    base.forEach((item) => {
+                      item.style.display = "none";
+                    });
+                  }
               }
             });
           }
+
           if(resp.result.tblBnrPopup.useYn != null){
             if(resp.result.tblBnrPopup.useYn == "Y"){
               document.getElementById("useYn").checked = true;
