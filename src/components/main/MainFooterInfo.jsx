@@ -4,7 +4,11 @@ import * as ComScript from "@/components/CommonScript";
 
 const MainFooterInfo = () => {
 
-    const [searchCondition, setSearchCondition] = useState({});
+    const [searchCondition, setSearchCondition] = useState(
+        location.state?.searchCondition || {
+            utztnTrmsKnd: "1",
+        }
+    );
     const [dataList, setDataList] = useState([]);
     const [viewData, setViewData] = useState({});
 
@@ -46,13 +50,11 @@ const MainFooterInfo = () => {
                     let resultList = [];
                     let indexNumber = 0;
                     resp.result.dataList.forEach(function (item, index) {
-                        if(item.utztnTrmsKnd == "1"){
-                            if(indexNumber === 0){
-                                setViewData(item);
-                            }
-                            resultList.push(item);
-                            indexNumber++;
+                        if(indexNumber === 0){
+                            setViewData(item);
                         }
+                        resultList.push(item);
+                        indexNumber++;
                     });
                     setDataList(resultList);
                 },
