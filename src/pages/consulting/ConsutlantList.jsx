@@ -316,6 +316,16 @@ function ConsultantList(props) {
             <div className="inner">
                 <CommonSubMenu/>
                 <div className="inner2">
+                    <div className="buttonBox rightBox" style={{justifyContent:"right", marginBottom:"20px"}}>
+                        <button type="button" className="clickBtn requestBtn" onClick={() => editClick(26, "", "")}>
+                            <div className="icon"></div>
+                            <span>컨설팅 의뢰</span>
+                        </button>
+                        <button type="button" className="clickBtn contactBtn" onClick={() => editClick(27, "", "")}>
+                            <div className="icon"></div>
+                            <span>간편 상담</span>
+                        </button>
+                    </div>
                     <div className="searchFormWrap type2" data-aos="fade-up" data-aos-duration="1500">
                         <form>
                             <div className="searchBox">

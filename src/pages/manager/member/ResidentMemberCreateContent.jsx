@@ -406,7 +406,7 @@ function ResidentMemberCreateContent(props){
         let requestOptions = {};
 
         if (!residentDetail.brno) {
-            alert("사업자번호는 필수 값입니다.");
+            alert("사업자번호를 입력해주세요.");
             return false;
         }
         if (!residentDetail.brno) {
@@ -414,11 +414,11 @@ function ResidentMemberCreateContent(props){
             return false;
         }
         if (!residentDetail.mvnEntNm) {
-            alert("기업명은 필수 값입니다.");
+            alert("기업명을 입력해주세요.");
             return false;
         }
         if (!residentDetail.rpsvNm) {
-            alert("대표자명은 필수 값입니다.");
+            alert("대표자명을 입력해주세요.");
             return false;
         }
         if(modeInfo.mode === CODE.MODE_MODIFY){
@@ -436,13 +436,21 @@ function ResidentMemberCreateContent(props){
             alert("기업분류를 선택해주세요.");
             return false;
         }
-
-        /*if (!residentDetail.clsNm) {
-            alert("산업은 필수 값입니다.");
+        if(!residentDetail.entTpbiz) {
+            alert("업종을 선택해주세요.");
             return false;
-        }*/
+        }
+        if(!residentDetail.bzentyExpln) {
+            alert("기업소개를 입력해주세요.");
+            return false;
+        }
+        if(!residentDetail.mainHstry) {
+            alert("주요이력을 입력해주세요.");
+            return false;
+        }
+
         if (!residentDetail.zip || !residentDetail.entAddr) {
-            alert("주소는 필수 값입니다.");
+            alert("주소를 입력해주세요.");
             return false;
         }
         if (!residentDetail.entDaddr) {
@@ -450,7 +458,11 @@ function ResidentMemberCreateContent(props){
             return false;
         }
         if (!residentDetail.entTelno) {
-            alert("대표번호는 필수 값입니다.");
+            alert("대표번호를 입력해주세요.");
+            return false;
+        }
+        if (!residentDetail.actvtnYn) {
+            alert("공개여부를 선택해주세요.");
             return false;
         }
 
