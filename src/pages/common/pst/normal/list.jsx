@@ -221,6 +221,7 @@ function commonPstList(props) {
             { pathname: URL.COMMON_PST_NORMAL_DETAIL },
             { state: {
                 pstSn:  pstSn,
+                thisMenuSn : location.state?.thisMenuSn,
                 menuSn : location.state?.menuSn,
                 menuNmPath : location.state?.menuNmPath,
             } },

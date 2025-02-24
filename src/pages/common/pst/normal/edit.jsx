@@ -237,6 +237,9 @@ function setCommonPst(props) {
                 { pathname : URL.COMMON_PST_NORMAL_LIST},
                 { state: {
                     bbsSn: bbs.bbsSn,
+                    menuSn: location.state?.menuSn,
+                    menuNmPath: location.state?.menuNmPath,
+                    thisMenuSn : location.state?.thisMenuSn,
                   }
                 }
             );
@@ -277,6 +280,9 @@ function setCommonPst(props) {
                 { pathname : URL.COMMON_PST_NORMAL_LIST},
                 { state: {
                     bbsSn: bbs.bbsSn,
+                    menuSn: location.state?.menuSn,
+                    menuNmPath: location.state?.menuNmPath,
+                    thisMenuSn : location.state?.thisMenuSn,
                   }
                 }
             );
@@ -469,7 +475,7 @@ function setCommonPst(props) {
                   </li>
               )}
               <li className="inputBox type1 width1">
-                <label className="title" htmlFor="linkUrlAddr"><small>외부링크</small></label>
+                <label className="title" htmlFor="linkUrlAddr"><small>관련링크</small></label>
                 <div className="input">
                   <input type="text"
                          name="linkUrlAddr"
@@ -549,6 +555,9 @@ function setCommonPst(props) {
                   to={URL.COMMON_PST_NORMAL_LIST}
                   state={{
                     bbsSn: bbs.bbsSn,
+                    menuSn: location.state?.menuSn,
+                    menuNmPath: location.state?.menuNmPath,
+                    thisMenuSn : location.state?.thisMenuSn,
                   }}
               >
                 <button type="button" className="clickBtn white">

@@ -273,3 +273,5 @@ button:focus { outline: 2px solid black;}
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;}
+
+.container .board_view > table thead .fileBox {flex-direction: column;}

@@ -200,6 +200,7 @@ function commonPstList(props) {
                     pstSn:  pstSn,
                     menuSn : location.state?.menuSn,
                     menuNmPath : location.state?.menuNmPath,
+                    thisMenuSn : location.state?.thisMenuSn,
                 } },
             { mode:  CODE.MODE_READ}
         );
@@ -313,6 +314,7 @@ function commonPstList(props) {
                                     bbsSn: bbs.bbsSn,
                                     menuSn: location.state?.menuSn,
                                     menuNmPath: location.state?.menuNmPath,
+                                    thisMenuSn : location.state?.thisMenuSn,
                                 }}
                                 mode={CODE.MODE_CREATE}
                                 style={{float: "right"}}

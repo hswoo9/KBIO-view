@@ -79,6 +79,9 @@ function commonPstDetail(props) {
               { pathname : URL.COMMON_PST_FAQ_LIST},
               { state: {
                   bbsSn: bbs.bbsSn,
+                  menuSn: location.state?.menuSn,
+                  menuNmPath: location.state?.menuNmPath,
+                  thisMenuSn : location.state?.thisMenuSn,
                 }
               }
             );
@@ -161,7 +164,7 @@ function commonPstDetail(props) {
                     </li>
                 )}
                 <li className="inputBox type1 width1">
-                  <label className="title"><small>외부링크</small></label>
+                  <label className="title"><small>관련링크</small></label>
                   <div className="input">
                     <NavLink to={pst.linkUrlAddr} target={"_blank"}>
                       {pst.linkUrlAddr}
@@ -182,6 +185,9 @@ function commonPstDetail(props) {
                           mode={CODE.MODE_MODIFY}
                           state={{
                             pstSn: pst.pstSn,
+                            menuSn: location.state?.menuSn,
+                            menuNmPath: location.state?.menuNmPath,
+                            thisMenuSn : location.state?.thisMenuSn,
                           }}
                       >
                         <button type="button" className="clickBtn">
@@ -204,6 +210,9 @@ function commonPstDetail(props) {
                       to={URL.COMMON_PST_FAQ_LIST}
                       state={{
                         bbsSn: bbs.bbsSn,
+                        menuSn: location.state?.menuSn,
+                        menuNmPath: location.state?.menuNmPath,
+                        thisMenuSn : location.state?.thisMenuSn,
                       }}
                   >
                     <button type="button" className="clickBtn white">
