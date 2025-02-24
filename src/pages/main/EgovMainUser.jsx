@@ -20,22 +20,17 @@ import "@/css/userMain.css";
 import AOS from "aos";
 
 import MainSwiper from "@/components/main/MainSwiper";
-import MainFooterSwiper from "@/components/main/MainFooterSwiper";
+import MainBottomSwiper from "@/components/main/MainBottomSwiper";
 import CommonSlider from "@/components/CommonSlider";
 import MainSlider from "@/components/main/MainSlider";
 import MainCalendar from "@/components/main/MainCalendar";
+import MainFooterBanner from "@/components/main/MainFooterBanner";
 
 import user_main_sec01_slide01 from "@/assets/images/user_main_sec01_slide01.jpg";
 import user_main_sec01_icon01 from "@/assets/images/user_main_sec01_icon01.svg";
 import user_main_sec01_icon02 from "@/assets/images/user_main_sec01_icon02.svg";
 import user_main_sec01_icon03 from "@/assets/images/user_main_sec01_icon03.svg";
 import user_main_sec01_icon04 from "@/assets/images/user_main_sec01_icon04.svg";
-
-import user_main_rolling_logo01 from "@/assets/images/user_main_rolling_logo01.svg";
-import user_main_rolling_logo02 from "@/assets/images/user_main_rolling_logo02.svg";
-import user_main_rolling_logo03 from "@/assets/images/user_main_rolling_logo03.svg";
-import user_main_rolling_logo04 from "@/assets/images/user_main_rolling_logo04.svg";
-import user_main_rolling_logo05 from "@/assets/images/user_main_rolling_logo05.svg";
 import moment from "moment/moment.js";
 
 function EgovMainUser(props) {
@@ -51,46 +46,6 @@ function EgovMainUser(props) {
 
   const [popUpList, setPopUpList] = useState([]);
 
-  // const wrapRef = useRef(null);
-  // const listRef = useRef(null);
-  // const [windowSize, setWindowSize] = useState(getWindowSize());
-  // function getWindowSize() {
-  //   if (window.innerWidth > 1279) return 'pc';
-  //   if (window.innerWidth > 767) return 'ta';
-  //   return 'mo';
-  // }
-  // useEffect(() => {
-  //   function handleResize() {
-  //     setWindowSize(getWindowSize());
-  //   }
-  //   window.addEventListener('resize', handleResize);
-  //   return () => {
-  //     window.removeEventListener('resize', handleResize);
-  //   };
-  // }, []);
-  // useEffect(() => {
-  //   // flowBannerAct 함수 실행
-  //   flowBannerAct();
-  // }, [windowSize]);
-  // const flowBannerAct = () => {
-  //   const wrap = wrapRef.current;
-  //   const list = listRef.current;
-  //   let wrapWidth = wrap.offsetWidth;
-  //   let listWidth = list.offsetWidth;
-  //   const speed = 15;
-  //   let $clone = list.cloneNode(true);
-  //   wrap.appendChild($clone);
-  //   if (listWidth < wrapWidth) {
-  //     const listCount = Math.ceil(wrapWidth * 2 / listWidth);
-  //     for (let i = 2; i < listCount; i++) {
-  //       $clone = $clone.cloneNode(true);
-  //       wrap.appendChild($clone);
-  //     }
-  //   }
-  //   wrap.querySelectorAll('.imgMove').forEach((el) => {
-  //     el.style.animation = `${listWidth / speed}s linear infinite flowRolling`;
-  //   });
-  // };
 
   const [mvnEntList, setMvnEntList] = useState([]);
   const [notiList, setNotiList] = useState([]);
@@ -187,7 +142,7 @@ function EgovMainUser(props) {
         <MainCalendar />
         <section className="sec sec04" data-aos="fade-in">
           <div className="inner">
-            <MainFooterSwiper />
+            <MainBottomSwiper />
             <div className="box noticeBox" data-aos="fade-in">
               <div className="topBox" data-aos="fade-in" data-aos-duration="1500">
                 <h2 className="secTitle">공지사항</h2>
@@ -277,22 +232,7 @@ function EgovMainUser(props) {
             </div>
           </div>
         </section>
-        {/*<div className="rollingWrap">*/}
-        {/*  <div className="moveWrap" ref={wrapRef}>*/}
-        {/*    <ul className="imgMove" ref={listRef}>*/}
-        {/*      <li><img src={user_main_rolling_logo01} alt="SAMSUNG BIOLOGICS" loading="lazy"/></li>*/}
-        {/*      <li><img src={user_main_rolling_logo02} alt="동화약품" loading="lazy"/></li>*/}
-        {/*      <li><img src={user_main_rolling_logo03} alt="GC녹십자" loading="lazy"/></li>*/}
-        {/*      <li><img src={user_main_rolling_logo04} alt="DAEWOONG" loading="lazy"/></li>*/}
-        {/*      <li><img src={user_main_rolling_logo05} alt="서울바이오허브" loading="lazy"/></li>*/}
-        {/*      <li><img src={user_main_rolling_logo01} alt="SAMSUNG BIOLOGICS" loading="lazy"/></li>*/}
-        {/*      <li><img src={user_main_rolling_logo02} alt="동화약품" loading="lazy"/></li>*/}
-        {/*      <li><img src={user_main_rolling_logo03} alt="GC녹십자" loading="lazy"/></li>*/}
-        {/*      <li><img src={user_main_rolling_logo04} alt="DAEWOONG" loading="lazy"/></li>*/}
-        {/*      <li><img src={user_main_rolling_logo05} alt="서울바이오허브" loading="lazy"/></li>*/}
-        {/*    </ul>*/}
-        {/*  </div>*/}
-        {/*</div>*/}
+        <MainFooterBanner />
       </div>
   );
 }

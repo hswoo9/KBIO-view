@@ -12,7 +12,7 @@ import user_main_sec02_logo04 from "@/assets/images/user_main_sec02_logo04.png";
 import user_main_sec02_logo05 from "@/assets/images/user_main_sec02_logo05.png";
 import user_main_sec04_banner01 from "@/assets/images/user_main_sec04_banner01.jpg";
 
-const MainFooterSwiper = ({data}) => {
+const MainBottomSwiper = ({data}) => {
     const swiperRef = useRef(null);
     const [isAutoPlay, setIsAutoPlay] = useState(true);
     const [swiperList, setSwiperList] = useState([]);
@@ -152,4 +152,4 @@ const MainFooterSwiper = ({data}) => {
     );
 }
 
-export default MainFooterSwiper;
+export default MainBottomSwiper;
