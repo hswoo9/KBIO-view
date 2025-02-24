@@ -8,6 +8,7 @@ import { fileDownLoad } from "@/components/CommonComponents";
 import Swal from 'sweetalert2';
 import CODE from "@/constants/code";
 import CommonSubMenu from "@/components/CommonSubMenu";
+import {getComCdList} from "@/components/CommonComponents";
 
 function MemberMyPageSimpleDetail(props) {
     const sessionUser = getSessionItem("loginUser");
@@ -16,8 +17,13 @@ function MemberMyPageSimpleDetail(props) {
     const [paginationInfo, setPaginationInfo] = useState({});
     const [latestCreator, setLatestCreator] = useState(null);
     const [consulttUser, setConsulttUser] = useState({});
-
+    const [comCdList, setComCdList] = useState([]);
     const [filesByDsctnSn, setFilesByDsctnSn] = useState({});
+    const [consulttUserName, setConsulttUserName] = useState({});
+
+    const [cnsltProfileFile, setCnsltProfileFile] = useState({});
+    const [cnsltCertificateFile, setCnsltCertificateFile] = useState([]);
+
     const [searchDto, setSearchDto] = useState({
         cnsltAplySn: location.state?.cnsltAplySn || "",
         cnsltSttsCd: location.state?.cnsltSttsCd || "",
@@ -34,6 +40,11 @@ function MemberMyPageSimpleDetail(props) {
         initMode();
     }, []);
 
+    useEffect(() => {
+        getComCdList(10).then((data) => {
+            setComCdList(data);
+        })
+    }, []);
 
 
     useEffect(() => {
@@ -69,6 +80,21 @@ function MemberMyPageSimpleDetail(props) {
                 setConsulttUser({
                     ...resp.result.consulttUser,
                 });
+
+                if (resp.result.cnsltProfileFile) {
+                    setCnsltProfileFile({
+                        ...resp.result.cnsltProfileFile
+                    });
+                }
+
+                if (resp.result.cnsltCertificateFile) {
+                    setCnsltCertificateFile(resp.result.cnsltCertificateFile);
+                }
+
+                if (resp.result.consulttUserName) {
+                    setConsulttUserName(resp.result.consulttUserName);
+                }
+
                 if (resp.result.filesByDsctnSn) {
                     setFilesByDsctnSn(resp.result.filesByDsctnSn);
                 }
@@ -96,68 +122,101 @@ function MemberMyPageSimpleDetail(props) {
                         const showEditButton = isLatest && isOwnComment && isSn && searchDto.cnsltSttsCd !== "200" && searchDto.cnsltSttsCd !== "999"
 
                         dataList.push(
-                            <div key={index} className="input" style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                            <div key={index} className="chatBox">
                                 {item.dsctnSe === "0" ? (
                                     <>
-                                        {showEditButton &&  (
-                                            <button
-                                                style={{ border: "1px solid #007bff", background: "#007bff", color: "#fff", padding: "5px 10px", borderRadius: "5px", cursor: "pointer" }}
-                                                onClick={() => handleEditClick(item)}
-                                            >
-                                                수정
-                                            </button>
-                                        )}
-                                        <div style={{ border: "1px solid #333", borderRadius: "10px", padding: "10px", width: "80%" }}>
-                                            <div dangerouslySetInnerHTML={{ __html: item.cn }}></div>
-                                            {files.length > 0 && (
-                                                <ul style={{paddingLeft: "20px"}}>
-                                                    {files.map((file, fileIndex) => (
-                                                        <li style={{marginBottom: "5px", marginTop: "20px"}} key={index}>
-                                                        <span
-                                                            onClick={() => fileDownLoad(file.atchFileSn, file.atchFileNm)}
-                                                            style={{cursor: "pointer"}}>
-                                                            {file.atchFileNm} - {(file.atchFileSz / 1024).toFixed(2)} KB
-                                                        </span>
-                                                        </li>
-                                                    ))}
-                                                </ul>
+                                        <div className="questionBox box">
+                                          <span className="time">
+                                            {moment(item.frstCrtDt).format('YYYY.MM.DD HH:mm')}
+                                          </span>
+                                            <div className="chatText">
+                                                <p className="text" dangerouslySetInnerHTML={{__html: item.cn}}></p>
+                                                {files?.length > 0 && (
+                                                    <ul className="fileBox">
+                                                        {files.map((file, fileIndex) => (
+                                                            <li key={fileIndex}>
+                                                                <a
+                                                                    href="#"
+                                                                    onClick={(e) => {
+                                                                        e.preventDefault();
+                                                                        fileDownLoad(file.atchFileSn, file.atchFileNm);
+                                                                    }}
+                                                                >
+                                                                    <div className="icon"></div>
+                                                                    <p className="name">{file.atchFileNm}</p>
+                                                                    <span className="size">
+                                                                    ({(file.atchFileSz / 1024).toFixed(2)} KB)
+                                                                  </span>
+                                                                </a>
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                )}
+                                            </div>
+                                            {showEditButton && (
+                                                <button
+                                                    type="button"
+                                                    className="editBtn"
+                                                    onClick={() => handleEditClick(item)}
+                                                >
+                                                    <div className="icon"></div>
+                                                </button>
                                             )}
-                                            <p style={{ textAlign: "right" }}>{moment(item.frstCrtDt).format('YYYY.MM.DD HH:mm')}</p>
-                                        </div>
-                                        <div style={{ border: "1px solid #333", borderRadius: "20px", padding: "10px", width: "7%" }}>
-                                            <p style={{ textAlign: "center" }}>신청자</p>
                                         </div>
                                     </>
                                 ) : (
                                     <>
-                                        <div style={{ border: "1px solid #333", borderRadius: "20px", padding: "10px", width: "7%" }}>
-                                            <p style={{ textAlign: "center" }}>컨설턴트</p>
+                                        <div className="answerBox">
+                                        <figure className="profileBox">
+                                                <img
+                                                    src={cnsltProfileFile
+                                                        ? `http://133.186.250.158${cnsltProfileFile.atchFilePathNm}/${cnsltProfileFile.strgFileNm}.${cnsltProfileFile.atchFileExtnNm}`
+                                                        : ""}
+                                                    alt="profile image"
+                                                />
+                                            </figure>
+                                            <div className="rightBox">
+                                                <p className="name">{consulttUserName.kornFlnm}</p>
+                                                <div className="box">
+                                                    <div className="chatText">
+                                                        <p className="text" dangerouslySetInnerHTML={{ __html: item.cn }}></p>
+                                                        {files?.length > 0 && (
+                                                            <ul className="fileBox">
+                                                                {files.map((file, fileIndex) => (
+                                                                    <li key={fileIndex}>
+                                                                        <a
+                                                                            href="#"
+                                                                            onClick={(e) => {
+                                                                                e.preventDefault();
+                                                                                fileDownLoad(file.atchFileSn, file.atchFileNm);
+                                                                            }}
+                                                                        >
+                                                                            <div className="icon"></div>
+                                                                            <p className="name">{file.atchFileNm}</p>
+                                                                            <span className="size">
+                                                                            ({(file.atchFileSz / 1024).toFixed(2)} KB)
+                                                                        </span>
+                                                                        </a>
+                                                                    </li>
+                                                                ))}
+                                                            </ul>
+                                                        )}
+                                                    </div>
+                                                    {showEditButton && (
+                                                        <button
+                                                            type="button"
+                                                            className="editBtn2"
+                                                            onClick={() => handleEditClick(item)}
+                                                        >
+                                                            <div className="icon"></div>
+                                                        </button>
+                                                    )}
+                                                    <span className="time">
+                                                    {moment(item.frstCrtDt).format('YYYY.MM.DD HH:mm')}
+                                                  </span>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div style={{ border: "1px solid #333", borderRadius: "10px", padding: "10px", width: "80%" }}>
-                                            <div dangerouslySetInnerHTML={{ __html: item.cn }}></div>
-                                            {files.length > 0 && (
-                                                <ul style={{paddingLeft: "20px"}}>
-                                                    {files.map((file, fileIndex) => (
-                                                        <li style={{marginBottom: "5px", marginTop: "20px"}} key={index}>
-                                                        <span
-                                                            onClick={() => fileDownLoad(file.atchFileSn, file.atchFileNm)}
-                                                            style={{cursor: "pointer"}}>
-                                                            {file.atchFileNm} - {(file.atchFileSz / 1024).toFixed(2)} KB
-                                                        </span>
-                                                        </li>
-                                                    ))}
-                                                </ul>
-                                            )}
-                                            <p style={{ textAlign: "right" }}>{moment(item.frstCrtDt).format('YYYY.MM.DD HH:mm')}</p>
-                                        </div>
-                                        {showEditButton && (
-                                            <button
-                                                style={{ border: "1px solid #007bff", background: "#007bff", color: "#fff", padding: "5px 10px", borderRadius: "5px", cursor: "pointer" }}
-                                                onClick={() => handleEditClick(item)}
-                                            >
-                                                수정
-                                            </button>
-                                        )}
                                     </>
                                 )}
                             </div>
@@ -273,101 +332,78 @@ function MemberMyPageSimpleDetail(props) {
 
 
     return (
-        <div id="container" className="container ithdraw join_step">
+        <div id="container" className="container mypage_consultant view">
             <div className="inner">
                 <CommonSubMenu/>
 
-                {/* 애로사항 상세 내용 */}
-                <div className="contBox" style={{marginTop: "20px"}}>
-                    {simpleDetail ? (
-                        <div className="contBox infoWrap customContBox"
-                             style={{padding: "20px", background: "#f9f9f9", borderRadius: "5px"}}>
-                            <ul className="inputWrap" style={{listStyleType: "none", paddingLeft: "0"}}>
-                                <li className="inputBox type1 width1" style={{marginBottom: "10px"}}>
-                                    <label className="title" style={{fontWeight: "bold"}}><small>등록일</small></label>
-                                    <div className="input"
-                                         style={{marginTop: "5px"}}>{moment(simpleDetail.frstCrtDt).format('YYYY-MM-DD')}</div>
-                                </li>
-                                <li className="inputBox type1 width1" style={{marginBottom: "10px"}}>
-                                    <label className="title" style={{fontWeight: "bold"}}><small>분류</small></label>
-                                    <div className="input"
-                                         style={{marginTop: "5px"}}>{simpleDetail.cnsltAplyFldNm}</div>
-                                </li>
-                                <li className="inputBox type1 width1" style={{marginBottom: "10px"}}>
-                                    <label className="title" style={{fontWeight: "bold"}}><small>제목</small></label>
-                                    <div className="input" style={{marginTop: "5px"}}>{simpleDetail.ttl}</div>
-                                </li>
-                                <li className="inputBox type1 width1" style={{marginBottom: "10px"}}>
-                                    <label className="title" style={{fontWeight: "bold"}}><small>의뢰내용</small></label>
-                                    <div className="input" style={{marginTop: "5px"}}
-                                         dangerouslySetInnerHTML={{__html: simpleDetail.cn}}></div>
-                                </li>
-                                {/*<li className="inputBox type1 width1" style={{marginBottom: "10px"}}>
-                                    <label className="title" style={{fontWeight: "bold"}}><small>첨부파일</small></label>
-                                    <div className="input" style={{marginTop: "5px"}}>
-                                        {simpleDetail.simpleFile && simpleDetail.simpleFile.length > 0 ? (
-                                            <ul style={{paddingLeft: "20px"}}>
-                                                {simpleDetail.simpleFile.map((file, index) => (
-                                                    <li style={{marginBottom: "5px"}} key={index}>
-                                                        <span
-                                                            onClick={() => fileDownLoad(file.atchFileSn, file.atchFileNm)}
-                                                            style={{cursor: "pointer"}}>
-                                                            {file.atchFileNm} - {(file.atchFileSz / 1024).toFixed(2)} KB
-                                                        </span>
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        ) : "첨부파일이 없습니다."}
-                                    </div>
-                                </li>*/}
-                            </ul>
-                            <div className="contBox infoWrap customContBox">
-                                <ul className="inputWrap">
-                                    <li className="inputBox type1 email width1">
-                                        <label className="title"><small>간편상담 내역</small></label>
-                                        {cnsltDsctnList}
-                                    </li>
-                                </ul>
+                <div className="inner2" data-aos="fade-up" data-aos-duration="1500">
+                    <div className="profileWrap">
+                        <div className="profileBox">
+                            <figure className="imgBox">
+                                <img src={cnsltProfileFile
+                                    ? `http://133.186.250.158${cnsltProfileFile.atchFilePathNm}/${cnsltProfileFile.strgFileNm}.${cnsltProfileFile.atchFileExtnNm}`
+                                    : ""}
+                                     alt="profile image"/>
+                            </figure>
+                            <div className="textBox">
+                                <div className="departBox cate4">
+                                    <div className="icon"></div>
+                                    <p className="text">{comCdList.find(item => item.comCd === String(consulttUser.cnsltFld))?.comCdNm || ""}</p>
+                                </div>
+                                <div className="nameBox">
+                                    <strong className="name">{consulttUserName.kornFlnm || ""}</strong>
+                                    <p className="company">{consulttUser.jbpsNm}({consulttUser.ogdpNm})</p>
+                                </div>
+                                <p className="intro">
+                                    {consulttUser.rmrkCn?.match(/.{1,50}/g)?.map((line, index) => (
+                                        <React.Fragment key={index}>
+                                            {line}
+                                            <br/>
+                                        </React.Fragment>
+                                    ))}
+                                </p>
                             </div>
                         </div>
-                    ) : (
-                        <div className="contBox infoWrap customContBox"
-                             style={{padding: "20px", background: "#f9f9f9", borderRadius: "5px"}}>
-                            <div className="input" style={{marginTop: "5px"}}>해당 간편상담의 상세 정보가 없습니다.</div>
+                    </div>
+
+                    <div className="chatWrap">
+                        <div className="titleWrap type2">
+                            <p className="tt1">컨설팅의뢰</p>
                         </div>
-                    )}
-                </div>
-                <div className="buttonBox">
-                    <div className="leftBox">
+                        {cnsltDsctnList}
+                    </div>
+                    <div className="buttonBox">
                         {simpleDetail && (
                             <>
-                            {/* 취소상태일때 */}
+                                {/* 취소상태일때 */}
                                 {searchDto.cnsltSttsCd === "999" ? (
                                     <>
                                         <NavLink to={URL.MEMBER_MYPAGE_SIMPLE}
-                                                 style={{width:'100%'}}
-                                        state={{
-                                            menuSn : location.state?.menuSn,
-                                            menuNmPath : location.state?.menuNmPath
-                                        }}>
-                                            <button type="button" className="clickBtn white">
+                                                 style={{width: '100%'}}
+                                                 state={{
+                                                     menuSn: location.state?.menuSn,
+                                                     menuNmPath: location.state?.menuNmPath
+                                                 }}>
+                                            <button type="button" className="clickBtn listBtn">
+                                                <div className="icon"></div>
                                                 목록
                                             </button>
                                         </NavLink>
                                     </>
                                 ) : cnsltDsctnList.length === 1 && latestCreator === sessionUser.userSn ? (
                                     <>
-                                        <button type="button" className="clickBtn point"
+                                        <button type="button" className="clickBtn writeBtn"
                                                 onClick={() => handleCancleClick(searchDto.cnsltAplySn)}>
                                             <span>취소</span>
                                         </button>
                                         <NavLink to={URL.MEMBER_MYPAGE_SIMPLE}
-                                                 style={{width:'100%'}}
+                                                 style={{width: '100%'}}
                                                  state={{
-                                                     menuSn : location.state?.menuSn,
-                                                     menuNmPath : location.state?.menuNmPath
+                                                     menuSn: location.state?.menuSn,
+                                                     menuNmPath: location.state?.menuNmPath
                                                  }}>
-                                            <button type="button" className="clickBtn white">
+                                            <button type="button" className="clickBtn listBtn">
+                                                <div className="icon"></div>
                                                 목록
                                             </button>
                                         </NavLink>
@@ -380,12 +416,13 @@ function MemberMyPageSimpleDetail(props) {
                                             <span>만족도 조사</span>
                                         </button>
                                         <NavLink to={URL.MEMBER_MYPAGE_SIMPLE}
-                                                 style={{width:'100%'}}
+                                                 style={{width: '100%'}}
                                                  state={{
-                                                     menuSn : location.state?.menuSn,
-                                                     menuNmPath : location.state?.menuNmPath
+                                                     menuSn: location.state?.menuSn,
+                                                     menuNmPath: location.state?.menuNmPath
                                                  }}>
-                                            <button type="button" className="clickBtn white">
+                                            <button type="button" className="clickBtn listBtn">
+                                                <div className="icon"></div>
                                                 목록
                                             </button>
                                         </NavLink>
@@ -394,12 +431,13 @@ function MemberMyPageSimpleDetail(props) {
                                     // 사용자가 로그인했을 때 마지막 작성자가 사용자일 경우
                                     <>
                                         <NavLink to={URL.MEMBER_MYPAGE_SIMPLE}
-                                                 style={{width:'100%'}}
+                                                 style={{width: '100%', marginLeft: '40%'}}
                                                  state={{
-                                                     menuSn : location.state?.menuSn,
-                                                     menuNmPath : location.state?.menuNmPath
+                                                     menuSn: location.state?.menuSn,
+                                                     menuNmPath: location.state?.menuNmPath
                                                  }}>
-                                            <button type="button" className="clickBtn white">
+                                            <button type="button" className="clickBtn listBtn">
+                                                <div className="icon"></div>
                                                 목록
                                             </button>
                                         </NavLink>
@@ -407,21 +445,23 @@ function MemberMyPageSimpleDetail(props) {
                                 ) : latestCreator !== sessionUser.userSn && sessionUser.mbrType !== 2 ? (
                                     // 사용자가 로그인했을 때 마지막 작성자가 컨설턴트일 경우
                                     <>
-                                        <button type="button" className="clickBtn point"
+                                        <button type="button" className="clickBtn writeBtn"
+                                                style={{marginLeft: "7%"}}
                                                 onClick={() => handleCreateClick()}>
                                             <span>등록</span>
                                         </button>
-                                        <button type="button" className="clickBtn point"
+                                        <button type="button" className="clickBtn completeBtn"
                                                 onClick={() => handleComClick(searchDto.cnsltAplySn)}>
                                             <span>처리완료</span>
                                         </button>
                                         <NavLink to={URL.MEMBER_MYPAGE_SIMPLE}
-                                                 style={{width:'100%'}}
+                                                 style={{width: '100%'}}
                                                  state={{
-                                                     menuSn : location.state?.menuSn,
-                                                     menuNmPath : location.state?.menuNmPath
+                                                     menuSn: location.state?.menuSn,
+                                                     menuNmPath: location.state?.menuNmPath
                                                  }}>
-                                            <button type="button" className="clickBtn white">
+                                            <button type="button" className="clickBtn listBtn">
+                                                <div className="icon"></div>
                                                 목록
                                             </button>
                                         </NavLink>
@@ -429,17 +469,19 @@ function MemberMyPageSimpleDetail(props) {
                                 ) : sessionUser.mbrType === 2 ? (
                                     // 컨설턴트가 로그인했을 때 마지막 작성자가 사용자일 경우
                                     <>
-                                        <button type="button" className="clickBtn point"
+                                        <button type="button" className="clickBtn writeBtn"
+                                                style={{marginLeft: '25%'}}
                                                 onClick={() => handleCreateClick()}>
                                             <span>등록</span>
                                         </button>
                                         <NavLink to={URL.MEMBER_MYPAGE_SIMPLE}
-                                                 style={{width:'100%'}}
+                                                 style={{width: '100%'}}
                                                  state={{
-                                                     menuSn : location.state?.menuSn,
-                                                     menuNmPath : location.state?.menuNmPath
+                                                     menuSn: location.state?.menuSn,
+                                                     menuNmPath: location.state?.menuNmPath
                                                  }}>
-                                            <button type="button" className="clickBtn white">
+                                            <button type="button" className="clickBtn listBtn">
+                                                <div className="icon"></div>
                                                 목록
                                             </button>
                                         </NavLink>
@@ -447,12 +489,13 @@ function MemberMyPageSimpleDetail(props) {
                                 ) : (
                                     // 컨설턴트가 로그인했을 때 마지막 작성자가 컨설턴트일 경우
                                     <NavLink to={URL.MEMBER_MYPAGE_SIMPLE}
-                                             style={{width:'100%'}}
+                                             style={{width: '100%'}}
                                              state={{
-                                                 menuSn : location.state?.menuSn,
-                                                 menuNmPath : location.state?.menuNmPath
+                                                 menuSn: location.state?.menuSn,
+                                                 menuNmPath: location.state?.menuNmPath
                                              }}>
-                                        <button type="button" className="clickBtn white">
+                                        <button type="button" className="clickBtn listBtn">
+                                            <div className="icon"></div>
                                             목록
                                         </button>
                                     </NavLink>

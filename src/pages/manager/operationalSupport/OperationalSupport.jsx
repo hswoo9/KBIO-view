@@ -17,26 +17,38 @@ import Form from 'react-bootstrap/Form';
 import { getSessionItem } from "@/utils/storage";
 
 import moment from "moment/moment.js";
+import {getComCdList} from "../../../components/CommonComponents.jsx";
 
 function OperationalSupport(props) {
 
     const [searchDto, setSearchDto] = useState(
         location.state?.searchDto || {
             pageIndex: 1,
-            brno: "",
-            mvnEntNm : "",
-            rpsvNm : "",
+            searchType: "",
+            searchVal : "",
         }
     );
+
+    const searchTypeRef = useRef();
+    const searchValRef = useRef();
 
     const [selectedOption, setSelectedOption] = useState("");
     const [paginationInfo, setPaginationInfo] = useState({});
     const [rcList, setAuthorityList] = useState([]);
+    /*기업분류*/
+    const [comCdList, setComCdList] = useState([]);
     const [activeTab, setActiveTab] = useState(1);
 
     const handleSearch = () => {
         setSearchDto({ ...searchDto, pageIndex: 1 });
         getRcList(searchDto);
+    };
+
+    const activeEnter = (e) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            getRcList(searchDto);
+        }
     };
 
     const getRcList = useCallback(
@@ -70,37 +82,37 @@ function OperationalSupport(props) {
                             <tr key={item.mvnEntSn}>
                                 <td>{index + 1}</td>
                                 <td>
-                                    {item.bzstatNm}
+                                    {item.entClsfNm || ""}
                                 </td>
                                 <td>
                                 <Link to={{pathname: URL.RESIDENT_COMPANY_MODIFY}}
                                       state={{
-                                          mvnEntSn: item.mvnEntSn,
+                                          mvnEntSn: item.tblMvnEnt.mvnEntSn,
                                           mode:CODE.MODE_MODIFY
                                       }}
                                 >
-                                {item.mvnEntNm}
+                                {item.tblMvnEnt.mvnEntNm}
                                 </Link>
                                 </td>
-                                <td>{item.rpsvNm}</td>
-                                <td>{formatTelNo(item.entTelno)}</td>
-                                <td>{item.clsNm}</td>
-                                <td>{item.actvtnYn === "Y" ? "공개" : "비공개"}</td>
+                                <td>{item.tblMvnEnt.rpsvNm}</td>
+                                <td>{formatTelNo(item.tblMvnEnt.entTelno)}</td>
+                                <td>{item.entTpbizNm || ""}</td>
+                                <td>{item.tblMvnEnt.actvtnYn === "Y" ? "공개" : "비공개"}</td>
                                 <td>
                                     <Link to={URL.MANAGER_RESIDENT_MANAGER}
-                                          state={{mvnEntSn: item.mvnEntSn,
-                                                  rpsvNm : item.rpsvNm,
-                                                  entTelno : item.entTelno,
-                                                  clsNm : item.clsNm}}>
+                                          state={{mvnEntSn: item.tblMvnEnt.mvnEntSn,
+                                                  rpsvNm : item.tblMvnEnt.rpsvNm,
+                                                  entTelno : item.tblMvnEnt.entTelno,
+                                                  clsNm : item.tblMvnEnt.clsNm}}>
                                     <button type="button" className="settingBtn"><span>관리자 설정</span></button>
                                     </Link>
                                 </td>
                                 <td>
                                     <Link to={URL.MANAGER_RESIDENT_MEMBER}
-                                          state={{mvnEntSn: item.mvnEntSn,
-                                                  rpsvNm : item.rpsvNm,
-                                                  entTelno : item.entTelno,
-                                                  clsNm : item.clsNm
+                                          state={{mvnEntSn: item.tblMvnEnt.mvnEntSn,
+                                                  rpsvNm : item.tblMvnEnt.rpsvNm,
+                                                  entTelno : item.tblMvnEnt.entTelno,
+                                                  clsNm : item.tblMvnEnt.clsNm
                                                 }}>
                                     <button type="button" className="listBtn"><span>직원 목록</span></button>
                                     </Link>
@@ -123,6 +135,14 @@ function OperationalSupport(props) {
         getRcList(searchDto);
     }, []);
 
+    useEffect(() => {
+        getComCdList(17).then((data) => {
+            setComCdList(data);
+        })
+    }, []);
+
+
+
     function formatTelNo(telNo) {
         if (!telNo || telNo.length < 12) {
             return telNo;
@@ -131,12 +151,6 @@ function OperationalSupport(props) {
         return `${telNo.slice(0, 2)}-${telNo.slice(3, 7)}-${telNo.slice(7)}`;
     }
 
-    const activeEnter = (e) => {
-        if (e.key === "Enter") {
-            e.preventDefault();
-            getRcList(searchDto);
-        }
-    };
 
     const handleKeywordSearch = () => {
 
@@ -158,44 +172,50 @@ function OperationalSupport(props) {
                             <li className="inputBox type1">
                                 <p className="title">분류</p>
                                 <div className="itemBox">
-                                    <select className="selectGroup">
-                                        <option value="0">전체</option>
-                                        <option value="1">예시1</option>
-                                        <option value="2">예시2</option>
-                                        <option value="3">예시3</option>
-                                        <option value="4">예시4</option>
-                                        <option value="5">예시5</option>
+                                    <select className="selectGroup"
+                                            id="entClsf"
+                                            onChange={(e) =>
+                                                setSearchDto({...searchDto,entClsf : e.target.value})
+                                            }
+                                    >
+                                        <option value="">선택</option>
+                                        {comCdList.map((item, index) => (
+                                            <option value={item.comCd}>
+                                                {item.comCdNm}
+                                            </option>
+                                        ))}
                                     </select>
                                 </div>
                             </li>
                             <li className="inputBox type1">
                                 <p className="title">공개 여부</p>
                                 <div className="itemBox">
-                                    <select className="selectGroup">
-                                        <option value="0">전체</option>
-                                        <option value="1">공개</option>
-                                        <option value="2">비공개</option>
+                                    <select className="selectGroup"
+                                            id="actvtnYn"
+                                            onChange={(e) =>
+                                                setSearchDto({...searchDto, actvtnYn : e.target.value})
+                                            }
+                                    >
+                                        <option value="">전체</option>
+                                        <option value="Y">공개</option>
+                                        <option value="N">비공개</option>
                                     </select>
                                 </div>
                             </li>
                             <li className="inputBox type1">
                                 <p className="title">키워드</p>
                                 <div className="itemBox">
-                                    <select className="selectGroup" onChange={(e) => {
-                                        const value = e.target.value;
-                                        const optionMap = {
-                                            "0":"",
-                                            "1": "mvnEntNm",
-                                            "2": "rpsvNm",
-                                            //추가되면 아래로 더 추가
-                                        };
-
-                                        setSelectedOption(optionMap[value] || "");
-                                        setSearchDto(prev => ({ ...prev, [optionMap[value] || ""]: "" }));
-                                    }}>
-                                        <option value="0">전체</option>
-                                        <option value="1">기업명</option>
-                                        <option value="2">대표자</option>
+                                    <select className="selectGroup"
+                                        id="searchType"
+                                        name="searchType"
+                                        title="검색유형"
+                                        ref={searchTypeRef}
+                                        onChange={(e) => {
+                                            setSearchDto({...searchDto, searchType: e.target.value})
+                                        }}>
+                                        <option value="">전체</option>
+                                        <option value="mvnEntNm">기업명</option>
+                                        <option value="rpsvNm">대표자</option>
                                     </select>
                                 </div>
                             </li>
@@ -203,12 +223,13 @@ function OperationalSupport(props) {
                                 <label className="input">
                                     <input
                                         type="text"
-                                        value={searchDto[selectedOption] || ""}
-                                        name="search"
+                                        name="searchVal"
+                                        defaultValue={searchDto.searchVal}
+                                        placeholder=""
+                                        ref={searchValRef}
                                         onChange={(e) => {
-                                            setSearchDto({ ...searchDto, [selectedOption]: e.target.value });
+                                            setSearchDto({...searchDto, searchVal: e.target.value})
                                         }}
-                                        placeholder="검색어를 입력해주세요"
                                         onKeyDown={activeEnter}
                                     />
                                 </label>
@@ -223,8 +244,10 @@ function OperationalSupport(props) {
                                     getRcList({
                                         ...searchDto,
                                         pageIndex: 1,
-                                        mvnEntNm : "",
-                                        rpsvNm : "",
+                                        actvtnYn : "",
+                                        entClsf:"",
+                                        searchType: "",
+                                        searchVal : "",
                                     });
                                 }}
                             >

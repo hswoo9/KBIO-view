@@ -4,12 +4,20 @@ import URL from "@/constants/url";
 import logoWhite from "@/assets/images/logo_white.svg";
 import React, {useEffect, useState} from "react";
 import {getBnrPopupList} from "@/components/main/MainComponents";
+import MainFooterInfo from "@/components/main/MainFooterInfo";
+import * as ComScript from "@/components/CommonScript";
 
 function EgovFooterUser() {
   const [comCdList, setComCdList] = useState([]);
   const [familySiteList, setFamilySiteList] = useState([]);
   const [bannerList, setBannerList] = useState([]);
-
+  const [footerValue, setFooterValue] = useState("");
+  useEffect(() => {
+  }, [footerValue]);
+  const handleClick = (value) => {
+    setFooterValue(value);
+    ComScript.openModal("privacyPolicyModal");
+  }
   useEffect(() => {
     /*getBnrPopupList("bnr").then((data) => {
       setBannerList(data.filter(e => e.tblBnrPopup.bnrPopupFrm == "footSlides"));
@@ -37,7 +45,7 @@ function EgovFooterUser() {
   }, []);
 
   return (
-      <footer>
+      <footer className="userFooter">
         <div>
           {bannerList.length > 0 && (
               <div style={{
@@ -70,8 +78,8 @@ function EgovFooterUser() {
             <figure className="logo"><img src={logoWhite} alt="K Bio LabHub"/></figure>
             <div className="center">
               <ul className="linkBox">
-                <li><a href="#"><span>개인정보 처리방침</span></a></li>
-                <li><a href="#"><span>이용약관</span></a></li>
+                <li><a onClick={() => handleClick("1")} className="cursorTag"><span>개인정보 처리방침</span></a></li>
+                <li><a onClick={() => handleClick("2")} className="cursorTag"><span>이용약관</span></a></li>
                 <li><a href="#"><span>이메일무단수집거부</span></a></li>
                 <li>
                   <NavLink to={URL.KBIO_LOCATION}
@@ -129,6 +137,7 @@ function EgovFooterUser() {
               }
             </div>
           </div>
+          <MainFooterInfo value={footerValue}/>
 
         </div>
       </footer>

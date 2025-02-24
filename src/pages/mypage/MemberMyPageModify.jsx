@@ -670,8 +670,9 @@ function MemberMyPageModify(props) {
 
     return (
         <div id="container" className="container mypage_information">
+            <div className="inner">
+            <CommonSubMenu/>
             <div className="inner2" data-aos="fade-up" data-aos-duration="1500">
-                <CommonSubMenu/>
 
                 {/* 페이지 내용 표시 */}
                 <form className="contBox">
@@ -1525,7 +1526,7 @@ function MemberMyPageModify(props) {
                             </button>
                         </div>
                 </form>
-
+            </div>
             </div>
         </div>
 );

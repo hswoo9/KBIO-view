@@ -199,21 +199,21 @@ function commonPstList(props) {
                                 <div className="bg hover"></div>
                                 <ul className="list">
                                     <li className={searchDto.pstClsf == "10" ? "active" : ""}>
-                                        <a href="javascript:void(0)" onClick={() => {
+                                        <a className="cursorTag" onClick={() => {
                                             setSearchDto({...searchDto, pageIndex: 1, pstClsf : "10"})
                                         }}>
                                             <span>사이트</span>
                                         </a>
                                     </li>
                                     <li className={searchDto.pstClsf == "11" ? "active" : ""}>
-                                        <a href="javascript:void(0)" onClick={() => {
+                                        <a className="cursorTag" onClick={() => {
                                             setSearchDto({...searchDto, pageIndex: 1, pstClsf : "11"})
                                         }}>
                                             <span>기관</span>
                                         </a>
                                     </li>
                                     <li className={searchDto.pstClsf == "12" ? "active" : ""}>
-                                        <a href="javascript:void(0)" onClick={() => {
+                                        <a className="cursorTag" onClick={() => {
                                             setSearchDto({...searchDto, pageIndex: 1, pstClsf : "12"})
                                         }}>
                                             <span>컨설팅</span>

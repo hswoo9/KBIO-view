@@ -146,7 +146,6 @@ const TotalSearch = () => {
                 requestURL,
                 requestOptions,
                 (resp) => {
-                    console.log(resp);
                     setPaginationInfo(resp.paginationInfo);
                     if(resp.result.returnSrchKywd != null){
                         let kywdList = [];

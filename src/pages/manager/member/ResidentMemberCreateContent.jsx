@@ -9,6 +9,7 @@ import Swal from "sweetalert2";
 import CommonEditor from "@/components/CommonEditor";
 import {useDropzone} from "react-dropzone";
 import { getSessionItem } from "@/utils/storage";
+import {getComCdList} from "../../../components/CommonComponents.jsx";
 
 
 
@@ -24,6 +25,10 @@ function ResidentMemberCreateContent(props){
     const [imgFile, setImgFile] = useState("");
     const [fileList, setFileList] = useState([]);
     const sessionUser = getSessionItem("loginUser");
+    /*기업분류*/
+    const [comCdList, setComCdList] = useState([]);
+    /*기업업종*/
+    const [comCdTpbizList, setComCdTpbizList] = useState([]);
 
 
     //const isFirstRender = useRef(true);
@@ -73,6 +78,11 @@ function ResidentMemberCreateContent(props){
     const handleDeleteFile = (index) => {
         const updatedFileList = fileList.filter((_, i) => i !== index);
         setFileList(updatedFileList);  // 파일 리스트 업데이트
+    };
+
+    const formatYmdForInput = (dateStr) => {
+        if (!dateStr || dateStr.length !== 8) return "";
+        return `${dateStr.slice(0, 4)}-${dateStr.slice(4, 6)}-${dateStr.slice(6, 8)}`;
     };
 
     const handleDeleteAtchFile = (index, atchFileSn) => {
@@ -311,6 +321,18 @@ function ResidentMemberCreateContent(props){
     useEffect(() => {
     }, [selectedFiles]);
 
+    useEffect(() => {
+        getComCdList(17).then((data) => {
+            setComCdList(data);
+        })
+    }, []);
+
+    //setComCdTpbizList
+    useEffect(() => {
+        getComCdList(18).then((data) => {
+            setComCdTpbizList(data);
+        })
+    }, []);
 
     //사업자번호 상태 확인
     const kbioauth = async () => {
@@ -410,6 +432,10 @@ function ResidentMemberCreateContent(props){
                 return false;
             }
         }
+        if(!residentDetail.entClsf) {
+            alert("기업분류를 선택해주세요.");
+            return false;
+        }
 
         /*if (!residentDetail.clsNm) {
             alert("산업은 필수 값입니다.");
@@ -426,6 +452,13 @@ function ResidentMemberCreateContent(props){
         if (!residentDetail.entTelno) {
             alert("대표번호는 필수 값입니다.");
             return false;
+        }
+
+        if(residentDetail.actvtnYn === 'Y'){
+            if(!residentDetail.rlsBgngYmd || !residentDetail.rlsEndYmd){
+                alert("공개기한을 선택해주세요.")
+                return false;
+            }
         }
 
 
@@ -509,13 +542,21 @@ function ResidentMemberCreateContent(props){
                     <li className="inputBox type1 width3">
                         <label className="title essential" htmlFor="mvnEntType"><small>분류</small></label>
                         <div className="itemBox">
-                            <select className="selectGroup">
-                                <option value="0">전체</option>
-                                <option value="1">예시1</option>
-                                <option value="2">예시2</option>
-                                <option value="3">예시3</option>
-                                <option value="4">예시4</option>
-                                <option value="5">예시5</option>
+                            <select className="selectGroup"
+                                    id="entClsf"
+                                    value={residentDetail.entClsf || ""}
+                                    onChange={(e) =>
+                                            setResidentDetail({...residentDetail,entClsf : e.target.value})
+                            }
+                            >
+                                <option value="">선택</option>
+                                {comCdList.map((item, index) => (
+                                    <option key={item.comCd}
+                                            value={item.comCd}
+                                    >
+                                        {item.comCdNm}
+                                    </option>
+                                ))}
                             </select>
                         </div>
                     </li>
@@ -672,13 +713,21 @@ function ResidentMemberCreateContent(props){
                     <li className="inputBox type1 width3">
                         <label className="title essential" htmlFor="clsNm"><small>업종</small></label>
                         <div className="itemBox">
-                            <select className="selectGroup">
-                                <option value="0">전체</option>
-                                <option value="1">예시1</option>
-                                <option value="2">예시2</option>
-                                <option value="3">예시3</option>
-                                <option value="4">예시4</option>
-                                <option value="5">예시5</option>
+                            <select className="selectGroup"
+                                    id="entClsf"
+                                    value={residentDetail.entTpbiz || ""}
+                                    onChange={(e) =>
+                                        setResidentDetail({...residentDetail,entTpbiz : e.target.value})
+                                    }
+                            >
+                                <option value="">선택</option>
+                                {comCdTpbizList.map((item, index) => (
+                                    <option key={item.comCd}
+                                            value={item.comCd}
+                                    >
+                                        {item.comCdNm}
+                                    </option>
+                                ))}
                             </select>
                         </div>
                     </li>
@@ -859,6 +908,48 @@ function ResidentMemberCreateContent(props){
                                 </label>
                             </div>
                         </div>
+
+                        {residentDetail.actvtnYn === "Y" && (
+                        <li className="dateWrap"
+                        style={{backgroundColor:"#F7F7F7"}}>
+                            <label className="title essential" htmlFor=""><small>공개기한</small></label>
+                        <div className="input" >
+                            <input
+                                type="date"
+                                style={{backgroundColor:"#F7F7F7"}}
+                                name="rlsBgngYmd"
+                                placeholder="공개시작일자"
+                                className="f_input2 widthGroup45"
+                                value={formatYmdForInput(residentDetail.rlsBgngYmd) || ""}
+                                onChange={(e) => {
+                                    const selectedDate = e.target.value;
+                                    const formattedDate = selectedDate.replace(/-/g, '');
+                                    setResidentDetail({
+                                        ...residentDetail,
+                                        rlsBgngYmd: formattedDate,
+                                    });
+                                }}
+                            />~&nbsp;
+                            <input
+                                type="date"
+                                style={{backgroundColor:"#F7F7F7"}}
+                                name="rlsEndYmd"
+                                placeholder="공개종료일자"
+                                className="f_input2 widthGroup45"
+                                value={formatYmdForInput(residentDetail.rlsEndYmd) || ""}
+                                onChange={(e) => {
+                                    const selectedDate = e.target.value;
+                                    const formattedDate = selectedDate.replace(/-/g, '');
+                                    setResidentDetail({
+                                        ...residentDetail,
+                                        rlsEndYmd: formattedDate,
+                                    });
+                                }}
+                            />
+                        </div>
+                        </li>
+                        )}
+
                         <span className="warningText">
                             On : 기관소개 메뉴에 기관 정보가 노출됩니다.
                             <br/>

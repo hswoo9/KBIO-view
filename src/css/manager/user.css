@@ -916,6 +916,8 @@ header.scroll + .container {transition-delay: .25s}
 .mypage_consultant.view .inner2 .chatWrap .questionBox {position: relative; text-align: right; margin-left: auto;}
 .mypage_consultant.view .inner2 .chatWrap .questionBox .chatText {background: #F0F3F9; align-items: flex-end;}
 .mypage_consultant.view .inner2 .chatWrap .questionBox .chatText:before {right: -3px;}
+.mypage_consultant.view .inner2 .chatWrap .editBtn2 {position: relative; top: 0; right: 0; margin-top: 20px;}
+.mypage_consultant.view .inner2 .chatWrap .editBtn2 .icon {width: 1.35rem; height: 1.35rem; background: url(../../assets/images/ico_pencil_gray.svg) no-repeat center / contain;}
 .mypage_consultant.view .inner2 .chatWrap .editBtn {position: absolute; top: 0; left: 0;}
 .mypage_consultant.view .inner2 .chatWrap .editBtn .icon {width: 1.35rem; height: 1.35rem; background: url(../../assets/images/ico_pencil_gray.svg) no-repeat center / contain;}
 .mypage_consultant.view .inner2 .chatWrap .answerBox {text-align: left; display: flex; align-items: flex-start; gap: .4rem;}
