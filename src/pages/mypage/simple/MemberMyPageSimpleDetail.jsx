@@ -15,13 +15,26 @@ function MemberMyPageSimpleDetail(props) {
     const [cnsltDsctnList, setCnsltDsctnList] = useState([]);
     const [paginationInfo, setPaginationInfo] = useState({});
     const [latestCreator, setLatestCreator] = useState(null);
+    const [consulttUser, setConsulttUser] = useState({});
 
     const [filesByDsctnSn, setFilesByDsctnSn] = useState({});
     const [searchDto, setSearchDto] = useState({
         cnsltAplySn: location.state?.cnsltAplySn || "",
         cnsltSttsCd: location.state?.cnsltSttsCd || "",
+        cnslttUserSn: location.state?.cnslttUserSn || "",
     });
     const [simpleDetail, setSimpleDetail] = useState(null);
+
+    const initMode = () => {
+        getSimpleDetail(searchDto);
+    };
+
+
+    useEffect(() => {
+        initMode();
+    }, []);
+
+
 
     useEffect(() => {
         const handleStorageChange = (event) => {
@@ -36,10 +49,10 @@ function MemberMyPageSimpleDetail(props) {
         };
     }, []);
 
-    const getSimpleDetail = () => {
-        if (!searchDto.cnsltAplySn) return;
+    const getSimpleDetail = (searchDto) => {
+        console.log(searchDto)
 
-        const getSimpleDetailURL = "/memberApi/getSimpleDetail";
+        const getSimpleDetailURL = "/memberApi/getSimpleDetail.do";
         const requestOptions = {
             method: "POST",
             headers: {
@@ -53,6 +66,9 @@ function MemberMyPageSimpleDetail(props) {
             requestOptions,
             function (resp) {
                 setSimpleDetail({ ...resp.result.simple });
+                setConsulttUser({
+                    ...resp.result.consulttUser,
+                });
                 if (resp.result.filesByDsctnSn) {
                     setFilesByDsctnSn(resp.result.filesByDsctnSn);
                 }
@@ -255,9 +271,6 @@ function MemberMyPageSimpleDetail(props) {
         window.open(`/popup/simple`, "_blank", "width=800,height=530");
     };
 
-    useEffect(() => {
-        getSimpleDetail();
-    }, [searchDto]);
 
     return (
         <div id="container" className="container ithdraw join_step">

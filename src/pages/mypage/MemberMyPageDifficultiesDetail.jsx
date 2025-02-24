@@ -47,75 +47,62 @@ function MemberMyPageDifficultiesDetail(props) {
         <div id="container" className="container ithdraw join_step">
             <div className="inner">
                 <CommonSubMenu/>
-
-                {/* 애로사항 상세 내용 */}
-                <div className="detailBox" style={{marginTop: "20px"}}>
-                    {difficultiesDetail ? (
-                        <div className="contBox infoWrap customContBox"
-                             style={{padding: "20px", background: "#f9f9f9", borderRadius: "5px"}}>
-                            <ul className="inputWrap" style={{listStyleType: "none", paddingLeft: "0"}}>
-                                <li className="inputBox type1 width1" style={{marginBottom: "10px"}}>
-                                    <label className="title" style={{fontWeight: "bold"}}><small>등록일</small></label>
-                                    <div className="input"
-                                         style={{marginTop: "5px"}}>{moment(difficultiesDetail.frstCrtDt).format('YYYY-MM-DD')}</div>
-                                </li>
-                                <li className="inputBox type1 width1" style={{marginBottom: "10px"}}>
-                                    <label className="title" style={{fontWeight: "bold"}}><small>분류</small></label>
-                                    <div className="input"
-                                         style={{marginTop: "5px"}}>{difficultiesDetail.dfclMttrFldNm}</div>
-                                </li>
-                                <li className="inputBox type1 width1" style={{marginBottom: "10px"}}>
-                                    <label className="title" style={{fontWeight: "bold"}}><small>제목</small></label>
-                                    <div className="input" style={{marginTop: "5px"}}>{difficultiesDetail.ttl}</div>
-                                </li>
-                                <li className="inputBox type1 width1" style={{marginBottom: "10px"}}>
-                                    <label className="title" style={{fontWeight: "bold"}}><small>의뢰내용</small></label>
-                                    <div className="input" style={{marginTop: "5px"}}
-                                         dangerouslySetInnerHTML={{__html: difficultiesDetail.dfclMttrCn}}></div>
-                                </li>
-                                <li className="inputBox type1 width1" style={{marginBottom: "10px"}}>
-                                    <label className="title" style={{fontWeight: "bold"}}><small>첨부파일</small></label>
-                                    <div className="input" style={{marginTop: "5px"}}>
-                                        {difficultiesDetail.diffFiles && difficultiesDetail.diffFiles.length > 0 ? (
-                                            <ul style={{paddingLeft: "20px"}}>
-                                                {difficultiesDetail.diffFiles.map((file, index) => (
-                                                    <li key={index} style={{marginBottom: "5px"}}>
-                                                <span onClick={() => fileDownLoad(file.atchFileSn, file.atchFileNm)}
-                                                      style={{cursor: "pointer"}}>
-                                                    {file.atchFileNm} - {(file.atchFileSz / 1024).toFixed(2)} KB
-                                                </span>
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        ) : "첨부파일이 없습니다."}
+                <div class="inner2">
+                    <div class="board_view" data-aos="fade-up" data-aos-duration="1500">
+                        <table>
+                            <caption>애로사항 상세</caption>
+                            <thead>
+                            <tr>
+                                <th>
+                                    <div className="titleBox">
+                                        <td className={`state ${difficultiesDetail?.ansCn ? "complete" : "waiting"}`}>
+                                            <p>{difficultiesDetail?.ansCn ? "답변완료" : "답변대기"}</p>
+                                        </td>
+                                        <strong class="title">의료시술에 관련된 문제가 있습니다.</strong>
+                                        <ul class="bot">
+                                            <li class="date">
+                                                <p>{moment(difficultiesDetail?.frstCrtDt || "").format('YYYY-MM-DD')}</p></li>
+                                        </ul>
                                     </div>
-                                </li>
-                            </ul>
-
-                            {/* 답변 */}
-                            <div className="contBox infoWrap customContBox" style={{
-                                padding: "20px",
-                                background: "#f0f0f0",
-                                borderRadius: "5px",
-                                marginTop: "20px"
-                            }}>
-                                <ul className="inputWrap" style={{listStyleType: "none", paddingLeft: "0"}}>
-                                    <li className="inputBox type1 width1" style={{marginBottom: "10px"}}>
-                                        <label className="title"
-                                               style={{fontWeight: "bold"}}><small>답변내용</small></label>
-                                        <div className="input" style={{marginTop: "5px"}}
-                                             dangerouslySetInnerHTML={{__html: difficultiesDetail.ansCn}}></div>
-                                    </li>
-                                    <li className="inputBox type1 width1" style={{marginBottom: "10px"}}>
-                                        <label className="title"
-                                               style={{fontWeight: "bold"}}><small>답변날짜</small></label>
-                                        <div className="input" style={{marginTop: "5px"}}>
-                                            {difficultiesDetail.ansRegDt ? moment(difficultiesDetail.ansRegDt).format('YYYY-MM-DD') : ""}
+                                    {difficultiesDetail?.diffFiles && difficultiesDetail?.diffFiles.length > 0 ? (
+                                        <ul className="fileBox">
+                                            {difficultiesDetail?.diffFiles.map((file, index) => (
+                                                <li key={index}>
+                                                    <a href="javascript:;"
+                                                       onClick={() => fileDownLoad(file.atchFileSn, file.atchFileNm)}>
+                                                        <div className="icon"></div>
+                                                        <p className="name">{file.atchFileNm}</p>
+                                                        <span
+                                                            className="size">({(file.atchFileSz / 1024).toFixed(2)} KB)</span>
+                                                    </a>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    ) : "첨부파일이 없습니다."}
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>
+                                    <div className="textBox">
+                                        <p style={{fontSize: "1.35rem", fontWeight: "500"}}>
+                                            {difficultiesDetail?.ttl}
+                                        </p>
+                                    </div>
+                                    <div className="answerBox">
+                                        <div className="titleBox">
+                                            <div className="state"><p>답변</p></div>
+                                            <p className="title"></p>
+                                            <ul className="bot">
+                                                <li>
+                                                    <p>{moment(difficultiesDetail?.ansRegDt || "").format('YYYY-MM-DD')}</p>
+                                                </li>
+                                                <li><p>관리자</p></li>
+                                            </ul>
                                         </div>
-                                    </li>
-                                    <li className="inputBox type1 width1" style={{marginBottom: "10px"}}>
-                                        <label className="title" style={{fontWeight: "bold"}}><small>답변
-                                            첨부파일</small></label>
+                                        <div className="textBox"><p
+                                            dangerouslySetInnerHTML={{__html: difficultiesDetail?.ansCn}}></p></div>
                                         <div className="input" style={{marginTop: "5px"}}>
                                             {difficultiesDetail?.answerFiles && difficultiesDetail?.answerFiles.length > 0 ? (
                                                 <ul style={{paddingLeft: "20px"}}>
@@ -130,35 +117,34 @@ function MemberMyPageDifficultiesDetail(props) {
                                                 </ul>
                                             ) : "첨부파일이 없습니다."}
                                         </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    ) : (
-                        <div className="contBox infoWrap customContBox"
-                             style={{padding: "20px", background: "#f9f9f9", borderRadius: "5px"}}>
-                            <ul className="inputWrap" style={{listStyleType: "none", paddingLeft: "0"}}>
-                                <li className="inputBox type1 width1" style={{marginBottom: "10px"}}>
-                                    <label className="title" style={{fontWeight: "bold"}}><small>상세 정보가
-                                        없습니다.</small></label>
-                                    <div className="input" style={{marginTop: "5px"}}>해당 애로사항의 상세 정보가 없습니다.</div>
-                                </li>
-                            </ul>
-                        </div>
-                    )}
-                    <div className="buttonBox">
-                        <NavLink
-                            className = "btn btn_blue_h46 w_100"
-                            to={URL.MEMBER_MYPAGE_DIFFICULTIES}
-                            state={{
-                                menuSn: location.state?.menuSn,
-                                menuNmPath: location.state?.menuNmPath
-                            }}>
-                            <button type="button" className="clickBtn black"><span>목록</span></button>
-                        </NavLink>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <td>
+                                    <div className="buttonBox">
+                                        <NavLink
+                                            className = "btn btn_blue_h46 w_100"
+                                            to={URL.MEMBER_MYPAGE_DIFFICULTIES}
+                                            state={{
+                                                menuSn: location.state?.menuSn,
+                                                menuNmPath: location.state?.menuNmPath
+                                            }}>
+                                            <button type="button" className="clickBtn listBtn">
+                                                <div class="icon"></div>
+                                                <span>목록</span>
+                                            </button>
+                                        </NavLink>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
                     </div>
                 </div>
-            </div>
         </div>
 
     );

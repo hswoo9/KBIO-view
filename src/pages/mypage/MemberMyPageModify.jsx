@@ -39,8 +39,8 @@ function MemberMyPageModify(props) {
     const [selectedCertFiles, setSelectedCertFiles] = useState([]);
     const [selectedCareerFiles, setSelectedCareerFiles] = useState([]);
     const [selectedAcbgFiles, setSelectedAcbgFiles] = useState([]);
-
-
+    
+    const [rcDetail, setRcDetail] = useState({});
 
     const [certificates, setCertificates] = useState([]);
     const addCertificate = () => {
@@ -279,6 +279,9 @@ function MemberMyPageModify(props) {
             if (modeInfo.mode === CODE.MODE_MODIFY) {
                 const memberData = resp.result.member;
                 const cnsltData = resp.result.cnslttMbr;
+                const rcData = resp.result.rc;
+
+                console.log(resp.result.rc);
 
                 const decodedPhoneNumber = memberData.mblTelno ? decodePhoneNumber(memberData.mblTelno) : "";
 
@@ -354,6 +357,10 @@ function MemberMyPageModify(props) {
                     ...prevState,
                     ...cnsltData,
                 }));
+
+                setRcDetail({
+                    ...rcData
+                })
             }
         });
     };
@@ -648,7 +655,7 @@ function MemberMyPageModify(props) {
                         text: resp.resultMessage,
                         confirmButtonText: '확인'
                     });
-                    navigate({ pathname: URL.LOGIN });
+                    navigate({ pathname: URL.MAIN });
                     window.location.reload()
                 } else {
                     navigate(
@@ -662,195 +669,329 @@ function MemberMyPageModify(props) {
 
 
     return (
-        <div id="container" className="container ithdraw join_step">
-            <div className="inner">
+        <div id="container" className="container mypage_information">
+            <div className="inner2" data-aos="fade-up" data-aos-duration="1500">
                 <CommonSubMenu/>
 
                 {/* 페이지 내용 표시 */}
                 <form className="contBox">
-                    <ul className="inputWrap box01" data-aos="fade-up" data-aos-duration="1500">
-                        {/*<li className="inputBox type2 white">
-                            <span className="tt1">회원분류</span>
-                            <div className="input">
-                                <input
-                                    type="text"
-                                    name="mbrType"
-                                    id="mbrType"
-                                    value={memberTypeLabel}
-                                    readOnly
-                                />
-                            </div>
-                        </li>*/}
 
-                        <li className="inputBox type2 white">
-                            <span className="tt1">성명</span>
-                            <label className="input">
-                                <input
-                                    type="text"
-                                    name="kornFlnm"
-                                    id="kornFlnm"
-                                    value={memberDetail.kornFlnm || ""}
-                                    readOnly
-                                />
-                            </label>
-                        </li>
-
-                        <li className="inputBox type2 white">
-                            <span className="tt1">휴대폰</span>
-                            <label className="input">
-                                <input
-                                    type="text"
-                                    name="mblTelno"
-                                    id="mblTelno"
-                                    value={memberDetail.mblTelno || ""}
-                                    readOnly
-                                />
-                            </label>
-                        </li>
-
-                        <li className="inputBox type2 white">
-                            <span className="tt1">아이디</span>
-                            <div className="input">
-                                <div style={{display: 'flex', alignItems: 'center', marginBottom: '4px'}}>
+                    <div className="inforBox">
+                        <div className="titleWrap type2 left">
+                            <p className="tt1">회원정보</p>
+                        </div>
+                        <ul className="listBox" data-aos="fade-up" data-aos-duration="1500">
+                            <li className="inputBox type2 textBox">
+                                <span className="title">성명</span>
+                                <label className="text">
                                     <input
                                         type="text"
-                                        name="userId"
-                                        id="userId"
-                                        placeholder="아이디는 6~12자 영문, 숫자만 가능합니다."
-                                        value={memberDetail.userId || ""}
+                                        name="kornFlnm"
+                                        id="kornFlnm"
+                                        value={memberDetail.kornFlnm || ""}
                                         readOnly
                                     />
-                                </div>
-                            </div>
-                        </li>
-                        <li className="inputBox type2">
-                            <span className="tt1">이메일</span>
-                            <div className="input flexinput" style={{display: 'flex', alignItems: 'center'}}>
-                                <input
-                                    type="text"
-                                    name="emailPrefix"
-                                    id="emailPrefix"
-                                    placeholder="이메일 아이디 입력"
-                                    value={memberDetail.emailPrefix || ""}
-                                    onChange={(e) => setMemberDetail((prev) => ({
-                                        ...prev,
-                                        emailPrefix: e.target.value,
-                                        email: `${e.target.value}@${prev.emailDomain}`
-                                    }))}
-                                    style={{flex: 1, padding: '5px'}}
-                                />
-                                <span style={{margin: '0 5px'}}>@</span>
-                                <div className="itemBox" style={{flex: 1}}>
-                                    {memberDetail.emailProvider === "direct" ? (
+                                </label>
+                            </li>
+
+                            <li className="inputBox type2 white">
+                                <span className="tt1">휴대폰</span>
+                                <label className="input">
+                                    <input
+                                        type="text"
+                                        name="mblTelno"
+                                        id="mblTelno"
+                                        value={memberDetail.mblTelno || ""}
+                                        readOnly
+                                    />
+                                </label>
+                            </li>
+
+                            <li className="inputBox type2 white">
+                                <span className="tt1">아이디</span>
+                                <div className="input">
+                                    <div style={{display: 'flex', alignItems: 'center', marginBottom: '4px'}}>
                                         <input
                                             type="text"
-                                            placeholder="도메인 입력"
-                                            value={memberDetail.emailDomain || ""}
-                                            onChange={(e) => {
-                                                const updatedEmailDomain = e.target.value;
-                                                setMemberDetail({
-                                                    ...memberDetail,
-                                                    emailDomain: updatedEmailDomain,
-                                                    email: `${memberDetail.emailPrefix}@${updatedEmailDomain}`,  // emailDomain이 수정될 때 email 값도 갱신
-                                                });
-                                            }}
-                                            onBlur={() => {
-                                                if (!memberDetail.emailDomain) {
+                                            name="userId"
+                                            id="userId"
+                                            placeholder="아이디는 6~12자 영문, 숫자만 가능합니다."
+                                            value={memberDetail.userId || ""}
+                                            readOnly
+                                        />
+                                    </div>
+                                </div>
+                            </li>
+                            <li className="inputBox type2">
+                                <span className="tt1">이메일</span>
+                                <div className="input flexinput" style={{display: 'flex', alignItems: 'center'}}>
+                                    <input
+                                        type="text"
+                                        name="emailPrefix"
+                                        id="emailPrefix"
+                                        placeholder="이메일 아이디 입력"
+                                        value={memberDetail.emailPrefix || ""}
+                                        onChange={(e) => setMemberDetail((prev) => ({
+                                            ...prev,
+                                            emailPrefix: e.target.value,
+                                            email: `${e.target.value}@${prev.emailDomain}`
+                                        }))}
+                                        style={{flex: 1, padding: '5px'}}
+                                    />
+                                    <span style={{margin: '0 5px'}}>@</span>
+                                    <div className="itemBox" style={{flex: 1}}>
+                                        {memberDetail.emailProvider === "direct" ? (
+                                            <input
+                                                type="text"
+                                                placeholder="도메인 입력"
+                                                value={memberDetail.emailDomain || ""}
+                                                onChange={(e) => {
+                                                    const updatedEmailDomain = e.target.value;
                                                     setMemberDetail({
                                                         ...memberDetail,
-                                                        emailProvider: "",
-                                                        emailDomain: "",
+                                                        emailDomain: updatedEmailDomain,
+                                                        email: `${memberDetail.emailPrefix}@${updatedEmailDomain}`,  // emailDomain이 수정될 때 email 값도 갱신
                                                     });
-                                                }
-                                            }}
-                                            style={{flex: 1, padding: '5px'}}
-                                        />
-                                    ) : (
-                                        <select
-                                            className="selectGroup"
-                                            onChange={(e) => {
-                                                const provider = e.target.value;
-                                                setMemberDetail((prev) => ({
-                                                    ...prev,
-                                                    emailProvider: provider,
-                                                    emailDomain: provider === "direct" ? "" : provider,
-                                                    email: `${prev.emailPrefix}@${provider === "direct" ? "" : provider}`
-                                                }));
-                                            }}
-                                            value={memberDetail.emailProvider || ""}
-                                            style={{
-                                                padding: '5px',
-                                                flex: 1,
-                                                appearance: 'none',
-                                                width: '100%',
-                                            }}
-                                        >
-                                            <option value="">선택하세요</option>
-                                            <option value="naver.com">naver.com</option>
-                                            <option value="gmail.com">gmail.com</option>
-                                            <option value="daum.net">daum.net</option>
-                                            <option value="hotmail.com">hotmail.com</option>
-                                            <option value="nate.com">nate.com</option>
-                                            <option value="hanmail.net">hanmail.net</option>
-                                            <option value="direct">직접 입력</option>
-                                        </select>
-                                    )}
+                                                }}
+                                                onBlur={() => {
+                                                    if (!memberDetail.emailDomain) {
+                                                        setMemberDetail({
+                                                            ...memberDetail,
+                                                            emailProvider: "",
+                                                            emailDomain: "",
+                                                        });
+                                                    }
+                                                }}
+                                                style={{flex: 1, padding: '5px'}}
+                                            />
+                                        ) : (
+                                            <select
+                                                className="selectGroup"
+                                                onChange={(e) => {
+                                                    const provider = e.target.value;
+                                                    setMemberDetail((prev) => ({
+                                                        ...prev,
+                                                        emailProvider: provider,
+                                                        emailDomain: provider === "direct" ? "" : provider,
+                                                        email: `${prev.emailPrefix}@${provider === "direct" ? "" : provider}`
+                                                    }));
+                                                }}
+                                                value={memberDetail.emailProvider || ""}
+                                                style={{
+                                                    padding: '5px',
+                                                    flex: 1,
+                                                    appearance: 'none',
+                                                    width: '100%',
+                                                }}
+                                            >
+                                                <option value="">선택하세요</option>
+                                                <option value="naver.com">naver.com</option>
+                                                <option value="gmail.com">gmail.com</option>
+                                                <option value="daum.net">daum.net</option>
+                                                <option value="hotmail.com">hotmail.com</option>
+                                                <option value="nate.com">nate.com</option>
+                                                <option value="hanmail.net">hanmail.net</option>
+                                                <option value="direct">직접 입력</option>
+                                            </select>
+                                        )}
+                                    </div>
                                 </div>
+                            </li>
+
+                            <li className="inputBox type2">
+                                <span className="tt1">비밀번호 확인</span>
+                                <label className="input">
+                                    <input
+                                        type="password"
+                                        name="userPw"
+                                        id="userPw"
+                                        placeholder="현재 비밀번호를 작성해주세요."
+                                        value={currentPassword || ""}
+                                        onChange={(e) => setCurrentPassword(e.target.value)}
+                                    />
+                                </label>
+                            </li>
+
+                            <li className="inputBox type2">
+                                <span className="tt1">비밀번호 변경</span>
+                                <label className="input">
+                                    <input
+                                        type="password"
+                                        name="newUserPw"
+                                        id="newUserPw"
+                                        placeholder="비밀번호 변경을 원하지 않으시면 작성하지 않으시면 됩니다."
+                                        value={newPassword || ""}
+                                        onChange={(e) => setNewPassword(e.target.value)}
+                                    />
+                                </label>
+                            </li>
+
+                            <li className="inputBox type2">
+                                <span className="tt1">주소</span>
+                                <label className="input" style={{paddingRight: "6rem"}}>
+                                    <input type="text" name="addr" id="addr" readOnly value={memberDetail.addr || ""}/>
+                                    <button type="button" className="addressBtn btn" onClick={searchAddress}>
+                                        <span>주소검색</span>
+                                    </button>
+                                </label>
+                            </li>
+
+                            <li className="inputBox type2">
+                                <span className="tt1">상세주소</span>
+                                <label className="input" style={{paddingRight: "6rem"}}>
+                                    <input
+                                        type="text"
+                                        name="daddr"
+                                        id="daddr"
+                                        placeholder="상세주소를 입력해주세요"
+                                        value={memberDetail.daddr || ""}
+                                        onChange={(e) => setMemberDetail({...memberDetail, daddr: e.target.value})}
+                                    />
+                                </label>
+                            </li>
+                                <li className="inputBox type2 white">
+                                    <div className="input">
+                                        <span className="tt1">메일수신</span>
+                                        <div className="checkWrap">
+                                            <label className="checkBox type3">
+                                                <input
+                                                    type="radio"
+                                                    id="receive_mail_yes"
+                                                    name="receive_mail"
+                                                    value="Y"
+                                                    className="signUpRadio"
+                                                    checked={memberDetail.emlRcptnAgreYn === "Y"}
+                                                    onChange={handleMailChange}
+                                                />
+                                                <small>수신</small>
+                                            </label>
+                                            <label className="checkBox type3">
+                                                <input
+                                                    type="radio"
+                                                    id="receive_mail_no"
+                                                    name="receive_mail"
+                                                    value="N"
+                                                    className="signUpRadio"
+                                                    checked={memberDetail.emlRcptnAgreYn === "N"}
+                                                    onChange={handleMailChange}
+                                                />
+                                                <small>수신안함</small>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <span
+                                        className="warningText">※ 메일링 서비스 수신동의 시 K-바이오랩허브 관련한 다양한 정보를 받으실 수 있습니다</span>
+                                </li>
+                                <li className="inputBox type2 white">
+                                    <div className="input">
+                                        <span className="tt1">문자수신</span>
+                                        <div className="checkWrap">
+                                            <label className="checkBox type3">
+                                                <input
+                                                    type="radio"
+                                                    id="receive_sms_yes"
+                                                    name="receive_sms"
+                                                    value="Y"
+                                                    className="signUpRadio"
+                                                    checked={memberDetail.smsRcptnAgreYn === "Y"}
+                                                    onChange={handleSmsChange}
+                                                />
+                                                <small>수신</small>
+                                            </label>
+                                            <label className="checkBox type3">
+                                                <input
+                                                    type="radio"
+                                                    id="receive_sms_no"
+                                                    name="receive_sms"
+                                                    value="N"
+                                                    className="signUpRadio"
+                                                    checked={memberDetail.smsRcptnAgreYn === "N"}
+                                                    onChange={handleSmsChange}
+                                                />
+                                                <small>수신안함</small>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <span
+                                        className="warningText">※ 메일링 서비스 수신동의 시 K-바이오랩허브 관련한 다양한 정보를 받으실 수 있습니다</span>
+                                </li>
+                        </ul>
+                    </div>
+                    {sessionUsermbrType !== 2 && (
+                        <div className="companyBox">
+                            <div className="titleWrap type2 left">
+                                <p className="tt1">기업 정보</p>
                             </div>
-                        </li>
-
-                        <li className="inputBox type2">
-                            <span className="tt1">비밀번호 확인</span>
-                            <label className="input">
-                                <input
-                                    type="password"
-                                    name="userPw"
-                                    id="userPw"
-                                    placeholder="현재 비밀번호를 작성해주세요."
-                                    value={currentPassword || ""}
-                                    onChange={(e) => setCurrentPassword(e.target.value)}
-                                />
-                            </label>
-                        </li>
-
-                        <li className="inputBox type2">
-                            <span className="tt1">비밀번호 변경</span>
-                            <label className="input">
-                                <input
-                                    type="password"
-                                    name="newUserPw"
-                                    id="newUserPw"
-                                    placeholder="비밀번호 변경을 원하지 않으시면 작성하지 않으시면 됩니다."
-                                    value={newPassword || ""}
-                                    onChange={(e) => setNewPassword(e.target.value)}
-                                />
-                            </label>
-                        </li>
-
-                        <li className="inputBox type2">
-                            <span className="tt1">주소</span>
-                            <label className="input" style={{paddingRight: "6rem"}}>
-                                <input type="text" name="addr" id="addr" readOnly value={memberDetail.addr || ""}/>
-                                <button type="button" className="addressBtn btn" onClick={searchAddress}>
-                                    <span>주소검색</span>
-                                </button>
-                            </label>
-                        </li>
-
-                        <li className="inputBox type2">
-                            <span className="tt1">상세주소</span>
-                            <label className="input" style={{paddingRight: "6rem"}}>
-                                <input
-                                    type="text"
-                                    name="daddr"
-                                    id="daddr"
-                                    placeholder="상세주소를 입력해주세요"
-                                    value={memberDetail.daddr || ""}
-                                    onChange={(e) => setMemberDetail({...memberDetail, daddr: e.target.value})}
-                                />
-                            </label>
-                        </li>
-                    </ul>
+                            <ul className="listBox" data-aos="fade-up" data-aos-duration="1500">
+                                <li className="inputBox type2">
+                                    <label htmlFor="brno" className="tt1">사업자등록번호</label>
+                                    <div className="input">
+                                        <input type="text" name="brno" id="brno" title="사업자등록번호" readOnly
+                                               value={rcDetail.brno || ""}/>
+                                    </div>
+                                </li>
+                                <li className="inputBox type2">
+                                    <label htmlFor="company_tel" className="tt1">대표번호</label>
+                                    <div className="input">
+                                        <input type="text" name="company_tel" id="company_tel" title="대표번호" readOnly
+                                               value={rcDetail.entTelno || ""}/>
+                                    </div>
+                                </li>
+                                <li className="inputBox type2">
+                                    <label htmlFor="company_name" className="tt1">기업명</label>
+                                    <div className="input">
+                                        <input type="text" name="company_name" id="company_name" title="기업명" readOnly
+                                        value={rcDetail.relInstNm || rcDetail.mvnEntNm || ""}/>
+                                    </div>
+                                </li>
+                                <li className="inputBox type2">
+                                    <label htmlFor="company_email" className="tt1">기업메일</label>
+                                    <div className="input">
+                                        <input type="text" name="company_email" id="company_email" title="기업메일"
+                                        readOnly
+                                        value={rcDetail.bzentyEmlAddr || ""}/>
+                                    </div>
+                                </li>
+                                <li className="inputBox type2">
+                                    <label htmlFor="company_representative" className="tt1">대표자</label>
+                                    <div className="input">
+                                        <input type="text" name="company_representative" id="company_representative"
+                                               title="대표자" readOnly
+                                        value={rcDetail.relInstNm || rcDetail.mvnEntNm || ""}/>
+                                    </div>
+                                </li>
+                                <li className="inputBox type2">
+                                    <span className="tt1">주소</span>
+                                    <label className="input" style={{paddingRight: "6rem"}}>
+                                        <input type="text" name="company_address1" id="company_address1" readOnly
+                                               title="주소"
+                                        value={rcDetail.entAddr || ""}/>
+                                    </label>
+                                </li>
+                                <li className="inputBox type2">
+                                    <label htmlFor="company_industry" className="tt1">산업</label>
+                                    <div className="input">
+                                        <input type="text" name="company_industry" id="company_industry"
+                                               title="산업" readOnly
+                                               value={rcDetail.clsNm || ""}/>
+                                    </div>
+                                </li>
+                                <li className="inputBox type2 noText">
+                                    <label className="input">
+                                        <input
+                                            type="text"
+                                            name="company_address2"
+                                            id="company_address2"
+                                            placeholder="상세주소를 입력해주세요"
+                                            title="상세주소"
+                                            readOnly
+                                            value={rcDetail.entDaddr || ""}
+                                        />
+                                    </label>
+                                </li>
+                            </ul>
+                        </div>
+                    )}
                     {sessionUsermbrType === 2 && (
                         <ul className="inputWrap" data-aos="fade-up" data-aos-duration="1500">
                             <li className="inputBox type2">
@@ -917,7 +1058,10 @@ function MemberMyPageModify(props) {
                                         name="consultantPosition"
                                         placeholder="직위를 입력해주세요"
                                         value={consultDetail.jbpsNm || ""}
-                                        onChange={(e) => setConsultDetail({...consultDetail, jbpsNm: e.target.value})}
+                                        onChange={(e) => setConsultDetail({
+                                            ...consultDetail,
+                                            jbpsNm: e.target.value
+                                        })}
                                     />
                                 </label>
                             </li>
@@ -930,7 +1074,10 @@ function MemberMyPageModify(props) {
                                         name="consultantExperience"
                                         placeholder="숫자만 입력"
                                         value={consultDetail.crrPrd || ""}
-                                        onChange={(e) => setConsultDetail({...consultDetail, crrPrd: e.target.value})}
+                                        onChange={(e) => setConsultDetail({
+                                            ...consultDetail,
+                                            crrPrd: e.target.value
+                                        })}
                                         style={{width: "120px"}}
                                     />
                                     <span style={{marginLeft: "10px", color: "#333"}}>년</span>
@@ -945,7 +1092,10 @@ function MemberMyPageModify(props) {
                                         name="consultantAffiliation"
                                         placeholder="소속을 입력해주세요"
                                         value={consultDetail.ogdpNm || ""}
-                                        onChange={(e) => setConsultDetail({...consultDetail, ogdpNm: e.target.value})}
+                                        onChange={(e) => setConsultDetail({
+                                            ...consultDetail,
+                                            ogdpNm: e.target.value
+                                        })}
                                     />
                                 </label>
                             </li>
@@ -979,7 +1129,7 @@ function MemberMyPageModify(props) {
                             <li className="inputBox type2">
                                 <span className="tt1">컨설팅 활동</span>
                                 <div className="input">
-                                <div className="checkWrap" style={{display: "flex", gap: "20px"}}>
+                                    <div className="checkWrap" style={{display: "flex", gap: "20px"}}>
                                         <label className="checkBox type3">
                                             <input
                                                 type="radio"
@@ -1137,315 +1287,248 @@ function MemberMyPageModify(props) {
                                 </div>
                             </li>
 
-                            <li className="inputBox type2 width1">
-                                <span className="tt1">경력 상세</span>
-                                <div className="input" style={{height: "100%"}}>
-                                    <div style={{display: "flex", flexDirection: "column", gap: "10px"}}>
-                                        <div
-                                            className="certificate-header"
-                                            style={{
-                                                display: "grid",
-                                                gridTemplateColumns: "1fr 1fr 1fr 1fr auto",
-                                                gap: "10px",
-                                                paddingBottom: "5px",
-                                                borderBottom: "1px solid #000",
-                                            }}>
-                                            <span>근무처</span>
-                                            <span>직위</span>
-                                            <span>근무기간</span>
-                                            <span>파일 업로드</span>
-                                        </div>
-                                        {careers.map((career, index) => (
+                                <li className="inputBox type2 width1">
+                                    <span className="tt1">경력 상세</span>
+                                    <div className="input" style={{height: "100%"}}>
+                                        <div style={{display: "flex", flexDirection: "column", gap: "10px"}}>
                                             <div
-                                                key={career.key}
-                                                className="flexinput"
+                                                className="certificate-header"
                                                 style={{
-                                                    display: "flex",
-                                                    alignItems: "center",
+                                                    display: "grid",
+                                                    gridTemplateColumns: "1fr 1fr 1fr 1fr auto",
                                                     gap: "10px",
-                                                }}
-                                            >
-                                                <input
-                                                    type="text"
-                                                    name="ogdpCoNm"
-                                                    placeholder="근무처를 입력하세요"
-                                                    className="f_input2"
-                                                    style={{width: "29%"}}
-                                                    value={career.ogdpCoNm || ""}
-                                                    onChange={(e) => handleInputChange(e, career.key, "career", "ogdpCoNm")}
-                                                />
-                                                <input
-                                                    type="text"
-                                                    name="jbgdNm"
-                                                    placeholder="직위를 입력하세요"
-                                                    className="f_input2"
-                                                    style={{width: "29%"}}
-                                                    value={career.jbgdNm || ""}
-                                                    onChange={(e) => handleInputChange(e, career.key, "career", "jbgdNm")}
-                                                />
-                                                <input
-                                                    type="date"
-                                                    name="jncmpYmd"
-                                                    placeholder="입사일자"
-                                                    className="f_input2"
-                                                    style={{width: "14%"}}
-                                                    value={formatDate(career.jncmpYmd) || ""}
-                                                    onChange={(e) => handleInputChange(e, career.key, "career", "jncmpYmd")}
-                                                />~&nbsp;
-                                                <input
-                                                    type="date"
-                                                    name="rsgntnYmd"
-                                                    placeholder="퇴사일자"
-                                                    className="f_input2"
-                                                    style={{width: "14%"}}
-                                                    value={formatDate(career.rsgntnYmd) || ""}
-                                                    onChange={(e) => handleInputChange(e, career.key, "career", "rsgntnYmd")}
-                                                />
-                                                {selectedCareerFiles.length > 0 && selectedCareerFiles[index] ? (
-                                                    <p className="file_name" id={`careerFileNamePTag${career.key}`}
-                                                       style={{width: "20%"}}>
+                                                    paddingBottom: "5px",
+                                                    borderBottom: "1px solid #000",
+                                                }}>
+                                                <span>근무처</span>
+                                                <span>직위</span>
+                                                <span>근무기간</span>
+                                                <span>파일 업로드</span>
+                                            </div>
+                                            {careers.map((career, index) => (
+                                                <div
+                                                    key={career.key}
+                                                    className="flexinput"
+                                                    style={{
+                                                        display: "flex",
+                                                        alignItems: "center",
+                                                        gap: "10px",
+                                                    }}
+                                                >
+                                                    <input
+                                                        type="text"
+                                                        name="ogdpCoNm"
+                                                        placeholder="근무처를 입력하세요"
+                                                        className="f_input2"
+                                                        style={{width: "29%"}}
+                                                        value={career.ogdpCoNm || ""}
+                                                        onChange={(e) => handleInputChange(e, career.key, "career", "ogdpCoNm")}
+                                                    />
+                                                    <input
+                                                        type="text"
+                                                        name="jbgdNm"
+                                                        placeholder="직위를 입력하세요"
+                                                        className="f_input2"
+                                                        style={{width: "29%"}}
+                                                        value={career.jbgdNm || ""}
+                                                        onChange={(e) => handleInputChange(e, career.key, "career", "jbgdNm")}
+                                                    />
+                                                    <input
+                                                        type="date"
+                                                        name="jncmpYmd"
+                                                        placeholder="입사일자"
+                                                        className="f_input2"
+                                                        style={{width: "14%"}}
+                                                        value={formatDate(career.jncmpYmd) || ""}
+                                                        onChange={(e) => handleInputChange(e, career.key, "career", "jncmpYmd")}
+                                                    />~&nbsp;
+                                                    <input
+                                                        type="date"
+                                                        name="rsgntnYmd"
+                                                        placeholder="퇴사일자"
+                                                        className="f_input2"
+                                                        style={{width: "14%"}}
+                                                        value={formatDate(career.rsgntnYmd) || ""}
+                                                        onChange={(e) => handleInputChange(e, career.key, "career", "rsgntnYmd")}
+                                                    />
+                                                    {selectedCareerFiles.length > 0 && selectedCareerFiles[index] ? (
+                                                        <p className="file_name" id={`careerFileNamePTag${career.key}`}
+                                                           style={{width: "20%"}}>
                             <span
                                 onClick={() => fileDownLoad(selectedCareerFiles[index].atchFileSn, selectedCareerFiles[index].atchFileNm)}
                                 style={{cursor: "pointer"}}
                             >
                                 {selectedCareerFiles[index].atchFileNm} - {Number(selectedCareerFiles[index].atchFileSz / 1024).toFixed(2)} KB
                             </span>
-                                                        <button
-                                                            onClick={() => setFileDel(selectedCareerFiles[index].atchFileSn)}
-                                                            style={{marginLeft: '10px', color: 'red'}}
-                                                        >
-                                                            삭제
-                                                        </button>
-                                                    </p>
-                                                ) : (
-                                                    <label style={{width: "20%"}}>
-                                                        <input
-                                                            type="file"
-                                                            name={`selectedCareerFile${index}`}
-                                                            id={`formCareerFile${index}`}
-                                                            onChange={(e) => handleFileChange(e, "career", index)}
-                                                        />
-                                                    </label>
-                                                )}
-                                                <button type="button" style={{width: "10%"}}
-                                                        onClick={() => removeCareer(career.key)}>
-                                                    삭제
-                                                </button>
-                                            </div>
-                                        ))}
-                                        <button
-                                            type="button"
-                                            className="writeBtn clickBtn"
-                                            style={{width: "10%", height: "30px"}}
-                                            onClick={addCareer}
-                                        >
-                                            추가
-                                        </button>
-                                    </div>
-                                </div>
-                            </li>
-
-                            <li className="inputBox type2 width1">
-                                <span className="tt1">학력 상세</span>
-                                <div className="input" style={{height: "100%"}}>
-                                    <div style={{display: "flex", flexDirection: "column", gap: "10px"}}>
-                                        <div
-                                            className="certificate-header"
-                                            style={{
-                                                display: "grid",
-                                                gridTemplateColumns: "1fr 1fr 1fr 1fr 1fr 1fr auto",
-                                                gap: "10px",
-                                                paddingBottom: "5px",
-                                                borderBottom: "1px solid #000",
-                                            }}>
-                                            <span>학교명</span>
-                                            <span>학과</span>
-                                            <span>전공</span>
-                                            <span>학위</span>
-                                            <span>졸업일자</span>
-                                            <span>파일 업로드</span>
-                                        </div>
-                                        {acbges.map((acbg, index) => (
-                                            <div
-                                                key={acbg.key}
-                                                className="flexinput"
-                                                style={{
-                                                    display: "flex",
-                                                    alignItems: "center",
-                                                    gap: "10px",
-                                                }}
+                                                            <button
+                                                                onClick={() => setFileDel(selectedCareerFiles[index].atchFileSn)}
+                                                                style={{marginLeft: '10px', color: 'red'}}
+                                                            >
+                                                                삭제
+                                                            </button>
+                                                        </p>
+                                                    ) : (
+                                                        <label style={{width: "20%"}}>
+                                                            <input
+                                                                type="file"
+                                                                name={`selectedCareerFile${index}`}
+                                                                id={`formCareerFile${index}`}
+                                                                onChange={(e) => handleFileChange(e, "career", index)}
+                                                            />
+                                                        </label>
+                                                    )}
+                                                    <button type="button" style={{width: "10%"}}
+                                                            onClick={() => removeCareer(career.key)}>
+                                                        삭제
+                                                    </button>
+                                                </div>
+                                            ))}
+                                            <button
+                                                type="button"
+                                                className="writeBtn clickBtn"
+                                                style={{width: "10%", height: "30px"}}
+                                                onClick={addCareer}
                                             >
-                                                <input
-                                                    type="text"
-                                                    name="schlNm"
-                                                    placeholder="학교명을 입력하세요"
-                                                    className="f_input2"
-                                                    style={{width: "29%"}}
-                                                    value={acbg.schlNm || ""}
-                                                    onChange={(e) => handleInputChange(e, acbg.key, "acbg", "schlNm")}
-                                                />
-                                                <input
-                                                    type="text"
-                                                    name="scsbjtNm"
-                                                    placeholder="학과를 입력하세요"
-                                                    className="f_input2"
-                                                    style={{width: "29%"}}
-                                                    value={acbg.scsbjtNm || ""}
-                                                    onChange={(e) => handleInputChange(e, acbg.key, "acbg", "scsbjtNm")}
-                                                />
-                                                <input
-                                                    type="text"
-                                                    name="mjrNm"
-                                                    placeholder="전공을 입력하세요"
-                                                    className="f_input2"
-                                                    style={{width: "29%"}}
-                                                    value={acbg.mjrNm || ""}
-                                                    onChange={(e) => handleInputChange(e, acbg.key, "acbg", "mjrNm")}
-                                                />
-                                                <input
-                                                    type="text"
-                                                    name="dgrNm"
-                                                    placeholder="학위를 입력하세요"
-                                                    className="f_input2"
-                                                    style={{width: "29%"}}
-                                                    value={acbg.dgrNm || ""}
-                                                    onChange={(e) => handleInputChange(e, acbg.key, "acbg", "dgrNm")}
-                                                />
-                                                <input
-                                                    type="date"
-                                                    name="grdtnYmd"
-                                                    placeholder="졸업일자"
-                                                    className="f_input2"
-                                                    style={{width: "29%"}}
-                                                    value={formatDate(acbg.grdtnYmd) || ""}
-                                                    onChange={(e) => handleInputChange(e, acbg.key, "acbg", "grdtnYmd")}
-                                                />
-                                                {selectedAcbgFiles.length > 0 && selectedAcbgFiles[index] ? (
-                                                    <p className="file_name" id={`acbgFileNamePTag${acbg.key}`}
-                                                       style={{width: "20%"}}>
-                            <span
-                                onClick={() => fileDownLoad(selectedAcbgFiles[index].atchFileSn, selectedAcbgFiles[index].atchFileNm)}
-                                style={{cursor: "pointer"}}
-                            >
-                                {selectedAcbgFiles[index].atchFileNm} - {Number(selectedAcbgFiles[index].atchFileSz / 1024).toFixed(2)} KB
-                            </span>
-                                                        <button
-                                                            onClick={() => setFileDel(selectedAcbgFiles[index].atchFileSn)}
-                                                            style={{marginLeft: '10px', color: 'red'}}
-                                                        >
-                                                            삭제
-                                                        </button>
-                                                    </p>
-                                                ) : (
-                                                    <label style={{width: "20%"}}>
-                                                        <input
-                                                            type="file"
-                                                            name={`selectedAcbgFile${index}`}
-                                                            id={`formAcbgFile${index}`}
-                                                            onChange={(e) => handleFileChange(e, "acbg", index)}
-                                                        />
-                                                    </label>
-                                                )}
-                                                <button type="button" style={{width: "10%"}}
-                                                        onClick={() => removeAcbg(acbg.key)}>
-                                                    삭제
-                                                </button>
-                                            </div>
-                                        ))}
-                                        <button
-                                            type="button"
-                                            className="writeBtn clickBtn"
-                                            style={{width: "10%", height: "30px"}}
-                                            onClick={addAcbg}
-                                        >
-                                            추가
-                                        </button>
+                                                추가
+                                            </button>
+                                        </div>
                                     </div>
-                                </div>
-                            </li>
+                                </li>
 
-                        </ul>
+                                <li className="inputBox type2 width1">
+                                    <span className="tt1">학력 상세</span>
+                                    <div className="input" style={{height: "100%"}}>
+                                        <div style={{display: "flex", flexDirection: "column", gap: "10px"}}>
+                                            <div
+                                                className="certificate-header"
+                                                style={{
+                                                    display: "grid",
+                                                    gridTemplateColumns: "1fr 1fr 1fr 1fr 1fr 1fr auto",
+                                                    gap: "10px",
+                                                    paddingBottom: "5px",
+                                                    borderBottom: "1px solid #000",
+                                                }}>
+                                                <span>학교명</span>
+                                                <span>학과</span>
+                                                <span>전공</span>
+                                                <span>학위</span>
+                                                <span>졸업일자</span>
+                                                <span>파일 업로드</span>
+                                            </div>
+                                            {acbges.map((acbg, index) => (
+                                                <div
+                                                    key={acbg.key}
+                                                    className="flexinput"
+                                                    style={{
+                                                        display: "flex",
+                                                        alignItems: "center",
+                                                        gap: "10px",
+                                                    }}
+                                                >
+                                                    <input
+                                                        type="text"
+                                                        name="schlNm"
+                                                        placeholder="학교명을 입력하세요"
+                                                        className="f_input2"
+                                                        style={{width: "29%"}}
+                                                        value={acbg.schlNm || ""}
+                                                        onChange={(e) => handleInputChange(e, acbg.key, "acbg", "schlNm")}
+                                                    />
+                                                    <input
+                                                        type="text"
+                                                        name="scsbjtNm"
+                                                        placeholder="학과를 입력하세요"
+                                                        className="f_input2"
+                                                        style={{width: "29%"}}
+                                                        value={acbg.scsbjtNm || ""}
+                                                        onChange={(e) => handleInputChange(e, acbg.key, "acbg", "scsbjtNm")}
+                                                    />
+                                                    <input
+                                                        type="text"
+                                                        name="mjrNm"
+                                                        placeholder="전공을 입력하세요"
+                                                        className="f_input2"
+                                                        style={{width: "29%"}}
+                                                        value={acbg.mjrNm || ""}
+                                                        onChange={(e) => handleInputChange(e, acbg.key, "acbg", "mjrNm")}
+                                                    />
+                                                    <input
+                                                        type="text"
+                                                        name="dgrNm"
+                                                        placeholder="학위를 입력하세요"
+                                                        className="f_input2"
+                                                        style={{width: "29%"}}
+                                                        value={acbg.dgrNm || ""}
+                                                        onChange={(e) => handleInputChange(e, acbg.key, "acbg", "dgrNm")}
+                                                    />
+                                                    <input
+                                                        type="date"
+                                                        name="grdtnYmd"
+                                                        placeholder="졸업일자"
+                                                        className="f_input2"
+                                                        style={{width: "29%"}}
+                                                        value={formatDate(acbg.grdtnYmd) || ""}
+                                                        onChange={(e) => handleInputChange(e, acbg.key, "acbg", "grdtnYmd")}
+                                                    />
+                                                    {selectedAcbgFiles.length > 0 && selectedAcbgFiles[index] ? (
+                                                        <p className="file_name" id={`acbgFileNamePTag${acbg.key}`}
+                                                           style={{width: "20%"}}>
+                                                            <span
+                                                                onClick={() => fileDownLoad(selectedAcbgFiles[index].atchFileSn, selectedAcbgFiles[index].atchFileNm)}
+                                                                style={{cursor: "pointer"}}
+                                                            >
+                                                                {selectedAcbgFiles[index].atchFileNm} - {Number(selectedAcbgFiles[index].atchFileSz / 1024).toFixed(2)} KB
+                                                            </span>
+                                                            <button
+                                                                onClick={() => setFileDel(selectedAcbgFiles[index].atchFileSn)}
+                                                                style={{marginLeft: '10px', color: 'red'}}
+                                                            >
+                                                                삭제
+                                                            </button>
+                                                        </p>
+                                                    ) : (
+                                                        <label style={{width: "20%"}}>
+                                                            <input
+                                                                type="file"
+                                                                name={`selectedAcbgFile${index}`}
+                                                                id={`formAcbgFile${index}`}
+                                                                onChange={(e) => handleFileChange(e, "acbg", index)}
+                                                            />
+                                                        </label>
+                                                    )}
+                                                    <button type="button" style={{width: "10%"}}
+                                                            onClick={() => removeAcbg(acbg.key)}>
+                                                        삭제
+                                                    </button>
+                                                </div>
+                                            ))}
+                                            <button
+                                                type="button"
+                                                className="writeBtn clickBtn"
+                                                style={{width: "10%", height: "30px"}}
+                                                onClick={addAcbg}
+                                            >
+                                                추가
+                                            </button>
+                                        </div>
+                                    </div>
+                                </li>
 
-                    )}
-                    <ul className="box03 inputWrap" data-aos="fade-up" data-aos-duration="1500">
-                        <li className="inputBox type2 white">
-                            <div className="input">
-                                <span className="tt1">메일수신</span>
-                                <div className="checkWrap">
-                                    <label className="checkBox type3">
-                                        <input
-                                            type="radio"
-                                            id="receive_mail_yes"
-                                            name="receive_mail"
-                                            value="Y"
-                                            className="signUpRadio"
-                                            checked={memberDetail.emlRcptnAgreYn === "Y"}
-                                            onChange={handleMailChange}
-                                        />
-                                        <small>수신</small>
-                                    </label>
-                                    <label className="checkBox type3">
-                                        <input
-                                            type="radio"
-                                            id="receive_mail_no"
-                                            name="receive_mail"
-                                            value="N"
-                                            className="signUpRadio"
-                                            checked={memberDetail.emlRcptnAgreYn === "N"}
-                                            onChange={handleMailChange}
-                                        />
-                                        <small>수신안함</small>
-                                    </label>
-                                </div>
-                            </div>
-                            <span className="warningText">※ 메일링 서비스 수신동의 시 K-바이오랩허브 관련한 다양한 정보를 받으실 수 있습니다</span>
-                        </li>
-                        <li className="inputBox type2 white">
-                            <div className="input">
-                                <span className="tt1">문자수신</span>
-                                <div className="checkWrap">
-                                    <label className="checkBox type3">
-                                        <input
-                                            type="radio"
-                                            id="receive_sms_yes"
-                                            name="receive_sms"
-                                            value="Y"
-                                            className="signUpRadio"
-                                            checked={memberDetail.smsRcptnAgreYn === "Y"}
-                                            onChange={handleSmsChange}
-                                        />
-                                        <small>수신</small>
-                                    </label>
-                                    <label className="checkBox type3">
-                                        <input
-                                            type="radio"
-                                            id="receive_sms_no"
-                                            name="receive_sms"
-                                            value="N"
-                                            className="signUpRadio"
-                                            checked={memberDetail.smsRcptnAgreYn === "N"}
-                                            onChange={handleSmsChange}
-                                        />
-                                        <small>수신안함</small>
-                                    </label>
-                                </div>
-                            </div>
-                            <span className="warningText">※ 메일링 서비스 수신동의 시 K-바이오랩허브 관련한 다양한 정보를 받으실 수 있습니다</span>
-                        </li>
-                    </ul>
+                            </ul>
 
-                    <div className="buttonBox">
-                        <button type="button" className="clickBtn black" onClick={checkPwd}>
-                            <span>수정</span>
-                        </button>
-                        {/*<button type="button" className="clickBtn white" onClick={() => navigate(URL.LOGIN)}>
-                            <span>뒤로가기</span>
-                        </button>*/}
-                    </div>
+                        )}
+
+                        <div className="buttonBox">
+                            <button type="button" className="clickBtn black" onClick={checkPwd}
+                            style={{marginBottom: "50px", marginTop: "30px"}}>
+                                <span>수정</span>
+                            </button>
+                        </div>
                 </form>
+
             </div>
         </div>
-    );
+);
 };
 
 export default MemberMyPageModify;

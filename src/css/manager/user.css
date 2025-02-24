@@ -958,7 +958,7 @@ header.scroll + .container {transition-delay: .25s}
 .mypage_information .inner2 .listBox {display: flex; flex-wrap: wrap; gap: 1.35rem 2.8%;}
 .mypage_information .inner2 .listBox > li {width: calc(50% - 1.4%);}
 .mypage_information .inner2 .listBox > li.width1 {width: 100%;}
-.mypage_information .inner2 .inforBox .listBox > li:nth-child(9) {margin-left: 51.5%;}
+/*.mypage_information .inner2 .inforBox .listBox > li:nth-child(9) {margin-left: 51.5%;}*/
 .mypage_information .inner2 .consultantBox {border-top: 1px solid #ddd; padding-top: 2.2rem;}
 .mypage_information .inner2 .consultantBox .profileImg {display: flex; flex-direction: column; gap: .9rem; text-align: center; align-items: center; margin-bottom: 2.2rem;}
 .mypage_information .inner2 .consultantBox .profileImg label {position: relative; display: block; position: relative; width: 8.3rem; height: 8.3rem; overflow: hidden; border-radius: 1.7rem;}

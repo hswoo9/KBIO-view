@@ -93,8 +93,10 @@ function MemberMyPageSimple(props) {
                         if (index === 0) dataList = [];
                         dataList.push(
                             <tr key={item.cnsltAplySn}>
-                                <td>
-                                    {resp.paginationInfo.totalRecordCount - (resp.paginationInfo.currentPageNo - 1) * resp.paginationInfo.pageSize - index}
+                                <td className={`state ${["101", "999"].includes(String(item.cnsltSttsCd)) ? "waiting" : "complete"}`}>
+                                    <p>
+                                        {statusMap[item.cnsltSttsCd] || item.cnsltSttsCd}
+                                    </p>
                                 </td>
                                 <td>{item.cnsltAplyFldNm}</td>
                                 <td>
@@ -103,6 +105,7 @@ function MemberMyPageSimple(props) {
                                               state={{
                                                   cnsltAplySn: item.cnsltAplySn,
                                                   cnsltSttsCd: item.cnsltSttsCd,
+                                                  cnslttUserSn : item.cnslttUserSn,
                                                   menuSn: location.state?.menuSn,
                                                   menuNmPath: location.state?.menuNmPath,
                                               }}
@@ -113,15 +116,10 @@ function MemberMyPageSimple(props) {
                                         </Link>
                                     </div>
                                 </td>
-                                <td>{moment(item.frstCrtDt).format('YYYY-MM-DD')}</td>
-                                <td className="state">
-                                    <p className={["101", "999"].includes(String(item.cnsltSttsCd)) ? "waiting" : "complete"}>
-                                        {statusMap[item.cnsltSttsCd] || item.cnsltSttsCd}
-                                    </p>
-                                </td>
-                                <td className="state">
-                                    <p className={item.dgstfnCnt > 0 ? "complete" : "waiting"}>
-                                        <span>{item.dgstfnCnt > 0 ? "만족도완료" : "만족도대기"}</span>
+
+                                <td className={`${item.dgstfnCnt > 0 ? "satisfaction" : ""}`}>
+                                    <p>
+                                        <span>{item.dgstfnCnt > 0 ? "만족도확인" : ""}</span>
                                     </p>
                                 </td>
                             </tr>
@@ -144,7 +142,7 @@ function MemberMyPageSimple(props) {
     }, []);
 
     return (
-        <div id="container" className="container notice board">
+        <div id="container" className="container mypage_consultant">
             <div className="inner">
             <CommonSubMenu/>
                 <div className="inner2">
@@ -224,11 +222,9 @@ function MemberMyPageSimple(props) {
                                 <caption>간편상담 목록</caption>
                                 <thead>
                                 <tr>
-                                    <th className="th1">번호</th>
+                                    <th className="th1">상태</th>
                                     <th className="th1">분류</th>
                                     <th>제목</th>
-                                    <th className="th2">신청일</th>
-                                    <th className="th1">상태</th>
                                     <th className="th1">만족도</th>
                                 </tr>
                                 </thead>
