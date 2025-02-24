@@ -286,9 +286,26 @@ function ResidentMemberCreateContent(props){
         }
     }, [residentDetail]);
 
+    const [emailAddr, setEmailAddr] = useState("");
+
+    useEffect(() => {
+        if (residentDetail.bzentyEmlAddr1 && selectedDomain) {
+            const newEmail = `${residentDetail.bzentyEmlAddr1}@${selectedDomain}`;
+            setEmailAddr(newEmail);
+            setResidentDetail(prev => ({
+                ...prev,
+                bzentyEmlAddr: newEmail
+            }));
+        }
+    }, [residentDetail.bzentyEmlAddr1, selectedDomain]);
+
     /*useEffect(() => {
-        console.log("sessionUser:", sessionUser);
-    }, sessionUser);*/
+        console.log("email :", emailAddr);
+        console.log("residentDetail:", residentDetail);
+        console.log("selectedFiles:", selectedFiles);
+        console.log("fileList:", fileList);
+
+    }, [residentDetail],[selectedFiles],[fileList]);*/
 
 
     useEffect(() => {
@@ -359,18 +376,7 @@ function ResidentMemberCreateContent(props){
         }).open();
     };
 
-    const [emailAddr, setEmailAddr] = useState("");
 
-    useEffect(() => {
-        if (residentDetail.bzentyEmlAddr1 && selectedDomain) {
-            const newEmail = `${residentDetail.bzentyEmlAddr1}@${selectedDomain}`;
-            setEmailAddr(newEmail);
-            setResidentDetail(prev => ({
-                ...prev,
-                bzentyEmlAddr: newEmail
-            }));
-        }
-    }, [residentDetail.bzentyEmlAddr1, selectedDomain]);
 
 
     //등록and수정
@@ -393,10 +399,18 @@ function ResidentMemberCreateContent(props){
             alert("대표자명은 필수 값입니다.");
             return false;
         }
-        if (!emailAddr || emailAddr.trim() === "") {
-            alert("이메일 주소를 입력해주세요.");
-            return false;
+        if(modeInfo.mode === CODE.MODE_MODIFY){
+            if (!residentDetail.bzentyEmlAddr) {
+                alert("이메일 주소를 입력해주세요.");
+                return false;
+            }
+        }else{
+            if (!residentDetail.rpsvNm || emailAddr.trim() === "") {
+                alert("이메일 주소를 입력해주세요.");
+                return false;
+            }
         }
+
         /*if (!residentDetail.clsNm) {
             alert("산업은 필수 값입니다.");
             return false;
@@ -421,17 +435,28 @@ function ResidentMemberCreateContent(props){
         const formData = new FormData();
 
         //로고
-        selectedFiles.map((file) => {
+        /*selectedFiles.map((file) => {
             formData.append("files", file);
-        })
+        })*/
+        Array.from(selectedFiles).map((file) => {
+            formData.append("files", file);
+        });
+
 
         fileList.map((file) => {
             formData.append("mvnEntAtchFiles",file);
         })
 
-        for (let key in residentDetail) {
+        /*for (let key in residentDetail) {
             formData.append(key, residentDetail[key]);
+        }*/
+        for (let key in residentDetail) {
+            const value = residentDetail[key];
+            if (value !== null && value !== undefined && value !== '') {
+                formData.append(key, value);
+            }
         }
+
 
         Swal.fire({
             title: "저장하시겠습니까?",
