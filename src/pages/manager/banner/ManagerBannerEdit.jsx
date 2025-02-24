@@ -26,7 +26,7 @@ function ManagerBannerEdit(props) {
         search: "",
       }
   );
-
+  const [customDisplay, setCustomDisplay] = useState("none")
   const [modeInfo, setModeInfo] = useState({ mode: props.mode });
 
   const [bnrPopupDetail, setBnrPopupDetail] = useState({});
@@ -416,11 +416,13 @@ function ManagerBannerEdit(props) {
   const bnrPopupFrmChange = (e) => {
     const base = document.querySelectorAll(".base")
     if(e.target.value != "mainTopSlides"){
+      setCustomDisplay("none")
       document.querySelector("li.mainTopSlides").style.display = "none"
       base.forEach((item) => {
         item.style.display = "block";
       });
     }else{
+      setCustomDisplay("block")
       document.querySelector("li.mainTopSlides").style.display = "flex"
       base.forEach((item) => {
         item.style.display = "none";
@@ -462,6 +464,7 @@ function ManagerBannerEdit(props) {
                          }
                          ref={(el) => (checkRef.current[0] = el)}
                   />
+                  <span className="warningText mainTopSlides" style={{fontSize: "14px", display: customDisplay}}>줄 바꿈 기호 [^]</span>
                 </div>
               </li>
               <li className="inputBox type1 width1">
@@ -540,18 +543,19 @@ function ManagerBannerEdit(props) {
                 <label className="title essential" htmlFor="bnrCn"><small>내용</small></label>
                 <div className="input">
                   <input type="text"
-                       id="bnrCn"
-                       placeholder=""
-                       maxLength="256"
-                       value={bnrPopupDetail.bnrCn}
-                       onChange={(e) =>
-                           setBnrPopupDetail({...bnrPopupDetail, bnrCn: e.target.value})
-                       }
+                         id="bnrCn"
+                         placeholder=""
+                         maxLength="256"
+                         value={bnrPopupDetail.bnrCn}
+                         onChange={(e) =>
+                             setBnrPopupDetail({...bnrPopupDetail, bnrCn: e.target.value})
+                         }
                   />
+                  <span className="warningText" style={{fontSize: "14px"}}>줄 바꿈 기호 [^]</span>
                 </div>
               </li>
               <li className="inputBox type1 width2">
-                <label className="title essential" htmlFor="bnrPopupUrlAddr"><small>배너링크</small></label>
+              <label className="title essential" htmlFor="bnrPopupUrlAddr"><small>배너링크</small></label>
                 <div className="input">
                   <input type="text"
                          id="bnrPopupUrlAddr"

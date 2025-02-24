@@ -75,7 +75,7 @@ const MainSwiper = ({data}) => {
             );
         });
 
-        if(dataList.length < 5 && dataList.length > 1){
+        if(dataList.length < 6 && dataList.length > 1){
             data.forEach(function(item, index) {
                 dataList.push(
                     <SwiperSlide className="swiper-slide" key={item.tblMvnEnt.mvnEntSn + 100}>
