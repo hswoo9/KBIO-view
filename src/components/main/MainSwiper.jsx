@@ -53,7 +53,6 @@ const MainSwiper = ({data}) => {
     const [operationalList, setAuthorityList] = useState([]);
     const getOperationalList = (data) => {
         let dataList = [];
-        console.log(data);
         {/* TODO :
                 기업별 이미지 맞춰서 수정
         */}
