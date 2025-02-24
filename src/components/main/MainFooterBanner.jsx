@@ -22,6 +22,9 @@ const MainFooterBanner = ({data}) => {
 
     const [bannerList, setBannerList] = useState([]);
     useEffect(() => {
+        console.log(bannerList);
+    }, [bannerList]);
+    useEffect(() => {
         getBnrPopupList("bnr").then((data) => {
             if(data != null){
                 let list = [];
@@ -38,25 +41,6 @@ const MainFooterBanner = ({data}) => {
                         );
                     }
                 });
-                if(list.length < 10){
-                    let keyNum = 0;
-                    while(list.length < 10){
-                        data.forEach((item) => {
-                            if (list.length < 10 && item.tblBnrPopup.bnrPopupFrm === "footSlides") {
-                                list.push(
-                                    <li key={`${item.tblBnrPopup.bnrPopupSn}_sub${list.length}`}>
-                                        <img
-                                            src={`http://133.186.250.158${item.tblComFile.atchFilePathNm}/${item.tblComFile.strgFileNm}.${item.tblComFile.atchFileExtnNm}`}
-                                            alt={item.tblComFile.atchFileNm}
-                                            loading="lazy"
-                                        />
-                                    </li>
-                                );
-                            }
-                        });
-                        if (data.length === 0) break;
-                    }
-                }
                 setBannerList(list);
             }
         });
@@ -80,10 +64,6 @@ const MainFooterBanner = ({data}) => {
         };
 
     }, []);
-    /*useEffect(() => {
-        // flowBannerAct 함수 실행
-        flowBannerAct();
-    }, [windowSize]);*/
 
     const flowBannerAct = () => {
         const wrap = wrapRef.current;
