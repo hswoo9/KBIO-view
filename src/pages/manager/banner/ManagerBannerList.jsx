@@ -117,6 +117,22 @@ function ManagerCodeGroup(props) {
         }
     );
 
+    const bnrStatus = (useYn, popupBgngDt, popupEndDt) => {
+        const now = moment(new Date()).format("YYYY-MM-DD HH:mm")
+        const startDt = moment(popupBgngDt).format("YYYY-MM-DD HH:mm")
+        const endDt = moment(popupEndDt).format("YYYY-MM-DD HH:mm")
+
+        if(useYn == "Y"){
+            if(startDt <= now && now <= endDt){
+                return "출력"
+            }else{
+                return "출력안함"
+            }
+        }else{
+            return "출력안함"
+        }
+    }
+
     const getBnrPopupList = useCallback(
         (searchCondition) => {
             const menuListURL = "/bannerPopupApi/getBnrPopupListOnPage.do";
@@ -149,7 +165,6 @@ function ManagerCodeGroup(props) {
                                 }}>
                                     {resp.paginationInfo.totalRecordCount - (resp.paginationInfo.currentPageNo - 1) * resp.paginationInfo.pageSize - index}
                                 </td>
-                                <td>{item.bnrPopupKnd}</td>
                                 <td>{item.bnrPopupTtl}</td>
                                 <td>
                                     {item.popupBgngDt && item.useYn === "Y" &&
@@ -160,32 +175,39 @@ function ManagerCodeGroup(props) {
                                         </>
                                     }
                                 </td>
-                                <td>{item.bnrPopupFrm}</td>
-                                <td>{item.useYn === "Y" ? "출력" : "출력안함"}</td>
                                 <td>
-                                    <Link
-                                        to={{pathname: URL.MANAGER_BANNER_MODIFY}}
-                                        state={{
-                                            bnrPopupSn: item.bnrPopupSn
-                                        }}
-                                        key={item.bnrPopupSn}
-                                    >
-                                        <button type="button">
-                                            수정
-                                        </button>
-                                    </Link>
+                                    {
+                                        item.bnrPopupFrm == "mainTopSlides" ? "메인 상단 배너" :
+                                        item.bnrPopupFrm == "mainSlides" ? "메인 배너" :
+                                        item.bnrPopupFrm == "footSlides" ? "메인 하단 배너" : ""
+                                    }
                                 </td>
+                                <td>{bnrStatus(item.useYn, item.popupBgngDt, item.popupEndDt)}</td>
                                 <td>
-                                    <button type="button"
-                                            onClick={() => {
-                                                delBtnEvent(item.bnrPopupSn);
+                                    <div style={{display: "flex", gap: "5px"}}>
+                                        <Link
+                                            to={{pathname: URL.MANAGER_BANNER_MODIFY}}
+                                            state={{
+                                                bnrPopupSn: item.bnrPopupSn
                                             }}
-                                    >
-                                        삭제
-                                    </button>
+                                            key={item.bnrPopupSn}
+                                        >
+                                            <button type="button">
+                                                수정
+                                            </button>
+                                        </Link>
+
+                                        <button type="button"
+                                                onClick={() => {
+                                                    delBtnEvent(item.bnrPopupSn);
+                                                }}
+                                        >
+                                            삭제
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
-                        );
+                    );
                     });
                     setBnrPopupList(dataList);
                 },
@@ -285,24 +307,20 @@ function ManagerCodeGroup(props) {
                             <caption>코드목록</caption>
                             <colgroup>
                                 <col width="50px"/>
-                                <col width="150px"/>
                                 <col/>
                                 <col width="200"/>
-                                <col width="150px"/>
-                                <col width="100px"/>
-                                <col width="100px"/>
-                                <col width="100px"/>
+                                <col width="150"/>
+                                <col width="100"/>
+                                <col width="120"/>
                             </colgroup>
                             <thead>
                             <tr>
                                 <th>번호</th>
-                                <th>그룹명</th>
                                 <th>배너제목</th>
                                 <th>공개기간</th>
                                 <th>배너형식</th>
                                 <th>상태</th>
-                                <th>수정</th>
-                                <th>삭제</th>
+                                <th>관리</th>
                             </tr>
                             </thead>
                             <tbody>

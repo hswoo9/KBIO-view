@@ -90,7 +90,7 @@ function MemberMyPageDifficulties(props) {
                                                       menuNmPath: location.state?.menuNmPath
 
                                                   }}
-                                                  style={{cursor: 'pointer', textDecoration: 'underline'}}
+                                                  style={{cursor: 'pointer'}}
                                             >
                                                 {item.ttl}
                                                 {item.fileCnt !== 0 && item.fileCnt != null && <img src={fileImages} alt="pass images"/>}
@@ -105,7 +105,7 @@ function MemberMyPageDifficulties(props) {
                                                       menuSn: location.state?.menuSn,
                                                       menuNmPath: location.state?.menuNmPath
                                                   }}
-                                                  style={{cursor: 'pointer', textDecoration: 'underline'}}
+                                                  style={{cursor: 'pointer'}}
                                             >
                                                 {item.ttl}
                                             </Link>

@@ -85,7 +85,7 @@ function ManagerPrivacyList(props) {
                                             utztnTrmsSn: item.utztnTrmsSn
                                         }}
                                         key={item.utztnTrmsSn}
-                                        style={{cursor: 'pointer', textDecoration: 'underline'}}
+                                        style={{cursor: 'pointer'}}
                                     >
                                         {item.utztnTrmsTtl}
                                     </Link>

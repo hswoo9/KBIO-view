@@ -107,7 +107,7 @@ function MemberMyPageConsulting(props) {
                                                   menuNmPath: location.state?.menuNmPath,
 
                                               }}
-                                              style={{cursor: 'pointer', textDecoration: 'underline'}}
+                                              style={{cursor: 'pointer'}}
                                         >
                                             {item.ttl}
                                             {item.fileCnt !== 0 && <img src={fileImages} alt="pass images"/>}
