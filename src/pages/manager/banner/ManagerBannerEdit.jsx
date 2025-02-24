@@ -107,6 +107,12 @@ function ManagerBannerEdit(props) {
             Swal.fire("첨부된 파일이 없습니다.");
             return;
           }
+        }else{
+          if((bnrPopupDetail.bnrPopupTtl.split("^").length - 1) +
+              (bnrPopupDetail.bnrCn.split("^").length - 1) > 5){
+            Swal.fire("제목과 내용의 줄 바꿈은 5번을 초과할 수 없습니다.");
+            return;
+          }
         }
 
         if(bnrPopupDetail.useYn == "Y"){
@@ -273,11 +279,13 @@ function ManagerBannerEdit(props) {
 
                 const base = document.querySelectorAll(".base")
                 if(this.value != "mainTopSlides"){
+                  setCustomDisplay("none")
                   document.querySelector("li.mainTopSlides").style.display = "none"
                     base.forEach((item) => {
                       item.style.display = "block";
                     });
                 }else{
+                  setCustomDisplay("block")
                     document.querySelector("li.mainTopSlides").style.display = "flex"
                     base.forEach((item) => {
                       item.style.display = "none";
