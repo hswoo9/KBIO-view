@@ -141,7 +141,7 @@ function RejectMemberList(props) {
                                         state={{
                                             userSn: item.userSn
                                         }}
-                                        style={{cursor: 'pointer', textDecoration: 'underline'}}
+                                        style={{cursor: 'pointer'}}
                                     >
                                         {item.userId}
                                     </Link>
