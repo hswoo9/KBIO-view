@@ -141,10 +141,17 @@ const ConsultingModal = ({data}) => {
                     <form className="diffiBox">
                         <div className="cont">
                             <ul className="listBox">
-                                <li className="inputBox type2 textBox">
+                                {paramsData.cnslttUserSn && (
+                                    <li className="inputBox type2 textBox">
+                                        <p className="title">컨설턴트명</p>
+                                        <p className="text">{paramsData?.kornFlnm}</p>
+                                    </li>
+                                )}
+                                {/*<li className="inputBox type2 textBox">
                                     <p className="title">컨설턴트명</p>
                                     <p className="text">{paramsData?.kornFlnm}</p>
-                                </li>
+                                </li>*/}
+
                                 <li className="inputBox type2 gray">
                                     <p className="tt1 essential">분야</p>
                                     <div className="itemBox">

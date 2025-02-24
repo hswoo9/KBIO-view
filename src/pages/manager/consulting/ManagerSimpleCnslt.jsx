@@ -101,6 +101,8 @@ function ManagerSimpleCnslt(props) {
                                 <td>
                                     {(() => {
                                         switch (item.cnsltSttsCd) {
+                                            case "10":
+                                                return "최초신청";
                                             case "101":
                                                 return "답변대기";
                                             case "102":

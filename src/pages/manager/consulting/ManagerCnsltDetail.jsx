@@ -70,11 +70,25 @@ function ManagerCnsltDetail(props) {
         };
 
         EgovNet.requestFetch(getCnsltDetailUrl, requestOptions, function (resp) {
-            const decodedPhoneNumber = decodePhoneNumber(resp.result.consulttUser.mblTelno);
-            setConsulttUser({
+
+
+
+            /*setConsulttUser({
                 ...resp.result.consulttUser,
                 mblTelno: decodedPhoneNumber
-            });
+            });*/
+
+            if (resp.result.consulttUser && resp.result.consulttUser.cnslttUserSn) {
+                const decodedPhoneNumber = decodePhoneNumber(resp.result.consulttUser.mblTelno);
+
+                setConsulttUser({
+                    ...resp.result.consulttUser,
+                    mblTelno: decodedPhoneNumber,
+                });
+            }
+
+
+
             setConsulttDtl({
                 ...resp.result.consulttDtl
             });
@@ -231,6 +245,9 @@ function ManagerCnsltDetail(props) {
         <div id="container" className="container layout cms">
             <ManagerLeft/>
             <div className="inner">
+
+                {consulttUser && (
+                    <>
                 <h2 className="pageTitle">
                     <p>컨설턴트 정보</p>
                 </h2>
@@ -371,6 +388,8 @@ function ManagerCnsltDetail(props) {
                         </li>
                     </ul>
                 </div>
+                    </>
+                )}
                 {/*컨설턴트정보끝*/}
 
                 <h2 className="pageTitle">
