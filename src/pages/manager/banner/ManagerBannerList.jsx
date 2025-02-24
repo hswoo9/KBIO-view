@@ -25,7 +25,7 @@ function ManagerCodeGroup(props) {
             searchCnd: "0",
             searchWrd: "",
             bnrPopupKnd: "bnr",
-            actvtnYn: "",
+            useYn: "",
             searchType: "all",
             searchVal: ""
         }
@@ -61,7 +61,7 @@ function ManagerCodeGroup(props) {
     const searchReset = () => {
         setSearchCondition({
             ...searchCondition,
-            actvtnYn: "",
+            useYn: "",
             searchType: "all",
             searchVal: ""
         })
