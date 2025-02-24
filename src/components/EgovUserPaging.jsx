@@ -67,7 +67,7 @@ function EgovPaging(props) {
         // 현재 페이지
         const currentPage = (
           <li key={i} className="num now">
-            <a href="javascript:void(0)"><span>{i}</span></a>
+            <a className="cursorTag"><span>{i}</span></a>
           </li>
         );
         paginationTag.push(currentPage);

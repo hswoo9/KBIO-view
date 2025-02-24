@@ -94,7 +94,7 @@ const MainFooterInfo = ({ value }) => {
                             <ul className="listBox">
                                 <li className="inputBox type2">
                                     <label htmlFor="request_text" className="">의뢰내용</label>
-                                    <div className="input fontColorCustom" dangerouslySetInnerHTML={{__html: viewData.utztnTrmsCn}}>
+                                    <div className="input fontColorCustom" dangerouslySetInnerHTML={{__html: viewData?.utztnTrmsCn}}>
                                     </div>
                                 </li>
                             </ul>
@@ -104,7 +104,7 @@ const MainFooterInfo = ({ value }) => {
                             <select
                                 id="cnsltFld"
                                 className="selectGroup"
-                                defaultValue={viewData.utztnTrmsSn || ""}
+                                defaultValue={viewData?.utztnTrmsSn || ""}
                                 onChange={selectHandle}
                             >
                                 {makerOption(dataList)}
