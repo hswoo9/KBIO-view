@@ -75,6 +75,7 @@ const MainSwiper = ({data}) => {
                 </SwiperSlide>
             );
         });
+
         if(dataList.length < 5 && dataList.length > 1){
             data.forEach(function(item, index) {
                 dataList.push(
@@ -94,9 +95,7 @@ const MainSwiper = ({data}) => {
                     </SwiperSlide>
                 )
             })
-        }
 
-        if(dataList.length < 5 && dataList.length > 1){
             data.forEach(function(item, index) {
                 dataList.push(
                     <SwiperSlide className="swiper-slide" key={item.tblMvnEnt.mvnEntSn + 1000}>
