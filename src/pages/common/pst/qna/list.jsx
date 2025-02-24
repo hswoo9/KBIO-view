@@ -227,8 +227,9 @@ function commonPstList(props) {
                                                 pageUnit: e.target.value
                                             })
                                         }
+                                        defaultValue={searchDto.pageUnit || 10}
                                     >
-                                        <option value="10" selected>10건</option>
+                                        <option value="10">10건</option>
                                         <option value="20">20건</option>
                                         <option value="50">50건</option>
                                         <option value="100">100건</option>
@@ -244,6 +245,7 @@ function commonPstList(props) {
                                             setSearchDto({...searchDto, searchType: e.target.value})
                                         }}
                                         className="niceSelectCustom"
+                                        defaultValue={searchDto.searchType || ""}
                                     >
                                         <option value="">전체</option>
                                         <option value="pstTtl">제목</option>

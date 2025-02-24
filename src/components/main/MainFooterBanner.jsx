@@ -22,7 +22,7 @@ const MainFooterBanner = ({data}) => {
 
     const [bannerList, setBannerList] = useState([]);
     useEffect(() => {
-        console.log(bannerList);
+        flowBannerAct();
     }, [bannerList]);
     useEffect(() => {
         getBnrPopupList("bnr").then((data) => {
@@ -49,12 +49,6 @@ const MainFooterBanner = ({data}) => {
     }, []);
 
     useEffect(() => {
-        if(wrapRef.current && listRef.current){
-            flowBannerAct();
-        }
-    }, [wrapRef.current, listRef.current]);
-
-    useEffect(() => {
         function handleResize() {
             setWindowSize(getWindowSize());
         }
@@ -68,23 +62,33 @@ const MainFooterBanner = ({data}) => {
     const flowBannerAct = () => {
         const wrap = wrapRef.current;
         const list = listRef.current;
-        console.log(wrap);
-        console.log(list);
-        let wrapWidth = wrap.offsetWidth;
-        let listWidth = list.offsetWidth;
-        const speed = 15;
-        let $clone = list.cloneNode(true);
-        wrap.appendChild($clone);
-        if (listWidth < wrapWidth) {
-            const listCount = Math.ceil(wrapWidth * 2 / listWidth);
-            for (let i = 2; i < listCount; i++) {
-                $clone = $clone.cloneNode(true);
-                wrap.appendChild($clone);
+        if(listRef.current.children.length > 0){
+            let liCount = list.children.length;
+            const originalItems = Array.from(list.children); // 기존 li 목록 복사
+            let index = 0;
+            while (liCount < 10) {
+                const cloneItem = originalItems[index].cloneNode(true); // 기존 li 복사
+                list.appendChild(cloneItem);
+                liCount++;
+                index = (index + 1) % originalItems.length; // 순환하면서 복사
             }
+
+            let wrapWidth = wrap.offsetWidth;
+            let listWidth = list.offsetWidth;
+            const speed = 15;
+            let $clone = list.cloneNode(true);
+            wrap.appendChild($clone);
+            if (listWidth < wrapWidth) {
+                const listCount = Math.ceil(wrapWidth * 2 / listWidth);
+                for (let i = 2; i < listCount; i++) {
+                    $clone = $clone.cloneNode(true);
+                    wrap.appendChild($clone);
+                }
+            }
+            wrap.querySelectorAll('.imgMove').forEach((el) => {
+                el.style.animation = `${listWidth / speed}s linear infinite flowRolling`;
+            });
         }
-        wrap.querySelectorAll('.imgMove').forEach((el) => {
-            el.style.animation = `${listWidth / speed}s linear infinite flowRolling`;
-        });
     };
 
     return (
