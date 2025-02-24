@@ -397,6 +397,7 @@ function MemberMyPageSimpleDetail(props) {
     };
 
 
+
     const handleComClick = (cnsltAplySn) => {
         const setComSimpleURL = '/memberApi/setComSimple';
 
@@ -426,6 +427,7 @@ function MemberMyPageSimpleDetail(props) {
                                 cnsltSttsCd: "201"
                             }));
                             getSimpleDetail();
+                            console.log("se :", searchDto);
                         });
 
                     } else {
@@ -494,6 +496,11 @@ function MemberMyPageSimpleDetail(props) {
 
                     <div className="chatWrap">
                         <div className="titleWrap type2">
+                            {searchDto.cnsltSttsCd === "201" && (
+                                <div className="state complete">
+                                    <p>처리완료</p>
+                                </div>
+                            )}
                             <p className="tt1">컨설팅의뢰</p>
                         </div>
                         {cnsltDsctnList}
@@ -534,11 +541,13 @@ function MemberMyPageSimpleDetail(props) {
                                             </button>
                                         </NavLink>
                                     </>
-                                ) : searchDto.cnsltSttsCd === "200" ? (
+                                ) : searchDto.cnsltSttsCd === "201" ? (
                                     // 처리 완료 상태일 경우
                                     <>
-                                        <button type="button" className="clickBtn point"
-                                                onClick={() => handleSatisClick()}>
+                                        <button type="button" className="clickBtn surveyBtn"
+                                                onClick={() => handleSatisClick()}
+                                                style={{width: '100%', marginLeft: '20%'}}>
+                                            <div className="icon"></div>
                                             <span>만족도 조사</span>
                                         </button>
                                         <NavLink to={URL.MEMBER_MYPAGE_SIMPLE}
