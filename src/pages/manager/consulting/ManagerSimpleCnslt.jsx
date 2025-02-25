@@ -699,11 +699,14 @@ function ManagerSimpleCnslt(props) {
                                     <tr>
                                         <th style={{width:"50px"}}>
                                             <label className="checkBox type2">
+                                                {/*<label className="checkBox type2">
                                                 <input type="checkbox"
                                                        name="userCheck"
                                                        className="customCheckBox"
                                                        onClick={checkUserAllCheck}
                                                 />
+                                            </label>*/}
+                                                <p>선택</p>
                                             </label>
                                         </th>
                                         <th><p>아이디</p></th>

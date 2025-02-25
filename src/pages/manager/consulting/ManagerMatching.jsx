@@ -698,13 +698,14 @@ function ManagerMatching(props) {
                                     <thead className="fixed-thead">
                                     <tr>
                                         <th style={{width:"50px"}}>
-                                            <label className="checkBox type2">
+                                            {/*<label className="checkBox type2">
                                                 <input type="checkbox"
                                                        name="userCheck"
                                                        className="customCheckBox"
                                                        onClick={checkUserAllCheck}
                                                 />
-                                            </label>
+                                            </label>*/}
+                                            <p>선택</p>
                                         </th>
                                         <th><p>아이디</p></th>
                                         <th><p>자문분야</p></th>
