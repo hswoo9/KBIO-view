@@ -13,6 +13,7 @@ import CommonSubMenu from "@/components/CommonSubMenu";
 import {getComCdList} from "@/components/CommonComponents";
 import { useDropzone } from 'react-dropzone';
 import SimpleModal from "@/components/SimpleModal";
+import SatisModal from "@/components/SatisModal";
 
 function MemberMyPageSimpleDetail(props) {
     const sessionUser = getSessionItem("loginUser");
@@ -25,6 +26,7 @@ function MemberMyPageSimpleDetail(props) {
     const [filesByDsctnSn, setFilesByDsctnSn] = useState({});
     const [consulttUserName, setConsulttUserName] = useState({});
     const [fileList, setFileList] = useState([]);
+    const [cnsltAplySn, setCnsltAplySn] = useState([]);
     const [simplePopupModify, setSimplePopupModify] = useState({
         creatrSn : sessionUser.userSn,
         dsctnSe: sessionUser.mbrType === 2 ? 1 : 0,
@@ -443,22 +445,6 @@ function MemberMyPageSimpleDetail(props) {
     
 
 
-    const handleSatisClick = () => {
-        const popupURL = `/popup/simple/satis?cnsltAplySn=${searchDto.cnsltAplySn}`;
-        window.open(popupURL, "_blank", "width=800, height=600");
-    }
-
-    /*const handleCreateClick = () => {
-        const popupURL = `/popup/simple/create?cnsltAplySn=${searchDto.cnsltAplySn}`;
-        window.open(popupURL, "_blank", "width=800,height=530");
-    }*/
-
-    /*const handleEditClick = (item) => {
-        localStorage.setItem('popupData', JSON.stringify(item));
-        window.open(`/popup/simple`, "_blank", "width=800,height=530");
-    };*/
-
-
     return (
         <div id="container" className="container mypage_consultant view">
             <div className="inner">
@@ -526,7 +512,8 @@ function MemberMyPageSimpleDetail(props) {
                                 ) : cnsltDsctnList.length === 1 && latestCreator === sessionUser.userSn ? (
                                     <>
                                         <button type="button" className="clickBtn writeBtn"
-                                                onClick={() => handleCancleClick(searchDto.cnsltAplySn)}>
+                                                onClick={() => handleCancleClick(searchDto.cnsltAplySn)}
+                                                style={{marginLeft : '20%'}}>
                                             <span>취소</span>
                                         </button>
                                         <NavLink to={URL.MEMBER_MYPAGE_SIMPLE}
@@ -545,7 +532,10 @@ function MemberMyPageSimpleDetail(props) {
                                     // 처리 완료 상태일 경우
                                     <>
                                         <button type="button" className="clickBtn surveyBtn"
-                                                onClick={() => handleSatisClick()}
+                                                onClick={() => {
+                                                    setCnsltAplySn(searchDto.cnsltAplySn);
+                                                    ComScript.openModal("surveyModal");
+                                                }}
                                                 style={{width: '100%', marginLeft: '20%'}}>
                                             <div className="icon"></div>
                                             <span>만족도 조사</span>
@@ -714,6 +704,7 @@ function MemberMyPageSimpleDetail(props) {
                     </div>
                 </div>
             </div>
+            <SatisModal cnsltAplySn={cnsltAplySn}/>
             <SimpleModal data={modalData} />
         </div>
     );
