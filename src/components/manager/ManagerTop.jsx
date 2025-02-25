@@ -23,7 +23,6 @@ function ManagerTop() {
   useEffect(() => {
     if(nowLi){
       const allLiList = document.querySelectorAll(".lnbBox .dep li");
-      console.log(allLiList);
       allLiList.forEach(function(item, index){
         item.classList.remove("active");
       });
