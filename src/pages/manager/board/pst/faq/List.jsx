@@ -9,10 +9,11 @@ import ManagerLeftNew from "@/components/manager/ManagerLeftNew";
 import { getComCdList } from "@/components/CommonComponents";
 import Swal from 'sweetalert2';
 import EgovPaging from "@/components/EgovPaging";
-
 import moment from "moment/moment.js";
 import {getSessionItem} from "../../../../../utils/storage.js";
 
+import PstSatisfaction from "@/components/PstSatisfaction";
+import * as ComScript from "@/components/CommonScript";
 
 function ManagerPst(props) {
     const sessionUser = getSessionItem("loginUser");
@@ -32,14 +33,12 @@ function ManagerPst(props) {
     const [pstList, setPstList] = useState([]);
     const searchTypeRef = useRef();
     const searchValRef = useRef();
-
+    const [selectPstSn, setSelectPstSn] = useState("");
+    useEffect(() => {
+    }, [selectPstSn]);
     const [pstEvlData, setPstEvlData] = useState({});
     useEffect(() => {
     }, [pstEvlData]);
-
-    const [comCdList, setComCdList] = useState([]);
-    useEffect(() => {
-    }, [comCdList]);
 
     const activeEnter = (e) => {
         if (e.key === "Enter") {
@@ -49,85 +48,8 @@ function ManagerPst(props) {
     };
 
     const modelOpenEvent = (e) => {
-        getPstEvl(e.currentTarget.closest("tr").getAttribute("fk"));
-        document.getElementById('modalDiv').classList.add("open");
-        document.getElementsByTagName('html')[0].style.overFlow = 'hidden';
-        document.getElementsByTagName('body')[0].style.overFlow = 'hidden';
-    }
-
-    const modelCloseEvent = (e) => {
-        /*setPstEvlData({});*/
-        document.getElementById('modalDiv').classList.remove("open");
-        document.getElementsByTagName('html')[0].style.overFlow = 'visible';
-        document.getElementsByTagName('body')[0].style.overFlow = 'visible';
-    }
-
-    const getPstEvl = useCallback(
-        (pstSn) => {
-            const requestURL = "/pstApi/getPstEvlList.do";
-            const requestOptions = {
-                method: "POST",
-                headers: {
-                    "Content-type": "application/json",
-                },
-                body: JSON.stringify({pstSn : pstSn})
-            };
-            EgovNet.requestFetch(
-                requestURL,
-                requestOptions,
-                (resp) => {
-
-                    if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
-                        if(resp.result.pstEvlList != null){
-                            let data = {};
-                            let impvOpnnCnList = [];
-                            let countHtml = [];
-                            let pstEvlList = resp.result.pstEvlList;
-                            if(comCdList != null && comCdList.length > 0){
-                                comCdList.forEach(function(item, index){
-                                    let count = 0;
-
-                                    pstEvlList.forEach(function(subItem, subIndex){
-                                       if(item.comCdSn == subItem.comCdSn){
-                                        count++;
-                                       }
-
-                                    });
-                                    countHtml.push(
-                                        <td key={item.comCdSn}><p>{count}</p></td>
-                                    )
-                                });
-
-                                pstEvlList.forEach(function(item, index){
-                                    impvOpnnCnList.push(
-                                        <tr key={item.pstEvlSn}>
-                                            <td><p>{pstEvlList.length - index}</p></td>
-                                            <td><p>{item.impvOpnnCn}</p></td>
-                                        </tr>
-                                    )
-                                });
-                                data.countHtml = countHtml;
-                                data.impvOpnnCnList = impvOpnnCnList;
-                            }
-                            setPstEvlData(data);
-                        }
-                    } else {
-                    }
-                }
-            )
-        }
-    )
-
-    const getComCdListToHtml = (dataList) => {
-        let htmlData = [];
-        if(dataList != null && dataList.length > 0){
-            dataList.forEach(function(item, index) {
-                htmlData.push(
-                    <th className="th1" key={item.comCdSn}><p>{item.comCdNm}</p></th>
-                )
-            });
-        }
-        return htmlData;
+        setSelectPstSn(e.currentTarget.closest("tr").getAttribute("fk"));
+        ComScript.openModal("programModal");
     }
 
     const getPstList = useCallback(
@@ -190,9 +112,6 @@ function ManagerPst(props) {
     );
 
     useEffect(() => {
-        getComCdList(2).then((data) => {
-            setComCdList(data);
-        });
         getPstList(searchDto);
     }, []);
 
@@ -322,65 +241,7 @@ function ManagerPst(props) {
                     </div>
                 </div>
             </div>
-            <div className="programModal modalCon" id="modalDiv">
-                <div className="bg"></div>
-                <div className="m-inner">
-                    <div className="boxWrap">
-                        <div className="top">
-                            <h2 className="title">만족도</h2>
-                            <div className="close" onClick={modelCloseEvent}>
-                                <div className="icon"></div>
-                            </div>
-                        </div>
-                        <div className="box">
-                            <div className="tableBox type1">
-                                <table>
-                                    <caption>만족도</caption>
-                                    <colgroup>
-                                        <col width="20%"/>
-                                        <col width="20%"/>
-                                        <col width="15%"/>
-                                        <col width="20%"/>
-                                        <col width="25%"/>
-                                    </colgroup>
-                                    <thead>
-                                    <tr>
-                                        {getComCdListToHtml(comCdList)}
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                    {pstEvlData.countHtml != null && (
-                                        pstEvlData.countHtml
-                                    )}
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div className="tableBox type1">
-                                <table>
-                                    <caption>만족도의견</caption>
-                                    <thead>
-                                    <tr>
-                                        <th className="th1"><p>번호</p></th>
-                                        <th className="th2"><p>의견</p></th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    {pstEvlData.impvOpnnCnList != null && (
-                                        pstEvlData.impvOpnnCnList
-                                    )}
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div className="pageWrap">
-
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <PstSatisfaction  data={selectPstSn}/>
         </div>
     );
 }
