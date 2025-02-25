@@ -321,10 +321,13 @@ function ManagerSimpleCnslt(props) {
                                 <td>{moment(item.frstCrtDt).format('YYYY-MM-DD')}</td>
                                 <td>
                                     {(() => {
+                                        const containerStyle = { display: "inline-flex", gap: "8px", alignItems: "center" };
+
+
                                         switch (item.cnsltSttsCd) {
                                             case "10":
                                                 return (
-                                                    <div style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
+                                                    <div style={containerStyle}>
                                                         <span>최초신청</span>
                                                         <button
                                                             type="button"
@@ -344,21 +347,9 @@ function ManagerSimpleCnslt(props) {
                                                         </button>
                                                     </div>
                                                 );
-                                            case "11":
-                                                return (
-                                                    <div style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
-                                                        <span>신청승인</span>
-                                                        <button
-                                                            type="button"
-                                                            onClick={(e) => modelOpenEvent(e, item.cnsltAplySn)}
-                                                        >
-                                                            등록
-                                                        </button>
-                                                    </div>
-                                                );
                                             case "12":
                                                 return (
-                                                    <div style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
+                                                    <div style={containerStyle}>
                                                         <span>컨설턴트지정</span>
                                                         <button
                                                             type="button"
@@ -366,20 +357,34 @@ function ManagerSimpleCnslt(props) {
                                                         >
                                                             등록
                                                         </button>
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => {
+                                                                cancleCnsltSttsCd(item.cnsltAplySn);
+                                                            }}
+                                                        >
+                                                            취소
+                                                        </button>
                                                     </div>
                                                 );
-                                            case "13":
-                                                return "매칭대기";
-                                            case "101":
-                                                return "답변대기";
-                                            case "102":
-                                                return "답변완료";
                                             case "200":
-                                                return "처리완료";
+                                            case "201":
                                             case "999":
-                                                return "취소";
+                                                return <span>{item.cnsltSttsCdNm}</span>;
                                             default:
-                                                return item.cnsltSttsCd;
+                                                return (
+                                                    <div style={containerStyle}>
+                                                        <span>{item.cnsltSttsCdNm}</span>
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => {
+                                                                cancleCnsltSttsCd(item.cnsltAplySn);
+                                                            }}
+                                                        >
+                                                            취소
+                                                        </button>
+                                                    </div>
+                                                );
                                         }
                                     })()}
                                 </td>
