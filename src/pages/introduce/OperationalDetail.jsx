@@ -107,7 +107,7 @@ function OperationalDetail() {
                                 </li>
                                 <li>
                                     <strong className="left">업종</strong>
-                                    <p className="right">{operationalDetail?.clsNm}</p>
+                                    <p className="right">{operationalDetail?.entTpbizNm}</p>
                                 </li>
                                 <li>
                                     <strong className="left">소재지 <span className="blue">BI</span></strong>
