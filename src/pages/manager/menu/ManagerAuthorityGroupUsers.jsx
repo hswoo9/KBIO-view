@@ -536,8 +536,13 @@ function ManagerAuthorityGroupUsers(props) {
                                         <li className="inputBox type1">
                                             <p className="title">검색 구분</p>
                                             <div className="itemBox">
-                                                <select className="selectGroup">
-                                                    <option value="0">이름</option>
+                                                <select className="selectGroup"
+                                                        onChange={(e) => {
+                                                            setSearchUserCondition({...searchUserCondition, searchType: e.target.value})
+                                                        }}
+                                                >
+                                                    <option value="">전체</option>
+                                                    <option value="kornFlnm">이름</option>
                                                 </select>
                                             </div>
                                         </li>
@@ -548,7 +553,7 @@ function ManagerAuthorityGroupUsers(props) {
                                                        name="program_search"
                                                        id="program_search" title="검색어"
                                                        onChange={(e) => {
-                                                           setSearchUserCondition({...searchUserCondition, kornFlnm: e.target.value})
+                                                           setSearchUserCondition({...searchUserCondition, searchVal: e.target.value})
                                                        }}
                                                 />
                                             </div>
@@ -557,7 +562,7 @@ function ManagerAuthorityGroupUsers(props) {
                                     <div className="rightBtn">
                                         <button type="button" className="refreshBtn btn btn1 gray"
                                                 onClick={() => {
-                                                    setSearchUserCondition({...searchUserCondition, kornFlnm: ""})
+                                                    setSearchUserCondition({...searchUserCondition, searchVal: ""})
                                                     document.getElementById('program_search').value = "";
                                                     getUserList({
                                                         pageIndex: 1,
