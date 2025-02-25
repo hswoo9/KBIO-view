@@ -71,7 +71,9 @@ function ManagerCnsltDetail(props) {
         };
 
         EgovNet.requestFetch(getCnsltDetailUrl, requestOptions, function (resp) {
-            if(resp.result.consulttUser != null){
+            console.log("resp.result : ",resp.result);
+
+            if(resp.result.consulttUser != null) {
                 //컨설턴트관련 정보
                 const decodedPhoneNumber = decodePhoneNumber(resp.result.consulttUser.mblTelno);
 
@@ -85,14 +87,6 @@ function ManagerCnsltDetail(props) {
                     ...resp.result.consulttDtl
                 });
 
-                //컨설턴트관련정보끝
-
-
-                setUserDetail({
-                    ...resp.result.userDetail
-                });
-
-
                 if (resp.result.cnsltCertificateFile) {
                     setCnsltCertificateFile(resp.result.cnsltCertificateFile);
                 }
@@ -102,6 +96,16 @@ function ManagerCnsltDetail(props) {
                         ...resp.result.cnsltProfileFile
                     });
                 }
+                //컨설턴트관련정보끝
+            }
+
+
+                setUserDetail({
+                    ...resp.result.userDetail
+                });
+
+
+
                 if (resp.result.userCompDetail) {
                     setUserCompDetail({
                         ...resp.result.userCompDetail
@@ -209,7 +213,7 @@ function ManagerCnsltDetail(props) {
                     );
                 });
                 setCnsltDsctnList(dataList);
-            }
+
 
 
 
@@ -237,8 +241,6 @@ function ManagerCnsltDetail(props) {
         })
     }, []);
 
-
-
     useEffect(() => {
         initMode();
     }, []);
@@ -248,8 +250,8 @@ function ManagerCnsltDetail(props) {
             <ManagerLeft/>
             <div className="inner">
 
-                {consulttUser && (
-                    <>
+                {consulttUser && Object.keys(consulttUser).length > 0 && (
+                    <div>
                 <h2 className="pageTitle">
                     <p>컨설턴트 정보</p>
                 </h2>
@@ -259,13 +261,6 @@ function ManagerCnsltDetail(props) {
                         <li className="inputBox type1 width1">
                             <label className="title" style={{cursor :"default"}}>자문분야</label>
                             <div className="input">
-                                {/*<div style={{
-                                    border: "1px solid #ddd",
-                                    borderRadius: "10px",
-                                    padding: "10px",
-                                }}>
-                                    {consulttDtl.cnsltFld || ""}
-                                </div>*/}
                                 <div>
                                     {comCdList.find(item => item.comCd === String(consulttDtl.cnsltFld))?.comCdNm || ""}
                                 </div>
@@ -393,7 +388,7 @@ function ManagerCnsltDetail(props) {
                         </li>
                     </ul>
                 </div>
-                    </>
+                    </div>
                 )}
                 {/*컨설턴트정보끝*/}
 

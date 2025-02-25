@@ -920,18 +920,21 @@ function ResidentMemberCreateContent(props){
                                 </label>
                             </div>
                         </div>
+                        <span className="warningText">
+                            On : 기관소개 메뉴에 기관 정보가 노출됩니다.
+                            <br/>
+                            Off : 기관소개 메뉴에 기관 정보가 노출되지 않습니다.
+                        </span>
+                    </li>
 
                         {residentDetail.actvtnYn === "Y" && (
-                        <li className="dateWrap"
-                        style={{backgroundColor:"#F7F7F7"}}>
-                            <label className="title essential" htmlFor=""><small>공개기한</small></label>
+                        <>
+                        <li className="inputBox type1 width3">
+                            <label className="title" htmlFor="ntcBgngDt"><small>공개 시작일</small></label>
                         <div className="input" >
                             <input
-                                type="date"
-                                style={{backgroundColor:"#F7F7F7"}}
+                                type="datetime-local"
                                 name="rlsBgngYmd"
-                                placeholder="공개시작일자"
-                                className="f_input2 widthGroup45"
                                 value={formatYmdForInput(residentDetail.rlsBgngYmd) || ""}
                                 onChange={(e) => {
                                     const selectedDate = e.target.value;
@@ -941,13 +944,15 @@ function ResidentMemberCreateContent(props){
                                         rlsBgngYmd: formattedDate,
                                     });
                                 }}
-                            />~&nbsp;
+                            />
+                        </div>
+                        </li>
+                        <li className="inputBox type1 width3">
+                            <label className="title" htmlFor="ntcEndDate"><small>공개 종료일</small></label>
+                            <div className="input">
                             <input
-                                type="date"
-                                style={{backgroundColor:"#F7F7F7"}}
+                                type="datetime-local"
                                 name="rlsEndYmd"
-                                placeholder="공개종료일자"
-                                className="f_input2 widthGroup45"
                                 value={formatYmdForInput(residentDetail.rlsEndYmd) || ""}
                                 onChange={(e) => {
                                     const selectedDate = e.target.value;
@@ -960,14 +965,10 @@ function ResidentMemberCreateContent(props){
                             />
                         </div>
                         </li>
+                        </>
                         )}
 
-                        <span className="warningText">
-                            On : 기관소개 메뉴에 기관 정보가 노출됩니다.
-                            <br/>
-                            Off : 기관소개 메뉴에 기관 정보가 노출되지 않습니다.
-                        </span>
-                    </li>
+
                     {/* 산하직원 가입여부 */}
                     <li className="toggleBox width3">
                         <div className="box">
