@@ -10,6 +10,8 @@ import ManagerTop from "@/components/manager/ManagerTop";
 import EgovFooterUser from "@/components/EgovFooterUser";
 import EgovMainUser from "@/pages/main/EgovMainUser";
 
+import InstitutionInfo from "@/pages/introduce/InstitutionInfo";
+import Consulting from "@/pages/consulting/Consulting";
 import Community from "@/pages/community/Community";
 import KBioLabHub from "@/pages/kBioLabHub/KBioLabHub";
 import BusinessOverview from "@/pages/kBioLabHub/BusinessOverview";
@@ -333,6 +335,8 @@ const SecondRoutes = () => {
               <Route path={URL.MAIN} element={<EgovMainUser/>}/>
               <Route path={URL.TOTAL_SEARCH} element={<TotalSearch/>}/>
               <Route path={URL.COMMUNITY} element={<Community/>}/>
+              <Route path={URL.CONSULTING} element={<Consulting/>}/>
+              <Route path={URL.INSTITUTION_INFO} element={<InstitutionInfo/>}/>
               <Route path={URL.K_BIO_LABHUB} element={<KBioLabHub/>}/>
               <Route path={URL.KBIO_BUSINESS_OVERVIEW} element={<BusinessOverview/>}/>
               <Route path={URL.KBIO_ORGANIZATION} element={<Organization/>}/>
