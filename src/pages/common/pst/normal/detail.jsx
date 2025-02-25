@@ -160,7 +160,7 @@ function commonPstDetail(props) {
   function pstPrevNextSearch(pstSn) {
     setSearchDto({
       ...searchDto,
-      pstSn: pstSn
+      pstSn: pstSn,
     })
   }
 
@@ -274,7 +274,7 @@ function commonPstDetail(props) {
 
   useEffect(() => {
     getPst(searchDto);
-  }, [searchDto.pstSn]);
+  }, [searchDto]);
 
   useEffect(() => {
     if(bbs.pstCtgryYn == "Y"){
@@ -372,7 +372,6 @@ function commonPstDetail(props) {
                       <li className="prevBtn">
                         {pstPrevNext.find(i => i.position === "PREV") ? (
                             <a
-                                href="#"
                                 style={{cursor: "pointer"}}
                                 onClick={() =>
                                     pstPrevNextSearch(pstPrevNext.find(i => i.position === "PREV").pstSn)
@@ -401,7 +400,6 @@ function commonPstDetail(props) {
                       <li className="nextBtn">
                         {pstPrevNext.find(i => i.position === "NEXT") ? (
                             <a
-                                href="#"
                                 style={{cursor: "pointer"}}
                                 onClick={() =>
                                     pstPrevNextSearch(pstPrevNext.find(i => i.position === "NEXT").pstSn)
