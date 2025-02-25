@@ -32,11 +32,13 @@ const MainFooterBanner = ({data}) => {
                     if(item.tblBnrPopup.bnrPopupFrm == "footSlides"){
                         list.push(
                             <li key={item.tblBnrPopup.bnrPopupSn}>
-                                <img
-                                    src={`http://133.186.250.158${item.tblComFile.atchFilePathNm}/${item.tblComFile.strgFileNm}.${item.tblComFile.atchFileExtnNm}`}
-                                    alt={item.tblComFile.atchFileNm}
-                                    loading="lazy"
-                                />
+                                <a href={item.tblBnrPopup.bnrPopupUrlAddr || "/"} target="_blank">
+                                    <img
+                                        src={`http://133.186.250.158${item.tblComFile.atchFilePathNm}/${item.tblComFile.strgFileNm}.${item.tblComFile.atchFileExtnNm}`}
+                                        alt={item.tblComFile.atchFileNm}
+                                        loading="lazy"
+                                    />
+                                </a>
                             </li>
                         );
                     }

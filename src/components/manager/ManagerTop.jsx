@@ -9,6 +9,7 @@ import { getSessionItem, setSessionItem, removeSessionItem } from "@/utils/stora
 import Swal from "sweetalert2";
 
 function ManagerTop() {
+  console.log("??>?>?>?>?");
   const location = useLocation();
   const sessionUser = getSessionItem("loginUser");
   const sessionUserId = sessionUser?.id;
@@ -19,6 +20,29 @@ function ManagerTop() {
   const navigate = useNavigate();
 
   const [topMenuList, setTopMenuList] = useState([]);
+  const [nowLi, setNowLi] = useState(null);
+  useEffect(() => {
+    if(nowLi){
+      const allLiList = document.querySelectorAll(".lnbBox .dep li");
+      console.log(allLiList);
+      allLiList.forEach(function(item, index){
+        item.classList.remove("active");
+      });
+      nowLi.classList.add("active");
+
+      const closestParentDiv = document.querySelector(".commonTop .navBox .lnbBox");
+      const closestParentDivRect = closestParentDiv.getBoundingClientRect();
+      if (nowLi) {
+        const closestElementRect = nowLi.getBoundingClientRect();
+        activeRef.current.style.width = `${closestElementRect.width}px`;
+        activeRef.current.style.height = `5px`;
+        activeRef.current.style.left = `${closestElementRect.left - closestParentDivRect.left}px`;
+        activeRef.current.style.opacity = `1`;
+      }
+
+
+    }
+  }, [nowLi])
 
   const logInHandler = () => {
     navigate(URL.MANAGER_LOGIN);
@@ -46,40 +70,6 @@ function ManagerTop() {
   };
 
   useEffect(() => {
-    /*getMenuByUserSn(0, 0, String(userSn)).then((data) => {
-      let datas = [];
-      if(data.length > 0){
-
-        data.forEach(function(item, index) {
-          datas.push(
-              <li key={item.menuSn}>
-                <a
-                    onClick={() => {
-                      navigate({pathname: item.menuPathNm}, {state: {selectMenuNm: item.menuNm, upperMenuSn: item.menuSn}});
-                    }}
-                    className="cursorClass"
-                ><p>{item.menuNm}</p>
-                </a>
-              </li>
-          )
-        });
-        datas.push(
-            <li key="cmsMenu">
-              <a
-                  onClick={() => {
-                    navigate({pathname: URL.MANAGER_CMS}, {state: {selectMenuNm: "CMS"}});
-                  }}
-                  className="cursorClass"
-              >
-                <p>CMS</p>
-              </a>
-            </li>
-        )
-      }
-      setTopMenuList(datas);
-    })*/
-
-
     if (location.pathname.split("/")[1] === "manager") {
       import('../../css/manager/admin.css');
       import('../../css/manager/customAdmin.css');
@@ -148,7 +138,38 @@ function ManagerTop() {
     logOutHandler();
   };
 
+  const activeRef = useRef(null);
+  const hoverRef = useRef(null);
+  const handleMouseOver = (e) => {
+    const closestParentDiv = document.querySelector(".commonTop .navBox .lnbBox");
+    const closestParentDivRect = closestParentDiv.getBoundingClientRect();
+    if(e.target !== e.currentTarget) {
+      const closestElement = e.target.closest("li");
+      if (closestElement) {
+        const closestElementRect = closestElement.getBoundingClientRect();
+        hoverRef.current.style.width = `${closestElementRect.width}px`;
+        hoverRef.current.style.height = `5px`;
+        hoverRef.current.style.left = `${closestElementRect.left - closestParentDivRect.left}px`;
+        hoverRef.current.style.opacity = `1`;
+      }
+    }
+  }
+
+  const onClickHandle = (e, url, selectMenuNm) => {
+    setNowLi(e.target.closest("li"));
+    navigate({pathname: url}, {state: {selectMenuNm: selectMenuNm}});
+  }
+
+  const onClickMainImgHandle = (url, selectMenuNm) => {
+    const firstLi = document.querySelector(".lnbBox .dep li:first-child");
+    if(firstLi){
+      setNowLi(firstLi);
+    }
+    navigate({pathname: url}, {state: {selectMenuNm: selectMenuNm}});
+  }
+
   useEffect(() => {
+
     // 이벤트 리스너 추가
     const events = ["mousemove", "mousedown", "keypress", "scroll", "touchstart"];
     events.forEach((event) => window.addEventListener(event, resetTimer) );
@@ -166,84 +187,69 @@ function ManagerTop() {
 
   return (
       <div className="commonTop" id="commonTop">
-        <h1><NavLink to={URL.MANAGER}><img src={LogoImg} alt="images"/><span
-            className="hidden">K BIO LabHub</span></NavLink></h1>
+        <h1>
+          <a onClick={ (e) => {onClickMainImgHandle(URL.MANAGER, "홈")}} className="cursorTag">
+            <img src={LogoImg} alt="images"/>
+            <span className="hidden">K BIO LabHub</span>
+        </a>
+        </h1>
         <div className="navBox">
           <div className="lnbBox">
-            <div className="bg hover"></div>
-            <div className="bg active"></div>
+            <div className="bg hover" ref={hoverRef}></div>
+            <div className="bg active" ref={activeRef}></div>
             <ul className="dep">
-              <li>
+              <li onMouseOver={(e) => handleMouseOver(e)}>
                 <a
-                    onClick={() => {
-                      navigate({pathname: URL.MANAGER}, {state: {selectMenuNm: "홈"}});
-                    }}
-                    className="cursorClass"
-                ><p>홈</p>
+                  onClick={ (e) => {onClickHandle(e, URL.MANAGER, "홈")}}
+                  className="cursorTag"
+                >
+                  <p>홈</p>
                 </a>
               </li>
-              <li>
+              <li onMouseOver={(e) => handleMouseOver(e)}>
                 <a
-                    onClick={() => {
-                      navigate({pathname: URL.MANAGER_OPERATIONAL_SUPPORT}, {state: {selectMenuNm: "운영지원"}});
-                    }}
-                    className="cursorClass"
-                ><p>운영지원</p>
+                    onClick={ (e) => {onClickHandle(e, URL.MANAGER_OPERATIONAL_SUPPORT, "운영지원")}}
+                    className="cursorTag"
+                >
+                  <p>운영지원</p>
                 </a>
               </li>
-              <li>
+              <li onMouseOver={(e) => handleMouseOver(e)}>
                 <a
-                    onClick={() => {
-                      navigate({pathname: URL.MANAGER_CONSULTING_EXPERT}, {state: {selectMenuNm: "컨설팅지원"}});
-                    }}
-                    className="cursorClass"
-                ><p>컨설팅지원</p>
+                    onClick={ (e) => {onClickHandle(e, URL.MANAGER_CONSULTING_EXPERT, "컨설팅지원")}}
+                    className="cursorTag"
+                >
+                  <p>컨설팅지원</p>
                 </a>
               </li>
-              <li>
+              <li onMouseOver={(e) => handleMouseOver(e)}>
                 <a
-                    onClick={() => {
-                      navigate({pathname: URL.MANAGER_NORMAL_MEMBER}, {state: {selectMenuNm: "회원"}});
-                    }}
-                    className="cursorClass"
-                ><p>회원</p>
+                    onClick={ (e) => {onClickHandle(e, URL.MANAGER_NORMAL_MEMBER, "회원")}}
+                    className="cursorTag"
+                >
+                  <p>회원</p>
                 </a>
               </li>
-              <li>
+              <li onMouseOver={(e) => handleMouseOver(e)}>
                 <a
-                    onClick={() => {
-                      navigate({pathname: URL.MANAGER_ALARM}, {state: {selectMenuNm: "홈페이지"}});
-                    }}
-                    className="cursorClass"
-                ><p>홈페이지</p>
+                    onClick={ (e) => {onClickHandle(e, URL.MANAGER_ALARM, "홈페이지")}}
+                    className="cursorTag"
+                >
+                  <p>홈페이지</p>
                 </a>
               </li>
-
-              {/*게시글 관리로 쓰면 될듯
-            <li>
-              <a
-                 onClick={() => {
-                   navigate({pathname: URL.MANAGER_COMMUNITY}, {state: {selectMenuNm: "커뮤니티"}});
-                 }}
-                 className="cursorClass"
-              ><p>커뮤니티</p>
-              </a>
-            </li>*/}
-              <li>
+              <li onMouseOver={(e) => handleMouseOver(e)}>
                 <a
-                    onClick={() => {
-                      navigate({pathname: URL.MANAGER_STATISTICS_USER}, {state: {selectMenuNm: "통계"}});
-                    }}
-                    className="cursorClass"
-                ><p>통계</p>
+                    onClick={ (e) => {onClickHandle(e, URL.MANAGER_STATISTICS_USER, "통계")}}
+                    className="cursorTag"
+                >
+                  <p>통계</p>
                 </a>
               </li>
-              <li>
+              <li onMouseOver={(e) => handleMouseOver(e)}>
                 <a
-                    onClick={() => {
-                      navigate({pathname: URL.MANAGER_MENU_MANAGEMENT}, {state: {selectMenuNm: "CMS"}});
-                    }}
-                    className="cursorClass"
+                    onClick={ (e) => {onClickHandle(e, URL.MANAGER_MENU_MANAGEMENT, "CMS")}}
+                    className="cursorTag"
                 >
                   <p>CMS</p>
                 </a>
