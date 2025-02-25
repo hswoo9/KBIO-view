@@ -30,8 +30,7 @@ function ManagerLeftStatistics() {
       const closestElement = e.target.closest("li");
       if (closestElement) {
         const closestElementRect = closestElement.getBoundingClientRect();
-        console.log(closestElementRect);
-        console.log(closestParentDivRect);
+        
         hoverRef.current.style.width = `${closestElementRect.width}px`;
         hoverRef.current.style.height = `${closestElementRect.height}px`;
         hoverRef.current.style.top = `${closestElementRect.top - closestParentDivRect.top}px`;
