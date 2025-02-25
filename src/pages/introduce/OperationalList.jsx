@@ -7,6 +7,7 @@ import URL from "@/constants/url";
 import CommonSubMenu from "@/components/CommonSubMenu";
 import AOS from "aos";
 import EgovUserPaging from "@/components/EgovUserPaging";
+import * as ComScript from "@/components/CommonScript";
 
 function OperationalList() {
     const userStatusRef = useRef();
@@ -96,7 +97,7 @@ function OperationalList() {
                                         </li>
                                         <li>
                                             <p className="left">대표전화</p>
-                                            <strong>{item.tblMvnEnt.entTelno}</strong>
+                                            <strong>{ComScript.formatTelNumber(item.tblMvnEnt.entTelno)}</strong>
                                         </li>
                                         <li>
                                             <p className="left">홈페이지</p>

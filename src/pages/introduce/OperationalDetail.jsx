@@ -3,6 +3,7 @@ import { useNavigate, useLocation, Link, NavLink } from "react-router-dom";
 import * as EgovNet from "@/api/egovFetch";
 import CommonSubMenu from "@/components/CommonSubMenu";
 import URL from "@/constants/url";
+import * as ComScript from "@/components/CommonScript";
 
 function OperationalDetail() {
     const navigate = useNavigate();
@@ -91,7 +92,7 @@ function OperationalDetail() {
                                 <li>
                                     <strong className="left">대표전화</strong>
                                     <p className="right"><a
-                                        href={`tel:${operationalDetail?.entTelno}`}><span>{operationalDetail?.entTelno}</span></a>
+                                        href={`tel:${ComScript.formatTelNumber(operationalDetail?.entTelno)}`}><span>{ComScript.formatTelNumber(operationalDetail?.entTelno)}</span></a>
                                     </p>
                                 </li>
                                 <li>
