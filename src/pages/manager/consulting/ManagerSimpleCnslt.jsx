@@ -33,6 +33,8 @@ function ManagerSimpleCnslt(props) {
             searchVal : "",
         }
     );
+    const [cnsltantList, setCnsltantList] = useState([]);
+
     const [consultingList, setConsultingList] = useState([]);
     /** 컨설팅 분야 코드 */
     const [cnsltFldList, setCnsltFldList] = useState([]);
@@ -47,7 +49,226 @@ function ManagerSimpleCnslt(props) {
             getConsultingList(searchDto);
         }
     };
+    
+    //최초신청버튼
+    const updateCnsltSttsCd = (cnsltAplySn) => {
+        const url = "/consultingApi/setCnsltDtlSttsCd";
 
+        Swal.fire({
+            title:"승인하시겠습니까?",
+            showCloseButton: true,
+            showCancelButton: true,
+            confirmButtonText: "예",
+            cancelButtonText: "아니오"
+        }).then((result) => {
+            if(result.isConfirmed) {
+                const requestOptions = {
+                    method: "POST",
+                    headers: {
+                        "Content-type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        cnsltAplySn: cnsltAplySn
+                    }),
+                };
+
+                EgovNet.requestFetch(url, requestOptions, (resp) => {
+                    if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
+                        Swal.fire("승인되었습니다.");
+                        getConsultingList(searchDto);
+                    } else {
+                        alert("ERR : " + resp.resultMessage);
+                    }
+                });
+
+            }else{
+                //취소
+            }
+        });
+    };
+
+    const cancleCnsltSttsCd = (cnsltAplySn) => {
+        const url = "/consultingApi/cancleCnsltDtlSttsCd";
+
+        Swal.fire({
+            title:"취소하시겠습니까?",
+            showCloseButton: true,
+            showCancelButton: true,
+            confirmButtonText: "예",
+            cancelButtonText: "아니오"
+        }).then((result) => {
+            if(result.isConfirmed) {
+                const requestOptions = {
+                    method: "POST",
+                    headers: {
+                        "Content-type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        cnsltAplySn: cnsltAplySn
+                    }),
+                };
+
+                EgovNet.requestFetch(url, requestOptions, (resp) => {
+                    if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
+                        Swal.fire("취소되었습니다.");
+                        getConsultingList(searchDto);
+                    } else {
+                        alert("ERR : " + resp.resultMessage);
+                    }
+                });
+
+            }else{
+                //취소
+            }
+        });
+    };
+    
+    //컨설턴트지정버튼(컨설턴트 리스트 모달창 오픈)
+    const [searchCnsltantCondition, setSearchCnsltantCondition] = useState({
+        pageIndex: 1,
+        pageUnit:9999,
+        searchType: "",
+        searchVal: "",
+    });
+    const [cnsltantPaginationInfo, setCnsltantPaginationInfo] = useState({
+        currentPageNo: 1,
+        firstPageNo: 1,
+        firstPageNoOnPageList: 1,
+        firstRecordIndex: 0,
+        lastPageNo: 1,
+        lastPageNoOnPageList: 1,
+        lastRecordIndex: 10,
+        pageSize: 10,
+        recordCountPerPage: 10,
+        totalPageCount: 15,
+        totalRecordCount: 158
+
+    });
+    const [selCnsltantList, setSelCnsltantList] = useState({});
+    const searchCnsltTypeRef = useRef();
+    const searchCnsltValRef = useRef();
+
+    const modelOpenEvent = (e, cnsltAplySn) => {
+        setSelCnsltantList({ cnsltAplySn: cnsltAplySn });
+        getConsultantList(searchCnsltantCondition);
+        document.getElementsByName("userCheck").forEach(function (item, index) {
+            item.checked = false;
+        });
+
+        document.getElementById('modalDiv').classList.add("open");
+        document.getElementsByTagName('html')[0].style.overFlow = 'hidden';
+        document.getElementsByTagName('body')[0].style.overFlow = 'hidden';
+    }
+
+    const modelCloseEvent = (e) => {
+        setSearchCnsltantCondition({
+            pageIndex: 1,
+            pageUnit:9999,
+            searchType: "",
+            searchVal: "",
+        })
+        document.getElementById('modalDiv').classList.remove("open");
+        document.getElementsByTagName('html')[0].style.overFlow = 'visible';
+        document.getElementsByTagName('body')[0].style.overFlow = 'visible';
+    }
+
+    const checkUserAllCheck = (e) => {
+        let checkBoolean = e.target.checked;
+        document.getElementsByName("userCheck").forEach(function (item, index) {
+            item.checked = checkBoolean;
+        });
+    }
+
+    const handleCheckboxChange = (e) => {
+        const userSn = parseInt(e.target.value);
+
+        if (e.target.checked) {
+            setSelCnsltantList(prevState => ({
+                ...prevState,
+                cnslttUserSn : userSn
+            }));
+        } else {
+            setSelCnsltantList(prevState => ({
+                ...prevState,
+                cnslttUserSn: null
+            }));
+        }
+    };
+
+
+    const activeUserEnter = (e) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            getConsultantList(searchCnsltantCondition);
+        }
+    };
+
+    const getConsultantList = useCallback(
+        (searchCnsltantCondition) => {
+            const consultantListUrl = "/consultingApi/getConsultantAdminList.do"
+            const requestOptions = {
+                method: "POST",
+                headers: {
+                    "Content-type": "application/json",
+                },
+                body: JSON.stringify(searchCnsltantCondition),
+            };
+
+            EgovNet.requestFetch(
+                consultantListUrl,
+                requestOptions,
+                (resp) => {
+                    console.log("resp.result : ",resp.result.consultantList);
+                    setCnsltantPaginationInfo(resp.paginationInfo);
+                    resp.result.consultantList.forEach(function (item, index) {
+                        setCnsltantList(resp.result.consultantList);
+                    });
+                },
+                function (resp) {
+
+                }
+            );
+
+
+        },
+        [cnsltantList, searchCnsltantCondition]
+    );
+
+    const cnslttSelectSubmit = () => {
+
+        const updateCnslttToDtlUrl = "/consultingApi/updateCnsltt";
+
+        Swal.fire({
+            title: "컨설턴트를 등록하시겠습니까?",
+            showCloseButton: true,
+            showCancelButton: true,
+            confirmButtonText: "예",
+            cancelButtonText: "아니오"
+        }).then((result) => {
+            if(result.isConfirmed){
+                const requestOptions = {
+                    method: "POST",
+                    headers: {
+                        "Content-type": "application/json",
+                    },
+                    body: JSON.stringify(selCnsltantList),
+                };
+
+                EgovNet.requestFetch(updateCnslttToDtlUrl, requestOptions, (resp) => {
+                    if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
+                        Swal.fire("승인되었습니다.");
+                        getConsultingList(searchDto);
+                        modelCloseEvent();
+                    } else {
+                        alert("ERR : " + resp.resultMessage);
+                    }
+                });
+
+            }else{
+                //취소
+            }
+        });
+    }
 
     const getConsultingList = useCallback(
         (searchDto) => {
@@ -102,7 +323,53 @@ function ManagerSimpleCnslt(props) {
                                     {(() => {
                                         switch (item.cnsltSttsCd) {
                                             case "10":
-                                                return "최초신청";
+                                                return (
+                                                    <div style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
+                                                        <span>최초신청</span>
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => {
+                                                                updateCnsltSttsCd(item.cnsltAplySn);
+                                                            }}
+                                                        >
+                                                            승인
+                                                        </button>
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => {
+                                                                cancleCnsltSttsCd(item.cnsltAplySn);
+                                                            }}
+                                                        >
+                                                            취소
+                                                        </button>
+                                                    </div>
+                                                );
+                                            case "11":
+                                                return (
+                                                    <div style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
+                                                        <span>신청승인</span>
+                                                        <button
+                                                            type="button"
+                                                            onClick={(e) => modelOpenEvent(e, item.cnsltAplySn)}
+                                                        >
+                                                            등록
+                                                        </button>
+                                                    </div>
+                                                );
+                                            case "12":
+                                                return (
+                                                    <div style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
+                                                        <span>컨설턴트지정</span>
+                                                        <button
+                                                            type="button"
+                                                            onClick={(e) => modelOpenEvent(e, item.cnsltAplySn)}
+                                                        >
+                                                            등록
+                                                        </button>
+                                                    </div>
+                                                );
+                                            case "13":
+                                                return "매칭대기";
                                             case "101":
                                                 return "답변대기";
                                             case "102":
@@ -319,6 +586,171 @@ function ManagerSimpleCnslt(props) {
                     </div>
                 </div>
             </div>
+
+            {/*모달창*/}
+            <div className="programModal modalCon" id="modalDiv">
+                <div className="bg"></div>
+                <div className="m-inner">
+                    <div className="boxWrap">
+                        <div className="top">
+                            <h2 className="title">컨설턴트목록</h2>
+                            <div className="close" onClick={modelCloseEvent}>
+                                <div className="icon"></div>
+                            </div>
+                        </div>
+                        <div className="box">
+                            <div className="cateWrap">
+                                <form action="">
+                                    <ul className="cateList">
+                                        <li className="inputBox type1">
+                                            <p className="title">자문 분야</p>
+                                            <div className="itemBox">
+                                                <select
+                                                    className="selectGroup"
+                                                    onChange={(e)=>{
+                                                        setSearchCnsltantCondition({
+                                                            ...searchCnsltantCondition,
+                                                            cnsltFld: e.target.value
+                                                        })
+                                                    }}
+                                                >
+                                                    <option value="">전체</option>
+                                                    {cnsltFldList.map((item, index) => (
+                                                        <option value={item.comCd} key={item.comCdSn}>{item.comCdNm}</option>
+                                                    ))}
+                                                </select>
+                                            </div>
+                                        </li>
+                                        <li className="inputBox type1">
+                                            <p className="title">검색 구분</p>
+                                            <div className="itemBox">
+                                                <select
+                                                    className="selectGroup"
+                                                    ref={searchCnsltTypeRef}
+                                                    onChange={(e) => {
+                                                        setSearchCnsltantCondition({...searchCnsltantCondition, searchType: e.target.value})
+                                                    }}
+                                                >
+                                                    <option value="kornFlnm">성명</option>
+                                                    <option value="userId">아이디</option>
+                                                </select>
+                                            </div>
+                                        </li>
+                                        <li className="searchBox inputBox type1">
+                                            <label className="title" htmlFor="program_search">
+                                                <small>검색어</small>
+                                            </label>
+                                            <div className="input">
+                                                <input type="text"
+                                                       name="program_search"
+                                                       id="program_search" title="검색어"
+                                                       defaultValue={searchCnsltantCondition.searchVal}
+                                                       ref={searchCnsltValRef}
+                                                       onChange={(e)=> {
+                                                           setSearchCnsltantCondition({...searchCnsltantCondition, searchVal: e.target.value})
+                                                       }}
+                                                       onKeyDown={activeUserEnter}
+                                                />
+                                            </div>
+                                        </li>
+                                    </ul>
+                                    <div className="rightBtn">
+                                        <button type="button" className="refreshBtn btn btn1 gray"
+                                                onClick={() => {
+                                                    setSearchCnsltantCondition({...searchCnsltantCondition, searchVal: ""})
+                                                    document.getElementById('program_search').value = "";
+                                                    getConsultantList({
+                                                        pageIndex: 1,
+                                                        pageUnit:9999,
+                                                        searchType: "",
+                                                        searchVal: "",
+                                                        cnsltFld:""
+                                                    });
+                                                }}
+
+                                        >
+                                            <div className="icon"></div>
+                                        </button>
+                                        <button type="button" className="searchBtn btn btn1 point"
+                                                onClick={() => {
+                                                    getConsultantList({
+                                                        ...searchCnsltantCondition,
+                                                        pageIndex: 1,
+                                                    });
+                                                }}
+                                        >
+                                            <div className="icon"></div>
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div className="tableBox type1">
+                                <table>
+                                    <caption>컨설턴트목록</caption>
+                                    <colgroup>
+                                        <col width="50"/>
+                                    </colgroup>
+                                    <thead className="fixed-thead">
+                                    <tr>
+                                        <th style={{width:"50px"}}>
+                                            <label className="checkBox type2">
+                                                <input type="checkbox"
+                                                       name="userCheck"
+                                                       className="customCheckBox"
+                                                       onClick={checkUserAllCheck}
+                                                />
+                                            </label>
+                                        </th>
+                                        <th><p>아이디</p></th>
+                                        <th><p>자문분야</p></th>
+                                        <th><p>성명</p></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody className="scrollable-tbody">
+                                    {cnsltantList.length>0 && (
+                                        <>
+                                            {cnsltantList.map((item,index) => (
+                                                <tr key={item.tblUser.userSn}>
+                                                    <td style={{width:"50px"}}>
+                                                        <label className="checkBox type2">
+                                                            <input type="checkbox" name="userCheck"
+                                                                   className="customCheckBox"
+                                                                   checked={selCnsltantList.cnslttUserSn === item.tblUser.userSn}
+                                                                   onChange={handleCheckboxChange}
+                                                                   value={item.tblUser.userSn}
+                                                            />
+                                                        </label>
+                                                    </td>
+                                                    <td>{item.tblUser.userId || ""}</td>
+                                                    <td>{item.cnsltFldNm}</td>
+                                                    <td>{item.tblUser.kornFlnm || ""}</td>
+                                                </tr>
+                                            ))}
+                                        </>
+                                    )}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div className="pageWrap">
+                                <EgovPaging
+                                    pagination={cnsltantPaginationInfo}
+                                    moveToPage={(passedPage) =>{
+                                        getConsultantList({
+                                            ...searchCnsltantCondition,
+                                            pageIndex: passedPage
+                                        });
+                                    }}
+                                />
+                                <button type="button" className="writeBtn clickBtn"
+                                        onClick={cnslttSelectSubmit}
+                                ><span>등록</span></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {/*모달끝*/}
+
         </div>
     );
 }

@@ -54,7 +54,7 @@ function ManagerExpert(props) {
 
     const getConsultMemberList = useCallback(
         (searchDto) => {
-            const consultMemberListUrl = "/consultingApi/getConsultantList.do";
+            const consultMemberListUrl = "/consultingApi/getConsultantAdminList.do";
             const requestOptions = {
                 method: "POST",
                 headers: {

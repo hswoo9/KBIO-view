@@ -933,7 +933,7 @@ function ResidentMemberCreateContent(props){
                             <label className="title" htmlFor="ntcBgngDt"><small>공개 시작일</small></label>
                         <div className="input" >
                             <input
-                                type="datetime-local"
+                                type="date"
                                 name="rlsBgngYmd"
                                 value={formatYmdForInput(residentDetail.rlsBgngYmd) || ""}
                                 onChange={(e) => {
@@ -951,7 +951,7 @@ function ResidentMemberCreateContent(props){
                             <label className="title" htmlFor="ntcEndDate"><small>공개 종료일</small></label>
                             <div className="input">
                             <input
-                                type="datetime-local"
+                                type="date"
                                 name="rlsEndYmd"
                                 value={formatYmdForInput(residentDetail.rlsEndYmd) || ""}
                                 onChange={(e) => {
