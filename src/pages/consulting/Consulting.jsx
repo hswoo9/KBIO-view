@@ -22,7 +22,7 @@ function KBioLabHub(props) {
         { pathname: URL.CONSULTANT_LIST},
         { state: {
             menuSn : location.state?.menuSn,
-            menuNmPath : location.state?.menuNmPath,
+            menuNmPath : "컨설팅 > 컨설턴트",
             thisMenuSn: 45,
           } },
         { mode:  CODE.MODE_READ}

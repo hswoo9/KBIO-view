@@ -24,7 +24,7 @@ function Community(props) {
             bbsSn:  1,
             thisMenuSn: 38,
             menuSn : location.state?.menuSn,
-            menuNmPath : location.state?.menuNmPath,
+            menuNmPath : "커뮤니티 > 공지사항",
           } },
         { mode:  CODE.MODE_READ}
     );

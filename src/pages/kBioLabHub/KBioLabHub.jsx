@@ -22,7 +22,7 @@ function KBioLabHub(props) {
         { pathname: URL.KBIO_BUSINESS_OVERVIEW},
         { state: {
             menuSn : location.state?.menuSn,
-            menuNmPath : location.state?.menuNmPath,
+            menuNmPath : "K-BioLabHub > 사업소개",
             thisMenuSn: 49,
           } },
         { mode:  CODE.MODE_READ}

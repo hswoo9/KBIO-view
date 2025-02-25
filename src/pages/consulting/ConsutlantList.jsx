@@ -152,6 +152,7 @@ function ConsultantList(props) {
                                                   userSn: item.tblUser.userSn,
                                                   menuSn : location.state?.menuSn,
                                                   menuNmPath : location.state?.menuNmPath,
+                                                  thisMenuSn: location.state?.thisMenuSn,
                                               }}
                                               className="moreBtn"
                                      >
