@@ -5,6 +5,7 @@ import logoWhite from "@/assets/images/logo_white.svg";
 import React, {useEffect, useState} from "react";
 import {getBnrPopupList} from "@/components/main/MainComponents";
 import MainFooterInfo from "@/components/main/MainFooterInfo";
+import MainFooterEmail from "@/components/main/MainFooterEmail";
 import * as ComScript from "@/components/CommonScript";
 
 function EgovFooterUser() {
@@ -80,7 +81,7 @@ function EgovFooterUser() {
               <ul className="linkBox">
                 <li><a onClick={() => handleClick("1")} className="cursorTag"><span>개인정보 처리방침</span></a></li>
                 <li><a onClick={() => handleClick("2")} className="cursorTag"><span>이용약관</span></a></li>
-                <li><a href="#"><span>이메일무단수집거부</span></a></li>
+                <li><a onClick={() => ComScript.openModal("emailModal")} className="cursorTag"><span>이메일무단수집거부</span></a></li>
                 <li>
                   <NavLink to={URL.KBIO_LOCATION}
                            state={{
@@ -138,7 +139,7 @@ function EgovFooterUser() {
             </div>
           </div>
           <MainFooterInfo value={footerValue}/>
-
+          <MainFooterEmail />
         </div>
       </footer>
   );
