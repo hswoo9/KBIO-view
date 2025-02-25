@@ -12,7 +12,7 @@ function OperationalDetail() {
         mvnEntSn: location.state?.mvnEntSn || "",
     });
 
-    const [operationalDetail, setOperationalDetail] = useState(null);
+    const [operationalDetail, setOperationalDetail] = useState({});
 
     const getOperationalDetail = () => {
         if (!searchDto.mvnEntSn) return;
@@ -30,6 +30,7 @@ function OperationalDetail() {
             getOperationalDetailURL,
             requestOptions,
             (resp) => {
+                console.log(resp);
                 setOperationalDetail(resp.result.operational);
             },
             (error) => {
@@ -50,10 +51,18 @@ function OperationalDetail() {
                     <div className="profileWrap">
                         <div className="profileBox">
                             <figure className="imgBox">
-                                <img
-                                    src="/src/assets/images/ico_logo_kakao.svg"
-                                    alt="기업 로고"
-                                />
+                                {operationalDetail.tblComFile != null ? (
+                                    <img
+                                        src={`http://133.186.250.158${operationalDetail.tblComFile.atchFilePathNm}/${operationalDetail.tblComFile.strgFileNm}.${operationalDetail.tblComFile.atchFileExtnNm}`}
+                                        alt={`${operationalDetail.mvnEntNm}_로고`}
+                                    />
+                                ) : (
+                                    <img
+                                        src="/src/assets/images/user_business_overview_box04_icon01.png"
+                                        alt={`${operationalDetail.mvnEntNm}_로고 없음`}
+                                        height="100"
+                                    />
+                                )}
                             </figure>
                             <div className="textBox">
                                 <div className="nameBox">
