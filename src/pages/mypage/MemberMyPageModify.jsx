@@ -1354,13 +1354,13 @@ function MemberMyPageModify(props) {
                                                     />
                                                     {selectedCareerFiles.length > 0 && selectedCareerFiles[index] ? (
                                                         <p className="file_name" id={`careerFileNamePTag${career.key}`}
-                                                           style={{width: "20%"}}>
-                            <span
-                                onClick={() => fileDownLoad(selectedCareerFiles[index].atchFileSn, selectedCareerFiles[index].atchFileNm)}
-                                style={{cursor: "pointer"}}
-                            >
-                                {selectedCareerFiles[index].atchFileNm} - {Number(selectedCareerFiles[index].atchFileSz / 1024).toFixed(2)} KB
-                            </span>
+                                                                                           style={{width: "20%"}}>
+                                                            <span
+                                                                onClick={() => fileDownLoad(selectedCareerFiles[index].atchFileSn, selectedCareerFiles[index].atchFileNm)}
+                                                                style={{cursor: "pointer"}}
+                                                            >
+                                                                {selectedCareerFiles[index].atchFileNm} - {Number(selectedCareerFiles[index].atchFileSz / 1024).toFixed(2)} KB
+                                                            </span>
                                                             <button
                                                                 onClick={() => setFileDel(selectedCareerFiles[index].atchFileSn)}
                                                                 style={{marginLeft: '10px', color: 'red'}}

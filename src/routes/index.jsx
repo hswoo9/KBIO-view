@@ -242,9 +242,6 @@ import MemberMyPageConsultingCreatePopup from '@/pages/mypage/consulting/MemberM
 import MemberMyPageConsultingStaisPopup from '@/pages/mypage/consulting/MemberMyPageConsultingSatisPopup';
 import MemberMyPageSimple from '@/pages/mypage/simple/MemberMyPageSimple';
 import MemberMyPageSimpleDetail from '@/pages/mypage/simple/MemberMyPageSimpleDetail';
-import MemberMyPageSimplePopup from '@/pages/mypage/simple/MemberMyPageSimplePopup';
-import MemberMyPageSimpleCreatePopup from '@/pages/mypage/simple/MemberMyPageSimpleCreatePopup';
-import MemberMyPageSimpleSatisPopup from '@/pages/mypage/simple/MemberMyPageSimpleSatisPopup';
 import MemberMyPageDifficulties from '@/pages/mypage/MemberMyPageDifficulties';
 import MemberMyPageDifficultiesDetail from '@/pages/mypage/MemberMyPageDifficultiesDetail';
 import MemberMyPageDifficultiesModify from '@/pages/mypage/MemberMyPageDifficultiesModify';
@@ -598,9 +595,6 @@ const SecondRoutes = () => {
               <Route path={URL.MEMBER_MYPAGE_CONSULTING_SATIS_POPUP} element={<MemberMyPageConsultingStaisPopup/>}/>
               <Route path={URL.MEMBER_MYPAGE_SIMPLE} element={<MemberMyPageSimple/>}/>
               <Route path={URL.MEMBER_MYPAGE_SIMPLE_DETAIL} element={<MemberMyPageSimpleDetail/>}/>
-              <Route path={URL.MEMBER_MYPAGE_SIMPLE_POPUP} element={<MemberMyPageSimplePopup/>}/>
-              <Route path={URL.MEMBER_MYPAGE_SIMPLE_CREATE_POPUP} element={<MemberMyPageSimpleCreatePopup/>}/>
-              <Route path={URL.MEMBER_MYPAGE_SIMPLE_SATIS_POPUP} element={<MemberMyPageSimpleSatisPopup/>}/>
               <Route path={URL.MEMBER_MYPAGE_DIFFICULTIES} element={<MemberMyPageDifficulties/>}/>
               <Route path={URL.MEMBER_MYPAGE_DIFFICULTIES_DETAIL} element={<MemberMyPageDifficultiesDetail/>}/>
               <Route path={URL.MEMBER_MYPAGE_DIFFICULTIES_MODIFY} element={<MemberMyPageDifficultiesModify/>}/>
