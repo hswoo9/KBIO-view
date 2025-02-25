@@ -280,6 +280,7 @@ function ConsultantDetail(props) {
                             state={{
                                 menuSn: location.state?.menuSn,
                                 menuNmPath: location.state?.menuNmPath,
+                                thisMenuSn: location.state?.thisMenuSn,
                             }}
                             className="clickBtn listBtn"
                         >

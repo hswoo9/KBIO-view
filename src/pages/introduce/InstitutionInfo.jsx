@@ -22,7 +22,7 @@ function KBioLabHub(props) {
         { pathname: URL.INTRODUCE_OPERATIONAL_LIST},
         { state: {
             menuSn : location.state?.menuSn,
-            menuNmPath : location.state?.menuNmPath,
+            menuNmPath : "기관소개 > 입주기업 소개",
             thisMenuSn: 48,
           } },
         { mode:  CODE.MODE_READ}
