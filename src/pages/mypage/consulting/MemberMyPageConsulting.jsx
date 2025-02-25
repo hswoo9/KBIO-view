@@ -24,12 +24,14 @@ function MemberMyPageConsulting(props) {
         ? {
             102: "답변대기",
             101: "답변완료",
+            201: "처리완료",
             200: "처리완료",
             999: "취소",
         }
         : {
             102: "답변완료",
             101: "답변대기",
+            201: "처리완료",
             200: "처리완료",
             999: "취소",
         };
@@ -103,6 +105,7 @@ function MemberMyPageConsulting(props) {
                                               state={{
                                                   cnsltAplySn: item.cnsltAplySn,
                                                   cnsltSttsCd: item.cnsltSttsCd,
+                                                  cnslttUserSn : item.cnslttUserSn,
                                                   menuSn: location.state?.menuSn,
                                                   menuNmPath: location.state?.menuNmPath,
 

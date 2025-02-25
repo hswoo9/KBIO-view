@@ -151,7 +151,7 @@ function MemberMyPageSimpleDetail(props) {
                         const isLatest = item.cnsltAplySn === latestItem.cnsltAplySn;
                         const isOwnComment = item.creatrSn === sessionUser.userSn;
                         const isSn = latestItem.cnsltDsctnSn === item.cnsltDsctnSn;
-                        const showEditButton = isLatest && isOwnComment && isSn && searchDto.cnsltSttsCd !== "200" && searchDto.cnsltSttsCd !== "999"
+                        const showEditButton = isLatest && isOwnComment && isSn && searchDto.cnsltSttsCd !== "200" && searchDto.cnsltSttsCd !== "999" && searchDto.cnsltSttsCd !== "201"
 
 
                         dataList.push(
@@ -498,7 +498,7 @@ function MemberMyPageSimpleDetail(props) {
                                 {searchDto.cnsltSttsCd === "999" ? (
                                     <>
                                         <NavLink to={URL.MEMBER_MYPAGE_SIMPLE}
-                                                 style={{width: '100%'}}
+                                                 style={{width: '100%', marginLeft: '40%'}}
                                                  state={{
                                                      menuSn: location.state?.menuSn,
                                                      menuNmPath: location.state?.menuNmPath
