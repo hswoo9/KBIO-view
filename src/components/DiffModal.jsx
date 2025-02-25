@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { useNavigate } from 'react-router-dom';
+import React, {useState, useEffect, useCallback} from "react";
 import { useDropzone } from 'react-dropzone';
 import Swal from "sweetalert2";
 import URL from "@/constants/url";
@@ -8,37 +7,71 @@ import * as EgovNet from "@/api/egovFetch";
 import * as ComScript from "@/components/CommonScript";
 import { getComCdList } from "@/components/CommonComponents";
 import CommonEditor from "@/components/CommonEditor";
+import moment from "moment/moment.js";
 
-const SimpleModal = ({ data }) => {
-    const navigate = useNavigate();
+const DiffModal = ({data, onSave }) => {
+
     const [paramsData, setParamsData] = useState({});
-    const [simple, setSimple] = useState({});
-    const [fileList, setFileList] = useState([]);
 
-    console.log(data);
-    useEffect(() => {}, [simple]);
+    const [comCdList, setComCdList] = useState([]);
+    const [fileList, setFileList] = useState([]);
+    const acceptFileTypes = 'pdf,hwp,docx,xls,ppt';
 
     useEffect(() => {
+        console.log(data);
         setParamsData(data);
     }, [data]);
 
     useEffect(() => {
-        setSimple(paramsData);
+        setDiff(paramsData);
     }, [paramsData]);
 
+    const handleChange = (value) => {
+        setDiff((prevDiff) => ({
+            ...prevDiff,
+            dfclMttrCn: value
+        }));
+    }
+
+
     useEffect(() => {
-        if (data.simpleFiles && data.simpleFiles.length > 0) {
-            setFileList(data.simpleFiles.map(file => ({
+        if (paramsData?.diffFiles && paramsData?.diffFiles.length > 0) {
+            setFileList(paramsData.diffFiles.map(file => ({
                 name: file.atchFileNm,
                 size: file.atchFileSz,
                 path: file.atchFilePathNm,
-                atchFileSn: file.atchFileSn, // To be used for deletion
-                isUploaded: true, // Mark this file as uploaded
+                atchFileSn: file.atchFileSn,
+                isUploaded: true,
             })));
         }
-    }, [data]);
+    }, [paramsData]);
 
-    const acceptFileTypes = 'pdf,hwp,docx,xls,ppt';
+
+    useEffect(() => {
+        setDiff({
+            ...paramsData,
+            creatrSn: paramsData?.userSn || '',
+            userSn: paramsData?.userSn || '',
+            frstCrtDt: paramsData?.frstCrtDt || '',
+            dfclMttrFldNm: paramsData?.dfclMttrFldNm || '',
+            ttl: paramsData?.ttl || '',
+            dfclMttrCn: paramsData?.dfclMttrCn || '',
+            dfclMttrSn: paramsData?.dfclMttrSn || '',
+            dfclMttrFld: paramsData?.dfclMttrFld || '',
+            mdfrSn: paramsData?.userSn || '',
+            diffFiles: paramsData?.diffFiles || [],
+        });
+    }, [paramsData]);
+
+
+    const [diff, setDiff] = useState({});
+    useEffect(() => {
+    }, [diff]);
+
+    useEffect(() => {
+        setFileList([]);
+        setParamsData(data);
+    }, [data]);
 
     const onDrop = useCallback((acceptedFiles) => {
         const allowedExtensions = acceptFileTypes.split(','); // 허용된 확장자 목록
@@ -74,54 +107,6 @@ const SimpleModal = ({ data }) => {
         }
     };
 
-    const handleChange = (value) => {
-        setSimple((prevSimple) => ({
-            ...prevSimple,
-            cn: value
-        }));
-    };
-
-    const handleModifySave = async () => {
-        const formData = new FormData();
-
-        for (let key in simple) {
-            if (simple[key] != null && key !== "simpleFiles") {
-                formData.append(key, simple[key]);
-            }
-        }
-
-        fileList.forEach((file) => {
-            formData.append("simpleFiles", file);
-        });
-
-        Swal.fire({
-            title: '저장하시겠습니까?',
-            showCloseButton: true,
-            showCancelButton: true,
-            confirmButtonText: '저장',
-            cancelButtonText: '취소',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                const requestOptions = {
-                    method: "POST",
-                    body: formData
-                };
-                EgovNet.requestFetch("/memberApi/setSimpleData", requestOptions, (resp) => {
-                    if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
-                        Swal.fire("수정되었습니다.").then((result) => {
-                            ComScript.closeModal("modifyModal");
-                            navigate(0);
-                        });
-                    } else {
-                        // 오류 처리
-                    }
-                });
-            } else {
-                // 취소
-            }
-        });
-    };
-
     const setFileDel = (atchFileSn) => {
         Swal.fire({
             title: "삭제한 파일은 복구할 수 없습니다.\n그래도 삭제하시겠습니까?",
@@ -145,34 +130,114 @@ const SimpleModal = ({ data }) => {
                     if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
                         Swal.fire("삭제되었습니다.");
 
-                        const updatedFiles = simple.simpleFiles.filter(file => file.atchFileSn !== atchFileSn);
-                        setSimple({ ...simple, simpleFiles: updatedFiles });
+                        const updatedFiles = simple.diffFiles.filter(file => file.atchFileSn !== atchFileSn);
+                        setSimple({ ...simple, diffFiles: updatedFiles });
                     }
                 });
             }
         });
     }
 
+
+
+    const setDifficultiesData = async () => {
+        if (!diff.dfclMttrCn) {
+            Swal.fire("의뢰내용 입력해주세요.");
+            return;
+        }
+        if (!diff.ttl) {
+            Swal.fire("의뢰제목 입력해주세요.");
+            return;
+        }
+
+        const formData = new FormData();
+        for (let key in diff) {
+            if(diff[key] != null && key != "diffFiles"){
+                formData.append(key, diff[key]);
+            }
+        }
+
+
+        fileList.map((file) => {
+            formData.append("files", file);
+        });
+
+
+
+        Swal.fire({
+            title: "저장하시겠습니까?",
+            showCloseButton: true,
+            showCancelButton: true,
+            confirmButtonText: "저장",
+            cancelButtonText: "취소"
+        }).then((result) => {
+            if(result.isConfirmed) {
+                const requestOptions = {
+                    method: "POST",
+                    body: formData
+                };
+
+                EgovNet.requestFetch("/memberApi/setDifficultiesData", requestOptions, (resp) => {
+                    if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
+                        Swal.fire("수정되었습니다.").then((result) => {
+                            ComScript.closeModal("writeModal");
+                            if (onSave) {
+                                onSave();
+                            }
+                        });
+                    } else {
+                    }
+                });
+            } else {
+                //취소
+            }
+        });
+    }
+
     return (
-        <div className="modifyModal modalCon diffiModal">
-            <div className="bg" onClick={() => ComScript.closeModal("modifyModal")}></div>
+        <div className="writeModal modalCon diffiModal">
+            <div className="bg" onClick={() => ComScript.closeModal("writeModal")}></div>
             <div className="m-inner">
                 <div className="boxWrap">
-                    <div className="close" onClick={() => ComScript.closeModal("modifyModal")}>
+                    <div className="close" onClick={() => ComScript.closeModal("writeModal")}>
                         <div className="icon"></div>
                     </div>
                     <div className="titleWrap type2">
-                        <p className="tt1">질문 등록</p>
+                        <p className="tt1">애로사항 수정</p>
                     </div>
                     <form className="diffiBox">
                         <div className="cont">
                             <ul className="listBox">
+                                <li className="inputBox type2 textBox">
+                                    <p className="title">신청일시</p>
+                                    <p className="text">
+                                        {diff?.frstCrtDt ? moment(diff.frstCrtDt).format('YYYY.MM.DD') : "날짜 없음"}
+                                    </p>
+                                </li>
+                                <li className="inputBox type2 textBox">
+                                    <p className="title">분야</p>
+                                    <p className="text">{diff?.dfclMttrFldNm || "분야 없음"}</p>
+                                </li>
                                 <li className="inputBox type2">
-                                    <label htmlFor="question_text" className="tt1 essential">질문내용</label>
+                                    <label htmlFor="difficulties_title" className="tt1 essential">제목</label>
+                                    <div className="input">
+                                        <input
+                                            type="text"
+                                            name="difficulties_title"
+                                            id="difficulties_title"
+                                            title="제목"
+                                            placeholder="제목을 입력해주세요"
+                                            value={diff?.ttl || ""}
+                                            onChange={(e) => setDiff({...diff, ttl: e.target.value})}
+                                        />
+                                    </div>
+                                </li>
+                                <li className="inputBox type2">
+                                    <label htmlFor="difficulties_text" className="tt1 essential">애로사항 내용</label>
                                     <div className="input">
                                         <CommonEditor
                                             onChange={handleChange}
-                                            value={simple.cn || "" }
+                                            value={diff?.dfclMttrCn || ""}
                                         />
                                     </div>
                                 </li>
@@ -218,13 +283,11 @@ const SimpleModal = ({ data }) => {
                                 </li>
                             </ul>
                         </div>
-                        <button type="button" className="clickBtn black writeBtn" onClick={() => handleModifySave()}>
-                            <span>수정</span></button>
+                        <button type="button" className="clickBtn black writeBtn" onClick={() => setDifficultiesData()}><span>수정</span></button>
                     </form>
                 </div>
             </div>
         </div>
     );
 }
-
-export default SimpleModal;
+export default DiffModal;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
@@ -6,15 +6,35 @@ import { getSessionItem } from "@/utils/storage";
 import moment from "moment/moment.js";
 import { fileDownLoad } from "@/components/CommonComponents";
 import CommonSubMenu from "@/components/CommonSubMenu";
+import * as ComScript from "@/components/CommonScript";
+import DiffModal from "@/components/DiffModal";
 function MemberMyPageDifficultiesDetail(props) {
+    const [modalData, setModalData] = useState({});
     const sessionUser = getSessionItem("loginUser");
     const location = useLocation();
-
     const [searchDto, setSearchDto] = useState({
         dfclMttrSn: location.state?.dfclMttrSn || "",
     });
 
     const [difficultiesDetail, setDifficultiesDetail] = useState(null);
+
+
+
+    const modifyClick = (difficultiesDetail) => {
+        if (sessionUser) {
+            const updatedData = {
+                ...difficultiesDetail,
+            };
+            setModalData(updatedData);
+            ComScript.openModal("writeModal");
+        } else {
+        }
+    }
+    useEffect(() => {
+        if (modalData && Object.keys(modalData).length > 0) {
+            ComScript.openModal("writeModal");
+        }
+    }, [modalData]);
 
     const getDifficultiesDetail = () => {
         if (!searchDto.dfclMttrSn) return;
@@ -44,11 +64,11 @@ function MemberMyPageDifficultiesDetail(props) {
     }, [searchDto]);
 
     return (
-        <div id="container" className="container ithdraw join_step">
+        <div id="container" className="container mypage_difficulties">
             <div className="inner">
                 <CommonSubMenu/>
-                <div class="inner2">
-                    <div class="board_view" data-aos="fade-up" data-aos-duration="1500">
+                <div className="inner2">
+                    <div className="board_view" data-aos="fade-up" data-aos-duration="1500">
                         <table>
                             <caption>애로사항 상세</caption>
                             <thead>
@@ -58,9 +78,9 @@ function MemberMyPageDifficultiesDetail(props) {
                                         <td className={`state ${difficultiesDetail?.ansCn ? "complete" : "waiting"}`}>
                                             <p>{difficultiesDetail?.ansCn ? "답변완료" : "답변대기"}</p>
                                         </td>
-                                        <strong class="title">의료시술에 관련된 문제가 있습니다.</strong>
-                                        <ul class="bot">
-                                            <li class="date">
+                                        <strong className="title">{difficultiesDetail?.ttl || ""}</strong>
+                                        <ul className="bot">
+                                            <li className="date">
                                                 <p>{moment(difficultiesDetail?.frstCrtDt || "").format('YYYY-MM-DD')}</p></li>
                                         </ul>
                                     </div>
@@ -137,18 +157,51 @@ function MemberMyPageDifficultiesDetail(props) {
                             <tr>
                                 <td>
                                     <div className="buttonBox">
+                                        {!difficultiesDetail?.ansCn && (
+                                            <button type="button" className="clickBtn cancelBtn"
+                                            style={{marginLeft: '10%'}}>
+                                                <span>삭제</span>
+                                            </button>
+                                        )}
+
+                                        {!difficultiesDetail?.ansCn && (
+                                            <button type="button" className="clickBtn writeBtn"
+                                                    onClick={() => {
+                                                        modifyClick(difficultiesDetail);
+                                                    }}>
+                                                <div className="icon"></div>
+                                                <span>수정</span>
+                                            </button>
+                                        )}
+
+                                        {!difficultiesDetail?.ansCn && (
                                         <NavLink
-                                            className="btn btn_blue_h46 w_100"
                                             to={URL.MEMBER_MYPAGE_DIFFICULTIES}
+                                            style={{width: '100%'}}
                                             state={{
                                                 menuSn: location.state?.menuSn,
                                                 menuNmPath: location.state?.menuNmPath
                                             }}>
                                             <button type="button" className="clickBtn listBtn">
-                                                <div class="icon"></div>
+                                                <div className="icon"></div>
                                                 <span>목록</span>
                                             </button>
                                         </NavLink>
+                                        )}
+                                        {difficultiesDetail?.ansCn && (
+                                            <NavLink
+                                                to={URL.MEMBER_MYPAGE_DIFFICULTIES}
+                                                style={{width: '100%', marginLeft: '40%'}}
+                                                state={{
+                                                    menuSn: location.state?.menuSn,
+                                                    menuNmPath: location.state?.menuNmPath
+                                                }}>
+                                                <button type="button" className="clickBtn listBtn">
+                                                    <div className="icon"></div>
+                                                    <span>목록</span>
+                                                </button>
+                                            </NavLink>
+                                            )}
                                     </div>
                                 </td>
                             </tr>
@@ -157,6 +210,10 @@ function MemberMyPageDifficultiesDetail(props) {
                     </div>
                 </div>
             </div>
+            <DiffModal data={modalData}
+            onSave={() => {
+                getDifficultiesDetail();
+            }}/>
         </div>
 
     );
