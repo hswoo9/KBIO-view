@@ -72,26 +72,31 @@ function ManagerSimpleCnsltDetail(props) {
         };
 
         EgovNet.requestFetch(getCnsltDetailUrl, requestOptions, function (resp) {
-            const decodedPhoneNumber = decodePhoneNumber(resp.result.consulttUser.mblTelno);
-            setConsulttUser({
-                ...resp.result.consulttUser,
-                mblTelno: decodedPhoneNumber
-            });
-            setConsulttDtl({
-                ...resp.result.consulttDtl
-            });
+            if(resp.result.consulttUser != null) {
+                const decodedPhoneNumber = decodePhoneNumber(resp.result.consulttUser.mblTelno);
+                setConsulttUser({
+                    ...resp.result.consulttUser,
+                    mblTelno: decodedPhoneNumber
+                });
+                setConsulttDtl({
+                    ...resp.result.consulttDtl
+                });
+
+                if (resp.result.cnsltCertificateFile) {
+                    setCnsltCertificateFile(resp.result.cnsltCertificateFile);
+                }
+
+                if (resp.result.cnsltProfileFile) {
+                    setCnsltProfileFile({
+                        ...resp.result.cnsltProfileFile
+                    });
+                }
+            }
+
             setUserDetail({
                 ...resp.result.userDetail
             });
-            if (resp.result.cnsltCertificateFile) {
-                setCnsltCertificateFile(resp.result.cnsltCertificateFile);
-            }
 
-            if (resp.result.cnsltProfileFile) {
-                setCnsltProfileFile({
-                    ...resp.result.cnsltProfileFile
-                });
-            }
             if (resp.result.userCompDetail) {
                 setUserCompDetail({
                     ...resp.result.userCompDetail
@@ -265,6 +270,9 @@ function ManagerSimpleCnsltDetail(props) {
         <div id="container" className="container layout cms">
             <ManagerLeft/>
             <div className="inner">
+
+                {consulttUser && Object.keys(consulttUser).length > 0 && (
+                <div>
                 <h2 className="pageTitle">
                     <p>컨설턴트 정보</p>
                 </h2>
@@ -405,6 +413,8 @@ function ManagerSimpleCnsltDetail(props) {
                         </li>
                     </ul>
                 </div>
+                </div>
+                )}
                 {/*컨설턴트정보끝*/}
 
                 <h2 className="pageTitle">

@@ -461,3 +461,5 @@ input.width3{ width: calc(100% / 3 - .6rem) !important; }
     opacity: 0;
     transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
 }
+
+header .leftHeader nav .dep li.active {content: ""; background: var(--mainColor); border-radius: .9rem; transition: .5s ease; }
