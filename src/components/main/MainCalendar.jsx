@@ -158,9 +158,28 @@ function MainCalendar() {
     };
 
     const pstDetailHandler = (pst) => {
+        let state = {
+            pstSn : pst.pstSn,
+            menuSn : 32
+        };
+
+        if(pst.bbsSn == "1"){
+            state.thisMenuSn = 38
+            state.menuNmPath = "커뮤니티 > 공지사항"
+        }else if(pst.bbsSn == "5"){
+            state.thisMenuSn = 35
+            state.menuNmPath = "커뮤니티 > 자료실"
+        }else if(pst.bbsSn == "7"){
+            state.thisMenuSn = 37
+            state.menuNmPath = "커뮤니티 > 연구자료실"
+        }else if(pst.bbsSn == "8"){
+            state.thisMenuSn = 62
+            state.menuNmPath = "커뮤니티 > 보도자료"
+        }
+
         navigate(
             { pathname: URL.COMMON_PST_NORMAL_DETAIL },
-            { state: { pstSn:  pst.pstSn} },
+            { state: state },
             { mode:  CODE.MODE_READ}
         );
     };

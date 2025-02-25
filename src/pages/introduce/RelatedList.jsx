@@ -65,6 +65,7 @@ function RelatedList() {
                                                 relInstSn: item.relInstSn,
                                                 menuSn : location.state?.menuSn,
                                                 menuNmPath : location.state?.menuNmPath,
+                                                thisMenuSn : location.state?.thisMenuSn,
                                             }
                                         },
                                     );

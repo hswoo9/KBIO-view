@@ -2,6 +2,8 @@ import React, {useState, useRef, useEffect, useCallback} from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination, Navigation } from 'swiper/modules';
 import {getMvnEntList} from "./MainComponents.jsx";
+import URL from "@/constants/url";
+import {NavLink} from "react-router-dom";
 
 const MainSwiper = ({data}) => {
     const swiperRef = useRef(null);
@@ -70,7 +72,20 @@ const MainSwiper = ({data}) => {
                         <h3 className="tt1">{item.tblMvnEnt.mvnEntNm}</h3>
                         <p className="tt2" dangerouslySetInnerHTML={{__html: item.bzentyExpln || "기업소개가 없습니다."}}></p>
                     </div>
-                    <a href={item.tblMvnEnt.hmpgAddr} target="_blank" rel="noopener noreferrer" className="linkBtn" key={item.tblMvnEnt.mvnEntSn}><span>바로가기</span></a>
+                    <NavLink
+                        to={URL.INTRODUCE_OPERATIONAL_DETAIL}
+                        state={{
+                            mvnEntSn: item.tblMvnEnt.mvnEntSn,
+                            menuSn : 47,
+                            menuNmPath: "기관소개 > 입주기업 소개",
+                            thisMenuSn : 48,
+                        }}
+                        // href={item.tblMvnEnt.hmpgAddr}
+                        // target="_blank" rel="noopener noreferrer"
+                        className="linkBtn"
+                        key={item.tblMvnEnt.mvnEntSn}>
+                        <span>바로가기</span>
+                    </NavLink>
                 </SwiperSlide>
             );
         });

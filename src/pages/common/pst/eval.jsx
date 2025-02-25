@@ -72,12 +72,11 @@ const CommonPstEval  = ({ pstSn }) => {
         if(dataList != null && dataList.length > 0){
             dataList.forEach(function(item, index) {
                 htmlData.push(
-                    <div className="checkBox type3">
-                        <label className="checkBox type2" key={item.pstEvlSn}>
+                    <div className="checkBox type3" key={item.comCdSn}>
+                        <label className="checkBox type2">
                             <input
                                 type="radio"
                                 name="rating"
-                                key={item.pstEvlSn}
                                 value={item.comCdSn}
                                 onChange={(e) =>
                                     setPstEvl({...pstEvl, comCdSn: e.target.value})
