@@ -5,7 +5,7 @@ import * as EgovNet from "@/api/egovFetch";
 import { getSessionItem } from "@/utils/storage";
 import * as ComScript from "@/components/CommonScript";
 
-const SatisModal = ({cnsltAplySn}) => {
+const SatisModal = ({cnsltAplySn, onSave}) => {
     const location = useLocation();
     const sessionUser = getSessionItem("loginUser");
     const [isDataLoaded, setIsDataLoaded] = useState(false);
@@ -110,6 +110,9 @@ const SatisModal = ({cnsltAplySn}) => {
                         confirmButtonText: "확인",
                     });
                     ComScript.closeModal("surveyModal");
+                    if (onSave) {
+                        onSave();
+                    }
                 } catch (error) {
                     Swal.fire({
                         title: "등록에 실패했습니다.",

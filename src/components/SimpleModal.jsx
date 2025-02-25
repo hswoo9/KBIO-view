@@ -9,7 +9,8 @@ import * as ComScript from "@/components/CommonScript";
 import { getComCdList } from "@/components/CommonComponents";
 import CommonEditor from "@/components/CommonEditor";
 
-const SimpleModal = ({ data }) => {
+const SimpleModal = ({ data, onSave }) => {
+
     const navigate = useNavigate();
     const [paramsData, setParamsData] = useState({});
     const [simple, setSimple] = useState({});
@@ -108,9 +109,11 @@ const SimpleModal = ({ data }) => {
                 };
                 EgovNet.requestFetch("/memberApi/setSimpleData", requestOptions, (resp) => {
                     if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
-                        Swal.fire("수정되었습니다.").then((result) => {
+                        Swal.fire("수정되었습니다.").then(() => {
                             ComScript.closeModal("modifyModal");
-                            navigate(0);
+                            if (onSave) {
+                                onSave();
+                            }
                         });
                     } else {
                         // 오류 처리

@@ -49,11 +49,14 @@ function MemberMyPageSimpleDetail(props) {
         setSimplePopupModify({ ...simplePopupModify, cn: value });
     };
 
+    useEffect(() => {
+        getSimpleDetail();
+    }, [searchDto]);
+
     const initMode = () => {
         getSimpleDetail(searchDto);
     };
-
-
+    
     useEffect(() => {
         initMode();
     }, []);
@@ -704,8 +707,10 @@ function MemberMyPageSimpleDetail(props) {
                     </div>
                 </div>
             </div>
-            <SatisModal cnsltAplySn={cnsltAplySn}/>
-            <SimpleModal data={modalData} />
+            <SatisModal cnsltAplySn={cnsltAplySn} onSave={() => {
+                getSimpleDetail();}}/>
+            <SimpleModal data={modalData} onSave={() => {
+                getSimpleDetail();}}/>
         </div>
     );
 }
