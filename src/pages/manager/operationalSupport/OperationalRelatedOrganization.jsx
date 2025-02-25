@@ -9,7 +9,7 @@ import ManagerLeft from "@/components/manager/ManagerLeftOperationalSupport";
 import EgovPaging from "@/components/EgovPaging";
 
 import Swal from 'sweetalert2';
-
+import * as ComScript from "@/components/CommonScript";
 /* bootstrip */
 import BtTable from 'react-bootstrap/Table';
 import BTButton from 'react-bootstrap/Button';
@@ -83,7 +83,7 @@ function OperationalRelatedOrganization(props) {
                                     </Link>
                                 </td>
                                 <td>{item.rpsvNm}</td>
-                                <td>{formatTelNo(item.entTelno)}</td>
+                                <td>{ComScript.formatTelNumber(item.entTelno)}</td>
                                 <td>{item.clsNm}</td>
                                 <td>{item.actvtnYn === "Y" ? "공개" : "비공개"}</td>
                                 <td>
@@ -122,14 +122,6 @@ function OperationalRelatedOrganization(props) {
     useEffect(()=>{
         getRcList(searchDto);
     }, []);
-
-    function formatTelNo(telNo) {
-        if (!telNo || telNo.length < 12) {
-            return telNo;
-        }
-
-        return `${telNo.slice(0, 2)}-${telNo.slice(3, 7)}-${telNo.slice(7)}`;
-    }
 
     const activeEnter = (e) => {
         if (e.key === "Enter") {
