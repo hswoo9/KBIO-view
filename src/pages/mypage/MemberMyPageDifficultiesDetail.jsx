@@ -92,32 +92,44 @@ function MemberMyPageDifficultiesDetail(props) {
                                     </div>
                                     <div className="answerBox">
                                         <div className="titleBox">
-                                            <div className="state"><p>답변</p></div>
-                                            <p className="title"></p>
-                                            <ul className="bot">
-                                                <li>
-                                                    <p>{moment(difficultiesDetail?.ansRegDt || "").format('YYYY-MM-DD')}</p>
-                                                </li>
-                                                <li><p>관리자</p></li>
-                                            </ul>
+                                            {difficultiesDetail?.ansCn ? (
+                                                <>
+                                                    <div className="state"><p>답변</p></div>
+                                                    <p className="title"></p>
+                                                    <ul className="bot">
+                                                        <li>
+                                                            <p>{moment(difficultiesDetail?.ansRegDt || "").isValid() ? moment(difficultiesDetail?.ansRegDt).format('YYYY-MM-DD') : '날짜 없음'}</p>
+                                                        </li>
+                                                        <li><p>관리자</p></li>
+                                                    </ul>
+                                                </>
+                                            ) : (
+                                                <div className="state"><p>답변</p></div>
+                                            )}
                                         </div>
-                                        <div className="textBox"><p
-                                            dangerouslySetInnerHTML={{__html: difficultiesDetail?.ansCn}}></p></div>
+                                        <div className="textBox">
+                                            {difficultiesDetail?.ansCn ? (
+                                                <p dangerouslySetInnerHTML={{__html: difficultiesDetail?.ansCn}}></p>
+                                            ) : (
+                                                <p>답변대기중입니다.</p>
+                                            )}
+                                        </div>
                                         <div className="input" style={{marginTop: "5px"}}>
                                             {difficultiesDetail?.answerFiles && difficultiesDetail?.answerFiles.length > 0 ? (
                                                 <ul style={{paddingLeft: "20px"}}>
                                                     {difficultiesDetail.answerFiles.map((file, index) => (
                                                         <li key={index} style={{marginBottom: "5px"}}>
-                                                    <span onClick={() => fileDownLoad(file.atchFileSn, file.atchFileNm)}
-                                                          style={{cursor: "pointer"}}>
-                                                        {file.atchFileNm} - {(file.atchFileSz / 1024).toFixed(2)} KB
-                                                    </span>
+                                                        <span onClick={() => fileDownLoad(file.atchFileSn, file.atchFileNm)}
+                                                              style={{cursor: "pointer"}}>
+                                                            {file.atchFileNm} - {(file.atchFileSz / 1024).toFixed(2)} KB
+                                                        </span>
                                                         </li>
                                                     ))}
                                                 </ul>
                                             ) : "첨부파일이 없습니다."}
                                         </div>
                                     </div>
+
                                 </td>
                             </tr>
                             </tbody>
@@ -126,7 +138,7 @@ function MemberMyPageDifficultiesDetail(props) {
                                 <td>
                                     <div className="buttonBox">
                                         <NavLink
-                                            className = "btn btn_blue_h46 w_100"
+                                            className="btn btn_blue_h46 w_100"
                                             to={URL.MEMBER_MYPAGE_DIFFICULTIES}
                                             state={{
                                                 menuSn: location.state?.menuSn,
@@ -143,8 +155,8 @@ function MemberMyPageDifficultiesDetail(props) {
                             </tfoot>
                         </table>
                     </div>
-                    </div>
                 </div>
+            </div>
         </div>
 
     );

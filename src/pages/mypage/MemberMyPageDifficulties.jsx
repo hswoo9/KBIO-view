@@ -99,7 +99,7 @@ function MemberMyPageDifficulties(props) {
                                         </div>
                                     ) : (
                                         <div style={{textAlign: 'left'}}>
-                                            <Link to={{pathname: URL.MEMBER_MYPAGE_DIFFICULTIES_MODIFY}}
+                                            <Link to={{pathname: URL.MEMBER_MYPAGE_DIFFICULTIES_DETAIL}}
                                                   state={{
                                                       dfclMttrSn: item.dfclMttrSn,
                                                       menuSn: location.state?.menuSn,
