@@ -7,6 +7,7 @@ import URL from "@/constants/url";
 import CommonSubMenu from "@/components/CommonSubMenu";
 import AOS from "aos";
 import EgovUserPaging from "@/components/EgovUserPaging";
+import * as ComScript from "@/components/CommonScript";
 
 function RelatedList() {
     const location = useLocation();
@@ -90,7 +91,7 @@ function RelatedList() {
                                         </li>
                                         <li>
                                             <p className="left">대표전화</p>
-                                            <strong>{item.entTelno}</strong>
+                                            <strong>{ComScript.formatTelNumber(item.entTelno)}</strong>
                                         </li>
                                         <li>
                                             <p className="left">홈페이지</p>

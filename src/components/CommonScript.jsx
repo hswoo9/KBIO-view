@@ -43,7 +43,9 @@ export function closeModal(className) {
 export function formatTelNumber(telNumber){
     if (!telNumber) return "";
     const numbers = telNumber.replace(/\D/g, ""); // 숫자만 추출
-    if (numbers.length === 9) {
+    if(numbers.length === 8){
+        return `${numbers.slice(0, 4)}-${numbers.slice(4, 8)}`;
+    } else if (numbers.length === 9) {
         // 지역번호 2자리 (서울 02) + 3자리 + 4자리
         return `${numbers.slice(0, 2)}-${numbers.slice(2, 5)}-${numbers.slice(5)}`;
     } else if (numbers.length === 10) {
