@@ -53,7 +53,6 @@ function OperationalList() {
                     let dataList = [];
 
                     resp.result.getOperationalList.forEach(function (item, index) {
-                        console.log(item.tblComFile)
                         dataList.push(
                             <tr key={item.tblMvnEnt.mvnEntSn}
                                 onClick={ () => {
