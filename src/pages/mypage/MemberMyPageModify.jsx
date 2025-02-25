@@ -45,31 +45,140 @@ function MemberMyPageModify(props) {
     const [certificates, setCertificates] = useState([]);
     const addCertificate = () => {
         const newId = `certificate_${Date.now()}`;
-        setCertificates([...certificates, { key: newId , qlfcLcnsNm: "", pblcnInstNm: "", acqsYmd: "" }]);
+        setCertificates([...certificates, { key: newId , qlfcLcnsNm: "", pblcnInstNm: "", acqsYmd: "", userSn: sessionUserSn, actvtnYn: 'Y'}]);
     };
 
-    const removeCertificate = (id) => {
+    const removeCertificate = (id, qlfcLcnsSn) => {
+        if (qlfcLcnsSn) {
+            removeCertificateFromServer(id, qlfcLcnsSn);
+        } else {
+            removeLocalCertificate(id);
+        }
+    };
+    const removeLocalCertificate = (id) => {
         setCertificates(certificates.filter(cert => cert.key !== id));
     };
+
+    const removeCertificateFromServer = (qlfcLcnsSn) => {
+        Swal.fire({
+            title: "삭제한 정보는 복구할 수 없습니다.\n그래도 삭제하시겠습니까?",
+            showCloseButton: true,
+            showCancelButton: true,
+            confirmButtonText: "확인",
+            cancelButtonText: "취소"
+        }).then((result) => {
+       if (result.isConfirmed) {
+           const requestOptions = {
+               method: "POST",
+               headers: {
+                   "Content-type": "application/json",
+               },
+               body: JSON.stringify({
+                   qlfcLcnsSn: qlfcLcnsSn,
+               }),
+           };
+
+           EgovNet.requestFetch("/memberApi/delCertificate", requestOptions, (resp) => {
+               if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
+                   Swal.fire("삭제되었습니다.");
+                   getNormalMember(searchDto);
+               }
+           });
+       }
+        });
+    }
 
 
     const [careers, setCareer] = useState([]);
     const addCareer = () => {
         const newId = `career_${Date.now()}`;
-        setCareer([...careers, { key: newId, ogdpCoNm : "", jbgdNm : "", jncmpYmd: "", rsgntnYmd: ""}]);
+        setCareer([...careers, { key: newId, ogdpCoNm : "", jbgdNm : "", jncmpYmd: "", rsgntnYmd: "", userSn: sessionUserSn, actvtnYn: 'Y'}]);
     };
-    const removeCareer = (key) => {
-        setCareer(careers.filter((career) => career.key !== key));
+
+    const removeCareer = (id, crrSn) => {
+        if (crrSn) {
+            removeCareerFromServer(id, crrSn);
+        } else {
+            removeLocalCareer(id);
+        }
     };
+    const removeLocalCareer = (id) => {
+        setCareer(careers.filter((career) => career.key !== id));
+    };
+
+    const removeCareerFromServer = (crrSn) => {
+        Swal.fire({
+            title: "삭제한 정보는 복구할 수 없습니다.\n그래도 삭제하시겠습니까?",
+            showCloseButton: true,
+            showCancelButton: true,
+            confirmButtonText: "확인",
+            cancelButtonText: "취소"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const requestOptions = {
+                    method: "POST",
+                    headers: {
+                        "Content-type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        crrSn: crrSn,
+                    }),
+                };
+
+                EgovNet.requestFetch("/memberApi/delCareer", requestOptions, (resp) => {
+                    if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
+                        Swal.fire("삭제되었습니다.");
+                        getNormalMember(searchDto);
+                    }
+                });
+            }
+        });
+    }
 
     const [acbges, setAcbg] = useState([]);
     const addAcbg = () => {
         const newId = `acbg_${Date.now()}`;
-        setAcbg([...acbges, { key: newId, schlNm : "", scsbjtNm : "", mjrNm: "", dgrNm : "", grdtnYmd : "" }]);
+        setAcbg([...acbges, { key: newId, schlNm : "", scsbjtNm : "", mjrNm: "", dgrNm : "", grdtnYmd : "", userSn: sessionUserSn, actvtnYn: 'Y'}]);
     };
-    const removeAcbg = (key) => {
-        setAcbg(acbges.filter((acbg) => acbg.key !== key));
+    const removeAcbg = (id, acbgSn) => {
+        if (acbgSn) {
+            removeAcbgFromServer(id, acbgSn);
+        } else {
+            removeLocalAcbg(id);
+        }
     };
+    const removeLocalAcbg = (id) => {
+        setAcbg(acbges.filter((acbg) => acbg.key !== id));
+    };
+
+    const removeAcbgFromServer = (acbgSn) => {
+        Swal.fire({
+            title: "삭제한 정보는 복구할 수 없습니다.\n그래도 삭제하시겠습니까?",
+            showCloseButton: true,
+            showCancelButton: true,
+            confirmButtonText: "확인",
+            cancelButtonText: "취소"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const requestOptions = {
+                    method: "POST",
+                    headers: {
+                        "Content-type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        acbgSn: acbgSn,
+                    }),
+                };
+
+                EgovNet.requestFetch("/memberApi/delAcbg", requestOptions, (resp) => {
+                    if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
+                        Swal.fire("삭제되었습니다.");
+                        getNormalMember(searchDto);
+                    }
+                });
+            }
+        });
+    }
 
     const handleInputChange = (e, id, type, field) => {
         let { value } = e.target;
@@ -79,12 +188,10 @@ function MemberMyPageModify(props) {
         }
 
         const updateList = (list, setList) => {
-            console.log(list)
             const updatedList = list.map(item =>
                 item.key === id ? { ...item, [field]: value } : item
             );
             setList(updatedList);
-            console.log(updatedList); // 변환된 값 확인
         };
 
         if (type === "cert") updateList(certificates, setCertificates);
@@ -281,7 +388,6 @@ function MemberMyPageModify(props) {
                 const cnsltData = resp.result.cnslttMbr;
                 const rcData = resp.result.rc;
 
-                console.log(resp.result.rc);
 
                 const decodedPhoneNumber = memberData.mblTelno ? decodePhoneNumber(memberData.mblTelno) : "";
 
@@ -557,7 +663,6 @@ function MemberMyPageModify(props) {
     const [saveEvent, setSaveEvent] = useState({});
 
     useEffect(() => {
-        console.log(saveEvent)
         if (saveEvent.save && saveEvent.mode === "save") {
             saveMemberModifyData(saveEvent.memberDetail, saveEvent.consultDetail, saveEvent.hasCertData, saveEvent.hasCrrData, saveEvent.hasAcbgData);
         }
@@ -581,69 +686,22 @@ function MemberMyPageModify(props) {
         }
 
         if (hasCertData) {
-            // formData.append("hasCertData", JSON.stringify(hasCertData))
-            hasCertData.forEach((item, index) => {
-                formData.append("hasCertData", JSON.stringify(item))
-                // Object.keys(item).forEach((key) => {
-                //     formData.append(`hasCertData[${index}].${key}`, item[key]);
-                // });
-            });
+            formData.append("hasCertData", JSON.stringify(hasCertData))
         }
 
         if (hasCrrData) {
-            // formData.append("hasCertData", JSON.stringify(hasCertData))
-            hasCrrData.forEach((item, index) => {
-                formData.append("hasCrrData", JSON.stringify(item))
-                // Object.keys(item).forEach((key) => {
-                //     formData.append(`hasCertData[${index}].${key}`, item[key]);
-                // });
-            });
+            formData.append("hasCrrData", JSON.stringify(hasCrrData))
         }
 
         if (hasAcbgData) {
-            // formData.append("hasCertData", JSON.stringify(hasCertData))
-            hasAcbgData.forEach((item, index) => {
-                formData.append("hasAcbgData", JSON.stringify(item))
-                // Object.keys(item).forEach((key) => {
-                //     formData.append(`hasCertData[${index}].${key}`, item[key]);
-                // });
-            });
+            formData.append("hasAcbgData", JSON.stringify(hasAcbgData))
         }
 
-       /* if (hasAcbgData) {
-            // formData.append("hasCertData", JSON.stringify(hasCertData))
-            hasAcbgData.forEach((item, index) => {
-                formData.append("hasAcbgData", JSON.stringify(item))
-                // Object.keys(item).forEach((key) => {
-                //     formData.append(`hasCertData[${index}].${key}`, item[key]);
-                // });
-            });
-        }
-
-        if (hasCrrData) {
-            hasCrrData.forEach((item, index) => {
-                Object.keys(item).forEach((key) => {
-                    formData.append(`hasCrrData[${index}].${key}`, item[key]);
-                });
-            });
-        }
-
-        if (hasAcbgData) {
-            hasAcbgData.forEach((item, index) => {
-                Object.keys(item).forEach((key) => {
-                    formData.append(`hasAcbgData[${index}].${key}`, item[key]);
-                });
-            });
-        }
-*/
-        /*for (let [key, value] of formData.entries()) {
-            console.log(key, value); // FormData 내용 확인
-        }*/
 
         const menuListURL = "/memberApi/setMemberMyPageModfiy";
         const requestOptions = {
             method: "POST",
-            body: formData
+            body: formData,
         };
 
         EgovNet.requestFetch(
@@ -1271,7 +1329,7 @@ function MemberMyPageModify(props) {
                                                 )}
 
                                                 <button type="button" style={{width: "10%"}}
-                                                        onClick={() => removeCertificate(cert.key)}>
+                                                        onClick={() => removeCertificate(cert.key, cert.qlfcLcnsSn)}>
                                                     삭제
                                                 </button>
                                             </div>
@@ -1379,7 +1437,7 @@ function MemberMyPageModify(props) {
                                                         </label>
                                                     )}
                                                     <button type="button" style={{width: "10%"}}
-                                                            onClick={() => removeCareer(career.key)}>
+                                                            onClick={() => removeCareer(career.key, career.crrSn)}>
                                                         삭제
                                                     </button>
                                                 </div>
@@ -1498,7 +1556,7 @@ function MemberMyPageModify(props) {
                                                         </label>
                                                     )}
                                                     <button type="button" style={{width: "10%"}}
-                                                            onClick={() => removeAcbg(acbg.key)}>
+                                                            onClick={() => removeAcbg(acbg.key, acbg.acbgSn)}>
                                                         삭제
                                                     </button>
                                                 </div>
