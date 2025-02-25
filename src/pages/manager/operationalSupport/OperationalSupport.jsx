@@ -70,7 +70,7 @@ function OperationalSupport(props) {
                     setPaginationInfo(resp.paginationInfo);
                     let dataList = [];
                     rcList.push(
-                        <tr>
+                        <tr key="noData">
                             <td colSpan="5">검색된 결과가 없습니다.</td>
                         </tr>
                     );
@@ -79,7 +79,7 @@ function OperationalSupport(props) {
                         if(index === 0) dataList = [];
 
                         dataList.push(
-                            <tr key={item.mvnEntSn}>
+                            <tr key={`${item.mvnEntSn}_${index}`}>
                                 <td>{index + 1}</td>
                                 <td>
                                     {item.entClsfNm || ""}
@@ -169,7 +169,7 @@ function OperationalSupport(props) {
                                     >
                                         <option value="">선택</option>
                                         {comCdList.map((item, index) => (
-                                            <option value={item.comCd}>
+                                            <option value={item.comCd} key={item.comCd}>
                                                 {item.comCdNm}
                                             </option>
                                         ))}
