@@ -237,9 +237,6 @@ import EgovCompleteMember from '@/pages/mypage/EgovCompleteMember';
 import MemberMyPageModify from '@/pages/mypage/MemberMyPageModify';
 import MemberMyPageConsulting from '@/pages/mypage/consulting/MemberMyPageConsulting';
 import MemberMyPageConsultingDetail from '@/pages/mypage/consulting/MemberMyPageConsultingDetail';
-import MemberMyPageConsultingPopup from '@/pages/mypage/consulting/MemberMyPageConsultingPopup';
-import MemberMyPageConsultingCreatePopup from '@/pages/mypage/consulting/MemberMyPageConsultingCreatePopup';
-import MemberMyPageConsultingStaisPopup from '@/pages/mypage/consulting/MemberMyPageConsultingSatisPopup';
 import MemberMyPageSimple from '@/pages/mypage/simple/MemberMyPageSimple';
 import MemberMyPageSimpleDetail from '@/pages/mypage/simple/MemberMyPageSimpleDetail';
 import MemberMyPageDifficulties from '@/pages/mypage/MemberMyPageDifficulties';
@@ -590,9 +587,6 @@ const SecondRoutes = () => {
               <Route path={URL.MEMBER_MYPAGE_MODIFY} element={<MemberMyPageModify mode={CODE.MODE_MODIFY}/>}/>
               <Route path={URL.MEMBER_MYPAGE_CONSULTING} element={<MemberMyPageConsulting/>}/>
               <Route path={URL.MEMBER_MYPAGE_CONSULTING_DETAIL} element={<MemberMyPageConsultingDetail/>}/>
-              <Route path={URL.MEMBER_MYPAGE_CONSULTING_POPUP} element={<MemberMyPageConsultingPopup/>}/>
-              <Route path={URL.MEMBER_MYPAGE_CONSULTING_CREATE_POPUP} element={<MemberMyPageConsultingCreatePopup/>}/>
-              <Route path={URL.MEMBER_MYPAGE_CONSULTING_SATIS_POPUP} element={<MemberMyPageConsultingStaisPopup/>}/>
               <Route path={URL.MEMBER_MYPAGE_SIMPLE} element={<MemberMyPageSimple/>}/>
               <Route path={URL.MEMBER_MYPAGE_SIMPLE_DETAIL} element={<MemberMyPageSimpleDetail/>}/>
               <Route path={URL.MEMBER_MYPAGE_DIFFICULTIES} element={<MemberMyPageDifficulties/>}/>
