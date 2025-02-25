@@ -4,7 +4,7 @@ import axios from "axios";
 import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
-
+import * as ComScript from "@/components/CommonScript";
 import ManagerLeft from "@/components/manager/ManagerLeftOperationalSupport";
 import EgovPaging from "@/components/EgovPaging";
 
@@ -95,7 +95,7 @@ function OperationalSupport(props) {
                                 </Link>
                                 </td>
                                 <td>{item.tblMvnEnt.rpsvNm}</td>
-                                <td>{formatTelNo(item.tblMvnEnt.entTelno)}</td>
+                                <td>{ComScript.formatTelNumber(item.tblMvnEnt.entTelno)}</td>
                                 <td>{item.entTpbizNm || ""}</td>
                                 <td>{item.tblMvnEnt.actvtnYn === "Y" ? "공개" : "비공개"}</td>
                                 <td>
@@ -140,17 +140,6 @@ function OperationalSupport(props) {
             setComCdList(data);
         })
     }, []);
-
-
-
-    function formatTelNo(telNo) {
-        if (!telNo || telNo.length < 12) {
-            return telNo;
-        }
-
-        return `${telNo.slice(0, 2)}-${telNo.slice(3, 7)}-${telNo.slice(7)}`;
-    }
-
 
     const handleKeywordSearch = () => {
 
