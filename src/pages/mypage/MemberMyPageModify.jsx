@@ -24,12 +24,14 @@ function MemberMyPageModify(props) {
     const sessionUsermbrType = sessionUser?.mbrType;
     const [address, setAddress] = useState({});
     const [image, setImage] = useState({});
+    const [acceptFileTypes, setAcceptFileTypes] = useState('jpg,jpeg,png,gif,bmp,tiff,tif,webp,svg,ico,heic,avif,pdf');
     const [comCdList, setComCdList] = useState([]);
     const [cnsltProfileFile, setCnsltProfileFile] = useState(null);
     const [currentPassword, setCurrentPassword] = useState(''); // 현재 비밀번호 상태
     const [newPassword, setNewPassword] = useState(''); // 변경할 비밀번호 상태
 
     const [consultDetail, setConsultDetail] = useState({});
+    const allowedExtensions = acceptFileTypes.split(',');
 
     const [memberDetail, setMemberDetail] = useState({});
     const [modeInfo, setModeInfo] = useState({mode: props.mode});
@@ -208,46 +210,64 @@ function MemberMyPageModify(props) {
 
     const handleFileChange = (e, id, index) => {
         const file = e.target.files[0];
-        const fileExtension = file.name.split(".").pop().toLowerCase();
+        if(!file){
+            Swal.fire(
+                `선택된 파일이 없습니다.`
+            );
+            if(document.getElementById(id + index)){
+                document.getElementById(id + index).textContent = "";
+            }
+        }
+        const fileExtension = e.target.files[0].name.split(".").pop().toLowerCase();
 
         const allowedExtensions = acceptFileTypes.split(',');
-        if (file) {
-            if (allowedExtensions.includes(fileExtension)) {
-                let fileName = file.name;
-                if (fileName.length > 30) {
-                    fileName = fileName.slice(0, 30) + "...";
+        if(e.target.files.length > 0){
+
+            if(allowedExtensions.includes(fileExtension)){
+                let fileName = e.target.files[0].name;
+                if(fileName.length > 10){
+                    fileName = fileName.slice(0, 10) + "...";
                 }
+                if(document.getElementById(id + index)){
+                    document.getElementById(id + index).textContent = fileName;
+                }
+
+                /**여기에 받아온 id를 앞의 이름과 date번호로 분리해서 자격,경력,학력별로 저장**/
 
                 if (id === "cert") {
                     setSelectedCertFiles((prevFiles) => {
-                        const updatedFiles = [...prevFiles];
-                        updatedFiles[index] = file; // 해당 인덱스에 파일 저장
+                        const updatedFiles = [...prevFiles]; // 기존 배열 복사
+                        updatedFiles[index] = file; // 배열의 인덱스를 이용해 해당 자격증 파일을 추가
                         return updatedFiles;
                     });
                 } else if (id === "career") {
                     setSelectedCareerFiles((prevFiles) => {
-                        const updatedFiles = [...prevFiles];
-                        updatedFiles[index] = file; // 해당 인덱스에 파일 저장
+                        const updatedFiles = [...prevFiles]; // 기존 배열 복사
+                        updatedFiles[index] = file; // 배열의 인덱스를 이용해 해당 자격증 파일을 추가
                         return updatedFiles;
                     });
                 } else if (id === "acbg") {
                     setSelectedAcbgFiles((prevFiles) => {
-                        const updatedFiles = [...prevFiles];
-                        updatedFiles[index] = file; // 해당 인덱스에 파일 저장
+                        const updatedFiles = [...prevFiles]; // 기존 배열 복사
+                        updatedFiles[index] = file; // 배열의 인덱스를 이용해 해당 자격증 파일을 추가
                         return updatedFiles;
                     });
                 }
-            } else {
+
+            }else{
                 Swal.fire({
                     title: "허용되지 않은 확장자입니다.",
                     text: `허용 확장자: ` + acceptFileTypes
                 });
                 e.target.value = null;
             }
-        } else {
-            Swal.fire(`선택된 파일이 없습니다.`);
+        }else{
+            Swal.fire(
+                `선택된 파일이 없습니다.`
+            );
         }
-    };
+
+    }
 
 
 
@@ -642,6 +662,7 @@ function MemberMyPageModify(props) {
                 const hasCrrData = careers && careers.length > 0 ? careers : null;
                 const hasAcbgData = acbges && acbges.length > 0 ? acbges : null;
 
+
                 setSaveEvent({
                     ...saveEvent,
                     save: true,
@@ -685,6 +706,17 @@ function MemberMyPageModify(props) {
             });
         }
 
+        selectedCertFiles.map((file) => {
+            formData.append("certFiles", file);
+        });
+        selectedCareerFiles.map((file) => {
+            formData.append("careerFiles", file);
+        });
+        selectedAcbgFiles.map((file) => {
+            formData.append("acbgFiles", file);
+        });
+        console.log(selectedCertFiles);
+
         if (hasCertData) {
             formData.append("hasCertData", JSON.stringify(hasCertData))
         }
@@ -698,7 +730,7 @@ function MemberMyPageModify(props) {
         }
 
 
-        const menuListURL = "/memberApi/setMemberMyPageModfiy";
+        const menuListURL = "/memberApi/setMemberMyPageModify";
         const requestOptions = {
             method: "POST",
             body: formData,
@@ -1302,14 +1334,16 @@ function MemberMyPageModify(props) {
                                                     onChange={(e) => handleInputChange(e, cert.key, "cert", "acqsYmd")}
                                                 />
                                                 {selectedCertFiles.length > 0 && selectedCertFiles[index] ? (
-                                                    <p className="file_name" id={`CertFileNamePTag${cert.key}`}
-                                                       style={{width: "20%"}}>
-                                                        <span
-                                                            onClick={() => fileDownLoad(selectedCertFiles[index].atchFileSn, selectedCertFiles[index].atchFileNm)}
-                                                            style={{cursor: "pointer"}}
-                                                        >
-                                                            {selectedCertFiles[index].atchFileNm} - {Number(selectedCertFiles[index].atchFileSz / 1024).toFixed(2)} KB
-                                                        </span>
+                                                    <p className="file_name" id={`CertFileNamePTag${cert.key}`} style={{width: "20%"}}>
+        <span
+            onClick={() => fileDownLoad(selectedCertFiles[index].atchFileSn, selectedCertFiles[index].atchFileNm)}
+            style={{cursor: "pointer"}}
+        >
+            {selectedCertFiles[index].atchFileNm} -
+            {Number(selectedCertFiles[index].atchFileSz) > 0 ?
+                (Number(selectedCertFiles[index].atchFileSz / 1024).toFixed(2))
+                : "0"} KB
+        </span>
                                                         <button
                                                             onClick={() => setFileDel(selectedCertFiles[index].atchFileSn)}
                                                             style={{marginLeft: '10px', color: 'red'}}
@@ -1318,17 +1352,18 @@ function MemberMyPageModify(props) {
                                                         </button>
                                                     </p>
                                                 ) : (
-                                                    <label style={{width: "20%"}}>
+                                                    <label className="fileLabel">파일 선택
                                                         <input
                                                             type="file"
                                                             name={`selectedCertFile${index}`}
                                                             id={`formCertFile${index}`}
+                                                            className="noneTag"
                                                             onChange={(e) => handleFileChange(e, "cert", index)}
                                                         />
                                                     </label>
                                                 )}
 
-                                                <button type="button" style={{width: "10%"}}
+                                                <button type="button" className="fileLabel"
                                                         onClick={() => removeCertificate(cert.key, cert.qlfcLcnsSn)}>
                                                     삭제
                                                 </button>
