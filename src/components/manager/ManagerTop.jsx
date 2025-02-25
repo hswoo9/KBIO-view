@@ -36,6 +36,9 @@ function ManagerTop() {
         activeRef.current.style.height = `5px`;
         activeRef.current.style.left = `${closestElementRect.left - closestParentDivRect.left}px`;
         activeRef.current.style.opacity = `1`;
+        if(hoverRef.current){
+          hoverRef.current.removeAttribute("style");
+        }
       }
 
 
@@ -191,7 +194,7 @@ function ManagerTop() {
             <span className="hidden">K BIO LabHub</span>
         </a>
         </h1>
-        <div className="navBox">
+        <div className="navBox" onMouseLeave={(e) => { if(hoverRef.current) hoverRef.current.removeAttribute("style") }}>
           <div className="lnbBox">
             <div className="bg hover" ref={hoverRef}></div>
             <div className="bg active" ref={activeRef}></div>

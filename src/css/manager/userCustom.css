@@ -303,3 +303,10 @@ button:focus { outline: 2px solid black;}
     -webkit-box-orient: vertical;}
 
 .container .board_view > table thead .fileBox {flex-direction: column;}
+
+.emailModal .imgBox {border-radius: 50%; overflow: hidden; margin: 0 auto; max-width: 18.8rem; width: 70%;}
+.emailModal .imgBox img {vertical-align: bottom;}
+.emailModal .textBox {display: flex; flex-direction: column; gap: .9rem; text-align: center;}
+.emailModal .textBox .title {font-size: 1.5rem; font-weight: 500;}
+.emailModal .textBox .title .blue {color: var(--mainColor3); font-weight: 800;}
+.emailModal .textBox .text {color: #555; line-height: 120%; font-size: 1.1rem; word-break: keep-all;}
