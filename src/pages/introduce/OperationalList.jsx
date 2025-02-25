@@ -53,13 +53,14 @@ function OperationalList() {
                     let dataList = [];
 
                     resp.result.getOperationalList.forEach(function (item, index) {
+                        console.log(item.tblComFile)
                         dataList.push(
-                            <tr key={item.mvnEntSn}
+                            <tr key={item.tblMvnEnt.mvnEntSn}
                                 onClick={ () => {
                                     navigate(
                                         { pathname: URL.INTRODUCE_OPERATIONAL_DETAIL },
                                         { state: {
-                                                mvnEntSn: item.mvnEntSn,
+                                                mvnEntSn: item.tblMvnEnt.mvnEntSn,
                                                 menuSn : location.state?.menuSn,
                                                 menuNmPath : location.state?.menuNmPath,
                                                 thisMenuSn : location.state?.thisMenuSn,
@@ -68,35 +69,45 @@ function OperationalList() {
                                 }}
                             >
                                 <td className="cate">
-                                    <p>의약품</p>
+                                    <p>{item.entClsfNm}</p>
                                 </td>
                                 <td>
                                     <figure>
-                                        <img src="/src/assets/images/ico_logo_kakao.svg" alt="" />
+                                        {item.tblComFile != null ? (
+                                            <img
+                                                src={`http://133.186.250.158${item.tblComFile.atchFilePathNm}/${item.tblComFile.strgFileNm}.${item.tblComFile.atchFileExtnNm}`}
+                                                alt={`${item.tblMvnEnt.mvnEntNm}_로고`}
+                                            />
+                                        ) : (
+                                            <img
+                                                src="/src/assets/images/user_business_overview_box04_icon01.png" width="44" height="44" alt={`${item.tblMvnEnt.mvnEntNm}_로고 없음`}
+                                            />
+                                        )}
+
                                     </figure>
                                 </td>
                                 <td className="title">
-                                    <div className="text">
-                                        <p>{item.mvnEntNm}</p>
+                                <div className="text">
+                                        <p>{item.tblMvnEnt.mvnEntNm}</p>
                                     </div>
                                     <ul className="bot">
                                         <li>
                                             <p className="left">대표성함</p>
-                                            <strong>{item.rpsvNm}</strong>
+                                            <strong>{item.tblMvnEnt.rpsvNm}</strong>
                                         </li>
                                         <li>
                                             <p className="left">대표전화</p>
-                                            <strong>{item.entTelno}</strong>
+                                            <strong>{item.tblMvnEnt.entTelno}</strong>
                                         </li>
                                         <li>
                                             <p className="left">홈페이지</p>
                                             <strong>
-                                                <a href={item.hmpgAddr} target="_blank" rel="noopener noreferrer"
+                                                <a href={item.tblMvnEnt.hmpgAddr} target="_blank" rel="noopener noreferrer"
                                                    style={{
                                                        color: '#007bff',
                                                        textDecoration: 'none',
                                                    }}>
-                                                    {item.hmpgAddr}
+                                                    {item.tblMvnEnt.hmpgAddr}
                                                 </a>
                                             </strong>
                                         </li>
