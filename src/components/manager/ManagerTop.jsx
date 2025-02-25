@@ -9,7 +9,6 @@ import { getSessionItem, setSessionItem, removeSessionItem } from "@/utils/stora
 import Swal from "sweetalert2";
 
 function ManagerTop() {
-  console.log("??>?>?>?>?");
   const location = useLocation();
   const sessionUser = getSessionItem("loginUser");
   const sessionUserId = sessionUser?.id;
