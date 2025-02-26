@@ -56,6 +56,7 @@ function OperationalResidentMember(props) {
                 requestOptions,
                 (resp) => {
                     setPaginationInfo(resp.paginationInfo);
+                    console.log("mvnEntMbr : ",resp.result.getResidentMemberList);
 
                     if(resp.result.logoFile){
                         setSelectedFiles(resp.result.logoFile);
@@ -69,26 +70,26 @@ function OperationalResidentMember(props) {
 
                     resp.result.getResidentMemberList.forEach(function (item,index){
                         if(index === 0) dataList = [];
-                        const decodedPhoneNumber = decodePhoneNumber(item.mblTelno);
+                        const decodedPhoneNumber = decodePhoneNumber(item.tblUser.mblTelno);
 
                         dataList.push(
-                            <tr key={item.userSn}>
+                            <tr key={item.tblUser.userSn}>
                                 <td>{index + 1}</td>
-                                <td>{item.userId}</td>
+                                <td>{item.tblUser.userId}</td>
                                 <td>
                                 <Link to={URL.MANAGER_RESIDENT_MEMBER_EDIT}
                                       state={{
                                           mvnEntSn: searchDto.mvnEntSn,
                                           mode:CODE.MODE_MODIFY,
-                                          userSn: item.userSn
+                                          userSn: item.tblUser.userSn
                                       }}
                                 >
-                                {item.kornFlnm}
+                                {item.tblUser.kornFlnm}
                                 </Link>
                                 </td>
                                 <td>{decodedPhoneNumber}</td>
-                                <td>{item.email}</td>
-                                <td>{new Date(item.frstCrtDt).toISOString().split("T")[0]}</td>
+                                <td>{item.tblUser.email}</td>
+                                <td>{new Date(item.tblUser.frstCrtDt).toISOString().split("T")[0]}</td>
                             </tr>
                         );
                     });
