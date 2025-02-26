@@ -10,6 +10,8 @@ import EgovRadioButtonGroup from "@/components/EgovRadioButtonGroup";
 import Swal from "sweetalert2";
 import base64 from 'base64-js';
 
+import {getComCdList} from "@/components/CommonComponents";
+
 
 function OperationResidentMember(props) {
     const navigate = useNavigate();
@@ -24,6 +26,7 @@ function OperationResidentMember(props) {
 
     const [modeInfo, setModeInfo] = useState({mode: props.mode});
     const [memberDetail, setMemberDetail] = useState({});
+    const [mbrTpbizList, setMbrTpbizList] = useState([])
     const [rcDetail, setRcDetail] = useState({});
 
     const initMode = () => {
@@ -75,6 +78,12 @@ function OperationResidentMember(props) {
 
     useEffect(() => {
         initMode();
+    }, []);
+
+    useEffect(() => {
+        getComCdList(18).then((data) => {
+            setMbrTpbizList(data);
+        });
     }, []);
 
     const updateMbrStts = (newStatus) =>{
@@ -298,13 +307,15 @@ function OperationResidentMember(props) {
                             </div>
                         </li>
                         <li className="inputBox type1 email width2">
-                            <label className="title"><small>산업</small></label>
+                            <label className="title"><small>업종</small></label>
                             <div className="input">
                                 <input
                                     type="text"
-                                    name="clsNm"
-                                    id="clsNm"
-                                    value={rcDetail.clsNm || ""}
+                                    name="entTpbiz"
+                                    id="entTpbiz"
+                                    value={
+                                        mbrTpbizList.find((item) => item.comCd === rcDetail.entTpbiz)?.comCdNm || ""
+                                    }
                                     readOnly
                                 >
                                 </input>
@@ -369,7 +380,7 @@ function OperationResidentMember(props) {
                 <div className="pageWrap">
 
                     <div className="leftBox"
-                         style={{ display: memberDetail.actvtnYn === "W" ? "inline-block" : "none" }}>
+                         style={{ display: memberDetail.mbrStts === "W" ? "inline-block" : "none" }}>
                         <button
                             type="button" className="clickBtn point"
                             style={{display : "inline-block"}}
@@ -387,7 +398,7 @@ function OperationResidentMember(props) {
                     </div>
 
                     <div className="leftBox"
-                         style={{ display: memberDetail.actvtnYn === "R" ? "inline-block" : "none" }}>
+                         style={{ display: memberDetail.mbrStts === "R" ? "inline-block" : "none" }}>
                         <button
                             type="button" className="clickBtn point"
                             style={{display : "inline-block"}}
@@ -402,7 +413,7 @@ function OperationResidentMember(props) {
                         state={{mvnEntSn: rcDetail.mvnEntSn,
                                 rpsvNm : rcDetail.rpsvNm,
                                 entTelno : rcDetail.entTelno,
-                                clsNm : rcDetail.clsNm
+                                entTpbiz : rcDetail.entTpbiz
                         }}>
 
                         <button type="button" className="clickBtn black">

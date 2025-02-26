@@ -4,7 +4,7 @@ import axios from "axios";
 import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
-
+import { excelExport } from "@/components/CommonComponents";
 import ManagerLeftNew from "@/components/manager/ManagerLeftHomepage";
 import EgovPaging from "@/components/EgovPaging";
 
@@ -46,6 +46,48 @@ function ManagerPrivacyList(props) {
             getprivacyPolicyList(searchDto);
         }
     };
+
+    const dataExcelDownload = useCallback(() => {
+        let excelParams = searchDto;
+        excelParams.pageIndex = 1;
+        excelParams.pageUnit = paginationInfo?.totalRecordCount || 9999999999
+
+        const requestURL = "/utztnApi/getPrivacyPolicyList.do";
+        const requestOptions = {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json",
+            },
+            body: JSON.stringify(excelParams)
+        };
+        EgovNet.requestFetch(
+            requestURL,
+            requestOptions,
+            (resp) => {
+                let rowDatas = [];
+                if(resp.result.getPrivacyPolicyList != null){
+                    resp.result.getPrivacyPolicyList.forEach(function (item, index) {
+                        rowDatas.push(
+                            {
+                                number : resp.paginationInfo.totalRecordCount - (resp.paginationInfo.currentPageNo - 1) * resp.paginationInfo.pageSize - index,
+                                utztnTrmsTtl : item.utztnTrmsTtl,
+                                creatr : item.creatr,
+                                frstCrtDt : moment(item.frstCrtDt).format('YYYY-MM-DD'),
+                                useYn : item.useYn === "Y" ? "사용중" : "사용안함",
+                            }
+                        )
+                    });
+                }
+
+                let sheetDatas = [{
+                    sheetName : "개인정보처리방침",
+                    header : ['번호', '제목', '등록자', '등록일', '사용여부'],
+                    row : rowDatas
+                }];
+                excelExport("개인정보처리방침", sheetDatas);
+            }
+        )
+    });
 
     const getprivacyPolicyList = useCallback(
         (searchDto) => {
@@ -194,7 +236,9 @@ function ManagerPrivacyList(props) {
                                 className="red">{paginationInfo.currentPageNo}/{paginationInfo.totalPageCount}</span>
                         </p>
                         <div className="rightBox">
-                            <button type="button" className="btn btn2 downBtn red">
+                            <button type="button" className="btn btn2 downBtn red"
+                                onClick={dataExcelDownload}
+                            >
                                 <div className="icon"></div>
                                 <span>엑셀 다운로드</span></button>
                         </div>

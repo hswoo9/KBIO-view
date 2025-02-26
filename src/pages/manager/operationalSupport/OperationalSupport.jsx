@@ -98,24 +98,21 @@ function OperationalSupport(props) {
                                 <td>{item.tblMvnEnt.actvtnYn === "Y" ? "공개" : "비공개"}</td>
                                 <td>
                                     <Link to={URL.MANAGER_RESIDENT_MANAGER}
-                                          state={{
-                                              mvnEntSn: item.tblMvnEnt.mvnEntSn,
-                                              rpsvNm: item.tblMvnEnt.rpsvNm,
-                                              entTelno: item.tblMvnEnt.entTelno,
-                                              clsNm: item.tblMvnEnt.clsNm
-                                          }}>
-                                        <button type="button" className="settingBtn"><span>관리자 설정</span></button>
+                                          state={{mvnEntSn: item.tblMvnEnt.mvnEntSn,
+                                                  rpsvNm : item.tblMvnEnt.rpsvNm,
+                                                  entTelno : item.tblMvnEnt.entTelno,
+                                                  entTpbiz : item.tblMvnEnt.entTpbiz}}>
+                                    <button type="button" className="settingBtn"><span>관리자 설정</span></button>
                                     </Link>
                                 </td>
                                 <td>
                                     <Link to={URL.MANAGER_RESIDENT_MEMBER}
-                                          state={{
-                                              mvnEntSn: item.tblMvnEnt.mvnEntSn,
-                                              rpsvNm: item.tblMvnEnt.rpsvNm,
-                                              entTelno: item.tblMvnEnt.entTelno,
-                                              clsNm: item.tblMvnEnt.clsNm
-                                          }}>
-                                        <button type="button" className="listBtn"><span>직원 목록</span></button>
+                                          state={{mvnEntSn: item.tblMvnEnt.mvnEntSn,
+                                                  rpsvNm : item.tblMvnEnt.rpsvNm,
+                                                  entTelno : item.tblMvnEnt.entTelno,
+                                                  entTpbiz : item.tblMvnEnt.entTpbiz
+                                                }}>
+                                    <button type="button" className="listBtn"><span>직원 목록</span></button>
                                     </Link>
                                 </td>
                             </tr>

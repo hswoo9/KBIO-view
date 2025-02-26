@@ -9,9 +9,11 @@ import ManagerLeft from "@/components/manager/ManagerLeftOperationalSupport";
 import EgovPaging from "@/components/EgovPaging";
 import OperationalSupport from "./OperationalSupport.jsx";
 import base64 from 'base64-js';
+import {getComCdList} from "@/components/CommonComponents";
 
 function OperationalResidentMember(props) {
     const location = useLocation();
+    const [mbrTpbizList, setMbrTpbizList] = useState([])
     const [residentMemberList, setAuthorityList] = useState([]);
     const [selectedFiles, setSelectedFiles] = useState([]);
     const [searchDto, setSearchDto] = useState(
@@ -97,7 +99,7 @@ function OperationalResidentMember(props) {
                                 {item.tblUser.kornFlnm}
                                 </Link>
                                 </td>
-                                <td>{decodedPhoneNumber}</td>
+                                <td>{ComScript.formatTelNumber(decodedPhoneNumber)}</td>
                                 <td>{item.tblUser.email}</td>
                                 <td>{new Date(item.tblUser.frstCrtDt).toISOString().split("T")[0]}</td>
                             </tr>
@@ -119,9 +121,12 @@ function OperationalResidentMember(props) {
         getResidentMemberList(searchDto);
     },[]);
 
-    /*useEffect(() => {
-        console.log("Updated logofile:", selectedFiles);
-    }, [selectedFiles]);*/
+
+    useEffect(() => {
+        getComCdList(18).then((data) => {
+            setMbrTpbizList(data);
+        });
+    }, []);
 
     return (
         <div id="container" className="container layout cms">
@@ -157,7 +162,9 @@ function OperationalResidentMember(props) {
                         </li>
                         <li>
                             <p className="tt1">업종</p>
-                            <p className="tt2">{location.state?.clsNm}</p>
+                            <p className="tt2">
+                                {mbrTpbizList.find((item) => item.comCd === location.state?.entTpbiz)?.comCdNm || ""}
+                            </p>
                         </li>
                     </ul>
                 </div>
