@@ -5,7 +5,7 @@ import axios from "axios";
 import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
-
+import * as ComScript from "@/components/CommonScript";
 import ManagerLeft from "@/components/manager/ManagerLeftConsulting";
 import EgovPaging from "@/components/EgovPaging";
 
@@ -304,7 +304,7 @@ function ManagerCnsltDetail(props) {
                             <label className="title" style={{cursor :"default"}}>휴대폰</label>
                             <div className="input">
                                 <div>
-                                    {consulttUser.mblTelno || ""}
+                                    {ComScript.formatTelNumber(consulttUser.mblTelno)}
                                 </div>
                             </div>
                         </li>
