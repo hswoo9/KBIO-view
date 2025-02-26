@@ -513,33 +513,33 @@ function EgovHeader() {
       }
     }
 
-    const requestOptions = {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify({userSn : userSn}),
-    };
-
-    EgovNet.requestFetch("/commonApi/getDuplicateLogin.do", requestOptions, (resp) => {
-      if(resp.result != null){
-        if(resp.result.duplicateLogin == "Y"){
-          removeSessionItem("loginUser");
-          removeSessionItem("jToken");
-          removeSessionItem("userSn");
-          navigate(
-              { pathname : URL.COMMON_ERROR},
-              { state : {
-                  redirectPath : URL.MAIN,
-                  errorCode: resp.resultCode,
-                  errorMessage: resp.resultMessage,
-                  errorSubMessage : "메인으로 이동합니다."
-                }
-              }
-          );
-        }
-      }
-    });
+    // const requestOptions = {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-type": "application/json",
+    //   },
+    //   body: JSON.stringify({userSn : userSn}),
+    // };
+    //
+    // EgovNet.requestFetch("/commonApi/getDuplicateLogin.do", requestOptions, (resp) => {
+    //   if(resp.result != null){
+    //     if(resp.result.duplicateLogin == "Y"){
+    //       removeSessionItem("loginUser");
+    //       removeSessionItem("jToken");
+    //       removeSessionItem("userSn");
+    //       navigate(
+    //           { pathname : URL.COMMON_ERROR},
+    //           { state : {
+    //               redirectPath : URL.MAIN,
+    //               errorCode: resp.resultCode,
+    //               errorMessage: resp.resultMessage,
+    //               errorSubMessage : "메인으로 이동합니다."
+    //             }
+    //           }
+    //       );
+    //     }
+    //   }
+    // });
   }, [window.location.pathname]);
 
   const userMsgTopMakeHtml = () => {
