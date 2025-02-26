@@ -7,7 +7,7 @@ function AccessTabPst(props) {
         props.searchDto || {
             searchYear: "",
             searchMonth: "",
-            bbsSn : ""
+            trgtSn : ""
         }
     );
 
