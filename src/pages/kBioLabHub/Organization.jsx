@@ -26,7 +26,6 @@ function KBioLabHub(props) {
   const [searchCondition, setSearchCondition] = useState(
       location.state?.searchCondition || {
         pageIndex: 1,
-        pageSize: 5,
         searchCnd: "0",
         searchWrd: "",
         searchType: "all",
