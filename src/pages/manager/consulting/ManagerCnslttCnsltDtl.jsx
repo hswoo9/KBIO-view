@@ -116,7 +116,9 @@ function ManagerCnslttCnsltDtl({ item, onBack }){
                              justifyContent: "center",
                              alignItems: "center",
                              gap: "20px"
-                         }}>
+                         }}
+                         key={`${index}_a`}
+                    >
                         <div
                             style={{ order: item.dsctnSe === "0" ? 1 : 2, border: "1px solid #333", borderRadius: "10px", padding: "10px", width: "80%" }}
                         >
@@ -124,14 +126,14 @@ function ManagerCnslttCnsltDtl({ item, onBack }){
                             </div>
                             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "10px" }}>
                                 {/* 파일 리스트 추가 */}
-                                <p style={{ textAlign: "left" }}>
+                                <div style={{ textAlign: "left" }}>
                                     <label className="title" style={{cursor :"default"}}>첨부파일</label>
                                     {files.map((file, fileIndex) => (
                                         <div key={fileIndex} style={{ cursor: "pointer" }} onClick={() => handleDownload(file)}>
                                             {fileIndex + 1}. {file.atchFileNm}
                                         </div>
                                     ))}
-                                </p>
+                                </div>
 
                                 {/*날짜*/}
                                 <p style={{ textAlign: "right" }}>

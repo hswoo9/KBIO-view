@@ -5,7 +5,7 @@ import axios from "axios";
 import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
-
+import * as ComScript from "@/components/CommonScript";
 import ManagerLeft from "@/components/manager/ManagerLeftConsulting";
 import EgovPaging from "@/components/EgovPaging";
 
@@ -133,7 +133,7 @@ function ManagerConsultuntDetail(props) {
         switch (tabIndex) {
             case 0:
                 return (
-                    <div>
+                    <div key="tabIndex0">
                     <div className="contBox infoWrap customContBox">
                         {/* 개인정보 탭 내용 */}
                             <ul className="inputWrap">
@@ -179,7 +179,7 @@ function ManagerConsultuntDetail(props) {
                                     <label className="title" style={{cursor :"default"}}>휴대폰</label>
                                     <div className="input">
                                         <div>
-                                            {memberDetail.mblTelno || ""}
+                                            {ComScript.formatTelNumber(memberDetail.mblTelno)}
                                         </div>
                                     </div>
                                 </li>
@@ -257,7 +257,7 @@ function ManagerConsultuntDetail(props) {
                                                     </div>
                                                 ))
                                             ) : (
-                                                <p></p>
+                                                <p key="noData"></p>
                                             )}
                                         </div>
 
@@ -326,7 +326,7 @@ function ManagerConsultuntDetail(props) {
                 );
             case 1:
                 return (
-                    <div>
+                    <div key="tabIndex1">
                         {/* 컨설팅의뢰 탭 내용 */}
                         <ManagerCnslttCnsltList
                         cnsltSe={26}
@@ -335,7 +335,7 @@ function ManagerConsultuntDetail(props) {
                 );
             case 2:
                 return (
-                    <div>
+                    <div key="tabIndex2">
                         {/* 간편상담 탭 내용 */}
                         <ManagerCnslttSimple
                             cnsltSe={27}
@@ -356,7 +356,7 @@ function ManagerConsultuntDetail(props) {
                 <div style={{ display: 'flex', marginBottom: '20px' }}>
                     {tabs.map((tab, index) => (
                         <div
-                            key={index}
+                            key={`${index}_tab`}
                             onClick={() => setActiveTab(index)}  // 클릭 시 활성화된 탭 상태 변경
                             style={{
                                 padding: '10px 20px',
