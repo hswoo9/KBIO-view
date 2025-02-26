@@ -7,7 +7,7 @@ import CODE from "@/constants/code";
 
 import ManagerLeft from "@/components/manager/ManagerLeftOperationalSupport";
 import EgovPaging from "@/components/EgovPaging";
-import {getComCdList, excelExport} from "@/components/CommonComponents";
+import {getComCdList, excelExport, fileUpload} from "@/components/CommonComponents";
 import Swal from 'sweetalert2';
 import * as ComScript from "@/components/CommonScript";
 
@@ -30,6 +30,19 @@ function OperationalRelatedOrganization(props) {
 
     const [comCdClsfList, setComCdClsfList] = useState([]);
     const [comCdTpbizList, setComCdTpbizList] = useState([]);
+
+    const excelUploadRef = useRef(null);
+    const fileBtnHandle = () => {
+        if(excelUploadRef.current){
+            excelUploadRef.current.click();
+        }
+    }
+    const excelUploadEvent = (e) => {
+        fileUpload(e.target.files[0]).then((data) => {
+            //엑셀 업로드 이 후 기능
+            console.log(data);
+        });
+    }
 
     const handleSearch = () => {
         setSearchDto({ ...searchDto, pageIndex: 1 });
@@ -108,7 +121,7 @@ function OperationalRelatedOrganization(props) {
                         if(index === 0) dataList = [];
 
                         dataList.push(
-                            <tr key={item.relInstSn}>
+                            <tr key={`${item.relInstSn}_${index}`}>
                                 <td>
                                     {resp.paginationInfo.totalRecordCount - (resp.paginationInfo.currentPageNo - 1) * resp.paginationInfo.pageSize - index}
                                 </td>
@@ -229,7 +242,7 @@ function OperationalRelatedOrganization(props) {
                                     >
                                         <option value="">전체</option>
                                         {comCdClsfList.map((item, index) => (
-                                            <option value={item.comCd} key={item.comCd}>
+                                            <option value={item.comCd} key={`${item.comCd}_clsf`}>
                                                 {item.comCdNm}
                                             </option>
                                         ))}
@@ -249,7 +262,7 @@ function OperationalRelatedOrganization(props) {
                                     >
                                         <option value="">전체</option>
                                         {comCdTpbizList.map((item, index) => (
-                                            <option value={item.comCd} key={item.comCd}>
+                                            <option value={item.comCd} key={`${item.comCd}_tpbiz`}>
                                                 {item.comCdNm}
                                             </option>
                                         ))}
@@ -325,10 +338,17 @@ function OperationalRelatedOrganization(props) {
                             <button type="button" className="btn btn2 downBtn red" onClick={dataExcelDownload}>
                                 <div className="icon"></div>
                                 <span>엑셀 다운로드</span></button>
-                            <button type="button" className="btn btn2 uploadBtn black">
+                            <button type="button" className="btn btn2 uploadBtn black" onClick={fileBtnHandle}>
                                 <div className="icon"></div>
                                 <span>엑셀 업로드</span>
                             </button>
+                            <input
+                                type="file"
+                                accept=".xlsx"
+                                ref={excelUploadRef}
+                                onChange={excelUploadEvent}
+                                style={{display: "none"}}
+                            />
                         </div>
                     </div>
                     <div className="tableBox type1">

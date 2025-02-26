@@ -17,7 +17,7 @@ import Form from 'react-bootstrap/Form';
 import { getSessionItem } from "@/utils/storage";
 
 import moment from "moment/moment.js";
-import {getComCdList, excelExport} from "@/components/CommonComponents";
+import {getComCdList, excelExport, fileUpload} from "@/components/CommonComponents";
 
 function OperationalSupport(props) {
 
@@ -36,6 +36,18 @@ function OperationalSupport(props) {
     const [rcList, setAuthorityList] = useState([]);
     const [comCdClsfList, setComCdClsfList] = useState([]);
     const [comCdTpbizList, setComCdTpbizList] = useState([]);
+    const excelUploadRef = useRef(null);
+    const fileBtnHandle = () => {
+        if(excelUploadRef.current){
+            excelUploadRef.current.click();
+        }
+    }
+    const excelUploadEvent = (e) => {
+        fileUpload(e.target.files[0]).then((data) => {
+            //엑셀 업로드 이 후 기능
+            console.log(data);
+        });
+    }
 
     const dataExcelDownload = useCallback(() => {
         let excelParams = searchDto;
@@ -321,10 +333,17 @@ function OperationalSupport(props) {
                             <button type="button" className="btn btn2 downBtn red" onClick={dataExcelDownload}>
                                 <div className="icon"></div>
                                 <span>엑셀 다운로드</span></button>
-                            <button type="button" className="btn btn2 uploadBtn black">
+                            <button type="button" className="btn btn2 uploadBtn black" onClick={fileBtnHandle}>
                                 <div className="icon"></div>
                                 <span>엑셀 업로드</span>
                             </button>
+                            <input 
+                                type="file"
+                                accept=".xlsx"
+                                ref={excelUploadRef}
+                                onChange={excelUploadEvent}
+                                style={{display: "none"}}
+                            />
                         </div>
                     </div>
                     <div className="tableBox type1">
