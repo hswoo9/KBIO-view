@@ -5,7 +5,8 @@ import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
 import 'moment/locale/ko';
-import ManagerLeft from "@/components/manager/ManagerLeftMember";
+/*import ManagerLeft from "@/components/manager/ManagerLeftMember";*/
+import ManagerLeft from "@/components/manager/ManagerLeftOperationalSupport";
 import EgovRadioButtonGroup from "@/components/EgovRadioButtonGroup";
 import Swal from "sweetalert2";
 import base64 from 'base64-js';

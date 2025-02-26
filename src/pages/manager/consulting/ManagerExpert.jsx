@@ -12,7 +12,7 @@ import Swal from 'sweetalert2';
 
 /* bootstrip */
 import { getSessionItem } from "@/utils/storage";
-import {getComCdList} from "@/components/CommonComponents";
+import {getComCdList, excelExport} from "@/components/CommonComponents";
 
 function ManagerExpert(props) {
 
@@ -51,6 +51,52 @@ function ManagerExpert(props) {
             getConsultMemberList(searchDto);
         }
     };
+
+    const dataExcelDownload = useCallback(() => {
+        let excelParams = searchDto;
+        excelParams.pageIndex = 1;
+        excelParams.pageUnit = paginationInfo?.totalRecordCount || 9999999999
+
+        const requestURL = "/consultingApi/getConsultantAdminList.do";
+        const requestOptions = {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json",
+            },
+            body: JSON.stringify(excelParams)
+        };
+        EgovNet.requestFetch(
+            requestURL,
+            requestOptions,
+            (resp) => {
+                let rowDatas = [];
+                if(resp.result.consultantList != null){
+                    resp.result.consultantList.forEach(function (item, index) {
+                        rowDatas.push(
+                            {
+                                number : resp.paginationInfo.totalRecordCount - (resp.paginationInfo.currentPageNo - 1) * resp.paginationInfo.pageSize - index,
+                                cnsltFldNm : item.cnsltFldNm || " ",
+                                kornFlnm : item.tblUser.kornFlnm || " ",
+                                ogdpNm : item.tblCnslttMbr.ogdpNm || " ",
+                                jbpsNm : item.tblCnslttMbr.jbpsNm || " ",
+                                crrPrd : item.tblCnslttMbr.crrPrd + " 년" || " ",
+                                cnsltActv : item.tblCnslttMbr.cnsltActv === "Y" ? "공개" : "비공개",
+                                cnsltCount : item.cnsltCount + " 건" || " ",
+                                simpleCount : item.simpleCount + " 건" || " ",
+                            }
+                        )
+                    });
+                }
+
+                let sheetDatas = [{
+                    sheetName : "전문가관리",
+                    header : ['번호', '자문분야', '성명', '소속' ,'직위' ,'경력', '컨설팅 활동', '컨설팅의뢰', '간편상담'],
+                    row : rowDatas
+                }];
+                excelExport("전문가관리", sheetDatas);
+            }
+        )
+    });
 
     const getConsultMemberList = useCallback(
         (searchDto) => {
@@ -218,7 +264,7 @@ function ManagerExpert(props) {
                     <div className="topBox">
                         <p className="resultText">전체 : <span className="red">{paginationInfo?.totalRecordCount}</span>건 페이지 : <span className="red">{paginationInfo?.currentPageNo}/{paginationInfo?.totalPageCount}</span> </p>
                         <div className="rightBox">
-                            <button type="button" className="btn btn2 downBtn red">
+                            <button type="button" className="btn btn2 downBtn red" onClick={dataExcelDownload}>
                                 <div className="icon"></div>
                                 <span>엑셀 다운로드</span></button>
                         </div>
