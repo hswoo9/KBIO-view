@@ -46,6 +46,197 @@ function OperationalRelatedMember(props) {
         return new TextDecoder().decode(decodedBytes);
     };
 
+    const cancleMng = (userSn, relInstSn) => {
+        setSelCancleList({ userSn, relInstSn });
+
+        setTimeout(() => {
+            const cancleMngUrl = "/relatedApi/cancleMng";
+
+            Swal.fire({
+                title: `<span style="font-size: 20px; line-height: 0.8;">
+                    삭제할 경우 해당 관리자는 해당 기업에<br>
+                    대해 관리할 수 없습니다.<br>
+                    해당 관리자를 삭제하시겠습니까?
+                </span>
+            `,
+                showCloseButton: true,
+                showCancelButton: true,
+                confirmButtonText: "예",
+                cancelButtonText: "아니오",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const requestOptions = {
+                        method: "POST",
+                        headers: {
+                            "Content-type": "application/json",
+                        },
+                        body: JSON.stringify({ userSn, relInstSn }),
+                    };
+
+
+                    EgovNet.requestFetch(cancleMngUrl, requestOptions, (resp) => {
+                        if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
+                            Swal.fire("승인되었습니다.");
+                            getRelatedMemberList(searchDto);
+                            //modelCloseEvent();
+                        } else {
+                            alert("ERR : " + resp.resultMessage);
+                        }
+                    });
+                }
+            });
+        }, 0);
+    };
+
+    //모달관련
+    const [searchRcUserCondition, setSearchRcUserCondition] = useState({
+        pageIndex: 1,
+        pageUnit:9999,
+        relInstSn : location.state?.relInstSn,
+        mbrStts:"Y",
+        searchType: "",
+        searchVal: "",
+    });
+    const [rcUserPaginationInfo, setRcUserPaginationInfo] = useState({
+        currentPageNo: 1,
+        firstPageNo: 1,
+        firstPageNoOnPageList: 1,
+        firstRecordIndex: 0,
+        lastPageNo: 1,
+        lastPageNoOnPageList: 1,
+        lastRecordIndex: 10,
+        pageSize: 10,
+        recordCountPerPage: 10,
+        totalPageCount: 15,
+        totalRecordCount: 158
+
+    });
+    const [rcUserList, setRcUserList] = useState([]);
+    const [selRcUserList, setSelRcUserList] = useState([]);
+    const searchRcUserTypeRef = useRef();
+    const searchRcUserValRef = useRef();
+
+    const modelOpenEvent = (e) => {
+        getRcUserList(searchRcUserCondition);
+        document.getElementsByName("userCheck").forEach(function (item, index) {
+            item.checked = false;
+        });
+
+        document.getElementById('modalDiv').classList.add("open");
+        document.getElementsByTagName('html')[0].style.overFlow = 'hidden';
+        document.getElementsByTagName('body')[0].style.overFlow = 'hidden';
+    }
+
+    const modelCloseEvent = (e) => {
+        setSearchRcUserCondition({
+            pageIndex: 1,
+            pageUnit:9999,
+            relInstSn : location.state?.relInstSn,
+            mbrStts:"Y",
+            searchType: "",
+            searchVal: "",
+        })
+        setSelRcUserList([]);
+        document.getElementById('modalDiv').classList.remove("open");
+        document.getElementsByTagName('html')[0].style.overFlow = 'visible';
+        document.getElementsByTagName('body')[0].style.overFlow = 'visible';
+    }
+
+    const checkUserAllCheck = (e) => {
+        let checkBoolean = e.target.checked;
+        document.getElementsByName("userCheck").forEach(function (item, index) {
+            item.checked = checkBoolean;
+        });
+    };
+
+    const activeUserEnter = (e) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            getRcUserList(searchRcUserCondition);
+        }
+    };
+
+    const handleCheckboxChange = (e) => {
+        const userSn = parseInt(e.target.value);
+        const relInstSn = location.state?.relInstSn;
+
+        if (e.target.checked) {
+            setSelRcUserList(prevState => [
+                ...prevState,
+                { userSn, relInstSn }
+            ]);
+        } else {
+            setSelRcUserList(prevState => prevState.filter(user => user.userSn !== userSn));
+        }
+    };
+
+    const getRcUserList = useCallback(
+        (searchRcUserCondition) =>{
+            const rcUserListUrl = "/relatedApi/getRelatedtMemberList.do";
+            const requestOptions = {
+                method: "POST",
+                headers: {
+                    "Content-type": "application/json",
+                },
+                body: JSON.stringify(searchRcUserCondition),
+            };
+
+            EgovNet.requestFetch(
+                rcUserListUrl,
+                requestOptions,
+                (resp) => {
+                    setRcUserPaginationInfo(resp.paginationInfo);
+                    resp.result.getRelatedMemberList.forEach(function (item, index) {
+                        setRcUserList(resp.result.getRelatedMemberList);
+                    });
+                },
+                function (resp) {
+
+                }
+            );
+
+        },[rcUserList, searchRcUserCondition]
+    );
+
+    const rcUserSelectSubmit = () => {
+        const updateRelInstMbrToMngUrl = "/relatedApi/updateRelInstMbrToMng";
+
+        Swal.fire({
+            title: "관리자로 등록하시겠습니까?",
+            showCloseButton: true,
+            showCancelButton: true,
+            confirmButtonText: "예",
+            cancelButtonText: "아니오"
+        }).then((result) => {
+            if(result.isConfirmed){
+                const requestOptions = {
+                    method: "POST",
+                    headers: {
+                        "Content-type": "application/json",
+                    },
+                    body: JSON.stringify(selRcUserList),
+                };
+
+
+                EgovNet.requestFetch(updateRelInstMbrToMngUrl, requestOptions, (resp) => {
+                    if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
+                        Swal.fire("승인되었습니다.");
+                        getRelatedMemberList(searchDto);
+                        modelCloseEvent();
+                    } else {
+                        alert("ERR : " + resp.resultMessage);
+                    }
+                });
+
+            }else{
+                //취소
+            }
+        });
+
+    };
+
+    //모달관련끝
+
     const getRelatedMemberList = useCallback(
         (searchDto) =>{
             const getUrl = "/relatedApi/getRelatedtMemberList.do";
@@ -96,7 +287,11 @@ function OperationalRelatedMember(props) {
                                 <td>{item.tblUser.email}</td>
                                 <td>{new Date(item.tblUser.frstCrtDt).toISOString().split("T")[0]}</td>
                                 <td>
-                                    <button type="button" className="settingBtn"><span>삭제</span></button>
+                                    <button type="button" className="settingBtn"
+                                            onClick={(e) => cancleMng(item.tblUser.userSn, location.state?.relInstSn,)}
+                                    >
+                                        <span>삭제</span>
+                                    </button>
                                 </td>
                             </tr>
                         );
@@ -254,22 +449,167 @@ function OperationalRelatedMember(props) {
                                 });
                             }}
                         />
-                        <button type="button" className="writeBtn clickBtn"><span>등록</span></button>
+                        <div className="rightBox">
+                        <button type="button" className="writeBtn clickBtn"
+                                onClick={(e) => modelOpenEvent(e)}
+                        >
+                            <span>등록</span>
+                        </button>
                         <Link
                             to={URL.MANAGER_RELATED_ORGANIZATION}
                         >
                             <button type="button" className="clickBtn black"><span>목록</span></button>
                         </Link>
+                        </div>
 
                     </div>
                 </div>
 
 
             </div>
-            {/*등록 모달 창*/}
-            <div className="uploadModal modalCon">
+            {/*모달창*/}
+            <div className="programModal modalCon" id="modalDiv">
+                <div className="bg"></div>
+                <div className="m-inner">
+                    <div className="boxWrap">
+                        <div className="top">
+                            <h2 className="title">회원목록</h2>
+                            <div className="close" onClick={modelCloseEvent}>
+                                <div className="icon"></div>
+                            </div>
+                        </div>
+                        <div className="box">
+                            <div className="cateWrap">
+                                <form action="">
+                                    <ul className="cateList">
+                                        <li className="inputBox type1">
+                                            <p className="title">검색 구분</p>
+                                            <div className="itemBox">
+                                                <select
+                                                    className="selectGroup"
+                                                    ref={searchRcUserTypeRef}
+                                                    onChange={(e) => {
+                                                        setSearchRcUserCondition({...searchRcUserCondition, searchType: e.target.value})
+                                                    }}
+                                                >
+                                                    <option value="kornFlnm">성명</option>
+                                                    <option value="userId">아이디</option>
+                                                </select>
+                                            </div>
+                                        </li>
+                                        <li className="searchBox inputBox type1">
+                                            <label className="title" htmlFor="program_search">
+                                                <small>검색어</small>
+                                            </label>
+                                            <div className="input">
+                                                <input type="text"
+                                                       name="program_search"
+                                                       id="program_search" title="검색어"
+                                                       defaultValue={searchRcUserCondition.searchVal}
+                                                       ref={searchRcUserValRef}
+                                                       onChange={(e)=> {
+                                                           setSearchRcUserCondition({...searchRcUserCondition, searchVal: e.target.value})
+                                                       }}
+                                                       onKeyDown={activeUserEnter}
+                                                />
+                                            </div>
+                                        </li>
+                                    </ul>
+                                    <div className="rightBtn">
+                                        <button type="button" className="refreshBtn btn btn1 gray"
+                                                onClick={() => {
+                                                    setSearchRcUserCondition({...searchRcUserCondition, searchVal: ""})
+                                                    document.getElementById('program_search').value = "";
+                                                    getRcUserList({
+                                                        pageIndex: 1,
+                                                        pageUnit:9999,
+                                                        relInstSn : location.state?.relInstSn,
+                                                        mbrStts:"Y",
+                                                        searchType: "",
+                                                        searchVal: "",
+                                                    });
+                                                }}
 
+                                        >
+                                            <div className="icon"></div>
+                                        </button>
+                                        <button type="button" className="searchBtn btn btn1 point"
+                                                onClick={() => {
+                                                    getRcUserList({
+                                                        ...searchRcUserCondition,
+                                                        pageIndex: 1,
+                                                    });
+                                                }}
+                                        >
+                                            <div className="icon"></div>
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div className="tableBox type1">
+                                <table>
+                                    <caption>회원목록</caption>
+                                    <colgroup>
+                                        <col width="50"/>
+                                    </colgroup>
+                                    <thead className="fixed-thead">
+                                    <tr>
+                                        <th style={{width:"50px"}}>
+                                            <label className="checkBox type2">
+                                                <input type="checkbox"
+                                                       name="userCheck"
+                                                       className="customCheckBox"
+                                                       onClick={checkUserAllCheck}
+                                                />
+                                            </label>
+                                        </th>
+                                        <th><p>아이디</p></th>
+                                        <th><p>성명</p></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody className="scrollable-tbody">
+                                    {rcUserList.length>0 && (
+                                        <>
+                                            {rcUserList.map((item,index) => (
+                                                <tr key={item.tblUser.userSn}>
+                                                    <td style={{width:"50px"}}>
+                                                        <label className="checkBox type2">
+                                                            <input type="checkbox" name="userCheck"
+                                                                   className="customCheckBox"
+                                                                /*checked={selRcUserList.some(user => user.userSn === item.tblUser.userSn)}*/
+                                                                   onChange={handleCheckboxChange}
+                                                                   value={item.tblUser.userSn}
+                                                            />
+                                                        </label>
+                                                    </td>
+                                                    <td>{item.tblUser.userId || ""}</td>
+                                                    <td>{item.tblUser.kornFlnm || ""}</td>
+                                                </tr>
+                                            ))}
+                                        </>
+                                    )}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div className="pageWrap">
+                                <EgovPaging
+                                    pagination={rcUserPaginationInfo}
+                                    moveToPage={(passedPage) =>{
+                                        getRcUserList({
+                                            ...searchRcUserCondition,
+                                            pageIndex: passedPage
+                                        });
+                                    }}
+                                />
+                                <button type="button" className="writeBtn clickBtn"
+                                        onClick={rcUserSelectSubmit}
+                                ><span>등록</span></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
+            {/*모달끝*/}
 
         </div>
     );
