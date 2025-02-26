@@ -22,10 +22,10 @@ import {
 } from "date-fns";
 
 import ManagerLeftNew from "@/components/manager/ManagerLeftNew";
-import {mngrAcsIpChk} from "@/components/CommonComponents.jsx";
+import {mngrAcsIpChk} from "@/components/CommonComponents";
 import Swal from "sweetalert2";
 import moment from "moment";
-import LoadingSpinner from "../../components/LoadingSpinner.jsx";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 function Index(props) {
     const [isLoading, setIsLoading] = useState(true);  // 로딩 상태

@@ -9,7 +9,7 @@ import { getComCdList } from "@/components/CommonComponents";
 import EgovPaging from "@/components/EgovPaging";
 
 import moment from "moment/moment.js";
-import {getSessionItem} from "../../../../../utils/storage.js";
+import {getSessionItem} from "@/utils/storage";
 import PstSatisfaction from "@/components/PstSatisfaction";
 import * as ComScript from "@/components/CommonScript";
 

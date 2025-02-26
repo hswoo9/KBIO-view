@@ -3,12 +3,11 @@ import {NavLink, useLocation, useNavigate} from "react-router-dom";
 import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
-import { getLocalItem, setLocalItem, setSessionItem } from "@/utils/storage";
+import { getLocalItem, setLocalItem, setSessionItem, getSessionItem } from "@/utils/storage";
 import SnsNaverBt from "@/components/sns/SnsNaverBt";
 import SnsKakaoBt from "@/components/sns/SnsKakaoBt";
-import SnsGoogleBt from "@/components/sns/SnsGoogleBt.jsx";
+import SnsGoogleBt from "@/components/sns/SnsGoogleBt";
 import Swal from "sweetalert2";
-import {getSessionItem} from "../../utils/storage.js";
 
 function EgovLoginContent(props) {
   const navigate = useNavigate();

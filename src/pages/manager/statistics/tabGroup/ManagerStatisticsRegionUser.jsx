@@ -18,7 +18,7 @@ import {
     subMonths,
     addMonths,
 } from "date-fns";
-import * as EgovNet from "../../../../api/egovFetch.js";
+import * as EgovNet from "@/api/egovFetch";
 
 function ManagerStatisticsRegionUser(props) {
 

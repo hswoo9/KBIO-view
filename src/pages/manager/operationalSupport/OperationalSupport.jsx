@@ -17,7 +17,7 @@ import Form from 'react-bootstrap/Form';
 import { getSessionItem } from "@/utils/storage";
 
 import moment from "moment/moment.js";
-import {getComCdList} from "../../../components/CommonComponents.jsx";
+import {getComCdList} from "@/components/CommonComponents";
 
 function OperationalSupport(props) {
 

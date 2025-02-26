@@ -8,8 +8,8 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import CommonEditor from "@/components/CommonEditor";
 import moment from "moment";
-import {getComCdList} from "../../../components/CommonComponents.jsx";
-import EgovPaging from "../../../components/EgovPaging.jsx";
+import {getComCdList} from "@/components/CommonComponents";
+import EgovPaging from "@/components/EgovPaging";
 import ManagerCnslttSimpleDtl from "./ManagerCnslttSimpleDtl.jsx";
 
 function ManagerCnslttSimple({ cnsltSe, userSn }) {
@@ -67,7 +67,7 @@ function ManagerCnslttSimple({ cnsltSe, userSn }) {
                 (resp) => {
                     let dataList = [];
                     dataList.push(
-                        <tr>
+                        <tr key="noData">
                             <td colSpan={9}>검색된 결과가 없습니다.</td>
                         </tr>
                     );

@@ -12,7 +12,7 @@ import Swal from 'sweetalert2';
 
 /* bootstrip */
 import { getSessionItem } from "@/utils/storage";
-import {getComCdList} from "../../../components/CommonComponents.jsx";
+import {getComCdList} from "@/components/CommonComponents";
 
 function ManagerExpert(props) {
 

@@ -61,7 +61,7 @@ function ManagerAccessList(props) {
                     setPaginationInfo(resp.paginationInfo);
                     let dataList = [];
                     dataList.push(
-                        <tr>
+                        <tr key="noData">
                             <td colSpan="5">검색된 결과가 없습니다.</td>
                         </tr>
                     );

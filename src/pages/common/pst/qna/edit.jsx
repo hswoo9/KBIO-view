@@ -11,8 +11,8 @@ import moment from "moment";
 import CommonSubMenu from "@/components/CommonSubMenu";
 import AOS from "aos";
 import CommonEditor from "@/components/CommonEditor";
-import {getSessionItem} from "../../../../utils/storage.js";
-import {getComCdList} from "../../../../components/CommonComponents.jsx";
+import {getSessionItem} from "@/utils/storage";
+import {getComCdList} from "@/components/CommonComponents";
 
 function setCommonPst(props) {
 

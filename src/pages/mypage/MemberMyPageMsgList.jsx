@@ -12,7 +12,7 @@ import AOS from "aos";
 import EgovPaging from "@/components/EgovPaging";
 import EgovUserPaging from "@/components/EgovUserPaging";
 import moment from "moment/moment.js";
-import {getSessionItem} from "../../utils/storage.js";
+import {getSessionItem} from "@/utils/storage";
 
 function MemberMyPageMsgList(props) {
     const sessionUser = getSessionItem("loginUser");

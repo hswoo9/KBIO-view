@@ -19,9 +19,9 @@ import {
     addMonths,
 } from "date-fns";
 import {Link} from "react-router-dom";
-import * as EgovNet from "../../../api/egovFetch.js";
+import * as EgovNet from "@/api/egovFetch";
 import {forEach} from "react-bootstrap/ElementChildren";
-import LoadingSpinner from "../../../components/LoadingSpinner.jsx";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 function ManagerStatisticsUser(props) {
     const [isLoading, setIsLoading] = useState(true);
