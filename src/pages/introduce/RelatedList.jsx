@@ -57,13 +57,13 @@ function RelatedList() {
 
                     resp.result.getRelatedList.forEach(function (item, index) {
                         dataList.push(
-                            <tr key={item.relInstSn}
+                            <tr key={item.tblRelInst.relInstSn}
                                 onClick={() => {
                                     navigate(
                                         {pathname: URL.INTRODUCE_RELATED_DETAIL},
                                         {
                                             state: {
-                                                relInstSn: item.relInstSn,
+                                                relInstSn: item.tblRelInst.relInstSn,
                                                 menuSn : location.state?.menuSn,
                                                 menuNmPath : location.state?.menuNmPath,
                                                 thisMenuSn : location.state?.thisMenuSn,
@@ -73,35 +73,44 @@ function RelatedList() {
                                 }}
                             >
                                 <td className="cate">
-                                    <p>의약품</p>
+                                    <p>{item.clsfNm}</p>
                                 </td>
                                 <td>
                                     <figure>
-                                        <img src="/src/assets/images/ico_logo_kakao.svg" alt=""/>
+                                        {item.tblComFile != null ? (
+                                            <img
+                                                src={`http://133.186.250.158${item.tblComFile.atchFilePathNm}/${item.tblComFile.strgFileNm}.${item.tblComFile.atchFileExtnNm}`}
+                                                alt={`${item.tblRelInst.relInstNm}_로고`}
+                                            />
+                                        ) : (
+                                            <img
+                                                src="/src/assets/images/user_business_overview_box04_icon01.png" width="44" height="44" alt={`${item.tblRelInst.relInstNm}_로고 없음`}
+                                            />
+                                        )}
                                     </figure>
                                 </td>
                                 <td className="title">
                                     <div className="text">
-                                        <p>{item.relInstNm}</p>
+                                        <p>{item.tblRelInst.relInstNm}</p>
                                     </div>
                                     <ul className="bot">
                                         <li>
                                             <p className="left">대표성함</p>
-                                            <strong>{item.rpsvNm}</strong>
+                                            <strong>{item.tblRelInst.rpsvNm}</strong>
                                         </li>
                                         <li>
                                             <p className="left">대표전화</p>
-                                            <strong>{ComScript.formatTelNumber(item.entTelno)}</strong>
+                                            <strong>{ComScript.formatTelNumber(item.tblRelInst.entTelno)}</strong>
                                         </li>
                                         <li>
                                             <p className="left">홈페이지</p>
                                             <strong>
-                                                <a href={item.hmpgAddr} target="_blank" rel="noopener noreferrer"
+                                                <a href={item.tblRelInst.hmpgAddr} target="_blank" rel="noopener noreferrer"
                                                    style={{
                                                        color: '#007bff',
                                                        textDecoration: 'none',
                                                    }}>
-                                                    {item.hmpgAddr}
+                                                    {item.tblRelInst.hmpgAddr}
                                                 </a>
                                             </strong>
                                         </li>
