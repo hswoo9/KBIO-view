@@ -169,6 +169,9 @@ function setDiffEdit(props) {
       <div id="container" className="container layout cms">
         <ManagerLeftNew/>
         <div className="inner">
+          <h2 className="pageTitle">
+            <p>애로사항 상세보기</p>
+          </h2>
           <div className="contBox infoWrap customContBox">
             <ul className="inputWrap">
               <li className="inputBox type1 width1">
@@ -199,7 +202,9 @@ function setDiffEdit(props) {
                         {dfclMttr.diffFiles.map((file, index) => (
                             <li key={index}>
                                 <span
-                                    onClick={() => fileDownLoad(file.atchFileSn, file.atchFileNm)}>{file.atchFileNm} - {(file.atchFileSz / 1024).toFixed(2)} KB</span>
+                                    onClick={() => fileDownLoad(file.atchFileSn, file.atchFileNm)}
+                                    style={{cursor: "pointer"}}
+                                >{file.atchFileNm} - {(file.atchFileSz / 1024).toFixed(2)} KB</span>
                             </li>
                         ))}
                       </ul>
@@ -255,7 +260,7 @@ function setDiffEdit(props) {
                     <ul>
                       {answerFileList.map((file, index) => (
                           <li key={index}>
-                          {file.name} - {(file.size / 1024).toFixed(2)} KB
+                            {file.name} - {(file.size / 1024).toFixed(2)} KB
 
                             <button
                                 onClick={() => handleDeleteFile(index)}  // 삭제 버튼 클릭 시 처리할 함수
