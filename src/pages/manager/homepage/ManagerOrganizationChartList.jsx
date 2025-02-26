@@ -9,7 +9,7 @@ import ManagerLeftNew from "@/components/manager/ManagerLeftHomepage";
 import EgovPaging from "@/components/EgovPaging";
 import moment from "moment/moment.js";
 import Swal from 'sweetalert2';
-import { getComCdList } from "@/components/CommonComponents";
+import { getComCdList, excelExport } from "@/components/CommonComponents";
 import { getSessionItem } from "@/utils/storage";
 
 function ManagerOrganizationChartList(props) {
@@ -58,6 +58,51 @@ function ManagerOrganizationChartList(props) {
             deptSn : ""
         })
     }
+
+    const dataExcelDownload = useCallback(() => {
+        let excelParams = searchCondition;
+        excelParams.pageIndex = 1;
+        excelParams.pageUnit = paginationInfo?.totalRecordCount || 9999999999
+
+        const requestURL = "/orgchtApi/getOrgchtList.do";
+        const requestOptions = {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json",
+            },
+            body: JSON.stringify(excelParams)
+        };
+        EgovNet.requestFetch(
+            requestURL,
+            requestOptions,
+            (resp) => {
+
+                let rowDatas = [];
+                if(resp.result.orgchtList != null){
+                    resp.result.orgchtList.forEach(function (item, index) {
+                        rowDatas.push(
+                            {
+                                number : resp.paginationInfo.totalRecordCount - (resp.paginationInfo.currentPageNo - 1) * resp.paginationInfo.pageSize - index,
+                                deptNm : item.deptNm,
+                                kornFlnm : item.kornFlnm,
+                                jbttlNm : item.jbttlNm,
+                                telno : ComScript.formatTelNumber(item.telno),
+                                email : item.email,
+                                frstCrtDt : moment(item.frstCrtDt).format('YYYY-MM-DD'),
+                            }
+                        )
+                    });
+                }
+
+                let sheetDatas = [{
+                    sheetName : "조직도관리",
+                    header : ['번호', '부서', '이름', '직책', '전화번호', '이메일', '등록일'],
+                    row : rowDatas
+                }];
+                excelExport("조직도관리", sheetDatas);
+            }
+        )
+    });
 
     const getOrgchtList = useCallback(
         (searchCondition) => {
@@ -192,9 +237,12 @@ function ManagerOrganizationChartList(props) {
                         <p className="resultText">전체 : <span className="red">{paginationInfo.totalRecordCount}</span>건 페이지 : <span
                             className="red">{paginationInfo.currentPageNo}/{paginationInfo.totalPageCount}</span></p>
                         <div className="rightBox">
-                            <button type="button" className="btn btn2 downBtn red">
+                            <button type="button" className="btn btn2 downBtn red"
+                                onClick={dataExcelDownload}
+                            >
                                 <div className="icon"></div>
-                                <span>엑셀 다운로드</span></button>
+                                <span>엑셀 다운로드</span>
+                            </button>
                         </div>
                     </div>
                     <div className="topBox"></div>
