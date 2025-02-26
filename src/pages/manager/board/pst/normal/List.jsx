@@ -12,7 +12,7 @@ import Swal from 'sweetalert2';
 import EgovPaging from "@/components/EgovPaging";
 import * as ComScript from "@/components/CommonScript";
 import moment from "moment/moment.js";
-import {getSessionItem} from "../../../../../utils/storage.js";
+import {getSessionItem} from "@/utils/storage";
 
 
 function ManagerPst(props) {

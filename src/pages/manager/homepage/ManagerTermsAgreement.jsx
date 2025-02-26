@@ -74,12 +74,9 @@ function ManagerTermsList(props) {
                     resp.result.getTermsAgreementList.forEach(function (item, index) {
                         if (index === 0) dataList = [];
 
-                        const totalItems = resp.result.getTermsAgreementList.length;
-                        const itemNumber = totalItems - index;
-
                         dataList.push(
                             <tr key={item.utztnTrmsSn}>
-                                <td>{itemNumber}</td>
+                                <td>{resp.paginationInfo.totalRecordCount - (resp.paginationInfo.currentPageNo - 1) * resp.paginationInfo.pageSize - index}</td>
                                 <td>
                                     <Link
                                         to={{pathname: URL.MANAGER_HOMEPAGE_TERMS_MODIFY}}

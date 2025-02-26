@@ -4,24 +4,26 @@ import axios from "axios";
 import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
-
+import * as ComScript from "@/components/CommonScript";
 import ManagerLeft from "@/components/manager/ManagerLeftOperationalSupport";
 import EgovPaging from "@/components/EgovPaging";
 import OperationalSupport from "./OperationalSupport.jsx";
 import base64 from 'base64-js';
+import Swal from "sweetalert2";
 
 function OperationalResidentMember(props) {
     const location = useLocation();
     const [residentMemberList, setAuthorityList] = useState([]);
     const [selectedFiles, setSelectedFiles] = useState([]);
+    const [selCancleList, setSelCancleList] = useState({});
     const [searchDto, setSearchDto] = useState(
         {
             pageIndex : 1,
             mvnEntSn : location.state?.mvnEntSn,
             sysMngrYn : "Y",
-            actvtnYn: "",
-            kornFlnm: "",
-            userId: ""
+            mbrStts:"",
+            searchType: "",
+            searchVal : "",
         }
     );
     const [paginationInfo, setPaginationInfo] = useState({
@@ -42,11 +44,56 @@ function OperationalResidentMember(props) {
         return new TextDecoder().decode(decodedBytes);
     };
 
+    const cancleMng = (userSn, mvnEntSn) => {
+        setSelCancleList({ userSn, mvnEntSn });
+
+        setTimeout(() => {
+            const cancleMngUrl = "/mvnEntApi/cancleMng";
+
+            Swal.fire({
+                title: `<span style="font-size: 20px; line-height: 0.8;">
+                    삭제할 경우 해당 관리자는 해당 기업에<br>
+                    대해 관리할 수 없습니다.<br>
+                    해당 관리자를 삭제하시겠습니까?
+                </span>
+            `,
+                showCloseButton: true,
+                showCancelButton: true,
+                confirmButtonText: "예",
+                cancelButtonText: "아니오",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const requestOptions = {
+                        method: "POST",
+                        headers: {
+                            "Content-type": "application/json",
+                        },
+                        body: JSON.stringify({ userSn, mvnEntSn }),
+                    };
+
+                    console.log("body", requestOptions.body);
+
+                    EgovNet.requestFetch(cancleMngUrl, requestOptions, (resp) => {
+                        if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
+                            Swal.fire("승인되었습니다.");
+                            getResidentMemberList(searchDto);
+                            modelCloseEvent();
+                        } else {
+                            alert("ERR : " + resp.resultMessage);
+                        }
+                    });
+                }
+            });
+        }, 0);
+    };
+
+
     //모달관련
     const [searchRcUserCondition, setSearchRcUserCondition] = useState({
         pageIndex: 1,
         pageUnit:9999,
         mvnEntSn : location.state?.mvnEntSn,
+        mbrStts:"Y",
         searchType: "",
         searchVal: "",
     });
@@ -85,9 +132,11 @@ function OperationalResidentMember(props) {
             pageIndex: 1,
             pageUnit:9999,
             mvnEntSn : location.state?.mvnEntSn,
+            mbrStts:"Y",
             searchType: "",
             searchVal: "",
         })
+        setSelRcUserList([]);
         document.getElementById('modalDiv').classList.remove("open");
         document.getElementsByTagName('html')[0].style.overFlow = 'visible';
         document.getElementsByTagName('body')[0].style.overFlow = 'visible';
@@ -108,11 +157,12 @@ function OperationalResidentMember(props) {
 
     const handleCheckboxChange = (e) => {
         const userSn = parseInt(e.target.value);
+        const mvnEntSn = location.state?.mvnEntSn;
 
         if (e.target.checked) {
             setSelRcUserList(prevState => [
                 ...prevState,
-                { userSn }
+                { userSn, mvnEntSn }
             ]);
         } else {
             setSelRcUserList(prevState => prevState.filter(user => user.userSn !== userSn));
@@ -150,6 +200,40 @@ function OperationalResidentMember(props) {
 
     const rcUserSelectSubmit = () => {
         console.log("selRcUserList :",selRcUserList);
+        const updateMvnEntMbrToMngUrl = "/mvnEntApi/updateMvnEntMbrToMng";
+
+        Swal.fire({
+            title: "관리자로 등록하시겠습니까?",
+            showCloseButton: true,
+            showCancelButton: true,
+            confirmButtonText: "예",
+            cancelButtonText: "아니오"
+        }).then((result) => {
+            if(result.isConfirmed){
+                const requestOptions = {
+                    method: "POST",
+                    headers: {
+                        "Content-type": "application/json",
+                    },
+                    body: JSON.stringify(selRcUserList),
+                };
+
+                console.log("body",requestOptions.body);
+
+                EgovNet.requestFetch(updateMvnEntMbrToMngUrl, requestOptions, (resp) => {
+                    if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
+                        Swal.fire("승인되었습니다.");
+                        getResidentMemberList(searchDto);
+                        modelCloseEvent();
+                    } else {
+                        alert("ERR : " + resp.resultMessage);
+                    }
+                });
+
+            }else{
+                //취소
+            }
+        });
 
     };
 
@@ -177,35 +261,41 @@ function OperationalResidentMember(props) {
 
                     let dataList = [];
                     dataList.push(
-                        <tr>
+                        <tr key="noData">
                             <td colSpan="6">검색된 결과가 없습니다.</td>
                         </tr>
                     );
 
                     resp.result.getResidentMemberList.forEach(function (item,index){
                         if(index === 0) dataList = [];
-                        const decodedPhoneNumber = decodePhoneNumber(item.mblTelno);
+                        const decodedPhoneNumber = decodePhoneNumber(item.tblUser.mblTelno);
 
                         dataList.push(
-                            <tr key={item.userSn}>
+                            <tr key={item.tblUser.userSn}>
                                 <td>{index + 1}</td>
-                                <td>{item.userId}</td>
+                                <td>{item.tblUser.userId}</td>
                                 <td>
                                     <Link to={URL.MANAGER_RESIDENT_MEMBER_EDIT}
                                           state={{
                                               mvnEntSn: searchDto.mvnEntSn,
                                               mode:CODE.MODE_MODIFY,
-                                              userSn: item.userSn
+                                              userSn: item.tblUser.userSn
                                           }}
                                     >
-                                        {item.kornFlnm}
+                                        {item.tblUser.kornFlnm}
                                     </Link>
                                 </td>
                                 <td>{decodedPhoneNumber}</td>
-                                <td>{item.email}</td>
-                                <td>{new Date(item.frstCrtDt).toISOString().split("T")[0]}</td>
+                                <td>{item.tblUser.email}</td>
+                                <td>{new Date(item.tblUser.frstCrtDt).toISOString().split("T")[0]}</td>
                                 <td>
-                                    <button type="button" className="settingBtn"><span>삭제</span></button>
+                                    <button
+                                        type="button"
+                                        className="settingBtn"
+                                        onClick={(e) => cancleMng(item.tblUser.userSn, location.state?.mvnEntSn)}
+                                    >
+                                        <span>삭제</span>
+                                    </button>
                                 </td>
                             </tr>
                         );
@@ -225,6 +315,12 @@ function OperationalResidentMember(props) {
     useEffect(() => {
         getResidentMemberList(searchDto);
     },[]);
+
+    /*useEffect(() => {
+        if (selCancleList) {
+            sendCancleMngRequest();
+        }
+    }, [selCancleList]);*/
 
 
     return (
@@ -255,7 +351,7 @@ function OperationalResidentMember(props) {
                         </li>
                         <li>
                             <p className="tt1">대표전화</p>
-                            <p className="tt2">{location.state?.entTelno}</p>
+                            <p className="tt2">{ComScript.formatTelNumber(location.state?.entTelno)}</p>
                         </li>
                         <li>
                             <p className="tt1">업종</p>
@@ -320,7 +416,7 @@ function OperationalResidentMember(props) {
                 {/*본문리스트영역*/}
                 <div className="contBox board type2 customContBox">
                     <div className="topBox">
-                        <p className="resultText"><span className="red">{paginationInfo.totalRecordCount}</span>건의 입주기업 정보가 조회되었습니다.</p>
+                        <p className="resultText"><span className="red">{paginationInfo?.totalRecordCount}</span>건의 입주기업 정보가 조회되었습니다.</p>
                     </div>
                     <div className="tableBox type1">
                         <table>
@@ -426,6 +522,7 @@ function OperationalResidentMember(props) {
                                                         pageIndex: 1,
                                                         pageUnit:9999,
                                                         mvnEntSn : location.state?.mvnEntSn,
+                                                        mbrStts:"Y",
                                                         searchType: "",
                                                         searchVal: "",
                                                     });
@@ -472,19 +569,19 @@ function OperationalResidentMember(props) {
                                     {rcUserList.length>0 && (
                                         <>
                                             {rcUserList.map((item,index) => (
-                                                <tr key={item.userSn}>
+                                                <tr key={item.tblUser.userSn}>
                                                     <td style={{width:"50px"}}>
                                                         <label className="checkBox type2">
                                                             <input type="checkbox" name="userCheck"
                                                                    className="customCheckBox"
-                                                                   checked={selRcUserList.some(user => user.userSn === item.userSn)}
+                                                                   /*checked={selRcUserList.some(user => user.userSn === item.tblUser.userSn)}*/
                                                                    onChange={handleCheckboxChange}
-                                                                   value={item.userSn}
+                                                                   value={item.tblUser.userSn}
                                                             />
                                                         </label>
                                                     </td>
-                                                    <td>{item.userId || ""}</td>
-                                                    <td>{item.kornFlnm || ""}</td>
+                                                    <td>{item.tblUser.userId || ""}</td>
+                                                    <td>{item.tblUser.kornFlnm || ""}</td>
                                                 </tr>
                                             ))}
                                         </>

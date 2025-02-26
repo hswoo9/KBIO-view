@@ -134,7 +134,7 @@ function ManagerCodeGroup(props) {
                     setPaginationInfo(resp.paginationInfo);
                     let dataList = [];
                     codeList.push(
-                        <tr>
+                        <tr key="noData">
                             <td colSpan="6" key="noData">검색된 결과가 없습니다.</td>
                         </tr>
                     );

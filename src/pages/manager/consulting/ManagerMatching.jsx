@@ -12,7 +12,7 @@ import Swal from 'sweetalert2';
 
 /* bootstrip */
 import { getSessionItem } from "@/utils/storage";
-import {getComCdList} from "../../../components/CommonComponents.jsx";
+import {getComCdList} from "@/components/CommonComponents";
 import moment from "moment/moment.js";
 
 function ManagerMatching(props) {
@@ -220,7 +220,6 @@ function ManagerMatching(props) {
                 consultantListUrl,
                 requestOptions,
                 (resp) => {
-                    console.log("resp.result : ",resp.result.consultantList);
                     setCnsltantPaginationInfo(resp.paginationInfo);
                     resp.result.consultantList.forEach(function (item, index) {
                         setCnsltantList(resp.result.consultantList);
@@ -287,7 +286,6 @@ function ManagerMatching(props) {
                 cnlstListURL,
                 requestOptions,
                 (resp) => {
-                    console.log("consultantList : ", resp.result.consultantList);
                      let dataList = [];
                      dataList.push(
                          <tr>
@@ -300,7 +298,7 @@ function ManagerMatching(props) {
 
                         dataList.push(
                             <tr key={item.cnsltAplySn}>
-                                <td>{index + 1}</td>
+                                <td>{resp.paginationInfo.totalRecordCount - (resp.paginationInfo.currentPageNo - 1) * resp.paginationInfo.pageSize - index}</td>
                                 <td>{item.cnsltFldNm}</td>
                                 <td>{item.cnslttKornFlnm}</td>
 

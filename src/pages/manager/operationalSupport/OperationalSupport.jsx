@@ -17,7 +17,7 @@ import Form from 'react-bootstrap/Form';
 import { getSessionItem } from "@/utils/storage";
 
 import moment from "moment/moment.js";
-import {getComCdList} from "../../../components/CommonComponents.jsx";
+import {getComCdList} from "@/components/CommonComponents";
 
 function OperationalSupport(props) {
 
@@ -250,7 +250,7 @@ function OperationalSupport(props) {
                 </div>
                 <div className="contBox board type1 customContBox">
                     <div className="topBox">
-                        <p className="resultText"><span className="red">{paginationInfo.totalRecordCount}</span>건의 입주기업 정보가 조회되었습니다.</p>
+                        <p className="resultText"><span className="red">{paginationInfo?.totalRecordCount}</span>건의 입주기업 정보가 조회되었습니다.</p>
                         <div className="rightBox">
                             <button type="button" className="btn btn2 downBtn red">
                                 <div className="icon"></div>

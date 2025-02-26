@@ -20,7 +20,7 @@ import {
     subMonths,
     addMonths,
 } from "date-fns";
-import LoadingSpinner from "../../../components/LoadingSpinner.jsx";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 function ManagerStatisticsBoard(props) {
     const [isLoading, setIsLoading] = useState(true);  // 로딩 상태

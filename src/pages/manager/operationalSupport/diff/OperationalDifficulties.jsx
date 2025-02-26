@@ -11,9 +11,9 @@ import Swal from 'sweetalert2';
 
 /* bootstrip */
 import { getSessionItem } from "@/utils/storage";
-import {getComCdList} from "../../../../components/CommonComponents.jsx";
+import {getComCdList} from "@/components/CommonComponents";
 import moment from "moment/moment.js";
-import ManagerLeftOperationalSupport from "../../../../components/manager/ManagerLeftOperationalSupport.jsx";
+import ManagerLeftOperationalSupport from "@/components/manager/ManagerLeftOperationalSupport";
 
 function OperationalDifficulties(props) {
     const sessionUser = getSessionItem("loginUser");
@@ -62,7 +62,7 @@ function OperationalDifficulties(props) {
                 (resp) => {
                     let dataList = [];
                     dataList.push(
-                        <tr>
+                        <tr key="noData">
                             <td colSpan="6">검색된 결과가 없습니다.</td>
                         </tr>
                     );
@@ -71,7 +71,7 @@ function OperationalDifficulties(props) {
                         if (index === 0) dataList = []; // 목록 초기화
 
                         dataList.push(
-                            <tr key={item.pstSn}>
+                            <tr key={`${item.pstSn}_${index}`}>
                                 <td>
                                     {resp.paginationInfo.totalRecordCount - (resp.paginationInfo.currentPageNo - 1) * resp.paginationInfo.pageSize - index}
                                 </td>

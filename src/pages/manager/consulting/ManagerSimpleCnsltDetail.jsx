@@ -4,7 +4,7 @@ import axios from "axios";
 import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
-
+import * as ComScript from "@/components/CommonScript";
 import ManagerLeft from "@/components/manager/ManagerLeftConsulting";
 import EgovPaging from "@/components/EgovPaging";
 
@@ -13,7 +13,7 @@ import base64 from 'base64-js';
 
 /* bootstrip */
 import { getSessionItem } from "@/utils/storage";
-import {getComCdList} from "../../../components/CommonComponents.jsx";
+import {getComCdList} from "@/components/CommonComponents";
 import moment from "moment/moment.js";
 
 
@@ -162,7 +162,9 @@ function ManagerSimpleCnsltDetail(props) {
                              justifyContent: "center",
                              alignItems: "center",
                              gap: "20px"
-                         }}>
+                         }}
+                         key={`${index}_d`}
+                    >
                         <div
                             style={{
                                 order: item.dsctnSe === "0" ? 1 : 2,
@@ -328,7 +330,7 @@ function ManagerSimpleCnsltDetail(props) {
                             <label className="title" style={{cursor :"default"}}>휴대폰</label>
                             <div className="input">
                                 <div>
-                                    {consulttUser.mblTelno || ""}
+                                    {ComScript.formatTelNumber(consulttUser.mblTelno)}
                                 </div>
                             </div>
                         </li>

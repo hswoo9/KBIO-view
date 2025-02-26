@@ -17,7 +17,7 @@ import '@/css/manager/managerPstDetail.css';
 import Eval  from "../../../../common/pst/eval.jsx";
 import { getSessionItem, setSessionItem } from "@/utils/storage";
 import ManagerLeftNew from "@/components/manager/ManagerLeftNew";
-import {fileDownLoad} from "@/components/CommonComponents.jsx";
+import {fileDownLoad} from "@/components/CommonComponents";
 
 function setPst(props) {
   const sessionUser = getSessionItem("loginUser");

@@ -11,10 +11,10 @@ import EgovRadioButtonGroup from "@/components/EgovRadioButtonGroup";
 import Swal from "sweetalert2";
 import Form from "react-bootstrap/Form";
 import moment from "moment";
-import {getSessionItem} from "../../../../../utils/storage.js";
+import {getSessionItem} from "@/utils/storage";
 
 import CommonEditor from "@/components/CommonEditor";
-import {getComCdList} from "../../../../../components/CommonComponents.jsx";
+import {getComCdList} from "@/components/CommonComponents";
 
 function setPst(props) {
 

@@ -4,7 +4,7 @@ import axios from "axios";
 import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
-
+import * as ComScript from "@/components/CommonScript";
 import ManagerLeft from "@/components/manager/ManagerLeftOperationalSupport";
 import EgovPaging from "@/components/EgovPaging";
 import OperationalSupport from "./OperationalSupport.jsx";
@@ -18,9 +18,9 @@ function OperationalResidentMember(props) {
         {
             pageIndex : 1,
             mvnEntSn : location.state?.mvnEntSn,
-            actvtnYn: "",
-            kornFlnm: "",
-            userId: ""
+            mbrStts:"",
+            searchType: "",
+            searchVal : "",
         }
         );
     const [paginationInfo, setPaginationInfo] = useState({
@@ -36,6 +36,17 @@ function OperationalResidentMember(props) {
         totalPageCount: 15,
         totalRecordCount: 158
     });
+
+    const searchTypeRef = useRef();
+    const searchValRef = useRef();
+
+    const activeEnter = (e) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            getResidentMemberList(searchDto);
+        }
+    };
+
     const decodePhoneNumber = (encodedPhoneNumber) => {
         const decodedBytes = base64.toByteArray(encodedPhoneNumber);
         return new TextDecoder().decode(decodedBytes);
@@ -62,33 +73,33 @@ function OperationalResidentMember(props) {
                     }
                     let dataList = [];
                     dataList.push(
-                        <tr>
+                        <tr key="noData">
                             <td colSpan="6">검색된 결과가 없습니다.</td>
                         </tr>
                     );
 
                     resp.result.getResidentMemberList.forEach(function (item,index){
                         if(index === 0) dataList = [];
-                        const decodedPhoneNumber = decodePhoneNumber(item.mblTelno);
+                        const decodedPhoneNumber = decodePhoneNumber(item.tblUser.mblTelno);
 
                         dataList.push(
-                            <tr key={item.userSn}>
+                            <tr key={item.tblUser.userSn}>
                                 <td>{index + 1}</td>
-                                <td>{item.userId}</td>
+                                <td>{item.tblUser.userId}</td>
                                 <td>
                                 <Link to={URL.MANAGER_RESIDENT_MEMBER_EDIT}
                                       state={{
                                           mvnEntSn: searchDto.mvnEntSn,
                                           mode:CODE.MODE_MODIFY,
-                                          userSn: item.userSn
+                                          userSn: item.tblUser.userSn
                                       }}
                                 >
-                                {item.kornFlnm}
+                                {item.tblUser.kornFlnm}
                                 </Link>
                                 </td>
                                 <td>{decodedPhoneNumber}</td>
-                                <td>{item.email}</td>
-                                <td>{new Date(item.frstCrtDt).toISOString().split("T")[0]}</td>
+                                <td>{item.tblUser.email}</td>
+                                <td>{new Date(item.tblUser.frstCrtDt).toISOString().split("T")[0]}</td>
                             </tr>
                         );
                     });
@@ -142,7 +153,7 @@ function OperationalResidentMember(props) {
                         </li>
                         <li>
                             <p className="tt1">대표전화</p>
-                            <p className="tt2">{location.state?.entTelno}</p>
+                            <p className="tt2">{ComScript.formatTelNumber(location.state?.entTelno)}</p>
                         </li>
                         <li>
                             <p className="tt1">업종</p>
@@ -158,6 +169,10 @@ function OperationalResidentMember(props) {
                                 <div className="itemBox">
                                     <select
                                         className="selectGroup"
+                                        name="mbrStts"
+                                        onChange={(e) => {
+                                            setSearchDto({...searchDto,mbrStts: e.target.value})
+                                        }}
                                     >
                                         <option value="">전체</option>
                                         <option value="Y">승인</option>
@@ -170,7 +185,13 @@ function OperationalResidentMember(props) {
                                 <p className="title">키워드</p>
                                 <div className="itemBox">
                                     <select
+                                        id="searchType"
+                                        name="searchType"
                                         className="selectGroup"
+                                        ref={searchTypeRef}
+                                        onChange={(e) => {
+                                            setSearchDto({...searchDto, searchType: e.target.value})
+                                        }}
                                     >
                                         <option value="">전체</option>
                                         <option value="userId">아이디</option>
@@ -182,6 +203,17 @@ function OperationalResidentMember(props) {
                                 <label className="input">
                                     <input
                                         type="text"
+                                        name="searchVal"
+                                        defaultValue={
+                                            searchDto && searchDto.searchVal
+                                        }
+                                        placeholder=""
+                                        ref={searchValRef}
+                                        onChange={(e) => {
+                                            setSearchDto({...searchDto, searchVal: e.target.value})
+                                        }}
+                                        onKeyDown={activeEnter}
+                                        placeholder="검색어를 입력해주세요."
                                     />
                                 </label>
                             </li>
@@ -190,12 +222,28 @@ function OperationalResidentMember(props) {
                             <button
                                 type="button"
                                 className="refreshBtn btn btn1 gray"
+                                onClick={() => {
+                                    getResidentMemberList({
+                                        pageIndex: 1,
+                                        mvnEntSn : location.state?.mvnEntSn,
+                                        mbrStts:"",
+                                        searchType: "",
+                                        searchVal : "",
+                                    });
+                                }}
                             >
                                 <div className="icon"></div>
                             </button>
                             <button
                                 type="button"
                                 className="searchBtn btn btn1 point"
+                                onClick={() => {
+                                    getResidentMemberList({
+                                        ...searchDto,
+                                        pageIndex: 1,
+                                        mvnEntSn : location.state?.mvnEntSn,
+                                    });
+                                }}
                             >
                                 <div className="icon"></div>
                             </button>
@@ -205,7 +253,7 @@ function OperationalResidentMember(props) {
                 {/*본문리스트영역*/}
                 <div className="contBox board type2 customContBox">
                     <div className="topBox">
-                        <p className="resultText"><span className="red">{paginationInfo.totalRecordCount}</span>건의 회원 정보가 조회되었습니다.</p>
+                        <p className="resultText"><span className="red">{paginationInfo?.totalRecordCount}</span>건의 회원 정보가 조회되었습니다.</p>
                     </div>
                     <div className="tableBox type1">
                         <table>

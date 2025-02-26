@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
-import * as EgovNet from "../../../../api/egovFetch.js";
+import * as EgovNet from "@/api/egovFetch";
 
 function AccessTabAll(props) {
     const [searchDto, setSearchDto] = useState(

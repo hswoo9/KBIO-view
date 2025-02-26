@@ -9,7 +9,7 @@ import { default as EgovLeftNav } from "@/components/leftmenu/EgovLeftNavTemplat
 
 //alert
 import Swal from 'sweetalert2';
-import {getSessionItem} from "../../utils/storage.js";
+import {getSessionItem} from "@/utils/storage";
 
 function Templates(props) {
 

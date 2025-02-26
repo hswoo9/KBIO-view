@@ -11,7 +11,7 @@ import moment from "moment/moment.js";
 import Swal from 'sweetalert2';
 import { getComCdList } from "@/components/CommonComponents";
 import { getSessionItem } from "@/utils/storage";
-import {sendMessageFn, useWebSocket} from "../../../utils/WebSocketProvider.jsx";
+import {sendMessageFn, useWebSocket} from "@/utils/WebSocketProvider";
 
 function ManagerOrganizationChartList(props) {
     const location = useLocation();
@@ -89,7 +89,7 @@ function ManagerOrganizationChartList(props) {
 
                     let dataList = [];
                     dataList.push(
-                        <tr>
+                        <tr key="noData">
                             <td colSpan="6" key="noData">검색된 결과가 없습니다.</td>
                         </tr>
                     );

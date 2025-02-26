@@ -8,8 +8,8 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import CommonEditor from "@/components/CommonEditor";
 import moment from "moment";
-import {getComCdList} from "../../../components/CommonComponents.jsx";
-import EgovPaging from "../../../components/EgovPaging.jsx";
+import {getComCdList} from "@/components/CommonComponents";
+import EgovPaging from "@/components/EgovPaging";
 import ManagerCnslttCnsltDtl from "./ManagerCnslttCnsltDtl.jsx";
 
 function ManagerCnslttCnsltList({ cnsltSe, userSn }) {
@@ -67,7 +67,7 @@ function ManagerCnslttCnsltList({ cnsltSe, userSn }) {
                 (resp) => {
                     let dataList = [];
                     dataList.push(
-                        <tr>
+                        <tr key="noData">
                             <td colSpan={9}>검색된 결과가 없습니다.</td>
                         </tr>
                     );
@@ -77,7 +77,7 @@ function ManagerCnslttCnsltList({ cnsltSe, userSn }) {
 
                         dataList.push(
                             <tr key={item.cnsltAplySn}>
-                                <td>{index + 1}</td>
+                                <td>{resp.paginationInfo.totalRecordCount - (resp.paginationInfo.currentPageNo - 1) * resp.paginationInfo.pageSize - index}</td>
                                 <td>{moment(item.frstCrtDt).format('YYYY-MM-DD')}</td>
                                 <td>{item.kornFlnm || ""}</td>
                                 <td style={{cursor:"pointer"}} onClick={() => handleItemClick(item)}>
