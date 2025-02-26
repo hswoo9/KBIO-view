@@ -83,7 +83,7 @@ function ManagerLeftNew() {
                     to={URL.MANAGER_MENU_MANAGEMENT}
                     className={({isActive}) => (isActive ? "activeTag" : "")}
                 >
-                  <div className="icon"></div>
+                  <div className="icon menuIcon"></div>
                   <p>메뉴관리</p>
                 </NavLink>
               </li>
@@ -92,7 +92,7 @@ function ManagerLeftNew() {
                     to={URL.MANAGER_MENU_CONTENT_MANAGEMENT}
                     className={({isActive}) => (isActive ? "activeTag" : "")}
                 >
-                  <div className="icon"></div>
+                  <div className="icon menuContentsIcon"></div>
                   <p>메뉴컨텐츠관리</p>
                 </NavLink>
               </li>

@@ -463,3 +463,6 @@ input.width3{ width: calc(100% / 3 - .6rem) !important; }
 }
 
 header .leftHeader nav .dep li.active {content: ""; background: var(--mainColor); border-radius: .9rem; transition: .5s ease; }
+
+.menuIcon{background-image: url(@/assets/icon/icon-menu.svg) !important;}
+.menuContentsIcon{background-image: url(@/assets/icon/icon-menu-contents.svg) !important;}
