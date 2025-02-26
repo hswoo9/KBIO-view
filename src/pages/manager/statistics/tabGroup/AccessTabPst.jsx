@@ -7,7 +7,7 @@ function AccessTabPst(props) {
         props.searchDto || {
             searchYear: "",
             searchMonth: "",
-            bbsSn : ""
+            trgtSn : ""
         }
     );
 
@@ -28,14 +28,17 @@ function AccessTabPst(props) {
         };
 
         EgovNet.requestFetch("/statisticsApi/getStatisticsPstAccess.do", requestOptions, function (resp) {
-            resp.result.statisticsPstAccess.forEach(function(v, i){
-                const userCounts = categories.map((day) => {
-                    const item = resp.result.statisticsPstAccess.find(v => parseInt(v.day.split("-")[2]) === parseInt(day.slice(0, -1)));
-                    return item ? item.cnt : 0;
-                });
+            if(resp.result.statisticsPstAccess != null){
+                resp.result.statisticsPstAccess.forEach(function(v, i){
+                    const userCounts = categories.map((day) => {
+                        const item = resp.result.statisticsPstAccess.find(v => parseInt(v.day.split("-")[2]) === parseInt(day.slice(0, -1)));
+                        return item ? item.cnt : 0;
+                    });
 
-                setCnt(userCounts)
-            })
+                    setCnt(userCounts)
+                })
+            }
+
             props.onCallback();
         });
     }

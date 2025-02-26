@@ -400,10 +400,10 @@ function EgovHeader() {
   const activeEnter = (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
-      submitFormHandler("N");
+      submitFormHandler();
     }
   };
-  const submitFormHandler = (confirmPass) => {
+  const submitFormHandler = () => {
     if(!idRef.current.value){
       Swal.fire("아이디를 입력해주세요.");
       idRef.current.focus();
@@ -420,24 +420,12 @@ function EgovHeader() {
       headers: {
         "Content-type": "application/json",
       },
-      body: JSON.stringify({ ...userInfo, confirmPass : confirmPass }),
+      body: JSON.stringify(userInfo),
     };
 
     EgovNet.requestFetch(loginUrl, requestOptions, (resp) => {
       if(resp.resultCode != "200"){
         if(resp.resultCode == "502"){
-          Swal.fire({
-            title: resp.resultMessage,
-            showCloseButton: true,
-            showCancelButton: true,
-            confirmButtonText: "예",
-            cancelButtonText: "아니오"
-          }).then((result) => {
-            if(result.isConfirmed) {
-              submitFormHandler("Y");
-            }
-          });
-        }else{
           Swal.fire(resp.resultMessage);
           return;
         }
@@ -525,33 +513,33 @@ function EgovHeader() {
       }
     }
 
-    const requestOptions = {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify({userSn : userSn}),
-    };
-
-    EgovNet.requestFetch("/commonApi/getDuplicateLogin.do", requestOptions, (resp) => {
-      if(resp.result != null){
-        if(resp.result.duplicateLogin == "Y"){
-          removeSessionItem("loginUser");
-          removeSessionItem("jToken");
-          removeSessionItem("userSn");
-          navigate(
-              { pathname : URL.COMMON_ERROR},
-              { state : {
-                  redirectPath : URL.MAIN,
-                  errorCode: resp.resultCode,
-                  errorMessage: resp.resultMessage,
-                  errorSubMessage : "메인으로 이동합니다."
-                }
-              }
-          );
-        }
-      }
-    });
+    // const requestOptions = {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-type": "application/json",
+    //   },
+    //   body: JSON.stringify({userSn : userSn}),
+    // };
+    //
+    // EgovNet.requestFetch("/commonApi/getDuplicateLogin.do", requestOptions, (resp) => {
+    //   if(resp.result != null){
+    //     if(resp.result.duplicateLogin == "Y"){
+    //       removeSessionItem("loginUser");
+    //       removeSessionItem("jToken");
+    //       removeSessionItem("userSn");
+    //       navigate(
+    //           { pathname : URL.COMMON_ERROR},
+    //           { state : {
+    //               redirectPath : URL.MAIN,
+    //               errorCode: resp.resultCode,
+    //               errorMessage: resp.resultMessage,
+    //               errorSubMessage : "메인으로 이동합니다."
+    //             }
+    //           }
+    //       );
+    //     }
+    //   }
+    // });
   }, [window.location.pathname]);
 
   const userMsgTopMakeHtml = () => {
@@ -923,9 +911,7 @@ function EgovHeader() {
                     <small>로그인 상태 유지</small>
                   </label>
                 </div>
-                <button type="button" className="loginBtn" onClick={(e) => {
-                  submitFormHandler("N")
-                }}><span>로그인</span></button>
+                <button type="button" className="loginBtn" onClick={submitFormHandler}><span>로그인</span></button>
                 <ul className="botBtnBox">
                   <li>
                     <button type="button" className="idBtn" onClick={() => {

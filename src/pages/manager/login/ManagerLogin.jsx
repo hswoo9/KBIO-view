@@ -70,10 +70,10 @@ function ManagerLogin(props) {
   const activeEnter = (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
-      submitFormHandler("N");
+      submitFormHandler();
     }
   };
-  const submitFormHandler = (confirmPass) => {
+  const submitFormHandler = () => {
     if(!idRef.current.value){
       Swal.fire("아이디를 입력해주세요.");
       idRef.current.focus();
@@ -90,24 +90,28 @@ function ManagerLogin(props) {
       headers: {
         "Content-type": "application/json",
       },
-      body: JSON.stringify({ ...userInfo, confirmPass : confirmPass }),
+      body: JSON.stringify(userInfo),
     };
 
     EgovNet.requestFetch(loginUrl, requestOptions, (resp) => {
       if(resp.resultCode != "200"){
+        // if(resp.resultCode == "502"){
+        //   Swal.fire({
+        //     title: resp.resultMessage,
+        //     showCloseButton: true,
+        //     showCancelButton: true,
+        //     confirmButtonText: "예",
+        //     cancelButtonText: "아니오"
+        //   }).then((result) => {
+        //     if(result.isConfirmed) {
+        //       submitFormHandler("Y");
+        //     }
+        //   });
+        // }else{
+        //   Swal.fire(resp.resultMessage);
+        //   return;
+        // }
         if(resp.resultCode == "502"){
-          Swal.fire({
-            title: resp.resultMessage,
-            showCloseButton: true,
-            showCancelButton: true,
-            confirmButtonText: "예",
-            cancelButtonText: "아니오"
-          }).then((result) => {
-            if(result.isConfirmed) {
-              submitFormHandler("Y");
-            }
-          });
-        }else{
           Swal.fire(resp.resultMessage);
           return;
         }
@@ -196,7 +200,7 @@ function ManagerLogin(props) {
                     />
                     <small>ID저장</small></label>
                 </div>
-                <button type="button" className="loginBtn" onClick={(e) => {submitFormHandler("N")}}><span>로그인</span></button>
+                <button type="button" className="loginBtn" onClick={submitFormHandler}><span>로그인</span></button>
               </div>
             </form>
           </div>

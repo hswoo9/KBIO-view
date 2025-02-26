@@ -179,7 +179,13 @@ function ManagerPst(props) {
                     </form>
                 </div>
                 <div className="contBox board type1 customContBox">
-                    <div className="topBox"></div>
+                    <div className="topBox">
+                        <p className="resultText">
+                            전체 : <span className="red">{paginationInfo?.totalRecordCount}</span>건
+                            페이지 : <span
+                            className="red">{paginationInfo?.currentPageNo}/{paginationInfo?.totalPageCount}</span>
+                        </p>
+                    </div>
                     <div className="tableBox type1">
                         <table>
                             <caption>게시글목록</caption>

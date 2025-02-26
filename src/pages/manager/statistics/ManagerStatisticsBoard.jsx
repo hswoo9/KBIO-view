@@ -29,6 +29,7 @@ function ManagerStatisticsBoard(props) {
     const [searchDto, setSearchDto] = useState({
         searchYear : format(nowDate, "yyyy"),
         searchMonth : format(nowDate, "MM"),
+        trgtTblNm: "tbl_bbs",
     });
 
     const currentYear = format(nowDate, "yyyy");
@@ -41,9 +42,10 @@ function ManagerStatisticsBoard(props) {
     }, [menuIndex, searchDto]);
 
     const menuList = (callback) => ({
-        0: <Tab key={menuIndex === 0 ? tabRenderKey : 0} searchDto={{ ...searchDto, bbsSn: 1 }} onCallback={callback}/>,
-        1: <Tab key={menuIndex === 1 ? tabRenderKey : 1} searchDto={{ ...searchDto, bbsSn: 5 }} onCallback={callback}/>,
-        2: <Tab key={menuIndex === 2 ? tabRenderKey : 2} searchDto={{ ...searchDto, bbsSn: 7 }} onCallback={callback}/>,
+        0: <Tab key={menuIndex === 0 ? tabRenderKey : 0} searchDto={{ ...searchDto, trgtSn: 1}} onCallback={callback}/>,
+        1: <Tab key={menuIndex === 1 ? tabRenderKey : 1} searchDto={{ ...searchDto, trgtSn: 8}} onCallback={callback}/>,
+        2: <Tab key={menuIndex === 2 ? tabRenderKey : 2} searchDto={{ ...searchDto, trgtSn: 5}} onCallback={callback}/>,
+        3: <Tab key={menuIndex === 3 ? tabRenderKey : 3} searchDto={{ ...searchDto, trgtSn: 7}} onCallback={callback}/>,
     });
 
     const handleCallback = (e) => {
@@ -140,10 +142,13 @@ function ManagerStatisticsBoard(props) {
                                 onClick={() => changeMenu(0)}>공지사항
                             </li>
                             <li className={`${menuIndex === 1 ? 'tabActive' : ''}`}
-                                onClick={() => changeMenu(1)}>자료실
+                                onClick={() => changeMenu(1)}>보도자료
                             </li>
                             <li className={`${menuIndex === 2 ? 'tabActive' : ''}`}
-                                onClick={() => changeMenu(2)}>연구자료실
+                                onClick={() => changeMenu(2)}>자료실
+                            </li>
+                            <li className={`${menuIndex === 3 ? 'tabActive' : ''}`}
+                                onClick={() => changeMenu(3)}>연구자료실
                             </li>
                         </ul>
                     </div>

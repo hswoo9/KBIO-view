@@ -218,7 +218,11 @@ function OperationalRelatedMember(props) {
                 {/*본문리스트영역*/}
                 <div className="contBox board type2 customContBox">
                     <div className="topBox">
-                        <p className="resultText"><span className="red">{paginationInfo.totalRecordCount}</span>건의 유관기관 정보가 조회되었습니다.</p>
+                        <p className="resultText">
+                            전체 : <span className="red">{paginationInfo?.totalRecordCount}</span>건
+                            페이지 : <span
+                            className="red">{paginationInfo?.currentPageNo}/{paginationInfo?.totalPageCount}</span>
+                        </p>
                     </div>
                     <div className="tableBox type1">
                         <table>
