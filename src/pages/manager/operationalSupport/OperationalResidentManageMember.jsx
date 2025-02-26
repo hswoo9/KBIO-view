@@ -476,7 +476,7 @@ function OperationalResidentMember(props) {
                 <div className="m-inner">
                     <div className="boxWrap">
                         <div className="top">
-                            <h2 className="title">컨설턴트목록</h2>
+                            <h2 className="title">회원목록</h2>
                             <div className="close" onClick={modelCloseEvent}>
                                 <div className="icon"></div>
                             </div>
@@ -551,7 +551,7 @@ function OperationalResidentMember(props) {
                             </div>
                             <div className="tableBox type1">
                                 <table>
-                                    <caption>컨설턴트목록</caption>
+                                    <caption>회원목록</caption>
                                     <colgroup>
                                         <col width="50"/>
                                     </colgroup>

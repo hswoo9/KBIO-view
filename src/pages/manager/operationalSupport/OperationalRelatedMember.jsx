@@ -9,17 +9,20 @@ import ManagerLeft from "@/components/manager/ManagerLeftOperationalSupport";
 import EgovPaging from "@/components/EgovPaging";
 import OperationalSupport from "./OperationalSupport.jsx";
 import base64 from 'base64-js';
+import {getComCdList} from "@/components/CommonComponents";
 
 function OperationalRelatedMember(props) {
     const location = useLocation();
+    const [mbrTpbizList, setMbrTpbizList] = useState([])
     const [residentMemberList, setAuthorityList] = useState([]);
+    const [selectedFiles, setSelectedFiles] = useState([]);
     const [searchDto, setSearchDto] = useState(
         {
             pageIndex : 1,
             relInstSn : location.state?.relInstSn,
-            actvtnYn: "",
-            kornFlnm: "",
-            userId: ""
+            mbrStts:"",
+            searchType: "",
+            searchVal : "",
         }
         );
     const [paginationInfo, setPaginationInfo] = useState({
@@ -35,6 +38,17 @@ function OperationalRelatedMember(props) {
         totalPageCount: 15,
         totalRecordCount: 158
     });
+
+    const searchTypeRef = useRef();
+    const searchValRef = useRef();
+
+    const activeEnter = (e) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            getRelatedMemberList(searchDto);
+        }
+    };
+
     const decodePhoneNumber = (encodedPhoneNumber) => {
         const decodedBytes = base64.toByteArray(encodedPhoneNumber);
         return new TextDecoder().decode(decodedBytes);
@@ -55,6 +69,11 @@ function OperationalRelatedMember(props) {
                 requestOptions,
                 (resp) => {
                     setPaginationInfo(resp.paginationInfo);
+
+                    if(resp.result.logoFile){
+                        setSelectedFiles(resp.result.logoFile);
+                    }
+
                     let dataList = [];
                     dataList.push(
                         <tr key="noData">
@@ -64,26 +83,26 @@ function OperationalRelatedMember(props) {
 
                     resp.result.getRelatedMemberList.forEach(function (item,index){
                         if(index === 0) dataList = [];
-                        const decodedPhoneNumber = decodePhoneNumber(item.mblTelno);
+                        const decodedPhoneNumber = decodePhoneNumber(item.tblUser.mblTelno);
 
                         dataList.push(
-                            <tr key={item.userSn}>
+                            <tr key={item.tblUser.userSn}>
                                 <td>{index + 1}</td>
-                                <td>{item.userId}</td>
+                                <td>{item.tblUser.userId}</td>
                                 <td>
                                 <Link to={URL.MANAGER_RELATED_MEMBER_EDIT}
                                       state={{
                                           relInstSn: searchDto.relInstSn,
                                           mode:CODE.MODE_MODIFY,
-                                          userSn: item.userSn
+                                          userSn: item.tblUser.userSn
                                       }}
                                 >
-                                {item.kornFlnm}
+                                {item.tblUser.kornFlnm}
                                 </Link>
                                 </td>
-                                <td>{decodedPhoneNumber}</td>
-                                <td>{item.email}</td>
-                                <td>{new Date(item.frstCrtDt).toISOString().split("T")[0]}</td>
+                                <td>{ComScript.formatTelNumber(decodedPhoneNumber)}</td>
+                                <td>{item.tblUser.email}</td>
+                                <td>{new Date(item.tblUser.frstCrtDt).toISOString().split("T")[0]}</td>
                             </tr>
                         );
                     });
@@ -103,16 +122,30 @@ function OperationalRelatedMember(props) {
         getRelatedMemberList(searchDto);
     },[]);
 
+    useEffect(() => {
+        getComCdList(18).then((data) => {
+            setMbrTpbizList(data);
+        });
+    }, []);
+
     return (
         <div id="container" className="container layout cms">
             <ManagerLeft/>
             <div className="inner">
-                <h2 className="pageTitle"><p>입주기업 관리</p></h2>
+                <h2 className="pageTitle"><p>유관기관 관리</p></h2>
                 {/*회사 로고*/}
                 <div className="company_info">
                     <div className="left">
                         <figure className="logo">
                             {/*기업 로고 이미지 추가할 것*/}
+                            {selectedFiles && selectedFiles.atchFileSn ? (
+                                <img
+                                    src={`http://133.186.250.158${selectedFiles.atchFilePathNm}/${selectedFiles.strgFileNm}.${selectedFiles.atchFileExtnNm}`}
+                                    alt="image"
+                                />
+                            ) : (
+                                <img src="" alt="defaultImage" />
+                            )}
                         </figure>
                         <p className="name" id="relInstNm"></p>
                     </div>
@@ -127,7 +160,9 @@ function OperationalRelatedMember(props) {
                         </li>
                         <li>
                             <p className="tt1">업종</p>
-                            <p className="tt2">{location.state?.clsNm}</p>
+                            <p className="tt2">
+                                {mbrTpbizList.find((item) => item.comCd === location.state?.tpbiz)?.comCdNm || ""}
+                            </p>
                         </li>
                     </ul>
                 </div>
@@ -139,6 +174,10 @@ function OperationalRelatedMember(props) {
                                 <div className="itemBox">
                                     <select
                                         className="selectGroup"
+                                        name="mbrStts"
+                                        onChange={(e) => {
+                                            setSearchDto({...searchDto,mbrStts: e.target.value})
+                                        }}
                                     >
                                         <option value="">전체</option>
                                         <option value="Y">승인</option>
@@ -151,7 +190,13 @@ function OperationalRelatedMember(props) {
                                 <p className="title">키워드</p>
                                 <div className="itemBox">
                                     <select
+                                        id="searchType"
+                                        name="searchType"
                                         className="selectGroup"
+                                        ref={searchTypeRef}
+                                        onChange={(e) => {
+                                            setSearchDto({...searchDto, searchType: e.target.value})
+                                        }}
                                     >
                                         <option value="">전체</option>
                                         <option value="userId">아이디</option>
@@ -163,6 +208,17 @@ function OperationalRelatedMember(props) {
                                 <label className="input">
                                     <input
                                         type="text"
+                                        name="searchVal"
+                                        defaultValue={
+                                            searchDto && searchDto.searchVal
+                                        }
+                                        placeholder=""
+                                        ref={searchValRef}
+                                        onChange={(e) => {
+                                            setSearchDto({...searchDto, searchVal: e.target.value})
+                                        }}
+                                        onKeyDown={activeEnter}
+                                        placeholder="검색어를 입력해주세요."
                                     />
                                 </label>
                             </li>
@@ -171,12 +227,28 @@ function OperationalRelatedMember(props) {
                             <button
                                 type="button"
                                 className="refreshBtn btn btn1 gray"
+                                onClick={() => {
+                                    getRelatedMemberList({
+                                        pageIndex : 1,
+                                        relInstSn : location.state?.relInstSn,
+                                        mbrStts:"",
+                                        searchType: "",
+                                        searchVal : "",
+                                    });
+                                }}
                             >
                                 <div className="icon"></div>
                             </button>
                             <button
                                 type="button"
                                 className="searchBtn btn btn1 point"
+                                onClick={()=>{
+                                    getRelatedMemberList({
+                                        ...searchDto,
+                                        pageIndex:1,
+                                        relInstSn : location.state?.relInstSn,
+                                    })
+                                }}
                             >
                                 <div className="icon"></div>
                             </button>
@@ -218,7 +290,7 @@ function OperationalRelatedMember(props) {
                             }}
                         />
                         <Link
-                            to={URL.MANAGER_OPERATIONAL_SUPPORT}
+                            to={URL.MANAGER_RELATED_ORGANIZATION}
                         >
                             <button type="button" className="clickBtn black"><span>목록</span></button>
                         </Link>

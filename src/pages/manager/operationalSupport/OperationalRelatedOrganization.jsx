@@ -146,7 +146,7 @@ function OperationalRelatedOrganization(props) {
                                               relInstSn: item.tblRelInst.relInstSn,
                                               rpsvNm: item.tblRelInst.rpsvNm,
                                               entTelno: item.tblRelInst.entTelno,
-                                              clsNm: item.tblRelInst.clsNm
+                                              tpbiz: item.tblRelInst.tpbiz
                                           }}>
                                         <button type="button" className="settingBtn"><span>관리자 설정</span></button>
                                     </Link>
@@ -157,7 +157,7 @@ function OperationalRelatedOrganization(props) {
                                                  relInstSn: item.tblRelInst.relInstSn,
                                                  rpsvNm: item.tblRelInst.rpsvNm,
                                                  entTelno: item.tblRelInst.entTelno,
-                                                 clsNm: item.tblRelInst.clsNm
+                                                 tpbiz: item.tblRelInst.tpbiz
                                              }}>
                                         <button type="button" className="listBtn"><span>직원 목록</span></button>
                                     </NavLink>
