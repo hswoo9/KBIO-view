@@ -271,12 +271,19 @@ function ManagerCodeGroup(props) {
                     </form>
                 </div>
                 <div className="contBox board type1 customContBox">
-                    <div className="topBox"></div>
+                    <div className="topBox">
+                        <p className="resultText">
+                            전체 : <span className="red">{paginationInfo?.totalRecordCount}</span>건
+                            페이지 : <span className="red">{paginationInfo?.currentPageNo}/{paginationInfo?.totalPageCount}</span>
+                        </p>
+                        <div className="rightBox">
+                        </div>
+                    </div>
                     <div className="tableBox type1">
                         <table>
                             <caption>코드목록</caption>
                             <colgroup>
-                                <col width="50px"/>
+                            <col width="50px"/>
                                 <col width="200px"/>
                                 <col/>
                                 <col width="80px"/>
