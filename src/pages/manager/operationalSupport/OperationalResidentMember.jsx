@@ -18,9 +18,9 @@ function OperationalResidentMember(props) {
         {
             pageIndex : 1,
             mvnEntSn : location.state?.mvnEntSn,
-            actvtnYn: "",
-            kornFlnm: "",
-            userId: ""
+            mbrStts:"",
+            searchType: "",
+            searchVal : "",
         }
         );
     const [paginationInfo, setPaginationInfo] = useState({
@@ -36,6 +36,17 @@ function OperationalResidentMember(props) {
         totalPageCount: 15,
         totalRecordCount: 158
     });
+
+    const searchTypeRef = useRef();
+    const searchValRef = useRef();
+
+    const activeEnter = (e) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            getResidentMemberList(searchDto);
+        }
+    };
+
     const decodePhoneNumber = (encodedPhoneNumber) => {
         const decodedBytes = base64.toByteArray(encodedPhoneNumber);
         return new TextDecoder().decode(decodedBytes);
@@ -159,6 +170,10 @@ function OperationalResidentMember(props) {
                                 <div className="itemBox">
                                     <select
                                         className="selectGroup"
+                                        name="mbrStts"
+                                        onChange={(e) => {
+                                            setSearchDto({...searchDto,mbrStts: e.target.value})
+                                        }}
                                     >
                                         <option value="">전체</option>
                                         <option value="Y">승인</option>
@@ -171,7 +186,13 @@ function OperationalResidentMember(props) {
                                 <p className="title">키워드</p>
                                 <div className="itemBox">
                                     <select
+                                        id="searchType"
+                                        name="searchType"
                                         className="selectGroup"
+                                        ref={searchTypeRef}
+                                        onChange={(e) => {
+                                            setSearchDto({...searchDto, searchType: e.target.value})
+                                        }}
                                     >
                                         <option value="">전체</option>
                                         <option value="userId">아이디</option>
@@ -183,6 +204,17 @@ function OperationalResidentMember(props) {
                                 <label className="input">
                                     <input
                                         type="text"
+                                        name="searchVal"
+                                        defaultValue={
+                                            searchDto && searchDto.searchVal
+                                        }
+                                        placeholder=""
+                                        ref={searchValRef}
+                                        onChange={(e) => {
+                                            setSearchDto({...searchDto, searchVal: e.target.value})
+                                        }}
+                                        onKeyDown={activeEnter}
+                                        placeholder="검색어를 입력해주세요."
                                     />
                                 </label>
                             </li>
@@ -191,12 +223,28 @@ function OperationalResidentMember(props) {
                             <button
                                 type="button"
                                 className="refreshBtn btn btn1 gray"
+                                onClick={() => {
+                                    getResidentMemberList({
+                                        pageIndex: 1,
+                                        mvnEntSn : location.state?.mvnEntSn,
+                                        mbrStts:"",
+                                        searchType: "",
+                                        searchVal : "",
+                                    });
+                                }}
                             >
                                 <div className="icon"></div>
                             </button>
                             <button
                                 type="button"
                                 className="searchBtn btn btn1 point"
+                                onClick={() => {
+                                    getResidentMemberList({
+                                        ...searchDto,
+                                        pageIndex: 1,
+                                        mvnEntSn : location.state?.mvnEntSn,
+                                    });
+                                }}
                             >
                                 <div className="icon"></div>
                             </button>
