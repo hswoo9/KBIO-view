@@ -312,7 +312,7 @@ function OperationalRelatedMember(props) {
         <div id="container" className="container layout cms">
             <ManagerLeft/>
             <div className="inner">
-                <h2 className="pageTitle"><p>유관기관 관리</p></h2>
+                <h2 className="pageTitle"><p>유관기관 관리자 목록</p></h2>
                 {/*회사 로고*/}
                 <div className="company_info">
                     <div className="left">
