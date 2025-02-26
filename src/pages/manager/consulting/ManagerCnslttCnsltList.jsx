@@ -77,7 +77,7 @@ function ManagerCnslttCnsltList({ cnsltSe, userSn }) {
 
                         dataList.push(
                             <tr key={item.cnsltAplySn}>
-                                <td>{index + 1}</td>
+                                <td>{resp.paginationInfo.totalRecordCount - (resp.paginationInfo.currentPageNo - 1) * resp.paginationInfo.pageSize - index}</td>
                                 <td>{moment(item.frstCrtDt).format('YYYY-MM-DD')}</td>
                                 <td>{item.kornFlnm || ""}</td>
                                 <td style={{cursor:"pointer"}} onClick={() => handleItemClick(item)}>

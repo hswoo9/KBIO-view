@@ -121,12 +121,9 @@ function StopMemberList(props) {
                     resp.result.getStopMemberList.forEach(function (item, index) {
                         if (index === 0) dataList = [];
 
-                        const totalItems = resp.result.getStopMemberList.length;
-                        const itemNumber = totalItems - index;
-
                         dataList.push(
                             <tr key={item.userSn}>
-                                <td>{itemNumber}</td>
+                                <td>{resp.paginationInfo.totalRecordCount - (resp.paginationInfo.currentPageNo - 1) * resp.paginationInfo.pageSize - index}</td>
                                 <td>
                                     {item.mbrType === 9 ? '관리자' :
                                      item.mbrType === 1 ? '입주기업' :
