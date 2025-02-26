@@ -11,7 +11,7 @@ import Swal from 'sweetalert2';
 
 /* bootstrip */
 import { getSessionItem } from "@/utils/storage";
-import {getComCdList} from "@/components/CommonComponents";
+import {getComCdList, excelExport} from "@/components/CommonComponents";
 import moment from "moment/moment.js";
 import ManagerLeftOperationalSupport from "@/components/manager/ManagerLeftOperationalSupport";
 
@@ -45,6 +45,49 @@ function OperationalDifficulties(props) {
             getDfclMttrList(searchDto);
         }
     };
+
+    const dataExcelDownload = useCallback(() => {
+        let excelParams = searchDto;
+        excelParams.pageIndex = 1;
+        excelParams.pageUnit = paginationInfo?.totalRecordCount || 9999999999
+
+        const requestURL = "/diffApi/getDfclMttrList.do";
+        const requestOptions = {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json",
+            },
+            body: JSON.stringify(excelParams)
+        };
+        EgovNet.requestFetch(
+            requestURL,
+            requestOptions,
+            (resp) => {
+                let rowDatas = [];
+                if(resp.result.diffList != null){
+                    resp.result.diffList.forEach(function (item, index) {
+                        rowDatas.push(
+                            {
+                                number : resp.paginationInfo.totalRecordCount - (resp.paginationInfo.currentPageNo - 1) * resp.paginationInfo.pageSize - index,
+                                dfclMttrFldNm : item.dfclMttrFldNm || " ",
+                                ttl : item.ttl || " ",
+                                kornFlnm : item.kornFlnm || " ",
+                                frstCrtDt : moment(item.frstCrtDt).format('YYYY-MM-DD'),
+                                answer : item.answer == "Y" ? "답변완료" : "답변대기"
+                            }
+                        )
+                    });
+                }
+
+                let sheetDatas = [{
+                    sheetName : "애로사항관리",
+                    header : ['번호', '분류', '제목', '신청자', '신청일', '상태'],
+                    row : rowDatas
+                }];
+                excelExport("애로사항관리", sheetDatas);
+            }
+        )
+    });
 
     const getDfclMttrList = useCallback(
         (searchDto) => {
@@ -239,7 +282,7 @@ function OperationalDifficulties(props) {
                             페이지 : <span className="red">{paginationInfo.currentPageNo}/{paginationInfo.totalPageCount}</span>
                         </p>
                         <div className="rightBox">
-                            <button type="button" className="btn btn2 downBtn red">
+                            <button type="button" className="btn btn2 downBtn red" onClick={dataExcelDownload}>
                                 <div className="icon"></div>
                                 <span>엑셀 다운로드</span></button>
                         </div>

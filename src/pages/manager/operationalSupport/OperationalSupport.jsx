@@ -17,7 +17,7 @@ import Form from 'react-bootstrap/Form';
 import { getSessionItem } from "@/utils/storage";
 
 import moment from "moment/moment.js";
-import {getComCdList} from "@/components/CommonComponents";
+import {getComCdList, excelExport} from "@/components/CommonComponents";
 
 function OperationalSupport(props) {
 
@@ -36,6 +36,50 @@ function OperationalSupport(props) {
     const [rcList, setAuthorityList] = useState([]);
     const [comCdClsfList, setComCdClsfList] = useState([]);
     const [comCdTpbizList, setComCdTpbizList] = useState([]);
+
+    const dataExcelDownload = useCallback(() => {
+        let excelParams = searchDto;
+        excelParams.pageIndex = 1;
+        excelParams.pageUnit = paginationInfo?.totalRecordCount || 9999999999
+
+        const requestURL = "/mvnEntApi/getMvnEntList.do";
+        const requestOptions = {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json",
+            },
+            body: JSON.stringify(excelParams)
+        };
+        EgovNet.requestFetch(
+            requestURL,
+            requestOptions,
+            (resp) => {
+                let rowDatas = [];
+                if(resp.result.rcList != null){
+                    resp.result.rcList.forEach(function (item, index) {
+                        rowDatas.push(
+                            {
+                                number : resp.paginationInfo.totalRecordCount - (resp.paginationInfo.currentPageNo - 1) * resp.paginationInfo.pageSize - index,
+                                entClsfNm : item.entClsfNm || " ",
+                                entTpbizNm : item.entTpbizNm || " ",
+                                mvnEntNm : item.tblMvnEnt.mvnEntNm || " ",
+                                rpsvNm : item.tblMvnEnt.rpsvNm || " ",
+                                entTelno : ComScript.formatTelNumber(item.tblMvnEnt.entTelno),
+                                actvtnYn : item.tblMvnEnt.actvtnYn === "Y" ? "공개" : "비공개",
+                            }
+                        )
+                    });
+                }
+
+                let sheetDatas = [{
+                    sheetName : "입주기업 관리",
+                    header : ['번호', '분류', '업종', '기업명', '대표자', '대표전화', '공개여부'],
+                    row : rowDatas
+                }];
+                excelExport("입주기업 관리", sheetDatas);
+            }
+        )
+    });
 
     const getRcList = useCallback(
         (searchDto)=>{
@@ -274,7 +318,7 @@ function OperationalSupport(props) {
                     <div className="topBox">
                         <p className="resultText"><span className="red">{paginationInfo?.totalRecordCount}</span>건의 입주기업 정보가 조회되었습니다.</p>
                         <div className="rightBox">
-                            <button type="button" className="btn btn2 downBtn red">
+                            <button type="button" className="btn btn2 downBtn red" onClick={dataExcelDownload}>
                                 <div className="icon"></div>
                                 <span>엑셀 다운로드</span></button>
                             <button type="button" className="btn btn2 uploadBtn black">
