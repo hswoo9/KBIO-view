@@ -78,12 +78,9 @@ function ManagerExpert(props) {
                     resp.result.consultantList.forEach(function (item, index) {
                         if (index === 0) dataList = [];
 
-                        const totalItems = resp.result.consultantList.length;
-                        const itemNumber = totalItems - index;
-
                         dataList.push(
                             <tr key={item.tblUser.userSn}>
-                                <td>{itemNumber}</td>
+                                <td>{resp.paginationInfo.totalRecordCount - (resp.paginationInfo.currentPageNo - 1) * resp.paginationInfo.pageSize - index}</td>
                                 <td>{item.cnsltFldNm}</td>
                                 <td>
                                     <NavLink to={URL.MANAGER_COUSULTANT_DETAIL}

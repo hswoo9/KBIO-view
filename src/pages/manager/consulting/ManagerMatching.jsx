@@ -300,7 +300,7 @@ function ManagerMatching(props) {
 
                         dataList.push(
                             <tr key={item.cnsltAplySn}>
-                                <td>{index + 1}</td>
+                                <td>{resp.paginationInfo.totalRecordCount - (resp.paginationInfo.currentPageNo - 1) * resp.paginationInfo.pageSize - index}</td>
                                 <td>{item.cnsltFldNm}</td>
                                 <td>{item.cnslttKornFlnm}</td>
 
