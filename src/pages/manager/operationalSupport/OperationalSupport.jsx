@@ -103,7 +103,7 @@ function OperationalSupport(props) {
                                           state={{mvnEntSn: item.tblMvnEnt.mvnEntSn,
                                                   rpsvNm : item.tblMvnEnt.rpsvNm,
                                                   entTelno : item.tblMvnEnt.entTelno,
-                                                  clsNm : item.tblMvnEnt.clsNm}}>
+                                                  entTpbiz : item.tblMvnEnt.entTpbiz}}>
                                     <button type="button" className="settingBtn"><span>관리자 설정</span></button>
                                     </Link>
                                 </td>
@@ -112,7 +112,7 @@ function OperationalSupport(props) {
                                           state={{mvnEntSn: item.tblMvnEnt.mvnEntSn,
                                                   rpsvNm : item.tblMvnEnt.rpsvNm,
                                                   entTelno : item.tblMvnEnt.entTelno,
-                                                  clsNm : item.tblMvnEnt.clsNm
+                                                  entTpbiz : item.tblMvnEnt.entTpbiz
                                                 }}>
                                     <button type="button" className="listBtn"><span>직원 목록</span></button>
                                     </Link>

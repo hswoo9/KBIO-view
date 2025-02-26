@@ -10,9 +10,11 @@ import EgovPaging from "@/components/EgovPaging";
 import OperationalSupport from "./OperationalSupport.jsx";
 import base64 from 'base64-js';
 import Swal from "sweetalert2";
+import {getComCdList} from "@/components/CommonComponents";
 
 function OperationalResidentMember(props) {
     const location = useLocation();
+    const [mbrTpbizList, setMbrTpbizList] = useState([])
     const [residentMemberList, setAuthorityList] = useState([]);
     const [selectedFiles, setSelectedFiles] = useState([]);
     const [selCancleList, setSelCancleList] = useState({});
@@ -71,7 +73,6 @@ function OperationalResidentMember(props) {
                         body: JSON.stringify({ userSn, mvnEntSn }),
                     };
 
-                    console.log("body", requestOptions.body);
 
                     EgovNet.requestFetch(cancleMngUrl, requestOptions, (resp) => {
                         if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
@@ -184,7 +185,6 @@ function OperationalResidentMember(props) {
                 rcUserListUrl,
                 requestOptions,
                 (resp) => {
-                    console.log("resp.result : ",resp.result.getResidentMemberList);
                     setRcUserPaginationInfo(resp.paginationInfo);
                     resp.result.getResidentMemberList.forEach(function (item, index) {
                         setRcUserList(resp.result.getResidentMemberList);
@@ -199,7 +199,6 @@ function OperationalResidentMember(props) {
     );
 
     const rcUserSelectSubmit = () => {
-        console.log("selRcUserList :",selRcUserList);
         const updateMvnEntMbrToMngUrl = "/mvnEntApi/updateMvnEntMbrToMng";
 
         Swal.fire({
@@ -218,7 +217,6 @@ function OperationalResidentMember(props) {
                     body: JSON.stringify(selRcUserList),
                 };
 
-                console.log("body",requestOptions.body);
 
                 EgovNet.requestFetch(updateMvnEntMbrToMngUrl, requestOptions, (resp) => {
                     if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
@@ -316,11 +314,11 @@ function OperationalResidentMember(props) {
         getResidentMemberList(searchDto);
     },[]);
 
-    /*useEffect(() => {
-        if (selCancleList) {
-            sendCancleMngRequest();
-        }
-    }, [selCancleList]);*/
+    useEffect(() => {
+        getComCdList(18).then((data) => {
+            setMbrTpbizList(data);
+        });
+    }, []);
 
 
     return (
@@ -355,7 +353,9 @@ function OperationalResidentMember(props) {
                         </li>
                         <li>
                             <p className="tt1">업종</p>
-                            <p className="tt2">{location.state?.clsNm}</p>
+                            <p className="tt2">
+                                {mbrTpbizList.find((item) => item.comCd === location.state?.entTpbiz)?.comCdNm || ""}
+                            </p>
                         </li>
                     </ul>
                 </div>
@@ -448,6 +448,7 @@ function OperationalResidentMember(props) {
                                 });
                             }}
                         />
+                        <div className="rightBox">
                             <button type="button" className="writeBtn clickBtn"
                                     onClick={(e) => modelOpenEvent(e)}
                             >
@@ -458,7 +459,7 @@ function OperationalResidentMember(props) {
                         >
                             <button type="button" className="clickBtn black"><span>목록</span></button>
                         </Link>
-
+                        </div>
                     </div>
                 </div>
 

@@ -723,7 +723,7 @@ function ResidentMemberCreateContent(props){
                     </li>
                     {/* 업종 */}
                     <li className="inputBox type1 width3">
-                        <label className="title essential" htmlFor="clsNm"><small>업종</small></label>
+                        <label className="title essential" htmlFor="entTpbiz"><small>업종</small></label>
                         <div className="itemBox">
                             <select className="selectGroup"
                                     id="entClsf"
