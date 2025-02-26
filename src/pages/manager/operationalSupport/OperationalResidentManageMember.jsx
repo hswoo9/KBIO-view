@@ -28,19 +28,7 @@ function OperationalResidentMember(props) {
             searchVal : "",
         }
     );
-    const [paginationInfo, setPaginationInfo] = useState({
-        currentPageNo: 1,
-        firstPageNo: 1,
-        firstPageNoOnPageList: 1,
-        firstRecordIndex: 0,
-        lastPageNo: 1,
-        lastPageNoOnPageList: 1,
-        lastRecordIndex: 10,
-        pageSize: 10,
-        recordCountPerPage: 10,
-        totalPageCount: 15,
-        totalRecordCount: 158
-    });
+    const [paginationInfo, setPaginationInfo] = useState({});
     const decodePhoneNumber = (encodedPhoneNumber) => {
         const decodedBytes = base64.toByteArray(encodedPhoneNumber);
         return new TextDecoder().decode(decodedBytes);
@@ -98,20 +86,7 @@ function OperationalResidentMember(props) {
         searchType: "",
         searchVal: "",
     });
-    const [rcUserPaginationInfo, setRcUserPaginationInfo] = useState({
-        currentPageNo: 1,
-        firstPageNo: 1,
-        firstPageNoOnPageList: 1,
-        firstRecordIndex: 0,
-        lastPageNo: 1,
-        lastPageNoOnPageList: 1,
-        lastRecordIndex: 10,
-        pageSize: 10,
-        recordCountPerPage: 10,
-        totalPageCount: 15,
-        totalRecordCount: 158
-
-    });
+    const [rcUserPaginationInfo, setRcUserPaginationInfo] = useState({});
     const [rcUserList, setRcUserList] = useState([]);
     const [selRcUserList, setSelRcUserList] = useState([]);
     const searchRcUserTypeRef = useRef();
