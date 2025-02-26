@@ -21,7 +21,7 @@ import {
 import {Link} from "react-router-dom";
 import ManagerStatisticsPeriodUser from "./tabGroup/ManagerStatisticsPeriodUser.jsx";
 import ManagerStatisticsRegionUser from "./tabGroup/ManagerStatisticsRegionUser.jsx";
-import LoadingSpinner from "../../../components/LoadingSpinner.jsx";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 function ManagerStatisticsUserAnalyze(props) {
     const [isLoading, setIsLoading] = useState(true);  // 로딩 상태

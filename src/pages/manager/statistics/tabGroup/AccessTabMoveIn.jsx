@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import ApexCharts from 'react-apexcharts'
-import * as EgovNet from "../../../../api/egovFetch.js";
+import * as EgovNet from "@/api/egovFetch";
 
 function AccessTabMoveIn(props) {
     const [searchDto, setSearchDto] = useState(

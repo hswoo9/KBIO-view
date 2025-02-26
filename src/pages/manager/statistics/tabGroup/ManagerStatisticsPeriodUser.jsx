@@ -19,8 +19,8 @@ import {
     addMonths,
 } from "date-fns";
 import {Link} from "react-router-dom";
-import * as EgovNet from "../../../../api/egovFetch.js";
-import LoadingSpinner from "../../../../components/LoadingSpinner.jsx";
+import * as EgovNet from "@/api/egovFetch";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 function ManagerStatisticsPeriodUser(props) {
     const nowDate = new Date();
