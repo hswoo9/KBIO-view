@@ -58,7 +58,7 @@ function OperationalRelatedOrganization(props) {
                     setPaginationInfo(resp.paginationInfo);
                     let dataList = [];
                     rcList.push(
-                        <tr>
+                        <tr key="noData">
                             <td colSpan="5">검색된 결과가 없습니다.</td>
                         </tr>
                     );
@@ -230,7 +230,7 @@ function OperationalRelatedOrganization(props) {
                 </div>
                 <div className="contBox board type1 customContBox">
                     <div className="topBox">
-                        <p className="resultText"><span className="red">{paginationInfo.totalRecordCount}</span>건의 유관기관 정보가 조회되었습니다.</p>
+                        <p className="resultText"><span className="red">{paginationInfo?.totalRecordCount}</span>건의 유관기관 정보가 조회되었습니다.</p>
                         <div className="rightBox">
                             <button type="button" className="btn btn2 downBtn red">
                                 <div className="icon"></div>

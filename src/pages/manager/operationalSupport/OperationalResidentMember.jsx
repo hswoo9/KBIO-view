@@ -4,7 +4,7 @@ import axios from "axios";
 import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
-
+import * as ComScript from "@/components/CommonScript";
 import ManagerLeft from "@/components/manager/ManagerLeftOperationalSupport";
 import EgovPaging from "@/components/EgovPaging";
 import OperationalSupport from "./OperationalSupport.jsx";
@@ -67,7 +67,6 @@ function OperationalResidentMember(props) {
                 requestOptions,
                 (resp) => {
                     setPaginationInfo(resp.paginationInfo);
-                    console.log("mvnEntMbr : ",resp.result.getResidentMemberList);
 
                     if(resp.result.logoFile){
                         setSelectedFiles(resp.result.logoFile);
@@ -154,7 +153,7 @@ function OperationalResidentMember(props) {
                         </li>
                         <li>
                             <p className="tt1">대표전화</p>
-                            <p className="tt2">{location.state?.entTelno}</p>
+                            <p className="tt2">{ComScript.formatTelNumber(location.state?.entTelno)}</p>
                         </li>
                         <li>
                             <p className="tt1">업종</p>

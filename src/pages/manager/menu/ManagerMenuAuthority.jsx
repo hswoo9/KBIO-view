@@ -311,7 +311,7 @@ function ManagerMenuAuthority(props) {
                     setPaginationInfo(resp.paginationInfo);
                     let dataList = [];
                     authorityList.push(
-                        <tr>
+                        <tr key="noData">
                             <td colSpan="5">검색된 결과가 없습니다.</td>
                         </tr>
                     );

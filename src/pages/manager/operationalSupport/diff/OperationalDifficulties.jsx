@@ -71,7 +71,7 @@ function OperationalDifficulties(props) {
                         if (index === 0) dataList = []; // 목록 초기화
 
                         dataList.push(
-                            <tr key={item.pstSn}>
+                            <tr key={`${item.pstSn}_${index}`}>
                                 <td>
                                     {resp.paginationInfo.totalRecordCount - (resp.paginationInfo.currentPageNo - 1) * resp.paginationInfo.pageSize - index}
                                 </td>
