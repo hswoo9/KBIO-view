@@ -939,7 +939,7 @@ function RelatedCompanyCreate(props){
                         </button>
                     </div>
                     <Link
-                        to={URL.MANAGER_OPERATIONAL_SUPPORT}
+                        to={URL.MANAGER_RELATED_ORGANIZATION}
                     >
                         <button type="button" className="clickBtn black">
                             <span>목록</span>

@@ -13,7 +13,7 @@ function RelatedDetail() {
         relInstSn: location.state?.relInstSn || "",
     });
 
-    const [relatedDetail, setRelInstDetail] = useState(null);
+    const [relatedDetail, setRelInstDetail] = useState({});
 
     const getRelInstDetail = () => {
         if (!searchDto.relInstSn) return;
@@ -31,6 +31,7 @@ function RelatedDetail() {
             getRelInstDetailURL,
             requestOptions,
             (resp) => {
+                console.log(resp.result.related)
                 setRelInstDetail(resp.result.related);
             },
             (error) => {
@@ -51,10 +52,18 @@ function RelatedDetail() {
                     <div className="profileWrap">
                         <div className="profileBox">
                             <figure className="imgBox">
-                                <img
-                                    src="/src/assets/images/ico_logo_kakao.svg"
-                                    alt="기업 로고"
-                                />
+                                {relatedDetail.logoFile != null ? (
+                                    <img
+                                        src={`http://133.186.250.158${relatedDetail.logoFile.atchFilePathNm}/${relatedDetail.logoFile.strgFileNm}.${relatedDetail.logoFile.atchFileExtnNm}`}
+                                        alt={`${relatedDetail.relInstNm}_로고`}
+                                    />
+                                ) : (
+                                    <img
+                                        src="/src/assets/images/user_business_overview_box04_icon01.png"
+                                        alt={`${relatedDetail.relInstNm}_로고 없음`}
+                                        height="100"
+                                    />
+                                )}
                             </figure>
                             <div className="textBox">
                                 <div className="nameBox">
@@ -98,7 +107,7 @@ function RelatedDetail() {
                                 </li>
                                 <li>
                                     <strong className="left">업종</strong>
-                                    <p className="right">{relatedDetail?.clsNm}</p>
+                                    <p className="right">{relatedDetail?.tpbizNm}</p>
                                 </li>
                                 <li>
                                     <strong className="left">소재지 <span className="blue">BI</span></strong>

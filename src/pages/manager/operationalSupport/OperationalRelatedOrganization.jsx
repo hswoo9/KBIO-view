@@ -7,32 +7,29 @@ import CODE from "@/constants/code";
 
 import ManagerLeft from "@/components/manager/ManagerLeftOperationalSupport";
 import EgovPaging from "@/components/EgovPaging";
-
+import {getComCdList} from "@/components/CommonComponents";
 import Swal from 'sweetalert2';
 import * as ComScript from "@/components/CommonScript";
-/* bootstrip */
-import BtTable from 'react-bootstrap/Table';
-import BTButton from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
-import { getSessionItem } from "@/utils/storage";
-
-import moment from "moment/moment.js";
 
 function OperationalRelatedOrganization(props) {
 
     const [searchDto, setSearchDto] = useState(
         location.state?.searchDto || {
             pageIndex: 1,
-            brno: "",
-            relInstNm : "",
-            rpsvNm : "",
+            searchVal: "",
+            searchType: "",
+            clsf : "",
+            tpbiz: "",
+            actvtnYn : ""
         }
     );
 
     const [selectedOption, setSelectedOption] = useState("");
     const [paginationInfo, setPaginationInfo] = useState({});
-    const [rcList, setAuthorityList] = useState([]);
-    const [activeTab, setActiveTab] = useState(1);
+    const [rcList, setRcList] = useState([]);
+
+    const [comCdClsfList, setComCdClsfList] = useState([]);
+    const [comCdTpbizList, setComCdTpbizList] = useState([]);
 
     const handleSearch = () => {
         setSearchDto({ ...searchDto, pageIndex: 1 });
@@ -57,7 +54,7 @@ function OperationalRelatedOrganization(props) {
                 (resp) => {
                     setPaginationInfo(resp.paginationInfo);
                     let dataList = [];
-                    rcList.push(
+                    dataList.push(
                         <tr key="noData">
                             <td colSpan="5">검색된 결과가 없습니다.</td>
                         </tr>
@@ -68,48 +65,50 @@ function OperationalRelatedOrganization(props) {
 
                         dataList.push(
                             <tr key={item.relInstSn}>
-                                <td>{index + 1}</td>
                                 <td>
-                                    {item.bzstatNm}
+                                    {resp.paginationInfo.totalRecordCount - (resp.paginationInfo.currentPageNo - 1) * resp.paginationInfo.pageSize - index}
                                 </td>
+                                <td>{item.clsfNm}</td>
+                                <td>{item.tpbizNm}</td>
                                 <td>
                                     <Link to={{pathname: URL.RELATED_COMPANY_MODIFY}}
                                           state={{
-                                              relInstSn: item.relInstSn,
-                                              mode:CODE.MODE_MODIFY
+                                              relInstSn: item.tblRelInst.relInstSn,
+                                              mode: CODE.MODE_MODIFY
                                           }}
                                     >
-                                        {item.relInstNm}
+                                        {item.tblRelInst.relInstNm}
                                     </Link>
                                 </td>
-                                <td>{item.rpsvNm}</td>
-                                <td>{ComScript.formatTelNumber(item.entTelno)}</td>
-                                <td>{item.clsNm}</td>
-                                <td>{item.actvtnYn === "Y" ? "공개" : "비공개"}</td>
+                                <td>{item.tblRelInst.rpsvNm}</td>
+                                <td>{ComScript.formatTelNumber(item.tblRelInst.entTelno)}</td>
+                                <td>{item.tblRelInst.actvtnYn === "Y" ? "공개" : "비공개"}</td>
                                 <td>
                                     <Link to={URL.MANAGER_RELATED_MANAGER}
-                                          state={{relInstSn: item.relInstSn,
-                                              rpsvNm : item.rpsvNm,
-                                              entTelno : item.entTelno,
-                                              clsNm : item.clsNm}}>
+                                          state={{
+                                              relInstSn: item.tblRelInst.relInstSn,
+                                              rpsvNm: item.tblRelInst.rpsvNm,
+                                              entTelno: item.tblRelInst.entTelno,
+                                              clsNm: item.tblRelInst.clsNm
+                                          }}>
                                         <button type="button" className="settingBtn"><span>관리자 설정</span></button>
                                     </Link>
                                 </td>
                                 <td>
                                     <NavLink to={URL.MANAGER_RELATED_MEMBER}
-                                          state={{relInstSn: item.relInstSn,
-                                              rpsvNm : item.rpsvNm,
-                                              entTelno : item.entTelno,
-                                              clsNm : item.clsNm
-                                          }}>
+                                             state={{
+                                                 relInstSn: item.tblRelInst.relInstSn,
+                                                 rpsvNm: item.tblRelInst.rpsvNm,
+                                                 entTelno: item.tblRelInst.entTelno,
+                                                 clsNm: item.tblRelInst.clsNm
+                                             }}>
                                         <button type="button" className="listBtn"><span>직원 목록</span></button>
                                     </NavLink>
                                 </td>
                             </tr>
                         );
                     });
-                    setAuthorityList(dataList);
-
+                    setRcList(dataList);
                 },
                 function (resp) {
 
@@ -121,6 +120,15 @@ function OperationalRelatedOrganization(props) {
 
     useEffect(()=>{
         getRcList(searchDto);
+
+        getComCdList(17).then((data) => {
+            setComCdClsfList(data);
+        })
+
+        getComCdList(18).then((data) => {
+            setComCdTpbizList(data);
+        })
+
     }, []);
 
     const activeEnter = (e) => {
@@ -130,14 +138,32 @@ function OperationalRelatedOrganization(props) {
         }
     };
 
-    const handleKeywordSearch = () => {
-
-        setSearchDto((prev) => {
-            const updatedSearchDto = { ...prev, [selectedOption]: prev[selectedOption] || "" , pageIndex: 1  };
-            getRcList(updatedSearchDto); // 여기서 검색 실행
-            return updatedSearchDto;
+    const searchReset = () => {
+        setSearchDto({
+            ...searchDto,
+            pageIndex: 1,
+            searchVal: "",
+            searchType: "",
+            clsf : "",
+            tpbiz: "",
+            actvtnYn : ""
         });
-    };
+
+        getRcList({
+            ...searchDto,
+            pageIndex: 1,
+            searchVal: "",
+            searchType: "",
+            clsf : "",
+            tpbiz: "",
+            actvtnYn : ""
+        });
+    }
+
+    const searchHandle = () => {
+        getRcList(searchDto);
+    }
+
 
     return (
         <div id="container" className="container layout cms">
@@ -150,44 +176,72 @@ function OperationalRelatedOrganization(props) {
                             <li className="inputBox type1">
                                 <p className="title">분류</p>
                                 <div className="itemBox">
-                                    <select className="selectGroup">
-                                        <option value="0">전체</option>
-                                        <option value="1">예시1</option>
-                                        <option value="2">예시2</option>
-                                        <option value="3">예시3</option>
-                                        <option value="4">예시4</option>
-                                        <option value="5">예시5</option>
+                                    <select className="selectGroup"
+                                        id="clsf"
+                                        value={searchDto.clsf || ""}
+                                        onChange={(e) =>
+                                            setSearchDto({...searchDto, clsf: e.target.value})
+                                        }
+                                    >
+                                        <option value="">전체</option>
+                                        {comCdClsfList.map((item, index) => (
+                                            <option value={item.comCd} key={item.comCd}>
+                                                {item.comCdNm}
+                                            </option>
+                                        ))}
                                     </select>
                                 </div>
                             </li>
+
+                            <li className="inputBox type1">
+                                <p className="title">업종</p>
+                                <div className="itemBox">
+                                    <select className="selectGroup"
+                                            id="tpbiz"
+                                            value={searchDto.tpbiz || ""}
+                                            onChange={(e) =>
+                                                setSearchDto({...searchDto, tpbiz: e.target.value})
+                                            }
+                                    >
+                                        <option value="">전체</option>
+                                        {comCdTpbizList.map((item, index) => (
+                                            <option value={item.comCd} key={item.comCd}>
+                                                {item.comCdNm}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                            </li>
+
                             <li className="inputBox type1">
                                 <p className="title">공개 여부</p>
                                 <div className="itemBox">
-                                    <select className="selectGroup">
-                                        <option value="0">전체</option>
-                                        <option value="1">공개</option>
-                                        <option value="2">비공개</option>
+                                    <select
+                                        className="selectGroup"
+                                        id="actvtnYn"
+                                        value={searchDto.actvtnYn || ""}
+                                        onChange={(e) =>
+                                            setSearchDto({...searchDto, actvtnYn: e.target.value})
+                                        }
+                                    >
+                                        <option value="">전체</option>
+                                        <option value="Y">공개</option>
+                                        <option value="N">비공개</option>
                                     </select>
                                 </div>
                             </li>
                             <li className="inputBox type1">
                                 <p className="title">키워드</p>
                                 <div className="itemBox">
-                                    <select className="selectGroup" onChange={(e) => {
-                                        const value = e.target.value;
-                                        const optionMap = {
-                                            "0":"",
-                                            "1": "relInstNm",
-                                            "2": "rpsvNm",
-                                            //추가되면 아래로 더 추가
-                                        };
-
-                                        setSelectedOption(optionMap[value] || "");
-                                        setSearchDto(prev => ({ ...prev, [optionMap[value] || ""]: "" }));
-                                    }}>
-                                        <option value="0">전체</option>
-                                        <option value="1">기업명</option>
-                                        <option value="2">대표자</option>
+                                    <select
+                                        className="selectGroup"
+                                        value={searchDto.searchType || ""}
+                                        onChange={(e) => {
+                                            setSearchDto({...searchDto, searchType: e.target.value})
+                                        }}>
+                                        <option value="">전체</option>
+                                        <option value="relInstNm">기업명</option>
+                                        <option value="rpsvNm">대표자</option>
                                     </select>
                                 </div>
                             </li>
@@ -195,10 +249,10 @@ function OperationalRelatedOrganization(props) {
                                 <label className="input">
                                     <input
                                         type="text"
-                                        value={searchDto[selectedOption] || ""}
+                                        value={searchDto.searchVal}
                                         name="search"
                                         onChange={(e) => {
-                                            setSearchDto({ ...searchDto, [selectedOption]: e.target.value });
+                                            setSearchDto({...searchDto, searchVal: e.target.value});
                                         }}
                                         placeholder="검색어를 입력해주세요"
                                         onKeyDown={activeEnter}
@@ -210,19 +264,11 @@ function OperationalRelatedOrganization(props) {
                             <button
                                 type="button"
                                 className="refreshBtn btn btn1 gray"
-                                onClick={(e)=>{
-                                    e.preventDefault();
-                                    getRcList({
-                                        ...searchDto,
-                                        pageIndex: 1,
-                                        RelInstNm : "",
-                                        rpsvNm : "",
-                                    });
-                                }}
+                                onClick={searchReset}
                             >
                                 <div className="icon"></div>
                             </button>
-                            <button type="button" className="searchBtn btn btn1 point" onClick= {handleKeywordSearch}>
+                            <button type="button" className="searchBtn btn btn1 point" onClick={searchHandle}>
                                 <div className="icon"></div>
                             </button>
                         </div>
@@ -230,7 +276,7 @@ function OperationalRelatedOrganization(props) {
                 </div>
                 <div className="contBox board type1 customContBox">
                     <div className="topBox">
-                        <p className="resultText"><span className="red">{paginationInfo?.totalRecordCount}</span>건의 유관기관 정보가 조회되었습니다.</p>
+                        <p className="resultText"><span className="red">{paginationInfo?.totalRecordCount || 0}</span>건의 유관기관 정보가 조회되었습니다.</p>
                         <div className="rightBox">
                             <button type="button" className="btn btn2 downBtn red">
                                 <div className="icon"></div>
@@ -243,15 +289,15 @@ function OperationalRelatedOrganization(props) {
                     </div>
                     <div className="tableBox type1">
                         <table>
-                            <caption>게시판</caption>
+                            <caption>유관기관</caption>
                             <thead>
                             <tr>
                                 <th className="th1"><p>번호</p></th>
                                 <th className="th2"><p>분류</p></th>
+                                <th className="th3"><p>업종</p></th>
                                 <th className="th3"><p>기업명</p></th>
                                 <th className="th4"><p>대표자</p></th>
                                 <th className="th2"><p>대표전화</p></th>
-                                <th className="th3"><p>업종</p></th>
                                 <th className="th5"><p>공개여부</p></th>
                                 <th className="th5"><p>설정 보기</p></th>
                                 <th className="th5"><p>목록 보기</p></th>
