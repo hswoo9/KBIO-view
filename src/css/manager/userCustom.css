@@ -261,6 +261,7 @@ header .hInner .hTop .alarmWrap.click .close .icon {height: 100%; background: ur
 }
 
 .widthGroup29{ width: 29% !important;}
+.widthGroup20{ width: 20% !important;}
 .widthGroup45{ width: 45% !important;}
 
 header .hInner .hBot{transition: .4s linear !important;}
@@ -310,3 +311,8 @@ button:focus { outline: 2px solid black;}
 .emailModal .textBox .title {font-size: 1.5rem; font-weight: 500;}
 .emailModal .textBox .title .blue {color: var(--mainColor3); font-weight: 800;}
 .emailModal .textBox .text {color: #555; line-height: 120%; font-size: 1.1rem; word-break: keep-all;}
+
+.mypage_information .inputWrap {display: flex; flex-wrap: wrap; gap: 1.35rem 2.8%;}
+.mypage_information .inputWrap > li {width: calc(100% / 2 - 1.4%);}
+.mypage_information .box02 {border-radius: 1.6rem; border: 1px solid #eee; display: flex; flex-direction: column; gap: 2.22rem; padding: 2.22rem; align-items: center; justify-content: center}
+.mypage_information .inner2 {max-width: 1500px; width: 100%; margin: 0 auto;}

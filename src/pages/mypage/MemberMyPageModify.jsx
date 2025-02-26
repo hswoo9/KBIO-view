@@ -9,6 +9,7 @@ import { getComCdList } from "@/components/CommonComponents";
 import ManagerLeft from "@/components/manager/ManagerLeftMember";
 import EgovRadioButtonGroup from "@/components/EgovRadioButtonGroup";
 import Swal from "sweetalert2";
+import { fileDownLoad } from "@/components/CommonComponents";
 import base64 from 'base64-js';
 import { getSessionItem } from "@/utils/storage";
 import CommonSubMenu from "@/components/CommonSubMenu";
@@ -23,25 +24,24 @@ function MemberMyPageModify(props) {
     const sessionUserSn = sessionUser?.userSn;
     const sessionUsermbrType = sessionUser?.mbrType;
     const [address, setAddress] = useState({});
-    const [image, setImage] = useState({});
     const [acceptFileTypes, setAcceptFileTypes] = useState('jpg,jpeg,png,gif,bmp,tiff,tif,webp,svg,ico,heic,avif,pdf');
+    const [image, setImage] = useState({});
     const [comCdList, setComCdList] = useState([]);
     const [cnsltProfileFile, setCnsltProfileFile] = useState(null);
     const [currentPassword, setCurrentPassword] = useState(''); // 현재 비밀번호 상태
     const [newPassword, setNewPassword] = useState(''); // 변경할 비밀번호 상태
 
     const [consultDetail, setConsultDetail] = useState({});
-    const allowedExtensions = acceptFileTypes.split(',');
 
     const [memberDetail, setMemberDetail] = useState({});
     const [modeInfo, setModeInfo] = useState({mode: props.mode});
     const [searchDto, setSearchDto] = useState({userSn:sessionUserSn});
 
-
     const [selectedCertFiles, setSelectedCertFiles] = useState([]);
     const [selectedCareerFiles, setSelectedCareerFiles] = useState([]);
     const [selectedAcbgFiles, setSelectedAcbgFiles] = useState([]);
-    
+
+
     const [rcDetail, setRcDetail] = useState({});
 
     const [certificates, setCertificates] = useState([]);
@@ -50,9 +50,9 @@ function MemberMyPageModify(props) {
         setCertificates([...certificates, { key: newId , qlfcLcnsNm: "", pblcnInstNm: "", acqsYmd: "", userSn: sessionUserSn, actvtnYn: 'Y'}]);
     };
 
-    const removeCertificate = (id, qlfcLcnsSn) => {
+    const removeCertificate = (id, qlfcLcnsSn, atchFileSn) => {
         if (qlfcLcnsSn) {
-            removeCertificateFromServer(id, qlfcLcnsSn);
+            removeCertificateFromServer(id, qlfcLcnsSn, atchFileSn);
         } else {
             removeLocalCertificate(id);
         }
@@ -61,7 +61,7 @@ function MemberMyPageModify(props) {
         setCertificates(certificates.filter(cert => cert.key !== id));
     };
 
-    const removeCertificateFromServer = (qlfcLcnsSn) => {
+    const removeCertificateFromServer = (id, qlfcLcnsSn, atchFileSn) => {
         Swal.fire({
             title: "삭제한 정보는 복구할 수 없습니다.\n그래도 삭제하시겠습니까?",
             showCloseButton: true,
@@ -69,26 +69,47 @@ function MemberMyPageModify(props) {
             confirmButtonText: "확인",
             cancelButtonText: "취소"
         }).then((result) => {
-       if (result.isConfirmed) {
-           const requestOptions = {
-               method: "POST",
-               headers: {
-                   "Content-type": "application/json",
-               },
-               body: JSON.stringify({
-                   qlfcLcnsSn: qlfcLcnsSn,
-               }),
-           };
+            if (result.isConfirmed) {
+                const requestOptions = {
+                    method: "POST",
+                    headers: {
+                        "Content-type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        qlfcLcnsSn: qlfcLcnsSn,
+                    }),
+                };
 
-           EgovNet.requestFetch("/memberApi/delCertificate", requestOptions, (resp) => {
-               if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
-                   Swal.fire("삭제되었습니다.");
-                   getNormalMember(searchDto);
-               }
-           });
-       }
+                EgovNet.requestFetch("/memberApi/delCertificate", requestOptions, (resp) => {
+                    if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
+
+                        if (atchFileSn) {
+                            const fileRequestOptions = {
+                                method: "POST",
+                                headers: {
+                                    "Content-type": "application/json",
+                                },
+                                body: JSON.stringify({
+                                    atchFileSn: atchFileSn,
+                                }),
+                            };
+
+                            EgovNet.requestFetch("/commonApi/setFileDel", fileRequestOptions, (fileResp) => {
+                                if (Number(fileResp.resultCode) === Number(CODE.RCV_SUCCESS)) {
+                                    Swal.fire("삭제되었습니다.");
+                                    getNormalMember(searchDto);
+                                }
+                            });
+                        } else {
+                            Swal.fire("삭제되었습니다.");
+                            getNormalMember(searchDto);
+                        }
+                    }
+                });
+            }
         });
-    }
+    };
+
 
 
     const [careers, setCareer] = useState([]);
@@ -97,9 +118,9 @@ function MemberMyPageModify(props) {
         setCareer([...careers, { key: newId, ogdpCoNm : "", jbgdNm : "", jncmpYmd: "", rsgntnYmd: "", userSn: sessionUserSn, actvtnYn: 'Y'}]);
     };
 
-    const removeCareer = (id, crrSn) => {
+    const removeCareer = (id, crrSn, atchFileSn) => {
         if (crrSn) {
-            removeCareerFromServer(id, crrSn);
+            removeCareerFromServer(id, crrSn, atchFileSn);
         } else {
             removeLocalCareer(id);
         }
@@ -108,7 +129,7 @@ function MemberMyPageModify(props) {
         setCareer(careers.filter((career) => career.key !== id));
     };
 
-    const removeCareerFromServer = (crrSn) => {
+    const removeCareerFromServer = (id, crrSn, atchFileSn) => {
         Swal.fire({
             title: "삭제한 정보는 복구할 수 없습니다.\n그래도 삭제하시겠습니까?",
             showCloseButton: true,
@@ -129,22 +150,42 @@ function MemberMyPageModify(props) {
 
                 EgovNet.requestFetch("/memberApi/delCareer", requestOptions, (resp) => {
                     if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
-                        Swal.fire("삭제되었습니다.");
-                        getNormalMember(searchDto);
+
+                        if (atchFileSn) {
+                            const fileRequestOptions = {
+                                method: "POST",
+                                headers: {
+                                    "Content-type": "application/json",
+                                },
+                                body: JSON.stringify({
+                                    atchFileSn: atchFileSn,
+                                }),
+                            };
+
+                            EgovNet.requestFetch("/commonApi/setFileDel", fileRequestOptions, (fileResp) => {
+                                if (Number(fileResp.resultCode) === Number(CODE.RCV_SUCCESS)) {
+                                    Swal.fire("삭제되었습니다.");
+                                    getNormalMember(searchDto);
+                                }
+                            });
+                        } else {
+                            Swal.fire("삭제되었습니다.");
+                            getNormalMember(searchDto);
+                        }
                     }
                 });
             }
         });
-    }
+    };
 
     const [acbges, setAcbg] = useState([]);
     const addAcbg = () => {
         const newId = `acbg_${Date.now()}`;
         setAcbg([...acbges, { key: newId, schlNm : "", scsbjtNm : "", mjrNm: "", dgrNm : "", grdtnYmd : "", userSn: sessionUserSn, actvtnYn: 'Y'}]);
     };
-    const removeAcbg = (id, acbgSn) => {
+    const removeAcbg = (id, acbgSn, atchFileSn) => {
         if (acbgSn) {
-            removeAcbgFromServer(id, acbgSn);
+            removeAcbgFromServer(id, acbgSn, atchFileSn);
         } else {
             removeLocalAcbg(id);
         }
@@ -153,7 +194,7 @@ function MemberMyPageModify(props) {
         setAcbg(acbges.filter((acbg) => acbg.key !== id));
     };
 
-    const removeAcbgFromServer = (acbgSn) => {
+    const removeAcbgFromServer = (id, acbgSn, atchFileSn) => {
         Swal.fire({
             title: "삭제한 정보는 복구할 수 없습니다.\n그래도 삭제하시겠습니까?",
             showCloseButton: true,
@@ -174,13 +215,33 @@ function MemberMyPageModify(props) {
 
                 EgovNet.requestFetch("/memberApi/delAcbg", requestOptions, (resp) => {
                     if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
-                        Swal.fire("삭제되었습니다.");
-                        getNormalMember(searchDto);
+
+                        if (atchFileSn) {
+                            const fileRequestOptions = {
+                                method: "POST",
+                                headers: {
+                                    "Content-type": "application/json",
+                                },
+                                body: JSON.stringify({
+                                    atchFileSn: atchFileSn,
+                                }),
+                            };
+
+                            EgovNet.requestFetch("/commonApi/setFileDel", fileRequestOptions, (fileResp) => {
+                                if (Number(fileResp.resultCode) === Number(CODE.RCV_SUCCESS)) {
+                                    Swal.fire("삭제되었습니다.");
+                                    getNormalMember(searchDto);
+                                }
+                            });
+                        } else {
+                            Swal.fire("삭제되었습니다.");
+                            getNormalMember(searchDto);
+                        }
                     }
                 });
             }
         });
-    }
+    };
 
     const handleInputChange = (e, id, type, field) => {
         let { value } = e.target;
@@ -232,24 +293,22 @@ function MemberMyPageModify(props) {
                     document.getElementById(id + index).textContent = fileName;
                 }
 
-                /**여기에 받아온 id를 앞의 이름과 date번호로 분리해서 자격,경력,학력별로 저장**/
-
                 if (id === "cert") {
                     setSelectedCertFiles((prevFiles) => {
-                        const updatedFiles = [...prevFiles]; // 기존 배열 복사
-                        updatedFiles[index] = file; // 배열의 인덱스를 이용해 해당 자격증 파일을 추가
+                        const updatedFiles = [...prevFiles];
+                        updatedFiles[index] = { file, isNew: true};
                         return updatedFiles;
                     });
                 } else if (id === "career") {
                     setSelectedCareerFiles((prevFiles) => {
-                        const updatedFiles = [...prevFiles]; // 기존 배열 복사
-                        updatedFiles[index] = file; // 배열의 인덱스를 이용해 해당 자격증 파일을 추가
+                        const updatedFiles = [...prevFiles];
+                        updatedFiles[index] = { file, isNew: true};
                         return updatedFiles;
                     });
                 } else if (id === "acbg") {
                     setSelectedAcbgFiles((prevFiles) => {
-                        const updatedFiles = [...prevFiles]; // 기존 배열 복사
-                        updatedFiles[index] = file; // 배열의 인덱스를 이용해 해당 자격증 파일을 추가
+                        const updatedFiles = [...prevFiles];
+                        updatedFiles[index] = { file, isNew: true};
                         return updatedFiles;
                     });
                 }
@@ -268,8 +327,6 @@ function MemberMyPageModify(props) {
         }
 
     }
-
-
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
@@ -466,8 +523,8 @@ function MemberMyPageModify(props) {
                     setSelectedCareerFiles(resp.result.cnsltCareerFile);
                 }
 
-                if (resp.result.cnsltAcgbFile) {
-                    setSelectedAcbgFiles(resp.result.cnsltAcgbFile);
+                if (resp.result.cnsltAcbgFile) {
+                    setSelectedAcbgFiles(resp.result.cnsltAcbgFile);
                 }
 
                 setMemberDetail({
@@ -642,6 +699,35 @@ function MemberMyPageModify(props) {
                     return;
                 }
 
+                if (sessionUsermbrType === 2) {
+                    const { jbpsNm, ogdpNm, cnsltSlfint, crrPrd, rmrkCn } = consultDetail;
+                    if (!jbpsNm || !ogdpNm || !cnsltSlfint || !crrPrd || !rmrkCn) {
+                        Swal.fire("모든 컨설턴트 정보를 입력해야 합니다.");
+                        return;
+                    }
+                    for (const cert of certificates) {
+                        if (!cert.qlfcLcnsNm || !cert.pblcnInstNm || !cert.acqsYmd) {
+                            Swal.fire("모든 자격증 정보를 입력해야 합니다.");
+                            return;
+                        }
+                    }
+
+                    for (const career of careers) {
+                        if (!career.ogdpCoNm || !career.jbgdNm || !career.jncmpYmd || !career.rsgntnYmd) {
+                            Swal.fire("모든 경력 정보를 입력해야 합니다.");
+                            return;
+                        }
+                    }
+
+                    for (const acbg of acbges) {
+                        if (!acbg.schlNm || !acbg.scsbjtNm || !acbg.mjrNm || !acbg.dgrNm || !acbg.grdtnYmd) {
+                            Swal.fire("모든 학력 정보를 입력해야 합니다.");
+                            return;
+                        }
+                    }
+                }
+
+
                 const emailPrefix = memberDetail.emailPrefix;
                 const emailDomain = memberDetail.emailDomain;
                 const email = `${emailPrefix}@${emailDomain}`;
@@ -684,12 +770,22 @@ function MemberMyPageModify(props) {
     const [saveEvent, setSaveEvent] = useState({});
 
     useEffect(() => {
+    }, [selectedCertFiles]);
+
+    useEffect(() => {
+    }, [selectedCareerFiles]);
+
+    useEffect(() => {
+    }, [selectedAcbgFiles]);
+
+
+    useEffect(() => {
         if (saveEvent.save && saveEvent.mode === "save") {
             saveMemberModifyData(saveEvent.memberDetail, saveEvent.consultDetail, saveEvent.hasCertData, saveEvent.hasCrrData, saveEvent.hasAcbgData);
         }
     }, [saveEvent]);
 
-    const saveMemberModifyData = useCallback((memberDetail, consultDetail, hasCertData, hasCrrData, hasAcbgData) => {
+    const saveMemberModifyData = (memberDetail, consultDetail, hasCertData, hasCrrData, hasAcbgData) => {
         const formData = new FormData();
 
         Object.keys(memberDetail).forEach((key) => {
@@ -705,21 +801,27 @@ function MemberMyPageModify(props) {
                 }
             });
         }
+        selectedCertFiles.forEach((file) => {
+            if (file.file != null) {
+                formData.append("certFiles", file.file);
+            }
+        });
+        selectedCareerFiles.forEach((file) => {
+            if (file.file != null) {
+                formData.append("careerFiles", file.file);
+            }
+        });
 
-        selectedCertFiles.map((file) => {
-            formData.append("certFiles", file);
+        selectedAcbgFiles.forEach((file) => {
+            if (file.file != null) {
+                formData.append("acbgFiles", file.file);
+            }
         });
-        selectedCareerFiles.map((file) => {
-            formData.append("careerFiles", file);
-        });
-        selectedAcbgFiles.map((file) => {
-            formData.append("acbgFiles", file);
-        });
-        console.log(selectedCertFiles);
 
         if (hasCertData) {
             formData.append("hasCertData", JSON.stringify(hasCertData))
         }
+
 
         if (hasCrrData) {
             formData.append("hasCrrData", JSON.stringify(hasCrrData))
@@ -746,7 +848,6 @@ function MemberMyPageModify(props) {
                         confirmButtonText: '확인'
                     });
                     navigate({ pathname: URL.MAIN });
-                    window.location.reload()
                 } else {
                     navigate(
                         { pathname: URL.ERROR },
@@ -755,7 +856,7 @@ function MemberMyPageModify(props) {
                 }
             }
         );
-    }, []);
+    };
 
 
     return (
@@ -940,320 +1041,323 @@ function MemberMyPageModify(props) {
                                     />
                                 </label>
                             </li>
-                                <li className="inputBox type2 white">
-                                    <div className="input">
-                                        <span className="tt1">메일수신</span>
-                                        <div className="checkWrap">
-                                            <label className="checkBox type3">
-                                                <input
-                                                    type="radio"
-                                                    id="receive_mail_yes"
-                                                    name="receive_mail"
-                                                    value="Y"
-                                                    className="signUpRadio"
-                                                    checked={memberDetail.emlRcptnAgreYn === "Y"}
-                                                    onChange={handleMailChange}
-                                                />
-                                                <small>수신</small>
-                                            </label>
-                                            <label className="checkBox type3">
-                                                <input
-                                                    type="radio"
-                                                    id="receive_mail_no"
-                                                    name="receive_mail"
-                                                    value="N"
-                                                    className="signUpRadio"
-                                                    checked={memberDetail.emlRcptnAgreYn === "N"}
-                                                    onChange={handleMailChange}
-                                                />
-                                                <small>수신안함</small>
-                                            </label>
-                                        </div>
+                            <li className="inputBox type2 white">
+                                <div className="input">
+                                    <span className="tt1">메일수신</span>
+                                    <div className="checkWrap">
+                                        <label className="checkBox type3">
+                                            <input
+                                                type="radio"
+                                                id="receive_mail_yes"
+                                                name="receive_mail"
+                                                value="Y"
+                                                className="signUpRadio"
+                                                checked={memberDetail.emlRcptnAgreYn === "Y"}
+                                                onChange={handleMailChange}
+                                            />
+                                            <small>수신</small>
+                                        </label>
+                                        <label className="checkBox type3">
+                                            <input
+                                                type="radio"
+                                                id="receive_mail_no"
+                                                name="receive_mail"
+                                                value="N"
+                                                className="signUpRadio"
+                                                checked={memberDetail.emlRcptnAgreYn === "N"}
+                                                onChange={handleMailChange}
+                                            />
+                                            <small>수신안함</small>
+                                        </label>
                                     </div>
-                                    <span
-                                        className="warningText">※ 메일링 서비스 수신동의 시 K-바이오랩허브 관련한 다양한 정보를 받으실 수 있습니다</span>
-                                </li>
-                                <li className="inputBox type2 white">
-                                    <div className="input">
-                                        <span className="tt1">문자수신</span>
-                                        <div className="checkWrap">
-                                            <label className="checkBox type3">
-                                                <input
-                                                    type="radio"
-                                                    id="receive_sms_yes"
-                                                    name="receive_sms"
-                                                    value="Y"
-                                                    className="signUpRadio"
-                                                    checked={memberDetail.smsRcptnAgreYn === "Y"}
-                                                    onChange={handleSmsChange}
-                                                />
-                                                <small>수신</small>
-                                            </label>
-                                            <label className="checkBox type3">
-                                                <input
-                                                    type="radio"
-                                                    id="receive_sms_no"
-                                                    name="receive_sms"
-                                                    value="N"
-                                                    className="signUpRadio"
-                                                    checked={memberDetail.smsRcptnAgreYn === "N"}
-                                                    onChange={handleSmsChange}
-                                                />
-                                                <small>수신안함</small>
-                                            </label>
-                                        </div>
+                                </div>
+                                <span
+                                    className="warningText">※ 메일링 서비스 수신동의 시 K-바이오랩허브 관련한 다양한 정보를 받으실 수 있습니다</span>
+                            </li>
+                            <li className="inputBox type2 white">
+                                <div className="input">
+                                    <span className="tt1">문자수신</span>
+                                    <div className="checkWrap">
+                                        <label className="checkBox type3">
+                                            <input
+                                                type="radio"
+                                                id="receive_sms_yes"
+                                                name="receive_sms"
+                                                value="Y"
+                                                className="signUpRadio"
+                                                checked={memberDetail.smsRcptnAgreYn === "Y"}
+                                                onChange={handleSmsChange}
+                                            />
+                                            <small>수신</small>
+                                        </label>
+                                        <label className="checkBox type3">
+                                            <input
+                                                type="radio"
+                                                id="receive_sms_no"
+                                                name="receive_sms"
+                                                value="N"
+                                                className="signUpRadio"
+                                                checked={memberDetail.smsRcptnAgreYn === "N"}
+                                                onChange={handleSmsChange}
+                                            />
+                                            <small>수신안함</small>
+                                        </label>
                                     </div>
-                                    <span
-                                        className="warningText">※ 메일링 서비스 수신동의 시 K-바이오랩허브 관련한 다양한 정보를 받으실 수 있습니다</span>
-                                </li>
+                                </div>
+                                <span
+                                    className="warningText">※ 메일링 서비스 수신동의 시 K-바이오랩허브 관련한 다양한 정보를 받으실 수 있습니다</span>
+                            </li>
                         </ul>
                     </div>
-                    {sessionUsermbrType !== 2 && (
-                        <div className="companyBox">
-                            <div className="titleWrap type2 left">
-                                <p className="tt1">기업 정보</p>
+
+                    <div className="box02" data-aos="fade-up" data-aos-duration="1500">
+                        {sessionUsermbrType !== 2 && (
+                            <div className="companyBox">
+                                <div className="titleWrap type2 left">
+                                    <p className="tt1">기업 정보</p>
+                                </div>
+                                <ul className="listBox" data-aos="fade-up" data-aos-duration="1500">
+                                    <li className="inputBox type2">
+                                        <label htmlFor="brno" className="tt1">사업자등록번호</label>
+                                        <div className="input">
+                                            <input type="text" name="brno" id="brno" title="사업자등록번호" readOnly
+                                                   value={rcDetail.brno || ""}/>
+                                        </div>
+                                    </li>
+                                    <li className="inputBox type2">
+                                        <label htmlFor="company_tel" className="tt1">대표번호</label>
+                                        <div className="input">
+                                            <input type="text" name="company_tel" id="company_tel" title="대표번호" readOnly
+                                                   value={rcDetail.entTelno || ""}/>
+                                        </div>
+                                    </li>
+                                    <li className="inputBox type2">
+                                        <label htmlFor="company_name" className="tt1">기업명</label>
+                                        <div className="input">
+                                            <input type="text" name="company_name" id="company_name" title="기업명"
+                                                   readOnly
+                                                   value={rcDetail.relInstNm || rcDetail.mvnEntNm || ""}/>
+                                        </div>
+                                    </li>
+                                    <li className="inputBox type2">
+                                        <label htmlFor="company_email" className="tt1">기업메일</label>
+                                        <div className="input">
+                                            <input type="text" name="company_email" id="company_email" title="기업메일"
+                                                   readOnly
+                                                   value={rcDetail.bzentyEmlAddr || ""}/>
+                                        </div>
+                                    </li>
+                                    <li className="inputBox type2">
+                                        <label htmlFor="company_representative" className="tt1">대표자</label>
+                                        <div className="input">
+                                            <input type="text" name="company_representative" id="company_representative"
+                                                   title="대표자" readOnly
+                                                   value={rcDetail.relInstNm || rcDetail.mvnEntNm || ""}/>
+                                        </div>
+                                    </li>
+                                    <li className="inputBox type2">
+                                        <span className="tt1">주소</span>
+                                        <label className="input" style={{paddingRight: "6rem"}}>
+                                            <input type="text" name="company_address1" id="company_address1" readOnly
+                                                   title="주소"
+                                                   value={rcDetail.entAddr || ""}/>
+                                        </label>
+                                    </li>
+                                    <li className="inputBox type2">
+                                        <label htmlFor="company_industry" className="tt1">산업</label>
+                                        <div className="input">
+                                            <input type="text" name="company_industry" id="company_industry"
+                                                   title="산업" readOnly
+                                                   value={rcDetail.clsNm || ""}/>
+                                        </div>
+                                    </li>
+                                    <li className="inputBox type2 noText">
+                                        <label className="input">
+                                            <input
+                                                type="text"
+                                                name="company_address2"
+                                                id="company_address2"
+                                                placeholder="상세주소를 입력해주세요"
+                                                title="상세주소"
+                                                readOnly
+                                                value={rcDetail.entDaddr || ""}
+                                            />
+                                        </label>
+                                    </li>
+                                </ul>
                             </div>
-                            <ul className="listBox" data-aos="fade-up" data-aos-duration="1500">
+                        )}
+                        {sessionUsermbrType === 2 && (
+                            <ul className="inputWrap" data-aos="fade-up" data-aos-duration="1500">
                                 <li className="inputBox type2">
-                                    <label htmlFor="brno" className="tt1">사업자등록번호</label>
-                                    <div className="input">
-                                        <input type="text" name="brno" id="brno" title="사업자등록번호" readOnly
-                                               value={rcDetail.brno || ""}/>
+                                    <span className="tt1">사진</span>
+                                    <div className="input" style={{height: "100%"}}>
+                                        <div style={{display: "flex", alignItems: "flex-start", gap: "20px"}}>
+                                            <div style={{
+                                                width: "150px",
+                                                height: "150px",
+                                                border: "1px solid #ddd",
+                                                borderRadius: "8px",
+                                                overflow: "hidden",
+                                                backgroundColor: "#f8f8f8"
+                                            }}>
+                                                <img
+                                                    src={
+                                                        cnsltProfileFile
+                                                            ? `http://133.186.250.158${cnsltProfileFile.atchFilePathNm}/${cnsltProfileFile.strgFileNm}.${cnsltProfileFile.atchFileExtnNm}`
+                                                            : notProfile
+                                                    }
+                                                    onError={(e) => {
+                                                        e.target.src = notProfile;
+                                                    }}
+                                                    alt="컨설턴트사진"
+                                                />
+                                            </div>
+
+                                            <div style={{flex: 1}}>
+                                                <p style={{color: "#ff4444", fontSize: "14px", marginBottom: "8px"}}>
+                                                    - 대표 사진 등록시 상세, 목록, 축소 이미지에 자동 리사이징되어 들어갑니다.
+                                                </p>
+                                                <p style={{color: "#666", fontSize: "14px", marginBottom: "12px"}}>
+                                                    - 사진 권장 사이즈: 500px * 500px / 10M 이하 / gif, png, jpg(jpeg)
+                                                </p>
+                                                <label style={{display: "block", marginTop: "12px"}}>
+                                                    <small className="text btn">파일 선택</small>
+                                                    <input type="file"
+                                                           name="formFile"
+                                                           id="formFile"
+                                                           onChange={handleImageChange}
+                                                           style={{display: "none"}} // 파일 선택 input 숨김
+                                                    />
+                                                </label>
+                                            </div>
+                                        </div>
                                     </div>
                                 </li>
+
                                 <li className="inputBox type2">
-                                    <label htmlFor="company_tel" className="tt1">대표번호</label>
-                                    <div className="input">
-                                        <input type="text" name="company_tel" id="company_tel" title="대표번호" readOnly
-                                               value={rcDetail.entTelno || ""}/>
+                                    <span className="tt1">소개</span>
+                                    <div className="input" style={{height: "100%"}}>
+                                        <CommonEditor
+                                            value={consultDetail.cnsltSlfint || ""}
+                                            onChange={handleChange}
+                                        />
                                     </div>
                                 </li>
+
                                 <li className="inputBox type2">
-                                    <label htmlFor="company_name" className="tt1">기업명</label>
-                                    <div className="input">
-                                        <input type="text" name="company_name" id="company_name" title="기업명" readOnly
-                                        value={rcDetail.relInstNm || rcDetail.mvnEntNm || ""}/>
-                                    </div>
-                                </li>
-                                <li className="inputBox type2">
-                                    <label htmlFor="company_email" className="tt1">기업메일</label>
-                                    <div className="input">
-                                        <input type="text" name="company_email" id="company_email" title="기업메일"
-                                        readOnly
-                                        value={rcDetail.bzentyEmlAddr || ""}/>
-                                    </div>
-                                </li>
-                                <li className="inputBox type2">
-                                    <label htmlFor="company_representative" className="tt1">대표자</label>
-                                    <div className="input">
-                                        <input type="text" name="company_representative" id="company_representative"
-                                               title="대표자" readOnly
-                                        value={rcDetail.relInstNm || rcDetail.mvnEntNm || ""}/>
-                                    </div>
-                                </li>
-                                <li className="inputBox type2">
-                                    <span className="tt1">주소</span>
-                                    <label className="input" style={{paddingRight: "6rem"}}>
-                                        <input type="text" name="company_address1" id="company_address1" readOnly
-                                               title="주소"
-                                        value={rcDetail.entAddr || ""}/>
-                                    </label>
-                                </li>
-                                <li className="inputBox type2">
-                                    <label htmlFor="company_industry" className="tt1">산업</label>
-                                    <div className="input">
-                                        <input type="text" name="company_industry" id="company_industry"
-                                               title="산업" readOnly
-                                               value={rcDetail.clsNm || ""}/>
-                                    </div>
-                                </li>
-                                <li className="inputBox type2 noText">
+                                    <span className="tt1">직위</span>
                                     <label className="input">
                                         <input
                                             type="text"
-                                            name="company_address2"
-                                            id="company_address2"
-                                            placeholder="상세주소를 입력해주세요"
-                                            title="상세주소"
-                                            readOnly
-                                            value={rcDetail.entDaddr || ""}
+                                            name="consultantPosition"
+                                            placeholder="직위를 입력해주세요"
+                                            value={consultDetail.jbpsNm || ""}
+                                            onChange={(e) => setConsultDetail({
+                                                ...consultDetail,
+                                                jbpsNm: e.target.value
+                                            })}
                                         />
                                     </label>
                                 </li>
-                            </ul>
-                        </div>
-                    )}
-                    {sessionUsermbrType === 2 && (
-                        <ul className="inputWrap" data-aos="fade-up" data-aos-duration="1500">
-                            <li className="inputBox type2">
-                                <span className="tt1">사진</span>
-                                <div className="input" style={{height: "100%"}}>
-                                    <div style={{display: "flex", alignItems: "flex-start", gap: "20px"}}>
-                                        <div style={{
-                                            width: "150px",
-                                            height: "150px",
-                                            border: "1px solid #ddd",
-                                            borderRadius: "8px",
-                                            overflow: "hidden",
-                                            backgroundColor: "#f8f8f8"
-                                        }}>
-                                            <img
-                                                src={
-                                                    cnsltProfileFile
-                                                        ? `http://133.186.250.158${cnsltProfileFile.atchFilePathNm}/${cnsltProfileFile.strgFileNm}.${cnsltProfileFile.atchFileExtnNm}`
-                                                        : notProfile
-                                                }
-                                                onError={(e) => {
-                                                    e.target.src = notProfile;
-                                                }}
-                                                alt="컨설턴트사진"
+
+                                <li className="inputBox type2">
+                                    <span className="tt1">경력</span>
+                                    <div className="flexinput input">
+                                        <input
+                                            type="text"
+                                            name="consultantExperience"
+                                            placeholder="숫자만 입력"
+                                            value={consultDetail.crrPrd || ""}
+                                            onChange={(e) => setConsultDetail({
+                                                ...consultDetail,
+                                                crrPrd: e.target.value
+                                            })}
+                                            style={{width: "120px"}}
+                                        />
+                                        <span style={{marginLeft: "10px", color: "#333"}}>년</span>
+                                    </div>
+                                </li>
+
+                                <li className="inputBox type2">
+                                    <span className="tt1">소속</span>
+                                    <label className="input">
+                                        <input
+                                            type="text"
+                                            name="consultantAffiliation"
+                                            placeholder="소속을 입력해주세요"
+                                            value={consultDetail.ogdpNm || ""}
+                                            onChange={(e) => setConsultDetail({
+                                                ...consultDetail,
+                                                ogdpNm: e.target.value
+                                            })}
+                                        />
+                                    </label>
+                                </li>
+
+                                <li className="inputBox type2">
+                                    <span className="tt1">컨설팅 항목</span>
+                                    <div className="input">
+                                        <div className="checkWrap" style={{display: "flex", gap: "20px"}}>
+                                            <input
+                                                type="text"
+                                                name="consultingOption1"
+                                                checked={consultDetail.consultingOption1}
+                                                onChange={(e) => setConsultDetail({
+                                                    ...consultDetail,
+                                                    consultingOption1: e.target.checked
+                                                })}
                                             />
                                         </div>
+                                    </div>
+                                </li>
 
-                                        <div style={{flex: 1}}>
-                                            <p style={{color: "#ff4444", fontSize: "14px", marginBottom: "8px"}}>
-                                                - 대표 사진 등록시 상세, 목록, 축소 이미지에 자동 리사이징되어 들어갑니다.
-                                            </p>
-                                            <p style={{color: "#666", fontSize: "14px", marginBottom: "12px"}}>
-                                                - 사진 권장 사이즈: 500px * 500px / 10M 이하 / gif, png, jpg(jpeg)
-                                            </p>
-                                            <label style={{display: "block", marginTop: "12px"}}>
-                                                <small className="text btn">파일 선택</small>
-                                                <input type="file"
-                                                       name="formFile"
-                                                       id="formFile"
-                                                       onChange={handleImageChange}
-                                                       style={{display: "none"}} // 파일 선택 input 숨김
+                                <li className="inputBox type2">
+                                    <span className="tt1">자문분야</span>
+                                    <label className="input">
+                                        <div className="itemBox" style={{flex: 1}}>
+                                            {getComCdListToHtml(comCdList)}
+                                        </div>
+                                    </label>
+                                </li>
+
+                                <li className="inputBox type2">
+                                    <span className="tt1">컨설팅 활동</span>
+                                    <div className="input">
+                                        <div className="checkWrap" style={{display: "flex", gap: "20px"}}>
+                                            <label className="checkBox type3">
+                                                <input
+                                                    type="radio"
+                                                    name="cnsltActv"
+                                                    value="Y"
+                                                    className="signUpRadio"
+                                                    checked={consultDetail.cnsltActv === "Y"}
+                                                    onChange={() =>
+                                                        setConsultDetail({...consultDetail, cnsltActv: "Y"})
+                                                    }
                                                 />
+                                                <small>공개</small>
+                                            </label>
+                                            <label className="checkBox type3">
+                                                <input
+                                                    type="radio"
+                                                    name="cnsltActv"
+                                                    value="N"
+                                                    className="signUpRadio"
+                                                    checked={consultDetail.cnsltActv === "N"}
+                                                    onChange={() =>
+                                                        setConsultDetail({...consultDetail, cnsltActv: "N"})
+                                                    }
+                                                />
+                                                <small>비공개</small>
                                             </label>
                                         </div>
                                     </div>
-                                </div>
-                            </li>
+                                </li>
 
-                            <li className="inputBox type2">
-                                <span className="tt1">소개</span>
-                                <div className="input" style={{height: "100%"}}>
-                                    <CommonEditor
-                                        value={consultDetail.cnsltSlfint || ""}
-                                        onChange={handleChange}
-                                    />
-                                </div>
-                            </li>
-
-                            <li className="inputBox type2">
-                                <span className="tt1">직위</span>
-                                <label className="input">
-                                    <input
-                                        type="text"
-                                        name="consultantPosition"
-                                        placeholder="직위를 입력해주세요"
-                                        value={consultDetail.jbpsNm || ""}
-                                        onChange={(e) => setConsultDetail({
-                                            ...consultDetail,
-                                            jbpsNm: e.target.value
-                                        })}
-                                    />
-                                </label>
-                            </li>
-
-                            <li className="inputBox type2">
-                                <span className="tt1">경력</span>
-                                <div className="flexinput input">
-                                    <input
-                                        type="text"
-                                        name="consultantExperience"
-                                        placeholder="숫자만 입력"
-                                        value={consultDetail.crrPrd || ""}
-                                        onChange={(e) => setConsultDetail({
-                                            ...consultDetail,
-                                            crrPrd: e.target.value
-                                        })}
-                                        style={{width: "120px"}}
-                                    />
-                                    <span style={{marginLeft: "10px", color: "#333"}}>년</span>
-                                </div>
-                            </li>
-
-                            <li className="inputBox type2">
-                                <span className="tt1">소속</span>
-                                <label className="input">
-                                    <input
-                                        type="text"
-                                        name="consultantAffiliation"
-                                        placeholder="소속을 입력해주세요"
-                                        value={consultDetail.ogdpNm || ""}
-                                        onChange={(e) => setConsultDetail({
-                                            ...consultDetail,
-                                            ogdpNm: e.target.value
-                                        })}
-                                    />
-                                </label>
-                            </li>
-
-                            <li className="inputBox type2">
-                                <span className="tt1">컨설팅 항목</span>
-                                <div className="input">
-                                    <div className="checkWrap" style={{display: "flex", gap: "20px"}}>
-                                        <input
-                                            type="text"
-                                            name="consultingOption1"
-                                            checked={consultDetail.consultingOption1}
-                                            onChange={(e) => setConsultDetail({
-                                                ...consultDetail,
-                                                consultingOption1: e.target.checked
-                                            })}
-                                        />
-                                    </div>
-                                </div>
-                            </li>
-
-                            <li className="inputBox type2">
-                                <span className="tt1">자문분야</span>
-                                <label className="input">
-                                    <div className="itemBox" style={{flex: 1}}>
-                                        {getComCdListToHtml(comCdList)}
-                                    </div>
-                                </label>
-                            </li>
-
-                            <li className="inputBox type2">
-                                <span className="tt1">컨설팅 활동</span>
-                                <div className="input">
-                                    <div className="checkWrap" style={{display: "flex", gap: "20px"}}>
-                                        <label className="checkBox type3">
-                                            <input
-                                                type="radio"
-                                                name="cnsltActv"
-                                                value="Y"
-                                                className="signUpRadio"
-                                                checked={consultDetail.cnsltActv === "Y"}
-                                                onChange={() =>
-                                                    setConsultDetail({...consultDetail, cnsltActv: "Y"})
-                                                }
-                                            />
-                                            <small>공개</small>
-                                        </label>
-                                        <label className="checkBox type3">
-                                            <input
-                                                type="radio"
-                                                name="cnsltActv"
-                                                value="N"
-                                                className="signUpRadio"
-                                                checked={consultDetail.cnsltActv === "N"}
-                                                onChange={() =>
-                                                    setConsultDetail({...consultDetail, cnsltActv: "N"})
-                                                }
-                                            />
-                                            <small>비공개</small>
-                                        </label>
-                                    </div>
-                                </div>
-                            </li>
-
-                            <li className="inputBox type2">
-                                <span className="tt1">간략 소개</span>
-                                <label className="input">
+                                <li className="inputBox type2">
+                                    <span className="tt1">간략 소개</span>
+                                    <label className="input">
                                     <textarea
                                         style={{height: "100px"}}
                                         name="consultantAffiliation"
@@ -1272,114 +1376,135 @@ function MemberMyPageModify(props) {
                                             });
                                         }}
                                     ></textarea>
-                                    <div style={{textAlign: "right", fontSize: "0.9em", color: "#666"}}>
-                                        {(consultDetail.rmrkCn || "").length} / 100
-                                    </div>
-                                </label>
-                            </li>
-
-                            <li className="inputBox type2 width1">
-                                <span className="tt1">자격증</span>
-                                <div className="input" style={{height: "100%"}}>
-                                    <div style={{display: "flex", flexDirection: "column", gap: "10px"}}>
-                                        <div
-                                            className="certificate-header"
-                                            style={{
-                                                display: "grid",
-                                                gridTemplateColumns: "1fr 1fr 1fr 1fr auto",
-                                                gap: "10px",
-                                                paddingBottom: "5px",
-                                                borderBottom: "1px solid #000",
-                                            }}>
-                                            <span>자격증명</span>
-                                            <span>발급기관</span>
-                                            <span>취득일</span>
-                                            <span>파일 업로드</span>
+                                        <div style={{textAlign: "right", fontSize: "0.9em", color: "#666"}}>
+                                            {(consultDetail.rmrkCn || "").length} / 100
                                         </div>
-                                        {certificates.map((cert, index) => (
-                                            <div
-                                                key={cert.key}
-                                                className="flexinput"
-                                                style={{
-                                                    display: "flex",
-                                                    alignItems: "center",
-                                                    gap: "10px",
-                                                }}
-                                            >
-                                                <input
-                                                    type="text"
-                                                    name="qlfcLcnsNm"
-                                                    placeholder="자격증명을 입력하세요"
-                                                    className="f_input2"
-                                                    style={{width: "29%"}}
-                                                    value={cert.qlfcLcnsNm}
-                                                    onChange={(e) => handleInputChange(e, cert.key, "cert", "qlfcLcnsNm")}
-                                                />
-                                                <input
-                                                    type="text"
-                                                    name="pblcnInstNm"
-                                                    placeholder="발급기관을 입력하세요"
-                                                    className="f_input2"
-                                                    value={cert.pblcnInstNm}
-                                                    style={{width: "29%"}}
-                                                    onChange={(e) => handleInputChange(e, cert.key, "cert", "pblcnInstNm")}
-                                                />
-                                                <input
-                                                    type="date"
-                                                    name="acqsYmd"
-                                                    placeholder="취득일"
-                                                    className="f_input2"
-                                                    style={{width: "29%"}}
-                                                    value={formatDate(cert.acqsYmd)}
-                                                    onChange={(e) => handleInputChange(e, cert.key, "cert", "acqsYmd")}
-                                                />
-                                                {selectedCertFiles.length > 0 && selectedCertFiles[index] ? (
-                                                    <p className="file_name" id={`CertFileNamePTag${cert.key}`} style={{width: "20%"}}>
-        <span
-            onClick={() => fileDownLoad(selectedCertFiles[index].atchFileSn, selectedCertFiles[index].atchFileNm)}
-            style={{cursor: "pointer"}}
-        >
-            {selectedCertFiles[index].atchFileNm} -
-            {Number(selectedCertFiles[index].atchFileSz) > 0 ?
-                (Number(selectedCertFiles[index].atchFileSz / 1024).toFixed(2))
-                : "0"} KB
-        </span>
-                                                        <button
-                                                            onClick={() => setFileDel(selectedCertFiles[index].atchFileSn)}
-                                                            style={{marginLeft: '10px', color: 'red'}}
-                                                        >
-                                                            삭제
-                                                        </button>
-                                                    </p>
-                                                ) : (
-                                                    <label className="fileLabel">파일 선택
-                                                        <input
-                                                            type="file"
-                                                            name={`selectedCertFile${index}`}
-                                                            id={`formCertFile${index}`}
-                                                            className="noneTag"
-                                                            onChange={(e) => handleFileChange(e, "cert", index)}
-                                                        />
-                                                    </label>
-                                                )}
+                                    </label>
+                                </li>
 
-                                                <button type="button" className="fileLabel"
-                                                        onClick={() => removeCertificate(cert.key, cert.qlfcLcnsSn)}>
-                                                    삭제
-                                                </button>
+                                <li className="inputBox type2 width1">
+                                    <span className="tt1">자격증</span>
+                                    <div className="input" style={{height: "100%"}}>
+                                        <div style={{display: "flex", flexDirection: "column", gap: "10px"}}>
+                                            <div
+                                                className="certificate-header"
+                                                style={{
+                                                    display: "grid",
+                                                    gridTemplateColumns: "1fr 1fr 1fr 1fr auto",
+                                                    gap: "10px",
+                                                    paddingBottom: "5px",
+                                                    borderBottom: "1px solid #000",
+                                                }}>
+                                                <span>자격증명</span>
+                                                <span>발급기관</span>
+                                                <span>취득일</span>
+                                                <span>파일 업로드</span>
                                             </div>
-                                        ))}
-                                        <button
-                                            type="button"
-                                            className="writeBtn clickBtn"
-                                            style={{width: "10%", height: "30px"}}
-                                            onClick={addCertificate}
-                                        >
-                                            추가
-                                        </button>
+                                            {certificates.map((cert, index) => (
+                                                <div
+                                                    key={cert.key}
+                                                    className="flexinput"
+                                                    style={{
+                                                        display: "flex",
+                                                        alignItems: "center",
+                                                        gap: "10px",
+                                                    }}
+                                                >
+                                                    <input
+                                                        type="text"
+                                                        name="qlfcLcnsNm"
+                                                        placeholder="자격증명을 입력하세요"
+                                                        className="f_input2"
+                                                        style={{width: "29%"}}
+                                                        value={cert.qlfcLcnsNm}
+                                                        onChange={(e) => handleInputChange(e, cert.key, "cert", "qlfcLcnsNm")}
+                                                    />
+                                                    <input
+                                                        type="text"
+                                                        name="pblcnInstNm"
+                                                        placeholder="발급기관을 입력하세요"
+                                                        className="f_input2"
+                                                        value={cert.pblcnInstNm}
+                                                        style={{width: "29%"}}
+                                                        onChange={(e) => handleInputChange(e, cert.key, "cert", "pblcnInstNm")}
+                                                    />
+                                                    <input
+                                                        type="date"
+                                                        name="acqsYmd"
+                                                        placeholder="취득일"
+                                                        className="f_input2"
+                                                        style={{width: "29%"}}
+                                                        value={formatDate(cert.acqsYmd)}
+                                                        onChange={(e) => handleInputChange(e, cert.key, "cert", "acqsYmd")}
+                                                    />
+                                                    {selectedCertFiles.length > 0 && selectedCertFiles[index] ? (
+                                                        selectedCertFiles[index].isNew ? (
+                                                            <p className="file_name" id={`cert${index}`}
+                                                               style={{width: "20%"}}>
+                                                            <span style={{cursor: "pointer"}}>
+                                                                {selectedCertFiles[index].file.name}
+                                                            </span>
+                                                            </p>
+                                                        ) : (
+                                                            <p className="file_name" id={`CertFileNamePTag${cert.key}`}
+                                                               style={{width: "20%"}}>
+                                                            <span
+                                                                onClick={() => fileDownLoad(selectedCertFiles[index].atchFileSn, selectedCertFiles[index].atchFileNm)}
+                                                                style={{cursor: "pointer"}}>
+                                                                {selectedCertFiles[index].atchFileNm}
+                                                            </span>
+                                                            </p>
+                                                        )
+                                                    ) : (
+                                                        <div
+                                                            style={{
+                                                                display: "flex",
+                                                                alignItems: "center",
+                                                                gap: "10px",
+                                                            }}
+                                                            className="widthGroup20"
+                                                        >
+                                                            <p className="file_name" id={`cert${index}`}
+                                                               style={{width: "50%"}}></p>
+                                                            <label
+                                                                className="fileLabel"
+                                                                style={{ marginLeft: "auto", cursor: "pointer" }}
+                                                            >
+                                                                파일 선택
+                                                                <input
+                                                                    type="file"
+                                                                    name={`selectedCertFile${index}`}
+                                                                    id={`formCertFile${index}`}
+                                                                    className="noneTag"
+                                                                    onChange={(e) => handleFileChange(e, "cert", index)}
+                                                                />
+                                                            </label>
+                                                        </div>
+                                                    )}
+                                                    <button type="button" className="fileLabel"
+                                                            onClick={() => {
+                                                                const certFile = selectedCertFiles[index];
+                                                                if (certFile && certFile.atchFileSn) {
+                                                                    removeCertificate(cert.key, cert.qlfcLcnsSn, certFile.atchFileSn);
+                                                                } else {
+                                                                    removeCertificate(cert.key, cert.qlfcLcnsSn, null);
+                                                                }
+                                                            }}>
+                                                        삭제
+                                                    </button>
+                                                </div>
+                                            ))}
+                                            <button
+                                                type="button"
+                                                className="writeBtn clickBtn"
+                                                style={{width: "10%", height: "30px"}}
+                                                onClick={addCertificate}
+                                            >
+                                                추가
+                                            </button>
+                                        </div>
                                     </div>
-                                </div>
-                            </li>
+                                </li>
 
                                 <li className="inputBox type2 width1">
                                     <span className="tt1">경력 상세</span>
@@ -1446,37 +1571,64 @@ function MemberMyPageModify(props) {
                                                         onChange={(e) => handleInputChange(e, career.key, "career", "rsgntnYmd")}
                                                     />
                                                     {selectedCareerFiles.length > 0 && selectedCareerFiles[index] ? (
-                                                        <p className="file_name" id={`careerFileNamePTag${career.key}`}
-                                                                                           style={{width: "20%"}}>
-                                                            <span
-                                                                onClick={() => fileDownLoad(selectedCareerFiles[index].atchFileSn, selectedCareerFiles[index].atchFileNm)}
-                                                                style={{cursor: "pointer"}}
-                                                            >
-                                                                {selectedCareerFiles[index].atchFileNm} - {Number(selectedCareerFiles[index].atchFileSz / 1024).toFixed(2)} KB
-                                                            </span>
-                                                            <button
-                                                                onClick={() => setFileDel(selectedCareerFiles[index].atchFileSn)}
-                                                                style={{marginLeft: '10px', color: 'red'}}
-                                                            >
-                                                                삭제
-                                                            </button>
-                                                        </p>
+                                                        selectedCareerFiles[index].isNew ? (
+                                                            <p className="file_name" id={`career${index}`}
+                                                               style={{width: "20%"}}>
+                                                               <span style={{cursor: "pointer"}}>
+                                                                    {selectedCareerFiles[index].file.name}
+                                                                </span>
+                                                            </p>
+                                                        ) : (
+                                                            <p className="file_name" id={`CrrFileNamePTag${career.key}`}
+                                                               style={{width: "20%"}}>
+                                                                <span
+                                                                    onClick={() => fileDownLoad(selectedCareerFiles[index].atchFileSn, selectedCareerFiles[index].atchFileNm)}
+                                                                    style={{cursor: "pointer"}}
+                                                                >
+                                                                    {selectedCareerFiles[index].atchFileNm}
+                                                                </span>
+                                                            </p>
+                                                        )
                                                     ) : (
-                                                        <label style={{width: "20%"}}>
-                                                            <input
-                                                                type="file"
-                                                                name={`selectedCareerFile${index}`}
-                                                                id={`formCareerFile${index}`}
-                                                                onChange={(e) => handleFileChange(e, "career", index)}
-                                                            />
-                                                        </label>
+                                                        <div
+                                                            style={{
+                                                                display: "flex",
+                                                                alignItems: "center",
+                                                                gap: "10px",
+                                                            }}
+                                                            className="widthGroup20"
+                                                        >
+                                                            <p className="file_name" id={`career${index}`}
+                                                               style={{width: "50%"}}></p>
+                                                            <label
+                                                                className="fileLabel"
+                                                                style={{ marginLeft: "auto", cursor: "pointer" }}
+                                                            >
+                                                                파일 선택
+                                                                <input
+                                                                    type="file"
+                                                                    name={`selectedCareerFile${index}`}
+                                                                    id={`formCareerFile${index}`}
+                                                                    className="noneTag"
+                                                                    onChange={(e) => handleFileChange(e, "career", index)}
+                                                                />
+                                                            </label>
+                                                        </div>
                                                     )}
-                                                    <button type="button" style={{width: "10%"}}
-                                                            onClick={() => removeCareer(career.key, career.crrSn)}>
+                                                    <button type="button" className="fileLabel"
+                                                            onClick={() => {
+                                                                const crrFile = selectedCareerFiles[index];
+                                                                if (crrFile && crrFile.atchFileSn) {
+                                                                    removeCareer(career.key, career.crrSn, crrFile.atchFileSn);
+                                                                } else {
+                                                                    removeCareer(career.key, career.crrSn, null);
+                                                                }
+                                                            }}>
                                                         삭제
                                                     </button>
                                                 </div>
                                             ))}
+
                                             <button
                                                 type="button"
                                                 className="writeBtn clickBtn"
@@ -1565,33 +1717,59 @@ function MemberMyPageModify(props) {
                                                         onChange={(e) => handleInputChange(e, acbg.key, "acbg", "grdtnYmd")}
                                                     />
                                                     {selectedAcbgFiles.length > 0 && selectedAcbgFiles[index] ? (
-                                                        <p className="file_name" id={`acbgFileNamePTag${acbg.key}`}
-                                                           style={{width: "20%"}}>
+                                                        selectedAcbgFiles[index].isNew ? (
+                                                            <p className="file_name" id={`acbg${index}`}
+                                                               style={{width: "20%"}}>
+                                                            <span style={{cursor: "pointer"}}>
+                                                                {selectedAcbgFiles[index].file.name}
+                                                            </span>
+                                                            </p>
+                                                        ) : (
+                                                            <p className="file_name" id={`AcbgFileNamePTag${acbg.key}`}
+                                                               style={{width: "20%"}}>
                                                             <span
                                                                 onClick={() => fileDownLoad(selectedAcbgFiles[index].atchFileSn, selectedAcbgFiles[index].atchFileNm)}
-                                                                style={{cursor: "pointer"}}
-                                                            >
-                                                                {selectedAcbgFiles[index].atchFileNm} - {Number(selectedAcbgFiles[index].atchFileSz / 1024).toFixed(2)} KB
+                                                                style={{cursor: "pointer"}}>
+                                                                {selectedAcbgFiles[index].atchFileNm}
                                                             </span>
-                                                            <button
-                                                                onClick={() => setFileDel(selectedAcbgFiles[index].atchFileSn)}
-                                                                style={{marginLeft: '10px', color: 'red'}}
-                                                            >
-                                                                삭제
-                                                            </button>
-                                                        </p>
+                                                            </p>
+                                                        )
                                                     ) : (
-                                                        <label style={{width: "20%"}}>
-                                                            <input
-                                                                type="file"
-                                                                name={`selectedAcbgFile${index}`}
-                                                                id={`formAcbgFile${index}`}
-                                                                onChange={(e) => handleFileChange(e, "acbg", index)}
-                                                            />
-                                                        </label>
+                                                        <div
+                                                            style={{
+                                                                display: "flex",
+                                                                alignItems: "center",
+                                                                gap: "10px",
+                                                            }}
+                                                            className="widthGroup20"
+                                                        >
+                                                            <p className="file_name" id={`acbg${index}`}
+                                                               style={{width: "50%"}}></p>
+                                                            <label
+                                                                className="fileLabel"
+                                                                style={{ marginLeft: "auto", cursor: "pointer" }}
+                                                            >
+                                                                파일 선택
+                                                                <input
+                                                                    type="file"
+                                                                    name={`selectedAcbgFile${index}`}
+                                                                    id={`formAcbgFile${index}`}
+                                                                    className="noneTag"
+                                                                    onChange={(e) => handleFileChange(e, "acbg", index)}
+                                                                />
+                                                            </label>
+                                                        </div>
                                                     )}
-                                                    <button type="button" style={{width: "10%"}}
-                                                            onClick={() => removeAcbg(acbg.key, acbg.acbgSn)}>
+                                                    <button type="button" className="fileLabel"
+                                                            onClick={() => {
+                                                                const acbgFile = selectedAcbgFiles[index];
+                                                                if (acbgFile && acbgFile.atchFileSn) {
+                                                                    removeAcbg(acbg.key, acbg.acbgSn, acbgFile.atchFileSn);
+                                                                } else {
+                                                                    removeAcbg(acbg.key, acbg.acbgSn, null);
+                                                                }
+                                                            }}
+                                                            style={{width: "6%"}}>
                                                         삭제
                                                     </button>
                                                 </div>
@@ -1611,10 +1789,11 @@ function MemberMyPageModify(props) {
                             </ul>
 
                         )}
+                    </div>
 
                         <div className="buttonBox">
                             <button type="button" className="clickBtn black" onClick={checkPwd}
-                            style={{marginBottom: "50px", marginTop: "30px"}}>
+                                    style={{marginBottom: "50px", marginTop: "30px"}}>
                                 <span>수정</span>
                             </button>
                         </div>
