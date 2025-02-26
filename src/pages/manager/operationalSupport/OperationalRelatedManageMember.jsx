@@ -9,18 +9,23 @@ import ManagerLeft from "@/components/manager/ManagerLeftOperationalSupport";
 import EgovPaging from "@/components/EgovPaging";
 import OperationalSupport from "./OperationalSupport.jsx";
 import base64 from 'base64-js';
+import Swal from "sweetalert2";
+import {getComCdList} from "@/components/CommonComponents";
 
 function OperationalRelatedMember(props) {
     const location = useLocation();
+    const [mbrTpbizList, setMbrTpbizList] = useState([])
     const [residentMemberList, setAuthorityList] = useState([]);
+    const [selectedFiles, setSelectedFiles] = useState([]);
+    const [selCancleList, setSelCancleList] = useState({});
     const [searchDto, setSearchDto] = useState(
         {
             pageIndex : 1,
             relInstSn : location.state?.relInstSn,
             sysMngrYn : "Y",
-            actvtnYn: "",
-            kornFlnm: "",
-            userId: ""
+            mbrStts:"",
+            searchType: "",
+            searchVal : "",
         }
     );
     const [paginationInfo, setPaginationInfo] = useState({
@@ -56,6 +61,11 @@ function OperationalRelatedMember(props) {
                 requestOptions,
                 (resp) => {
                     setPaginationInfo(resp.paginationInfo);
+
+                    if(resp.result.logoFile){
+                        setSelectedFiles(resp.result.logoFile);
+                    }
+
                     let dataList = [];
                     dataList.push(
                         <tr key="noData">
@@ -65,26 +75,26 @@ function OperationalRelatedMember(props) {
 
                     resp.result.getRelatedMemberList.forEach(function (item,index){
                         if(index === 0) dataList = [];
-                        const decodedPhoneNumber = decodePhoneNumber(item.mblTelno);
+                        const decodedPhoneNumber = decodePhoneNumber(item.tblUser.mblTelno);
 
                         dataList.push(
-                            <tr key={item.userSn}>
+                            <tr key={item.tblUser.userSn}>
                                 <td>{index + 1}</td>
-                                <td>{item.userId}</td>
+                                <td>{item.tblUser.userId}</td>
                                 <td>
                                     <Link to={URL.MANAGER_RELATED_MEMBER_EDIT}
                                           state={{
                                               relInstSn: searchDto.relInstSn,
                                               mode:CODE.MODE_MODIFY,
-                                              userSn: item.userSn
+                                              userSn: item.tblUser.userSn
                                           }}
                                     >
-                                        {item.kornFlnm}
+                                        {item.tblUser.kornFlnm}
                                     </Link>
                                 </td>
-                                <td>{decodedPhoneNumber}</td>
-                                <td>{item.email}</td>
-                                <td>{new Date(item.frstCrtDt).toISOString().split("T")[0]}</td>
+                                <td>{ComScript.formatTelNumber(decodedPhoneNumber)}</td>
+                                <td>{item.tblUser.email}</td>
+                                <td>{new Date(item.tblUser.frstCrtDt).toISOString().split("T")[0]}</td>
                                 <td>
                                     <button type="button" className="settingBtn"><span>삭제</span></button>
                                 </td>
@@ -107,6 +117,13 @@ function OperationalRelatedMember(props) {
         getRelatedMemberList(searchDto);
     },[]);
 
+    useEffect(() => {
+        getComCdList(18).then((data) => {
+            setMbrTpbizList(data);
+        });
+    }, []);
+
+
 
     return (
         <div id="container" className="container layout cms">
@@ -118,6 +135,14 @@ function OperationalRelatedMember(props) {
                     <div className="left">
                         <figure className="logo">
                             {/*기업 로고 이미지 추가할 것*/}
+                            {selectedFiles && selectedFiles.atchFileSn ? (
+                                <img
+                                    src={`http://133.186.250.158${selectedFiles.atchFilePathNm}/${selectedFiles.strgFileNm}.${selectedFiles.atchFileExtnNm}`}
+                                    alt="image"
+                                />
+                            ) : (
+                                <img src="" alt="defaultImage" />
+                            )}
                         </figure>
                         <p className="name" id="relInstNm"></p>
                     </div>
@@ -132,11 +157,13 @@ function OperationalRelatedMember(props) {
                         </li>
                         <li>
                             <p className="tt1">업종</p>
-                            <p className="tt2">{location.state?.clsNm}</p>
+                            <p className="tt2">
+                                {mbrTpbizList.find((item) => item.comCd === location.state?.tpbiz)?.comCdNm || ""}
+                            </p>
                         </li>
                     </ul>
                 </div>
-                <div className="cateWrap">
+                {/*<div className="cateWrap">
                     <form action="">
                         <ul className="cateList">
                             <li className="inputBox type1">
@@ -187,7 +214,7 @@ function OperationalRelatedMember(props) {
                             </button>
                         </div>
                     </form>
-                </div>
+                </div>*/}
                 {/*본문리스트영역*/}
                 <div className="contBox board type2 customContBox">
                     <div className="topBox">
@@ -225,7 +252,7 @@ function OperationalRelatedMember(props) {
                         />
                         <button type="button" className="writeBtn clickBtn"><span>등록</span></button>
                         <Link
-                            to={URL.MANAGER_OPERATIONAL_SUPPORT}
+                            to={URL.MANAGER_RELATED_ORGANIZATION}
                         >
                             <button type="button" className="clickBtn black"><span>목록</span></button>
                         </Link>
