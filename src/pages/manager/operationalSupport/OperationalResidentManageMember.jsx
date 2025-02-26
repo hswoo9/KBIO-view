@@ -416,7 +416,7 @@ function OperationalResidentMember(props) {
                 {/*본문리스트영역*/}
                 <div className="contBox board type2 customContBox">
                     <div className="topBox">
-                        <p className="resultText"><span className="red">{paginationInfo.totalRecordCount}</span>건의 입주기업 정보가 조회되었습니다.</p>
+                        <p className="resultText"><span className="red">{paginationInfo?.totalRecordCount}</span>건의 입주기업 정보가 조회되었습니다.</p>
                     </div>
                     <div className="tableBox type1">
                         <table>

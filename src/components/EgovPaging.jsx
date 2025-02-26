@@ -7,10 +7,10 @@ function EgovPaging(props) {
   if (props.pagination === undefined) {
     paginationTag = "-";
   } else {
-    const currentPageNo = props.pagination.currentPageNo;
-    const pageSize = props.pagination.pageSize;
-    const totalRecordCount = props.pagination.totalRecordCount;
-    const recordCountPerPage = props.pagination.recordCountPerPage;
+    const currentPageNo = props.pagination?.currentPageNo;
+    const pageSize = props.pagination?.pageSize;
+    const totalRecordCount = props.pagination?.totalRecordCount;
+    const recordCountPerPage = props.pagination?.recordCountPerPage;
 
     const totalPageCount = Math.ceil(totalRecordCount / recordCountPerPage);
     const currentFirstPage =
