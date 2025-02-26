@@ -6,7 +6,7 @@ import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
 import 'moment/locale/ko';
-import ManagerLeftNew from "@/components/manager/ManagerLeftNew";
+import ManagerLeftNew from "@/components/manager/ManagerLeftOperationalSupport";
 import Swal from "sweetalert2";
 import moment from "moment";
 

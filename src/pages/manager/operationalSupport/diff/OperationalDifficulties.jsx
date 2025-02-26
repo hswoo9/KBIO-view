@@ -13,7 +13,7 @@ import Swal from 'sweetalert2';
 import { getSessionItem } from "@/utils/storage";
 import {getComCdList} from "../../../../components/CommonComponents.jsx";
 import moment from "moment/moment.js";
-import ManagerLeftOperationalSupport from "../../../../components/manager/ManagerLeftOperationalSupport.jsx";
+import ManagerLeftOperationalSupport from "@/components/manager/ManagerLeftOperationalSupport";
 
 function OperationalDifficulties(props) {
     const sessionUser = getSessionItem("loginUser");
