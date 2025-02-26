@@ -99,7 +99,7 @@ function OperationalResidentMember(props) {
                                 {item.tblUser.kornFlnm}
                                 </Link>
                                 </td>
-                                <td>{decodedPhoneNumber}</td>
+                                <td>{ComScript.formatTelNumber(decodedPhoneNumber)}</td>
                                 <td>{item.tblUser.email}</td>
                                 <td>{new Date(item.tblUser.frstCrtDt).toISOString().split("T")[0]}</td>
                             </tr>
