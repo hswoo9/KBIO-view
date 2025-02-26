@@ -5,7 +5,7 @@ import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
 import 'moment/locale/ko';
-
+import { excelExport } from "@/components/CommonComponents";
 import ManagerLeft from "@/components/manager/ManagerLeftMember";
 import Swal from 'sweetalert2';
 import EgovPaging from "@/components/EgovPaging";
@@ -90,6 +90,61 @@ function NormalMemberList(props) {
             }
         });
     };
+
+    const dataExcelDownload = useCallback(() => {
+        let excelParams = searchDto;
+        excelParams.pageIndex = 1;
+        excelParams.pageUnit = paginationInfo?.totalRecordCount || 9999999999
+
+        const requestURL = "/memberApi/getNormalMemberList.do";
+        const requestOptions = {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json",
+            },
+            body: JSON.stringify(excelParams)
+        };
+        EgovNet.requestFetch(
+            requestURL,
+            requestOptions,
+            (resp) => {
+                let rowDatas = [];
+                if(resp.result.getNormalMemberList != null){
+                    resp.result.getNormalMemberList.forEach(function (item, index) {
+                        rowDatas.push(
+                            {
+                                number : resp.paginationInfo.totalRecordCount - (resp.paginationInfo.currentPageNo - 1) * resp.paginationInfo.pageSize - index,
+                                mbrType :   item.mbrType === 9 ? '관리자' :
+                                            item.mbrType === 1 ? '입주기업' :
+                                            item.mbrType === 2 ? '컨설턴트' :
+                                            item.mbrType === 3 ? '유관기관' :
+                                            item.mbrType === 4 ? '비입주기업' :
+                                            '테스트',
+                                userId : item.userId,
+                                kornFlnm : item.kornFlnm,
+                                userType : item.userType || " ",
+                                temp : " ",
+                                frstCrtDt : moment(item.frstCrtDt).format('YYYY-MM-DD'),
+                                useYn : item.mbrStts === 'Y' ? '정상회원' :
+                                        item.mbrStts === 'W' ? '대기회원' :
+                                        item.mbrStts === 'R' ? '반려회원' :
+                                        item.mbrStts === 'C' ? '정지회원' :
+                                        item.mbrStts === 'S' ? '탈퇴회원' : ' '
+                            }
+                        )
+                    });
+                }
+
+
+                let sheetDatas = [{
+                    sheetName : "전체회원",
+                    header : ['번호', '회원분류', '아이디', '성명', '기업명', '소셜구분', '가입일', '최근회원상태'],
+                    row : rowDatas
+                }];
+                excelExport("전체회원", sheetDatas);
+            }
+        )
+    });
 
     const getnormalMemberList = useCallback(
         (searchDto) => {
@@ -321,7 +376,7 @@ function NormalMemberList(props) {
                             페이지 : <span className="red">{paginationInfo.currentPageNo}/{paginationInfo.totalPageCount}</span>
                         </p>
                         <div className="rightBox">
-                            <button type="button" className="btn btn2 downBtn red">
+                            <button type="button" className="btn btn2 downBtn red" onClick={dataExcelDownload}>
                                 <div className="icon"></div>
                                 <span>엑셀 다운로드</span></button>
                         </div>
@@ -331,15 +386,15 @@ function NormalMemberList(props) {
                             <caption>회원목록</caption>
                             <thead>
                             <tr>
-                                    <th className="th1">번호</th>
-                                    <th className="th1">회원분류</th>
-                                    <th className="th2">아이디</th>
-                                    <th className="th2">성명</th>
-                                    <th className="th2">기업명</th>
-                                    <th className="th1">소셜구분</th>
-                                    <th className="th2">가입일</th>
-                                    <th className="th2">최근 접속일시</th>
-                                    <th className="th1">최근 회원상태</th>
+                                <th className="th1">번호</th>
+                                <th className="th1">회원분류</th>
+                                <th className="th2">아이디</th>
+                                <th className="th2">성명</th>
+                                <th className="th2">기업명</th>
+                                <th className="th1">소셜구분</th>
+                                <th className="th2">가입일</th>
+                                <th className="th2">최근 접속일시</th>
+                                <th className="th1">최근 회원상태</th>
                             </tr>
                             </thead>
                             <tbody>
