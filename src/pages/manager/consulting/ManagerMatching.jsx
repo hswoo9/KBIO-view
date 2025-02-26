@@ -12,7 +12,7 @@ import Swal from 'sweetalert2';
 
 /* bootstrip */
 import { getSessionItem } from "@/utils/storage";
-import {getComCdList} from "@/components/CommonComponents";
+import {getComCdList, excelExport} from "@/components/CommonComponents";
 import moment from "moment/moment.js";
 
 function ManagerMatching(props) {
@@ -271,6 +271,51 @@ function ManagerMatching(props) {
         });
     }
 
+    const dataExcelDownload = useCallback(() => {
+        let excelParams = searchDto;
+        excelParams.pageIndex = 1;
+        excelParams.pageUnit = paginationInfo?.totalRecordCount || 9999999999
+
+        const requestURL = "/consultingApi/getConsultingList.do";
+        const requestOptions = {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json",
+            },
+            body: JSON.stringify(excelParams)
+        };
+        EgovNet.requestFetch(
+            requestURL,
+            requestOptions,
+            (resp) => {
+                let rowDatas = [];
+                if(resp.result.consultantList != null){
+                    resp.result.consultantList.forEach(function (item, index) {
+                        rowDatas.push(
+                            {
+                                number : resp.paginationInfo.totalRecordCount - (resp.paginationInfo.currentPageNo - 1) * resp.paginationInfo.pageSize - index,
+                                cnsltFldNm : item.cnsltFldNm || " ",
+                                cnslttKornFlnm : item.cnslttKornFlnm || " ",
+                                ogdpNm : item.ogdpNm || " ",
+                                ttl : item.ttl || " ",
+                                kornFlnm : item.kornFlnm || " ",
+                                frstCrtDt : moment(item.frstCrtDt).format('YYYY-MM-DD'),
+                                cnsltCount : "상태", // TODO : 상태 관련 코드 수정되면 여기도 수정
+                                dgstfnCnt : item.dgstfnCnt > 0 ? "등록" : "미등록",
+                            }
+                        )
+                    });
+                }
+
+                let sheetDatas = [{
+                    sheetName : "컨설팅의뢰 관리",
+                    header : ['번호', '자문분야', '컨설턴트', '소속', '제목', '신청자', '신청일', '상태', '만족도'],
+                    row : rowDatas
+                }];
+                excelExport("컨설팅의뢰 관리", sheetDatas);
+            }
+        )
+    });
 
     const getConsultingList = useCallback(
         (searchDto) => {
@@ -549,7 +594,7 @@ function ManagerMatching(props) {
                         <p className="resultText">전체 : <span className="red">{paginationInfo.totalRecordCount}</span>건 페이지 : <span
                             className="red">{paginationInfo.currentPageNo}/{paginationInfo.totalPageCount}</span></p>
                         <div className="rightBox">
-                            <button type="button" className="btn btn2 downBtn red">
+                            <button type="button" className="btn btn2 downBtn red" onClick={dataExcelDownload}>
                                 <div className="icon"></div>
                                 <span>엑셀 다운로드</span></button>
                         </div>
