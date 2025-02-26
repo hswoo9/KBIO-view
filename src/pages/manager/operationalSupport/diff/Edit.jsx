@@ -10,9 +10,9 @@ import ManagerLeftNew from "@/components/manager/ManagerLeftOperationalSupport";
 import Swal from "sweetalert2";
 import moment from "moment";
 
-import {fileDownLoad} from "../../../../components/CommonComponents.jsx";
-import {getSessionItem} from "../../../../utils/storage.js";
-import CommonEditor from "../../../../components/CommonEditor.jsx";
+import {fileDownLoad} from "@/components/CommonComponents";
+import {getSessionItem} from "@/utils/storage";
+import CommonEditor from "@/components/CommonEditor";
 
 function setDiffEdit(props) {
 

@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useRef, useCallback} from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { getComCdList } from "../../components/CommonComponents.jsx";
+import { getComCdList } from "@/components/CommonComponents";
 import AOS from "aos";
 import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";

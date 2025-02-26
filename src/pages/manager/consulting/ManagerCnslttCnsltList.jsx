@@ -8,8 +8,8 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import CommonEditor from "@/components/CommonEditor";
 import moment from "moment";
-import {getComCdList} from "../../../components/CommonComponents.jsx";
-import EgovPaging from "../../../components/EgovPaging.jsx";
+import {getComCdList} from "@/components/CommonComponents";
+import EgovPaging from "@/components/EgovPaging";
 import ManagerCnslttCnsltDtl from "./ManagerCnslttCnsltDtl.jsx";
 
 function ManagerCnslttCnsltList({ cnsltSe, userSn }) {

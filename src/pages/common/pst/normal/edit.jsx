@@ -10,8 +10,8 @@ import Swal from "sweetalert2";
 import moment from "moment";
 
 import CommonEditor from "@/components/CommonEditor";
-import {getSessionItem} from "../../../../utils/storage.js";
-import {getComCdList} from "../../../../components/CommonComponents.jsx";
+import {getSessionItem} from "@/utils/storage";
+import {getComCdList} from "@/components/CommonComponents";
 
 function setCommonPst(props) {
 

@@ -9,9 +9,8 @@ import moment from "moment";
 import '@/css/quillSnow.css';
 import '@/css/manager/managerPstDetail.css';
 import { getSessionItem, setSessionItem } from "@/utils/storage";
-import {fileDownLoad, fileZipDownLoad} from "@/components/CommonComponents.jsx";
+import {fileDownLoad, fileZipDownLoad, getComCdList} from "@/components/CommonComponents";
 import CommonPstEval from "../eval.jsx";
-import {getComCdList} from "../../../../components/CommonComponents.jsx";
 
 function commonPstDetail(props) {
   const sessionUser = getSessionItem("loginUser");

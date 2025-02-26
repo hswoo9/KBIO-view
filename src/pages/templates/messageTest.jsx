@@ -1,8 +1,8 @@
 import React, {useEffect, useRef, useState} from "react";
 import { default as EgovLeftNav } from "@/components/leftmenu/EgovLeftNavTemplates";
-import {useWebSocket, sendMessageFn} from "../../utils/WebSocketProvider.jsx";
-import {getSessionItem} from "../../utils/storage.js";
-import {fileUpload} from "../../components/CommonComponents.jsx";
+import {useWebSocket, sendMessageFn} from "@/utils/WebSocketProvider";
+import {getSessionItem} from "@/utils/storage";
+import {fileUpload} from "@/components/CommonComponents";
 
 const WebSocketNotification = () => {
     const sessionUser = getSessionItem("loginUser");

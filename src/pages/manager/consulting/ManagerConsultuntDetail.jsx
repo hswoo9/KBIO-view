@@ -12,7 +12,7 @@ import EgovPaging from "@/components/EgovPaging";
 import Swal from 'sweetalert2';
 import base64 from 'base64-js';
 import ManagerCnslttCnsltList from "./ManagerCnslttCnsltList.jsx";
-import {getComCdList} from "../../../components/CommonComponents.jsx";
+import {getComCdList} from "@/components/CommonComponents";
 import ManagerCnslttSimple from "./ManagerCnslttSimple.jsx";
 
 function ManagerConsultuntDetail(props) {

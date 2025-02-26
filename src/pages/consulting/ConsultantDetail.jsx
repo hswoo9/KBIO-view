@@ -5,13 +5,13 @@ import CommonSubMenu from "@/components/CommonSubMenu";
 import ConsultingModal from "@/components/ConsultingModal";
 import URL from "@/constants/url";
 import Swal from "sweetalert2";
-import {getSessionItem} from "../../utils/storage.js";
+import {getSessionItem} from "@/utils/storage";
 import * as ComScript from "@/components/CommonScript";
 import notProfile from "@/assets/images/no_profile.png";
 
 import user_consultant_img3 from "@/assets/images/user_consultant_img3.jpg";
 import base64 from 'base64-js';
-import {getComCdList} from "../../components/CommonComponents.jsx";
+import {getComCdList} from "@/components/CommonComponents";
 import AOS from "aos";
 
 function ConsultantDetail(props) {

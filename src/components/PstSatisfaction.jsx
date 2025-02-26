@@ -63,8 +63,6 @@ const PstSatisfaction = ({data}) => {
                 requestURL,
                 requestOptions,
                 (resp) => {
-                    console.log(searchCondition);
-                    console.log(resp);
                     if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
                         if(resp.result.pstEvlList != null){
                             let ds = {};

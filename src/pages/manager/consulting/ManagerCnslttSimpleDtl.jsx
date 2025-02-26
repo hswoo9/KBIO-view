@@ -14,7 +14,7 @@ import base64 from 'base64-js';
 
 /* bootstrip */
 import { getSessionItem } from "@/utils/storage";
-import {getComCdList} from "../../../components/CommonComponents.jsx";
+import {getComCdList} from "@/components/CommonComponents";
 import moment from "moment/moment.js";
 
 function ManagerCnslttSimpleDtl({ item, onBack }){

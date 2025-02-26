@@ -9,7 +9,7 @@ import 'moment/locale/ko';
 import ManagerLeftNew from "@/components/manager/ManagerLeftNew";
 import EgovRadioButtonGroup from "@/components/EgovRadioButtonGroup";
 import Swal from "sweetalert2";
-import {getSessionItem} from "../../../utils/storage.js";
+import {getSessionItem} from "@/utils/storage";
 
 function setBbs(props) {
   const sessionUser = getSessionItem("loginUser");

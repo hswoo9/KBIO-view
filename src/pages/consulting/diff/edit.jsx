@@ -9,8 +9,8 @@ import 'moment/locale/ko';
 import Swal from "sweetalert2";
 
 import CommonEditor from "@/components/CommonEditor";
-import {getSessionItem} from "../../../utils/storage.js";
-import {getComCdList} from "../../../components/CommonComponents.jsx";
+import {getSessionItem} from "@/utils/storage";
+import {getComCdList} from "@/components/CommonComponents";
 
 function DfclMttrPage(props) {
   const sessionUser = getSessionItem("loginUser");

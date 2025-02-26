@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {getSessionItem} from "../../../utils/storage.js";
+import {getSessionItem} from "@/utils/storage";
 import * as EgovNet from "@/api/egovFetch";
 import Swal from "sweetalert2";
 import moment from "moment/moment.js";

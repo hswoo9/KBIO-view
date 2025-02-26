@@ -9,7 +9,7 @@ import Swal from "sweetalert2";
 import CommonEditor from "@/components/CommonEditor";
 import {useDropzone} from "react-dropzone";
 import { getSessionItem } from "@/utils/storage";
-import {getComCdList} from "../../../components/CommonComponents.jsx";
+import {getComCdList} from "@/components/CommonComponents";
 
 
 
