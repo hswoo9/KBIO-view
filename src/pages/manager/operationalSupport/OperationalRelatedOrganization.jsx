@@ -333,7 +333,11 @@ function OperationalRelatedOrganization(props) {
                 </div>
                 <div className="contBox board type1 customContBox">
                     <div className="topBox">
-                        <p className="resultText"><span className="red">{paginationInfo?.totalRecordCount || 0}</span>건의 유관기관 정보가 조회되었습니다.</p>
+                        <p className="resultText">
+                            전체 : <span className="red">{paginationInfo?.totalRecordCount}</span>건
+                            페이지 : <span
+                            className="red">{paginationInfo?.currentPageNo}/{paginationInfo?.totalPageCount}</span>
+                        </p>
                         <div className="rightBox">
                             <button type="button" className="btn btn2 downBtn red" onClick={dataExcelDownload}>
                                 <div className="icon"></div>

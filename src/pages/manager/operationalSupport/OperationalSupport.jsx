@@ -328,7 +328,11 @@ function OperationalSupport(props) {
                 </div>
                 <div className="contBox board type1 customContBox">
                     <div className="topBox">
-                        <p className="resultText"><span className="red">{paginationInfo?.totalRecordCount}</span>건의 입주기업 정보가 조회되었습니다.</p>
+                        <p className="resultText">
+                            전체 : <span className="red">{paginationInfo?.totalRecordCount}</span>건
+                            페이지 : <span
+                            className="red">{paginationInfo?.currentPageNo}/{paginationInfo?.totalPageCount}</span>
+                        </p>
                         <div className="rightBox">
                             <button type="button" className="btn btn2 downBtn red" onClick={dataExcelDownload}>
                                 <div className="icon"></div>
@@ -337,7 +341,7 @@ function OperationalSupport(props) {
                                 <div className="icon"></div>
                                 <span>엑셀 업로드</span>
                             </button>
-                            <input 
+                            <input
                                 type="file"
                                 accept=".xlsx"
                                 ref={excelUploadRef}
