@@ -16,7 +16,7 @@ import {getComCdList} from "../../../components/CommonComponents.jsx";
 function ResidentMemberCreateContent(props){
     const location = useLocation();
     const [modeInfo, setModeInfo] = useState({ mode: location.state?.mode });
-
+    const [isDatePickerEnabled, setIsDatePickerEnabled] = useState(true);
     const navigate = useNavigate();
     const [residentDetail, setResidentDetail] = useState({});
     const [searchDto, setSearchDto] = useState({mvnEntSn : location.state?.mvnEntSn});
@@ -117,8 +117,6 @@ function ResidentMemberCreateContent(props){
             } else {
             }
         });
-
-
     };
 
     const splitEmail = (email) =>{
@@ -184,6 +182,13 @@ function ResidentMemberCreateContent(props){
                 if(resp.result.mvnEntAtchFile){
                     setFileList(resp.result.mvnEntAtchFile);
                 }
+
+                if(resp.result.rc.actvtnYn == "Y"){
+                    setIsDatePickerEnabled(true);
+                }else{
+                    setIsDatePickerEnabled(false);
+                }
+
             }
 
         });
@@ -444,6 +449,7 @@ function ResidentMemberCreateContent(props){
             alert("기업소개를 입력해주세요.");
             return false;
         }
+
         if(!residentDetail.mainHstry) {
             alert("주요이력을 입력해주세요.");
             return false;
@@ -909,12 +915,13 @@ function ResidentMemberCreateContent(props){
                             <div className="toggleSwithWrap">
                                 <input type="checkbox" id="actvtnYn" hidden
                                        checked={residentDetail.actvtnYn === "Y"}
-                                       onChange={(e) =>
+                                       onChange={(e) => {
                                            setResidentDetail({
                                                ...residentDetail,
                                                actvtnYn: e.target.checked ? "Y" : "N",
                                            })
-                                       }/>
+                                           setIsDatePickerEnabled(e.target.checked);
+                                       }}/>
                                 <label htmlFor="actvtnYn" className="toggleSwitch">
                                     <span className="toggleButton"></span>
                                 </label>
@@ -927,10 +934,8 @@ function ResidentMemberCreateContent(props){
                         </span>
                     </li>
 
-                        {residentDetail.actvtnYn === "Y" && (
-                        <>
-                        <li className="inputBox type1 width3">
-                            <label className="title" htmlFor="ntcBgngDt"><small>공개 시작일</small></label>
+                    <li className="inputBox type1 width3">
+                        <label className="title" htmlFor="ntcBgngDt"><small>공개 시작일</small></label>
                         <div className="input" >
                             <input
                                 type="date"
@@ -944,29 +949,29 @@ function ResidentMemberCreateContent(props){
                                         rlsBgngYmd: formattedDate,
                                     });
                                 }}
+                                disabled={!isDatePickerEnabled}
                             />
                         </div>
-                        </li>
-                        <li className="inputBox type1 width3">
-                            <label className="title" htmlFor="ntcEndDate"><small>공개 종료일</small></label>
-                            <div className="input">
-                            <input
-                                type="date"
-                                name="rlsEndYmd"
-                                value={formatYmdForInput(residentDetail.rlsEndYmd) || ""}
-                                onChange={(e) => {
-                                    const selectedDate = e.target.value;
-                                    const formattedDate = selectedDate.replace(/-/g, '');
-                                    setResidentDetail({
-                                        ...residentDetail,
-                                        rlsEndYmd: formattedDate,
-                                    });
-                                }}
-                            />
-                        </div>
-                        </li>
-                        </>
-                        )}
+                    </li>
+                    <li className="inputBox type1 width3">
+                        <label className="title" htmlFor="ntcEndDate"><small>공개 종료일</small></label>
+                        <div className="input">
+                        <input
+                            type="date"
+                            name="rlsEndYmd"
+                            value={formatYmdForInput(residentDetail.rlsEndYmd) || ""}
+                            onChange={(e) => {
+                                const selectedDate = e.target.value;
+                                const formattedDate = selectedDate.replace(/-/g, '');
+                                setResidentDetail({
+                                    ...residentDetail,
+                                    rlsEndYmd: formattedDate,
+                                });
+                            }}
+                            disabled={!isDatePickerEnabled}
+                        />
+                    </div>
+                    </li>
 
 
                     {/* 산하직원 가입여부 */}

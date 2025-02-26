@@ -7,24 +7,34 @@ import CODE from "@/constants/code";
 import axios from "axios";
 import Swal from "sweetalert2";
 import CommonEditor from "@/components/CommonEditor";
-
+import { getSessionItem } from "@/utils/storage";
 
 
 import ManagerLeft from "@/components/manager/ManagerLeftOperationalSupport";
+import {getComCdList} from "../../../components/CommonComponents.jsx";
+import {useDropzone} from "react-dropzone";
 
 
 function RelatedCompanyCreate(props){
     const location = useLocation();
     const [modeInfo, setModeInfo] = useState({ mode: location.state?.mode });
-
+    const sessionUser = getSessionItem("loginUser");
     const navigate = useNavigate();
+    const [isDatePickerEnabled, setIsDatePickerEnabled] = useState(true);
     const [relatedDetail, setRelatedDetail] = useState({});
     const [searchDto, setSearchDto] = useState({relInstSn : location.state?.relInstSn});
     const [acceptFileTypes, setAcceptFileTypes] = useState('jpg,jpeg,png,gif,bmp,tiff,tif,webp,svg,ico,heic,avif');
     const [selectedFiles, setSelectedFiles] = useState([]);
+    const [fileList, setFileList] = useState([]);
     const [imgFile, setImgFile] = useState("");
-    const isFirstRender = useRef(true);
-
+    const isFirstRender = {
+        bzentyExpln: useRef(true),
+        mainHstry: useRef(true)
+    };
+    /*기업분류*/
+    const [comCdList, setComCdList] = useState([]);
+    /*기업업종*/
+    const [comCdTpbizList, setComCdTpbizList] = useState([]);
 
     const initMode = () => {
         setModeInfo({
@@ -40,6 +50,40 @@ function RelatedCompanyCreate(props){
     //이메일 도메인 구분
     const [selectedDomain, setSelectedDomain] = useState(""); // 선택된 이메일 도메인
     const [isCustom, setIsCustom] = useState(false); // 직접 입력 여부
+    const acceptAtchFileTypes = 'pdf,hwp,docx,xls,ppt';
+    const onDrop = useCallback((acceptAtchFiles) => {
+        const allowedExtensions = acceptAtchFileTypes.split(','); // 허용된 확장자 목록
+        const validFiles = acceptAtchFiles.filter((file) => {
+            const fileExtension = file.name.split(".").pop().toLowerCase();
+            return allowedExtensions.includes(fileExtension);
+        });
+
+        if (validFiles.length > 0) {
+            setFileList((prevFiles) => [...prevFiles, ...validFiles]); // 유효한 파일만 추가
+        }
+
+        if (validFiles.length !== acceptAtchFiles.length) {
+            Swal.fire(
+                `허용되지 않은 파일 유형이 포함되어 있습니다! (허용 파일: ${acceptAtchFileTypes})`
+            );
+        }
+
+    }, [acceptAtchFileTypes]);
+
+    const { getRootProps, getInputProps } = useDropzone({
+        onDrop,
+        multiple: true,
+    });
+
+    const formatYmdForInput = (dateStr) => {
+        if (!dateStr || dateStr.length !== 8) return "";
+        return `${dateStr.slice(0, 4)}-${dateStr.slice(4, 6)}-${dateStr.slice(6, 8)}`;
+    };
+
+    const handleDeleteFile = (index) => {
+        const updatedFileList = fileList.filter((_, i) => i !== index);
+        setFileList(updatedFileList);  // 파일 리스트 업데이트
+    };
 
     const splitEmail = (email) =>{
         if (!email || !email.includes("@")) return "";
@@ -57,15 +101,14 @@ function RelatedCompanyCreate(props){
         }
     };
 
-    const handleChange = (value) => {
-        if(isFirstRender.current){
-            isFirstRender.current = false;
+    const handleChangeField = (fieldName, value) => {
+        if (isFirstRender[fieldName].current) {
+            isFirstRender[fieldName].current = false;
             return;
         }
-        setRelatedDetail({...relatedDetail, bzentyExpln: value});
+        setRelatedDetail({...relatedDetail, [fieldName]: value});
     };
 
-    //수정 시 데이터 조회
     const getRc = (searchDto) =>{
         if (modeInfo.mode === CODE.MODE_CREATE) {
 
@@ -83,7 +126,25 @@ function RelatedCompanyCreate(props){
 
         EgovNet.requestFetch(getRcURL, requestOptions, function (resp){
             if(modeInfo.mode === CODE.MODE_MODIFY){
-                setRelatedDetail(resp.result.rc);
+                setRelatedDetail({
+                    ...resp.result.rc,
+                    mdfrSn : sessionUser.userSn,
+                    mdfcnDt: new Date().toISOString()
+                });
+
+                if(resp.result.rc.actvtnYn == "Y"){
+                    setIsDatePickerEnabled(true);
+                }else{
+                    setIsDatePickerEnabled(false);
+                }
+
+                if(resp.result.rc.logoFile != null){
+                    setSelectedFiles(resp.result.rc.logoFile);
+                }
+
+                if(resp.result.rc.relInstAtchFiles != null){
+                    setFileList(resp.result.rc.relInstAtchFiles);
+                }
             }
         });
 
@@ -92,8 +153,7 @@ function RelatedCompanyCreate(props){
     }
 
     const handleFileChange = (e) => {
-
-        if(relatedDetail.tblComFiles != null && relatedDetail.tblComFiles.length > 0){
+        if(selectedFiles != null){
             Swal.fire("기존 파일 삭제 후 첨부가 가능합니다.");
             e.target.value = null;
             return false;
@@ -129,6 +189,72 @@ function RelatedCompanyCreate(props){
             );
         }
     };
+
+    const handleDeleteAtchFile = (index, atchFileSn) => {
+        Swal.fire({
+            title: "삭제한 파일은 복구할 수 없습니다.\n그래도 삭제하시겠습니까?",
+            showCloseButton: true,
+            showCancelButton: true,
+            confirmButtonText: "확인",
+            cancelButtonText: "취소"
+        }).then((result) => {
+            if(result.isConfirmed) {
+                const requestOptions = {
+                    method: "POST",
+                    headers: {
+                        "Content-type": "application/json",
+                    },
+                    body:  JSON.stringify({
+                        atchFileSn: atchFileSn,
+                    }),
+                };
+
+                EgovNet.requestFetch("/commonApi/setFileDel", requestOptions, (resp) => {
+                    if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
+                        Swal.fire("삭제되었습니다.");
+                        const updatedFileList = fileList.filter((_, i) => i !== index);
+                        setFileList(updatedFileList);  // 파일 리스트 업데이트
+                    } else {
+                        Swal.fire("삭제 중 문제가 발생하였습니다.");
+                        return;
+                    }
+                });
+            } else {
+            }
+        });
+    };
+
+    const setFileDel = (atchFileSn) => {
+        Swal.fire({
+            title: "삭제한 파일은 복구할 수 없습니다.\n그래도 삭제하시겠습니까?",
+            showCloseButton: true,
+            showCancelButton: true,
+            confirmButtonText: "확인",
+            cancelButtonText: "취소"
+        }).then((result) => {
+            if(result.isConfirmed) {
+                const requestOptions = {
+                    method: "POST",
+                    headers: {
+                        "Content-type": "application/json",
+                    },
+                    body:  JSON.stringify({
+                        atchFileSn: atchFileSn,
+                    }),
+                };
+
+                EgovNet.requestFetch("/commonApi/setFileDel", requestOptions, (resp) => {
+                    if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
+                        Swal.fire("삭제되었습니다.");
+                        setSelectedFiles([]);
+                    } else {
+                    }
+                });
+            } else {
+                //취소
+            }
+        });
+    }
 
     useEffect(() => {
         initMode();
@@ -236,10 +362,10 @@ function RelatedCompanyCreate(props){
         if (relatedDetail.bzentyEmlAddr1 && selectedDomain) {
             const newEmail = `${relatedDetail.bzentyEmlAddr1}@${selectedDomain}`;
             setEmailAddr(newEmail);
-            setRelatedDetail(prev => ({
-                ...prev,
+            setRelatedDetail({
+                ...relatedDetail,
                 bzentyEmlAddr: newEmail
-            }));
+            });
         }
     }, [relatedDetail.bzentyEmlAddr1, selectedDomain]);
 
@@ -247,6 +373,11 @@ function RelatedCompanyCreate(props){
     //등록and수정
     const updateRelated = () => {
         let requestOptions = {};
+
+        if(!relatedDetail.clsf) {
+            alert("분류를 선택해주세요.");
+            return false;
+        }
 
         if (!relatedDetail.brno) {
             alert("사업자번호는 필수 값입니다.");
@@ -264,14 +395,22 @@ function RelatedCompanyCreate(props){
             alert("대표자명은 필수 값입니다.");
             return false;
         }
-        if (!emailAddr || emailAddr.trim() === "") {
+        if (!relatedDetail.entTelno) {
+            alert("대표번호는 필수 값입니다.");
+            return false;
+        }
+
+
+        if (!relatedDetail.bzentyEmlAddr) {
             alert("이메일 주소를 입력해주세요.");
             return false;
         }
-        /*if (!relatedDetail.clsNm) {
-            alert("산업은 필수 값입니다.");
+
+        if(!relatedDetail.tpbiz) {
+            alert("업종을 선택해주세요.");
             return false;
-        }*/
+        }
+
         if (!relatedDetail.zip || !relatedDetail.entAddr) {
             alert("주소는 필수 값입니다.");
             return false;
@@ -280,19 +419,40 @@ function RelatedCompanyCreate(props){
             alert("세부주소를 입력해주십시오.");
             return false;
         }
-        if (!relatedDetail.entTelno) {
-            alert("대표번호는 필수 값입니다.");
+
+        if(!relatedDetail.bzentyExpln) {
+            alert("기업소개를 입력해주세요.");
             return false;
         }
 
+        if(!relatedDetail.mainHstry) {
+            alert("주요이력을 입력해주세요.");
+            return false;
+        }
 
+        if(relatedDetail.actvtnYn === 'Y'){
+            if(!relatedDetail.rlsBgngYmd || !relatedDetail.rlsEndYmd){
+                alert("공개기한을 선택해주세요.")
+                return false;
+            }
+        }
 
         setRelatedDetail({...relatedDetail});
 
         const formData = new FormData();
 
+        Array.from(selectedFiles).map((file) => {
+            formData.append("file", file);
+        });
+
+        fileList.map((file) => {
+            formData.append("files", file);
+        })
+
         for (let key in relatedDetail) {
-            formData.append(key, relatedDetail[key]);
+            if(key != "logoFile" && key != "relInstAtchFiles"){
+                formData.append(key, relatedDetail[key]);
+            }
         }
 
         Swal.fire({
@@ -305,10 +465,7 @@ function RelatedCompanyCreate(props){
             if(result.isConfirmed) {
                 requestOptions = {
                     method: "POST",
-                    headers: {
-                        "Content-type": "application/json",
-                    },
-                    body: JSON.stringify(relatedDetail),
+                    body: formData
                 };
 
                 EgovNet.requestFetch(modeInfo.editURL, requestOptions, (resp) => {
@@ -326,11 +483,17 @@ function RelatedCompanyCreate(props){
                 //취소
             }
         });
-
     };
 
+    useEffect(() => {
+        getComCdList(17).then((data) => {
+            setComCdList(data);
+        })
 
-
+        getComCdList(18).then((data) => {
+            setComCdTpbizList(data);
+        })
+    }, []);
 
     return(
         <div id="container" className="container layout cms">
@@ -344,17 +507,25 @@ function RelatedCompanyCreate(props){
             <div className="contBox infoWrap customContBox">
                 <div className="topTitle">유관기관 정보</div>
                 <ul className="inputWrap">
-                    {/* 기업분류 */}
+                    {/* 종목 */}
                     <li className="inputBox type1 width3">
-                        <label className="title essential" htmlFor="relInstType"><small>분류</small></label>
+                        <label className="title essential" htmlFor="clsf"><small>분류</small></label>
                         <div className="itemBox">
-                            <select className="selectGroup">
-                                <option value="0">전체</option>
-                                <option value="1">예시1</option>
-                                <option value="2">예시2</option>
-                                <option value="3">예시3</option>
-                                <option value="4">예시4</option>
-                                <option value="5">예시5</option>
+                            <select className="selectGroup"
+                                    id="clsf"
+                                    value={relatedDetail.clsf || ""}
+                                    onChange={(e) =>
+                                        setRelatedDetail({...relatedDetail, clsf: e.target.value})
+                                    }
+                            >
+                                <option value="">선택</option>
+                                {comCdList.map((item, index) => (
+                                    <option key={item.comCd}
+                                            value={item.comCd}
+                                    >
+                                        {item.comCdNm}
+                                    </option>
+                                ))}
                             </select>
                         </div>
                     </li>
@@ -368,16 +539,30 @@ function RelatedCompanyCreate(props){
                                 id="relInstNm"
                                 defaultValue={relatedDetail.relInstNm || ""}
                                 onChange={(e) =>
-                                    setRelatedDetail({ ...relatedDetail, relInstNm: e.target.value })
+                                    setRelatedDetail({...relatedDetail, relInstNm: e.target.value})
                                 }
                             />
                         </div>
                     </li>
                     {/*로고*/}
                     <li className="inputBox type1 width3 file">
-                        <p className="title essential">파일선택</p>
+                        <p className="title essential">로고파일선택</p>
                         <div className="input">
-                            <p className="file_name" id="fileNamePTag"></p>
+                            {selectedFiles && selectedFiles.atchFileSn ? (
+                                <p className="file_name" id="fileNamePTag">
+                                    {selectedFiles.atchFileNm} - {(selectedFiles.atchFileSz / 1024).toFixed(2)} KB
+
+                                    <button type="button" className="deletBtn white"
+                                            onClick={() => setFileDel(selectedFiles.atchFileSn)}  // 삭제 버튼 클릭 시 처리할 함수
+                                            style={{marginLeft: '10px', color: 'red'}}
+                                    >
+                                        삭제
+                                    </button>
+                                </p>
+                            ) : (
+                                <p className="file_name" id="fileNamePTag"></p>
+                            )}
+
                             <label>
                                 <small className="text btn">파일 선택</small>
                                 <input
@@ -394,7 +579,7 @@ function RelatedCompanyCreate(props){
                     <li className="inputBox type1 width3">
                         <label className="title essential" htmlFor="rpsvNm"><small>대표자</small></label>
                         <div className="input">
-                            <input
+                        <input
                                 type="text"
                                 name="rpsvNm"
                                 id="rpsvNm"
@@ -484,15 +669,23 @@ function RelatedCompanyCreate(props){
                     </li>
                     {/* 업종 */}
                     <li className="inputBox type1 width3">
-                        <label className="title essential" htmlFor="clsNm"><small>업종</small></label>
+                        <label className="title essential" htmlFor="tpbiz"><small>업종</small></label>
                         <div className="itemBox">
-                            <select className="selectGroup">
-                                <option value="0">전체</option>
-                                <option value="1">예시1</option>
-                                <option value="2">예시2</option>
-                                <option value="3">예시3</option>
-                                <option value="4">예시4</option>
-                                <option value="5">예시5</option>
+                            <select className="selectGroup"
+                                    id="tpbiz"
+                                    value={relatedDetail.tpbiz || ""}
+                                    onChange={(e) =>
+                                        setRelatedDetail({...relatedDetail, tpbiz: e.target.value})
+                                    }
+                            >
+                                <option value="">선택</option>
+                                {comCdTpbizList.map((item, index) => (
+                                    <option key={item.comCd}
+                                            value={item.comCd}
+                                    >
+                                        {item.comCdNm}
+                                    </option>
+                                ))}
                             </select>
                         </div>
                     </li>
@@ -508,7 +701,7 @@ function RelatedCompanyCreate(props){
                                 placeholder="숫자만 입력"
                                 defaultValue={relatedDetail.brno || ""}
                                 onChange={(e) =>
-                                    setRelatedDetail({ ...relatedDetail, brno: e.target.value })
+                                    setRelatedDetail({...relatedDetail, brno: e.target.value})
                                 }
                             >
                             </input>
@@ -579,37 +772,70 @@ function RelatedCompanyCreate(props){
                     </li>
                     {/* 기업소개 */}
                     <li className="inputBox type1">
-                        <label className="title essential" htmlFor=""><small>기업소개</small></label>
+                        <label className="title essential" htmlFor="bzentyExpln"><small>기업소개</small></label>
                         <div className="input">
                             <CommonEditor
                                 value={relatedDetail.bzentyExpln || ""}
-                                onChange={handleChange}
+                                onChange={(value) => handleChangeField("bzentyExpln", value)}
                             />
                         </div>
                     </li>
+
                     {/* 주요이력 */}
                     <li className="inputBox type1">
-                        <label className="title essential" htmlFor=""><small>주요이력</small></label>
+                        <label className="title essential" htmlFor="mainHstry"><small>주요이력</small></label>
                         <div className="input">
-                            <textarea
-                                type="text"
-                            >
-                            </textarea>
+                            <CommonEditor
+                                value={relatedDetail.mainHstry || ""}
+                                onChange={(value) => handleChangeField("mainHstry", value)}
+
+                            />
                         </div>
                     </li>
+
                     {/*증빙자료*/}
-                    <li className="inputBox type1 width3 file">
+                    <li className="inputBox type1 width1 file">
                         <p className="title essential">증빙자료</p>
-                        <div className="input">
-                            <p className="file_name" id="fileNamePTag"></p>
-                            <label>
-                                <small className="text btn">파일 선택</small>
-                                <input
-                                    type="file"
-                                    onChange={handleFileChange}
-                                />
-                            </label>
+                        <div
+                            {...getRootProps({
+                                style: {
+                                    border: "2px dashed #cccccc",
+                                    padding: "20px",
+                                    textAlign: "center",
+                                    cursor: "pointer",
+                                },
+                            })}
+                        >
+                            <input {...getInputProps()} />
+                            <p>파일을 이곳에 드롭하거나 클릭하여 업로드하세요</p>
                         </div>
+                        {fileList.length > 0 && (
+                            <ul>
+                                {fileList.map((file, index) =>
+                                    file.atchFileSn ? (
+                                        <li key={index}>
+                                            {file.atchFileNm} - {(file.atchFileSz/ 1024).toFixed(2)} KB
+                                            <button
+                                                onClick={() => handleDeleteAtchFile(index,file.atchFileSn)}
+                                                style={{ marginLeft: '10px', color: 'red' }}
+                                            >
+                                                삭제
+                                            </button>
+                                        </li>
+                                    ) : (
+                                        <li key={index}>
+                                            {file.name} - {(file.size / 1024).toFixed(2)} KB
+                                            <button
+                                                onClick={() => handleDeleteFile(index)}
+                                                style={{ marginLeft: '10px', color: 'red' }}
+                                            >
+                                                삭제
+                                            </button>
+                                        </li>
+                                    )
+                                )}
+                            </ul>
+                        )}
                         <span className="warningText">첨부파일은 PDF,HWP,Docx, xls,PPT형식만 가능하며 최대 10MB까지만 지원</span>
                     </li>
                     {/* 공개여부 */}
@@ -617,7 +843,15 @@ function RelatedCompanyCreate(props){
                         <div className="box">
                             <p className="title essential">공개여부</p>
                             <div className="toggleSwithWrap">
-                                <input type="checkbox" id="actvtnYn" hidden/>
+                                <input type="checkbox" id="actvtnYn" hidden
+                                       checked={relatedDetail.actvtnYn === "Y"}
+                                       onChange={(e) => {
+                                           setRelatedDetail({
+                                               ...relatedDetail,
+                                               actvtnYn: e.target.checked ? "Y" : "N",
+                                           })
+                                           setIsDatePickerEnabled(e.target.checked);
+                                       }}/>
                                 <label htmlFor="actvtnYn" className="toggleSwitch">
                                     <span className="toggleButton"></span>
                                 </label>
@@ -629,6 +863,46 @@ function RelatedCompanyCreate(props){
                             Off : 기관소개 메뉴에 기관 정보가 노출되지 않습니다.
                         </span>
                     </li>
+
+                    <li className="inputBox type1 width3">
+                        <label className="title" htmlFor="ntcBgngDt"><small>공개 시작일</small></label>
+                        <div className="input" >
+                            <input
+                                type="date"
+                                name="rlsBgngYmd"
+                                value={formatYmdForInput(relatedDetail.rlsBgngYmd) || ""}
+                                onChange={(e) => {
+                                    const selectedDate = e.target.value;
+                                    const formattedDate = selectedDate.replace(/-/g, '');
+                                    setRelatedDetail({
+                                        ...relatedDetail,
+                                        rlsBgngYmd: formattedDate,
+                                    });
+                                }}
+                                disabled={!isDatePickerEnabled}
+                            />
+                        </div>
+                    </li>
+                    <li className="inputBox type1 width3">
+                        <label className="title" htmlFor="ntcEndDate"><small>공개 종료일</small></label>
+                        <div className="input">
+                            <input
+                                type="date"
+                                name="rlsEndYmd"
+                                value={formatYmdForInput(relatedDetail.rlsEndYmd) || ""}
+                                onChange={(e) => {
+                                    const selectedDate = e.target.value;
+                                    const formattedDate = selectedDate.replace(/-/g, '');
+                                    setRelatedDetail({
+                                        ...relatedDetail,
+                                        rlsEndYmd: formattedDate,
+                                    });
+                                }}
+                                disabled={!isDatePickerEnabled}
+                            />
+                        </div>
+                    </li>
+
                     {/* 산하직원 가입여부 */}
                     <li className="toggleBox width3">
                         <div className="box">
