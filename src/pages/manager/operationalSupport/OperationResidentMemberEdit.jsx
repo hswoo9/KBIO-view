@@ -27,13 +27,14 @@ function OperationResidentMember(props) {
 
     const [modeInfo, setModeInfo] = useState({mode: props.mode});
     const [memberDetail, setMemberDetail] = useState({});
+    const [mvnEntMbrDetail, setMvnEntMbrDetail] = useState({});
     const [mbrTpbizList, setMbrTpbizList] = useState([])
     const [rcDetail, setRcDetail] = useState({});
 
     const initMode = () => {
         setModeInfo({
             ...modeInfo,
-            editURL: `/mvnEntApi/setMemberMbrStts`,
+            editURL: `/mvnEntApi/setAprvYn`,
         });
 
         getNormalMember(searchDto);
@@ -69,6 +70,11 @@ function OperationResidentMember(props) {
                     ...resp.result.member,
                     mblTelno: decodedPhoneNumber, // 디코딩된 전화번호로 업데이트
                 });
+                //mvnEntMbr
+                setMvnEntMbrDetail({
+                    ...resp.result.mvnEntMbr
+                });
+
 
                 setRcDetail({
                     ...resp.result.rc
@@ -87,9 +93,13 @@ function OperationResidentMember(props) {
         });
     }, []);
 
-    const updateMbrStts = (newStatus) =>{
+    useEffect(() => {
+        console.log("relInstMbrDetail 변경됨:", mvnEntMbrDetail);
+    }, [mvnEntMbrDetail]);
 
-        const updatedDto = { ...searchDto, mbrStts: newStatus };
+    const updateAprvYn = (newStatus) =>{
+
+        const updatedDto = { ...searchDto, aprvYn: newStatus };
 
         Swal.fire({
             title: "수정하시겠습니까?",
@@ -262,7 +272,7 @@ function OperationResidentMember(props) {
                             </li>
                         </div>
 
-                        <li className="inputBox type1 width1">
+                        <li className="inputBox type1 width2">
                             <label className="title"><small>소셜구분</small></label>
                             <div className="input">
                                 <input
@@ -272,6 +282,20 @@ function OperationResidentMember(props) {
                                 />
                             </div>
                         </li>
+
+                        <li className="inputBox type1 width2">
+                            <label className="title"><small>기업 승인 상태</small></label>
+                            <div className="input">
+                                <input
+                                    type="text"
+                                    value={mvnEntMbrDetail.aprvYn === 'Y'? '승인' :
+                                            mvnEntMbrDetail.aprvYn === 'N' ? '미승인' : ''
+                                           }
+                                    readOnly
+                                />
+                            </div>
+                        </li>
+
                     </ul>
                 </div>
                 {/*회원정보끝*/}
@@ -380,32 +404,26 @@ function OperationResidentMember(props) {
                 {/*버튼영역*/}
                 <div className="pageWrap">
 
-                    <div className="leftBox"
-                         style={{ display: memberDetail.mbrStts === "W" ? "inline-block" : "none" }}>
-                        <button
-                            type="button" className="clickBtn point"
-                            style={{display : "inline-block"}}
-                            onClick={() => updateMbrStts("Y")}>
-                            승인
-                        </button>
-                        <button
-                            type="button"
-                            className="clickBtn gray"
-                            style={{display : "inline-block" , marginLeft : "10px"}}
-                            onClick={() => updateMbrStts("R")}
-                        >
-                            <span>승인반려</span>
-                        </button>
-                    </div>
+                    <div className="leftBox">
+                        {mvnEntMbrDetail.aprvYn === "N" && (
+                            <button
+                                type="button"
+                                className="clickBtn point"
+                                onClick={() => updateAprvYn("Y")}
+                            >
+                                승인
+                            </button>
+                        )}
 
-                    <div className="leftBox"
-                         style={{ display: memberDetail.mbrStts === "R" ? "inline-block" : "none" }}>
-                        <button
-                            type="button" className="clickBtn point"
-                            style={{display : "inline-block"}}
-                            onClick={() => updateMbrStts("Y")}>
-                            재승인
-                        </button>
+                        {mvnEntMbrDetail.aprvYn === "Y" && (
+                            <button
+                                type="button"
+                                className="clickBtn point"
+                                onClick={() => updateAprvYn("N")}
+                            >
+                                승인취소
+                            </button>
+                        )}
                     </div>
 
                     <div className="rightBox">

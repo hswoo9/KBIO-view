@@ -89,6 +89,22 @@ function OperationalResidentMember(props) {
                                 </td>
                                 <td>{ComScript.formatTelNumber(decodedPhoneNumber)}</td>
                                 <td>{item.tblUser.email}</td>
+                                <td>
+                                    {item.tblUser.mbrStts === "W"
+                                        ? "승인대기"
+                                        : item.tblUser.mbrStts === "Y"
+                                            ? "승인"
+                                            : item.tblUser.mbrStts === "R"
+                                                ? "승인반려"
+                                                : "이용정지"}
+                                </td>
+                                <td>
+                                    {item.tblMvnEntMbr.aprvYn === "N"
+                                        ? "미승인"
+                                        : item.tblMvnEntMbr.aprvYn === "Y"
+                                            ? "승인"
+                                            : "알 수 없음"}
+                                </td>
                                 <td>{new Date(item.tblUser.frstCrtDt).toISOString().split("T")[0]}</td>
                             </tr>
                         );
@@ -260,6 +276,8 @@ function OperationalResidentMember(props) {
                                 <th className="th2"><p>성명</p></th>
                                 <th className="th3"><p>휴대전화번호</p></th>
                                 <th className="th4"><p>이메일</p></th>
+                                <th className="th4"><p>회원상태</p></th>
+                                <th className="th4"><p>기업승인상태</p></th>
                                 <th className="th5"><p>등록일</p></th>
                             </tr>
                             </thead>

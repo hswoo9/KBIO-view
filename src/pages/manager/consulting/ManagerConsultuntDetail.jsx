@@ -133,7 +133,12 @@ function ManagerConsultuntDetail(props) {
         switch (tabIndex) {
             case 0:
                 return (
+
+
                     <div key="tabIndex0">
+                     <h2 className="pageTitle" style={{marginBottom:"20px"}}>
+                         <p>전문가관리 - 개인정보</p>
+                     </h2>
                     <div className="contBox infoWrap customContBox">
                         {/* 개인정보 탭 내용 */}
                             <ul className="inputWrap">
