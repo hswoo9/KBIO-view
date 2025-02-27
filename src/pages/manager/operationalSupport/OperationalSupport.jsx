@@ -20,7 +20,7 @@ import moment from "moment/moment.js";
 import {getComCdList, excelExport, fileUpload} from "@/components/CommonComponents";
 
 function OperationalSupport(props) {
-
+    const sessionUser = getSessionItem("loginUser");
     const [searchDto, setSearchDto] = useState(
         location.state?.searchDto || {
             pageIndex: 1,
@@ -36,23 +36,85 @@ function OperationalSupport(props) {
     const [rcList, setAuthorityList] = useState([]);
     const [comCdClsfList, setComCdClsfList] = useState([]);
     const [comCdTpbizList, setComCdTpbizList] = useState([]);
-    const excelUploadRef = useRef(null);
-    const fileBtnHandle = () => {
-        if(excelUploadRef.current){
-            excelUploadRef.current.click();
+
+    const [uploadFileName, setUploadFileName] = useState("");
+    const [uploadExcelData, setUploadExcelData] = useState([]);
+    useEffect(() => {
+        if(uploadExcelData.length > 0){
+            uploadExcelData.forEach(function(item, index){
+                item.mvnEntNm = item['기업명'];
+                item.brno = String(item['사업자등록번호']).replaceAll("-", "");
+                item.rpsvNm = item['대표자'];
+                item.entTelno = String(item['대표전화']).replaceAll("-", "");
+                item.entClsf = item['분류코드(시트참조)'];
+                item.entTpbiz = item['업종코드(시트참조)'];
+                item.creatrSn = sessionUser?.userSn;
+                item.actvtnYn = "Y";
+            });
+            console.log(uploadExcelData);
         }
-    }
+    }, [uploadExcelData]);
+
+    const excelDataSave = useCallback(
+        () => {
+            Swal.fire({
+                title: "등록하시겠습니까?",
+                showCloseButton: true,
+                showCancelButton: true,
+                confirmButtonText: "등록",
+                cancelButtonText: "취소"
+            }).then((result) => {
+                if(result.isConfirmed) {
+                    if(uploadExcelData.length > 0){
+                        const requestURL = "/mvnEntApi/setMvnEntList.do";
+                        const requestOptions = {
+                            method: "POST",
+                            headers: {
+                                "Content-type": "application/json",
+                            },
+                            body: JSON.stringify({tblMvnEntList : uploadExcelData})
+                        };
+                        EgovNet.requestFetch(
+                            requestURL,
+                            requestOptions,
+                            (resp) => {
+                                if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
+                                    Swal.fire("등록되었습니다");
+                                    setUploadFileName("");
+                                    setUploadExcelData([]);
+                                    ComScript.closeModal("uploadModal");
+                                    getRcList(searchDto);
+                                } else {
+                                }
+                            }
+                        )
+
+                    }else{
+                        Swal.fire("엑셀 데이터가 없습니다.");
+                    }
+                } else {
+                }
+            });
+
+
+        }
+    )
+
     const excelUploadEvent = (e) => {
         fileUpload(e.target.files[0]).then((data) => {
-            //엑셀 업로드 이 후 기능
-            console.log(data);
+            if(e.target.files[0].name != null){
+                setUploadFileName(e.target.files[0].name);
+            }
+            if(data[0].sheet0 != null){
+                setUploadExcelData(data[0].sheet0);
+            }
         });
     }
 
     const excelUploadSample = () => {
         let sheetDatas = [{
             sheetName : "입주기업 업로드 양식",
-            header : ['기업명', '사업자등록번호', '대표자', '대표전화', '분류코드(시트참조)', '업종코드(시트참조)', '공개여부'],
+            header : ['기업명', '사업자등록번호', '대표자', '대표전화', '분류코드(시트참조)', '업종코드(시트참조)'],
             row : []
         }];
 
@@ -381,13 +443,6 @@ function OperationalSupport(props) {
                                 <div className="icon"></div>
                                 <span>엑셀 업로드</span>
                             </button>
-                            <input
-                                type="file"
-                                accept=".xlsx"
-                                ref={excelUploadRef}
-                                onChange={excelUploadEvent}
-                                style={{display: "none"}}
-                            />
                         </div>
                     </div>
                     <div className="tableBox type1">
@@ -448,7 +503,7 @@ function OperationalSupport(props) {
                                 <div className="inputBox type1 file">
                                     <p className="title">기업정보 파일</p>
                                     <div className="input">
-                                        <p className="file_name"></p>
+                                        <p className="file_name">{uploadFileName}</p>
                                         <label>
                                             <small className="text btn">파일 선택</small>
                                             <input type="file" name="file" id="file"
@@ -464,7 +519,7 @@ function OperationalSupport(props) {
                                     <span>양식파일을 다운로드 받은 후 작성해서 업로드 해주세요.</span>
                                 </div>
                                 <div className="buttonBox">
-                                    <button type="submit" className="clickBtn"><span>등록</span></button>
+                                    <button type="button" className="clickBtn" onClick={excelDataSave}><span>등록</span></button>
                                 </div>
                             </form>
                         </div>
