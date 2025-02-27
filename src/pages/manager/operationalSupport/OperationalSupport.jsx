@@ -236,7 +236,7 @@ function OperationalSupport(props) {
                                 <td>{item.tblMvnEnt.rpsvNm}</td>
                                 <td>{ComScript.formatTelNumber(item.tblMvnEnt.entTelno)}</td>
                                 <td>{item.entTpbizNm || ""}</td>
-                                <td>{item.tblMvnEnt.actvtnYn === "Y" ? "공개" : "비공개"}</td>
+                                <td>{item.tblMvnEnt.rlsYn === "Y" ? "공개" : "비공개"}</td>
                                 <td>
                                     <Link to={URL.MANAGER_RESIDENT_MANAGER}
                                           state={{
@@ -371,9 +371,9 @@ function OperationalSupport(props) {
                                 <div className="itemBox">
                                     <select className="selectGroup"
                                             id="actvtnYn"
-                                            value={searchDto.actvtnYn || ""}
+                                            value={searchDto.rlsYn || ""}
                                             onChange={(e) =>
-                                                setSearchDto({...searchDto, actvtnYn: e.target.value})
+                                                setSearchDto({...searchDto, rlsYn: e.target.value})
                                             }
                                     >
                                         <option value="">전체</option>

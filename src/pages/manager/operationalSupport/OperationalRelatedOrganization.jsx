@@ -237,7 +237,7 @@ function OperationalRelatedOrganization(props) {
                                 </td>
                                 <td>{item.tblRelInst.rpsvNm}</td>
                                 <td>{ComScript.formatTelNumber(item.tblRelInst.entTelno)}</td>
-                                <td>{item.tblRelInst.actvtnYn === "Y" ? "공개" : "비공개"}</td>
+                                <td>{item.tblRelInst.rlsYn === "Y" ? "공개" : "비공개"}</td>
                                 <td>
                                     <Link to={URL.MANAGER_RELATED_MANAGER}
                                           state={{
@@ -374,9 +374,9 @@ function OperationalRelatedOrganization(props) {
                                     <select
                                         className="selectGroup"
                                         id="actvtnYn"
-                                        value={searchDto.actvtnYn || ""}
+                                        value={searchDto.rlsYn || ""}
                                         onChange={(e) =>
-                                            setSearchDto({...searchDto, actvtnYn: e.target.value})
+                                            setSearchDto({...searchDto, rlsYn: e.target.value})
                                         }
                                     >
                                         <option value="">전체</option>
