@@ -111,10 +111,11 @@ function ManagerLogin(props) {
         //   Swal.fire(resp.resultMessage);
         //   return;
         // }
-        if(resp.resultCode == "502"){
-          Swal.fire(resp.resultMessage);
-          return;
-        }
+        Swal.fire({
+          title: "로그인 실패",
+          html: resp.resultMessage
+        });
+        return;
       }else{
         setSessionItem("loginUser", {userSn : resp.result.userSn, name : resp.result.userName, id : resp.result.userId, userSe : resp.result.userSe});
         // setSessionItem("userName", resp.userName);

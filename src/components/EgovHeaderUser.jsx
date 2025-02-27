@@ -403,6 +403,7 @@ function EgovHeader() {
       submitFormHandler();
     }
   };
+
   const submitFormHandler = () => {
     if(!idRef.current.value){
       Swal.fire("아이디를 입력해주세요.");
@@ -425,10 +426,11 @@ function EgovHeader() {
 
     EgovNet.requestFetch(loginUrl, requestOptions, (resp) => {
       if(resp.resultCode != "200"){
-        if(resp.resultCode == "502"){
-          Swal.fire(resp.resultMessage);
+          Swal.fire({
+            title: "로그인 실패",
+            html: resp.resultMessage
+          });
           return;
-        }
       }else{
         setSessionItem("loginUser", {userSn : resp.result.userSn, name : resp.result.userName, id : resp.result.userId, userSe : resp.result.userSe, mbrType : resp.result.mbrType});
         // setSessionItem("userName", resp.userName);
