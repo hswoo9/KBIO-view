@@ -10,6 +10,8 @@ import EgovRadioButtonGroup from "@/components/EgovRadioButtonGroup";
 import Swal from "sweetalert2";
 import base64 from 'base64-js';
 
+import {getComCdList} from "@/components/CommonComponents";
+
 
 function OperationRelatedMember(props) {
     const navigate = useNavigate();
@@ -23,13 +25,15 @@ function OperationRelatedMember(props) {
     );
 
     const [modeInfo, setModeInfo] = useState({mode: props.mode});
+    const [relInstMbrDetail, setRelInstMbrDetail] = useState({});
     const [memberDetail, setMemberDetail] = useState({});
+    const [mbrTpbizList, setMbrTpbizList] = useState([])
     const [rcDetail, setRcDetail] = useState({});
 
     const initMode = () => {
         setModeInfo({
             ...modeInfo,
-            editURL: `/relatedApi/setMemberMbrStts`,
+            editURL: `/relatedApi/setAprvYn`,
         });
 
         getNormalMember(searchDto);
@@ -66,6 +70,8 @@ function OperationRelatedMember(props) {
                     mblTelno: decodedPhoneNumber, // 디코딩된 전화번호로 업데이트
                 });
 
+                setRelInstMbrDetail({...resp.result.relInstMbr});
+
                 setRcDetail({
                     ...resp.result.rc
                 });
@@ -77,9 +83,20 @@ function OperationRelatedMember(props) {
         initMode();
     }, []);
 
-    const updateMbrStts = (newStatus) =>{
+    useEffect(() => {
+        getComCdList(18).then((data) => {
+            setMbrTpbizList(data);
+        });
+    }, []);
 
-        const updatedDto = { ...searchDto, mbrStts: newStatus };
+    useEffect(() => {
+        console.log("relInstMbrDetail 변경됨:", relInstMbrDetail);
+    }, [relInstMbrDetail]);
+
+
+    const updateAprvYn = (newStatus) =>{
+
+        const updatedDto = { ...searchDto, aprvYn: newStatus };
 
         Swal.fire({
             title: "수정하시겠습니까?",
@@ -252,7 +269,7 @@ function OperationRelatedMember(props) {
                             </li>
                         </div>
 
-                        <li className="inputBox type1 width1">
+                        <li className="inputBox type1 width2">
                             <label className="title"><small>소셜구분</small></label>
                             <div className="input">
                                 <input
@@ -262,6 +279,19 @@ function OperationRelatedMember(props) {
                                 />
                             </div>
                         </li>
+
+                        <li className="inputBox type1 width2">
+                            <label className="title"><small>기업 승인 상태</small></label>
+                            <div className="input">
+                                <input
+                                    type="text"
+                                    value={relInstMbrDetail.aprvYn === 'Y'? '승인' :
+                                            relInstMbrDetail.aprvYn === 'N'?'미승인' : ''}
+                                    readOnly
+                                />
+                            </div>
+                        </li>
+
                     </ul>
                 </div>
                 {/*회원정보끝*/}
@@ -298,13 +328,15 @@ function OperationRelatedMember(props) {
                             </div>
                         </li>
                         <li className="inputBox type1 email width2">
-                            <label className="title"><small>산업</small></label>
+                            <label className="title"><small>업종</small></label>
                             <div className="input">
                                 <input
                                     type="text"
                                     name="clsNm"
                                     id="clsNm"
-                                    value={rcDetail.clsNm || ""}
+                                    value={
+                                        mbrTpbizList.find((item) => item.comCd === rcDetail.tpbiz)?.comCdNm || ""
+                                    }
                                     readOnly
                                 >
                                 </input>
@@ -368,41 +400,36 @@ function OperationRelatedMember(props) {
                 {/*버튼영역*/}
                 <div className="pageWrap">
 
-                    <div className="leftBox"
-                         style={{ display: memberDetail.actvtnYn === "W" ? "inline-block" : "none" }}>
-                        <button
-                            type="button" className="clickBtn point"
-                            style={{display : "inline-block"}}
-                            onClick={() => updateMbrStts("Y")}>
-                            승인
-                        </button>
-                        <button
-                            type="button"
-                            className="clickBtn gray"
-                            style={{display : "inline-block" , marginLeft : "10px"}}
-                            onClick={() => updateMbrStts("R")}
-                        >
-                            <span>승인반려</span>
-                        </button>
+                    <div className="leftBox">
+                        {relInstMbrDetail.aprvYn === "N" && (
+                            <button
+                                type="button"
+                                className="clickBtn point"
+                                onClick={() => updateAprvYn("Y")}
+                            >
+                                승인
+                            </button>
+                        )}
+
+                        {relInstMbrDetail.aprvYn === "Y" && (
+                            <button
+                                type="button"
+                                className="clickBtn point"
+                                onClick={() => updateAprvYn("N")}
+                            >
+                                승인취소
+                            </button>
+                        )}
                     </div>
 
-                    <div className="leftBox"
-                         style={{ display: memberDetail.actvtnYn === "R" ? "inline-block" : "none" }}>
-                        <button
-                            type="button" className="clickBtn point"
-                            style={{display : "inline-block"}}
-                            onClick={() => updateMbrStts("Y")}>
-                            재승인
-                        </button>
-                    </div>
 
                     <div className="rightBox">
                         <Link
-                            to={URL.MANAGER_RESIDENT_MEMBER}
+                            to={URL.MANAGER_RELATED_MEMBER}
                             state={{relInstSn: rcDetail.relInstSn,
                                 rpsvNm : rcDetail.rpsvNm,
                                 entTelno : rcDetail.entTelno,
-                                clsNm : rcDetail.clsNm
+                                tpbiz : rcDetail.tpbiz
                             }}>
 
                             <button type="button" className="clickBtn black">

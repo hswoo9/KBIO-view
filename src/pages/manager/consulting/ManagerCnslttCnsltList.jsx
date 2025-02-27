@@ -191,6 +191,9 @@ function ManagerCnslttCnsltList({ cnsltSe, userSn }) {
             ) : (
         <div>
         <div className="cateWrap">
+            <h2 className="pageTitle" style={{marginBottom:"20px"}}>
+                <p>전문가관리 - 컨설팅의뢰</p>
+            </h2>
             <form action="">
                 <ul className="cateList">
                     <li className="searchBox inputBox type1" style={{width:"55%"}}>

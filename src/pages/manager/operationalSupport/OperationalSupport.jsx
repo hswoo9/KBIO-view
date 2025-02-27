@@ -49,6 +49,43 @@ function OperationalSupport(props) {
         });
     }
 
+    const excelUploadSample = () => {
+        let sheetDatas = [{
+            sheetName : "입주기업 업로드 양식",
+            header : ['기업명', '사업자등록번호', '대표자', '대표전화', '분류코드(시트참조)', '업종코드(시트참조)', '공개여부'],
+            row : []
+        }];
+
+        let comCdClsfRow = [];
+        comCdClsfList.forEach(function(item, index){
+            comCdClsfRow.push({
+                comCd: item.comCd,
+                comCdNm: item.comCdNm
+            })
+        });
+        let comCdClsf = {
+            sheetName: "분류코드",
+            header: ['코드', '코드명'],
+            row: comCdClsfRow
+        }
+        sheetDatas.push(comCdClsf);
+
+        let comCdTpbizRow = [];
+        comCdTpbizList.forEach(function(item, index){
+            comCdTpbizRow.push({
+                comCd: item.comCd,
+                comCdNm: item.comCdNm
+            })
+        });
+        let comCdTpbiz = {
+            sheetName: "업종코드",
+            header: ['코드', '코드명'],
+            row: comCdTpbizRow
+        }
+        sheetDatas.push(comCdTpbiz);
+        excelExport("입주기업 업로드 양식", sheetDatas);
+    }
+    
     const dataExcelDownload = useCallback(() => {
         let excelParams = searchDto;
         excelParams.pageIndex = 1;
@@ -340,7 +377,7 @@ function OperationalSupport(props) {
                             <button type="button" className="btn btn2 downBtn red" onClick={dataExcelDownload}>
                                 <div className="icon"></div>
                                 <span>엑셀 다운로드</span></button>
-                            <button type="button" className="btn btn2 uploadBtn black" onClick={fileBtnHandle}>
+                            <button type="button" className="btn btn2 uploadBtn black" onClick={() => ComScript.openModal("uploadModal")}>
                                 <div className="icon"></div>
                                 <span>엑셀 업로드</span>
                             </button>
@@ -397,12 +434,12 @@ function OperationalSupport(props) {
                 </div>
             </div>
             <div className="uploadModal modalCon">
-                <div className="bg"></div>
+                <div className="bg" onClick={() => ComScript.closeModal("uploadModal")}></div>
                 <div className="m-inner">
                     <div className="boxWrap">
                         <div className="top">
                             <h2 className="title">기업정보 일괄 등록</h2>
-                            <div className="close">
+                            <div className="close" onClick={() => ComScript.closeModal("uploadModal")}>
                                 <div className="icon"></div>
                             </div>
                         </div>
@@ -415,13 +452,18 @@ function OperationalSupport(props) {
                                         <label>
                                             <small className="text btn">파일 선택</small>
                                             <input type="file" name="file" id="file"
-                                                   accept=".xlsx, .xlsm, .xlsb, .xltx"/>
+                                                   accept=".xlsx"
+                                                   onChange={excelUploadEvent}/>
                                         </label>
                                     </div>
                                 </div>
-                                <p className="botText"><span className="point">양식파일</span>을 다운로드 받은 후 작성해서 업로드 해주세요.</p>
+                                <div className="botText">
+                                    <a onClick={excelUploadSample} className="cursorTag">
+                                        <span className="point">[ 양식파일.xlsx ]</span>
+                                    </a>
+                                    <span>양식파일을 다운로드 받은 후 작성해서 업로드 해주세요.</span>
+                                </div>
                                 <div className="buttonBox">
-                                    <button type="button" className="clickBtn gray"><span>취소</span></button>
                                     <button type="submit" className="clickBtn"><span>등록</span></button>
                                 </div>
                             </form>
