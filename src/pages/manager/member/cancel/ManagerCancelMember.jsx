@@ -88,18 +88,18 @@ function CancelMemberList(props) {
                                 <td>{resp.paginationInfo.totalRecordCount - (resp.paginationInfo.currentPageNo - 1) * resp.paginationInfo.pageSize - index}</td>
                                 <td>
                                     {item.mbrType === 9 ? '관리자' :
-                                     item.mbrType === 1 ? '입주기업' :
-                                     item.mbrType === 2 ? '컨설턴트' :
-                                     item.mbrType === 3 ? '유관기관' :
-                                     item.mbrType === 4 ? '비입주기업' :
-                                     '테스트'}
+                                        item.mbrType === 1 ? '입주기업' :
+                                            item.mbrType === 2 ? '컨설턴트' :
+                                                item.mbrType === 3 ? '유관기관' :
+                                                    item.mbrType === 4 ? '비입주기업' :
+                                                        '테스트'}
                                 </td>
                                 <td>{item.userId}</td>
                                 <td>{item.kornFlnm}</td>
                                 <td></td>
                                 <td></td>
                                 <td>{new Date(item.frstCrtDt).toISOString().split("T")[0]}</td>
-                                <td></td>
+                                <td>{item.lastLoginDate ? new Date(item.lastLoginDate).toISOString().split("T")[0] : "-"}</td>
                                 <td>{item.answerPosblYn}</td>
                             </tr>
                         );
