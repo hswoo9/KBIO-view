@@ -127,6 +127,8 @@ function RelatedCompanyCreate(props){
         };
 
         EgovNet.requestFetch(getRcURL, requestOptions, function (resp){
+            console.log("resp.result : ",resp.result);
+
             if(modeInfo.mode === CODE.MODE_MODIFY){
                 setRelatedDetail({
                     ...resp.result.rc,
@@ -144,8 +146,8 @@ function RelatedCompanyCreate(props){
                     setSelectedFiles(resp.result.rc.logoFile);
                 }
 
-                if(resp.result.biLogoFile){
-                    setSelectedBIFiles(resp.result.biLogoFile);
+                if(resp.result.rc.biLogoFile != null){
+                    setSelectedBIFiles(resp.result.rc.biLogoFile);
                 }
 
 
@@ -369,6 +371,10 @@ function RelatedCompanyCreate(props){
     useEffect(() => {
     }, [selectedFiles]);
 
+    useEffect(() => {
+        console.log("selectedBIFiles : ",selectedBIFiles);
+    }, [selectedBIFiles]);
+
 
     //사업자번호 상태 확인
     const kbioauth = async () => {
@@ -523,12 +529,16 @@ function RelatedCompanyCreate(props){
             formData.append("file", file);
         });
 
+        Array.from(selectedBIFiles).map((file) => {
+            formData.append("biFile", file);
+        });
+
         fileList.map((file) => {
             formData.append("files", file);
         })
 
         for (let key in relatedDetail) {
-            if(key != "logoFile" && key != "relInstAtchFiles"){
+            if(key != "logoFile" && key != "relInstAtchFiles" && key != "biLogoFile"){
                 formData.append(key, relatedDetail[key]);
             }
         }
