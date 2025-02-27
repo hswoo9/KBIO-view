@@ -146,8 +146,8 @@ function RejectMemberList(props) {
                                 </td>
 
                                 <td>{item.kornFlnm}</td>
-                                <td>{item.userType}</td>
-                                <td></td>
+                                <td>{item.companyNm}</td>
+                                <td>{item.snsClsf ? item.snsClsf : ""}</td>
                                 <td>{new Date(item.frstCrtDt).toISOString().split("T")[0]}</td>
                                 <td>{item.lastLoginDate ? new Date(item.lastLoginDate).toISOString().split("T")[0] : "-"}</td>
                                 {/*<td>{item.replyPosblYn}</td>
