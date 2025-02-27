@@ -148,7 +148,7 @@ function ApprovalMemberList(props) {
                                 <td>{item.userType}</td>
                                 <td></td>
                                 <td>{new Date(item.frstCrtDt).toISOString().split("T")[0]}</td>
-                                <td>{item.answerPosblYn}</td>
+                                <td>{item.lastLoginDate ? new Date(item.lastLoginDate).toISOString().split("T")[0] : "-"}</td>
                                 {/*<td>{item.replyPosblYn}</td>
                                 <td>
                                     <Link
