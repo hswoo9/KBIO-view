@@ -72,6 +72,8 @@ function setNormalMember(props) {
         getNormalMember(searchDto);
     };
 
+    console.log(memberDetail);
+
     const updateMember = () => {
         let requestOptions = {};
 
@@ -475,7 +477,7 @@ function setNormalMember(props) {
                             <div className="input">
                                 <input
                                     type="text"
-                                    defaultValue={memberDetail.socialType || ''}
+                                    defaultValue={memberDetail.snsClsf || ''}
                                     readOnly
                                 />
                             </div>

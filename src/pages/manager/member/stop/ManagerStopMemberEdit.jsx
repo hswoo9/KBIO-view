@@ -330,7 +330,7 @@ function setStopMember(props) {
                             <div className="input">
                                 <input
                                     type="text"
-                                    value={memberDetail.socialType || ''}
+                                    defaultValue={memberDetail.snsClsf || ''}
                                     readOnly
                                 />
                             </div>
