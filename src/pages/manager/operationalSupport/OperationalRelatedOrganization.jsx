@@ -19,7 +19,7 @@ function OperationalRelatedOrganization(props) {
             searchVal: "",
             searchType: "",
             clsf : "",
-            tpbiz: "",
+            // tpbiz: "",
             actvtnYn : ""
         }
     );
@@ -202,7 +202,7 @@ function OperationalRelatedOrganization(props) {
             searchVal: "",
             searchType: "",
             clsf : "",
-            tpbiz: "",
+            // tpbiz: "",
             actvtnYn : ""
         });
 
@@ -212,7 +212,7 @@ function OperationalRelatedOrganization(props) {
             searchVal: "",
             searchType: "",
             clsf : "",
-            tpbiz: "",
+            // tpbiz: "",
             actvtnYn : ""
         });
     }
@@ -250,25 +250,25 @@ function OperationalRelatedOrganization(props) {
                                 </div>
                             </li>
 
-                            <li className="inputBox type1">
-                                <p className="title">업종</p>
-                                <div className="itemBox">
-                                    <select className="selectGroup"
-                                            id="tpbiz"
-                                            value={searchDto.tpbiz || ""}
-                                            onChange={(e) =>
-                                                setSearchDto({...searchDto, tpbiz: e.target.value})
-                                            }
-                                    >
-                                        <option value="">전체</option>
-                                        {comCdTpbizList.map((item, index) => (
-                                            <option value={item.comCd} key={`${item.comCd}_tpbiz`}>
-                                                {item.comCdNm}
-                                            </option>
-                                        ))}
-                                    </select>
-                                </div>
-                            </li>
+                            {/*<li className="inputBox type1">*/}
+                            {/*    <p className="title">업종</p>*/}
+                            {/*    <div className="itemBox">*/}
+                            {/*        <select className="selectGroup"*/}
+                            {/*                id="tpbiz"*/}
+                            {/*                value={searchDto.tpbiz || ""}*/}
+                            {/*                onChange={(e) =>*/}
+                            {/*                    setSearchDto({...searchDto, tpbiz: e.target.value})*/}
+                            {/*                }*/}
+                            {/*        >*/}
+                            {/*            <option value="">전체</option>*/}
+                            {/*            {comCdTpbizList.map((item, index) => (*/}
+                            {/*                <option value={item.comCd} key={`${item.comCd}_tpbiz`}>*/}
+                            {/*                    {item.comCdNm}*/}
+                            {/*                </option>*/}
+                            {/*            ))}*/}
+                            {/*        </select>*/}
+                            {/*    </div>*/}
+                            {/*</li>*/}
 
                             <li className="inputBox type1">
                                 <p className="title">공개 여부</p>
@@ -362,10 +362,10 @@ function OperationalRelatedOrganization(props) {
                             <tr>
                                 <th className="th1"><p>번호</p></th>
                                 <th className="th2"><p>분류</p></th>
-                                <th className="th3"><p>업종</p></th>
                                 <th className="th3"><p>기업명</p></th>
                                 <th className="th4"><p>대표자</p></th>
                                 <th className="th2"><p>대표전화</p></th>
+                                <th className="th3"><p>업종</p></th>
                                 <th className="th5"><p>공개여부</p></th>
                                 <th className="th5"><p>설정 보기</p></th>
                                 <th className="th5"><p>목록 보기</p></th>

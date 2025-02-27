@@ -27,7 +27,7 @@ function OperationalSupport(props) {
             searchVal: "",
             searchType: "",
             entClsf : "",
-            entTpbiz: "",
+            // entTpbiz: "",
             actvtnYn : ""
         }
     );
@@ -124,7 +124,6 @@ function OperationalSupport(props) {
                             <tr key={`${item.mvnEntSn}_${index}`}>
                                 <td> {resp.paginationInfo.totalRecordCount - (resp.paginationInfo.currentPageNo - 1) * resp.paginationInfo.pageSize - index}</td>
                                 <td>{item.entClsfNm || ""}</td>
-                                <td>{item.entTpbizNm || ""}</td>
                                 <td>
                                     <Link to={{pathname: URL.RESIDENT_COMPANY_MODIFY}}
                                           state={{
@@ -137,24 +136,28 @@ function OperationalSupport(props) {
                                 </td>
                                 <td>{item.tblMvnEnt.rpsvNm}</td>
                                 <td>{ComScript.formatTelNumber(item.tblMvnEnt.entTelno)}</td>
+                                <td>{item.entTpbizNm || ""}</td>
                                 <td>{item.tblMvnEnt.actvtnYn === "Y" ? "공개" : "비공개"}</td>
                                 <td>
                                     <Link to={URL.MANAGER_RESIDENT_MANAGER}
-                                          state={{mvnEntSn: item.tblMvnEnt.mvnEntSn,
-                                                  rpsvNm : item.tblMvnEnt.rpsvNm,
-                                                  entTelno : item.tblMvnEnt.entTelno,
-                                                  entTpbiz : item.tblMvnEnt.entTpbiz}}>
-                                    <button type="button" className="settingBtn"><span>관리자 설정</span></button>
+                                          state={{
+                                              mvnEntSn: item.tblMvnEnt.mvnEntSn,
+                                              rpsvNm: item.tblMvnEnt.rpsvNm,
+                                              entTelno: item.tblMvnEnt.entTelno,
+                                              entTpbiz: item.tblMvnEnt.entTpbiz
+                                          }}>
+                                        <button type="button" className="settingBtn"><span>관리자 설정</span></button>
                                     </Link>
                                 </td>
                                 <td>
                                     <Link to={URL.MANAGER_RESIDENT_MEMBER}
-                                          state={{mvnEntSn: item.tblMvnEnt.mvnEntSn,
-                                                  rpsvNm : item.tblMvnEnt.rpsvNm,
-                                                  entTelno : item.tblMvnEnt.entTelno,
-                                                  entTpbiz : item.tblMvnEnt.entTpbiz
-                                                }}>
-                                    <button type="button" className="listBtn"><span>직원 목록</span></button>
+                                          state={{
+                                              mvnEntSn: item.tblMvnEnt.mvnEntSn,
+                                              rpsvNm: item.tblMvnEnt.rpsvNm,
+                                              entTelno: item.tblMvnEnt.entTelno,
+                                              entTpbiz: item.tblMvnEnt.entTpbiz
+                                          }}>
+                                        <button type="button" className="listBtn"><span>직원 목록</span></button>
                                     </Link>
                                 </td>
                             </tr>
@@ -201,7 +204,7 @@ function OperationalSupport(props) {
             searchVal: "",
             searchType: "",
             entClsf : "",
-            entTpbiz: "",
+            // entTpbiz: "",
             actvtnYn : ""
         });
 
@@ -211,7 +214,7 @@ function OperationalSupport(props) {
             searchVal: "",
             searchType: "",
             entClsf : "",
-            entTpbiz: "",
+            // entTpbiz: "",
             actvtnYn : ""
         });
     }
@@ -244,25 +247,25 @@ function OperationalSupport(props) {
                                 </div>
                             </li>
 
-                            <li className="inputBox type1">
-                                <p className="title">업종</p>
-                                <div className="itemBox">
-                                    <select className="selectGroup"
-                                            id="entTpbiz"
-                                            value={searchDto.entTpbiz || ""}
-                                            onChange={(e) =>
-                                                setSearchDto({...searchDto, entTpbiz: e.target.value})
-                                            }
-                                    >
-                                        <option value="">전체</option>
-                                        {comCdTpbizList.map((item, index) => (
-                                            <option value={item.comCd} key={item.comCd}>
-                                                {item.comCdNm}
-                                            </option>
-                                        ))}
-                                    </select>
-                                </div>
-                            </li>
+                            {/*<li className="inputBox type1">*/}
+                            {/*    <p className="title">업종</p>*/}
+                            {/*    <div className="itemBox">*/}
+                            {/*        <select className="selectGroup"*/}
+                            {/*                id="entTpbiz"*/}
+                            {/*                value={searchDto.entTpbiz || ""}*/}
+                            {/*                onChange={(e) =>*/}
+                            {/*                    setSearchDto({...searchDto, entTpbiz: e.target.value})*/}
+                            {/*                }*/}
+                            {/*        >*/}
+                            {/*            <option value="">전체</option>*/}
+                            {/*            {comCdTpbizList.map((item, index) => (*/}
+                            {/*                <option value={item.comCd} key={item.comCd}>*/}
+                            {/*                    {item.comCdNm}*/}
+                            {/*                </option>*/}
+                            {/*            ))}*/}
+                            {/*        </select>*/}
+                            {/*    </div>*/}
+                            {/*</li>*/}
 
                             <li className="inputBox type1">
                                 <p className="title">공개 여부</p>
@@ -356,11 +359,11 @@ function OperationalSupport(props) {
                             <thead>
                             <tr>
                                 <th className="th1"><p>번호</p></th>
-                                <th className="th2"><p>분류</p></th>
-                                <th className="th3"><p>업종</p></th>
-                                <th className="th3"><p>기업명</p></th>
-                                <th className="th4"><p>대표자</p></th>
+                                <th className="th3"><p>분류</p></th>
+                                <th className="th4"><p>기업명</p></th>
+                                <th className="th1"><p>대표자</p></th>
                                 <th className="th2"><p>대표전화</p></th>
+                                <th className="th1"><p>업종</p></th>
                                 <th className="th5"><p>공개여부</p></th>
                                 <th className="th5"><p>설정 보기</p></th>
                                 <th className="th5"><p>목록 보기</p></th>
