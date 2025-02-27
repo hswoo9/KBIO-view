@@ -412,6 +412,14 @@ function NormalMemberList(props) {
                                 });
                             }}
                         />
+                        <NavLink
+                            to={URL.MANAGER_MEMBER_CREATE}
+                            state={{
+                                mode:CODE.MODE_CREATE
+                            }}
+                        >
+                            <button type="button" className="writeBtn clickBtn"><span>등록</span></button>
+                        </NavLink>
                     </div>
                 </div>
             </div>

@@ -97,6 +97,7 @@ import EgovAdminMenuList from "@/pages/admin/menu/EgovAdminMenuList";
 //MANAGER
 import MamagerIndex from "@/pages/manager/Index";
 import ManagerNormalMember from "@/pages/manager/member/all/ManagerNormalMember";
+import ManagerMemberCreate from "@/pages/manager/member/all/ManagerMemberCreate";
 import ManagerApprovalMember from "@/pages/manager/member/approval/ManagerApprovalMember";
 import ManagerRejectMember from "@/pages/manager/member/reject/ManagerRejectMember";
 import ManagerCancelMember from "@/pages/manager/member/cancel/ManagerCancelMember";
@@ -630,6 +631,10 @@ const SecondRoutes = () => {
               <Route
                   path={URL.MANAGER_NORMAL_MEMBER}
                   element={<ManagerNormalMember/>}
+              />
+              <Route
+                  path={URL.MANAGER_MEMBER_CREATE}
+                  element={<ManagerMemberCreate mode={CODE.MODE_CREATE}/>}
               />
               <Route
                   path={URL.MANAGER_APPROVAL_MEMBER}
