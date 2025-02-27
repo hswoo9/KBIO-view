@@ -34,7 +34,6 @@ function ManagerStatisticsAccess(props) {
     });
 
     const currentYear = format(nowDate, "yyyy");
-
     const [menuIndex, setMenuIndex] = useState(0);
     const [tabRenderKey, setTabRenderKey] = useState(0);
 
@@ -157,11 +156,8 @@ function ManagerStatisticsAccess(props) {
                             </li>
                         </ul>
                     </div>
-                    <div>
-                        {menuList(handleCallback)[menuIndex]}
-                    </div>
                 </div>
-
+                {menuList(handleCallback)[menuIndex]}
             </div>
         </div>
     );

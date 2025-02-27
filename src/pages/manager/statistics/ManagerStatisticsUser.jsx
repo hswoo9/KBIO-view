@@ -39,7 +39,7 @@ function ManagerStatisticsUser(props) {
 
     const chartOptions = {
         chart: {
-            id: 'basic-bar',
+            id: '사용자통계',
         },
         xaxis: {
             categories: ['입주기업', '유관기관', '비입주기업', '컨설턴트'],
