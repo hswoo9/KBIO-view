@@ -42,10 +42,10 @@ function ManagerStatisticsFile(props) {
     }, [menuIndex, searchDto]);
 
     const menuList = (callback) => ({
-        0: <Tab key={menuIndex === 0 ? tabRenderKey : 0} searchDto={{ ...searchDto, trgtSn: 1}} onCallback={callback}/>,
-        1: <Tab key={menuIndex === 1 ? tabRenderKey : 1} searchDto={{ ...searchDto, trgtSn: 8}} onCallback={callback}/>,
-        2: <Tab key={menuIndex === 2 ? tabRenderKey : 2} searchDto={{ ...searchDto, trgtSn: 5}} onCallback={callback}/>,
-        3: <Tab key={menuIndex === 3 ? tabRenderKey : 3} searchDto={{ ...searchDto, trgtSn: 7}} onCallback={callback}/>,
+        0: <Tab key={menuIndex === 0 ? tabRenderKey : 0} pageName="공지사항" searchDto={{ ...searchDto, trgtSn: 1}} onCallback={callback}/>,
+        1: <Tab key={menuIndex === 1 ? tabRenderKey : 1} pageName="보도자료" searchDto={{ ...searchDto, trgtSn: 8}} onCallback={callback}/>,
+        2: <Tab key={menuIndex === 2 ? tabRenderKey : 2} pageName="자료실" searchDto={{ ...searchDto, trgtSn: 5}} onCallback={callback}/>,
+        3: <Tab key={menuIndex === 3 ? tabRenderKey : 3} pageName="연구자료실" searchDto={{ ...searchDto, trgtSn: 7}} onCallback={callback}/>,
     });
 
     const handleCallback = (e) => {
@@ -152,11 +152,8 @@ function ManagerStatisticsFile(props) {
                             </li>
                         </ul>
                     </div>
-                    <div>
-                        {menuList(handleCallback)[menuIndex]}
-                    </div>
                 </div>
-
+                {menuList(handleCallback)[menuIndex]}
             </div>
         </div>
     );

@@ -16,6 +16,7 @@ function AccessTabPst(props) {
     const lastDay = new Date(year, month, 0).getDate();
 
     const categories = Array.from({ length: lastDay }, (_, i) => String(i + 1 + "일").padStart(2, '0'));
+    const [pstAccessList, setPstAccessList] = useState([]);
     const [cnt, setCnt] = useState([])
 
     const getStatisticsPstAccess = () => {
@@ -28,17 +29,45 @@ function AccessTabPst(props) {
         };
 
         EgovNet.requestFetch("/statisticsApi/getStatisticsPstAccess.do", requestOptions, function (resp) {
-            if(resp.result.statisticsPstAccess != null){
-                resp.result.statisticsPstAccess.forEach(function(v, i){
-                    const userCounts = categories.map((day) => {
-                        const item = resp.result.statisticsPstAccess.find(v => parseInt(v.day.split("-")[2]) === parseInt(day.slice(0, -1)));
-                        return item ? item.cnt : 0;
-                    });
+            setCnt([])
 
-                    setCnt(userCounts)
-                })
-            }
+            const statisticsMap = new Map(
+                resp.result.statisticsPstAccess.map(item => [item.day.split("-")[2], item])
+            );
 
+            let totalAccessCnt = 0;
+            const dataList = categories.map(day => {
+                const dayFormat = day.slice(0, -1);
+
+                /** chart Item */
+                const chartItem =  statisticsMap.get(dayFormat) ? statisticsMap.get(dayFormat).cnt : 0
+                setCnt(cnt => [...cnt, chartItem])
+
+                /** table Item */
+                const tbItem = statisticsMap.get(dayFormat) || {
+                    day,
+                    cnt: 0,
+                };
+
+                totalAccessCnt += Number(tbItem.cnt || 0)
+
+                return (
+                    <tr key={dayFormat}>
+                        <td>{dayFormat} 일</td>
+                        <td>{Number(tbItem.cnt || 0).toLocaleString()} 명</td>
+                    </tr>
+                );
+            });
+
+            /** table Item */
+            dataList.push(
+                <tr key="total">
+                    <td>총합</td>
+                    <td>{Number(totalAccessCnt).toLocaleString()} 명</td>
+                </tr>
+            );
+
+            setPstAccessList(dataList);
             props.onCallback();
         });
     }
@@ -51,7 +80,7 @@ function AccessTabPst(props) {
 
     const chartOptions = {
         chart: {
-            id: 'basic-bar',
+            id: props.pageName + "-접속통계",
         },
         //컬럼명
         xaxis: {
@@ -61,13 +90,60 @@ function AccessTabPst(props) {
 
     const series = [
         {
-            name: '조회수',
+            name: '접속자수',
             data: cnt,
         },
     ];
 
     return (
-        <ApexCharts options={chartOptions} series={series} type="bar" height={350}/>
+        <>
+            <style>
+                {`
+                #tbChart {
+                    display : flex;
+                }
+                #item1 {
+                    width : 25%
+                }
+                #item1 tbody tr td:nth-child(1) {
+                    text-align : left !important;
+                }
+                #item1 tbody tr td:nth-child(2) {
+                    text-align : right;
+                } 
+                 #item2 {
+                    width : 75%
+                }
+                
+                .scrollable-tbody {
+                    display: block;
+                    max-height: 450px; /* 원하는 높이 지정 */
+                    min-height: 300px;
+                    overflow-y: auto;
+                }
+
+            `}
+            </style>
+            <div className="tableBox type1" id="tbChart">
+                <div id="item1">
+                    <table>
+                        <caption>접속자 수</caption>
+                        <thead className="fixed-thead">
+                        <tr>
+                            <th>일자</th>
+                            <th>접속자수</th>
+                        </tr>
+                        </thead>
+                        <tbody className="scrollable-tbody">
+                        {pstAccessList}
+                        </tbody>
+                    </table>
+                </div>
+                <div id="item2">
+                    <ApexCharts options={chartOptions} series={series} type="bar" height={500}/>
+                </div>
+            </div>
+        </>
     );
 }
 
