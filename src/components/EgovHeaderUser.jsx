@@ -725,8 +725,8 @@ function EgovHeader() {
                           <button type="button" className="myPage"><span>마이페이지</span></button>
                         </NavLink>
                     )}
-                    <button onClick={logOutHandler} className="btn">
-                      로그아웃
+                    <button type="button" onClick={logOutHandler} className="btn">
+                      <span>로그아웃</span>
                     </button>
                   </>
               )}
