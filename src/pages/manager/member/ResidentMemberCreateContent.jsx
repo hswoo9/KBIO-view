@@ -22,7 +22,9 @@ function ResidentMemberCreateContent(props){
     const [searchDto, setSearchDto] = useState({mvnEntSn : location.state?.mvnEntSn});
     const [acceptFileTypes, setAcceptFileTypes] = useState('jpg,jpeg,png,gif,bmp,tiff,tif,webp,svg,ico,heic,avif');
     const [selectedFiles, setSelectedFiles] = useState([]);
+    const [selectedBIFiles, setSelectedBIFiles] = useState([]);
     const [imgFile, setImgFile] = useState("");
+    const [biImgFile, setBiImgFile] = useState("");
     const [fileList, setFileList] = useState([]);
     const sessionUser = getSessionItem("loginUser");
     /*기업분류*/
@@ -179,6 +181,10 @@ function ResidentMemberCreateContent(props){
                     setSelectedFiles(resp.result.logoFile);
                 }
 
+                if(resp.result.biLogoFile){
+                    setSelectedBIFiles(resp.result.biLogoFile);
+                }
+
                 if(resp.result.mvnEntAtchFile){
                     setFileList(resp.result.mvnEntAtchFile);
                 }
@@ -196,10 +202,48 @@ function ResidentMemberCreateContent(props){
 
 
     }
+    const handleBiFileChange = (e) => {
+        if(selectedBIFiles.atchFileSn != null){
+            Swal.fire("기존 파일 삭제 후 첨부가 가능합니다.");
+            e.target.value = null;
+            return false;
+        }
+
+        const allowedExtensions = acceptFileTypes.split(',');
+        if(e.target.files.length > 0){
+            const fileExtension = e.target.files[0].name.split(".").pop().toLowerCase();
+            if(allowedExtensions.includes(fileExtension)){
+                let fileName = e.target.files[0].name;
+                if(fileName.length > 30){
+                    fileName = fileName.slice(0, 30) + "...";
+                }
+                document.getElementById("fileBiNamePTag").textContent = fileName;
+                setSelectedBIFiles(Array.from(e.target.files));
+                const file = e.target.files[0];
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onloadend = () => {
+                    setBiImgFile(reader.result);
+                }
+
+            }else{
+                Swal.fire({
+                    title: "허용되지 않은 확장자입니다.",
+                    text: `허용 확장자: ` + acceptFileTypes
+                });
+                e.target.value = null;
+            }
+        }else{
+            Swal.fire(
+                `선택된 파일이 없습니다.`
+            );
+        }
+
+    }
 
     const handleFileChange = (e) => {
 
-        if(selectedFiles != null && selectedFiles.length > 0){
+        if(selectedFiles.atchFileSn != null){
             Swal.fire("기존 파일 삭제 후 첨부가 가능합니다.");
             e.target.value = null;
             return false;
@@ -235,6 +279,37 @@ function ResidentMemberCreateContent(props){
             );
         }
     };
+    const setBiFileDel = (atchFileSn) => {
+        Swal.fire({
+            title: "삭제한 파일은 복구할 수 없습니다.\n그래도 삭제하시겠습니까?",
+            showCloseButton: true,
+            showCancelButton: true,
+            confirmButtonText: "확인",
+            cancelButtonText: "취소"
+        }).then((result) => {
+            if(result.isConfirmed) {
+                const requestOptions = {
+                    method: "POST",
+                    headers: {
+                        "Content-type": "application/json",
+                    },
+                    body:  JSON.stringify({
+                        atchFileSn: atchFileSn,
+                    }),
+                };
+
+                EgovNet.requestFetch("/commonApi/setFileDel", requestOptions, (resp) => {
+                    if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
+                        Swal.fire("삭제되었습니다.");
+                        setSelectedBIFiles([]);
+                    } else {
+                    }
+                });
+            } else {
+                //취소
+            }
+        });
+    }
 
 
     const setFileDel = (atchFileSn) => {
@@ -493,6 +568,10 @@ function ResidentMemberCreateContent(props){
             formData.append("files", file);
         });
 
+        Array.from(selectedBIFiles).map((file) => {
+            formData.append("biFile", file);
+        })
+
 
         fileList.map((file) => {
             formData.append("mvnEntAtchFiles",file);
@@ -597,7 +676,7 @@ function ResidentMemberCreateContent(props){
                     <li className="inputBox type1 width3 file">
                         <p className="title essential">로고파일선택</p>
                         <div className="input">
-                            {selectedFiles&& selectedFiles.atchFileSn ? (
+                            {selectedFiles.atchFileSn ? (
                                         <p className="file_name" id="fileNamePTag">
                                             {selectedFiles.atchFileNm} - {(selectedFiles.atchFileSz / 1024).toFixed(2)} KB
 
@@ -611,16 +690,6 @@ function ResidentMemberCreateContent(props){
                             ) : (
                                     <p className="file_name" id="fileNamePTag"></p>
                             )}
-                            {/*<p className="file_name" id="fileNamePTag"></p>
-                            <label>
-                            <small className="text btn">파일 선택</small>
-                            <input
-                                type="file"
-                                name="logo"
-                                id="logo"
-                                onChange={handleFileChange}
-                            />
-                            </label>*/}
                             <label>
                                 <small className="text btn">파일 선택</small>
                                 <input
@@ -821,14 +890,34 @@ function ResidentMemberCreateContent(props){
                         </div>
                     </li>
                     {/* 참여기관 */}
-                    <li className="inputBox type1 email width3">
-                        <label className="title essential" htmlFor=""><small>참여기관 (BI)</small></label>
+                    <li className="inputBox type1 file width3">
+                        <p className="title essential" htmlFor="">참여기관 (BI)</p>
                         <div className="input">
-                            <input
-                                type="text"
-                            >
-                            </input>
+                            {selectedBIFiles.atchFileSn ? (
+                                <p className="file_name" id="fileBiNamePTag">
+                                    {selectedBIFiles.atchFileNm} - {(selectedBIFiles.atchFileSz / 1024).toFixed(2)} KB
+
+                                    <button type="button" className="deletBtn white"
+                                            onClick={() => setBiFileDel(selectedBIFiles.atchFileSn)}  // 삭제 버튼 클릭 시 처리할 함수
+                                            style={{marginLeft: '10px', color: 'red'}}
+                                    >
+                                        삭제
+                                    </button>
+                                </p>
+                            ) : (
+                                <p className="file_name" id="fileBiNamePTag"></p>
+                            )}
+                            <label>
+                                <small className="text btn">파일 선택</small>
+                                <input
+                                    type="file"
+                                    name="biLogo"
+                                    id="biLogo"
+                                    onChange={handleBiFileChange}
+                                />
+                            </label>
                         </div>
+                        <span className="warningText">gif,png,jpg 파일 / 권장 사이즈 : 500px * 500px / 용량 : 10M 이하</span>
                     </li>
                     {/* 기업소개 */}
                     <li className="inputBox type1">
@@ -913,16 +1002,16 @@ function ResidentMemberCreateContent(props){
                         <div className="box">
                             <p className="title essential">공개여부</p>
                             <div className="toggleSwithWrap">
-                                <input type="checkbox" id="actvtnYn" hidden
-                                       checked={residentDetail.actvtnYn === "Y"}
+                                <input type="checkbox" id="rlsYn" hidden
+                                       checked={residentDetail.rlsYn === "Y"}
                                        onChange={(e) => {
                                            setResidentDetail({
                                                ...residentDetail,
-                                               actvtnYn: e.target.checked ? "Y" : "N",
+                                               rlsYn: e.target.checked ? "Y" : "N",
                                            })
                                            setIsDatePickerEnabled(e.target.checked);
                                        }}/>
-                                <label htmlFor="actvtnYn" className="toggleSwitch">
+                                <label htmlFor="rlsYn" className="toggleSwitch">
                                     <span className="toggleButton"></span>
                                 </label>
                             </div>
@@ -979,8 +1068,16 @@ function ResidentMemberCreateContent(props){
                         <div className="box">
                             <p className="title essential">산하직원 가입여부</p>
                             <div className="toggleSwithWrap">
-                                <input type="checkbox" id="joinYn" hidden/>
-                                <label htmlFor="joinYn" className="toggleSwitch">
+                                <input type="checkbox" id="empJoinYn" hidden
+                                checked={residentDetail.empJoinYn === "Y"}
+                                       onChange={(e) => {
+                                           setResidentDetail({
+                                               ...residentDetail,
+                                               empJoinYn : e.target.checked ? "Y" : "N"
+                                           })
+                                       }}
+                                />
+                                <label htmlFor="empJoinYn" className="toggleSwitch">
                                     <span className="toggleButton"></span>
                                 </label>
                             </div>
