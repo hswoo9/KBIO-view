@@ -72,6 +72,8 @@ function setNormalMember(props) {
         getNormalMember(searchDto);
     };
 
+    console.log(memberDetail);
+
     const updateMember = () => {
         let requestOptions = {};
 
