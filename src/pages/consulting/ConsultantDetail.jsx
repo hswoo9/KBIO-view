@@ -192,11 +192,9 @@ function ConsultantDetail(props) {
                                 <li>
                                     <strong className="left">컨설팅항목</strong>
                                     <div className="right">
-                                        <p>{consultantDetail?.cnsltArtcl}</p>
-                                        {/*<p>기업 맞춤형 마케팅 전략 수립</p>
-                                        <p>브랜드 아이덴티티 구축</p>
-                                        <p>온라인 광고 최적화 (SEO, SNS, PPC)</p>
-                                        <p>고객 데이터 분석 및 활용 방안 제시</p>*/}
+                                        {consultantDetail?.cnsltArtcl?.split("^").map((item, index) => (
+                                            <p key={index}>{item}</p>
+                                        ))}
                                     </div>
                                 </li>
                                 <li>
