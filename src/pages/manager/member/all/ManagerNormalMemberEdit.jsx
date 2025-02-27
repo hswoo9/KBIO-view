@@ -102,6 +102,8 @@ function setNormalMember(props) {
 
         setMemberDetail({...memberDetail});
 
+        console.log(memberDetail);
+
         const formData = new FormData();
 
 
@@ -304,7 +306,7 @@ function setNormalMember(props) {
                                     type="text"
                                     defaultValue={memberDetail.userId || ''}
                                     onChange={(e) =>
-                                        setMemberDetail({...memberDetail, userId: e.target.defaultValue})
+                                        setMemberDetail({...memberDetail, userId: e.target.value})
                                     }
                                 />
                             </div>
@@ -332,7 +334,7 @@ function setNormalMember(props) {
                                     type="text"
                                     defaultValue={memberDetail.kornFlnm || ''}
                                     onChange={(e) =>
-                                        setMemberDetail({...memberDetail, kornFlnm: e.target.defaultValue})
+                                        setMemberDetail({...memberDetail, kornFlnm: e.target.value})
                                     }
                                 />
                             </div>
@@ -343,9 +345,9 @@ function setNormalMember(props) {
                             <div className="input">
                                 <input
                                     type="text"
-                                    defaultValue={memberDetail.mblTelno || ''}
+                                    value={memberDetail.mblTelno || ''}
                                     onChange={(e) =>
-                                        setMemberDetail({...memberDetail, mblTelno: e.target.defaultValue})
+                                        setMemberDetail({...memberDetail, mblTelno: e.target.value})
                                     }
                                 />
                             </div>
@@ -358,7 +360,7 @@ function setNormalMember(props) {
                                     type="text"
                                     defaultValue={memberDetail.email || ''}
                                     onChange={(e) =>
-                                        setMemberDetail({...memberDetail, email: e.target.defaultValue})
+                                        setMemberDetail({...memberDetail, email: e.target.value})
                                     }
                                 />
                             </div>
@@ -377,7 +379,7 @@ function setNormalMember(props) {
                                     onChange={(e) =>
                                         setMemberDetail({
                                             ...memberDetail,
-                                            zip: e.target.defaultValue,
+                                            zip: e.target.value,
                                         })
                                     }
                                     required
@@ -388,7 +390,8 @@ function setNormalMember(props) {
                                     id="addr"
                                     title="주소"
                                     defaultValue={memberDetail.addr || ""}
-                                    onChange={(e) => setMemberDetail({...memberDetail, addr: e.target.defaultValue})}
+                                    onChange={(e) => setMemberDetail({...memberDetail, addr: e.target.value})}
+                                    readOnly
                                 /></div>
                         </li>
 
@@ -401,7 +404,7 @@ function setNormalMember(props) {
                                     id="daddr"
                                     title="상세주소"
                                     defaultValue={memberDetail.daddr || ""}
-                                    onChange={(e) => setMemberDetail({...memberDetail, daddr: e.target.defaultValue})}
+                                    onChange={(e) => setMemberDetail({...memberDetail, daddr: e.target.value})}
                                 />
                             </div>
                         </li>
@@ -461,7 +464,7 @@ function setNormalMember(props) {
                             <div className="input">
                                 <input
                                     type="text"
-                                    defaultValue={memberDetail.lastLoginDt || ''}
+                                    defaultValue={memberDetail.lastLoginDate ? new Date(memberDetail.lastLoginDate).toLocaleDateString() : ''}
                                     readOnly
                                 />
                             </div>

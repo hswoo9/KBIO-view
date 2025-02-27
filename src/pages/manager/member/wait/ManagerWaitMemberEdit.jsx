@@ -360,7 +360,7 @@ function setWaitMember(props) {
                                 <div className="input">
                                     <input
                                         type="text"
-                                        value={memberDetail.lastLoginDt || ''}
+                                        defaultValue={memberDetail.lastLoginDate ? new Date(memberDetail.lastLoginDate).toLocaleDateString() : ''}
                                         readOnly
                                     />
                                 </div>
