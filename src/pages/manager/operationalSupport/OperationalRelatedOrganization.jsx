@@ -19,7 +19,7 @@ function OperationalRelatedOrganization(props) {
             searchVal: "",
             searchType: "",
             clsf : "",
-            tpbiz: "",
+            // tpbiz: "",
             actvtnYn : ""
         }
     );
@@ -39,7 +39,6 @@ function OperationalRelatedOrganization(props) {
     }
     const excelUploadEvent = (e) => {
         fileUpload(e.target.files[0]).then((data) => {
-            //엑셀 업로드 이 후 기능
             console.log(data);
         });
     }
@@ -84,14 +83,51 @@ function OperationalRelatedOrganization(props) {
                 }
 
                 let sheetDatas = [{
-                    sheetName : "입주기업 관리",
+                    sheetName : "유관기관 관리",
                     header : ['번호', '분류', '업종', '기업명', '대표자', '대표전화', '공개여부'],
                     row : rowDatas
                 }];
-                excelExport("입주기업 관리", sheetDatas);
+                excelExport("유관기관 관리", sheetDatas);
             }
         )
     });
+
+    const excelUploadSample = () => {
+        let sheetDatas = [{
+            sheetName : "유관기관 업로드 양식",
+            header : ['기업명', '사업자등록번호', '대표자', '대표전화', '분류코드(시트참조)', '업종코드(시트참조)', '공개여부'],
+            row : []
+        }];
+
+        let comCdClsfRow = [];
+        comCdClsfList.forEach(function(item, index){
+            comCdClsfRow.push({
+                comCd: item.comCd,
+                comCdNm: item.comCdNm
+            })
+        });
+        let comCdClsf = {
+            sheetName: "분류코드",
+            header: ['코드', '코드명'],
+            row: comCdClsfRow
+        }
+        sheetDatas.push(comCdClsf);
+
+        let comCdTpbizRow = [];
+        comCdTpbizList.forEach(function(item, index){
+            comCdTpbizRow.push({
+                comCd: item.comCd,
+                comCdNm: item.comCdNm
+            })
+        });
+        let comCdTpbiz = {
+            sheetName: "업종코드",
+            header: ['코드', '코드명'],
+            row: comCdTpbizRow
+        }
+        sheetDatas.push(comCdTpbiz);
+        excelExport("유관기관 업로드 양식", sheetDatas);
+    }
 
     const getRcList = useCallback(
         (searchDto)=>{
@@ -202,7 +238,7 @@ function OperationalRelatedOrganization(props) {
             searchVal: "",
             searchType: "",
             clsf : "",
-            tpbiz: "",
+            // tpbiz: "",
             actvtnYn : ""
         });
 
@@ -212,7 +248,7 @@ function OperationalRelatedOrganization(props) {
             searchVal: "",
             searchType: "",
             clsf : "",
-            tpbiz: "",
+            // tpbiz: "",
             actvtnYn : ""
         });
     }
@@ -250,25 +286,25 @@ function OperationalRelatedOrganization(props) {
                                 </div>
                             </li>
 
-                            <li className="inputBox type1">
-                                <p className="title">업종</p>
-                                <div className="itemBox">
-                                    <select className="selectGroup"
-                                            id="tpbiz"
-                                            value={searchDto.tpbiz || ""}
-                                            onChange={(e) =>
-                                                setSearchDto({...searchDto, tpbiz: e.target.value})
-                                            }
-                                    >
-                                        <option value="">전체</option>
-                                        {comCdTpbizList.map((item, index) => (
-                                            <option value={item.comCd} key={`${item.comCd}_tpbiz`}>
-                                                {item.comCdNm}
-                                            </option>
-                                        ))}
-                                    </select>
-                                </div>
-                            </li>
+                            {/*<li className="inputBox type1">*/}
+                            {/*    <p className="title">업종</p>*/}
+                            {/*    <div className="itemBox">*/}
+                            {/*        <select className="selectGroup"*/}
+                            {/*                id="tpbiz"*/}
+                            {/*                value={searchDto.tpbiz || ""}*/}
+                            {/*                onChange={(e) =>*/}
+                            {/*                    setSearchDto({...searchDto, tpbiz: e.target.value})*/}
+                            {/*                }*/}
+                            {/*        >*/}
+                            {/*            <option value="">전체</option>*/}
+                            {/*            {comCdTpbizList.map((item, index) => (*/}
+                            {/*                <option value={item.comCd} key={`${item.comCd}_tpbiz`}>*/}
+                            {/*                    {item.comCdNm}*/}
+                            {/*                </option>*/}
+                            {/*            ))}*/}
+                            {/*        </select>*/}
+                            {/*    </div>*/}
+                            {/*</li>*/}
 
                             <li className="inputBox type1">
                                 <p className="title">공개 여부</p>
@@ -342,17 +378,10 @@ function OperationalRelatedOrganization(props) {
                             <button type="button" className="btn btn2 downBtn red" onClick={dataExcelDownload}>
                                 <div className="icon"></div>
                                 <span>엑셀 다운로드</span></button>
-                            <button type="button" className="btn btn2 uploadBtn black" onClick={fileBtnHandle}>
+                            <button type="button" className="btn btn2 uploadBtn black" onClick={() => ComScript.openModal("uploadModal")}>
                                 <div className="icon"></div>
                                 <span>엑셀 업로드</span>
                             </button>
-                            <input
-                                type="file"
-                                accept=".xlsx"
-                                ref={excelUploadRef}
-                                onChange={excelUploadEvent}
-                                style={{display: "none"}}
-                            />
                         </div>
                     </div>
                     <div className="tableBox type1">
@@ -399,12 +428,12 @@ function OperationalRelatedOrganization(props) {
                 </div>
             </div>
             <div className="uploadModal modalCon">
-                <div className="bg"></div>
+                <div className="bg" onClick={() => ComScript.closeModal("uploadModal")}></div>
                 <div className="m-inner">
                     <div className="boxWrap">
                         <div className="top">
                             <h2 className="title">기업정보 일괄 등록</h2>
-                            <div className="close">
+                            <div className="close" onClick={() => ComScript.closeModal("uploadModal")}>
                                 <div className="icon"></div>
                             </div>
                         </div>
@@ -417,13 +446,18 @@ function OperationalRelatedOrganization(props) {
                                         <label>
                                             <small className="text btn">파일 선택</small>
                                             <input type="file" name="file" id="file"
-                                                   accept=".xlsx, .xlsm, .xlsb, .xltx"/>
+                                                   accept=".xlsx"
+                                                   onChange={excelUploadEvent}/>
                                         </label>
                                     </div>
                                 </div>
-                                <p className="botText"><span className="point">양식파일</span>을 다운로드 받은 후 작성해서 업로드 해주세요.</p>
+                                <div className="botText">
+                                    <a onClick={excelUploadSample} className="cursorTag">
+                                        <span className="point">[ 양식파일.xlsx ]</span>
+                                    </a>
+                                    <span>양식파일을 다운로드 받은 후 작성해서 업로드 해주세요.</span>
+                                </div>
                                 <div className="buttonBox">
-                                    <button type="button" className="clickBtn gray"><span>취소</span></button>
                                     <button type="submit" className="clickBtn"><span>등록</span></button>
                                 </div>
                             </form>

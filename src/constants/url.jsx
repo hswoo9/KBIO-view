@@ -162,6 +162,7 @@ const URL = {
   //관리자 페이지
   MANAGER: "/manager/main",
   MANAGER_NORMAL_MEMBER: "/manager/all/normalMember",
+  MANAGER_MEMBER_CREATE: "/manager/memberCreate",
   MANAGER_APPROVAL_MEMBER: "/manager/approval/approvalMember",
   MANAGER_REJECT_MEMBER: "/manager/reject/rejetcMember",
   MANAGER_CANCEL_MEMBER: "/manager/cancel/cancelMember",

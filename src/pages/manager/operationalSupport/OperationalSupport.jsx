@@ -27,7 +27,7 @@ function OperationalSupport(props) {
             searchVal: "",
             searchType: "",
             entClsf : "",
-            entTpbiz: "",
+            // entTpbiz: "",
             actvtnYn : ""
         }
     );
@@ -49,6 +49,43 @@ function OperationalSupport(props) {
         });
     }
 
+    const excelUploadSample = () => {
+        let sheetDatas = [{
+            sheetName : "입주기업 업로드 양식",
+            header : ['기업명', '사업자등록번호', '대표자', '대표전화', '분류코드(시트참조)', '업종코드(시트참조)', '공개여부'],
+            row : []
+        }];
+
+        let comCdClsfRow = [];
+        comCdClsfList.forEach(function(item, index){
+            comCdClsfRow.push({
+                comCd: item.comCd,
+                comCdNm: item.comCdNm
+            })
+        });
+        let comCdClsf = {
+            sheetName: "분류코드",
+            header: ['코드', '코드명'],
+            row: comCdClsfRow
+        }
+        sheetDatas.push(comCdClsf);
+
+        let comCdTpbizRow = [];
+        comCdTpbizList.forEach(function(item, index){
+            comCdTpbizRow.push({
+                comCd: item.comCd,
+                comCdNm: item.comCdNm
+            })
+        });
+        let comCdTpbiz = {
+            sheetName: "업종코드",
+            header: ['코드', '코드명'],
+            row: comCdTpbizRow
+        }
+        sheetDatas.push(comCdTpbiz);
+        excelExport("입주기업 업로드 양식", sheetDatas);
+    }
+    
     const dataExcelDownload = useCallback(() => {
         let excelParams = searchDto;
         excelParams.pageIndex = 1;
@@ -124,7 +161,6 @@ function OperationalSupport(props) {
                             <tr key={`${item.mvnEntSn}_${index}`}>
                                 <td> {resp.paginationInfo.totalRecordCount - (resp.paginationInfo.currentPageNo - 1) * resp.paginationInfo.pageSize - index}</td>
                                 <td>{item.entClsfNm || ""}</td>
-                                <td>{item.entTpbizNm || ""}</td>
                                 <td>
                                     <Link to={{pathname: URL.RESIDENT_COMPANY_MODIFY}}
                                           state={{
@@ -137,24 +173,28 @@ function OperationalSupport(props) {
                                 </td>
                                 <td>{item.tblMvnEnt.rpsvNm}</td>
                                 <td>{ComScript.formatTelNumber(item.tblMvnEnt.entTelno)}</td>
+                                <td>{item.entTpbizNm || ""}</td>
                                 <td>{item.tblMvnEnt.actvtnYn === "Y" ? "공개" : "비공개"}</td>
                                 <td>
                                     <Link to={URL.MANAGER_RESIDENT_MANAGER}
-                                          state={{mvnEntSn: item.tblMvnEnt.mvnEntSn,
-                                                  rpsvNm : item.tblMvnEnt.rpsvNm,
-                                                  entTelno : item.tblMvnEnt.entTelno,
-                                                  entTpbiz : item.tblMvnEnt.entTpbiz}}>
-                                    <button type="button" className="settingBtn"><span>관리자 설정</span></button>
+                                          state={{
+                                              mvnEntSn: item.tblMvnEnt.mvnEntSn,
+                                              rpsvNm: item.tblMvnEnt.rpsvNm,
+                                              entTelno: item.tblMvnEnt.entTelno,
+                                              entTpbiz: item.tblMvnEnt.entTpbiz
+                                          }}>
+                                        <button type="button" className="settingBtn"><span>관리자 설정</span></button>
                                     </Link>
                                 </td>
                                 <td>
                                     <Link to={URL.MANAGER_RESIDENT_MEMBER}
-                                          state={{mvnEntSn: item.tblMvnEnt.mvnEntSn,
-                                                  rpsvNm : item.tblMvnEnt.rpsvNm,
-                                                  entTelno : item.tblMvnEnt.entTelno,
-                                                  entTpbiz : item.tblMvnEnt.entTpbiz
-                                                }}>
-                                    <button type="button" className="listBtn"><span>직원 목록</span></button>
+                                          state={{
+                                              mvnEntSn: item.tblMvnEnt.mvnEntSn,
+                                              rpsvNm: item.tblMvnEnt.rpsvNm,
+                                              entTelno: item.tblMvnEnt.entTelno,
+                                              entTpbiz: item.tblMvnEnt.entTpbiz
+                                          }}>
+                                        <button type="button" className="listBtn"><span>직원 목록</span></button>
                                     </Link>
                                 </td>
                             </tr>
@@ -201,7 +241,7 @@ function OperationalSupport(props) {
             searchVal: "",
             searchType: "",
             entClsf : "",
-            entTpbiz: "",
+            // entTpbiz: "",
             actvtnYn : ""
         });
 
@@ -211,7 +251,7 @@ function OperationalSupport(props) {
             searchVal: "",
             searchType: "",
             entClsf : "",
-            entTpbiz: "",
+            // entTpbiz: "",
             actvtnYn : ""
         });
     }
@@ -244,25 +284,25 @@ function OperationalSupport(props) {
                                 </div>
                             </li>
 
-                            <li className="inputBox type1">
-                                <p className="title">업종</p>
-                                <div className="itemBox">
-                                    <select className="selectGroup"
-                                            id="entTpbiz"
-                                            value={searchDto.entTpbiz || ""}
-                                            onChange={(e) =>
-                                                setSearchDto({...searchDto, entTpbiz: e.target.value})
-                                            }
-                                    >
-                                        <option value="">전체</option>
-                                        {comCdTpbizList.map((item, index) => (
-                                            <option value={item.comCd} key={item.comCd}>
-                                                {item.comCdNm}
-                                            </option>
-                                        ))}
-                                    </select>
-                                </div>
-                            </li>
+                            {/*<li className="inputBox type1">*/}
+                            {/*    <p className="title">업종</p>*/}
+                            {/*    <div className="itemBox">*/}
+                            {/*        <select className="selectGroup"*/}
+                            {/*                id="entTpbiz"*/}
+                            {/*                value={searchDto.entTpbiz || ""}*/}
+                            {/*                onChange={(e) =>*/}
+                            {/*                    setSearchDto({...searchDto, entTpbiz: e.target.value})*/}
+                            {/*                }*/}
+                            {/*        >*/}
+                            {/*            <option value="">전체</option>*/}
+                            {/*            {comCdTpbizList.map((item, index) => (*/}
+                            {/*                <option value={item.comCd} key={item.comCd}>*/}
+                            {/*                    {item.comCdNm}*/}
+                            {/*                </option>*/}
+                            {/*            ))}*/}
+                            {/*        </select>*/}
+                            {/*    </div>*/}
+                            {/*</li>*/}
 
                             <li className="inputBox type1">
                                 <p className="title">공개 여부</p>
@@ -337,7 +377,7 @@ function OperationalSupport(props) {
                             <button type="button" className="btn btn2 downBtn red" onClick={dataExcelDownload}>
                                 <div className="icon"></div>
                                 <span>엑셀 다운로드</span></button>
-                            <button type="button" className="btn btn2 uploadBtn black" onClick={fileBtnHandle}>
+                            <button type="button" className="btn btn2 uploadBtn black" onClick={() => ComScript.openModal("uploadModal")}>
                                 <div className="icon"></div>
                                 <span>엑셀 업로드</span>
                             </button>
@@ -356,11 +396,11 @@ function OperationalSupport(props) {
                             <thead>
                             <tr>
                                 <th className="th1"><p>번호</p></th>
-                                <th className="th2"><p>분류</p></th>
-                                <th className="th3"><p>업종</p></th>
-                                <th className="th3"><p>기업명</p></th>
-                                <th className="th4"><p>대표자</p></th>
+                                <th className="th3"><p>분류</p></th>
+                                <th className="th4"><p>기업명</p></th>
+                                <th className="th1"><p>대표자</p></th>
                                 <th className="th2"><p>대표전화</p></th>
+                                <th className="th1"><p>업종</p></th>
                                 <th className="th5"><p>공개여부</p></th>
                                 <th className="th5"><p>설정 보기</p></th>
                                 <th className="th5"><p>목록 보기</p></th>
@@ -394,12 +434,12 @@ function OperationalSupport(props) {
                 </div>
             </div>
             <div className="uploadModal modalCon">
-                <div className="bg"></div>
+                <div className="bg" onClick={() => ComScript.closeModal("uploadModal")}></div>
                 <div className="m-inner">
                     <div className="boxWrap">
                         <div className="top">
                             <h2 className="title">기업정보 일괄 등록</h2>
-                            <div className="close">
+                            <div className="close" onClick={() => ComScript.closeModal("uploadModal")}>
                                 <div className="icon"></div>
                             </div>
                         </div>
@@ -412,13 +452,18 @@ function OperationalSupport(props) {
                                         <label>
                                             <small className="text btn">파일 선택</small>
                                             <input type="file" name="file" id="file"
-                                                   accept=".xlsx, .xlsm, .xlsb, .xltx"/>
+                                                   accept=".xlsx"
+                                                   onChange={excelUploadEvent}/>
                                         </label>
                                     </div>
                                 </div>
-                                <p className="botText"><span className="point">양식파일</span>을 다운로드 받은 후 작성해서 업로드 해주세요.</p>
+                                <div className="botText">
+                                    <a onClick={excelUploadSample} className="cursorTag">
+                                        <span className="point">[ 양식파일.xlsx ]</span>
+                                    </a>
+                                    <span>양식파일을 다운로드 받은 후 작성해서 업로드 해주세요.</span>
+                                </div>
                                 <div className="buttonBox">
-                                    <button type="button" className="clickBtn gray"><span>취소</span></button>
                                     <button type="submit" className="clickBtn"><span>등록</span></button>
                                 </div>
                             </form>
