@@ -26,6 +26,7 @@ import logoWhite from "@/assets/images/logo_white.svg";
 import {useWebSocket} from "../utils/WebSocketProvider.jsx";
 import {getUserMsgTopList} from "./CommonComponents.jsx";
 import moment from "moment";
+import GoogleTranslateWidget from "../pages/common/content/GoogleTranslateWidget.jsx";
 
 function EgovHeader() {
   const KAKAO_CLIENT_ID = import.meta.env.VITE_APP_KAKAO_CLIENTID; // 발급받은 클라이언트 아이디
@@ -768,6 +769,8 @@ function EgovHeader() {
                   <option value="1">EN</option>
                 </select>
               </div>
+
+              {/*<GoogleTranslateWidget/>*/}
             </div>
           </div>
           <div className="hBot inner">
