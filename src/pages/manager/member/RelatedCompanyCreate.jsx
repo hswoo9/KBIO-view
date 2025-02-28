@@ -111,6 +111,39 @@ function RelatedCompanyCreate(props){
         setRelatedDetail({...relatedDetail, [fieldName]: value});
     };
 
+    const setRcActvtnYn = (e) => {
+        Swal.fire({
+            title: "유관기관을 삭제할 경우\n 소속 직원 계정도 삭제됩니다.\n그래도 삭제하시겠습니까?",
+            showCloseButton: true,
+            showCancelButton: true,
+            confirmButtonText: "확인",
+            cancelButtonText: "취소"
+        }).then((result) => {
+            if(result.isConfirmed) {
+                const setRcActvtnYnUrl = "/relatedApi/setRcActvtnYn";
+                const requestOptions = {
+                    method: "POST",
+                    headers: {
+                        "Content-type": "application/json",
+                    },
+                    body: JSON.stringify(relatedDetail)
+                };
+                EgovNet.requestFetch(setRcActvtnYnUrl, requestOptions, (resp) => {
+                    if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
+                        Swal.fire("삭제되었습니다.").then(() => {
+                            navigate(URL.MANAGER_RELATED_ORGANIZATION);
+                        });
+                    }else {
+                        Swal.fire("삭제 중 문제가 발생하였습니다.");
+                        return;
+                    }
+                });
+            }else{
+                //취소
+            }
+        });
+    }
+
     const getRc = (searchDto) =>{
         if (modeInfo.mode === CODE.MODE_CREATE) {
 
@@ -1036,6 +1069,7 @@ function RelatedCompanyCreate(props){
                             <button
                                 type="button"
                                 className="clickBtn gray"
+                                onClick={()=>setRcActvtnYn()}
                             >
                                 <span>삭제</span>
                             </button>

@@ -173,7 +173,7 @@ function ResidentMemberCreateContent(props){
                 EgovNet.requestFetch(setRcActvtnYnUrl, requestOptions, (resp) => {
                     if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
                         Swal.fire("삭제되었습니다.").then(() => {
-                            window.location.href = URL.MANAGER_OPERATIONAL_SUPPORT;
+                            navigate(URL.MANAGER_OPERATIONAL_SUPPORT);
                         });
                     }else {
                         Swal.fire("삭제 중 문제가 발생하였습니다.");
