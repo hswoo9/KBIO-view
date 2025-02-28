@@ -1507,8 +1507,11 @@ function MemberSignUp(props) {
                                   cnsltArtcl: e.target.value
                                 })}
                             />
+
                         </div>
+
                       </div>
+                      <span className="warningText" style={{fontSize: "14px"}}>항목과 항목 사이에 기호 [^] 를 넣어주세요.</span>
                     </li>
 
                     <li className="inputBox type2">

@@ -18,6 +18,7 @@ import Eval  from "../../../../common/pst/eval.jsx";
 import { getSessionItem, setSessionItem } from "@/utils/storage";
 import ManagerLeftNew from "@/components/manager/ManagerLeftNew";
 import {fileDownLoad, fileZipDownLoad} from "@/components/CommonComponents";
+import * as ComScript from "@/components/CommonScript";
 
 function setPst(props) {
   const sessionUser = getSessionItem("loginUser");
@@ -327,7 +328,7 @@ function setPst(props) {
                 </li>
                 <li className="inputBox type1 width1">
                   <label className="title"><small>내용</small></label>
-                  <div className="input" dangerouslySetInnerHTML={{__html: pstDetail.pstCn}}></div>
+                  <div className="input" dangerouslySetInnerHTML={{__html: ComScript.convertOembedToIframe(pstDetail.pstCn)}}></div>
                 </li>
 
                 {bbsDetail.cmntPsbltyYn == "Y" && (

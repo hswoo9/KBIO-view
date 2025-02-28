@@ -4,7 +4,7 @@ import axios from "axios";
 import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
-
+import { getSessionItem } from "@/utils/storage";
 import ManagerLeft from "@/components/manager/ManagerLeftOperationalSupport";
 import EgovPaging from "@/components/EgovPaging";
 import {getComCdList, excelExport, fileUpload} from "@/components/CommonComponents";
@@ -12,7 +12,7 @@ import Swal from 'sweetalert2';
 import * as ComScript from "@/components/CommonScript";
 
 function OperationalRelatedOrganization(props) {
-
+    const sessionUser = getSessionItem("loginUser");
     const [searchDto, setSearchDto] = useState(
         location.state?.searchDto || {
             pageIndex: 1,
@@ -31,15 +31,77 @@ function OperationalRelatedOrganization(props) {
     const [comCdClsfList, setComCdClsfList] = useState([]);
     const [comCdTpbizList, setComCdTpbizList] = useState([]);
 
-    const excelUploadRef = useRef(null);
-    const fileBtnHandle = () => {
-        if(excelUploadRef.current){
-            excelUploadRef.current.click();
+    const [uploadFileName, setUploadFileName] = useState("");
+    const [uploadExcelData, setUploadExcelData] = useState([]);
+    useEffect(() => {
+        if(uploadExcelData.length > 0){
+            uploadExcelData.forEach(function(item, index){
+                item.relInstNm = item['기업명'];
+                item.brno = String(item['사업자등록번호']).replaceAll("-", "");
+                item.rpsvNm = item['대표자'];
+                item.entTelno = String(item['대표전화']).replaceAll("-", "");
+                item.clsf = item['분류코드(시트참조)'];
+                item.tpbiz = item['업종코드(시트참조)'];
+                item.creatrSn = sessionUser?.userSn;
+                item.actvtnYn = "Y";
+            });
+            console.log(uploadExcelData);
         }
-    }
+    }, [uploadExcelData]);
+
+    const excelDataSave = useCallback(
+        () => {
+            Swal.fire({
+                title: "등록하시겠습니까?",
+                showCloseButton: true,
+                showCancelButton: true,
+                confirmButtonText: "등록",
+                cancelButtonText: "취소"
+            }).then((result) => {
+                if(result.isConfirmed) {
+                    if(uploadExcelData.length > 0){
+                        const requestURL = "/relatedApi/setRelInstList.do";
+                        const requestOptions = {
+                            method: "POST",
+                            headers: {
+                                "Content-type": "application/json",
+                            },
+                            body: JSON.stringify({tblRelInstList : uploadExcelData})
+                        };
+                        EgovNet.requestFetch(
+                            requestURL,
+                            requestOptions,
+                            (resp) => {
+                                if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
+                                    Swal.fire("등록되었습니다");
+                                    setUploadFileName("");
+                                    setUploadExcelData([]);
+                                    ComScript.closeModal("uploadModal");
+                                    getRcList(searchDto);
+                                } else {
+                                }
+                            }
+                        )
+
+                    }else{
+                        Swal.fire("엑셀 데이터가 없습니다.");
+                    }
+                } else {
+                }
+            });
+
+
+        }
+    )
+
     const excelUploadEvent = (e) => {
         fileUpload(e.target.files[0]).then((data) => {
-            console.log(data);
+            if(e.target.files[0].name != null){
+                setUploadFileName(e.target.files[0].name);
+            }
+            if(data[0].sheet0 != null){
+                setUploadExcelData(data[0].sheet0);
+            }
         });
     }
 
@@ -95,7 +157,7 @@ function OperationalRelatedOrganization(props) {
     const excelUploadSample = () => {
         let sheetDatas = [{
             sheetName : "유관기관 업로드 양식",
-            header : ['기업명', '사업자등록번호', '대표자', '대표전화', '분류코드(시트참조)', '업종코드(시트참조)', '공개여부'],
+            header : ['기업명', '사업자등록번호', '대표자', '대표전화', '분류코드(시트참조)', '업종코드(시트참조)'],
             row : []
         }];
 
@@ -175,7 +237,7 @@ function OperationalRelatedOrganization(props) {
                                 </td>
                                 <td>{item.tblRelInst.rpsvNm}</td>
                                 <td>{ComScript.formatTelNumber(item.tblRelInst.entTelno)}</td>
-                                <td>{item.tblRelInst.actvtnYn === "Y" ? "공개" : "비공개"}</td>
+                                <td>{item.tblRelInst.rlsYn === "Y" ? "공개" : "비공개"}</td>
                                 <td>
                                     <Link to={URL.MANAGER_RELATED_MANAGER}
                                           state={{
@@ -312,9 +374,9 @@ function OperationalRelatedOrganization(props) {
                                     <select
                                         className="selectGroup"
                                         id="actvtnYn"
-                                        value={searchDto.actvtnYn || ""}
+                                        value={searchDto.rlsYn || ""}
                                         onChange={(e) =>
-                                            setSearchDto({...searchDto, actvtnYn: e.target.value})
+                                            setSearchDto({...searchDto, rlsYn: e.target.value})
                                         }
                                     >
                                         <option value="">전체</option>
@@ -442,7 +504,7 @@ function OperationalRelatedOrganization(props) {
                                 <div className="inputBox type1 file">
                                     <p className="title">기업정보 파일</p>
                                     <div className="input">
-                                        <p className="file_name"></p>
+                                        <p className="file_name">{uploadFileName}</p>
                                         <label>
                                             <small className="text btn">파일 선택</small>
                                             <input type="file" name="file" id="file"
@@ -458,7 +520,7 @@ function OperationalRelatedOrganization(props) {
                                     <span>양식파일을 다운로드 받은 후 작성해서 업로드 해주세요.</span>
                                 </div>
                                 <div className="buttonBox">
-                                    <button type="submit" className="clickBtn"><span>등록</span></button>
+                                    <button type="button" className="clickBtn" onClick={excelDataSave}><span>등록</span></button>
                                 </div>
                             </form>
                         </div>
