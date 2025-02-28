@@ -18,6 +18,26 @@ export function openModal(className) {
 }
 
 /**
+ * 유튜브 등 외부 링크 있는 경우
+ */
+export function convertOembedToIframe(html) {
+    return String(html).replace(
+        /<oembed url="(.*?)"><\/oembed>/g,
+        (match, url) => {
+            if (url.includes("youtube.com") || url.includes("youtu.be")) {
+                const videoId = url.split("/").pop().split("?")[0];
+                return `
+            <div class="video-container">
+              <iframe src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>
+            </div>
+          `;
+            }
+            return match;
+        }
+    );
+}
+
+/**
  * 모달창 닫기
  * @param className
  */
