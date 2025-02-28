@@ -763,14 +763,14 @@ function EgovHeader() {
 
 
             <div className="langBox">
-              <div className="itemBox">
+              {/*<div className="itemBox">
                 <select className="selectGroup langSelect">
                   <option value="0">KR</option>
                   <option value="1">EN</option>
                 </select>
-              </div>
+              </div>*/}
 
-              {/*<GoogleTranslateWidget/>*/}
+              <GoogleTranslateWidget/>
             </div>
           </div>
           <div className="hBot inner">
