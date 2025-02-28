@@ -125,6 +125,9 @@ function AccessTabPst(props) {
             `}
             </style>
             <div className="tableBox type1" id="tbChart">
+                <div id="item2">
+                    <ApexCharts options={chartOptions} series={series} type="bar" height={500}/>
+                </div>
                 <div id="item1">
                     <table>
                         <caption>접속자 수</caption>
@@ -138,9 +141,6 @@ function AccessTabPst(props) {
                         {pstAccessList}
                         </tbody>
                     </table>
-                </div>
-                <div id="item2">
-                    <ApexCharts options={chartOptions} series={series} type="bar" height={500}/>
                 </div>
             </div>
         </>

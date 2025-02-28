@@ -142,13 +142,7 @@ function AccessTabAll(props) {
     return (
         <>
             <style>
-                {`
-                // #tbChart {
-                //     display : flex;
-                // }
-                // #item1 {
-                //     width : 30%
-                // }
+            {`
                 #item1 thead tr th:not(:nth-child(1)) {
                     text-align : center !important;
                 }
@@ -160,11 +154,11 @@ function AccessTabAll(props) {
                  #item1 tbody tr td:nth-child(6){
                     text-align : right;
                 } 
-                //  #item2 {
-                //     width : 70%
-                // }
             `}
             </style>
+            <div className="tableBox type1">
+                <ApexCharts options={chartOptions} series={series} type="bar" height={350}/>
+            </div>
             <div className="contBox board type1 customContBox">
                 <div className="tableBox type1" id="tbChart">
                     <div id="item1">
@@ -186,9 +180,6 @@ function AccessTabAll(props) {
                         </table>
                     </div>
                 </div>
-            </div>
-            <div className="tableBox type1">
-                <ApexCharts options={chartOptions} series={series} type="bar" height={350}/>
             </div>
         </>
     );
