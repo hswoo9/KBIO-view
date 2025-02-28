@@ -50,6 +50,8 @@ function OperationalSupport(props) {
                 item.entTpbiz = item['업종코드(시트참조)'];
                 item.creatrSn = sessionUser?.userSn;
                 item.actvtnYn = "Y";
+                item.rlsYn = "N";
+                item.empJoinYn = "N";
             });
             console.log(uploadExcelData);
         }
@@ -176,7 +178,7 @@ function OperationalSupport(props) {
                                 mvnEntNm : item.tblMvnEnt.mvnEntNm || " ",
                                 rpsvNm : item.tblMvnEnt.rpsvNm || " ",
                                 entTelno : ComScript.formatTelNumber(item.tblMvnEnt.entTelno),
-                                actvtnYn : item.tblMvnEnt.actvtnYn === "Y" ? "공개" : "비공개",
+                                rlsYn : item.tblMvnEnt.rlsYn === "Y" ? "공개" : "비공개",
                             }
                         )
                     });
