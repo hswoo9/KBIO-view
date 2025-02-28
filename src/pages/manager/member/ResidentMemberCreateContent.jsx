@@ -153,6 +153,39 @@ function ResidentMemberCreateContent(props){
         }));
     };
 
+    const setRcActvtnYn = (e) => {
+        Swal.fire({
+            title: "입주기업을 삭제할 경우\n 소속 직원 계정도 삭제됩니다.\n그래도 삭제하시겠습니까?",
+            showCloseButton: true,
+            showCancelButton: true,
+            confirmButtonText: "확인",
+            cancelButtonText: "취소"
+        }).then((result) => {
+            if(result.isConfirmed) {
+                const setRcActvtnYnUrl = "/mvnEntApi/setRcActvtnYn";
+                const requestOptions = {
+                    method: "POST",
+                    headers: {
+                        "Content-type": "application/json",
+                    },
+                    body: JSON.stringify(residentDetail)
+                };
+                EgovNet.requestFetch(setRcActvtnYnUrl, requestOptions, (resp) => {
+                    if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
+                        Swal.fire("삭제되었습니다.").then(() => {
+                            window.location.href = URL.MANAGER_OPERATIONAL_SUPPORT;
+                        });
+                    }else {
+                        Swal.fire("삭제 중 문제가 발생하였습니다.");
+                        return;
+                    }
+                });
+            }else{
+                //취소
+            }
+        });
+    }
+
 
     //수정 시 데이터 조회
     const getRc = (searchDto) =>{
@@ -389,13 +422,6 @@ function ResidentMemberCreateContent(props){
         }
     }, [residentDetail.bzentyEmlAddr1, selectedDomain]);
 
-    /*useEffect(() => {
-        console.log("email :", emailAddr);
-        console.log("residentDetail:", residentDetail);
-        console.log("selectedFiles:", selectedFiles);
-        console.log("fileList:", fileList);
-
-    }, [residentDetail],[selectedFiles],[fileList]);*/
 
 
     useEffect(() => {
@@ -1099,12 +1125,15 @@ function ResidentMemberCreateContent(props){
                     >
                         저장
                     </button>
-                        <button
-                            type="button"
-                            className="clickBtn gray"
-                        >
-                            <span>삭제</span>
-                        </button>
+                        {modeInfo.mode === "modify" && (
+                            <button
+                                type="button"
+                                className="clickBtn gray"
+                                onClick={()=>setRcActvtnYn()}
+                            >
+                                <span>삭제</span>
+                            </button>
+                        )}
                     </div>
                     <Link
                         to={URL.MANAGER_OPERATIONAL_SUPPORT}

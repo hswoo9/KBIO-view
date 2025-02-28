@@ -50,6 +50,8 @@ function OperationalSupport(props) {
                 item.entTpbiz = item['업종코드(시트참조)'];
                 item.creatrSn = sessionUser?.userSn;
                 item.actvtnYn = "Y";
+                item.rlsYn = "N";
+                item.empJoinYn = "N";
             });
             console.log(uploadExcelData);
         }

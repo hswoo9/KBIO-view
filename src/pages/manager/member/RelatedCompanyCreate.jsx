@@ -127,7 +127,6 @@ function RelatedCompanyCreate(props){
         };
 
         EgovNet.requestFetch(getRcURL, requestOptions, function (resp){
-            console.log("resp.result : ",resp.result);
 
             if(modeInfo.mode === CODE.MODE_MODIFY){
                 setRelatedDetail({
@@ -370,10 +369,6 @@ function RelatedCompanyCreate(props){
 
     useEffect(() => {
     }, [selectedFiles]);
-
-    useEffect(() => {
-        console.log("selectedBIFiles : ",selectedBIFiles);
-    }, [selectedBIFiles]);
 
 
     //사업자번호 상태 확인
@@ -1037,12 +1032,14 @@ function RelatedCompanyCreate(props){
                         >
                             저장
                         </button>
-                        <button
-                            type="button"
-                            className="clickBtn gray"
-                        >
-                            <span>삭제</span>
-                        </button>
+                        {modeInfo.mode === "modify" && (
+                            <button
+                                type="button"
+                                className="clickBtn gray"
+                            >
+                                <span>삭제</span>
+                            </button>
+                        )}
                     </div>
                     <Link
                         to={URL.MANAGER_RELATED_ORGANIZATION}
