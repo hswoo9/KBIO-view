@@ -106,7 +106,7 @@ function ManagerStatisticsFile(props) {
                                     >
                                         {Array.from({length: Math.max(0, currentYear - 2025) + 1}, (_, i) => (
                                             <option key={i} value={currentYear - i}>
-                                                {currentYear - i}
+                                                {currentYear - i}년
                                             </option>
                                         ))}
                                     </select>
@@ -126,7 +126,7 @@ function ManagerStatisticsFile(props) {
                                     >
                                         {["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"].map((month, index) => (
                                             <option key={index} value={String(month).padStart(2, '0')}>
-                                                {String(month).padStart(2, '0')}
+                                                {String(month).padStart(2, '0')}월
                                             </option>
                                         ))}
                                     </select>

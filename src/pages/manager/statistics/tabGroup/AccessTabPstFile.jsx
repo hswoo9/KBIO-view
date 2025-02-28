@@ -125,6 +125,9 @@ function AccessTabPstFile(props) {
             `}
             </style>
             <div className="tableBox type1" id="tbChart">
+                <div id="item2">
+                    <ApexCharts options={chartOptions} series={series} type="bar" height={500}/>
+                </div>
                 <div id="item1">
                     <table>
                         <caption>다운로드수</caption>
@@ -135,12 +138,9 @@ function AccessTabPstFile(props) {
                         </tr>
                         </thead>
                         <tbody className="scrollable-tbody">
-                            {pstFileUseList}
+                        {pstFileUseList}
                         </tbody>
                     </table>
-                </div>
-                <div id="item2">
-                    <ApexCharts options={chartOptions} series={series} type="bar" height={500}/>
                 </div>
             </div>
         </>
