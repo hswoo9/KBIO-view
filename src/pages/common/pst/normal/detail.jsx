@@ -13,6 +13,8 @@ import { getSessionItem, setSessionItem } from "@/utils/storage";
 import {fileDownLoad, fileZipDownLoad, getComCdList} from "@/components/CommonComponents";
 import CommonPstEval from "../eval.jsx";
 import CommonSubMenu from "@/components/CommonSubMenu";
+import * as ComScript from "@/components/CommonScript";
+
 function commonPstDetail(props) {
   const sessionUser = getSessionItem("loginUser");
   const navigate = useNavigate();
@@ -359,7 +361,7 @@ function commonPstDetail(props) {
                 <tbody>
                 <tr>
                   <td>
-                    <div className="textBox" dangerouslySetInnerHTML={{__html: pst.pstCn}}>
+                    <div className="textBox" dangerouslySetInnerHTML={{__html: ComScript.convertOembedToIframe(pst.pstCn)}}>
                     </div>
                   </td>
                 </tr>
