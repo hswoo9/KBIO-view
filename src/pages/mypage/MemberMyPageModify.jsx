@@ -8,6 +8,7 @@ import 'moment/locale/ko';
 import { getComCdList } from "@/components/CommonComponents";
 import ManagerLeft from "@/components/manager/ManagerLeftMember";
 import EgovRadioButtonGroup from "@/components/EgovRadioButtonGroup";
+import EgovPaging from "@/components/EgovPaging";
 import Swal from "sweetalert2";
 import { fileDownLoad } from "@/components/CommonComponents";
 import base64 from 'base64-js';
@@ -15,6 +16,7 @@ import { getSessionItem } from "@/utils/storage";
 import CommonSubMenu from "@/components/CommonSubMenu";
 import CommonEditor from "@/components/CommonEditor";
 import notProfile from "@/assets/images/no_profile.png";
+import CompanyMemberList from "@/components/CompanyMemberList";
 
 function MemberMyPageModify(props) {
     const navigate = useNavigate();
@@ -40,6 +42,7 @@ function MemberMyPageModify(props) {
     const [selectedCertFiles, setSelectedCertFiles] = useState([]);
     const [selectedCareerFiles, setSelectedCareerFiles] = useState([]);
     const [selectedAcbgFiles, setSelectedAcbgFiles] = useState([]);
+    const [paginationInfo, setPaginationInfo] = useState({});
 
 
     const [rcDetail, setRcDetail] = useState({});
@@ -60,6 +63,7 @@ function MemberMyPageModify(props) {
     const removeLocalCertificate = (id) => {
         setCertificates(certificates.filter(cert => cert.key !== id));
     };
+
 
     const removeCertificateFromServer = (id, qlfcLcnsSn, atchFileSn) => {
         Swal.fire({
@@ -544,6 +548,8 @@ function MemberMyPageModify(props) {
                 setRcDetail({
                     ...rcData
                 })
+
+                console.log(rcData)
             }
         });
     };
@@ -1187,6 +1193,8 @@ function MemberMyPageModify(props) {
                                 </ul>
                             </div>
                         )}
+
+
                         {sessionUsermbrType === 2 && (
                             <ul className="inputWrap" data-aos="fade-up" data-aos-duration="1500">
                                 <li className="inputBox type2">
@@ -1468,7 +1476,7 @@ function MemberMyPageModify(props) {
                                                                style={{width: "50%"}}></p>
                                                             <label
                                                                 className="fileLabel"
-                                                                style={{ marginLeft: "auto", cursor: "pointer" }}
+                                                                style={{marginLeft: "auto", cursor: "pointer"}}
                                                             >
                                                                 파일 선택
                                                                 <input
@@ -1602,7 +1610,7 @@ function MemberMyPageModify(props) {
                                                                style={{width: "50%"}}></p>
                                                             <label
                                                                 className="fileLabel"
-                                                                style={{ marginLeft: "auto", cursor: "pointer" }}
+                                                                style={{marginLeft: "auto", cursor: "pointer"}}
                                                             >
                                                                 파일 선택
                                                                 <input
@@ -1747,7 +1755,7 @@ function MemberMyPageModify(props) {
                                                                style={{width: "50%"}}></p>
                                                             <label
                                                                 className="fileLabel"
-                                                                style={{ marginLeft: "auto", cursor: "pointer" }}
+                                                                style={{marginLeft: "auto", cursor: "pointer"}}
                                                             >
                                                                 파일 선택
                                                                 <input
@@ -1791,17 +1799,23 @@ function MemberMyPageModify(props) {
                         )}
                     </div>
 
-                        <div className="buttonBox">
-                            <button type="button" className="clickBtn black" onClick={checkPwd}
-                                    style={{marginBottom: "50px", marginTop: "30px"}}>
-                                <span>수정</span>
-                            </button>
-                        </div>
+                    <div className="box02" data-aos="fade-up" data-aos-duration="1500">
+                        {rcDetail.sysMngrYn === "Y" && (
+                            <CompanyMemberList mvnEntSn={rcDetail.mvnEntSn} relInstSn={rcDetail.relInstSn}/>
+                        )}
+                    </div>
+
+                    <div className="buttonBox">
+                        <button type="button" className="clickBtn black" onClick={checkPwd}
+                                style={{marginBottom: "50px", marginTop: "30px"}}>
+                            <span>수정</span>
+                        </button>
+                    </div>
                 </form>
             </div>
             </div>
         </div>
-);
+    );
 };
 
 export default MemberMyPageModify;
