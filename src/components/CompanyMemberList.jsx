@@ -5,7 +5,7 @@ import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
 import * as ComScript from "@/components/CommonScript";
-import EgovPaging from "@/components/EgovPaging";
+import EgovUserPaging from "@/components/EgovUserPaging";
 import Swal from 'sweetalert2';
 import base64 from 'base64-js';
 import {getComCdList} from "@/components/CommonComponents";
@@ -278,8 +278,8 @@ function CompanyMemberList (props) {
                 </table>
             </div>
             {/*페이징, 버튼 영역*/}
-            <div className="pageWrap">
-                <EgovPaging
+            <div className="pageWrap1">
+                <EgovUserPaging
                     pagination={paginationInfo}
                     moveToPage={(passedPage) => {
                         getCompanyMemberList({

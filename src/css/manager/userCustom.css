@@ -372,3 +372,15 @@ button:focus { outline: 2px solid black;}
 .user .titleWrap.type5 .tt2 {font-size: 1.5rem; font-weight: 500; word-break: keep-all; color: #555555; letter-spacing: -1px; margin-top: .9rem;}
 .user .titleWrap.type5.left .tt1 {text-align: left;}
 .user .titleWrap.type5.left .tt1:after {margin-right: auto; margin-left: 0;}
+
+
+.pageWrap1 { opacity: 1; transition: opacity 0.5s ease;}
+.aos-animate + .pageWrap1 { opacity: 1; animation: upMove 1s ease both;}
+.pageWrap1 .pageList {display: flex; justify-content: center; gap: .9rem; align-items: center;}
+.pageWrap1 .pageList li a {color: #999;}
+.pageWrap1 .pageList li.arrow a {padding: .2rem; font-size: .9rem; font-weight: 600; white-space: nowrap;}
+.pageWrap1 .pageList li.arrow.disabled a {opacity: .4; cursor: no-drop;}
+.pageWrap1 .pageList li.num a {width: 2.2rem; height: 2.2rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; font-weight: 600; border: 1px solid #EEEEEE; box-sizing: border-box;}
+.pageWrap1 .pageList li.num.now a {background: var(--black); color: #fff; border-color: var(--black);}
+.pageWrap1 .pageList li.num:not(.now):hover a {background: #04359B15; color: var(--mainColor3);}
+.pageWrap1 .pageList li.arrow:not(.disabled):hover a {color: var(--mainColor3); text-shadow: 2px 2px #04359B25;}
