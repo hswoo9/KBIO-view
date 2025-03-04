@@ -6,6 +6,7 @@ import URL from "@/constants/url";
 import CODE from "@/constants/code";
 import * as ComScript from "@/components/CommonScript";
 import EgovPaging from "@/components/EgovPaging";
+import Swal from 'sweetalert2';
 import base64 from 'base64-js';
 import {getComCdList} from "@/components/CommonComponents";
 
@@ -84,9 +85,15 @@ function CompanyMemberList (props) {
                                     <td>{new Date(item.frstCrtDt).toISOString().split("T")[0]}</td>
                                     <td>
                                         {item.aprvYn === "N" ? (
-                                            <button onClick={() => ""}>승인</button>
-                                        ) : item.aprvYn === "Y" ? ("-") : ("승인불가")}
+                                            <button type="button"
+                                                    onClick={() => setApprovalMember(item.userSn)}>승인</button>
+                                        ) : item.aprvYn === "Y" ? (
+                                            <button type="button" onClick={() => setApprovalMemberDel(item.userSn)}>취소</button>
+                                        ) : (
+                                            "승인불가"
+                                        )}
                                     </td>
+
                                 </tr>
                             );
                         });
@@ -102,6 +109,80 @@ function CompanyMemberList (props) {
         },
         [companyMemberList, searchDto]
     );
+
+    console.log(paginationInfo)
+
+    const setApprovalMember = (userSn) => {
+        console.log(userSn)
+        const setApprovalUrl = '/memberApi/setCompanyMember';
+
+        Swal.fire({
+            title: `해당 회원을 기업회원으로 승인하시겠습니까?`,
+            showCloseButton: true,
+            showCancelButton: true,
+            confirmButtonText: "예",
+            cancelButtonText: "아니오"
+        }).then((result) => {
+            if(result.isConfirmed) {
+                const requestOptions = {
+                    method: "POST",
+                    headers: {
+                        "Content-type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        userSn: userSn
+                    }),
+                };
+
+                EgovNet.requestFetch(setApprovalUrl, requestOptions, (resp) => {
+                    if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
+                        Swal.fire("승인되었습니다.");
+                        getCompanyMemberList(searchDto);
+                    } else {
+                        alert("ERR : " + resp.resultMessage);
+                    }
+                });
+            } else {
+                //취소
+            }
+        });
+    };
+
+    const setApprovalMemberDel = (userSn) => {
+        console.log(userSn)
+        const setApprovalDelUrl = '/memberApi/setCompanyMemberDel';
+
+        Swal.fire({
+            title: `해당 회원을 취소하시겠습니까?`,
+            showCloseButton: true,
+            showCancelButton: true,
+            confirmButtonText: "예",
+            cancelButtonText: "아니오"
+        }).then((result) => {
+            if(result.isConfirmed) {
+                const requestOptions = {
+                    method: "POST",
+                    headers: {
+                        "Content-type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        userSn: userSn
+                    }),
+                };
+
+                EgovNet.requestFetch(setApprovalDelUrl, requestOptions, (resp) => {
+                    if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
+                        Swal.fire("취소되었습니다.");
+                        getCompanyMemberList(searchDto);
+                    } else {
+                        alert("ERR : " + resp.resultMessage);
+                    }
+                });
+            } else {
+                //취소
+            }
+        });
+    };
 
 
 
@@ -127,8 +208,8 @@ function CompanyMemberList (props) {
                         <th className="th3"><p>휴대전화번호</p></th>
                         <th className="th4"><p>이메일</p></th>
                         <th className="th4"><p>회원상태</p></th>
-                        <th className="th4"><p>승인</p></th>
-                        <th className="th5"><p>등록일</p></th>
+                        <th className="th4"><p>등록일</p></th>
+                        <th className="th5"><p>승인</p></th>
                     </tr>
                     </thead>
                     <tbody>
