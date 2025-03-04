@@ -2,12 +2,15 @@ import React, { useState, useEffect, useRef } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
+import CODE from "@/constants/code";
 import { getSessionItem } from "@/utils/storage";
 import moment from "moment/moment.js";
 import { fileDownLoad } from "@/components/CommonComponents";
 import CommonSubMenu from "@/components/CommonSubMenu";
 import * as ComScript from "@/components/CommonScript";
+import Swal from 'sweetalert2';
 import DiffModal from "@/components/DiffModal";
+
 function MemberMyPageDifficultiesDetail(props) {
     const [modalData, setModalData] = useState({});
     const sessionUser = getSessionItem("loginUser");
@@ -17,7 +20,6 @@ function MemberMyPageDifficultiesDetail(props) {
     });
 
     const [difficultiesDetail, setDifficultiesDetail] = useState(null);
-
 
 
     const modifyClick = (difficultiesDetail) => {
@@ -62,6 +64,48 @@ function MemberMyPageDifficultiesDetail(props) {
     useEffect(() => {
         getDifficultiesDetail();
     }, [searchDto]);
+
+    const cancelClick = (dfclMttrSn) => {
+        console.log(dfclMttrSn)
+        const setDiffUrl = '/memberApi/setDiffDel';
+
+        Swal.fire({
+            title: `해당 애로사항을 삭제하시겠습니까?`,
+            showCloseButton: true,
+            showCancelButton: true,
+            confirmButtonText: "예",
+            cancelButtonText: "아니오"
+        }).then((result) => {
+            if(result.isConfirmed) {
+                const requestOptions = {
+                    method: "POST",
+                    headers: {
+                        "Content-type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        dfclMttrSn: dfclMttrSn
+                    }),
+                };
+
+                EgovNet.requestFetch(setDiffUrl, requestOptions, (resp) => {
+                    if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
+                        Swal.fire("삭제되었습니다.");
+                        navigate(URL.MEMBER_MYPAGE_DIFFICULTIES, {
+                            state: {
+                                menuSn: location.state?.menuSn,
+                                menuNmPath: location.state?.menuNmPath
+                            }
+                        });
+
+                    } else {
+                        alert("ERR : " + resp.resultMessage);
+                    }
+                });
+            } else {
+                //취소
+            }
+        });
+    };
 
     return (
         <div id="container" className="container mypage_difficulties">
@@ -159,7 +203,10 @@ function MemberMyPageDifficultiesDetail(props) {
                                     <div className="buttonBox">
                                         {!difficultiesDetail?.ansCn && (
                                             <button type="button" className="clickBtn cancelBtn"
-                                            style={{marginLeft: '10%'}}>
+                                            style={{marginLeft: '10%'}}
+                                                    onClick={() => {
+                                                        cancelClick(difficultiesDetail.dfclMttrSn);
+                                                    }}>
                                                 <span>삭제</span>
                                             </button>
                                         )}

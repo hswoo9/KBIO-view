@@ -5,7 +5,7 @@ import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
 import * as ComScript from "@/components/CommonScript";
-import EgovPaging from "@/components/EgovPaging";
+import EgovUserPaging from "@/components/EgovUserPaging";
 import Swal from 'sweetalert2';
 import base64 from 'base64-js';
 import {getComCdList} from "@/components/CommonComponents";
@@ -86,13 +86,13 @@ function CompanyMemberList (props) {
                                     </td>
                                     <td>{new Date(item.frstCrtDt).toISOString().split("T")[0]}</td>
                                     <td>
-                                        {item.aprvYn === "N" ? (
+                                        {item.aprvYn === "N" && item.mbrStts === "Y" ? (
                                             <button type="button"
                                                     onClick={() => setApprovalMember(item.userSn)}>승인</button>
-                                        ) : item.aprvYn === "Y" ? (
+                                        ) : item.aprvYn === "Y" && item.mbrStts === "Y" ? (
                                             <button type="button" onClick={() => setApprovalMemberDel(item.userSn)}>취소</button>
                                         ) : (
-                                            "승인불가"
+                                            "-"
                                         )}
                                     </td>
 
@@ -204,7 +204,7 @@ function CompanyMemberList (props) {
                     <ul className="cateList">
                         <li className="inputBox type1">
                             <p className="title">키워드</p>
-                            <div className="itemBox">
+                            <div className="itemBox5">
                                 <select
                                     className="selectGroup"
                                     id="searchType"
@@ -278,8 +278,8 @@ function CompanyMemberList (props) {
                 </table>
             </div>
             {/*페이징, 버튼 영역*/}
-            <div className="pageWrap">
-                <EgovPaging
+            <div className="pageWrap1">
+                <EgovUserPaging
                     pagination={paginationInfo}
                     moveToPage={(passedPage) => {
                         getCompanyMemberList({
