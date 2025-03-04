@@ -136,20 +136,7 @@ function ManagerCnslttSimple({ cnsltSe, userSn }) {
                                     </NavLink>*/}
                                 </td>
                                 <td>
-                                    {(() => {
-                                        switch (item.cnsltSttsCd) {
-                                            case "101":
-                                                return "답변대기";
-                                            case "102":
-                                                return "답변완료";
-                                            case "200":
-                                                return "처리완료";
-                                            case "999":
-                                                return "취소";
-                                            default:
-                                                return item.cnsltSttsCd;
-                                        }
-                                    })()}
+                                    {item.cnsltSttsCdNm}
                                 </td>
                                 <td>{item.dgstfnCnt > 0 ? "등록" : "미등록"}</td>
                             </tr>

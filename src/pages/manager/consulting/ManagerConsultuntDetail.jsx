@@ -8,6 +8,7 @@ import CODE from "@/constants/code";
 import * as ComScript from "@/components/CommonScript";
 import ManagerLeft from "@/components/manager/ManagerLeftConsulting";
 import EgovPaging from "@/components/EgovPaging";
+import CommonEditor from "@/components/CommonEditor";
 
 import Swal from 'sweetalert2';
 import base64 from 'base64-js';
@@ -35,10 +36,53 @@ function ManagerConsultuntDetail(props) {
         return new TextDecoder().decode(decodedBytes);
     };
 
+    const isFirstRender = useRef(true);
+    const handleChange = (value) => {
+        if(isFirstRender.current){
+          isFirstRender.current = false;
+          return;
+        }
+        setConsultantDetail({...consultantDetail, cnsltSlfint: value});
+    };
+
+    const searchAddress = () => {
+        if (!window.daum || !window.daum.Postcode) {
+            alert('주소 검색 API가 아직 로드되지 않았습니다. 잠시 후 다시 시도해주세요.');
+            return;
+        }
+
+        new window.daum.Postcode({
+            oncomplete: function (data) {
+                const fullAddress = data.address;
+                const zipCode = data.zonecode;
+                setMemberDetail({
+                    ...memberDetail,
+                    zip: zipCode,
+                    addr: fullAddress,
+                    searchAddress: '',
+                });
+            },
+        }).open();
+    };
+
     const setCnslttMbrActv = (e) =>{
         const setCnslttMbrActvUrl = "/consultingApi/setCnslttMbrActv";
+        let requestOptions = {};
+        const formData = new FormData();
 
-        const updatedConsultant = { ...consultantDetail};
+        for(let key in memberDetail) {
+            const value = memberDetail[key];
+            if(value != null && value !== undefined && value !== ''){
+                formData.append(key, value);
+            }
+        }
+
+        for(let key in consultantDetail) {
+            const value = consultantDetail[key];
+            if(value != null && value !== undefined && value !== ''){
+                formData.append(key, value);
+            }
+        }
 
 
         Swal.fire({
@@ -49,13 +93,12 @@ function ManagerConsultuntDetail(props) {
             cancelButtonText: "아니오"
         }).then((result) => {
             if(result.isConfirmed) {
-                const requestOptions = {
+                requestOptions = {
                     method: "POST",
-                    headers: {
-                        "Content-type": "application/json",
-                    },
-                    body: JSON.stringify(updatedConsultant),
+                    body: formData
                 };
+
+                console.log("formData : ",requestOptions.body);
 
                 EgovNet.requestFetch(setCnslttMbrActvUrl,requestOptions, (resp) =>{
                     if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
@@ -83,6 +126,29 @@ function ManagerConsultuntDetail(props) {
         a.click();
         document.body.removeChild(a);
     };
+
+    const getComCdListToHtml = (dataList) => {
+        if (!dataList || dataList.length === 0) return null;
+
+        return (
+            <select
+                className="selectGroup"
+                name="cnsltFld"
+                value={consultantDetail.cnsltFld || ""} // 기존 값 유지
+                onChange={(e) =>
+                    setConsultantDetail({...consultantDetail, cnsltFld: e.target.value})
+                }
+            >
+                <option value="">전체</option>
+                {dataList.map((item) => (
+                    <option key={item.comCd} value={item.comCd}>
+                        {item.comCdNm}
+                    </option>
+                ))}
+            </select>
+        );
+    };
+
     const getConsultantDetail = () => {
         const getConsultantDetailUrl = "/consultingApi/getConsultantDetail.do";
         const requestOptions = {
@@ -98,9 +164,25 @@ function ManagerConsultuntDetail(props) {
             requestOptions,
             (resp) => {
                 const decodedPhoneNumber = decodePhoneNumber(resp.result.memberDetail.mblTelno);
+                let emailPrefix = "";
+                let emailDomain = "";
+                let emailProvider = "direct";
+
                 setConsultantDetail(resp.result.consultant);
+
+                if(resp.result.memberDetail.email && resp.result.memberDetail.email.includes("@")){
+                    const emailParts =resp.result.memberDetail.email.split("@");
+                    emailPrefix = emailParts[0];
+                    emailDomain = emailParts[1];
+                    emailProvider = emailDomain;
+                }
+
                 setMemberDetail({...resp.result.memberDetail,
-                    mblTelno: decodedPhoneNumber
+                    mblTelno: decodedPhoneNumber,
+                    emailPrefix : emailPrefix,
+                    emailDomain : emailDomain,
+                    email: resp.result.memberDetail.email,
+                    emailProvider : emailProvider,
                 });
 
                 if (resp.result.cnsltProfileFile) {
@@ -129,6 +211,46 @@ function ManagerConsultuntDetail(props) {
         getConsultantDetail();
     }, [searchDto]);
 
+    useEffect(() => {
+        const script = document.createElement("script");
+        script.type = "text/javascript";
+        script.src = "https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js";
+        script.async = true;
+
+        script.onload = () => {
+        };
+
+        document.body.appendChild(script);
+
+        return () => {
+            document.body.removeChild(script);
+        };
+    }, [location.state]);
+
+    useEffect(() => {
+        if (memberDetail.email) {
+            const emailParts = memberDetail.email.split("@");
+            const emailPrefix = emailParts[0];
+            const emailDomain = emailParts[1];
+
+            // 기본 제공 도메인 리스트
+            const defaultProviders = [
+                "naver.com",
+                "gmail.com",
+                "daum.net",
+                "hotmail.com",
+                "nate.com",
+                "hanmail.net"
+            ];
+            setMemberDetail((prevState) => ({
+                ...prevState,
+                emailPrefix,
+                emailDomain,
+                emailProvider: defaultProviders.includes(emailDomain) ? emailDomain : "direct",
+            }));
+        }
+    }, [memberDetail.email]);
+
     const renderTabContent = (tabIndex) => {
         switch (tabIndex) {
             case 0:
@@ -142,14 +264,7 @@ function ManagerConsultuntDetail(props) {
                     <div className="contBox infoWrap customContBox">
                         {/* 개인정보 탭 내용 */}
                             <ul className="inputWrap">
-                                <li className="inputBox type1 width1">
-                                    <label className="title" style={{cursor :"default"}}>자문분야</label>
-                                    <div className="input">
-                                        <div>
-                                            {comCdList.find(item => item.comCd === String(consultantDetail.cnsltFld))?.comCdNm || ""}
-                                        </div>
-                                    </div>
-                                </li>
+
 
                                 <li className="inputBox type1 width1">
                                     <label className="title" style={{cursor :"default"}}>사진</label>
@@ -174,8 +289,21 @@ function ManagerConsultuntDetail(props) {
                                 <li className="inputBox type1 width2">
                                     <label className="title" style={{cursor :"default"}}>성명</label>
                                     <div className="input">
-                                        <div>
-                                            {memberDetail.kornFlnm || ""}
+                                        <input
+                                            type="text"
+                                            name="kornFlnm"
+                                            id="kornFlnm"
+                                            value={memberDetail.kornFlnm || ""}
+                                            onChange={(e) => setMemberDetail({...memberDetail, kornFlnm: e.target.value})}
+                                        />
+                                    </div>
+                                </li>
+
+                                <li className="inputBox type1 width2">
+                                    <label className="title" style={{cursor :"default"}}>자문분야</label>
+                                    <div className="input">
+                                        <div className="itemBox" style={{flex: 1}}>
+                                            {getComCdListToHtml(comCdList)}
                                         </div>
                                     </div>
                                 </li>
@@ -183,17 +311,89 @@ function ManagerConsultuntDetail(props) {
                                 <li className="inputBox type1 width2">
                                     <label className="title" style={{cursor :"default"}}>휴대폰</label>
                                     <div className="input">
-                                        <div>
-                                            {ComScript.formatTelNumber(memberDetail.mblTelno)}
-                                        </div>
+                                        <input
+                                            type="text"
+                                            name="mblTelno"
+                                            id="mblTelno"
+                                            value={ComScript.formatTelNumber(memberDetail.mblTelno)}
+                                            onChange={(e) =>{
+                                                const rawValue = e.target.value.replace(/-/g, "");  // 하이픈 제거
+                                                setMemberDetail({ ...memberDetail, mblTelno: rawValue });
+                                        }}
+                                        >
+
+                                        </input>
                                     </div>
                                 </li>
 
-                                <li className="inputBox type1 width1">
+
+
+                                <li className="inputBox type1 width2">
                                     <label className="title" style={{cursor :"default"}}>이메일</label>
-                                    <div className="input">
-                                        <div>
-                                            {memberDetail.email || ""}
+                                    <div className="input" style={{display: 'flex'}}>
+                                        <input
+                                            type="text"
+                                            name="emailPrefix"
+                                            id="emailPrefix"
+                                            placeholder="이메일 아이디 입력"
+                                            value={memberDetail.emailPrefix || ""}
+                                            onChange={(e) => setMemberDetail((prev) => ({
+                                                ...prev,
+                                                emailPrefix: e.target.value,
+                                                email: `${e.target.value}@${prev.emailDomain}`
+                                            }))}
+                                            style={{flex: 1, padding: '5px', width:'45%'}}
+                                        />
+                                        <span style={{margin: '0 5px'}}>@</span>
+                                        <div className="itemBox" style={{width:"45%"}}>
+                                            {memberDetail.emailProvider === "direct" ? (
+                                                <input
+                                                    type="text"
+                                                    placeholder="도메인 입력"
+                                                    value={memberDetail.emailDomain || ""}
+                                                    onChange={(e) => {
+                                                        const updatedEmailDomain = e.target.value;
+                                                        setMemberDetail({
+                                                            ...memberDetail,
+                                                            emailDomain: updatedEmailDomain,
+                                                            email: `${memberDetail.emailPrefix}@${updatedEmailDomain}`,  // emailDomain이 수정될 때 email 값도 갱신
+                                                        });
+                                                    }}
+                                                    onBlur={() => {
+                                                        if (!memberDetail.emailDomain) {
+                                                            setMemberDetail({
+                                                                ...memberDetail,
+                                                                emailProvider: "",
+                                                                emailDomain: "",
+                                                            });
+                                                        }
+                                                    }}
+                                                    style={{flex: 1, padding: '5px'}}
+                                                />
+                                            ) : (
+                                                <select
+                                                    className="selectGroup"
+                                                    onChange={(e) => {
+                                                        const provider = e.target.value;
+                                                        setMemberDetail((prev) => ({
+                                                            ...prev,
+                                                            emailProvider: provider,
+                                                            emailDomain: provider === "direct" ? "" : provider,
+                                                            email: `${prev.emailPrefix}@${provider === "direct" ? "" : provider}`
+                                                        }));
+                                                    }}
+                                                    value={memberDetail.emailProvider || ""}
+                                                >
+                                                    <option value="">선택하세요</option>
+                                                    <option value="naver.com">naver.com</option>
+                                                    <option value="gmail.com">gmail.com</option>
+                                                    <option value="daum.net">daum.net</option>
+                                                    <option value="hotmail.com">hotmail.com</option>
+                                                    <option value="nate.com">nate.com</option>
+                                                    <option value="hanmail.net">hanmail.net</option>
+                                                    <option value="direct">직접 입력</option>
+                                                </select>
+                                            )}
                                         </div>
                                     </div>
                                 </li>
@@ -201,9 +401,23 @@ function ManagerConsultuntDetail(props) {
                                 <li className="inputBox type1 width2">
                                     <label className="title" style={{cursor :"default"}}>주소</label>
                                     <div className="input">
-                                        <div>
-                                            {`${memberDetail.addr || ''} ${memberDetail.daddr || ''}`}
-                                        </div>
+                                        <input type="text" name="addr" id="addr" readOnly value={memberDetail.addr || ""}/>
+                                        <button type="button" className="addressBtn btn" onClick={searchAddress}>
+                                            <span>주소검색</span>
+                                        </button>
+                                    </div>
+                                </li>
+                                <li className="inputBox type1 width2">
+                                    <label className="title" style={{cursor :"default"}}>상세주소</label>
+                                    <div className="input">
+                                        <input
+                                            type="text"
+                                            name="daddr"
+                                            id="daddr"
+                                            placeholder="상세주소를 입력해주세요"
+                                            value={memberDetail.daddr || ""}
+                                            onChange={(e) => setMemberDetail({...memberDetail, daddr: e.target.value})}
+                                        />
                                     </div>
                                 </li>
 
@@ -211,42 +425,63 @@ function ManagerConsultuntDetail(props) {
                                 <li className="inputBox type1 width2">
                                     <label className="title" style={{cursor :"default"}}>소속</label>
                                     <div className="input">
-                                        <div>
-                                            {consultantDetail.ogdpNm || ""}
-                                        </div>
+                                        <input
+                                            type="text"
+                                            name="ogdpNm"
+                                            value={consultantDetail.ogdpNm || ""}
+                                            onChange={(e)=>setConsultantDetail({...consultantDetail,ogdpNm : e.target.value})}
+                                        />
                                     </div>
                                 </li>
 
                                 <li className="inputBox type1 width2">
                                     <label className="title" style={{cursor :"default"}}>직위</label>
                                     <div className="input">
-                                        <div>
-                                            {consultantDetail.jbpsNm || ""}
-                                        </div>
+                                        <input
+                                            type="text"
+                                            name="jbpsNm"
+                                            value={consultantDetail.jbpsNm || ""}
+                                            onChange={(e) => setConsultantDetail({...consultantDetail, jbpsNm : e.target.value})}
+                                        />
                                     </div>
                                 </li>
 
                                 <li className="inputBox type1 width2">
                                     <label className="title" style={{cursor :"default"}}>경력</label>
                                     <div className="input">
-                                        <div>
-                                            {`${consultantDetail.crrPrd || ''} 년`}
-                                        </div>
+                                        <input
+                                            type="text"
+                                            name="crrPrd"
+                                            placeholder="숫자만 입력"
+                                            value={consultantDetail.crrPrd || ''}
+                                            onChange={(e) => setConsultantDetail({...consultantDetail, crrPrd : e.target.value})}
+                                            style={{width:"90%"}}
+                                        />
+                                        <span style={{marginLeft: "10px", color: "#333"}}>년</span>
                                     </div>
                                 </li>
 
                                 <li className="inputBox type1 width1">
                                     <label className="title" style={{cursor :"default"}}>컨설팅항목</label>
                                     <div className="input">
-                                        <div>
-                                            {consultantDetail.cnsltArtcl || ""}
-                                        </div>
+                                        <input
+                                            type="text"
+                                            name="cnsltArtcl"
+                                            placeholder="컨설팅 항목을 입력해주세요"
+                                            value={consultantDetail.cnsltArtcl || ""}
+                                            onChange={(e) => setConsultantDetail({...consultantDetail,cnsltArtcl:e.target.value})}
+                                        />
+                                        <span className="warningText" style={{fontSize: "14px"}}>항목과 항목 사이에 기호 [^] 를 넣어주세요.</span>
                                     </div>
                                 </li>
                                 <li className="inputBox type1 width1">
                                     <label className="title" style={{cursor :"default"}}>소개</label>
-                                    <div className="input"
-                                         dangerouslySetInnerHTML={{__html: consultantDetail.cnsltSlfint}}>
+                                    <div className="input" style={{height: "100%"}}
+                                         /*dangerouslySetInnerHTML={{__html: consultantDetail.cnsltSlfint}}*/>
+                                        <CommonEditor
+                                            value={consultantDetail.cnsltSlfint || ""}
+                                            onChange={handleChange}
+                                        />
                                     </div>
                                 </li>
 
