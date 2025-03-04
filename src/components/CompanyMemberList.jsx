@@ -18,11 +18,13 @@ function CompanyMemberList (props) {
     const [searchDto, setSearchDto] = useState(
         location.state?.searchDto || {
             pageIndex : 1,
-            mbrStts:"",
+            aprvYn:"",
             searchType: "",
             searchVal : "",
             mvnEntSn: mvnEntSn,
             relInstSn: relInstSn,
+            kornFlnm: "",
+            userId: "",
         }
     );
 
@@ -194,13 +196,71 @@ function CompanyMemberList (props) {
 
     return (
         <div className="contBox board type 1 customContBox">
+            <div className="titleWrap type5 left">
+                <p className="tt1">산하 직원 정보</p>
+            </div>
+            <div className="cateWrap">
+                <form action="">
+                    <ul className="cateList">
+                        <li className="inputBox type1">
+                            <p className="title">키워드</p>
+                            <div className="itemBox">
+                                <select
+                                    className="selectGroup"
+                                    id="searchType"
+                                    name="searchType"
+                                    title="검색유형"
+                                    ref={searchTypeRef}
+                                    onChange={(e) => {
+                                        setSearchDto({...searchDto, searchType: e.target.value})
+                                    }}
+                                >
+                                    <option value="">전체</option>
+                                    <option value="userId">아이디</option>
+                                    <option value="kornFlnm">성명</option>
+                                </select>
+                            </div>
+                        </li>
+                        <li className="searchBox inputBox type1" style={{width: "100%"}}>
+                            <label className="input">
+                                <input
+                                    type="text"
+                                    name="searchVal"
+                                    defaultValue={searchDto.searchVal}
+                                    placeholder=""
+                                    ref={searchValRef}
+                                    onChange={(e) => {
+                                        setSearchDto({...searchDto, searchVal: e.target.value})
+                                    }}
+                                    onKeyDown={activeEnter}
+                                />
+                            </label>
+                        </li>
+                    </ul>
+                    <div className="rightBtn">
+                        <button
+                            type="button"
+                            className="searchBtn btn btn1 point"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                getCompanyMemberList({
+                                    ...searchDto,
+                                    pageIndex: 1
+                                });
+                            }}
+                        >
+                            <div className="icon"></div>
+                        </button>
+                    </div>
+                </form>
+            </div>
             <div className="topBox">
                 <p className="resultText"><span className="red">{paginationInfo?.totalRecordCount}</span>건의 회원 정보가
                     조회되었습니다.</p>
             </div>
             <div className="tableBox type1">
                 <table>
-                    <caption>게시판</caption>
+                    <caption>관리자회원</caption>
                     <thead>
                     <tr>
                         <th className="th2"><p>아이디</p></th>
