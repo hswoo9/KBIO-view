@@ -86,13 +86,13 @@ function CompanyMemberList (props) {
                                     </td>
                                     <td>{new Date(item.frstCrtDt).toISOString().split("T")[0]}</td>
                                     <td>
-                                        {item.aprvYn === "N" ? (
+                                        {item.aprvYn === "N" && item.mbrStts === "Y" ? (
                                             <button type="button"
                                                     onClick={() => setApprovalMember(item.userSn)}>승인</button>
-                                        ) : item.aprvYn === "Y" ? (
+                                        ) : item.aprvYn === "Y" && item.mbrStts === "Y" ? (
                                             <button type="button" onClick={() => setApprovalMemberDel(item.userSn)}>취소</button>
                                         ) : (
-                                            "승인불가"
+                                            "-"
                                         )}
                                     </td>
 
