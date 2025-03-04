@@ -204,7 +204,7 @@ function CompanyMemberList (props) {
                     <ul className="cateList">
                         <li className="inputBox type1">
                             <p className="title">키워드</p>
-                            <div className="itemBox">
+                            <div className="itemBox5">
                                 <select
                                     className="selectGroup"
                                     id="searchType"

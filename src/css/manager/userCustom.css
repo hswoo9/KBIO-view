@@ -384,3 +384,5 @@ button:focus { outline: 2px solid black;}
 .pageWrap1 .pageList li.num.now a {background: var(--black); color: #fff; border-color: var(--black);}
 .pageWrap1 .pageList li.num:not(.now):hover a {background: #04359B15; color: var(--mainColor3);}
 .pageWrap1 .pageList li.arrow:not(.disabled):hover a {color: var(--mainColor3); text-shadow: 2px 2px #04359B25;}
+
+.itemBox5 {border: 1px solid #ddd; border-radius: .6rem;}
