@@ -22,6 +22,9 @@ function MemberMyPageConsulting(props) {
     const searchValRef = useRef();
     const statusMap = sessionUser.mbrType === 2
         ? {
+            10: "최초신청",
+            12: "컨설턴트지정중",
+            13: "매칭대기",
             102: "답변대기",
             101: "답변완료",
             201: "처리완료",
@@ -29,6 +32,9 @@ function MemberMyPageConsulting(props) {
             999: "취소",
         }
         : {
+            10: "최초신청",
+            12: "컨설턴트지정중",
+            13: "매칭대기",
             102: "답변완료",
             101: "답변대기",
             201: "처리완료",

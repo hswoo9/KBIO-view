@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useCallback} from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import {NavLink, useLocation, useNavigate} from "react-router-dom";
 import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
 import { getSessionItem } from "@/utils/storage";
@@ -19,6 +19,7 @@ import SatisModal from "@/components/SatisModal";
 function MemberMyPageConsultingDetail(props) {
     const sessionUser = getSessionItem("loginUser");
     const location = useLocation();
+    const navigate = useNavigate();
     const [cnsltDsctnList, setCnsltDsctnList] = useState([]);
     const [paginationInfo, setPaginationInfo] = useState({});
     const [latestCreator, setLatestCreator] = useState(null);
@@ -309,6 +310,91 @@ function MemberMyPageConsultingDetail(props) {
         }
     }
 
+    const acceptCnslt = (cnsltAplySn) => {
+        const acceptCnsltUrl = "/memberApi/setAcceptCnslt";
+
+        Swal.fire({
+            title: `해당 의뢰를 수락 하시겠습니까?`,
+            showCloseButton: true,
+            showCancelButton: true,
+            confirmButtonText: "예",
+            cancelButtonText: "아니오"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const requestOptions = {
+                    method: "POST",
+                    headers: {
+                        "Content-type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        cnsltAplySn: cnsltAplySn
+                    }),
+                };
+
+                EgovNet.requestFetch(acceptCnsltUrl, requestOptions, (resp) => {
+                    if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
+                        Swal.fire("완료 되었습니다.").then(() => {
+                            setSearchDto((prev) => ({
+                                ...prev,
+                                cnsltSttsCd: "101"
+                            }));
+                            getSimpleDetail();
+                        });
+
+                    } else {
+                        alert("ERR : " + resp.resultMessage);
+                    }
+                });
+            } else {
+                return;
+                //취소
+            }
+        });
+
+    }
+
+    const cancleCnsltRequest = (cnsltAplySn) => {
+        const cancleCnsltRequestUrl = "/memberApi/setCancleCnsltRequest";
+        Swal.fire({
+            title: `해당 의뢰를 거절 하시겠습니까?`,
+            showCloseButton: true,
+            showCancelButton: true,
+            confirmButtonText: "예",
+            cancelButtonText: "아니오"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const requestOptions = {
+                    method: "POST",
+                    headers: {
+                        "Content-type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        cnsltAplySn: cnsltAplySn
+                    }),
+                };
+
+                EgovNet.requestFetch(cancleCnsltRequestUrl, requestOptions, (resp) => {
+                    if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
+                        Swal.fire("처리 되었습니다.").then(() => {
+                            navigate(URL.MEMBER_MYPAGE_CONSULTING, {
+                                state : {
+                                    menuSn: location.state?.menuSn,
+                                    menuNmPath: location.state?.menuNmPath
+                                }
+                            });
+                        });
+
+                    } else {
+                        alert("ERR : " + resp.resultMessage);
+                    }
+                });
+            } else {
+                return;
+                //취소
+            }
+        });
+    }
+
 
     useEffect(() => {
         if (modalData && Object.keys(modalData).length > 0) {
@@ -498,8 +584,35 @@ function MemberMyPageConsultingDetail(props) {
                                 {/* 취소상태일때 */}
                                 {searchDto.cnsltSttsCd === "999" ? (
                                     <>
-                                        <NavLink to={URL.MEMBER_MYPAGE_SIMPLE}
+                                        <NavLink to={URL.MEMBER_MYPAGE_CONSULTING}
                                                  style={{width: '100%', marginLeft: '40%'}}
+                                                 state={{
+                                                     menuSn: location.state?.menuSn,
+                                                     menuNmPath: location.state?.menuNmPath
+                                                 }}>
+                                            <button type="button" className="clickBtn listBtn">
+                                                <div className="icon"></div>
+                                                목록
+                                            </button>
+                                        </NavLink>
+                                    </>
+                                )   : searchDto.cnsltSttsCd === "13" && sessionUser.mbrType === 2 ? (
+                                    //상태가 매칭대기이며 사용자가 컨설턴트인 경우
+                                    <>
+                                        <button type="button" className="clickBtn writeBtn"
+                                                style={{width: '100%',marginLeft : '3%'}}
+                                                onClick={()=>acceptCnslt(searchDto.cnsltAplySn)}
+                                        >
+                                            <span>수락</span>
+                                        </button>
+                                        <button type="button" className="clickBtn gray"
+                                                style={{width: '100%', marginLeft : '3%'}}
+                                                onClick={()=>cancleCnsltRequest(searchDto.cnsltAplySn)}
+                                        >
+                                            <span>거절</span>
+                                        </button>
+                                        <NavLink to={URL.MEMBER_MYPAGE_CONSULTING}
+                                                 style={{width: '100%', marginLeft: '3%'}}
                                                  state={{
                                                      menuSn: location.state?.menuSn,
                                                      menuNmPath: location.state?.menuNmPath
@@ -517,7 +630,7 @@ function MemberMyPageConsultingDetail(props) {
                                                 style={{marginLeft : '20%'}}>
                                             <span>취소</span>
                                         </button>
-                                        <NavLink to={URL.MEMBER_MYPAGE_SIMPLE}
+                                        <NavLink to={URL.MEMBER_MYPAGE_CONSULTING}
                                                  style={{width: '100%'}}
                                                  state={{
                                                      menuSn: location.state?.menuSn,
@@ -541,7 +654,7 @@ function MemberMyPageConsultingDetail(props) {
                                             <div className="icon"></div>
                                             <span>만족도 조사</span>
                                         </button>
-                                        <NavLink to={URL.MEMBER_MYPAGE_SIMPLE}
+                                        <NavLink to={URL.MEMBER_MYPAGE_CONSULTING}
                                                  style={{width: '100%'}}
                                                  state={{
                                                      menuSn: location.state?.menuSn,
@@ -556,7 +669,7 @@ function MemberMyPageConsultingDetail(props) {
                                 ) : latestCreator === sessionUser.userSn ? (
                                     // 사용자가 로그인했을 때 마지막 작성자가 사용자일 경우
                                     <>
-                                        <NavLink to={URL.MEMBER_MYPAGE_SIMPLE}
+                                        <NavLink to={URL.MEMBER_MYPAGE_CONSULTING}
                                                  style={{width: '100%', marginLeft: '40%'}}
                                                  state={{
                                                      menuSn: location.state?.menuSn,
@@ -582,7 +695,7 @@ function MemberMyPageConsultingDetail(props) {
                                                 onClick={() => handleComClick(searchDto.cnsltAplySn)}>
                                             <span>처리완료</span>
                                         </button>
-                                        <NavLink to={URL.MEMBER_MYPAGE_SIMPLE}
+                                        <NavLink to={URL.MEMBER_MYPAGE_CONSULTING}
                                                  style={{width: '100%'}}
                                                  state={{
                                                      menuSn: location.state?.menuSn,
@@ -604,7 +717,7 @@ function MemberMyPageConsultingDetail(props) {
                                                 }}>
                                             <span>등록</span>
                                         </button>
-                                        <NavLink to={URL.MEMBER_MYPAGE_SIMPLE}
+                                        <NavLink to={URL.MEMBER_MYPAGE_CONSULTING}
                                                  style={{width: '100%'}}
                                                  state={{
                                                      menuSn: location.state?.menuSn,
@@ -618,7 +731,7 @@ function MemberMyPageConsultingDetail(props) {
                                     </>
                                 ) : (
                                     // 컨설턴트가 로그인했을 때 마지막 작성자가 컨설턴트일 경우
-                                    <NavLink to={URL.MEMBER_MYPAGE_SIMPLE}
+                                    <NavLink to={URL.MEMBER_MYPAGE_CONSULTING}
                                              style={{width: '100%'}}
                                              state={{
                                                  menuSn: location.state?.menuSn,
