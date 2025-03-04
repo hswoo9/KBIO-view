@@ -6,6 +6,7 @@ import URL from "@/constants/url";
 import CODE from "@/constants/code";
 import * as ComScript from "@/components/CommonScript";
 import EgovPaging from "@/components/EgovPaging";
+import Swal from 'sweetalert2';
 import base64 from 'base64-js';
 import {getComCdList} from "@/components/CommonComponents";
 
@@ -17,11 +18,13 @@ function CompanyMemberList (props) {
     const [searchDto, setSearchDto] = useState(
         location.state?.searchDto || {
             pageIndex : 1,
-            mbrStts:"",
+            aprvYn:"",
             searchType: "",
             searchVal : "",
             mvnEntSn: mvnEntSn,
             relInstSn: relInstSn,
+            kornFlnm: "",
+            userId: "",
         }
     );
 
@@ -84,9 +87,15 @@ function CompanyMemberList (props) {
                                     <td>{new Date(item.frstCrtDt).toISOString().split("T")[0]}</td>
                                     <td>
                                         {item.aprvYn === "N" ? (
-                                            <button onClick={() => ""}>승인</button>
-                                        ) : item.aprvYn === "Y" ? ("-") : ("승인불가")}
+                                            <button type="button"
+                                                    onClick={() => setApprovalMember(item.userSn)}>승인</button>
+                                        ) : item.aprvYn === "Y" ? (
+                                            <button type="button" onClick={() => setApprovalMemberDel(item.userSn)}>취소</button>
+                                        ) : (
+                                            "승인불가"
+                                        )}
                                     </td>
+
                                 </tr>
                             );
                         });
@@ -103,6 +112,80 @@ function CompanyMemberList (props) {
         [companyMemberList, searchDto]
     );
 
+    console.log(paginationInfo)
+
+    const setApprovalMember = (userSn) => {
+        console.log(userSn)
+        const setApprovalUrl = '/memberApi/setCompanyMember';
+
+        Swal.fire({
+            title: `해당 회원을 기업회원으로 승인하시겠습니까?`,
+            showCloseButton: true,
+            showCancelButton: true,
+            confirmButtonText: "예",
+            cancelButtonText: "아니오"
+        }).then((result) => {
+            if(result.isConfirmed) {
+                const requestOptions = {
+                    method: "POST",
+                    headers: {
+                        "Content-type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        userSn: userSn
+                    }),
+                };
+
+                EgovNet.requestFetch(setApprovalUrl, requestOptions, (resp) => {
+                    if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
+                        Swal.fire("승인되었습니다.");
+                        getCompanyMemberList(searchDto);
+                    } else {
+                        alert("ERR : " + resp.resultMessage);
+                    }
+                });
+            } else {
+                //취소
+            }
+        });
+    };
+
+    const setApprovalMemberDel = (userSn) => {
+        console.log(userSn)
+        const setApprovalDelUrl = '/memberApi/setCompanyMemberDel';
+
+        Swal.fire({
+            title: `해당 회원을 취소하시겠습니까?`,
+            showCloseButton: true,
+            showCancelButton: true,
+            confirmButtonText: "예",
+            cancelButtonText: "아니오"
+        }).then((result) => {
+            if(result.isConfirmed) {
+                const requestOptions = {
+                    method: "POST",
+                    headers: {
+                        "Content-type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        userSn: userSn
+                    }),
+                };
+
+                EgovNet.requestFetch(setApprovalDelUrl, requestOptions, (resp) => {
+                    if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
+                        Swal.fire("취소되었습니다.");
+                        getCompanyMemberList(searchDto);
+                    } else {
+                        alert("ERR : " + resp.resultMessage);
+                    }
+                });
+            } else {
+                //취소
+            }
+        });
+    };
+
 
 
     useEffect(() => {
@@ -113,13 +196,71 @@ function CompanyMemberList (props) {
 
     return (
         <div className="contBox board type 1 customContBox">
+            <div className="titleWrap type5 left">
+                <p className="tt1">산하 직원 정보</p>
+            </div>
+            <div className="cateWrap">
+                <form action="">
+                    <ul className="cateList">
+                        <li className="inputBox type1">
+                            <p className="title">키워드</p>
+                            <div className="itemBox">
+                                <select
+                                    className="selectGroup"
+                                    id="searchType"
+                                    name="searchType"
+                                    title="검색유형"
+                                    ref={searchTypeRef}
+                                    onChange={(e) => {
+                                        setSearchDto({...searchDto, searchType: e.target.value})
+                                    }}
+                                >
+                                    <option value="">전체</option>
+                                    <option value="userId">아이디</option>
+                                    <option value="kornFlnm">성명</option>
+                                </select>
+                            </div>
+                        </li>
+                        <li className="searchBox inputBox type1" style={{width: "100%"}}>
+                            <label className="input">
+                                <input
+                                    type="text"
+                                    name="searchVal"
+                                    defaultValue={searchDto.searchVal}
+                                    placeholder=""
+                                    ref={searchValRef}
+                                    onChange={(e) => {
+                                        setSearchDto({...searchDto, searchVal: e.target.value})
+                                    }}
+                                    onKeyDown={activeEnter}
+                                />
+                            </label>
+                        </li>
+                    </ul>
+                    <div className="rightBtn">
+                        <button
+                            type="button"
+                            className="searchBtn btn btn1 point"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                getCompanyMemberList({
+                                    ...searchDto,
+                                    pageIndex: 1
+                                });
+                            }}
+                        >
+                            <div className="icon"></div>
+                        </button>
+                    </div>
+                </form>
+            </div>
             <div className="topBox">
                 <p className="resultText"><span className="red">{paginationInfo?.totalRecordCount}</span>건의 회원 정보가
                     조회되었습니다.</p>
             </div>
             <div className="tableBox type1">
                 <table>
-                    <caption>게시판</caption>
+                    <caption>관리자회원</caption>
                     <thead>
                     <tr>
                         <th className="th2"><p>아이디</p></th>
@@ -127,8 +268,8 @@ function CompanyMemberList (props) {
                         <th className="th3"><p>휴대전화번호</p></th>
                         <th className="th4"><p>이메일</p></th>
                         <th className="th4"><p>회원상태</p></th>
-                        <th className="th4"><p>승인</p></th>
-                        <th className="th5"><p>등록일</p></th>
+                        <th className="th4"><p>등록일</p></th>
+                        <th className="th5"><p>승인</p></th>
                     </tr>
                     </thead>
                     <tbody>

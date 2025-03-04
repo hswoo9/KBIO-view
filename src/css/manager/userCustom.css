@@ -357,3 +357,18 @@ button:focus { outline: 2px solid black;}
     display: none !important; /* 기본 배너를 숨깁니다 */
 }
 .skiptranslate iframe { display : none }
+
+.container .cateWrap form {display: flex; gap: 8px; align-items: flex-end;}
+.container .cateWrap form .cateList {display: flex; gap: 8px; align-items: flex-end; width: 100%;}
+.container .cateWrap form .cateList > li {width:  100%;}
+.container .cateWrap form .cateList .inputBox:not(.searchBox) {max-width: 240px;}
+.container .cateWrap form .rightBtn {display: flex; gap: 8px; flex: none;}
+.container .cateWrap form .rightBtn .refreshBtn .icon {background-image: url(@/assets/images/ico_refresh_white.svg);}
+.container .cateWrap form .rightBtn .searchBtn .icon {background-image: url(@/assets/images/ico_search_white.svg);}
+
+.user .titleWrap.type5 { text-align: center;}
+.user .titleWrap.type5 .tt1 {position: relative; font-size: 1.35rem; font-weight: 700;}
+.user .titleWrap.type5 .tt1:after {content: ""; display: block; width: 1.35rem; height: 2px; background: var(--black); margin: .9rem auto 0;}
+.user .titleWrap.type5 .tt2 {font-size: 1.5rem; font-weight: 500; word-break: keep-all; color: #555555; letter-spacing: -1px; margin-top: .9rem;}
+.user .titleWrap.type5.left .tt1 {text-align: left;}
+.user .titleWrap.type5.left .tt1:after {margin-right: auto; margin-left: 0;}
