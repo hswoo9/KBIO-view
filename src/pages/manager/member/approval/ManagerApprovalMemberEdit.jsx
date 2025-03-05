@@ -141,7 +141,7 @@ function setApprovalMember(props) {
                     },
                     body: JSON.stringify({
                         ...memberDetail,
-                        password: "qwer12!@"
+                        userPw: "qwer12!@"
                     }),
                 };
 
@@ -151,10 +151,6 @@ function setApprovalMember(props) {
                             title: "비밀번호가 초기화되었습니다.",
                             confirmButtonText: "확인"
                         })
-                        setMemberDetail({
-                            ...memberDetail,
-                            password: "qwer12!@"
-                        });
                     } else {
                         Swal.fire({
                             title: "오류가 발생했습니다.",
