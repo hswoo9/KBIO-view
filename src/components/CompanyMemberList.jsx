@@ -5,16 +5,22 @@ import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
 import * as ComScript from "@/components/CommonScript";
+import { getSessionItem } from "@/utils/storage";
 import EgovUserPaging from "@/components/EgovUserPaging";
 import Swal from 'sweetalert2';
 import base64 from 'base64-js';
 import {getComCdList} from "@/components/CommonComponents";
+import CompanyModifyMember from "@/components/CompanyModifyMember";
 
 function CompanyMemberList (props) {
+    const sessionUser = getSessionItem("loginUser");
+    const [modalData, setModalData] = useState({});
     const { mvnEntSn, relInstSn } = props;
+    const [userSn, setUserSn] = useState([]);
     const location = useLocation();
     const [companyMemberList, setAuthorityList] = useState([]);
     const [paginationInfo, setPaginationInfo] = useState({});
+    const [originalMemberList, setOriginalMemberList] = useState([]);
     const [searchDto, setSearchDto] = useState(
         location.state?.searchDto || {
             pageIndex : 1,
@@ -31,6 +37,7 @@ function CompanyMemberList (props) {
 
     const searchTypeRef = useRef();
     const searchValRef = useRef();
+
 
     const activeEnter = (e) => {
         if (e.key === "Enter") {
@@ -59,6 +66,9 @@ function CompanyMemberList (props) {
                 (resp) => {
                     setPaginationInfo(resp.paginationInfo);
 
+                    const rawList = resp.result.getCompanyMemberList;
+                    setOriginalMemberList(rawList);
+
                     let dataList = [];
 
                     if (resp.result.getCompanyMemberList.length === 0) {
@@ -73,7 +83,15 @@ function CompanyMemberList (props) {
 
                             dataList.push(
                                 <tr key={item.userSn}>
-                                    <td>{item.userId}</td>
+                                    <td
+                                        onClick={() => {
+                                            modifyClick(item.userSn);
+                                        }}
+                                        style={{
+                                            cursor: "pointer",
+                                        }}
+                                    >{item.userId}
+                                    </td>
                                     <td>{item.kornFlnm}</td>
                                     <td>{ComScript.formatTelNumber(decodedPhoneNumber)}</td>
                                     <td>{item.email}</td>
@@ -90,7 +108,8 @@ function CompanyMemberList (props) {
                                             <button type="button"
                                                     onClick={() => setApprovalMember(item.userSn)}>승인</button>
                                         ) : item.aprvYn === "Y" && item.mbrStts === "Y" ? (
-                                            <button type="button" onClick={() => setApprovalMemberDel(item.userSn)}>취소</button>
+                                            <button type="button"
+                                                    onClick={() => setApprovalMemberDel(item.userSn)}>취소</button>
                                         ) : (
                                             "-"
                                         )}
@@ -100,7 +119,6 @@ function CompanyMemberList (props) {
                             );
                         });
                     }
-
                     setAuthorityList(dataList);
                 },
                 function (resp) {
@@ -112,10 +130,7 @@ function CompanyMemberList (props) {
         [companyMemberList, searchDto]
     );
 
-    console.log(paginationInfo)
-
     const setApprovalMember = (userSn) => {
-        console.log(userSn)
         const setApprovalUrl = '/memberApi/setCompanyMember';
 
         Swal.fire({
@@ -151,7 +166,6 @@ function CompanyMemberList (props) {
     };
 
     const setApprovalMemberDel = (userSn) => {
-        console.log(userSn)
         const setApprovalDelUrl = '/memberApi/setCompanyMemberDel';
 
         Swal.fire({
@@ -192,6 +206,53 @@ function CompanyMemberList (props) {
         getCompanyMemberList(searchDto);
     },[]);
 
+    useEffect(() => {
+    }, [originalMemberList]);
+
+    /*const modifyClick = (userSn) => {
+        const selectedUser = originalMemberList.find(item => item.userSn == userSn);
+        if (sessionUser) {
+            const updatedData ={
+                ...selectedUser,
+            };
+            setModalData(updatedData);
+            ComScript.openModal("modifyModal");
+        } else {
+        }
+    };*/
+
+    const modifyClick = (userSn) => {
+        const getNormalMemberUrl = "/memberApi/getNormalMember";
+        const requestOptions = {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json",
+            },
+            body: JSON.stringify({
+                userSn: userSn
+            })
+        };
+
+        EgovNet.requestFetch(
+            getNormalMemberUrl,
+            requestOptions,
+            (resp) => {
+                console.log(resp.result.member)
+                setModalData(resp.result.member);
+                ComScript.openModal("modifyModal");
+            },
+            (error) => {
+            }
+        );
+
+    }
+
+    useEffect(() => {
+        if (modalData && Object.keys(modalData).length > 0) {
+            ComScript.openModal("modifyModal");
+        }
+    }, [modalData]);
+
 
 
     return (
@@ -200,59 +261,57 @@ function CompanyMemberList (props) {
                 <p className="tt1">산하 직원 정보</p>
             </div>
             <div className="cateWrap">
-                <form action="">
-                    <ul className="cateList">
-                        <li className="inputBox type1">
-                            <p className="title">키워드</p>
-                            <div className="itemBox5">
-                                <select
-                                    className="selectGroup"
-                                    id="searchType"
-                                    name="searchType"
-                                    title="검색유형"
-                                    ref={searchTypeRef}
-                                    onChange={(e) => {
-                                        setSearchDto({...searchDto, searchType: e.target.value})
-                                    }}
-                                >
-                                    <option value="">전체</option>
-                                    <option value="userId">아이디</option>
-                                    <option value="kornFlnm">성명</option>
-                                </select>
-                            </div>
-                        </li>
-                        <li className="searchBox inputBox type1" style={{width: "100%"}}>
-                            <label className="input">
-                                <input
-                                    type="text"
-                                    name="searchVal"
-                                    defaultValue={searchDto.searchVal}
-                                    placeholder=""
-                                    ref={searchValRef}
-                                    onChange={(e) => {
-                                        setSearchDto({...searchDto, searchVal: e.target.value})
-                                    }}
-                                    onKeyDown={activeEnter}
-                                />
-                            </label>
-                        </li>
-                    </ul>
-                    <div className="rightBtn">
-                        <button
-                            type="button"
-                            className="searchBtn btn btn1 point"
-                            onClick={(e) => {
-                                e.preventDefault();
-                                getCompanyMemberList({
-                                    ...searchDto,
-                                    pageIndex: 1
-                                });
-                            }}
-                        >
-                            <div className="icon"></div>
-                        </button>
-                    </div>
-                </form>
+                <ul className="cateList">
+                    <li className="inputBox type1">
+                        <p className="title">키워드</p>
+                        <div className="itemBox5">
+                            <select
+                                className="selectGroup"
+                                id="searchType"
+                                name="searchType"
+                                title="검색유형"
+                                ref={searchTypeRef}
+                                onChange={(e) => {
+                                    setSearchDto({...searchDto, searchType: e.target.value})
+                                }}
+                            >
+                                <option value="">전체</option>
+                                <option value="userId">아이디</option>
+                                <option value="kornFlnm">성명</option>
+                            </select>
+                        </div>
+                    </li>
+                    <li className="searchBox inputBox type1" style={{width: "100%"}}>
+                        <label className="input">
+                            <input
+                                type="text"
+                                name="searchVal"
+                                defaultValue={searchDto.searchVal}
+                                placeholder=""
+                                ref={searchValRef}
+                                onChange={(e) => {
+                                    setSearchDto({...searchDto, searchVal: e.target.value})
+                                }}
+                                onKeyDown={activeEnter}
+                            />
+                        </label>
+                    </li>
+                </ul>
+                <div className="rightBtn">
+                    <button
+                        type="button"
+                        className="searchBtn btn btn1 point"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            getCompanyMemberList({
+                                ...searchDto,
+                                pageIndex: 1
+                            });
+                        }}
+                    >
+                        <div className="icon"></div>
+                    </button>
+                </div>
             </div>
             <div className="topBox">
                 <p className="resultText"><span className="red">{paginationInfo?.totalRecordCount}</span>건의 회원 정보가
@@ -289,6 +348,11 @@ function CompanyMemberList (props) {
                     }}
                 />
             </div>
+            <CompanyModifyMember
+                data={modalData}
+                 onSave={() => {
+                 getCompanyMemberList();
+            }}/>
         </div>
     );
 }
