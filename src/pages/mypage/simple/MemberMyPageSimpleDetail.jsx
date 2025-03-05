@@ -685,11 +685,11 @@ function MemberMyPageSimpleDetail(props) {
                                     // 사용자가 로그인했을 때 마지막 작성자가 컨설턴트일 경우
                                     <>
                                         <button type="button" className="clickBtn writeBtn"
-                                                style={{marginLeft: "7%"}}
+                                                style={{marginLeft: "25%"}}
                                                 onClick={() => {
                                                     ComScript.openModal("writeModal");
                                                 }}>
-                                            <span>등록</span>
+                                            <span>답변 등록</span>
                                         </button>
                                         <button type="button" className="clickBtn completeBtn"
                                                 onClick={() => handleComClick(searchDto.cnsltAplySn)}>
@@ -711,11 +711,11 @@ function MemberMyPageSimpleDetail(props) {
                                     // 컨설턴트가 로그인했을 때 마지막 작성자가 사용자일 경우
                                     <>
                                         <button type="button" className="clickBtn writeBtn"
-                                                style={{marginLeft: "7%"}}
+                                                style={{marginLeft: "25%"}}
                                                 onClick={() => {
                                                     ComScript.openModal("writeModal");
                                                 }}>
-                                            <span>등록</span>
+                                            <span>답변 등록</span>
                                         </button>
                                         <NavLink to={URL.MEMBER_MYPAGE_SIMPLE}
                                                  style={{width: '100%'}}
