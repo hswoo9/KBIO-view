@@ -163,12 +163,16 @@ function ManagerConsultuntDetail(props) {
             getConsultantDetailUrl,
             requestOptions,
             (resp) => {
+                /*debugger
+                console.log("resp.result:",resp.result);*/
                 const decodedPhoneNumber = decodePhoneNumber(resp.result.memberDetail.mblTelno);
                 let emailPrefix = "";
                 let emailDomain = "";
                 let emailProvider = "direct";
 
+
                 setConsultantDetail(resp.result.consultant);
+
 
                 if(resp.result.memberDetail.email && resp.result.memberDetail.email.includes("@")){
                     const emailParts =resp.result.memberDetail.email.split("@");
