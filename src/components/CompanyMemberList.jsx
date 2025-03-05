@@ -209,7 +209,7 @@ function CompanyMemberList (props) {
     useEffect(() => {
     }, [originalMemberList]);
 
-    const modifyClick = (userSn) => {
+    /*const modifyClick = (userSn) => {
         const selectedUser = originalMemberList.find(item => item.userSn == userSn);
         if (sessionUser) {
             const updatedData ={
@@ -219,7 +219,33 @@ function CompanyMemberList (props) {
             ComScript.openModal("modifyModal");
         } else {
         }
-    };
+    };*/
+
+    const modifyClick = (userSn) => {
+        const getNormalMemberUrl = "/memberApi/getNormalMember";
+        const requestOptions = {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json",
+            },
+            body: JSON.stringify({
+                userSn: userSn
+            })
+        };
+
+        EgovNet.requestFetch(
+            getNormalMemberUrl,
+            requestOptions,
+            (resp) => {
+                console.log(resp.result.member)
+                setModalData(resp.result.member);
+                ComScript.openModal("modifyModal");
+            },
+            (error) => {
+            }
+        );
+
+    }
 
     useEffect(() => {
         if (modalData && Object.keys(modalData).length > 0) {
