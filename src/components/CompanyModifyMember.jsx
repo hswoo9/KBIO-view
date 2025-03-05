@@ -13,7 +13,6 @@ const CompanyModifyMember = ({data, onSave}) => {
     const [paramsData, setParamsData] = useState({});
 
     useEffect(() => {
-        console.log(data);
         setParamsData(data);
     }, [data]);
 
@@ -76,7 +75,7 @@ const CompanyModifyMember = ({data, onSave}) => {
                     <div className="titleWrap type2">
                         <p className="tt1">직원 수정</p>
                     </div>
-                    <form className="diffiBox">
+                    <div className="diffiBox">
                         <div className="cont">
                             <ul className="listBox">
 
@@ -197,9 +196,9 @@ const CompanyModifyMember = ({data, onSave}) => {
                                 </li>
                             </ul>
                         </div>
-                        <button type="button" className="clickBtn black writeBtn" onClick="">
+                        <button type="button" className="clickBtn black writeBtn">
                             <span>수정</span></button>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>

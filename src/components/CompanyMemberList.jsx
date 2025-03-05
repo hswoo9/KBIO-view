@@ -166,7 +166,6 @@ function CompanyMemberList (props) {
     };
 
     const setApprovalMemberDel = (userSn) => {
-        console.log(userSn)
         const setApprovalDelUrl = '/memberApi/setCompanyMemberDel';
 
         Swal.fire({
@@ -212,7 +211,6 @@ function CompanyMemberList (props) {
 
     const modifyClick = (userSn) => {
         const selectedUser = originalMemberList.find(item => item.userSn == userSn);
-        console.log(selectedUser)
         if (sessionUser) {
             const updatedData ={
                 ...selectedUser,
@@ -237,59 +235,57 @@ function CompanyMemberList (props) {
                 <p className="tt1">산하 직원 정보</p>
             </div>
             <div className="cateWrap">
-                <form action="">
-                    <ul className="cateList">
-                        <li className="inputBox type1">
-                            <p className="title">키워드</p>
-                            <div className="itemBox5">
-                                <select
-                                    className="selectGroup"
-                                    id="searchType"
-                                    name="searchType"
-                                    title="검색유형"
-                                    ref={searchTypeRef}
-                                    onChange={(e) => {
-                                        setSearchDto({...searchDto, searchType: e.target.value})
-                                    }}
-                                >
-                                    <option value="">전체</option>
-                                    <option value="userId">아이디</option>
-                                    <option value="kornFlnm">성명</option>
-                                </select>
-                            </div>
-                        </li>
-                        <li className="searchBox inputBox type1" style={{width: "100%"}}>
-                            <label className="input">
-                                <input
-                                    type="text"
-                                    name="searchVal"
-                                    defaultValue={searchDto.searchVal}
-                                    placeholder=""
-                                    ref={searchValRef}
-                                    onChange={(e) => {
-                                        setSearchDto({...searchDto, searchVal: e.target.value})
-                                    }}
-                                    onKeyDown={activeEnter}
-                                />
-                            </label>
-                        </li>
-                    </ul>
-                    <div className="rightBtn">
-                        <button
-                            type="button"
-                            className="searchBtn btn btn1 point"
-                            onClick={(e) => {
-                                e.preventDefault();
-                                getCompanyMemberList({
-                                    ...searchDto,
-                                    pageIndex: 1
-                                });
-                            }}
-                        >
-                            <div className="icon"></div>
-                        </button>
-                    </div>
-                </form>
+                <ul className="cateList">
+                    <li className="inputBox type1">
+                        <p className="title">키워드</p>
+                        <div className="itemBox5">
+                            <select
+                                className="selectGroup"
+                                id="searchType"
+                                name="searchType"
+                                title="검색유형"
+                                ref={searchTypeRef}
+                                onChange={(e) => {
+                                    setSearchDto({...searchDto, searchType: e.target.value})
+                                }}
+                            >
+                                <option value="">전체</option>
+                                <option value="userId">아이디</option>
+                                <option value="kornFlnm">성명</option>
+                            </select>
+                        </div>
+                    </li>
+                    <li className="searchBox inputBox type1" style={{width: "100%"}}>
+                        <label className="input">
+                            <input
+                                type="text"
+                                name="searchVal"
+                                defaultValue={searchDto.searchVal}
+                                placeholder=""
+                                ref={searchValRef}
+                                onChange={(e) => {
+                                    setSearchDto({...searchDto, searchVal: e.target.value})
+                                }}
+                                onKeyDown={activeEnter}
+                            />
+                        </label>
+                    </li>
+                </ul>
+                <div className="rightBtn">
+                    <button
+                        type="button"
+                        className="searchBtn btn btn1 point"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            getCompanyMemberList({
+                                ...searchDto,
+                                pageIndex: 1
+                            });
+                        }}
+                    >
+                        <div className="icon"></div>
+                    </button>
+                </div>
             </div>
             <div className="topBox">
                 <p className="resultText"><span className="red">{paginationInfo?.totalRecordCount}</span>건의 회원 정보가
