@@ -149,7 +149,6 @@ function RejectMemberList(props) {
                                 <td>{item.companyNm}</td>
                                 <td>{item.snsClsf ? item.snsClsf : ""}</td>
                                 <td>{new Date(item.frstCrtDt).toISOString().split("T")[0]}</td>
-                                <td>{item.lastLoginDate ? new Date(item.lastLoginDate).toISOString().split("T")[0] : "-"}</td>
                                 {/*<td>{item.replyPosblYn}</td>
                                 <td>
                                     <Link
@@ -316,7 +315,6 @@ function RejectMemberList(props) {
                                 <th className="th2">기업명</th>
                                 <th className="th1">소셜구분</th>
                                 <th className="th2">가입일</th>
-                                <th className="th2">최근 접속일시</th>
                                 <th className="th1">승인여부</th>
                             </tr>
                             </thead>
