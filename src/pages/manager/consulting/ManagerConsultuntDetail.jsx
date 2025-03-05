@@ -68,6 +68,66 @@ function ManagerConsultuntDetail(props) {
     const setCnslttMbrActv = (e) =>{
         const setCnslttMbrActvUrl = "/consultingApi/setCnslttMbrActv";
         let requestOptions = {};
+
+        if(!memberDetail.kornFlnm) {
+            alert("성명을 입력해주세요.")
+            return false;
+        }
+
+        if(!consultantDetail.cnsltFld) {
+            alert("자문분야를 선택해주세요.")
+            return false;
+        }
+
+        if(!memberDetail.mblTelno) {
+            alert("전화번호를 입력해주세요.")
+            return false;
+        }
+
+        if(!memberDetail.emailPrefix || !memberDetail.emailDomain) {
+            alert("이메일을 입력해주세요.")
+            return false;
+        }
+
+        if(!memberDetail.addr){
+            alert("주소를 입력해주세요.")
+            return false;
+        }
+
+        if(!memberDetail.daddr){
+            alert("상세주소를 입력해주세요.")
+        }
+
+        if(!consultantDetail.ogdpNm) {
+            alert("소속을 입력해주세요.");
+            return false;
+        }
+
+        if(!consultantDetail.jbpsNm) {
+            alert("직위를 입력해주세요.");
+            return false;
+        }
+
+        if(!consultantDetail.crrPrd) {
+            alert("경력을 입력해주세요.");
+            return false;
+        }
+
+        if(!consultantDetail.cnsltArtcl) {
+            alert("컨설팅항목을 입력해주세요.");
+            return false;
+        }
+
+        if(!consultantDetail.cnsltSlfint) {
+            alert("소개를 입력해주세요.");
+            return false;
+        }
+
+        if(!consultantDetail.cnsltActv){
+            alert("활동여부를 선택해주세요.");
+            return false;
+        }
+
         const formData = new FormData();
 
         for(let key in memberDetail) {
