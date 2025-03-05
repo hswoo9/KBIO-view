@@ -1118,9 +1118,8 @@ function MemberMyPageModify(props) {
                             </ul>
                         </div>
                     </div>
-
+                    {sessionUsermbrType !== 2 && rcDetail && Object.keys(rcDetail).length > 0 && (
                         <div className="box02" data-aos="fade-up" data-aos-duration="1500">
-                            {sessionUsermbrType !== 2 && (
                                 <div className="companyBox">
                                 <div className="titleWrap type2 left">
                                     <p className="tt1">기업 정보</p>
@@ -1195,10 +1194,12 @@ function MemberMyPageModify(props) {
                                     </li>
                                 </ul>
                             </div>
+                        </div>
                         )}
 
 
                         {sessionUsermbrType === 2 && (
+                            <div className="box02" data-aos="fade-up" data-aos-duration="1500">
                             <ul className="inputWrap" data-aos="fade-up" data-aos-duration="1500">
                                 <li className="inputBox type2">
                                     <span className="tt1">사진</span>
@@ -1798,15 +1799,14 @@ function MemberMyPageModify(props) {
                                 </li>
 
                             </ul>
-
+                            </div>
                         )}
-                    </div>
 
+                    {rcDetail.sysMngrYn === "Y" && (
                     <div className="box02" data-aos="fade-up" data-aos-duration="1500">
-                        {rcDetail.sysMngrYn === "Y" && (
                             <CompanyMemberList mvnEntSn={rcDetail.mvnEntSn} relInstSn={rcDetail.relInstSn}/>
-                        )}
                     </div>
+                    )}
 
                     <div className="buttonBox">
                         <button type="button" className="clickBtn black" onClick={checkPwd}
