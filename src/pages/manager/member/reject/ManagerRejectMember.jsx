@@ -135,7 +135,7 @@ function RejectMemberList(props) {
                                 </td>
                                 <td>
                                     <Link
-                                        to={{pathname: URL.MANAGER_NORMAL_MEMBER_MODIFY}}
+                                        to={{pathname: URL.MANAGER_REJECT_MEMBER_MODIFY}}
                                         state={{
                                             userSn: item.userSn
                                         }}
