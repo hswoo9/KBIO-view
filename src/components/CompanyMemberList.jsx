@@ -242,7 +242,7 @@ function CompanyMemberList (props) {
             <div className="titleWrap type5 left">
                 <p className="tt1">산하 직원 정보</p>
             </div>
-            <div className="cateWrap">
+            <div className="cateWrap5">
                     <ul className="cateList">
                         <li className="inputBox type1">
                             <p className="title">키워드</p>
