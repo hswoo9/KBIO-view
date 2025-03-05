@@ -386,3 +386,14 @@ button:focus { outline: 2px solid black;}
 .pageWrap1 .pageList li.arrow:not(.disabled):hover a {color: var(--mainColor3); text-shadow: 2px 2px #04359B25;}
 
 .itemBox5 {border: 1px solid #ddd; border-radius: .6rem;}
+
+.modalCon.companyModal .boxWrap {max-width: 1000px; padding: 2.2rem; box-sizing: border-box; max-height: 600px;}
+.modalCon.companyModal .boxWrap .titleWrap.type2 {margin-bottom: 1.35rem;}
+.modalCon.companyModal .boxWrap .diffiBox {gap: 1.35rem;}
+.modalCon.companyModal .boxWrap .diffiBox .cont {max-height: calc(100vh - 19rem); overflow: auto; min-height: 87px;}
+.modalCon.companyModal .boxWrap .diffiBox .cont::-webkit-scrollbar {width: 3px;}
+.modalCon.companyModal .boxWrap .diffiBox .cont .listBox {flex-wrap: wrap; flex-direction: row; gap: 1.35rem 0;}
+.modalCon.companyModal .boxWrap .diffiBox .cont .listBox .inputBox.textBox {width: 50%;}
+.modalCon.companyModal .boxWrap .diffiBox .cont .listBox .inputBox {width: 100%;}
+.modalCon.companyModal .boxWrap .diffiBox .writeBtn {width: 100%; max-width: none;}
+.modalCon.companyModal .boxWrap .diffiBox .inputBox.type2 .fileName {flex-direction: column;}

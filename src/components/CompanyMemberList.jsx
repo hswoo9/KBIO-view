@@ -5,16 +5,22 @@ import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
 import * as ComScript from "@/components/CommonScript";
+import { getSessionItem } from "@/utils/storage";
 import EgovUserPaging from "@/components/EgovUserPaging";
 import Swal from 'sweetalert2';
 import base64 from 'base64-js';
 import {getComCdList} from "@/components/CommonComponents";
+import CompanyModifyMember from "@/components/CompanyModifyMember";
 
 function CompanyMemberList (props) {
+    const sessionUser = getSessionItem("loginUser");
+    const [modalData, setModalData] = useState({});
     const { mvnEntSn, relInstSn } = props;
+    const [userSn, setUserSn] = useState([]);
     const location = useLocation();
     const [companyMemberList, setAuthorityList] = useState([]);
     const [paginationInfo, setPaginationInfo] = useState({});
+    const [originalMemberList, setOriginalMemberList] = useState([]);
     const [searchDto, setSearchDto] = useState(
         location.state?.searchDto || {
             pageIndex : 1,
@@ -31,6 +37,7 @@ function CompanyMemberList (props) {
 
     const searchTypeRef = useRef();
     const searchValRef = useRef();
+
 
     const activeEnter = (e) => {
         if (e.key === "Enter") {
@@ -59,6 +66,9 @@ function CompanyMemberList (props) {
                 (resp) => {
                     setPaginationInfo(resp.paginationInfo);
 
+                    const rawList = resp.result.getCompanyMemberList;
+                    setOriginalMemberList(rawList);
+
                     let dataList = [];
 
                     if (resp.result.getCompanyMemberList.length === 0) {
@@ -73,7 +83,15 @@ function CompanyMemberList (props) {
 
                             dataList.push(
                                 <tr key={item.userSn}>
-                                    <td>{item.userId}</td>
+                                    <td
+                                        onClick={() => {
+                                            modifyClick(item.userSn);
+                                        }}
+                                        style={{
+                                            cursor: "pointer",
+                                        }}
+                                    >{item.userId}
+                                    </td>
                                     <td>{item.kornFlnm}</td>
                                     <td>{ComScript.formatTelNumber(decodedPhoneNumber)}</td>
                                     <td>{item.email}</td>
@@ -90,7 +108,8 @@ function CompanyMemberList (props) {
                                             <button type="button"
                                                     onClick={() => setApprovalMember(item.userSn)}>승인</button>
                                         ) : item.aprvYn === "Y" && item.mbrStts === "Y" ? (
-                                            <button type="button" onClick={() => setApprovalMemberDel(item.userSn)}>취소</button>
+                                            <button type="button"
+                                                    onClick={() => setApprovalMemberDel(item.userSn)}>취소</button>
                                         ) : (
                                             "-"
                                         )}
@@ -100,7 +119,6 @@ function CompanyMemberList (props) {
                             );
                         });
                     }
-
                     setAuthorityList(dataList);
                 },
                 function (resp) {
@@ -112,10 +130,7 @@ function CompanyMemberList (props) {
         [companyMemberList, searchDto]
     );
 
-    console.log(paginationInfo)
-
     const setApprovalMember = (userSn) => {
-        console.log(userSn)
         const setApprovalUrl = '/memberApi/setCompanyMember';
 
         Swal.fire({
@@ -191,6 +206,28 @@ function CompanyMemberList (props) {
     useEffect(() => {
         getCompanyMemberList(searchDto);
     },[]);
+
+    useEffect(() => {
+    }, [originalMemberList]);
+
+    const modifyClick = (userSn) => {
+        const selectedUser = originalMemberList.find(item => item.userSn == userSn);
+        console.log(selectedUser)
+        if (sessionUser) {
+            const updatedData ={
+                ...selectedUser,
+            };
+            setModalData(updatedData);
+            ComScript.openModal("modifyModal");
+        } else {
+        }
+    };
+
+    useEffect(() => {
+        if (modalData && Object.keys(modalData).length > 0) {
+            ComScript.openModal("modifyModal");
+        }
+    }, [modalData]);
 
 
 
@@ -289,6 +326,11 @@ function CompanyMemberList (props) {
                     }}
                 />
             </div>
+            <CompanyModifyMember
+                data={modalData}
+                 onSave={() => {
+                 getCompanyMemberList();
+            }}/>
         </div>
     );
 }
