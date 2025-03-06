@@ -12,6 +12,7 @@ import base64 from 'base64-js';
 import {getComCdList} from "@/components/CommonComponents";
 import CompanyModifyMember from "@/components/CompanyModifyMember";
 
+
 function CompanyMemberList (props) {
     const sessionUser = getSessionItem("loginUser");
     const [modalData, setModalData] = useState({});
@@ -20,7 +21,6 @@ function CompanyMemberList (props) {
     const location = useLocation();
     const [companyMemberList, setAuthorityList] = useState([]);
     const [paginationInfo, setPaginationInfo] = useState({});
-    const [originalMemberList, setOriginalMemberList] = useState([]);
     const [searchDto, setSearchDto] = useState(
         location.state?.searchDto || {
             pageIndex : 1,
@@ -38,6 +38,10 @@ function CompanyMemberList (props) {
     const searchTypeRef = useRef();
     const searchValRef = useRef();
 
+    const decodePhoneNumber = (encodedPhoneNumber) => {
+        const decodedBytes = base64.toByteArray(encodedPhoneNumber);
+        return new TextDecoder().decode(decodedBytes);
+    };
 
     const activeEnter = (e) => {
         if (e.key === "Enter") {
@@ -45,52 +49,38 @@ function CompanyMemberList (props) {
             getCompanyMemberList(searchDto);
         }
     };
-    const decodePhoneNumber = (encodedPhoneNumber) => {
-        const decodedBytes = base64.toByteArray(encodedPhoneNumber);
-        return new TextDecoder().decode(decodedBytes);
-    };
 
     const getCompanyMemberList = useCallback(
-        (searchDto) =>{
+        (searchDto) => {
             const getUrl = "/memberApi/getCompanyMemberList.do";
             const requestOptions = {
                 method: "POST",
-                headers: {
-                    "Content-type": "application/json",
-                },
-                body: JSON.stringify(searchDto)
+                headers: { "Content-type": "application/json" },
+                body: JSON.stringify(searchDto),
             };
             EgovNet.requestFetch(
                 getUrl,
                 requestOptions,
                 (resp) => {
+
                     setPaginationInfo(resp.paginationInfo);
 
-                    const rawList = resp.result.getCompanyMemberList;
-                    setOriginalMemberList(rawList);
-
-                    let dataList = [];
-
-                    if (resp.result.getCompanyMemberList.length === 0) {
-                        dataList.push(
+                    if (!resp.result?.getCompanyMemberList?.length) {
+                        setAuthorityList([
                             <tr key="noData">
                                 <td colSpan="6">검색된 결과가 없습니다.</td>
-                            </tr>
-                        );
-                    } else {
-                        resp.result.getCompanyMemberList.forEach((item, index) => {
-                            const decodedPhoneNumber = decodePhoneNumber(item.mblTelno);
+                            </tr>,
+                        ]);
+                        return;
+                    }
 
-                            dataList.push(
+                    setAuthorityList(
+                        resp.result.getCompanyMemberList.map((item) => {
+                            const decodedPhoneNumber = decodePhoneNumber(item.mblTelno);
+                            return (
                                 <tr key={item.userSn}>
-                                    <td
-                                        onClick={() => {
-                                            modifyClick(item.userSn);
-                                        }}
-                                        style={{
-                                            cursor: "pointer",
-                                        }}
-                                    >{item.userId}
+                                    <td onClick={() => modifyClick(item.userSn)} style={{ cursor: "pointer" }}>
+                                        {item.userId}
                                     </td>
                                     <td>{item.kornFlnm}</td>
                                     <td>{ComScript.formatTelNumber(decodedPhoneNumber)}</td>
@@ -99,36 +89,39 @@ function CompanyMemberList (props) {
                                         {item.mbrStts === "W"
                                             ? "승인대기"
                                             : item.mbrStts === "Y"
-                                                ? "승인" : item.mbrStts === "R"
-                                                    ? "승인반려" : "이용정지"}
+                                                ? "승인"
+                                                : item.mbrStts === "R"
+                                                    ? "승인반려"
+                                                    : "이용정지"}
                                     </td>
                                     <td>{new Date(item.frstCrtDt).toISOString().split("T")[0]}</td>
                                     <td>
                                         {item.aprvYn === "N" && item.mbrStts === "Y" ? (
-                                            <button type="button"
-                                                    onClick={() => setApprovalMember(item.userSn)}>승인</button>
+                                            <button type="button" onClick={() => setApprovalMember(item.userSn)}>
+                                                승인
+                                            </button>
                                         ) : item.aprvYn === "Y" && item.mbrStts === "Y" ? (
-                                            <button type="button"
-                                                    onClick={() => setApprovalMemberDel(item.userSn)}>취소</button>
+                                            <button type="button" onClick={() => setApprovalMemberDel(item.userSn)}>
+                                                취소
+                                            </button>
                                         ) : (
                                             "-"
                                         )}
                                     </td>
-
                                 </tr>
                             );
-                        });
-                    }
-                    setAuthorityList(dataList);
+                        })
+                    );
                 },
-                function (resp) {
-
-                }
-            )
-
+                (error) => console.error("API 요청 실패:", error)
+            );
         },
-        [companyMemberList, searchDto]
+        [searchDto]
     );
+
+    useEffect(() => {
+        getCompanyMemberList(searchDto);
+    }, []);
 
     const setApprovalMember = (userSn) => {
         const setApprovalUrl = '/memberApi/setCompanyMember';
@@ -206,20 +199,6 @@ function CompanyMemberList (props) {
         getCompanyMemberList(searchDto);
     },[]);
 
-    useEffect(() => {
-    }, [originalMemberList]);
-
-    /*const modifyClick = (userSn) => {
-        const selectedUser = originalMemberList.find(item => item.userSn == userSn);
-        if (sessionUser) {
-            const updatedData ={
-                ...selectedUser,
-            };
-            setModalData(updatedData);
-            ComScript.openModal("modifyModal");
-        } else {
-        }
-    };*/
 
     const modifyClick = (userSn) => {
         const getNormalMemberUrl = "/memberApi/getNormalMember";
@@ -237,8 +216,11 @@ function CompanyMemberList (props) {
             getNormalMemberUrl,
             requestOptions,
             (resp) => {
-                console.log(resp.result.member)
-                setModalData(resp.result.member);
+                const decodedPhoneNumber = decodePhoneNumber(resp.result.member.mblTelno);
+                setModalData({
+                    ...resp.result.member,
+                    mblTelno: decodedPhoneNumber,
+                });
                 ComScript.openModal("modifyModal");
             },
             (error) => {
@@ -260,58 +242,58 @@ function CompanyMemberList (props) {
             <div className="titleWrap type5 left">
                 <p className="tt1">산하 직원 정보</p>
             </div>
-            <div className="cateWrap">
-                <ul className="cateList">
-                    <li className="inputBox type1">
-                        <p className="title">키워드</p>
-                        <div className="itemBox5">
-                            <select
-                                className="selectGroup"
-                                id="searchType"
-                                name="searchType"
-                                title="검색유형"
-                                ref={searchTypeRef}
-                                onChange={(e) => {
-                                    setSearchDto({...searchDto, searchType: e.target.value})
-                                }}
-                            >
-                                <option value="">전체</option>
-                                <option value="userId">아이디</option>
-                                <option value="kornFlnm">성명</option>
-                            </select>
-                        </div>
-                    </li>
-                    <li className="searchBox inputBox type1" style={{width: "100%"}}>
-                        <label className="input">
-                            <input
-                                type="text"
-                                name="searchVal"
-                                defaultValue={searchDto.searchVal}
-                                placeholder=""
-                                ref={searchValRef}
-                                onChange={(e) => {
-                                    setSearchDto({...searchDto, searchVal: e.target.value})
-                                }}
-                                onKeyDown={activeEnter}
-                            />
-                        </label>
-                    </li>
-                </ul>
-                <div className="rightBtn">
-                    <button
-                        type="button"
-                        className="searchBtn btn btn1 point"
-                        onClick={(e) => {
-                            e.preventDefault();
-                            getCompanyMemberList({
-                                ...searchDto,
-                                pageIndex: 1
-                            });
-                        }}
-                    >
-                        <div className="icon"></div>
-                    </button>
-                </div>
+            <div className="cateWrap5">
+                    <ul className="cateList">
+                        <li className="inputBox type1">
+                            <p className="title">키워드</p>
+                            <div className="itemBox5">
+                                <select
+                                    className="selectGroup"
+                                    id="searchType"
+                                    name="searchType"
+                                    title="검색유형"
+                                    ref={searchTypeRef}
+                                    onChange={(e) => {
+                                        setSearchDto({...searchDto, searchType: e.target.value})
+                                    }}
+                                >
+                                    <option value="">전체</option>
+                                    <option value="userId">아이디</option>
+                                    <option value="kornFlnm">성명</option>
+                                </select>
+                            </div>
+                        </li>
+                        <li className="searchBox inputBox type1" style={{width: "100%"}}>
+                            <label className="input">
+                                <input
+                                    type="text"
+                                    name="searchVal"
+                                    defaultValue={searchDto.searchVal}
+                                    placeholder=""
+                                    ref={searchValRef}
+                                    onChange={(e) => {
+                                        setSearchDto({...searchDto, searchVal: e.target.value})
+                                    }}
+                                    onKeyDown={activeEnter}
+                                />
+                            </label>
+                        </li>
+                    </ul>
+                    <div className="rightBtn">
+                        <button
+                            type="button"
+                            className="searchBtn btn btn1 point"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                getCompanyMemberList({
+                                    ...searchDto,
+                                    pageIndex: 1
+                                });
+                            }}
+                        >
+                            <div className="icon"></div>
+                        </button>
+                    </div>
             </div>
             <div className="topBox">
                 <p className="resultText"><span className="red">{paginationInfo?.totalRecordCount}</span>건의 회원 정보가
@@ -349,10 +331,7 @@ function CompanyMemberList (props) {
                 />
             </div>
             <CompanyModifyMember
-                data={modalData}
-                 onSave={() => {
-                 getCompanyMemberList();
-            }}/>
+                data={modalData}/>
         </div>
     );
 }
