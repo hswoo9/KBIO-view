@@ -34,12 +34,12 @@ const EgovSignUpComplete = () => {
 
                 <div className="titleWrap type1" data-aos="fade-up" data-aos-duration="1500">
                     <p className="tt1">회원가입 완료</p>
-                    <strong className="tt2">축하합니다! 회원가입이 성공적으로 완료되었습니다.</strong>
+                    <strong className="tt2">축하합니다! 회원가입 신청이 성공적으로 완료되었습니다.</strong>
                 </div>
 
                 <div className="titleWrap type1" data-aos="fade-up" data-aos-duration="1500">
                     <p className="success_message">
-                        이제 로그인 후 서비스를 이용하실 수 있습니다.
+                        관리자 승인 이 후 로그인이 가능합니다.
                     </p>
                 </div>
 
