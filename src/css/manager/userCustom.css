@@ -397,3 +397,12 @@ button:focus { outline: 2px solid black;}
 .modalCon.companyModal .boxWrap .diffiBox .cont .listBox .inputBox {width: 100%;}
 .modalCon.companyModal .boxWrap .diffiBox .writeBtn {width: 100%; max-width: none;}
 .modalCon.companyModal .boxWrap .diffiBox .inputBox.type2 .fileName {flex-direction: column;}
+
+
+.container .cateWrap5 {display: flex; gap: 8px; align-items: flex-end;}
+.container .cateWrap5 .cateList {display: flex; gap: 8px; align-items: flex-end; width: 100%;}
+.container .cateWrap5 .cateList > li {width:  100%;}
+.container .cateWrap5 .cateList .inputBox:not(.searchBox) {max-width: 240px;}
+.container .cateWrap5 .rightBtn {display: flex; gap: 8px; flex: none;}
+.container .cateWrap5 .rightBtn .refreshBtn .icon {background-image: url(@/assets/images/ico_refresh_white.svg);}
+.container .cateWrap5 .rightBtn .searchBtn .icon {background-image: url(@/assets/images/ico_search_white.svg);}

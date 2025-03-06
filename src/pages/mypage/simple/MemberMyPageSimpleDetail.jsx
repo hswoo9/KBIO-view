@@ -574,7 +574,7 @@ function MemberMyPageSimpleDetail(props) {
                                     <p>처리완료</p>
                                 </div>
                             )}
-                            <p className="tt1">컨설팅의뢰</p>
+                            <p className="tt1">간편상담의뢰</p>
                         </div>
                         {cnsltDsctnList}
                     </div>

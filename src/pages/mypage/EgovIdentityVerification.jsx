@@ -63,12 +63,12 @@ const EgovIdentityVerification = () => {
 
                 <div className="authenBox" data-aos="fade-up" data-aos-duration="1500">
                     <div className="selectBox">
-                        <button type="button" className="pass" onClick={handleNext}>
+                        {/*<button type="button" className="pass" onClick={handleNext}>
                             <figure className="imgBox">
                                 <img src={passImage} alt="pass images"/>
                             </figure>
                             <p className="tt">통신사 PASS</p>
-                        </button>
+                        </button>*/}
                         <button type="button" className="moblie" onClick={handleNext}>
                             <figure className="imgBox">
                                 <img src={mobileImage} alt="mobile ID"/>

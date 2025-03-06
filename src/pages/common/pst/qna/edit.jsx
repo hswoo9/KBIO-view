@@ -335,7 +335,7 @@ function setCommonPst(props) {
               <ul className="listBox" data-aos="fade-up" data-aos-duration="1500">
                 <li className="textBox width3">
                   <p className="title">작성자</p>
-                  <p className="text">김덕배</p>
+                  <p className="text">{sessionUser?.name}</p>
                 </li>
                 <li className="textBox width3">
                   <p className="title">작성일</p>
