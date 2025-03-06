@@ -31,15 +31,6 @@ function ManagerOrganizationChartList(props) {
     const cndRef = useRef();
     const wrdRef = useRef();
 
-    const [saveEvent, setSaveEvent] = useState({});
-    useEffect(() => {
-        if(saveEvent.save){
-            if(saveEvent.mode == "delete"){
-                delCdGroupData(saveEvent);
-            }
-        }
-    }, [saveEvent]);
-
     const searchHandle = () => {
         getOrgchtList(searchCondition);
     }

@@ -79,7 +79,7 @@ function RelatedList() {
                                     <figure>
                                         {item.tblComFile != null ? (
                                             <img
-                                                src={`http://133.186.250.158${item.tblComFile.atchFilePathNm}/${item.tblComFile.strgFileNm}.${item.tblComFile.atchFileExtnNm}`}
+                                                src={`http://133.186.250.158${item.tblComFile.atchFilePathNm}/${item.tblComFile.strgFileNm}.${item.tblComFile.atchFileExtnNm}`} width="44" height="44"
                                                 alt={`${item.tblRelInst.relInstNm}_로고`}
                                             />
                                         ) : (

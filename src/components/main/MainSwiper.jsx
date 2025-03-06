@@ -66,6 +66,9 @@ const MainSwiper = ({data}) => {
                             src={`${window.location.protocol}//133.186.250.158${item.tblComFile.atchFilePathNm}/${item.tblComFile.strgFileNm}.${item.tblComFile.atchFileExtnNm}`}
                             alt={item.tblMvnEnt.mvnEntNm}
                             loading="lazy"
+                            style={{
+                                maxWidth: "100px"
+                            }}
                         />
                     </figure>
                     <div className="textBox">
@@ -99,6 +102,9 @@ const MainSwiper = ({data}) => {
                                 src={`${window.location.protocol}//133.186.250.158${item.tblComFile.atchFilePathNm}/${item.tblComFile.strgFileNm}.${item.tblComFile.atchFileExtnNm}`}
                                 alt={item.tblMvnEnt.mvnEntNm}
                                 loading="lazy"
+                                style={{
+                                    maxWidth: "100px"
+                                }}
                             />
                         </figure>
                         <div className="textBox">
@@ -118,6 +124,9 @@ const MainSwiper = ({data}) => {
                                 src={`${window.location.protocol}//133.186.250.158${item.tblComFile.atchFilePathNm}/${item.tblComFile.strgFileNm}.${item.tblComFile.atchFileExtnNm}`}
                                 alt={item.tblMvnEnt.mvnEntNm}
                                 loading="lazy"
+                                style={{
+                                    maxWidth: "100px"
+                                }}
                             />
                         </figure>
                         <div className="textBox">

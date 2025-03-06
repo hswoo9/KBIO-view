@@ -146,6 +146,8 @@ function OperationalRelatedMember(props) {
                                 <img
                                     src={`http://133.186.250.158${selectedFiles.atchFilePathNm}/${selectedFiles.strgFileNm}.${selectedFiles.atchFileExtnNm}`}
                                     alt="image"
+                                    width="200"
+                                    height="60"
                                 />
                             ) : (
                                 <img src="" alt="defaultImage" />
