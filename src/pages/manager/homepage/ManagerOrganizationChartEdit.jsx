@@ -85,7 +85,7 @@ function ManagerAccessList(props) {
 
     const delOrgchtData = useCallback(
         (orgchtData) => {
-            const requestURL = "/codeApi/setComCdDel";
+            const requestURL = "/orgchtApi/delOrgcht";
             const requestOptions = {
                 method: "POST",
                 headers: {
@@ -141,7 +141,11 @@ function ManagerAccessList(props) {
             cancelButtonText: "취소"
         }).then((result) => {
             if(result.isConfirmed) {
-                navigate({ pathname: URL.MANAGER_HOMEPAGE_ORGANIZATION_CHART_LIST });
+                setSaveEvent({
+                    ...saveEvent,
+                    save: true,
+                    mode: "delete"
+                });
             } else {
                 //취소
             }
