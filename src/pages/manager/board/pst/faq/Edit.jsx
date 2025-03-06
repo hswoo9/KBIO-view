@@ -199,7 +199,7 @@ function setPst(props) {
 
     const formData = new FormData();
     for (let key in pstDetail) {
-      if(pstDetail[key] != null && key != "pstFiles" && key != "tblUser"){
+      if(pstDetail[key] != null && key != "pstFiles" && key != "tblUser" && key != "pstCmnt" && key != "answer"){
         formData.append(key, pstDetail[key]);
       }
     }

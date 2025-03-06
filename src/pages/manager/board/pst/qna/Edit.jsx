@@ -209,7 +209,7 @@ function setPst(props) {
 
     const formData = new FormData();
     for (let key in pstDetail) {
-      if(pstDetail[key] != null && key != "pstFiles" && key != "tblUser"){
+      if(pstDetail[key] != null && key != "pstFiles" && key != "tblUser" && key != "pstCmnt" && key != "answer"){
         formData.append(key, pstDetail[key]);
       }
     }
@@ -466,25 +466,25 @@ function setPst(props) {
                         </select>
                       </div>
                     </li>
-                    <li className="inputBox type1 width2">
-                      <label className="title essential" htmlFor="prvtPswd"><small>비밀번호</small></label>
-                      <div className="input">
-                        <form>
-                          <input type="password"
-                                 name="prvtPswd"
-                                 title=""
-                                 id="prvtPswd"
-                                 placeholder="비밀번호"
-                                 autoComplete="off"
-                                 defaultValue={pstDetail.prvtPswd}
-                                 onChange={(e) =>
-                                     setPstDetail({...pstDetail, prvtPswd: e.target.value})
-                                 }
-                                 disabled={pstDetail.rlsYn == "N"}
-                          />
-                        </form>
-                      </div>
-                    </li>
+                    {/*<li className="inputBox type1 width2">*/}
+                    {/*  <label className="title essential" htmlFor="prvtPswd"><small>비밀번호</small></label>*/}
+                    {/*  <div className="input">*/}
+                    {/*    <form>*/}
+                    {/*      <input type="password"*/}
+                    {/*             name="prvtPswd"*/}
+                    {/*             title=""*/}
+                    {/*             id="prvtPswd"*/}
+                    {/*             placeholder="비밀번호"*/}
+                    {/*             autoComplete="off"*/}
+                    {/*             defaultValue={pstDetail.prvtPswd}*/}
+                    {/*             onChange={(e) =>*/}
+                    {/*                 setPstDetail({...pstDetail, prvtPswd: e.target.value})*/}
+                    {/*             }*/}
+                    {/*             disabled={pstDetail.rlsYn == "N"}*/}
+                    {/*      />*/}
+                    {/*    </form>*/}
+                    {/*  </div>*/}
+                    {/*</li>*/}
                   </>
               )}
             </ul>
