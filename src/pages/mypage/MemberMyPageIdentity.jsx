@@ -82,11 +82,11 @@ const MemberMyPageIdentity = () => {
                     </div>
                     <div className="authenBox" data-aos="fade-up" data-aos-duration="1500">
                         <div className="selectBox">
-                            <button type="button" className="pass" onClick={handleImageClick}>
+                            {/*<button type="button" className="pass" onClick={handleImageClick}>
                             <figure className="imgBox"><img src={passImage} alt="pass images"/>
                                 </figure>
                                 <p className="tt">통신사 PASS</p>
-                            </button>
+                            </button>*/}
                             <button type="button" className="moblie" onClick={handleImageClick}>
                                 <figure className="imgBox"><img src={mobileImage} alt="pass images"/>
                                 </figure>
