@@ -199,6 +199,7 @@ const CompanyModifyMember = ({data}) => {
                                             onChange={(e) =>
                                                 setCompanyDetail({...companyMember, userId: e.target.value})
                                             }
+                                            readOnly
                                         />
                                     </div>
                                 </li>
