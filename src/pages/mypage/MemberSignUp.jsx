@@ -337,7 +337,6 @@ function MemberSignUp(props) {
     }
 
     try {
-      // Step 1: 로컬 데이터베이스에서 사업자 등록번호 조회
       const checkBusinessURL = '/memberApi/checkBusiness.do';
       const reqOptions = {
         method: "POST",
@@ -352,14 +351,28 @@ function MemberSignUp(props) {
       await EgovNet.requestFetch(checkBusinessURL, reqOptions, async function (resp) {
         if (resp.resultCode === 200) {
           const businessData = resp.result.businessData;
-          Swal.fire({
-            text: "해당 기업은 K-바이오 랩허브 입주기업입니다.",
-          });
+          const businessType = resp.result.businessType;
+
+          let message = "";
+          if (businessType === "입주기업") {
+            message = "해당 기업은 K-바이오 랩허브 입주기업입니다.";
+          } else if (businessType === "유관기관") {
+            message = "해당 기업은 K-바이오 랩허브 유관기관입니다.";
+          }
+
+          Swal.fire({ text: message });
+
+          if (
+              (memberDetail.mbrType === 1 && businessType !== "입주기업") ||
+              (memberDetail.mbrType === 3 && businessType !== "유관기관")
+          ) {
+            return;
+          }
 
           if (businessData) {
             setMemberDetail({
               ...memberDetail,
-              isResident: true,
+              isResident: businessType === "입주기업",
               mvnEntSn: businessData.mvnEntSn,
               mvnEntNm: businessData.mvnEntNm,
               relInstNm: businessData.relInstNm,
@@ -393,27 +406,18 @@ function MemberSignUp(props) {
                 b_no: [businessNumber.replace(/-/g, '')],
               });
 
-              const businessData = response.data[0];
-
               const businessStatus = response.data.data[0]?.b_stt_cd;
 
+              let statusMessage = "사업자가 존재하지 않습니다.";
               if (businessStatus === '01') {
-                Swal.fire({
-                  text: "사업자가 정상적으로 운영 중입니다.",
-                });
+                statusMessage = "사업자가 정상적으로 운영 중입니다.";
               } else if (businessStatus === '02') {
-                Swal.fire({
-                  text: "사업자가 휴업 중입니다.",
-                });
+                statusMessage = "사업자가 휴업 중입니다.";
               } else if (businessStatus === '03') {
-                Swal.fire({
-                  text: "사업자가 폐업 상태입니다.",
-                });
-              } else {
-                Swal.fire({
-                  text: "사업자가 존재하지 않습니다.",
-                });
+                statusMessage = "사업자가 폐업 상태입니다.";
               }
+
+              Swal.fire({ text: statusMessage });
             } catch (error) {
               Swal.fire({
                 text: "공공 API 요청 중 문제가 발생했습니다.",
@@ -1036,7 +1040,7 @@ function MemberSignUp(props) {
               <div className="tabBox type1">
                 <div className="bg hover"></div>
                 <ul className="list">
-                  <li className={memberDetail.mbrType === "입주기업" ? "active" : ""}>
+                  <li className={memberDetail.mbrType === 1 ? "active" : ""}>
                     <a href="#" onClick={() => {
                       setMemberDetail({
                         ...memberDetail,
@@ -1056,7 +1060,7 @@ function MemberSignUp(props) {
                       <span>입주기업</span>
                     </a>
                   </li>
-                  <li className={memberDetail.mbrType === "유관기관" ? "active" : ""}>
+                  <li className={memberDetail.mbrType === 3 ? "active" : ""}>
                     <a href="#" onClick={() => {
                       setMemberDetail({
                         ...memberDetail,
@@ -1076,7 +1080,7 @@ function MemberSignUp(props) {
                       <span>유관기관</span>
                     </a>
                   </li>
-                  <li className={memberDetail.mbrType === "비입주기업" ? "active" : ""}>
+                  <li className={memberDetail.mbrType === 4 ? "active" : ""}>
                     <a href="#" onClick={() => {
                       setMemberDetail({
                         ...memberDetail,
@@ -1096,7 +1100,7 @@ function MemberSignUp(props) {
                       <span>비입주기업</span>
                     </a>
                   </li>
-                  <li className={memberDetail.mbrType === "컨설턴트" ? "active" : ""}>
+                  <li className={memberDetail.mbrType === 2 ? "active" : ""}>
                     <a href="#" onClick={() => setMemberDetail({...memberDetail, mbrType: 2,})}>
                       <span>컨설턴트</span>
                     </a>
