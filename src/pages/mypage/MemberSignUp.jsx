@@ -32,6 +32,42 @@ function MemberSignUp(props) {
   const [memberDetail, setMemberDetail] = useState({
   });
 
+  const prevScrollY = useRef(0);
+
+  useEffect(() => {
+    const restoreScroll = () => {
+      window.scrollTo(0, prevScrollY.current);
+    };
+
+    setTimeout(restoreScroll, 0);
+  }, [memberDetail.mbrType]);
+
+  const handleMemberTypeChange = (type) => {
+    prevScrollY.current = window.scrollY;
+    setMemberDetail({
+      ...memberDetail,
+      mbrType: type,
+      bizRegNum1: '',
+      bizRegNum2: '',
+      bizRegNum3: '',
+      mvnEntNm: '',
+      rpsvNm: '',
+      clsNm: '',
+      entTelno: '',
+      bzentyEmlAddr: '',
+      address: '',
+      daddress: '',
+    });
+  };
+
+  const handleConsultantChange = () => {
+    prevScrollY.current = window.scrollY;
+    setMemberDetail({
+      ...memberDetail,
+      mbrType: 2,
+    });
+  };
+
 
   useEffect(() => {
     const script = document.createElement("script");
@@ -797,7 +833,7 @@ function MemberSignUp(props) {
   }, []);
 
   return (
-      <div id="container" className="container join_step step2">
+      <div id="container" className="container join_step step3">
         <div className="inner">
           <ul className="stepWrap" data-aos="fade-up" data-aos-duration="1500">
             <ul className="stepWrap" data-aos="fade-up" data-aos-duration="1500">
@@ -1041,67 +1077,22 @@ function MemberSignUp(props) {
                 <div className="bg hover"></div>
                 <ul className="list">
                   <li className={memberDetail.mbrType === 1 ? "active" : ""}>
-                    <a href="#" onClick={() => {
-                      setMemberDetail({
-                        ...memberDetail,
-                        mbrType: 1,
-                        bizRegNum1: '',
-                        bizRegNum2: '',
-                        bizRegNum3: '',
-                        mvnEntNm: '',
-                        rpsvNm: '',
-                        clsNm: '',
-                        entTelno: '',
-                        bzentyEmlAddr: '',
-                        address: '',
-                        daddress: '',
-                      });
-                    }}>
+                    <a href="#" onClick={() => handleMemberTypeChange(1)}>
                       <span>입주기업</span>
                     </a>
                   </li>
                   <li className={memberDetail.mbrType === 3 ? "active" : ""}>
-                    <a href="#" onClick={() => {
-                      setMemberDetail({
-                        ...memberDetail,
-                        mbrType: 3,
-                        bizRegNum1: '',
-                        bizRegNum2: '',
-                        bizRegNum3: '',
-                        mvnEntNm: '',
-                        rpsvNm: '',
-                        clsNm: '',
-                        entTelno: '',
-                        bzentyEmlAddr: '',
-                        address: '',
-                        daddress: '',
-                      });
-                    }}>
+                    <a href="#" onClick={() => handleMemberTypeChange(3)}>
                       <span>유관기관</span>
                     </a>
                   </li>
                   <li className={memberDetail.mbrType === 4 ? "active" : ""}>
-                    <a href="#" onClick={() => {
-                      setMemberDetail({
-                        ...memberDetail,
-                        mbrType: 4,
-                        bizRegNum1: '',
-                        bizRegNum2: '',
-                        bizRegNum3: '',
-                        mvnEntNm: '',
-                        rpsvNm: '',
-                        clsNm: '',
-                        entTelno: '',
-                        bzentyEmlAddr: '',
-                        address: '',
-                        daddress: '',
-                      });
-                    }}>
+                    <a href="#" onClick={() => handleMemberTypeChange(4)}>
                       <span>비입주기업</span>
                     </a>
                   </li>
                   <li className={memberDetail.mbrType === 2 ? "active" : ""}>
-                    <a href="#" onClick={() => setMemberDetail({...memberDetail, mbrType: 2,})}>
+                    <a href="#" onClick={handleConsultantChange}>
                       <span>컨설턴트</span>
                     </a>
                   </li>
@@ -1125,7 +1116,7 @@ function MemberSignUp(props) {
                               onChange={(e) => handleBusinessNumberChange(e, 'bizRegNum1')}
                           />
                         </label>
-                        <label>
+                        <label  style={{marginLeft: "5px"}}>
                           <input
                               type="text"
                               name="business_registration_number2"
@@ -1136,7 +1127,7 @@ function MemberSignUp(props) {
                               onChange={(e) => handleBusinessNumberChange(e, 'bizRegNum2')}
                           />
                         </label>
-                        <label>
+                        <label style={{marginLeft: "5px"}}>
                           <input
                               type="text"
                               name="business_registration_number3"
@@ -1267,7 +1258,7 @@ function MemberSignUp(props) {
                               onChange={(e) => handleBusinessNumberChange(e, 'bizRegNum1')}
                           />
                         </label>
-                        <label>
+                        <label style={{marginLeft: "5px"}}>
                           <input
                               type="text"
                               name="business_registration_number2"
@@ -1278,7 +1269,7 @@ function MemberSignUp(props) {
                               onChange={(e) => handleBusinessNumberChange(e, 'bizRegNum2')}
                           />
                         </label>
-                        <label>
+                        <label style={{marginLeft: "5px"}}>
                           <input
                               type="text"
                               name="business_registration_number3"
