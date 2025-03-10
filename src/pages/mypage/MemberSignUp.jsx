@@ -765,11 +765,16 @@ function MemberSignUp(props) {
     const insertMemURL = `/memberApi/insertMember`;
 
     formValidator(memberDetail).then((isValid) => {
-      if (!isValid) return; // 검증 실패 시 함수 종료
+      if (!isValid) return;
 
-      /*selectedFiles.map((file) => {
-        formData.append("files", file);
-      });*/
+      if (memberDetail.mbrType === 1 && !memberDetail.mvnEntNm) {
+        Swal.fire("입주기업 정보를 입력해 주세요.");
+        return;
+      }
+      if (memberDetail.mbrType === 3 && !memberDetail.relInstNm) {
+        Swal.fire("유관기관 정보를 입력해 주세요.");
+        return;
+      }
 
       selectedCertFiles.map((file) => {
         formData.append("certFiles", file);
