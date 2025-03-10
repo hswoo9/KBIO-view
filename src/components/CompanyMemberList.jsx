@@ -35,6 +35,7 @@ function CompanyMemberList (props) {
     );
 
 
+
     const searchTypeRef = useRef();
     const searchValRef = useRef();
 
@@ -42,6 +43,10 @@ function CompanyMemberList (props) {
         const decodedBytes = base64.toByteArray(encodedPhoneNumber);
         return new TextDecoder().decode(decodedBytes);
     };
+
+    useEffect(() => {
+        getCompanyMemberList(searchDto);
+    }, [searchDto]);
 
     const activeEnter = (e) => {
         if (e.key === "Enter") {
@@ -119,9 +124,6 @@ function CompanyMemberList (props) {
         [searchDto]
     );
 
-    useEffect(() => {
-        getCompanyMemberList(searchDto);
-    }, []);
 
     const setApprovalMember = (userSn) => {
         const setApprovalUrl = '/memberApi/setCompanyMember';
@@ -287,7 +289,9 @@ function CompanyMemberList (props) {
                                 e.preventDefault();
                                 getCompanyMemberList({
                                     ...searchDto,
-                                    pageIndex: 1
+                                    pageIndex: 1,
+                                    searchType: searchTypeRef.current.value,
+                                    searchVal: searchValRef.current.value,
                                 });
                             }}
                         >
@@ -325,7 +329,7 @@ function CompanyMemberList (props) {
                     moveToPage={(passedPage) => {
                         getCompanyMemberList({
                             ...searchDto,
-                            pageIndex: passedPage,
+                            pageIndex: passedPage
                         });
                     }}
                 />
