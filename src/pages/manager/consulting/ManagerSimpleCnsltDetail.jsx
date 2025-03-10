@@ -13,6 +13,7 @@ import base64 from 'base64-js';
 
 /* bootstrip */
 import { getSessionItem } from "@/utils/storage";
+import {fileDownLoad} from "@/components/CommonComponents";
 import {getComCdList} from "@/components/CommonComponents";
 import moment from "moment/moment.js";
 
@@ -196,7 +197,10 @@ function ManagerSimpleCnsltDetail(props) {
                                 <p style={{ textAlign: "left" }}>
                                     <label className="title" style={{cursor :"default"}}>첨부파일</label>
                                     {files.map((file, fileIndex) => (
-                                        <div key={fileIndex} style={{ cursor: "pointer" }} onClick={() => handleDownload(file)}>
+                                        /*<div key={fileIndex} style={{ cursor: "pointer" }} onClick={() => handleDownload(file)}>*/
+                                        <div  key={fileIndex} style={{ cursor: "pointer" }}
+                                              onClick={() => fileDownLoad(file.atchFileSn, file.atchFileNm)}
+                                              >
                                             {fileIndex + 1}. {file.atchFileNm}
                                         </div>
                                     ))}
