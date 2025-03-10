@@ -136,6 +136,16 @@ const CompanyModifyMember = ({data}) => {
             return false;
         }
 
+        if (!companyMember.addr) {
+            Swal.fire("주소를 입력해주세요.");
+            return false;
+        }
+
+        if (!companyMember.daddr) {
+            Swal.fire("상세주소를 입력해주세요.");
+            return false;
+        }
+
         setCompanyDetail({...companyMember});
 
 
