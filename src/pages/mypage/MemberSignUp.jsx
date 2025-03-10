@@ -1163,6 +1163,7 @@ function MemberSignUp(props) {
                             title="대표번호"
                             value={memberDetail.entTelno || ""}
                             onChange={(e) => setMemberDetail({...memberDetail, entTelno: e.target.value})}
+                            readOnly
                         />
                       </label>
                     </li>
