@@ -96,31 +96,35 @@ function EgovMainUser(props) {
             <div className="rightBox">
               <ul className="list">
                 <li>
-                  <a href="#">
+                  <a href="#" style={{pointerEvents: "none"}}>
                     <strong className="tt1">연구개발 장비 구축</strong>
                     <p className="tt2">바이오 연구개발 장비 및 <br/>시설 구축 오퍼레이터 상주 및 <br/>장비운용 관리</p>
-                    <figure className="icon"><img src={user_main_sec01_icon01} alt="icon image" loading="lazy"/></figure>
+                    <figure className="icon"><img src={user_main_sec01_icon01} alt="icon image" loading="lazy"/>
+                    </figure>
                   </a>
                 </li>
                 <li>
-                  <a href="#">
+                  <a href="#" style={{pointerEvents: "none"}}>
                     <strong className="tt1">네트워킹 플랫폼</strong>
                     <p className="tt2">산,학,연,병 업무 협력 <br/>플랫폼 운용 기술교류회 <br/>IR, 포럼 등 개최</p>
-                    <figure className="icon"><img src={user_main_sec01_icon02} alt="icon image" loading="lazy"/></figure>
+                    <figure className="icon"><img src={user_main_sec01_icon02} alt="icon image" loading="lazy"/>
+                    </figure>
                   </a>
                 </li>
                 <li>
-                  <a href="#">
+                  <a href="#" style={{pointerEvents: "none"}}>
                     <strong className="tt1">입주시설 구축</strong>
                     <p className="tt2">기업성장단계를 고려한 <br/>기업별 사무공간 및 <br/>공용 실험공간</p>
-                    <figure className="icon"><img src={user_main_sec01_icon03} alt="icon image" loading="lazy"/></figure>
+                    <figure className="icon"><img src={user_main_sec01_icon03} alt="icon image" loading="lazy"/>
+                    </figure>
                   </a>
                 </li>
                 <li>
-                  <a href="#">
+                  <a href="#" style={{pointerEvents: "none"}}>
                     <strong className="tt1">프로그램 운영</strong>
                     <p className="tt2">스타트업 기술사업화, <br/>편딩 및 투자 지원과 관련된 <br/>5개 프로그램 운영</p>
-                    <figure className="icon"><img src={user_main_sec01_icon04} alt="icon image" loading="lazy"/></figure>
+                    <figure className="icon"><img src={user_main_sec01_icon04} alt="icon image" loading="lazy"/>
+                    </figure>
                   </a>
                 </li>
               </ul>
