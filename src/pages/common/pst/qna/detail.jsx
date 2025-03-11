@@ -268,7 +268,7 @@ function commonPstDetail(props) {
                         </li>
                       </ul>
                       <div className="buttonBox">
-                        {bbs.ansPsbltyYn == "Y" && authrt.wrtAuthrt == "Y" && sessionUser.userSe == "ADM" && (
+                        {bbs.ansPsbltyYn == "Y" && authrt.wrtAuthrt == "Y" && sessionUser.userSe == "ADM" && !pst.answer && (
                             <Link
                                 to={URL.COMMON_PST_QNA_CREATE}
                                 state={{
@@ -289,7 +289,7 @@ function commonPstDetail(props) {
                               <span>답변</span>
                             </Link>
                         )}
-                        {(authrt.mdfcnAuthrt == "Y" || pst.creatrSn == sessionUser?.userSn) && (
+                        {(authrt.mdfcnAuthrt == "Y" && (sessionUser?.userSe === "ADM" || pst.creatrSn == sessionUser?.userSn)) && (
                             <Link
                                 to={URL.COMMON_PST_QNA_MODIFY}
                                 mode={CODE.MODE_MODIFY}
@@ -305,7 +305,7 @@ function commonPstDetail(props) {
                               <span>수정</span>
                             </Link>
                         )}
-                        {(authrt.delAuthrt == "Y" || pst.creatrSn == sessionUser?.userSn) && (
+                        {(authrt.delAuthrt == "Y" && (sessionUser?.userSe === "ADM" || pst.creatrSn == sessionUser?.userSn)) && (
                             <button type="button" className="clickBtn red"
                                     onClick={() => {
                                       setPstDel(pst.pstSn);

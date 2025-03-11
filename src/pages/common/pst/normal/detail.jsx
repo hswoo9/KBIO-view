@@ -305,17 +305,9 @@ function commonPstDetail(props) {
                 <tr>
                   <th>
                     <div className="titleBox">
-                      <div className="title">
-                        <p>
-                          {bbs.pstCtgryYn == "Y" && comCdList.length > 0 && (
-                              <>
-                                {comCdList.find(e => e.comCdSn == pst.pstClsf).comCdNm}
-                              </>
-                          )}
-                        </p>
-                      </div>
                       <strong className="title">{pst.pstTtl}</strong>
                       <ul className="bot">
+                        <li className="date"><p>{pst.pstClsfNm}</p></li>
                         <li className="date"><p>{moment(pst.frstCrtDt).format('YYYY-MM-DD')}</p></li>
                         <li className="name"><p>{pst.tblUser?.kornFlnm}</p></li>
                       </ul>
@@ -428,23 +420,23 @@ function commonPstDetail(props) {
                       </li>
                     </ul>
                     <div className="buttonBox">
-                      {bbs.ansPsbltyYn == "Y" && (
-                          <Link
-                              to={URL.COMMON_PST_NORMAL_CREATE}
-                              state={{
-                                bbsSn: pst.bbsSn,
-                                pstGroup: pst.pstGroup,
-                                upPstSn: pst.pstSn,
-                                menuSn: location.state?.menuSn,
-                                menuNmPath: location.state?.menuNmPath,
-                                thisMenuSn : location.state?.thisMenuSn,
-                              }}
-                          >
-                            <button type="button" className="clickBtn">
-                              답변
-                            </button>
-                          </Link>
-                      )}
+                      {/*{bbs.ansPsbltyYn == "Y" && authrt.wrtAuthrt == "Y" && sessionUser.userSe == "ADM" && (*/}
+                      {/*    <Link*/}
+                      {/*        to={URL.COMMON_PST_NORMAL_CREATE}*/}
+                      {/*        state={{*/}
+                      {/*          bbsSn: pst.bbsSn,*/}
+                      {/*          pstGroup: pst.pstGroup,*/}
+                      {/*          upPstSn: pst.pstSn,*/}
+                      {/*          menuSn: location.state?.menuSn,*/}
+                      {/*          menuNmPath: location.state?.menuNmPath,*/}
+                      {/*          thisMenuSn : location.state?.thisMenuSn,*/}
+                      {/*        }}*/}
+                      {/*    >*/}
+                      {/*      <button type="button" className="clickBtn">*/}
+                      {/*        답변*/}
+                      {/*      </button>*/}
+                      {/*    </Link>*/}
+                      {/*)}*/}
                       {/*{authrt.mdfcnAuthrt == "Y" && (
                           <Link
                               to={URL.COMMON_PST_NORMAL_MODIFY}
@@ -457,7 +449,7 @@ function commonPstDetail(props) {
                             <span>수정</span>
                           </Link>
                       )}*/}
-                      {authrt.delAuthrt == "Y" && (
+                      {authrt.delAuthrt == "Y" && (sessionUser?.userSe === "ADM" || pst.creatrSn == sessionUser?.userSn) && (
                           <button type="button" className="clickBtn red"
                                   onClick={() => {
                                     setPstDel(pst.pstSn);
