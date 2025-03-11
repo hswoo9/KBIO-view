@@ -90,7 +90,7 @@ function ManagerStatisticsUser(props) {
             let type4CntList = [];
 
             const dataList = categories.map(day => {
-                const dayFormat = day.slice(0, -1);
+                const dayFormat = day.slice(0, -1).padStart(2, '0');
 
                 const isFuture = searchDto.searchYear + "-" + searchDto.searchMonth  + "-" + dayFormat > today;
                 const item = isFuture ? {day, mbrType1Cnt: 0, mbrType2Cnt: 0, mbrType3Cnt: 0, mbrType4Cnt: 0 }

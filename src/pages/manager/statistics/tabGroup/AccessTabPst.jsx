@@ -37,8 +37,7 @@ function AccessTabPst(props) {
 
             let totalAccessCnt = 0;
             const dataList = categories.map(day => {
-                const dayFormat = day.slice(0, -1);
-
+                const dayFormat = day.slice(0, -1).padStart(2, '0');
                 /** chart Item */
                 const chartItem =  statisticsMap.get(dayFormat) ? statisticsMap.get(dayFormat).cnt : 0
                 setCnt(cnt => [...cnt, chartItem])

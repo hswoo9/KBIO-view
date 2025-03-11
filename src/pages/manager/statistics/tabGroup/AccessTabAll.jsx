@@ -76,9 +76,8 @@ function AccessTabAll(props) {
             let type2CntList = [];
             let type3CntList = [];
             let type4CntList = [];
-
             const dataList = categories.map(day => {
-                const dayFormat = day.slice(0, -1);
+                const dayFormat = day.slice(0, -1).padStart(2, '0');
 
                 const item = statisticsMap.get(dayFormat) || {
                     day,

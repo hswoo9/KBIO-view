@@ -129,8 +129,8 @@ function commonPstDetail(props) {
                   <tr>
                     <th>
                       <div className="titleBox">
-                        <div className={pst.answer === "Y" ? "state complete" : "state waiting"}>
-                          <p>{pst.answer === "Y" ? "답변완료" : "답변대기"}</p>
+                        <div className={pst.answer ? "state complete" : "state waiting"}>
+                          <p>{pst.answer ? "답변완료" : "답변대기"}</p>
                         </div>
                         <strong className="title">
                           {pst.pstTtl}
@@ -185,7 +185,7 @@ function commonPstDetail(props) {
                     <td>
                       <div className="textBox" dangerouslySetInnerHTML={{__html: pst.pstCn}}>
                       </div>
-                      {pst.answer == "Y" && (
+                      {pst.answer && (
                           <div className="answerBox">
                             <div className="titleBox">
                               <div className="state">

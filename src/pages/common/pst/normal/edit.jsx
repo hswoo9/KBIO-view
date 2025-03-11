@@ -200,7 +200,7 @@ function setCommonPst(props) {
 
     const formData = new FormData();
     for (let key in pst) {
-      if(pst[key] != null && key != "pstFiles" && key != "tblUser"){
+      if(pst[key] != null && key != "pstFiles" && key != "tblUser" && key != "pstCmnt" && key != "answer"){
         formData.append(key, pst[key]);
       }
     }

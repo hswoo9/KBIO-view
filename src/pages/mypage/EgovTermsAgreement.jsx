@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import URL from "@/constants/url";
 import AOS from "aos";
+import Swal from "sweetalert2";
 
 const EgovTermsAgreement = () => {
     const [isAgreed, setIsAgreed] = useState(false);
@@ -22,10 +23,9 @@ const EgovTermsAgreement = () => {
 
     const handleNext = () => {
         if (!isAgreed) {
-            alert("약관에 동의해야 회원가입을 진행할 수 있습니다.");
+            Swal.fire("약관에 동의해야 회원가입을 진행할 수 있습니다.");
             return;
         }
-        // navigate(URL.MYPAGE_CREATE); // 회원가입 폼 페이지로 이동
         if (location.state?.signupType) {
             navigate(URL.IDENTITY_VERIFICATION, { state: { signupType } });
         }else{
@@ -101,7 +101,6 @@ const EgovTermsAgreement = () => {
                                     isAgreed ? "" : "btn_disabled"
                                 }`}
                                 onClick={handleNext}
-                                disabled={!isAgreed}
                         ><span>다음</span></button>
                         <button type="button" className="clickBtn white" onClick={() => navigate(URL.SIGNUP_CHOICE)}><span>뒤로가기</span></button>
                     </div>

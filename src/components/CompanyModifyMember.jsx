@@ -136,6 +136,16 @@ const CompanyModifyMember = ({data}) => {
             return false;
         }
 
+        if (!companyMember.addr) {
+            Swal.fire("주소를 입력해주세요.");
+            return false;
+        }
+
+        if (!companyMember.daddr) {
+            Swal.fire("상세주소를 입력해주세요.");
+            return false;
+        }
+
         setCompanyDetail({...companyMember});
 
 
@@ -199,6 +209,7 @@ const CompanyModifyMember = ({data}) => {
                                             onChange={(e) =>
                                                 setCompanyDetail({...companyMember, userId: e.target.value})
                                             }
+                                            readOnly
                                         />
                                     </div>
                                 </li>
@@ -219,7 +230,7 @@ const CompanyModifyMember = ({data}) => {
                                     </div>
                                 </li>
 
-                                <li className="inputBox type1 width2">
+                                <li className="inputBox type1 width2 left">
                                     <label className="title"><small>성명</small></label>
                                     <div className="input">
                                         <input
@@ -245,7 +256,7 @@ const CompanyModifyMember = ({data}) => {
                                     </div>
                                 </li>
 
-                                <li className="inputBox type1 width2">
+                                <li className="inputBox type1 width2 left">
                                     <label className="title"><small>이메일</small></label>
                                     <div className="input">
                                         <input
@@ -290,7 +301,7 @@ const CompanyModifyMember = ({data}) => {
                                         /></div>
                                 </li>
 
-                                <li className="inputBox type1 width2">
+                                <li className="inputBox type1 width2 left">
                                     <span className="title">상세주소</span>
                                     <div className="input">
                                         <input

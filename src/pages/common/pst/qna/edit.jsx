@@ -206,7 +206,7 @@ function setCommonPst(props) {
 
     const formData = new FormData();
     for (let key in pst) {
-      if(pst[key] != null && key != "pstFiles" && key != "tblUser"){
+      if(pst[key] != null && key != "pstFiles" && key != "tblUser" && key != "pstCmnt" && key != "answer"){
         formData.append(key, pst[key]);
       }
     }
@@ -335,7 +335,7 @@ function setCommonPst(props) {
               <ul className="listBox" data-aos="fade-up" data-aos-duration="1500">
                 <li className="textBox width3">
                   <p className="title">작성자</p>
-                  <p className="text">{sessionUser?.name}</p>
+                  <p className="text">{pst.tblUser?.kornFlnm || sessionUser.name}</p>
                 </li>
                 <li className="textBox width3">
                   <p className="title">작성일</p>
