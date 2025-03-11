@@ -62,6 +62,9 @@ function EgovPaging(props) {
       paginationTag.push(previousPageTag);
     //}
 
+  if(currentLastPage === 0){
+      currentLastPage = 1;
+  }
     for (let i = currentFirstPage; i <= currentLastPage; i++) {
       if (i === currentPageNo) {
         // 현재 페이지
@@ -98,7 +101,7 @@ function EgovPaging(props) {
       const nextPageIndex =
         currentLastPage + 1 < totalPageCount
           ? currentLastPage + 1
-          : totalPageCount;
+          : totalPageCount === 0 ? 1 : totalPageCount;
       const nextPageTag = (
         <li key="np" className="next arrow">
           <NavLink
@@ -121,11 +124,12 @@ function EgovPaging(props) {
       paginationTag.push(nextPageTag);
 
       // 마지막 페이지 이동
+      const lastPageNumber = totalPageCount === 0 ? 1 : totalPageCount;
       const lastPageTag = (
         <li key="lp" className="last arrow">
           <NavLink
             onClick={() => {
-              props.moveToPage(totalPageCount);
+              props.moveToPage(lastPageNumber);
             }}
             state={{
                 bbsSn: location.state?.bbsSn,
