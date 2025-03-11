@@ -310,19 +310,23 @@ function commonPstList(props) {
                             }}
                         />
                         {authrt.wrtAuthrt == "Y" && sessionUser && (
-                            <NavLink
-                                to={URL.COMMON_PST_QNA_CREATE}
-                                state={{
-                                    bbsSn: bbs.bbsSn,
-                                    menuSn: location.state?.menuSn,
-                                    menuNmPath: location.state?.menuNmPath,
-                                    thisMenuSn : location.state?.thisMenuSn,
-                                }}
-                                mode={CODE.MODE_CREATE}
-                                style={{float: "right"}}
-                            >
-                                <button type="button" className="writeBtn clickBtn"><span>등록</span></button>
-                            </NavLink>
+                            <div className="buttonBox" style={{float: "right"}}>
+                                <NavLink
+                                    to={URL.COMMON_PST_QNA_CREATE}
+                                    state={{
+                                        bbsSn: bbs.bbsSn,
+                                        menuSn: location.state?.menuSn,
+                                        menuNmPath: location.state?.menuNmPath,
+                                        thisMenuSn: location.state?.thisMenuSn,
+                                    }}
+                                    mode={CODE.MODE_CREATE}
+                                    className="clickBtn editBtn"
+                                    style={{width:"7rem"}}
+                                >
+                                    <div className="icon"></div>
+                                    <span>등록</span>
+                                </NavLink>
+                            </div>
                         )}
                     </div>
                 </div>
