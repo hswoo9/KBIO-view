@@ -48,7 +48,8 @@ function ManagerPrivacyList(props) {
     };
 
     const dataExcelDownload = useCallback(() => {
-        let excelParams = searchDto;
+        //let excelParams = searchDto;
+        let excelParams = { ...searchDto };
         excelParams.pageIndex = 1;
         excelParams.pageUnit = paginationInfo?.totalRecordCount || 9999999999
 

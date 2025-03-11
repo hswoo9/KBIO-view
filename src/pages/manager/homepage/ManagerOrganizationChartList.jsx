@@ -51,7 +51,8 @@ function ManagerOrganizationChartList(props) {
     }
 
     const dataExcelDownload = useCallback(() => {
-        let excelParams = searchCondition;
+        //let excelParams = searchCondition;
+        let excelParams = { ...searchCondition };
         excelParams.pageIndex = 1;
         excelParams.pageUnit = paginationInfo?.totalRecordCount || 9999999999
 
