@@ -87,6 +87,7 @@ function OperationalSupport(props) {
                                     ComScript.closeModal("uploadModal");
                                     getRcList(searchDto);
                                 } else {
+                                    Swal.fire("엑셀파일의 양식을 확인해주세요.");
                                 }
                             }
                         )
