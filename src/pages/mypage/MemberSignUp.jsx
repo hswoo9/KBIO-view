@@ -163,9 +163,7 @@ function MemberSignUp(props) {
   const [acceptFileTypes, setAcceptFileTypes] = useState('jpg,jpeg,png,gif,bmp,tiff,tif,webp,svg,ico,heic,avif,pdf');
   const [selectedImgFile, setSelectedImgFile] = useState([]);
   const [selectedFiles, setSelectedFiles] = useState([]);
-  const [selectedCertFiles, setSelectedCertFiles] = useState([]);
-  const [selectedCareerFiles, setSelectedCareerFiles] = useState([]);
-  const [selectedAcbgFiles, setSelectedAcbgFiles] = useState([]);
+
 
   const allowedImgExtensions = acceptImgFileTypes.split(',');
   const allowedExtensions = acceptFileTypes.split(',');
@@ -193,15 +191,26 @@ function MemberSignUp(props) {
 
 
   };
+  /**
+   * 컨설턴트 자격증, 경력, 학력
+   * **/
+  //컨설턴트 증빙파일
+  const [selectedCertFiles, setSelectedCertFiles] = useState([]);
+  const [selectedCareerFiles, setSelectedCareerFiles] = useState([]);
+  const [selectedAcbgFiles, setSelectedAcbgFiles] = useState([]);
 
   //자격증정보
   const [certificates, setCertificates] = useState([]);
   const addCertificate = () => {
     const newId = `certificate_${Date.now()}`;
     setCertificates([...certificates, { id: newId, qlfcLcnsNm : "", pblcnInstNm : "", acqsYmd : "" }]);
+    setSelectedCertFiles([...selectedCertFiles,{fileIndex:newId}]);
   };
   const removeCertificate = (id) => {
     setCertificates(certificates.filter((cert) => cert.id !== id));
+    setSelectedCertFiles((prevFiles) =>
+        prevFiles.filter((file)=>file.fileIndex !== id)
+    );
   };
 
   //경력정보
@@ -209,9 +218,13 @@ function MemberSignUp(props) {
   const addCareer = () => {
     const newId = `career_${Date.now()}`;
     setCareer([...careers, { id: newId, ogdpCoNm : "", ogdpJbpsNm : "", jncmpYmd: "", rsgntnYmd: ""}]);
+    setSelectedCareerFiles([...selectedCareerFiles,{fileIndex:newId}]);
   };
   const removeCareer = (id) => {
     setCareer(careers.filter((career) => career.id !== id));
+    setSelectedCareerFiles((prevFiles) =>
+      prevFiles.filter((file)=>file.fileIndex !== id)
+    );
   };
 
   //학력정보
@@ -219,9 +232,13 @@ function MemberSignUp(props) {
   const addAcbg = () => {
     const newId = `career_${Date.now()}`;
     setAcbg([...acbges, { id: newId, schlNm : "", scsbjtNm : "", mjrNm: "", dgrNm : "", grdtnYmd : "" }]);
+    setSelectedAcbgFiles([...selectedAcbgFiles,{fileIndex:newId}]);
   };
   const removeAcbg = (id) => {
     setAcbg(acbges.filter((acbg) => acbg.id !== id));
+    setSelectedAcbgFiles((prevFiles) =>
+        prevFiles.filter((file)=>file.fileIndex !== id)
+    );
   };
 
   const handleInputChange = (e, id, type, field) => {
@@ -236,17 +253,12 @@ function MemberSignUp(props) {
           item.id === id ? { ...item, [field]: value } : item
       );
       setList(updatedList);
-      console.log(updatedList); // 변환된 값 확인
+      //console.log(updatedList); // 변환된 값 확인
     };
 
     if (type === "cert") updateList(certificates, setCertificates);
     if (type === "career") updateList(careers, setCareer);
     if (type === "acbg") updateList(acbges, setAcbg);
-  };
-
-  const formatDate = (dateString) => {
-    if (!dateString) return "";
-    return dateString.replace(/(\d{4})(\d{2})(\d{2})/, "$1-$2-$3");
   };
 
   //컨설턴트 증빙파일들
@@ -277,35 +289,28 @@ function MemberSignUp(props) {
         /**여기에 받아온 id를 앞의 이름과 date번호로 분리해서 자격,경력,학력별로 저장**/
 
         if (id === "cert") {
-          /*setSelectedCertFiles((prev) => {
-            const updatedFiles = [...prev];
-            updatedFiles[parseInt(id.replace("cert", ""), 10) - 1] = file;
-            return updatedFiles;
-          });*/
           setSelectedCertFiles((prevFiles) => {
             const updatedFiles = [...prevFiles]; // 기존 배열 복사
-            updatedFiles[index] = file; // 배열의 인덱스를 이용해 해당 자격증 파일을 추가
+            //updatedFiles[index] = file; // 배열의 인덱스를 이용해 해당 자격증 파일을 추가
+            updatedFiles[index] = { ...updatedFiles[index], file };
             return updatedFiles;
           });
         } else if (id === "career") {
           setSelectedCareerFiles((prevFiles) => {
             const updatedFiles = [...prevFiles]; // 기존 배열 복사
-            updatedFiles[index] = file; // 배열의 인덱스를 이용해 해당 자격증 파일을 추가
+            //updatedFiles[index] = file; // 배열의 인덱스를 이용해 해당 자격증 파일을 추가
+            updatedFiles[index] = { ...updatedFiles[index], file };
             return updatedFiles;
           });
         } else if (id === "acbg") {
           setSelectedAcbgFiles((prevFiles) => {
             const updatedFiles = [...prevFiles]; // 기존 배열 복사
-            updatedFiles[index] = file; // 배열의 인덱스를 이용해 해당 자격증 파일을 추가
+            //updatedFiles[index] = file; // 배열의 인덱스를 이용해 해당 자격증 파일을 추가
+            updatedFiles[index] = { ...updatedFiles[index], file };
             return updatedFiles;
           });
         }
 
-        /*setSelectedFiles((prevFiles) => {
-          const updatedFiles = [...prevFiles]; // 기존 배열 복사
-          updatedFiles[id - 1] = file; // 배열의 인덱스를 이용해 해당 자격증 파일을 추가
-          return updatedFiles;
-        });*/
       }else{
         Swal.fire({
           title: "허용되지 않은 확장자입니다.",
@@ -320,6 +325,13 @@ function MemberSignUp(props) {
     }
 
   }
+
+  const formatDate = (dateString) => {
+    if (!dateString) return "";
+    return dateString.replace(/(\d{4})(\d{2})(\d{2})/, "$1-$2-$3");
+  };
+
+
 
 
 
@@ -740,23 +752,86 @@ function MemberSignUp(props) {
 
   const formObjValidator = (checkRef) => {
     if (checkRef.current[0].value === "") {
-      alert("회원ID는 필수 값입니다.");
+      Swal.fire("회원ID는 필수 값입니다.");
       return false;
     }
     if (checkRef.current[1].value === "") {
       memberDetail.password = ""; //수정 시 암호값을 입력하지 않으면 공백으로처리
     }
     if (checkRef.current[2].value === "") {
-      alert("회원명은 필수 값입니다.");
+      Swal.fire("회원명은 필수 값입니다.");
       return false;
     }
     const phonenumRegex = /^[0-9\-]+$/;
     if (!phonenumRegex.test(formData.get("phonenum"))) {
-      alert("전화번호는 숫자와 하이픈(-)만 포함할 수 있습니다.");
+      Swal.fire("전화번호는 숫자와 하이픈(-)만 포함할 수 있습니다.");
       return false;
     }
     return true;
   };
+
+  // 자격증 정보 유효성 검사
+  const validateCertificates = () => {
+    for(let i = 0; i<selectedCertFiles.length; i++){
+      const fileObj = selectedCertFiles[i];
+      if(!fileObj.file){
+        Swal.fire(`자격증 증빙파일 중 누락된 값이 있습니다.`);
+        return false;
+      }
+    }
+
+    for (let i = 0; i < certificates.length; i++) {
+      const cert = certificates[i];
+      if (cert.qlfcLcnsNm === "" || cert.pblcnInstNm === "" || cert.acqsYmd === "") {
+        Swal.fire(`자격증 정보 항목 중 누락된 값이 있습니다.`);
+        return false;
+      }
+    }
+    return true;
+  };
+
+// 경력 정보 유효성 검사
+  const validateCareers = () => {
+    for(let i = 0; i<selectedCareerFiles.length; i++){
+      const fileObj = selectedCareerFiles[i];
+      if(!fileObj.file){
+        Swal.fire(`경력 증빙파일 중 누락된 값이 있습니다.`);
+        return false;
+      }
+    }
+
+    for (let i = 0; i < careers.length; i++) {
+      const career = careers[i];
+      if (career.ogdpCoNm === "" || career.ogdpJbpsNm === "" || career.jncmpYmd === "" || career.rsgntnYmd === "") {
+        Swal.fire(`경력 정보 항목 중 누락된 값이 있습니다.`);
+        return false;
+      }
+    }
+    return true;
+  };
+
+// 학력 정보 유효성 검사
+  const validateAcbges = () => {
+    for(let i = 0; i<selectedAcbgFiles.length; i++){
+      const fileObj = selectedAcbgFiles[i];
+      if(!fileObj.file){
+        Swal.fire(`학력 증빙파일 중 누락된 값이 있습니다.`);
+        return false;
+      }
+    }
+
+    for (let i = 0; i < acbges.length; i++) {
+      const acbg = acbges[i];
+      if (acbg.schlNm === "" || acbg.scsbjtNm === "" || acbg.mjrNm === "" || acbg.dgrNm === "" || acbg.grdtnYmd === "") {
+        Swal.fire(`학력 정보 항목 중 누락된 값이 있습니다.`);
+        return false;
+      }
+    }
+    return true;
+  };
+
+
+
 
 
   // 회원가입 신청
@@ -776,14 +851,67 @@ function MemberSignUp(props) {
         return;
       }
 
-      selectedCertFiles.map((file) => {
-        formData.append("certFiles", file);
+      //컨설턴트인 경우
+      if(memberDetail.mbrType === 2){
+
+        if (selectedImgFile.length === 0 || !selectedImgFile) {
+            Swal.fire("사진을 등록해 주세요.");
+            return;
+        }
+        if (!memberDetail.cnsltSlfint) {
+          Swal.fire("소개를 등록해 주세요.");
+          return;
+        }
+        if (!memberDetail.jbpsNm) {
+          Swal.fire("직위를 등록해 주세요.");
+          return;
+        }
+        if (!memberDetail.crrPrd) {
+          Swal.fire("경력기간을 등록해 주세요.");
+          return;
+        }
+        if (!memberDetail.ogdpNm) {
+          Swal.fire("소속을 등록해 주세요.");
+          return;
+        }
+        if (!memberDetail.cnsltArtcl) {
+          Swal.fire("컨설팅 항목을 등록해 주세요.");
+          return;
+        }
+        if(!memberDetail.cnsltFld){
+          Swal.fire("자문분야를 선택해 주세요.");
+          return;
+        }
+        if (!memberDetail.cnsltActv) {
+          Swal.fire("컨설팅 활동을 선택해 주세요.");
+          return;
+        }
+        if (!memberDetail.rmrkCn) {
+          Swal.fire("간략소개를 등록해 주세요.");
+          return;
+        }
+
+        //경력, 자격증, 학력 유효성 검사
+        const isCertificatesValid = validateCertificates();
+        const isCareersValid = validateCareers();
+        const isAcbgesValid = validateAcbges();
+
+        if (!isCertificatesValid || !isCareersValid || !isAcbgesValid) {
+          return;
+        }
+      }
+
+
+
+
+      selectedCareerFiles.map((fileObj) => {
+        formData.append("careerFiles", fileObj.file);
       });
-      selectedCareerFiles.map((file) => {
-        formData.append("careerFiles", file);
+      selectedCertFiles.forEach((fileObj) => {
+        formData.append("certFiles", fileObj.file);
       });
-      selectedAcbgFiles.map((file) => {
-        formData.append("acbgFiles", file);
+      selectedAcbgFiles.map((fileObj) => {
+        formData.append("acbgFiles", fileObj.file);
       });
 
       selectedImgFile.map((file) => {
@@ -1949,6 +2077,9 @@ function MemberSignUp(props) {
               </button>{/*
               <button type="button" className="clickBtn white" onClick={() => navigate(URL.LOGIN)}>
                 <span>뒤로가기</span>
+              </button>*/}
+              {/*<button type="button" className="clickBtn black" onClick={validateAll}>
+                <span>임시</span>
               </button>*/}
             </div>
           </form>
