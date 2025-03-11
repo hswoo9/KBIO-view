@@ -367,7 +367,13 @@ const TotalSearch = () => {
                     </div>
                     <div className="resultBox" data-aos="fade-up" data-aos-duration="1500">
                         <p>
-                            <strong>“{searchCondition.searchVal || ""}”</strong> 에 대한 검색결과
+                            {searchCondition.searchVal ? (
+                                <>
+                                    <strong>“{searchCondition.searchVal}”</strong> 에 대한 검색결과
+                                </>
+                            ) : (
+                                <>전체 검색결과는</>
+                            )}{" "}
                             총 <strong>{paginationInfo.totalRecordCount || 0}건</strong>이 검색되었습니다.
                         </p>
                     </div>
