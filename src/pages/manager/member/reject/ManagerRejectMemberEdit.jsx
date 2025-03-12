@@ -67,13 +67,12 @@ function setRejectMember(props) {
         };
 
         EgovNet.requestFetch(getRejectMemberURL, requestOptions, function (resp) {
-            if (modeInfo.mode === CODE.MODE_MODIFY) {
-                const decodedPhoneNumber = decodePhoneNumber(resp.result.member.mblTelno);
+                const decodedPhoneNumber = resp.result.member.decodeMblTelno;
                 setMemberDetail({
                     ...resp.result.member,
                     mblTelno: decodedPhoneNumber, // 디코딩된 전화번호로 업데이트
                 });
-            }
+            
         });
     };
 
