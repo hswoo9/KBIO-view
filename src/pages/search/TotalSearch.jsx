@@ -401,9 +401,11 @@ const TotalSearch = () => {
                             </tbody>
                         </table>
                     </div>
-                    <a className="clickBtn black" style={{cursor: "pointer"}}
-                        onClick={pageUnitAddEvent}
-                    ><span>더보기</span></a>
+                    {searchDataList.length > 10 && (
+                        <a className="clickBtn black" style={{ cursor: "pointer" }} onClick={pageUnitAddEvent}>
+                            <span>더보기</span>
+                        </a>
+                    )}
                 </div>
             </div>
         </div>
