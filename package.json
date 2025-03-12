@@ -18,7 +18,9 @@
     "egovframe-template-simple-react": "file:",
     "exceljs": "^4.4.0",
     "file-saver": "^2.0.5",
+    "gojs": "^3.40.0",
     "jquery": "^3.7.1",
+    "jquery-nice-select": "^1.2.0",
     "jwt-decode": "^4.0.0",
     "moment": "^2.30.1",
     "qs": "^6.11.0",
@@ -39,7 +41,7 @@
     "sockjs-client": "^1.6.1",
     "sweetalert2": "^11.15.10",
     "sweetalert2-react-content": "^5.1.0",
-    "swiper": "^11.2.2",
+    "swiper": "^11.1.4",
     "web-vitals": "^2.1.4",
     "xlsx": "^0.18.5",
     "xlsx-js-style": "^1.2.0"
