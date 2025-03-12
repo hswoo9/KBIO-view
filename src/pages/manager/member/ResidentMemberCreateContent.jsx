@@ -512,77 +512,86 @@ function ResidentMemberCreateContent(props){
         let requestOptions = {};
 
         if (!residentDetail.brno) {
-            alert("사업자번호를 입력해주세요.");
+            Swal.fire("사업자번호를 입력해주세요.");
             return false;
         }
         if (!residentDetail.brno) {
-            alert("사업자번호 인증을 진행해주십시오.");
+            Swal.fire("사업자번호 인증을 진행해주십시오.");
             return false;
         }
         if (!residentDetail.mvnEntNm) {
-            alert("기업명을 입력해주세요.");
+            Swal.fire("기업명을 입력해주세요.");
             return false;
         }
         if (!residentDetail.rpsvNm) {
-            alert("대표자명을 입력해주세요.");
+            Swal.fire("대표자명을 입력해주세요.");
             return false;
         }
         if(modeInfo.mode === CODE.MODE_MODIFY){
             if (!residentDetail.bzentyEmlAddr) {
-                alert("이메일 주소를 입력해주세요.");
+                Swal.fire("이메일 주소를 입력해주세요.");
                 return false;
             }
         }else{
             if (!residentDetail.rpsvNm || emailAddr.trim() === "") {
-                alert("이메일 주소를 입력해주세요.");
+                Swal.fire("이메일 주소를 입력해주세요.");
                 return false;
             }
         }
         if(!residentDetail.entClsf) {
-            alert("기업분류를 선택해주세요.");
+            Swal.fire("기업분류를 선택해주세요.");
             return false;
         }
         if(!residentDetail.entTpbiz) {
-            alert("업종을 선택해주세요.");
+            Swal.fire("업종을 선택해주세요.");
             return false;
         }
         if(!residentDetail.bzentyExpln) {
-            alert("기업소개를 입력해주세요.");
+            Swal.fire("기업소개를 입력해주세요.");
+            return false;
+        }
+        if(!residentDetail.hmpgAddr){
+            Swal.fire("홈페이지 주소를 입력해주세요.");
             return false;
         }
 
-        if(!residentDetail.mainHstry) {
-            alert("주요이력을 입력해주세요.");
-            return false;
-        }
 
         if (!residentDetail.zip || !residentDetail.entAddr) {
-            alert("주소를 입력해주세요.");
+            Swal.fire("주소를 입력해주세요.");
             return false;
         }
         if (!residentDetail.entDaddr) {
-            alert("세부주소를 입력해주십시오.");
+            Swal.fire("세부주소를 입력해주십시오.");
             return false;
         }
         if (!residentDetail.entTelno) {
-            alert("대표번호를 입력해주세요.");
+            Swal.fire("대표번호를 입력해주세요.");
             return false;
         }
-        if (!residentDetail.rlsYn) {
-            alert("공개여부를 선택해주세요.");
+        /*if (!residentDetail.rlsYn) {
+            Swal.fire("공개여부를 선택해주세요.");
             return false;
-        }
+        }*/
 
         if(residentDetail.rlsYn === 'Y'){
             if(!residentDetail.rlsBgngYmd || !residentDetail.rlsEndYmd){
-                alert("공개기한을 선택해주세요.");
+                Swal.fire("공개기한을 선택해주세요.");
                 return false;
             }
         }
-        if(!residentDetail.empJoinYn){
-            alert("산하직원가입여부를 선택해주세요");
+        /*if(!residentDetail.empJoinYn){
+            Swal.fire("산하직원가입여부를 선택해주세요.");
+            return false;
+        }*/
+        if(!fileList || fileList.length == 0){
+            Swal.fire("증빙파일을 첨부해주세요.");
             return false;
         }
+        if(!selectedFiles || selectedFiles.length == 0){
+            Swal.fire("로고파일을 첨부해주세요.");
+            return false;
+        }
+
 
 
 
@@ -667,7 +676,9 @@ function ResidentMemberCreateContent(props){
                 <ul className="inputWrap">
                     {/* 기업분류 */}
                     <li className="inputBox type1 width3">
-                        <label className="title essential" htmlFor="mvnEntType"><small>분류</small></label>
+                        <label className="title essential" htmlFor="mvnEntType">
+                            <small>분류<small style={{color:"red"}}> *</small></small>
+                        </label>
                         <div className="itemBox">
                             <select className="selectGroup"
                                     id="entClsf"
@@ -689,7 +700,9 @@ function ResidentMemberCreateContent(props){
                     </li>
                     {/*기업명*/}
                     <li className="inputBox type1 width3">
-                        <label className="title essential" htmlFor="mvnEntNm"><small>기업명</small></label>
+                        <label className="title essential" htmlFor="mvnEntNm">
+                            <small>기업명<small style={{color:"red"}}> *</small></small>
+                        </label>
                         <div className="input">
                             <input
                                 type="text"
@@ -704,7 +717,9 @@ function ResidentMemberCreateContent(props){
                     </li>
                     {/*로고*/}
                     <li className="inputBox type1 width3 file">
-                        <p className="title essential">로고파일선택</p>
+                        <p className="title essential">로고파일선택
+                            <small style={{color:"red"}}> *</small>
+                        </p>
                         <div className="input">
                             {selectedFiles.atchFileSn ? (
                                         <p className="file_name" id="fileNamePTag">
@@ -736,7 +751,11 @@ function ResidentMemberCreateContent(props){
 
                     {/*대표자명*/}
                     <li className="inputBox type1 width3">
-                        <label className="title essential" htmlFor="rpsvNm"><small>대표자</small></label>
+                        <label className="title essential" htmlFor="rpsvNm">
+                            <small>대표자
+                                <small style={{color:"red"}}> *</small>
+                            </small>
+                        </label>
                         <div className="input">
                             <input
                                 type="text"
@@ -751,7 +770,11 @@ function ResidentMemberCreateContent(props){
                     </li>
                     {/*기업대표전화*/}
                     <li className="inputBox type1 width3">
-                        <label className="title essential" htmlFor="entTelno"><small>대표번호</small></label>
+                        <label className="title essential" htmlFor="entTelno">
+                            <small>대표번호
+                                <small style={{color:"red"}}> *</small>
+                            </small>
+                        </label>
                         <div className="input">
                             <input
                                 type="text"
@@ -771,7 +794,11 @@ function ResidentMemberCreateContent(props){
                     </li>
                     {/*기업대표메일*/}
                     <li className="inputBox type1 email width3">
-                        <label className="title essential" htmlFor="bzentyEmlId1"><small>대표이메일</small></label>
+                        <label className="title essential" htmlFor="bzentyEmlId1">
+                            <small>대표이메일
+                                <small style={{color:"red"}}> *</small>
+                            </small>
+                        </label>
                         <div className="input">
                             <input
                                 type="text"
@@ -812,7 +839,11 @@ function ResidentMemberCreateContent(props){
                     </li>
                     {/*기업 홈페이지*/}
                     <li className="inputBox type1 email width3">
-                        <label className="title essential" htmlFor="hmpgAddr"><small>홈페이지</small></label>
+                        <label className="title essential" htmlFor="hmpgAddr">
+                            <small>홈페이지
+                                <small style={{color:"red"}}> *</small>
+                            </small>
+                        </label>
                         <div className="input">
                             <input
                                 type="text"
@@ -828,7 +859,11 @@ function ResidentMemberCreateContent(props){
                     </li>
                     {/* 업종 */}
                     <li className="inputBox type1 width3">
-                        <label className="title essential" htmlFor="entTpbiz"><small>업종</small></label>
+                        <label className="title essential" htmlFor="entTpbiz">
+                            <small>업종
+                                <small style={{color:"red"}}> *</small>
+                            </small>
+                        </label>
                         <div className="itemBox">
                             <select className="selectGroup"
                                     id="entClsf"
@@ -850,7 +885,10 @@ function ResidentMemberCreateContent(props){
                     </li>
                     {/* 사업자 등록번호 */}
                     <li className="inputBox type1 email width3">
-                        <label className="title essential" htmlFor="brno"><small>사업자등록번호</small></label>
+                        <label className="title essential" htmlFor="brno">
+                            <small>사업자등록번호
+                                <small style={{color:"red"}}> *</small>
+                            </small></label>
                         <div className="input">
                             <small className="text btn" onClick={kbioauth}>기업인증</small>
                             <input
@@ -869,7 +907,9 @@ function ResidentMemberCreateContent(props){
                     </li>
                     {/* 주소 */}
                     <li className="inputBox type1 email width3">
-                        <label className="title essential" htmlFor="entAddr"><small>주소</small></label>
+                        <label className="title essential" htmlFor="entAddr">
+                            <small>주소<small style={{color:"red"}}> *</small></small>
+                        </label>
                         <div className="input">
                             <small className="text btn" onClick={searchAddress}>주소 검색</small>
                             <input
@@ -905,7 +945,11 @@ function ResidentMemberCreateContent(props){
                     </li>
                     {/* 상세주소 */}
                     <li className="inputBox type1 email width3">
-                        <label className="title essential" htmlFor="entDaddr"><small>상세주소</small></label>
+                        <label className="title essential" htmlFor="entDaddr">
+                            <small>상세주소
+                                <small style={{color:"red"}}> *</small>
+                            </small>
+                        </label>
                         <div className="input">
                             <input
                                 type="text"
@@ -951,7 +995,11 @@ function ResidentMemberCreateContent(props){
                     </li>
                     {/* 기업소개 */}
                     <li className="inputBox type1">
-                        <label className="title essential" htmlFor=""><small>기업소개</small></label>
+                        <label className="title essential" htmlFor="">
+                            <small>기업소개
+                                <small style={{color:"red"}}> *</small>
+                            </small>
+                        </label>
                         <div className="input">
                             <CommonEditor
                                 value={residentDetail.bzentyExpln || ""}
@@ -972,7 +1020,10 @@ function ResidentMemberCreateContent(props){
 
                     {/*증빙자료*/}
                     <li className="inputBox type1 width1 file">
-                        <p className="title essential">증빙자료</p>
+                        <p className="title essential">
+                            증빙자료
+                            <small style={{color:"red"}}> *</small>
+                        </p>
                         {/*<div className="input">
                             <p className="file_name" id="fileNamePTag"></p>
                             <label>
@@ -1030,7 +1081,7 @@ function ResidentMemberCreateContent(props){
                     {/* 공개여부 */}
                     <li className="toggleBox width3">
                         <div className="box">
-                            <p className="title essential">공개여부</p>
+                            <p className="title essential">공개여부<small style={{color:"red"}}> *</small></p>
                             <div className="toggleSwithWrap">
                                 <input type="checkbox" id="rlsYn" hidden
                                        checked={residentDetail.rlsYn === "Y"}
@@ -1096,7 +1147,7 @@ function ResidentMemberCreateContent(props){
                     {/* 산하직원 가입여부 */}
                     <li className="toggleBox width3">
                         <div className="box">
-                            <p className="title essential">산하직원 가입여부</p>
+                            <p className="title essential">산하직원 가입여부<small style={{color:"red"}}> *</small></p>
                             <div className="toggleSwithWrap">
                                 <input type="checkbox" id="empJoinYn" hidden
                                 checked={residentDetail.empJoinYn === "Y"}
