@@ -410,7 +410,7 @@ function RelatedCompanyCreate(props){
         const businessNumber = `${relatedDetail.brno}`;
 
         if (!businessNumber || businessNumber.includes("--")) {
-            alert("사업자 등록번호를 정확히 입력하세요.");
+            Swal.fire("사업자 등록번호를 정확히 입력하세요.");
             return;
         }
 
@@ -427,22 +427,22 @@ function RelatedCompanyCreate(props){
             const businessStatus = response.data.data[0]?.b_stt_cd;
 
             if (businessStatus === '01') {
-                alert("사업자가 정상적으로 운영 중입니다.");
+                Swal.fire("사업자가 정상적으로 운영 중입니다.");
                 setRelatedDetail({...relatedDetail, brno: businessNumber});
                 document.getElementById("confirmText").style.display = "block";
             } else if (businessStatus === '02') {
-                alert("사업자가 휴업 중입니다.");
+                Swal.fire("사업자가 휴업 중입니다.");
                 document.getElementById("confirmText").style.display = "none";
             } else if (businessStatus === '03') {
-                alert("사업자가 폐업 상태입니다.");
+                Swal.fire("사업자가 폐업 상태입니다.");
                 document.getElementById("confirmText").style.display = "none";
             } else {
-                alert("사업자가 존재 하지 않습니다.");
+                Swal.fire("사업자가 존재 하지 않습니다.");
                 document.getElementById("confirmText").style.display = "none";
             }
 
         } catch (error) {
-            alert("사업자 등록번호 조회에 실패했습니다.");
+            Swal.fire("사업자 등록번호 조회에 실패했습니다.");
         }
     };
 
@@ -451,7 +451,7 @@ function RelatedCompanyCreate(props){
     //주소찾기 api
     const searchAddress = () => {
         if (!window.daum || !window.daum.Postcode) {
-            alert('주소 검색 API가 아직 로드되지 않았습니다. 잠시 후 다시 시도해주세요.');
+            Swal.fire('주소 검색 API가 아직 로드되지 않았습니다. 잠시 후 다시 시도해주세요.');
             return;
         }
 
@@ -487,69 +487,69 @@ function RelatedCompanyCreate(props){
         let requestOptions = {};
 
         if(!relatedDetail.clsf) {
-            alert("분류를 선택해주세요.");
+            Swal.fire("분류를 선택해주세요.");
             return false;
         }
 
         if (!relatedDetail.brno) {
-            alert("사업자번호는 필수 값입니다.");
+            Swal.fire("사업자번호는 필수 값입니다.");
             return false;
         }
         if (!relatedDetail.brno) {
-            alert("사업자번호 인증을 진행해주십시오.");
+            Swal.fire("사업자번호 인증을 진행해주십시오.");
             return false;
         }
         if (!relatedDetail.relInstNm) {
-            alert("기업명은 필수 값입니다.");
+            Swal.fire("기업명은 필수 값입니다.");
             return false;
         }
         if (!relatedDetail.rpsvNm) {
-            alert("대표자명은 필수 값입니다.");
+            Swal.fire("대표자명은 필수 값입니다.");
             return false;
         }
         if (!relatedDetail.entTelno) {
-            alert("대표번호는 필수 값입니다.");
+            Swal.fire("대표번호는 필수 값입니다.");
             return false;
         }
 
 
         if (!relatedDetail.bzentyEmlAddr) {
-            alert("이메일 주소를 입력해주세요.");
+            Swal.fire("이메일 주소를 입력해주세요.");
             return false;
         }
 
         if(!relatedDetail.tpbiz) {
-            alert("업종을 선택해주세요.");
+            Swal.fire("업종을 선택해주세요.");
             return false;
         }
 
         if (!relatedDetail.zip || !relatedDetail.entAddr) {
-            alert("주소는 필수 값입니다.");
+            Swal.fire("주소는 필수 값입니다.");
             return false;
         }
         if (!relatedDetail.entDaddr) {
-            alert("세부주소를 입력해주십시오.");
+            Swal.fire("세부주소를 입력해주십시오.");
             return false;
         }
 
 
         if(!relatedDetail.mainHstry) {
-            alert("주요이력을 입력해주세요.");
+            Swal.fire("주요이력을 입력해주세요.");
             return false;
         }
         if(!relatedDetail.rlsYn) {
-            alert("공개여부를 선택해주세요.");
+            Swal.fire("공개여부를 선택해주세요.");
             return false;
         }
 
         if(relatedDetail.rlsYn === 'Y'){
             if(!relatedDetail.rlsBgngYmd || !relatedDetail.rlsEndYmd){
-                alert("공개기한을 선택해주세요.")
+                Swal.fire("공개기한을 선택해주세요.")
                 return false;
             }
         }
         if(!relatedDetail.empJoinYn){
-            alert("산하직원가입여부를 선택해주세요");
+            Swal.fire("산하직원가입여부를 선택해주세요");
             return false;
         }
 
@@ -909,6 +909,17 @@ function RelatedCompanyCreate(props){
                             </label>
                         </div>
                         <span className="warningText">gif,png,jpg 파일 / 권장 사이즈 : 500px * 500px / 용량 : 10M 이하</span>
+                    </li>
+
+                    {/* 기업소개 */}
+                    <li className="inputBox type1">
+                        <label className="title essential" htmlFor=""><small>기업소개</small></label>
+                        <div className="input">
+                            <CommonEditor
+                                value={relatedDetail.bzentyExpln || ""}
+                                onChange={(value) => handleChangeField("bzentyExpln", value)}
+                            />
+                        </div>
                     </li>
 
                     {/* 주요이력 */}
