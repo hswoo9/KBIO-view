@@ -69,37 +69,11 @@ function ConsultantDetail(props) {
     }
 
 
-    const decodePhoneNumber = (encodedPhoneNumber) => {
-        if (!encodedPhoneNumber) return "";
-        try {
-            const decodedBytes = base64.toByteArray(encodedPhoneNumber);
-            return new TextDecoder().decode(decodedBytes);
-        } catch (error) {
-            console.error("전화번호 디코딩 오류:", error);
-            return "";
-        }
-    };
 
 
 
-    const formatPhoneNumber = (phoneNumber) => {
-        // 숫자 이외의 문자는 제거
-        const cleaned = phoneNumber.replace(/\D/g, "");
-
-        // 02 로 시작하면 02-XXXX-XXXX 형태, 그 외에는 3자리-4자리-4자리 형태로 변환
-        if (cleaned.startsWith("02")) {
-            // 02는 2자리이므로 뒤에 3~4자리와 4자리를 나눔
-            return cleaned.replace(/(\d{2})(\d{3,4})(\d{4})/, "$1-$2-$3");
-        } else {
-            return cleaned.replace(/(\d{3})(\d{3,4})(\d{4})/, "$1-$2-$3");
-        }
-    };
 
 
-    const decodeAndFormatPhoneNumber = (encodedPhoneNumber) => {
-        const decoded = decodePhoneNumber(encodedPhoneNumber);
-        return formatPhoneNumber(decoded);
-    };
 
     const getConsultantDetail = () => {
         const getConsultantDetailUrl = "/consultingApi/getConsultantDetail.do";
@@ -173,8 +147,11 @@ function ConsultantDetail(props) {
                             </div>
                             <div className="tel">
                                 <p className="text">연락처</p>
-                                <a href={`tel:${decodeAndFormatPhoneNumber(memberDetail?.mblTelno)}`}>
+                                {/*<a href={`tel:${decodeAndFormatPhoneNumber(memberDetail?.mblTelno)}`}>
                                     <span>{decodeAndFormatPhoneNumber(memberDetail?.mblTelno)}</span>
+                                </a>*/}
+                                <a href={`tel:${ComScript.formatTelNumber(memberDetail?.decodeMblTelno)}`}>
+                                    <span>{ComScript.formatTelNumber(memberDetail?.decodeMblTelno)}</span>
                                 </a>
                             </div>
                         </div>

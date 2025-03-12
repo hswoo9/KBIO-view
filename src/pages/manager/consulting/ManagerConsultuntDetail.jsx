@@ -225,7 +225,8 @@ function ManagerConsultuntDetail(props) {
             (resp) => {
                 /*debugger
                 console.log("resp.result:",resp.result);*/
-                const decodedPhoneNumber = decodePhoneNumber(resp.result.memberDetail.mblTelno);
+                //const decodedPhoneNumber = decodePhoneNumber(resp.result.memberDetail.mblTelno);
+                const decodedPhoneNumber = resp.result.memberDetail.decodeMblTelno ?resp.result.memberDetail.decodeMblTelno : resp.result.memberDetail.mblTelno ? decodePhoneNumber(resp.result.memberDetail.mblTelno) : "";
                 let emailPrefix = "";
                 let emailDomain = "";
                 let emailProvider = "direct";

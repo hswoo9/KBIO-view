@@ -75,8 +75,8 @@ function ManagerCnsltDetail(props) {
 
             if(resp.result.consulttUser != null) {
                 //컨설턴트관련 정보
-                const decodedPhoneNumber = decodePhoneNumber(resp.result.consulttUser.mblTelno);
-
+                //const decodedPhoneNumber = decodePhoneNumber(resp.result.consulttUser.mblTelno);
+                const decodedPhoneNumber = resp.result.consulttUser.decodeMblTelno ?resp.result.consulttUser.decodeMblTelno : resp.result.consulttUser.mblTelno ? decodePhoneNumber(resp.result.consulttUser.mblTelno) : "";
                 setConsulttUser({
                     ...resp.result.consulttUser,
                     mblTelno: decodedPhoneNumber,
