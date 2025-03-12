@@ -274,12 +274,6 @@ export const excelExport = async (exportFileName, sheetDatas) => {
             }
         });
 
-        //예시샘플
-        if (sheetData.example) {
-            worksheet.addRow(sheetData.example);
-        }
-        //예시샘플끝
-
         sheetData.row.forEach(item => {
             worksheet.addRow(Object.values(item));
         });
