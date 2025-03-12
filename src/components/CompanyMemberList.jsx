@@ -39,10 +39,10 @@ function CompanyMemberList (props) {
     const searchTypeRef = useRef();
     const searchValRef = useRef();
 
-    const decodePhoneNumber = (encodedPhoneNumber) => {
+    /*const decodePhoneNumber = (encodedPhoneNumber) => {
         const decodedBytes = base64.toByteArray(encodedPhoneNumber);
         return new TextDecoder().decode(decodedBytes);
-    };
+    };*/
 
     useEffect(() => {
         getCompanyMemberList(searchDto);
@@ -81,7 +81,7 @@ function CompanyMemberList (props) {
 
                     setAuthorityList(
                         resp.result.getCompanyMemberList.map((item) => {
-                            const decodedPhoneNumber = decodePhoneNumber(item.mblTelno);
+                            const decodedPhoneNumber = item.decodeMblTelno;
                             return (
                                 <tr key={item.userSn}>
                                     <td onClick={() => modifyClick(item.userSn)} style={{ cursor: "pointer" }}>
@@ -218,7 +218,7 @@ function CompanyMemberList (props) {
             getNormalMemberUrl,
             requestOptions,
             (resp) => {
-                const decodedPhoneNumber = decodePhoneNumber(resp.result.member.mblTelno);
+                const decodedPhoneNumber = resp.result.member.decodeMblTelno;
                 setModalData({
                     ...resp.result.member,
                     mblTelno: decodedPhoneNumber,

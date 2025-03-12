@@ -105,7 +105,7 @@ const CompanyModifyMember = ({data}) => {
             userId: paramsData?.userId || '',
             userPw: paramsData?.userPw || '',
             kornFlnm: paramsData?.kornFlnm || '',
-            mblTelno: paramsData?.mblTelno || '',
+            mblTelno: paramsData?.decodeMblTelno || '',
             zip: paramsData?.zip || '',
             addr: paramsData?.addr || '',
             daddr: paramsData?.daddr || '',

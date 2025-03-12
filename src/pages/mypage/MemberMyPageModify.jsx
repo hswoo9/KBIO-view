@@ -470,7 +470,8 @@ function MemberMyPageModify(props) {
                 const rcData = resp.result.rc;
 
 
-                const decodedPhoneNumber = memberData.mblTelno ? decodePhoneNumber(memberData.mblTelno) : "";
+                //const decodedPhoneNumber = memberData.mblTelno ? decodePhoneNumber(memberData.mblTelno) : "";
+                const decodedPhoneNumber = memberData.decodeMblTelno ? memberData.decodeMblTelno : memberData.mblTelno ? decodePhoneNumber(memberData.mblTelno) : "";
 
                 let emailPrefix = "";
                 let emailDomain = "";
