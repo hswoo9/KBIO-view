@@ -629,7 +629,7 @@ function RelatedCompanyCreate(props){
                 <ul className="inputWrap">
                     {/* 종목 */}
                     <li className="inputBox type1 width3">
-                        <label className="title essential" htmlFor="clsf"><small>분류</small></label>
+                        <p className="title essential" htmlFor="clsf">분류<small style={{color: "red"}}>*</small></p>
                         <div className="itemBox">
                             <select className="selectGroup"
                                     id="clsf"
@@ -651,7 +651,7 @@ function RelatedCompanyCreate(props){
                     </li>
                     {/*기업명*/}
                     <li className="inputBox type1 width3">
-                        <label className="title essential" htmlFor="relInstNm"><small>기업명</small></label>
+                        <p className="title essential" htmlFor="relInstNm">기업명<small style={{color: "red"}}>*</small></p>
                         <div className="input">
                             <input
                                 type="text"
@@ -666,7 +666,7 @@ function RelatedCompanyCreate(props){
                     </li>
                     {/*로고*/}
                     <li className="inputBox type1 width3 file">
-                        <p className="title essential">로고파일선택</p>
+                        <p className="title essential">로고파일선택<small style={{color: "red"}}>*</small></p>
                         <div className="input">
                             {selectedFiles.atchFileSn ? (
                                 <p className="file_name" id="fileNamePTag">
@@ -697,7 +697,7 @@ function RelatedCompanyCreate(props){
                     </li>
                     {/*대표자명*/}
                     <li className="inputBox type1 width3">
-                        <label className="title essential" htmlFor="rpsvNm"><small>대표자</small></label>
+                        <p className="title essential" htmlFor="rpsvNm">대표자<small style={{color: "red"}}>*</small></p>
                         <div className="input">
                         <input
                                 type="text"
@@ -712,7 +712,8 @@ function RelatedCompanyCreate(props){
                     </li>
                     {/*기업대표전화*/}
                     <li className="inputBox type1 width3">
-                        <label className="title essential" htmlFor="entTelno"><small>대표번호</small></label>
+                        <p className="title essential" htmlFor="entTelno">대표번호<small style={{color: "red"}}>*</small>
+                        </p>
                         <div className="input">
                             <input
                                 type="text"
@@ -732,7 +733,8 @@ function RelatedCompanyCreate(props){
                     </li>
                     {/*기업대표메일*/}
                     <li className="inputBox type1 email width3">
-                        <label className="title essential" htmlFor="bzentyEmlId1"><small>대표이메일</small></label>
+                        <p className="title essential" htmlFor="bzentyEmlId1">대표이메일<small
+                            style={{color: "red"}}>*</small></p>
                         <div className="input">
                             <input
                                 type="text"
@@ -773,7 +775,8 @@ function RelatedCompanyCreate(props){
                     </li>
                     {/*기업 홈페이지*/}
                     <li className="inputBox type1 email width3">
-                        <label className="title essential" htmlFor="hmpgAddr"><small>홈페이지</small></label>
+                        <p className="title essential" htmlFor="hmpgAddr">홈페이지<small style={{color: "red"}}>*</small>
+                        </p>
                         <div className="input">
                             <input
                                 type="text"
@@ -789,7 +792,7 @@ function RelatedCompanyCreate(props){
                     </li>
                     {/* 업종 */}
                     <li className="inputBox type1 width3">
-                        <label className="title essential" htmlFor="tpbiz"><small>업종</small></label>
+                        <p className="title essential" htmlFor="tpbiz">업종<small style={{color: "red"}}>*</small></p>
                         <div className="itemBox">
                             <select className="selectGroup"
                                     id="tpbiz"
@@ -811,7 +814,7 @@ function RelatedCompanyCreate(props){
                     </li>
                     {/* 사업자 등록번호 */}
                     <li className="inputBox type1 email width3">
-                        <label className="title essential" htmlFor="brno"><small>사업자등록번호</small></label>
+                        <p className="title essential" htmlFor="brno">사업자등록번호<small style={{color: "red"}}>*</small></p>
                         <div className="input">
                             <small className="text btn" onClick={kbioauth}>기업인증</small>
                             <input
@@ -830,7 +833,7 @@ function RelatedCompanyCreate(props){
                     </li>
                     {/* 주소 */}
                     <li className="inputBox type1 email width3">
-                        <label className="title essential" htmlFor="entAddr"><small>주소</small></label>
+                        <p className="title essential" htmlFor="entAddr">주소<small style={{color: "red"}}>*</small></p>
                         <div className="input">
                             <small className="text btn" onClick={searchAddress}>주소 검색</small>
                             <input
@@ -866,7 +869,8 @@ function RelatedCompanyCreate(props){
                     </li>
                     {/* 상세주소 */}
                     <li className="inputBox type1 email width3">
-                        <label className="title essential" htmlFor="entDaddr"><small>상세주소</small></label>
+                        <p className="title essential" htmlFor="entDaddr">상세주소<small
+                            style={{color: "red"}}>*</small></p>
                         <div className="input">
                             <input
                                 type="text"
@@ -913,7 +917,7 @@ function RelatedCompanyCreate(props){
 
                     {/* 기업소개 */}
                     <li className="inputBox type1">
-                        <label className="title essential" htmlFor=""><small>기업소개</small></label>
+                        <p className="title essential" htmlFor="">기업소개<small style={{color: "red"}}>*</small></p>
                         <div className="input">
                             <CommonEditor
                                 value={relatedDetail.bzentyExpln || ""}
@@ -936,7 +940,7 @@ function RelatedCompanyCreate(props){
 
                     {/*증빙자료*/}
                     <li className="inputBox type1 width1 file">
-                        <p className="title essential">증빙자료</p>
+                        <p className="title essential">증빙자료<small style={{color: "red"}}>*</small></p>
                         <div
                             {...getRootProps({
                                 style: {
