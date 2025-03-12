@@ -70,7 +70,8 @@ function OperationalResidentMember(props) {
 
                     resp.result.getResidentMemberList.forEach(function (item,index){
                         if(index === 0) dataList = [];
-                        const decodedPhoneNumber = decodePhoneNumber(item.tblUser.mblTelno);
+                        //const decodedPhoneNumber = decodePhoneNumber(item.tblUser.mblTelno);
+                        const decodedPhoneNumber = item.tblUser.decodeMblTelno ? item.tblUser.decodeMblTelno : item.tblUser.mblTelno ? decodePhoneNumber(item.tblUser.mblTelno) : "";
 
                         dataList.push(
                             <tr key={item.tblUser.userSn}>

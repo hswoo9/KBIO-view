@@ -532,21 +532,25 @@ function RelatedCompanyCreate(props){
             return false;
         }
 
-        if(!relatedDetail.bzentyExpln) {
-            alert("기업소개를 입력해주세요.");
-            return false;
-        }
 
         if(!relatedDetail.mainHstry) {
             alert("주요이력을 입력해주세요.");
             return false;
         }
+        if(!relatedDetail.rlsYn) {
+            alert("공개여부를 선택해주세요.");
+            return false;
+        }
 
-        if(relatedDetail.actvtnYn === 'Y'){
+        if(relatedDetail.rlsYn === 'Y'){
             if(!relatedDetail.rlsBgngYmd || !relatedDetail.rlsEndYmd){
                 alert("공개기한을 선택해주세요.")
                 return false;
             }
+        }
+        if(!relatedDetail.empJoinYn){
+            alert("산하직원가입여부를 선택해주세요");
+            return false;
         }
 
         setRelatedDetail({...relatedDetail});

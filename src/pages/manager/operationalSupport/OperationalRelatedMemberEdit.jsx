@@ -64,7 +64,8 @@ function OperationRelatedMember(props) {
 
         EgovNet.requestFetch(getNormalMemberURL, requestOptions, function (resp) {
             if (modeInfo.mode === CODE.MODE_MODIFY) {
-                const decodedPhoneNumber = decodePhoneNumber(resp.result.member.mblTelno);
+                const decodedPhoneNumber = resp.result.member.decodeMblTelno ? resp.result.member.decodeMblTelno : resp.result.member.mblTelno ? decodePhoneNumber(resp.result.member.mblTelno) : "";
+                // const decodedPhoneNumber = decodePhoneNumber(resp.result.member.mblTelno);
                 setMemberDetail({
                     ...resp.result.member,
                     mblTelno: decodedPhoneNumber, // 디코딩된 전화번호로 업데이트

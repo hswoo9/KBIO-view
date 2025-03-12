@@ -222,7 +222,7 @@ function ResidentMemberCreateContent(props){
                     setFileList(resp.result.mvnEntAtchFile);
                 }
 
-                if(resp.result.rc.actvtnYn == "Y"){
+                if(resp.result.rc.rlsYn == "Y"){
                     setIsDatePickerEnabled(true);
                 }else{
                     setIsDatePickerEnabled(false);
@@ -568,16 +568,20 @@ function ResidentMemberCreateContent(props){
             alert("대표번호를 입력해주세요.");
             return false;
         }
-        if (!residentDetail.actvtnYn) {
+        if (!residentDetail.rlsYn) {
             alert("공개여부를 선택해주세요.");
             return false;
         }
 
-        if(residentDetail.actvtnYn === 'Y'){
+        if(residentDetail.rlsYn === 'Y'){
             if(!residentDetail.rlsBgngYmd || !residentDetail.rlsEndYmd){
-                alert("공개기한을 선택해주세요.")
+                alert("공개기한을 선택해주세요.");
                 return false;
             }
+        }
+        if(!residentDetail.empJoinYn){
+            alert("산하직원가입여부를 선택해주세요");
+            return false;
         }
 
 

@@ -117,6 +117,7 @@ function OperationalSupport(props) {
         let sheetDatas = [{
             sheetName : "입주기업 업로드 양식",
             header : ['기업명', '사업자등록번호', '대표자', '대표전화', '분류코드(시트참조)', '업종코드(시트참조)'],
+            example : ['kbio', '123-45-67890', '홍길동', '010-1234-5678', '시트참조', '시트참조'],
             row : []
         }];
 
