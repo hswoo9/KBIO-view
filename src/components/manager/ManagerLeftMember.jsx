@@ -123,6 +123,15 @@ function ManagerLeftMember() {
                   <p>탈퇴회원</p>
                 </NavLink>
               </li>
+              <li onMouseOver={(e) => handleMouseOver(e)}>
+                <NavLink
+                    to={URL.MANAGER_MESSAGE_MEMBER}
+                    className={({isActive}) => (isActive ? "activeTag" : "")}
+                >
+                  <div className="icon"></div>
+                  <p>문자발송</p>
+                </NavLink>
+              </li>
             </ul>
           </nav>
         </div>

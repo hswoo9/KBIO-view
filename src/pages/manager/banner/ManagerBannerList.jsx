@@ -149,7 +149,7 @@ function ManagerCodeGroup(props) {
                 (resp) => {
                     setPaginationInfo(resp.paginationInfo);
                     let dataList = [];
-                    bnrPopupList.push(
+                    dataList.push(
                         <tr key="noData">
                             <td colSpan="6" key="noData">검색된 결과가 없습니다.</td>
                         </tr>

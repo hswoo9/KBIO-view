@@ -533,10 +533,10 @@ function RelatedCompanyCreate(props){
         }
 
 
-        if(!relatedDetail.mainHstry) {
+        /*if(!relatedDetail.mainHstry) {
             Swal.fire("주요이력을 입력해주세요.");
             return false;
-        }
+        }*/
         /*if(!relatedDetail.rlsYn) {
             Swal.fire("공개여부를 선택해주세요.");
             return false;

@@ -166,6 +166,7 @@ const URL = {
   MANAGER_APPROVAL_MEMBER: "/manager/approval/approvalMember",
   MANAGER_REJECT_MEMBER: "/manager/reject/rejetcMember",
   MANAGER_CANCEL_MEMBER: "/manager/cancel/cancelMember",
+  MANAGER_MESSAGE_MEMBER: "/manager/message",
   MANAGER_STOP_MEMBER: "/manager/stop/stopMember",
   MANAGER_WAIT_MEMBER: "/manager/wait/waitMember",
   MANAGER_RESIDENT_COMPANY: "/manager/residentCompany",
