@@ -9,12 +9,47 @@ function AccessTabAll(props) {
             searchMonth: "",
         }
     );
+
+    useEffect(() => {
+        console.log("초기 props.searchDto:", props.searchDto);
+        console.log("초기 searchDto 상태:", searchDto);
+    }, []); // 컴포넌트 마운트 시 한 번 실행
+
+    useEffect(() => {
+        console.log("searchDto 변경됨:", searchDto);
+    }, [searchDto]); // searchDto 변경 시 실행
+
     const year = parseInt(searchDto.searchYear, 10);
     const month = parseInt(searchDto.searchMonth, 10);
     const lastDay = new Date(year, month, 0).getDate();
+    /*const lastDay = searchDto.lastDate
+            ? parseInt(searchDto.lastDate.split("-")[2], 10)
+            : new Date(year, month, 0).getDate();*/
 
     const [userAccessList, setUserAccessList] = useState([]);
-    const categories = Array.from({ length: lastDay }, (_, i) => String(i + 1 + "일").padStart(2, '0'));
+    //const categories = Array.from({ length: lastDay }, (_, i) => String(i + 1 + "일").padStart(2, '0'));
+    const categories = (() => {
+        if (searchDto.searchDate) {
+            const startDate = new Date(searchDto.searchDate);
+            const endDate = new Date(searchDto.lastDate || lastDay);
+            const categoryList = [];
+
+            while (startDate <= endDate) {
+                const day = String(startDate.getDate()).padStart(2, '0'); // 일자만 추출하여 두 자리로 맞춤
+                categoryList.push(day + "일");
+                startDate.setDate(startDate.getDate() + 1); // 다음 날짜로 이동
+            }
+
+            return categoryList;
+        } else {
+            return Array.from({ length: lastDay }, (_, i) =>
+                String(i + 1).padStart(2, '0') + "일"
+            );
+        }
+    })();
+
+
+
     const [mbrType1UserCnt, setMbrType1UserCnt] = useState([])
     const [mbrType3UserCnt, setMbrType3UserCnt] = useState([])
     const [mbrType4UserCnt, setMbrType4UserCnt] = useState([])
