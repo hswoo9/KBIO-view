@@ -327,12 +327,12 @@ function ManagerMenuAuthority(props) {
                             <tr key={item.authrtGroupSn}
                                 onClick={(e) => {authorityClick(item.authrtGroupSn)}}
                             >
-                                <td onClick={(e) => {e.stopPropagation()}}>
+                                <td onClick={(e) => {e.stopPropagation()}} >
                                     <label className="checkBox type2">
                                         <input type="checkbox" name="authorityCheck" className="customCheckBox" value={item.authrtGroupSn}/>
                                     </label>
                                 </td>
-                                <td>{item.authrtGroupNm}</td>
+                                <td style={{ cursor: "pointer" }}>{item.authrtGroupNm}</td>
                                 <td>{item.authrtType}</td>
                                 <td>{item.actvtnYn === "Y" ? "사용" : "사용안함"}</td>
                                 <td>{moment(item.frstCrtDt).format('YYYY-MM-DD')}</td>

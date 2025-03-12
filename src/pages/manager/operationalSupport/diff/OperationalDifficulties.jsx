@@ -240,7 +240,7 @@ function OperationalDifficulties(props) {
                                         <option value="">전체</option>
                                         <option value="ttl">제목</option>
                                         <option value="kornFlnm">신청자</option>
-                                        <option value="dfclMttrCn">내용</option>
+                                        <option value="dfclMttrCn">의뢰내용</option>
                                     </select>
                                 </div>
                             </li>
