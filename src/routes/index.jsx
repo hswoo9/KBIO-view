@@ -101,6 +101,7 @@ import ManagerMemberCreate from "@/pages/manager/member/all/ManagerMemberCreate"
 import ManagerApprovalMember from "@/pages/manager/member/approval/ManagerApprovalMember";
 import ManagerRejectMember from "@/pages/manager/member/reject/ManagerRejectMember";
 import ManagerCancelMember from "@/pages/manager/member/cancel/ManagerCancelMember";
+import ManagerMemberMessage from "@/pages/manager/member/message/ManagerMemberMessage";
 import ManagerStopMember from "@/pages/manager/member/stop/ManagerStopMember";
 import ManagerWaitMember from "@/pages/manager/member/wait/ManagerWaitMember";
 
@@ -655,6 +656,10 @@ const SecondRoutes = () => {
               <Route
                   path={URL.MANAGER_CANCEL_MEMBER}
                   element={<ManagerCancelMember/>}
+              />
+              <Route
+                  path={URL.MANAGER_MESSAGE_MEMBER}
+                  element={<ManagerMemberMessage/>}
               />
               <Route
                   path={URL.MANAGER_RELATED_COMPANY}
