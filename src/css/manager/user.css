@@ -1029,6 +1029,22 @@ header.scroll + .container {transition-delay: .25s}
 .email_collection .inner .textBox .text {color: #555; line-height: 120%; font-size: 1.1rem; word-break: keep-all;}
 .email_collection .inner .clickBtn {max-width: 29.4rem; width: 90%; background: var(--black);}
 
+/* 에러 */
+.error {min-height: 100vh; display: flex; align-items: center; justify-content: center; overflow-y: auto; padding: 2rem 0; box-sizing: border-box;}
+.error .inner2 {display: flex; flex-direction: column; align-items: center;}
+.error .inner2 .imgBox {border-radius: 50%; overflow: hidden; margin: 0 auto; max-width: 18.8rem; width: 70%;}
+.error .inner2 .imgBox img {vertical-align: bottom;}
+.error .inner2 .textBox {display: flex; flex-direction: column; gap: .9rem; align-items: center; text-align: center; margin-bottom: 3.3rem;}
+.error .inner2 .textBox .title {font-size: 1.5rem; font-weight: 500;}
+.error .inner2 .textBox .title .blue {color: var(--mainColor3); font-weight: 800;}
+.error .inner2 .textBox .text {color: #555; line-height: 140%; font-size: 1.1rem; word-break: keep-all;}
+.error .inner2 .textBox .text .gray {color: #55555540;}
+.error .inner2 .clickBtn {display: flex; align-items: center; justify-content: center; color: #fff; border-radius: .6rem; height: 3.3rem; font-size: 1.1rem; font-weight: 600; box-sizing: border-box; transition: .5s ease; max-width: 29.4rem; width: 90%; background: var(--black);}
+
+.error .inner2.aos-animate .imgBox img {animation: scaleMove 1s ease both;}
+.error .inner2.aos-animate .textBox {animation: upMove 1s .1s ease both;}
+.error .inner2.aos-animate .clickBtn {animation: upMove 1s .3s ease both;}
+
 @media screen and (min-width: 1025px) {
 	header .hInner .hBot .top nav .dep li a:hover:after {width: 100%; opacity: 1;}
 	header .hInner .hTop .logBox button:hover {color: var(--mainColor);}
