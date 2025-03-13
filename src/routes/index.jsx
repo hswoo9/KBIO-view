@@ -23,6 +23,10 @@ import IntroduceOperationalDetail from "@/pages/introduce/OperationalDetail";
 import IntroduceRelated from "@/pages/introduce/RelatedList";
 import IntroduceRelatedDetail from "@/pages/introduce/RelatedDetail";
 import TotalSearch from "@/pages/search/TotalSearch";
+
+
+import UserError404 from "@/pages/error_pages/user_error404";
+
 //COMMON
 import CommonError from "@/pages/common/error/commonError";
 import CommonPopup from "@/pages/common/popup/commonPopup";
@@ -813,7 +817,7 @@ const SecondRoutes = () => {
               <Route path={URL.MANAGER_POPUP_LIST} element={<ManagerPopupList/>}/>
               <Route path={URL.MANAGER_POPUP_CREATE} element={<ManagerPopupEdit mode={CODE.MODE_CREATE}/>}/>
               <Route path={URL.MANAGER_POPUP_MODIFY} element={<ManagerPopupEdit mode={CODE.MODE_MODIFY}/>}/>
-              
+
               <Route path={URL.MANAGER_IMAGES_POPUP} element={<ManagerImagesPopup/>}/>
               <Route path={URL.MANAGER_OPERATIONAL_SUPPORT} element={<OperationalSupport/>}/>
               <Route path={URL.MANAGER_CONSULTING_EXPERT} element={<ManagerExpert/>}/>
@@ -867,6 +871,13 @@ const SecondRoutes = () => {
               <Route path={URL.MessageTest} element={<MessageTest/>}/>
 
               <Route path={URL.COMMON_ERROR} element={<CommonError/>}/>
+              <Route path={URL.USER_ERROR} element={<UserError404/>}/>
+
+              <Route path="*" component={() => {
+                // window.location.href = URL.USER_ERROR;
+                console.log("asdfasdfas")
+                return null;
+              }}/>
             </Routes>
 
 

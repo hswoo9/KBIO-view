@@ -136,7 +136,15 @@ export const getComCdList = async (cdGroupSn) => {
  */
 export const fileDownLoad = async (atchFileSn, atchFileNm, trgtTblNm, trgtSn) => {
     try {
-        const response = await axios.post(`${window.location.protocol}//${window.location.hostname}:8080/commonApi/getFileDownLoad.do`, {
+
+        let hostName = window.location.hostname;
+
+        if(window.location.hostname == "133.186.146.192"){
+            hostName = "127.0.0.1"
+        }
+
+
+        const response = await axios.post(`${window.location.protocol}//${hostName}:8080/commonApi/getFileDownLoad.do`, {
             atchFileSn : atchFileSn,
             trgtTblNm : trgtTblNm,
             trgtSn : trgtSn
@@ -169,7 +177,13 @@ export const fileDownLoad = async (atchFileSn, atchFileNm, trgtTblNm, trgtSn) =>
  */
 export const fileZipDownLoad = async (psnTblSn, zipFileName, trgtTblNm, trgtSn) => {
     try {
-        const response = await axios.post(`${window.location.protocol}//${window.location.hostname}:8080/commonApi/getFileZipDownLoad.do`, {
+        let hostName = window.location.hostname;
+
+        if(window.location.hostname == "133.186.146.192"){
+            hostName = "127.0.0.1"
+        }
+
+        const response = await axios.post(`${window.location.protocol}//${hostName}:8080/commonApi/getFileZipDownLoad.do`, {
             psnTblSn : psnTblSn,
             zipFileName : zipFileName,
             trgtTblNm : trgtTblNm,

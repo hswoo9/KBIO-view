@@ -36,6 +36,7 @@ const URL = {
   ERROR: "/egovframe-template-simple-react/error", //로그인
 
   COMMON_ERROR : "/commonError",
+  USER_ERROR : "/error",
 
   FIND_ID_PSWD:"/egovframe-template-simple-react/findIdPswd", //아이디 비번찾기
 

@@ -2,7 +2,7 @@
 FROM node:18
 
 # 작업 디렉토리 설정
-WORKDIR /app
+WORKDIR /usr/src/app
 
 # package.json과 package-lock.json 복사
 COPY package*.json ./

@@ -16,7 +16,13 @@ export const WebSocketProvider = ({ children }) => {
   const connectWebSocket = () => {
     if (!sessionUserSn) return;
 
-    const socketInstance = new SockJS(`${window.location.protocol}//${window.location.hostname}:8080/ws?userSn=${sessionUserSn}`);
+    let hostName = window.location.hostname;
+
+    if(window.location.hostname == "133.186.146.192"){
+      hostName = "127.0.0.1"
+    }
+
+    const socketInstance = new SockJS(`${window.location.protocol}//${hostName}:8080/ws?userSn=${sessionUserSn}`);
 
     socketInstance.onopen = () => {
       console.log('WebSocket 연결됨');
