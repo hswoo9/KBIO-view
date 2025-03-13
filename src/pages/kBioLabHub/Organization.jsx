@@ -142,167 +142,170 @@ function KBioLabHub(props) {
       <div id="container" className="container organization">
         <div className="inner">
           <CommonSubMenu/>
-          <div className="inner2">
-            <div className="organizationBox" data-aos="fade-up" data-aos-duration="1500">
-              <div className="text1">
-                <div className="text type1 move mouseCursor"
-                  onClick={() => {
-                      setSearchCondition({
-                        ...searchCondition,
-                        deptSn: ""
-                      });
-                    }
-                  }
-                >
-                  <strong className="title">사업추진단 협의체</strong>
-                  <p className="text">중소벤처기업부 - 인천광역시 - 연세대학교</p>
+            <div className="inner2">
+                <div className="titleWrap type2" data-aos="flip-up" data-aos-duration="1000">
+                    <p className="tt1">조직도</p>
                 </div>
-              </div>
-              <div className="textWrap">
-                <div className="text type2 text3 mouseCursor"
-                     onClick={() => {
-                           setSearchCondition({
-                             ...searchCondition,
-                             deptSn: 30
-                           });
-                         }
-                     }
-                >
-                  <p className="text">건축 TF</p>
+                <div className="organizationBox" data-aos="fade-up" data-aos-duration="1500">
+                    <div className="text1">
+                        <div className="text type1 move mouseCursor"
+                             onClick={() => {
+                                 setSearchCondition({
+                                     ...searchCondition,
+                                     deptSn: ""
+                                 });
+                             }
+                             }
+                        >
+                            <strong className="title">사업추진단 협의체</strong>
+                            <p className="text">중소벤처기업부 - 인천광역시 - 연세대학교</p>
+                        </div>
+                    </div>
+                    <div className="textWrap">
+                        <div className="text type2 text3 mouseCursor"
+                             onClick={() => {
+                                 setSearchCondition({
+                                     ...searchCondition,
+                                     deptSn: 30
+                                 });
+                             }
+                             }
+                        >
+                            <p className="text">건축 TF</p>
+                        </div>
+                        <div className="textWrap2">
+                            <div className="text type1 text2 mouseCursor"
+                                 onClick={() => {
+                                     setSearchCondition({
+                                         ...searchCondition,
+                                         deptSn: 29
+                                     });
+                                 }
+                                 }
+                            >
+                                <strong className="title">사업추진단 협의체</strong>
+                                <p className="text">단장</p>
+                            </div>
+                            <ul className="textWrap3">
+                                <li className="text type2 text4 mouseCursor"
+                                    onClick={() => {
+                                        setSearchCondition({
+                                            ...searchCondition,
+                                            deptSn: 31
+                                        });
+                                    }
+                                    }
+                                >
+                                    <p className="text">전략기획팀</p>
+                                </li>
+                                <li className="text type2 text5 mouseCursor"
+                                    onClick={() => {
+                                        setSearchCondition({
+                                            ...searchCondition,
+                                            deptSn: 41
+                                        });
+                                    }
+                                    }
+                                >
+                                    <p className="text">경영지원팀</p>
+                                </li>
+                                <li className="text type2 text6 mouseCursor"
+                                    onClick={() => {
+                                        setSearchCondition({
+                                            ...searchCondition,
+                                            deptSn: 42
+                                        });
+                                    }
+                                    }
+                                >
+                                    <p className="text">프로그램관리팀</p>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
-                <div className="textWrap2">
-                  <div className="text type1 text2 mouseCursor"
-                       onClick={() => {
-                           setSearchCondition({
-                               ...searchCondition,
-                               deptSn: 29
-                           });
-                        }
-                       }
-                  >
-                    <strong className="title">사업추진단 협의체</strong>
-                    <p className="text">단장</p>
-                  </div>
-                  <ul className="textWrap3">
-                    <li className="text type2 text4 mouseCursor"
-                        onClick={() => {
-                            setSearchCondition({
+                <div className="searchFormWrap type1" data-aos="fade-up" data-aos-duration="1500">
+                    <form>
+                        <div className="itemBox type2">
+                            <select
+                                className="niceSelectCustom"
+                                onChange={(e) =>
+                                    setSearchCondition({...searchCondition, deptSn: e.target.value})
+                                }
+                                value={searchCondition.deptSn || ""}
+                            >
+                                {deptList}
+                            </select>
+                        </div>
+                        <div className="searchBox">
+                            <div className="itemBox type2">
+                                <select
+                                    className="niceSelectCustom"
+                                    onChange={(e) =>
+                                        setSearchCondition({...searchCondition, searchType: e.target.value})
+                                    }
+                                    value={searchCondition.searchType || "all"}
+                                >
+                                    <option value="all">전체</option>
+                                    <option value="kornFlnm">이름</option>
+                                    <option value="tkcgTask">업무</option>
+                                </select>
+                            </div>
+                            <div className="inputBox type1">
+                                <label className="input">
+                                    <input type="text"
+                                           id="board_search"
+                                           name="board_search"
+                                           placeholder="검색어를 입력해주세요."
+                                           value={searchCondition.searchVal || ""}
+                                           onChange={(e) =>
+                                               setSearchCondition({
+                                                   ...searchCondition,
+                                                   searchVal: e.target.value
+                                               })
+                                           }
+                                           onKeyDown={activeEnter}
+                                    />
+                                </label>
+                            </div>
+                            <button type="button" className="searchBtn"
+                                    onClick={searchHandle}
+                            >
+                                <div className="icon"></div>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div className="tableCont type1" data-aos="fade-up" data-aos-duration="1500">
+                    <table>
+                        <caption>게시판</caption>
+                        <thead>
+                        <tr>
+                            <th className="th1"><p>소속</p></th>
+                            <th className="th1"><p>직책</p></th>
+                            <th className="th1"><p>이름</p></th>
+                            <th className="th3"><p>담당업무</p></th>
+                            <th className="th2"><p>전화번호</p></th>
+                            <th className="th2"><p>이메일</p></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {orgchtList}
+                        </tbody>
+                    </table>
+                </div>
+                <div className="pageWrap">
+                    <EgovUserPaging
+                        pagination={paginationInfo}
+                        moveToPage={(passedPage) => {
+                            getOrgchtList({
                                 ...searchCondition,
-                                deptSn: 31
+                                pageIndex: passedPage
                             });
-                        }
-                        }
-                    >
-                      <p className="text">전략기획팀</p>
-                    </li>
-                    <li className="text type2 text5 mouseCursor"
-                        onClick={() => {
-                            setSearchCondition({
-                                ...searchCondition,
-                                deptSn: 41
-                            });
-                        }
-                        }
-                    >
-                      <p className="text">경영지원팀</p>
-                    </li>
-                    <li className="text type2 text6 mouseCursor"
-                        onClick={() => {
-                            setSearchCondition({
-                                ...searchCondition,
-                                deptSn: 42
-                            });
-                        }
-                        }
-                    >
-                      <p className="text">프로그램관리팀</p>
-                    </li>
-                  </ul>
+                        }}
+                    />
                 </div>
-              </div>
             </div>
-            <div className="searchFormWrap type1" data-aos="fade-up" data-aos-duration="1500">
-              <form>
-                <div className="itemBox type2">
-                  <select
-                      className="niceSelectCustom"
-                      onChange={(e) =>
-                          setSearchCondition({ ...searchCondition, deptSn: e.target.value })
-                      }
-                      value={searchCondition.deptSn || ""}
-                  >
-                      {deptList}
-                  </select>
-                </div>
-                <div className="searchBox">
-                  <div className="itemBox type2">
-                    <select
-                        className="niceSelectCustom"
-                        onChange={(e) =>
-                            setSearchCondition({ ...searchCondition, searchType: e.target.value })
-                        }
-                        value={searchCondition.searchType || "all"}
-                    >
-                      <option value="all">전체</option>
-                      <option value="kornFlnm">이름</option>
-                      <option value="tkcgTask">업무</option>
-                    </select>
-                  </div>
-                  <div className="inputBox type1">
-                    <label className="input">
-                      <input type="text"
-                             id="board_search"
-                             name="board_search"
-                             placeholder="검색어를 입력해주세요."
-                             value={searchCondition.searchVal || ""}
-                             onChange={ (e) =>
-                                setSearchCondition({
-                                    ...searchCondition,
-                                    searchVal: e.target.value
-                                })
-                            }
-                             onKeyDown={activeEnter}
-                      />
-                    </label>
-                  </div>
-                  <button type="button" className="searchBtn"
-                          onClick={searchHandle}
-                  >
-                    <div className="icon"></div>
-                  </button>
-                </div>
-              </form>
-            </div>
-            <div className="tableCont type1" data-aos="fade-up" data-aos-duration="1500">
-              <table>
-                <caption>게시판</caption>
-                <thead>
-                <tr>
-                  <th className="th1"><p>소속</p></th>
-                  <th className="th1"><p>직책</p></th>
-                  <th className="th1"><p>이름</p></th>
-                  <th className="th3"><p>담당업무</p></th>
-                  <th className="th2"><p>전화번호</p></th>
-                  <th className="th2"><p>이메일</p></th>
-                </tr>
-                </thead>
-                <tbody>
-                {orgchtList}
-                </tbody>
-              </table>
-            </div>
-            <div className="pageWrap">
-              <EgovUserPaging
-                  pagination={paginationInfo}
-                  moveToPage={(passedPage) => {
-                    getOrgchtList({
-                      ...searchCondition,
-                      pageIndex: passedPage
-                    });
-                  }}
-              />
-            </div>
-          </div>
         </div>
       </div>
   );

@@ -708,6 +708,8 @@ function EgovHeader() {
                 }
                 `}
         </style>
+
+        <a href="/" className="visually-hidden">본문 바로가기</a>
         <div className="hInner">
           <div className="hTop inner">
             <div className="logBox">

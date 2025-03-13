@@ -311,12 +311,12 @@ function commonPstList(props) {
                             <caption>게시글목록</caption>
                             <thead>
                             <tr>
-                                <th className="th1">번호</th>
+                                <th className="th1" scope="col">번호</th>
                                 {bbs.pstCtgryYn == "Y" && (
-                                    <th className="th1">분류</th>
+                                    <th className="th1" scope="col">분류</th>
                                 )}
                                 <th></th>
-                                <th className="th1">조회수</th>
+                                <th className="th1" scope="col">조회수</th>
                             </tr>
                             </thead>
                             <tbody>

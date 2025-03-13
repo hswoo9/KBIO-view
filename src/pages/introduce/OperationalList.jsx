@@ -173,7 +173,7 @@ function OperationalList() {
                                     </select>
                                 </div>
                                 <div className="inputBox type1">
-                                    <label className="input">
+                                    <label className="input" htmlFor="searchVal">
                                         <input
                                             type="text"
                                             name="searchVal"

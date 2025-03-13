@@ -89,7 +89,7 @@ function EgovMainUser(props) {
       <div id="container" className="container main">
         <div className="sec01">
           <div className="bg bgSlide">
-          <div className="slide"><img src={user_main_sec01_slide01} alt="images" loading="lazy"/></div>
+            <div className="slide"><img src={user_main_sec01_slide01} alt="images" loading="lazy"/></div>
           </div>
           <div className="inner">
             <MainSlider/>
@@ -99,7 +99,7 @@ function EgovMainUser(props) {
                   <a href="#" style={{pointerEvents: "none"}}>
                     <strong className="tt1">연구개발 장비 구축</strong>
                     <p className="tt2">바이오 연구개발 장비 및 <br/>시설 구축 오퍼레이터 상주 및 <br/>장비운용 관리</p>
-                    <figure className="icon"><img src={user_main_sec01_icon01} alt="icon image" loading="lazy"/>
+                    <figure className="icon"><img src={user_main_sec01_icon01} alt="연구개발 장비 구축" loading="lazy"/>
                     </figure>
                   </a>
                 </li>
@@ -107,7 +107,7 @@ function EgovMainUser(props) {
                   <a href="#" style={{pointerEvents: "none"}}>
                     <strong className="tt1">네트워킹 플랫폼</strong>
                     <p className="tt2">산,학,연,병 업무 협력 <br/>플랫폼 운용 기술교류회 <br/>IR, 포럼 등 개최</p>
-                    <figure className="icon"><img src={user_main_sec01_icon02} alt="icon image" loading="lazy"/>
+                    <figure className="icon"><img src={user_main_sec01_icon02} alt="i네트워킹 플랫폼" loading="lazy"/>
                     </figure>
                   </a>
                 </li>
@@ -115,7 +115,7 @@ function EgovMainUser(props) {
                   <a href="#" style={{pointerEvents: "none"}}>
                     <strong className="tt1">입주시설 구축</strong>
                     <p className="tt2">기업성장단계를 고려한 <br/>기업별 사무공간 및 <br/>공용 실험공간</p>
-                    <figure className="icon"><img src={user_main_sec01_icon03} alt="icon image" loading="lazy"/>
+                    <figure className="icon"><img src={user_main_sec01_icon03} alt="입주시설 구축" loading="lazy"/>
                     </figure>
                   </a>
                 </li>
@@ -123,7 +123,7 @@ function EgovMainUser(props) {
                   <a href="#" style={{pointerEvents: "none"}}>
                     <strong className="tt1">프로그램 운영</strong>
                     <p className="tt2">스타트업 기술사업화, <br/>편딩 및 투자 지원과 관련된 <br/>5개 프로그램 운영</p>
-                    <figure className="icon"><img src={user_main_sec01_icon04} alt="icon image" loading="lazy"/>
+                    <figure className="icon"><img src={user_main_sec01_icon04} alt="프로그램 운영" loading="lazy"/>
                     </figure>
                   </a>
                 </li>
@@ -139,14 +139,14 @@ function EgovMainUser(props) {
               <p className="secText"><strong className="kBio">K- Bio Labhub</strong>는 바이오산업 기업을 위한 서비스를 제공하고있습니다</p>
             </div>
             <div className="institution_swiper swiper" data-aos="fade-up" data-aos-duration="1500">
-              <MainSwiper />
+              <MainSwiper/>
             </div>
           </div>
         </section>
-        <MainCalendar />
+        <MainCalendar/>
         <section className="sec sec04" data-aos="fade-in">
           <div className="inner">
-            <MainBottomSwiper />
+            <MainBottomSwiper/>
             <div className="box noticeBox" data-aos="fade-in">
               <div className="topBox" data-aos="fade-in" data-aos-duration="1500">
                 <h2 className="secTitle">공지사항</h2>
@@ -164,29 +164,30 @@ function EgovMainUser(props) {
               </div>
               <ul className="listBox" data-aos="fade-up" data-aos-duration="1500">
                 {notiList.length > 0 && notiList.map((pst, index) => (
-                  <li key={pst.pstSn}>
-                    <NavLink
-                      to={URL.COMMON_PST_NORMAL_DETAIL}
-                      state={{
-                        pstSn : pst.pstSn,
-                        menuSn: 32,
-                        thisMenuSn: 38,
-                        menuNmPath : "커뮤니티 > 공지사항"
-                      }}
-                    >
-                      {pst.upendNtcYn == "Y" ?
-                          <span className="cate">공지</span> :
-                          <span className="cate etc">일반</span>
-                      }
-                      <div className="titleBox">
-                        <h3 className="title">{pst.pstTtl}</h3>
-                        <p className="date">{moment(pst.frstCrtDt).format('YYYY-MM-DD')}</p>
-                      </div>
-                      <div className="textBox">
-                        <p style={{minHeight : "77px"}} dangerouslySetInnerHTML={{__html: pst.pstCn.replace(/<\/?[^>]+(>|$)/g, " ")}}></p>
-                      </div>
-                    </NavLink>
-                  </li>
+                    <li key={pst.pstSn}>
+                      <NavLink
+                          to={URL.COMMON_PST_NORMAL_DETAIL}
+                          state={{
+                            pstSn: pst.pstSn,
+                            menuSn: 32,
+                            thisMenuSn: 38,
+                            menuNmPath: "커뮤니티 > 공지사항"
+                          }}
+                      >
+                        {pst.upendNtcYn == "Y" ?
+                            <span className="cate">공지</span> :
+                            <span className="cate etc">일반</span>
+                        }
+                        <div className="titleBox">
+                          <h3 className="title">{pst.pstTtl}</h3>
+                          <p className="date">{moment(pst.frstCrtDt).format('YYYY-MM-DD')}</p>
+                        </div>
+                        <div className="textBox">
+                          <p style={{minHeight: "77px"}}
+                             dangerouslySetInnerHTML={{__html: pst.pstCn.replace(/<\/?[^>]+(>|$)/g, " ")}}></p>
+                        </div>
+                      </NavLink>
+                    </li>
                 ))}
               </ul>
             </div>
@@ -210,13 +211,13 @@ function EgovMainUser(props) {
                 {pressReleaseList.length > 0 && pressReleaseList.map((pst, index) => (
                     <li key={pst.pstSn}>
                       <NavLink
-                        to={URL.COMMON_PST_NORMAL_DETAIL}
-                        state={{
-                          pstSn : pst.pstSn,
-                          menuSn: 32,
-                          thisMenuSn: 62,
-                          menuNmPath : "커뮤니티 > 보도자료"
-                        }}
+                          to={URL.COMMON_PST_NORMAL_DETAIL}
+                          state={{
+                            pstSn: pst.pstSn,
+                            menuSn: 32,
+                            thisMenuSn: 62,
+                            menuNmPath: "커뮤니티 > 보도자료"
+                          }}
                       >
                         {pst.upendNtcYn == "Y" ?
                             <span className="cate">공지</span> :
@@ -227,7 +228,8 @@ function EgovMainUser(props) {
                           <p className="date">{moment(pst.frstCrtDt).format('YYYY-MM-DD')}</p>
                         </div>
                         <div className="textBox">
-                          <p style={{minHeight : "77px"}} dangerouslySetInnerHTML={{__html: pst.pstCn.replace(/<\/?[^>]+(>|$)/g, " ")}}></p>
+                          <p style={{minHeight: "77px"}}
+                             dangerouslySetInnerHTML={{__html: pst.pstCn.replace(/<\/?[^>]+(>|$)/g, " ")}}></p>
                         </div>
                       </NavLink>
                     </li>
@@ -236,7 +238,7 @@ function EgovMainUser(props) {
             </div>
           </div>
         </section>
-        <MainFooterBanner />
+        <MainFooterBanner/>
       </div>
   );
 }

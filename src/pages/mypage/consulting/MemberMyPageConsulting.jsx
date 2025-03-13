@@ -226,10 +226,10 @@ function MemberMyPageConsulting(props) {
                             <caption>컨설팅의뢰 내역</caption>
                             <thead>
                             <tr>
-                                <th className="th1">상태</th>
-                                <th className="th1">분류</th>
-                                <th>제목</th>
-                                <th className="th1">만족도</th>
+                                <th className="th1" scope="col">상태</th>
+                                <th className="th1" scope="col">분류</th>
+                                <th scope="col">제목</th>
+                                <th className="th1" scope="col">만족도</th>
                             </tr>
                             </thead>
                             <tbody>
