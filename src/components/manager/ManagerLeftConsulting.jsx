@@ -84,7 +84,7 @@ function ManagerLeftConsulting() {
                     className={({isActive}) => (isActive ? "activeTag" : "")}
                 >
                   <div className="icon"></div>
-                  <p>간편의뢰관리</p>
+                  <p>간편상담관리</p>
                 </NavLink>
               </li>
               <li onMouseOver={(e) => handleMouseOver(e)}>

@@ -295,11 +295,11 @@ function ManagerSimpleCnslt(props) {
                 }
 
                 let sheetDatas = [{
-                    sheetName : "간편의뢰관리",
+                    sheetName : "간편상담관리",
                     header : ['번호', '자문분야', '컨설턴트', '소속', '제목', '신청자', '신청일', '상태', '만족도'],
                     row : rowDatas
                 }];
-                excelExport("간편의뢰관리", sheetDatas);
+                excelExport("간편상담관리", sheetDatas);
             }
         )
     });
@@ -463,7 +463,7 @@ function ManagerSimpleCnslt(props) {
         <div id="container" className="container layout cms">
             <ManagerLeft/>
             <div className="inner">
-                <h2 className="pageTitle"><p>간편의뢰 관리</p></h2>
+                <h2 className="pageTitle"><p>간편상담 관리</p></h2>
                 <div className="cateWrap">
                     <form action="">
                         <ul className="cateList">
