@@ -89,7 +89,7 @@ function EgovMainUser(props) {
       <div id="container" className="container main">
         <div className="sec01">
           <div className="bg bgSlide">
-            <div className="slide"><img src={user_main_sec01_slide01} alt="images" loading="lazy"/></div>
+            <div className="slide" style={{height : "100%"}}><img src={user_main_sec01_slide01} alt="images" loading="lazy"/></div>
           </div>
           <div className="inner">
             <MainSlider/>
