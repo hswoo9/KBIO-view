@@ -315,7 +315,7 @@ function setRejectMember(props) {
                                 <div className="input">
                                     <input
                                         type="text"
-                                        defaultValue={memberDetail.lastLoginDate ? new Date(memberDetail.lastLoginDate).toLocaleDateString() : '-'}
+                                        value={memberDetail.lastLoginDate ? new Date(memberDetail.lastLoginDate).toLocaleDateString() : '-'}
                                         readOnly
                                     />
                                 </div>
@@ -327,7 +327,7 @@ function setRejectMember(props) {
                             <div className="input">
                                 <input
                                     type="text"
-                                    defaultValue={memberDetail.snsClsf || ''}
+                                    value={memberDetail.snsClsf || ''}
                                     readOnly
                                 />
                             </div>
