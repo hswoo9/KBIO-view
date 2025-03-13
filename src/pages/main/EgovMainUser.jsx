@@ -159,6 +159,7 @@ function EgovMainUser(props) {
                       menuNmPath: "커뮤니티 > 공지사항"
                     }}
                     className="plusBtn">
+                   <span className="visually-hidden">공지사항</span>
                   <div className="icon"></div>
                 </NavLink>
               </div>
@@ -205,6 +206,7 @@ function EgovMainUser(props) {
                     className="plusBtn"
                 >
                   <div className="icon"></div>
+                  <span className="visually-hidden">공지사항</span>
                 </NavLink>
               </div>
               <ul className="listBox" data-aos="fade-up" data-aos-duration="1500">

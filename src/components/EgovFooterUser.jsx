@@ -107,13 +107,16 @@ function EgovFooterUser() {
             <div className="right">
               <div className="familySiteWrap">
                 <div className="itemBox">
-                  <select className="selectGroup footerSelect"
-                    onChange={(e) => {
-                        if (e.target.value != "") {
-                          window.open(e.target.value);
-                        }
-                      }
-                    }
+                  <label htmlFor="familySiteSelect" className="visually-hidden">패밀리 사이트 바로가기</label>
+                  <select
+                          id="familySiteSelect"
+                          className="selectGroup footerSelect"
+                          onChange={(e) => {
+                            if (e.target.value != "") {
+                              window.open(e.target.value);
+                            }
+                          }
+                          }
                   >
                     <option value="">패밀리 사이트 바로가기</option>
                     {familySiteList}

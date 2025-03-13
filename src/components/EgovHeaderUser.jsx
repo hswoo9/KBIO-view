@@ -709,7 +709,6 @@ function EgovHeader() {
                 `}
         </style>
 
-        <a href="/" className="visually-hidden">본문 바로가기</a>
         <div className="hInner">
           <div className="hTop inner">
             <div className="logBox">
@@ -792,6 +791,7 @@ function EgovHeader() {
                     }}
                 >
                   <button type="button" className="searchBtn">
+                    <span className="visually-hidden">통합검색</span>
                     <div className="icon"></div>
                   </button>
                 </NavLink>

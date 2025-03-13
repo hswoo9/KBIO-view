@@ -408,14 +408,4 @@ button:focus { outline: 2px solid black;}
 .container .cateWrap5 .rightBtn .refreshBtn .icon {background-image: url(@/assets/images/ico_refresh_white.svg);}
 .container .cateWrap5 .rightBtn .searchBtn .icon {background-image: url(@/assets/images/ico_search_white.svg);}
 
-.visually-hidden {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    border: 0;
-    white-space: nowrap;
-}
+.visually-hidden {position: absolute;width: 1px;height: 1px;padding: 0;margin: -1px;overflow: hidden;clip: rect(0, 0, 0, 0);border: 0;white-space: nowrap;}

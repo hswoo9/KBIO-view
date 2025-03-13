@@ -288,9 +288,12 @@ function MainCalendar() {
                                 <div className="icon"></div>
                             </button>
                             <div className="date"><strong>{currentYear}년 {currentMonthIndex}월</strong>
+                                <label htmlFor="month-input" className="visually-hidden">날짜 선택</label>
                                 <div className="icon" onClick={handleMonthClick}>
                                     <input
                                         type="month"
+                                        id="month-input"
+                                        name="month"
                                         ref={monthInputRef}
                                         className="customMonth"
                                         onChange={monthChangeEvent}
