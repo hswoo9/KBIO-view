@@ -14,6 +14,7 @@
     "bootstrap": "^5.3.3",
     "ci": "^2.3.0",
     "ckeditor5": "^44.1.0",
+    "core-js": "^3.40.0",
     "date-fns": "^4.1.0",
     "egovframe-template-simple-react": "file:",
     "exceljs": "^4.4.0",
