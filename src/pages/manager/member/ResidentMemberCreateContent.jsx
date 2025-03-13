@@ -677,15 +677,15 @@ function ResidentMemberCreateContent(props){
                     {/* 기업분류 */}
                     <li className="inputBox type1 width3">
                         <label className="title essential" htmlFor="mvnEntType">
-                            <small>분류<small style={{color:"red"}}> *</small></small>
+                            <small>분류<small style={{color: "red"}}> *</small></small>
                         </label>
                         <div className="itemBox">
                             <select className="selectGroup"
                                     id="entClsf"
                                     value={residentDetail.entClsf || ""}
                                     onChange={(e) =>
-                                            setResidentDetail({...residentDetail,entClsf : e.target.value})
-                            }
+                                        setResidentDetail({...residentDetail, entClsf: e.target.value})
+                                    }
                             >
                                 <option value="">선택</option>
                                 {comCdList.map((item, index) => (
@@ -701,7 +701,7 @@ function ResidentMemberCreateContent(props){
                     {/*기업명*/}
                     <li className="inputBox type1 width3">
                         <label className="title essential" htmlFor="mvnEntNm">
-                            <small>기업명<small style={{color:"red"}}> *</small></small>
+                            <small>기업명<small style={{color: "red"}}> *</small></small>
                         </label>
                         <div className="input">
                             <input
@@ -710,7 +710,7 @@ function ResidentMemberCreateContent(props){
                                 id="mvnEntNm"
                                 defaultValue={residentDetail.mvnEntNm || ""}
                                 onChange={(e) =>
-                                    setResidentDetail({ ...residentDetail, mvnEntNm: e.target.value })
+                                    setResidentDetail({...residentDetail, mvnEntNm: e.target.value})
                                 }
                             />
                         </div>
@@ -718,22 +718,22 @@ function ResidentMemberCreateContent(props){
                     {/*로고*/}
                     <li className="inputBox type1 width3 file">
                         <p className="title essential">로고파일선택
-                            <small style={{color:"red"}}> *</small>
+                            <small style={{color: "red"}}> *</small>
                         </p>
                         <div className="input">
                             {selectedFiles.atchFileSn ? (
-                                        <p className="file_name" id="fileNamePTag">
-                                            {selectedFiles.atchFileNm} - {(selectedFiles.atchFileSz / 1024).toFixed(2)} KB
+                                <p className="file_name" id="fileNamePTag">
+                                    {selectedFiles.atchFileNm} - {(selectedFiles.atchFileSz / 1024).toFixed(2)} KB
 
-                                            <button type="button" className="deletBtn white"
-                                                    onClick={() => setFileDel(selectedFiles.atchFileSn)}  // 삭제 버튼 클릭 시 처리할 함수
-                                                    style={{marginLeft: '10px', color: 'red'}}
-                                            >
-                                                삭제
-                                            </button>
-                                        </p>
+                                    <button type="button" className="deletBtn white"
+                                            onClick={() => setFileDel(selectedFiles.atchFileSn)}  // 삭제 버튼 클릭 시 처리할 함수
+                                            style={{marginLeft: '10px', color: 'red'}}
+                                    >
+                                        삭제
+                                    </button>
+                                </p>
                             ) : (
-                                    <p className="file_name" id="fileNamePTag"></p>
+                                <p className="file_name" id="fileNamePTag"></p>
                             )}
                             <label>
                                 <small className="text btn">파일 선택</small>
@@ -753,7 +753,7 @@ function ResidentMemberCreateContent(props){
                     <li className="inputBox type1 width3">
                         <label className="title essential" htmlFor="rpsvNm">
                             <small>대표자
-                                <small style={{color:"red"}}> *</small>
+                                <small style={{color: "red"}}> *</small>
                             </small>
                         </label>
                         <div className="input">
@@ -763,7 +763,7 @@ function ResidentMemberCreateContent(props){
                                 id="rpsvNm"
                                 defaultValue={residentDetail.rpsvNm || ""}
                                 onChange={(e) =>
-                                    setResidentDetail({ ...residentDetail, rpsvNm: e.target.value })
+                                    setResidentDetail({...residentDetail, rpsvNm: e.target.value})
                                 }
                             />
                         </div>
@@ -772,7 +772,7 @@ function ResidentMemberCreateContent(props){
                     <li className="inputBox type1 width3">
                         <label className="title essential" htmlFor="entTelno">
                             <small>대표번호
-                                <small style={{color:"red"}}> *</small>
+                                <small style={{color: "red"}}> *</small>
                             </small>
                         </label>
                         <div className="input">
@@ -786,7 +786,7 @@ function ResidentMemberCreateContent(props){
                                 onChange={(e) => {
                                     const inputValue = e.target.value;
                                     if (/^\d*$/.test(inputValue)) { // 숫자만 허용
-                                        setResidentDetail({ ...residentDetail, entTelno: inputValue });
+                                        setResidentDetail({...residentDetail, entTelno: inputValue});
                                     }
                                 }}
                             />
@@ -796,7 +796,7 @@ function ResidentMemberCreateContent(props){
                     <li className="inputBox type1 email width3">
                         <label className="title essential" htmlFor="bzentyEmlId1">
                             <small>대표이메일
-                                <small style={{color:"red"}}> *</small>
+                                <small style={{color: "red"}}> *</small>
                             </small>
                         </label>
                         <div className="input">
@@ -806,7 +806,7 @@ function ResidentMemberCreateContent(props){
                                 id="bzentyEmlAddr1"
                                 defaultValue={splitEmail(residentDetail.bzentyEmlAddr || "")}
                                 onChange={(e) =>
-                                    setResidentDetail({ ...residentDetail, bzentyEmlAddr1: e.target.value })
+                                    setResidentDetail({...residentDetail, bzentyEmlAddr1: e.target.value})
                                 }
                             />
                             <span>@</span>
@@ -826,7 +826,8 @@ function ResidentMemberCreateContent(props){
                                     />
                                 ) : (
                                     // 기본 select 박스
-                                    <select className="selectGroup" onChange={handleSelectChange} value={selectedDomain}>
+                                    <select className="selectGroup" onChange={handleSelectChange}
+                                            value={selectedDomain}>
                                         <option value="">선택하세요</option>
                                         <option value="naver.com">naver.com</option>
                                         <option value="gmail.com">gmail.com</option>
@@ -841,7 +842,7 @@ function ResidentMemberCreateContent(props){
                     <li className="inputBox type1 email width3">
                         <label className="title essential" htmlFor="hmpgAddr">
                             <small>홈페이지
-                                <small style={{color:"red"}}> *</small>
+                                <small style={{color: "red"}}> *</small>
                             </small>
                         </label>
                         <div className="input">
@@ -851,7 +852,7 @@ function ResidentMemberCreateContent(props){
                                 id="hmpgAddr"
                                 defaultValue={residentDetail.hmpgAddr || ""}
                                 onChange={(e) =>
-                                    setResidentDetail({ ...residentDetail, hmpgAddr: e.target.value })
+                                    setResidentDetail({...residentDetail, hmpgAddr: e.target.value})
                                 }
                             >
                             </input>
@@ -861,7 +862,7 @@ function ResidentMemberCreateContent(props){
                     <li className="inputBox type1 width3">
                         <label className="title essential" htmlFor="entTpbiz">
                             <small>업종
-                                <small style={{color:"red"}}> *</small>
+                                <small style={{color: "red"}}> *</small>
                             </small>
                         </label>
                         <div className="itemBox">
@@ -869,7 +870,7 @@ function ResidentMemberCreateContent(props){
                                     id="entClsf"
                                     value={residentDetail.entTpbiz || ""}
                                     onChange={(e) =>
-                                        setResidentDetail({...residentDetail,entTpbiz : e.target.value})
+                                        setResidentDetail({...residentDetail, entTpbiz: e.target.value})
                                     }
                             >
                                 <option value="">선택</option>
@@ -887,7 +888,7 @@ function ResidentMemberCreateContent(props){
                     <li className="inputBox type1 email width3">
                         <label className="title essential" htmlFor="brno">
                             <small>사업자등록번호
-                                <small style={{color:"red"}}> *</small>
+                                <small style={{color: "red"}}> *</small>
                             </small></label>
                         <div className="input">
                             <small className="text btn" onClick={kbioauth}>기업인증</small>
@@ -898,17 +899,17 @@ function ResidentMemberCreateContent(props){
                                 placeholder="숫자만 입력"
                                 defaultValue={residentDetail.brno || ""}
                                 onChange={(e) =>
-                                    setResidentDetail({ ...residentDetail, brno: e.target.value })
+                                    setResidentDetail({...residentDetail, brno: e.target.value})
                                 }
                             >
                             </input>
                         </div>
-                        <span className="warningText" id="confirmText" style={{display:"none"}}>*인증되었습니다.</span>
+                        <span className="warningText" id="confirmText" style={{display: "none"}}>*인증되었습니다.</span>
                     </li>
                     {/* 주소 */}
                     <li className="inputBox type1 email width3">
                         <label className="title essential" htmlFor="entAddr">
-                            <small>주소<small style={{color:"red"}}> *</small></small>
+                            <small>주소<small style={{color: "red"}}> *</small></small>
                         </label>
                         <div className="input">
                             <small className="text btn" onClick={searchAddress}>주소 검색</small>
@@ -947,7 +948,7 @@ function ResidentMemberCreateContent(props){
                     <li className="inputBox type1 email width3">
                         <label className="title essential" htmlFor="entDaddr">
                             <small>상세주소
-                                <small style={{color:"red"}}> *</small>
+                                <small style={{color: "red"}}> *</small>
                             </small>
                         </label>
                         <div className="input">
@@ -957,7 +958,7 @@ function ResidentMemberCreateContent(props){
                                 id="entDaddr"
                                 value={residentDetail.entDaddr || ""}
                                 onChange={(e) =>
-                                    setResidentDetail({ ...residentDetail, entDaddr: e.target.value })
+                                    setResidentDetail({...residentDetail, entDaddr: e.target.value})
                                 }
                             >
                             </input>
@@ -997,7 +998,7 @@ function ResidentMemberCreateContent(props){
                     <li className="inputBox type1">
                         <label className="title essential" htmlFor="">
                             <small>기업소개
-                                <small style={{color:"red"}}> *</small>
+                                <small style={{color: "red"}}> *</small>
                             </small>
                         </label>
                         <div className="input">
@@ -1012,8 +1013,8 @@ function ResidentMemberCreateContent(props){
                         <label className="title essential" htmlFor=""><small>주요이력</small></label>
                         <div className="input">
                             <CommonEditor
-                            value={residentDetail.mainHstry || ""}
-                            onChange={(value) => handleChangeField("mainHstry", value)}
+                                value={residentDetail.mainHstry || ""}
+                                onChange={(value) => handleChangeField("mainHstry", value)}
                             />
                         </div>
                     </li>
@@ -1022,7 +1023,7 @@ function ResidentMemberCreateContent(props){
                     <li className="inputBox type1 width1 file">
                         <p className="title essential">
                             증빙자료
-                            <small style={{color:"red"}}> *</small>
+                            <small style={{color: "red"}}> *</small>
                         </p>
                         {/*<div className="input">
                             <p className="file_name" id="fileNamePTag"></p>
@@ -1052,10 +1053,10 @@ function ResidentMemberCreateContent(props){
                                 {fileList.map((file, index) =>
                                     file.atchFileSn ? (
                                         <li key={index}>
-                                            {file.atchFileNm} - {(file.atchFileSz/ 1024).toFixed(2)} KB
+                                            {file.atchFileNm} - {(file.atchFileSz / 1024).toFixed(2)} KB
                                             <button
-                                                onClick={() => handleDeleteAtchFile(index,file.atchFileSn)}
-                                                style={{ marginLeft: '10px', color: 'red' }}
+                                                onClick={() => handleDeleteAtchFile(index, file.atchFileSn)}
+                                                style={{marginLeft: '10px', color: 'red'}}
                                             >
                                                 삭제
                                             </button>
@@ -1065,7 +1066,7 @@ function ResidentMemberCreateContent(props){
                                             {file.name} - {(file.size / 1024).toFixed(2)} KB
                                             <button
                                                 onClick={() => handleDeleteFile(index)}
-                                                style={{ marginLeft: '10px', color: 'red' }}
+                                                style={{marginLeft: '10px', color: 'red'}}
                                             >
                                                 삭제
                                             </button>
@@ -1081,7 +1082,7 @@ function ResidentMemberCreateContent(props){
                     {/* 공개여부 */}
                     <li className="toggleBox width3">
                         <div className="box">
-                            <p className="title essential">공개여부<small style={{color:"red"}}> *</small></p>
+                            <p className="title essential">공개여부<small style={{color: "red"}}> *</small></p>
                             <div className="toggleSwithWrap">
                                 <input type="checkbox" id="rlsYn" hidden
                                        checked={residentDetail.rlsYn === "Y"}
@@ -1106,7 +1107,7 @@ function ResidentMemberCreateContent(props){
 
                     <li className="inputBox type1 width3">
                         <label className="title" htmlFor="ntcBgngDt"><small>공개 시작일</small></label>
-                        <div className="input" >
+                        <div className="input">
                             <input
                                 type="date"
                                 name="rlsBgngYmd"
@@ -1126,35 +1127,35 @@ function ResidentMemberCreateContent(props){
                     <li className="inputBox type1 width3">
                         <label className="title" htmlFor="ntcEndDate"><small>공개 종료일</small></label>
                         <div className="input">
-                        <input
-                            type="date"
-                            name="rlsEndYmd"
-                            value={formatYmdForInput(residentDetail.rlsEndYmd) || ""}
-                            onChange={(e) => {
-                                const selectedDate = e.target.value;
-                                const formattedDate = selectedDate.replace(/-/g, '');
-                                setResidentDetail({
-                                    ...residentDetail,
-                                    rlsEndYmd: formattedDate,
-                                });
-                            }}
-                            disabled={!isDatePickerEnabled}
-                        />
-                    </div>
+                            <input
+                                type="date"
+                                name="rlsEndYmd"
+                                value={formatYmdForInput(residentDetail.rlsEndYmd) || ""}
+                                onChange={(e) => {
+                                    const selectedDate = e.target.value;
+                                    const formattedDate = selectedDate.replace(/-/g, '');
+                                    setResidentDetail({
+                                        ...residentDetail,
+                                        rlsEndYmd: formattedDate,
+                                    });
+                                }}
+                                disabled={!isDatePickerEnabled}
+                            />
+                        </div>
                     </li>
 
 
                     {/* 산하직원 가입여부 */}
                     <li className="toggleBox width3">
                         <div className="box">
-                            <p className="title essential">산하직원 가입여부<small style={{color:"red"}}> *</small></p>
+                            <p className="title essential">산하직원 가입여부<small style={{color: "red"}}> *</small></p>
                             <div className="toggleSwithWrap">
                                 <input type="checkbox" id="empJoinYn" hidden
-                                checked={residentDetail.empJoinYn === "Y"}
+                                       checked={residentDetail.empJoinYn === "Y"}
                                        onChange={(e) => {
                                            setResidentDetail({
                                                ...residentDetail,
-                                               empJoinYn : e.target.checked ? "Y" : "N"
+                                               empJoinYn: e.target.checked ? "Y" : "N"
                                            })
                                        }}
                                 />
@@ -1169,22 +1170,41 @@ function ResidentMemberCreateContent(props){
                             Off : 회원가입시 직원들이 해당 기업을 선택하지 못하도록 비활성화 처리됩니다.
                         </span>
                     </li>
+                    <li className="toggleBox width3">
+                        <div className="box">
+                            <p className="title essential">졸업기업 여부<small style={{color: "red"}}> *</small></p>
+                            <div className="toggleSwithWrap">
+                                <input type="checkbox" id="grdtnYn" hidden
+                                       checked={residentDetail.grdtnYn === "Y"}
+                                       onChange={(e) => {
+                                           setResidentDetail({
+                                               ...residentDetail,
+                                               grdtnYn: e.target.checked ? "Y" : "N"
+                                           })
+                                       }}
+                                />
+                                <label htmlFor="grdtnYn" className="toggleSwitch">
+                                    <span className="toggleButton"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </li>
                 </ul>
-                
+
                 {/* <!--// 버튼영역 --> */}
                 <div className="buttonBox">
                     <div className="leftBox">
-                    <button
-                        type="button" className="clickBtn point"
-                        onClick={()=>updateResident()}
-                    >
-                        저장
-                    </button>
+                        <button
+                            type="button" className="clickBtn point"
+                            onClick={() => updateResident()}
+                        >
+                            저장
+                        </button>
                         {modeInfo.mode === "modify" && (
                             <button
                                 type="button"
                                 className="clickBtn gray"
-                                onClick={()=>setRcActvtnYn()}
+                                onClick={() => setRcActvtnYn()}
                             >
                                 <span>삭제</span>
                             </button>
@@ -1200,7 +1220,7 @@ function ResidentMemberCreateContent(props){
 
                 </div>
                 {/* <!--// 버튼영역 --> */}
-                
+
             </div>
         </div>
     );
