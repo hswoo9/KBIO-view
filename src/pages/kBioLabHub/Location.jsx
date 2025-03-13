@@ -48,6 +48,9 @@ function KbioLocation(props) {
         <div className="inner">
           <CommonSubMenu/>
           <div className="inner2">
+            <div className="titleWrap type2" data-aos="flip-up" data-aos-duration="1000">
+              <p className="tt1">오시는길</p>
+            </div>
             <div className="mapBox" data-aos="fade-up" data-aos-duration="1000">
               <iframe
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6340.543807153608!2d126.66629589579395!3d37.38340155356639!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x357b77f5212deb81%3A0x2fbd0ed40e59d8e2!2z7Jew7IS464yA7ZWZ6rWQIOq1reygnOy6oO2NvOyKpCDsooXtlanqtIA!5e0!3m2!1sko!2skr!4v1739756633646!5m2!1sko!2skr"

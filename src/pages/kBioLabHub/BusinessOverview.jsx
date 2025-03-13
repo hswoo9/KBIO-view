@@ -65,7 +65,7 @@ function BusinessOverview(props) {
           <div className="inner2">
             <div className="box box01" data-aos="fade-in">
               <div className="titleWrap type2" data-aos="flip-up" data-aos-duration="1000">
-                <p className="tt1">사업개요</p>
+                <p className="tt1">사업소개</p>
                 <strong className="tt2">의약바이오 분야 창업기업이 글로벌 혁신기업으로 빠르게 성장할 수 있도록 특화지원(후보물질 발굴&gt;사업화) 체계 구축</strong>
               </div>
               <div className="textBox">
@@ -148,7 +148,8 @@ function BusinessOverview(props) {
                 </li>
                 <li>
                   <strong className="title">선발기업</strong>
-                  <p className="text"><strong>정기모집</strong> 창업 초기기업 및 성장기업 60개사 <br/><strong>수시모집</strong> 지원예산 및 입주공간 공실
+                  <p className="text"><strong>정기모집</strong> 창업 초기기업 및 성장기업 60개사 <br/><strong>수시모집</strong> 지원예산 및 입주공간
+                    공실
                     등을 고려하여 소수선발</p>
                 </li>
               </ul>
@@ -239,7 +240,7 @@ function BusinessOverview(props) {
           </div>
         </div>
       </div>
-);
+  );
 }
 
 export default BusinessOverview;

@@ -604,7 +604,7 @@ function MemberMyPageModify(props) {
         let htmlData = [];
         if (dataList != null && dataList.length > 0) {
             htmlData.push(
-                <label className="checkBox type2" key="all">
+                <label className="checkBox type2" key="all" htmlFor="cnsltFld">
                     <input
                         type="radio"
                         name="cnsltFld"
@@ -618,7 +618,7 @@ function MemberMyPageModify(props) {
             )
             dataList.forEach(function (item, index) {
                 htmlData.push(
-                    <label className="checkBox type2" key={item.comCd}>
+                    <label className="checkBox type2" key={item.comCd} htmlFor="cnsltFld">
                         <input
                             type="radio"
                             name="cnsltFld"
@@ -878,12 +878,12 @@ function MemberMyPageModify(props) {
                     <div className="box02" data-aos="fade-up" data-aos-duration="1500">
                         <div className="companyBox">
                             <div className="titleWrap type2 left">
-                                <p className="tt1">회원 정보</p>
+                                <p className="tt1">회원정보 수정</p>
                             </div>
                             <ul className="listBox" data-aos="fade-up" data-aos-duration="1500">
                                 <li className="inputBox type2 textBox">
                                     <span className="title">성명</span>
-                                    <label className="text">
+                                    <label className="text" htmlFor="kornFlnm">
                                         <input
                                             type="text"
                                             name="kornFlnm"
@@ -896,7 +896,7 @@ function MemberMyPageModify(props) {
 
                                 <li className="inputBox type2 white">
                                     <span className="tt1">휴대폰</span>
-                                    <label className="input">
+                                    <label className="input" htmlFor="mblTelno">
                                         <input
                                             type="text"
                                             name="mblTelno"
@@ -1000,7 +1000,7 @@ function MemberMyPageModify(props) {
 
                                 <li className="inputBox type2">
                                     <span className="tt1">비밀번호 확인</span>
-                                    <label className="input">
+                                    <label className="input" htmlFor="userPw">
                                         <input
                                             type="password"
                                             name="userPw"
@@ -1014,7 +1014,7 @@ function MemberMyPageModify(props) {
 
                                 <li className="inputBox type2">
                                     <span className="tt1">비밀번호 변경</span>
-                                    <label className="input">
+                                    <label className="input" htmlFor="newUserPw">
                                         <input
                                             type="password"
                                             name="newUserPw"
@@ -1028,7 +1028,7 @@ function MemberMyPageModify(props) {
 
                                 <li className="inputBox type2">
                                     <span className="tt1">주소</span>
-                                    <label className="input" style={{paddingRight: "6rem"}}>
+                                    <label className="input" style={{paddingRight: "6rem"}} htmlFor="addr">
                                         <input type="text" name="addr" id="addr" readOnly
                                                value={memberDetail.addr || ""}/>
                                         <button type="button" className="addressBtn btn" onClick={searchAddress}>
@@ -1039,7 +1039,7 @@ function MemberMyPageModify(props) {
 
                                 <li className="inputBox type2">
                                     <span className="tt1">상세주소</span>
-                                    <label className="input" style={{paddingRight: "6rem"}}>
+                                    <label className="input" style={{paddingRight: "6rem"}} htmlFor="daddr">
                                         <input
                                             type="text"
                                             name="daddr"
@@ -1054,7 +1054,7 @@ function MemberMyPageModify(props) {
                                     <div className="input">
                                         <span className="tt1">메일수신</span>
                                         <div className="checkWrap">
-                                            <label className="checkBox type3">
+                                            <label className="checkBox type3" htmlFor="receive_mail">
                                                 <input
                                                     type="radio"
                                                     id="receive_mail_yes"
@@ -1066,7 +1066,7 @@ function MemberMyPageModify(props) {
                                                 />
                                                 <small>수신</small>
                                             </label>
-                                            <label className="checkBox type3">
+                                            <label className="checkBox type3" htmlFor="receive_mail">
                                                 <input
                                                     type="radio"
                                                     id="receive_mail_no"
@@ -1087,7 +1087,7 @@ function MemberMyPageModify(props) {
                                     <div className="input">
                                         <span className="tt1">문자수신</span>
                                         <div className="checkWrap">
-                                            <label className="checkBox type3">
+                                            <label className="checkBox type3" htmlFor="receive_sms">
                                                 <input
                                                     type="radio"
                                                     id="receive_sms_yes"
@@ -1099,7 +1099,7 @@ function MemberMyPageModify(props) {
                                                 />
                                                 <small>수신</small>
                                             </label>
-                                            <label className="checkBox type3">
+                                            <label className="checkBox type3" htmlFor="receive_sms">
                                                 <input
                                                     type="radio"
                                                     id="receive_sms_no"
@@ -1166,7 +1166,7 @@ function MemberMyPageModify(props) {
                                     </li>
                                     <li className="inputBox type2">
                                         <span className="tt1">주소</span>
-                                        <label className="input" style={{paddingRight: "6rem"}}>
+                                        <label className="input" style={{paddingRight: "6rem"}} htmlFor="company_address1">
                                             <input type="text" name="company_address1" id="company_address1" readOnly
                                                    title="주소"
                                                    value={rcDetail.entAddr || ""}/>
@@ -1181,7 +1181,7 @@ function MemberMyPageModify(props) {
                                         </div>
                                     </li>
                                     <li className="inputBox type2 noText">
-                                        <label className="input">
+                                        <label className="input" htmlFor="company_address2">
                                             <input
                                                 type="text"
                                                 name="company_address2"
@@ -1234,7 +1234,7 @@ function MemberMyPageModify(props) {
                                                 <p style={{color: "#666", fontSize: "14px", marginBottom: "12px"}}>
                                                     - 사진 권장 사이즈: 500px * 500px / 10M 이하 / gif, png, jpg(jpeg)
                                                 </p>
-                                                <label style={{display: "block", marginTop: "12px"}}>
+                                                <label style={{display: "block", marginTop: "12px"}} htmlFor="formFile">
                                                     <small className="text btn">파일 선택</small>
                                                     <input type="file"
                                                            name="formFile"
@@ -1260,7 +1260,7 @@ function MemberMyPageModify(props) {
 
                                 <li className="inputBox type2">
                                     <span className="tt1">직위</span>
-                                    <label className="input">
+                                    <label className="input" htmlFor="consultantPosition">
                                         <input
                                             type="text"
                                             name="consultantPosition"
@@ -1294,7 +1294,7 @@ function MemberMyPageModify(props) {
 
                                 <li className="inputBox type2">
                                     <span className="tt1">소속</span>
-                                    <label className="input">
+                                    <label className="input" htmlFor="consultantAffiliation">
                                         <input
                                             type="text"
                                             name="consultantAffiliation"
@@ -1327,7 +1327,7 @@ function MemberMyPageModify(props) {
 
                                 <li className="inputBox type2">
                                     <span className="tt1">자문분야</span>
-                                    <label className="input">
+                                    <label className="input" >
                                         <div className="itemBox" style={{flex: 1}}>
                                             {getComCdListToHtml(comCdList)}
                                         </div>
@@ -1338,7 +1338,7 @@ function MemberMyPageModify(props) {
                                     <span className="tt1">컨설팅 활동</span>
                                     <div className="input">
                                         <div className="checkWrap" style={{display: "flex", gap: "20px"}}>
-                                            <label className="checkBox type3">
+                                            <label className="checkBox type3" htmlFor="cnsltFld">
                                                 <input
                                                     type="radio"
                                                     name="cnsltActv"
@@ -1351,7 +1351,7 @@ function MemberMyPageModify(props) {
                                                 />
                                                 <small>공개</small>
                                             </label>
-                                            <label className="checkBox type3">
+                                            <label className="checkBox type3" htmlFor="cnsltActv">
                                                 <input
                                                     type="radio"
                                                     name="cnsltActv"
@@ -1370,7 +1370,7 @@ function MemberMyPageModify(props) {
 
                                 <li className="inputBox type2">
                                     <span className="tt1">간략 소개</span>
-                                    <label className="input">
+                                    <label className="input" htmlFor="consultantAffiliation">
                                     <textarea
                                         style={{height: "100px"}}
                                         name="consultantAffiliation"
@@ -1482,6 +1482,7 @@ function MemberMyPageModify(props) {
                                                             <label
                                                                 className="fileLabel"
                                                                 style={{marginLeft: "auto", cursor: "pointer"}}
+                                                                htmlFor="{`formCertFile${index}`}"
                                                             >
                                                                 파일 선택
                                                                 <input
@@ -1616,6 +1617,7 @@ function MemberMyPageModify(props) {
                                                             <label
                                                                 className="fileLabel"
                                                                 style={{marginLeft: "auto", cursor: "pointer"}}
+                                                                htmlFor="{`formCareerFile${index}`}"
                                                             >
                                                                 파일 선택
                                                                 <input
@@ -1761,6 +1763,7 @@ function MemberMyPageModify(props) {
                                                             <label
                                                                 className="fileLabel"
                                                                 style={{marginLeft: "auto", cursor: "pointer"}}
+                                                                htmlFor="{`formAcbgFile${index}`}"
                                                             >
                                                                 파일 선택
                                                                 <input
