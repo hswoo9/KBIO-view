@@ -5,6 +5,8 @@ import URL from "@/constants/url";
 import CODE from "@/constants/code";
 
 //CUSTOM
+import EgovHeaderError from "@/components/EgovHeaderError";
+
 import EgovHeaderUser from "@/components/EgovHeaderUser";
 import ManagerTop from "@/components/manager/ManagerTop";
 import EgovFooterUser from "@/components/EgovFooterUser";
@@ -23,9 +25,7 @@ import IntroduceOperationalDetail from "@/pages/introduce/OperationalDetail";
 import IntroduceRelated from "@/pages/introduce/RelatedList";
 import IntroduceRelatedDetail from "@/pages/introduce/RelatedDetail";
 import TotalSearch from "@/pages/search/TotalSearch";
-
-
-import UserError404 from "@/pages/error_pages/user_error404";
+import UserError404 from "@/pages/error_pages/UserError404";
 
 //COMMON
 import CommonError from "@/pages/common/error/commonError";
@@ -326,6 +326,10 @@ const SecondRoutes = () => {
     }
   }, []);
 
+  const RedirectTo404 = () => {
+    window.location.href = URL.USER_ERROR;
+  };
+
   const requestUrl = window.location.pathname.split("/")[1];
   return (
       <WebSocketProvider>
@@ -333,7 +337,8 @@ const SecondRoutes = () => {
           {
             requestUrl === "manager" ? (<ManagerTop/>) :
             requestUrl === "popup" ? "" :
-            requestUrl === "commonError" ? "" : (<EgovHeaderUser/>)
+            requestUrl === "commonError" ? "" :
+            requestUrl === "pageNotFound" ? (<EgovHeaderError/>) : (<EgovHeaderUser/>)
           }
 
             <Routes>
@@ -873,18 +878,21 @@ const SecondRoutes = () => {
               <Route path={URL.COMMON_ERROR} element={<CommonError/>}/>
               <Route path={URL.USER_ERROR} element={<UserError404/>}/>
 
-              <Route path="*" component={() => {
-                // window.location.href = URL.USER_ERROR;
-                console.log("asdfasdfas")
-                return null;
-              }}/>
+              <Route
+                  path="*"
+                  element={
+                    // 모든 잘못된 경로에서 404.html로 리디렉션
+                    <RedirectTo404 />
+                  }
+              />
             </Routes>
 
 
           {
             requestUrl === "manager" ? "" :
             requestUrl === "popup" ? "" :
-            requestUrl === "commonError" ? "" :  (<EgovFooterUser/>)
+            requestUrl === "commonError" ? "" :
+            requestUrl === "pageNotFound" ? "" : (<EgovFooterUser/>)
           }
         </div>
       </WebSocketProvider>

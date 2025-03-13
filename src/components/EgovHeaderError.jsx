@@ -1,6 +1,7 @@
-import '@/css/error/pretendard.css';
-import '@/css/error/reset.css';
-import '@/css/error/user.css';
+import '@/css/manager/pretendard.css';
+import '@/css/manager/reset.css';
+import '@/css/manager/user.css';
+import React from "react";
 
 function EgovHeaderError() {
 

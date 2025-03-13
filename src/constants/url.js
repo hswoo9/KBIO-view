@@ -39,7 +39,7 @@ const URL = {
   ERROR: "/error", //로그인
 
   COMMON_ERROR : "/commonError",
-  USER_ERROR : "/error",
+  USER_ERROR : "/pageNotFound",
 
   FIND_ID_PSWD:"/findIdPswd", //아이디 비번찾기
 
