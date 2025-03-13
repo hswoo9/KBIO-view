@@ -229,6 +229,7 @@ function KBioLabHub(props) {
                         <div className="itemBox type2">
                             <select
                                 className="niceSelectCustom"
+                                title="부서"
                                 onChange={(e) =>
                                     setSearchCondition({...searchCondition, deptSn: e.target.value})
                                 }
@@ -241,6 +242,7 @@ function KBioLabHub(props) {
                             <div className="itemBox type2">
                                 <select
                                     className="niceSelectCustom"
+                                    title="검색유형"
                                     onChange={(e) =>
                                         setSearchCondition({...searchCondition, searchType: e.target.value})
                                     }

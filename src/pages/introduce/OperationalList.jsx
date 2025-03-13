@@ -206,7 +206,9 @@ function OperationalList() {
                         <table>
                             <caption>입주기관리스트</caption>
                             <thead>
-                            <tr></tr>
+                            <tr>
+                                <th scope="col"></th>
+                            </tr>
                             </thead>
                             <tbody>
                             {operationalList}
@@ -214,7 +216,7 @@ function OperationalList() {
                         </table>
                     </div>
                     <div className="pageWrap">
-                        <EgovUserPaging
+                    <EgovUserPaging
                             pagination={paginationInfo}
                             moveToPage={(passedPage) => {
                                 getOperationalList({

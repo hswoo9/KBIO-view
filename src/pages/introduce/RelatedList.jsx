@@ -206,7 +206,9 @@ function RelatedList() {
                         <table>
                             <caption>유관기관리스트</caption>
                             <thead>
-                            <tr></tr>
+                            <tr>
+                                <th scope="col"></th>
+                            </tr>
                             </thead>
                             <tbody>
                             {relatedList}

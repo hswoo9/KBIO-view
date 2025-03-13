@@ -242,6 +242,7 @@ function commonPstList(props) {
                             <div className="searchBox">
                                 <div className="itemBox type2">
                                     <select
+                                        title="건수"
                                         className="niceSelectCustom"
                                         onChange={(e) =>
                                             setSearchDto({
