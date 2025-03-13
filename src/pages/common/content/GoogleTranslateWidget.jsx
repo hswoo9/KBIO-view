@@ -14,6 +14,10 @@ const GoogleTranslateWidget = () => {
                 includedLanguages: 'ko,en', // 번역 지원할 언어 목록 (예시: 영어, 스페인어, 프랑스어, 독일어, 한국어)
                 layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE, // 레이아웃 타입
             }, 'google_translate_element');
+
+            document.querySelectorAll('.VIpgJd-ZVi9od-xl07Ob-lTBxed').forEach(function(element) {
+                element.removeAttribute('href');
+            });
         };
     }, []);
 
