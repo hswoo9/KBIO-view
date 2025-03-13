@@ -908,7 +908,7 @@ function MemberMyPageModify(props) {
                                 </li>
 
                                 <li className="inputBox type2 white">
-                                    <span className="tt1">아이디</span>
+                                    <label htmlFor="userId" className="tt1">아이디</label>
                                     <div className="input">
                                         <div style={{display: 'flex', alignItems: 'center', marginBottom: '4px'}}>
                                             <input
@@ -923,7 +923,7 @@ function MemberMyPageModify(props) {
                                     </div>
                                 </li>
                                 <li className="inputBox type2">
-                                    <span className="tt1">이메일</span>
+                                    <label htmlFor="emailPrefix" className="tt1" title="이메일 아이디 입력">이메일</label>
                                     <div className="input flexinput" style={{display: 'flex', alignItems: 'center'}}>
                                         <input
                                             type="text"
@@ -937,12 +937,14 @@ function MemberMyPageModify(props) {
                                                 email: `${e.target.value}@${prev.emailDomain}`
                                             }))}
                                             style={{flex: 1, padding: '5px'}}
+                                            title="이메일 아이디를 입력하세요"
                                         />
                                         <span style={{margin: '0 5px'}}>@</span>
                                         <div className="itemBox" style={{flex: 1}}>
                                             {memberDetail.emailProvider === "direct" ? (
                                                 <input
                                                     type="text"
+                                                    id="emailDomain"
                                                     placeholder="도메인 입력"
                                                     value={memberDetail.emailDomain || ""}
                                                     onChange={(e) => {
@@ -966,6 +968,7 @@ function MemberMyPageModify(props) {
                                                 />
                                             ) : (
                                                 <select
+                                                    id="emailProvider"
                                                     className="selectGroup"
                                                     onChange={(e) => {
                                                         const provider = e.target.value;
@@ -983,6 +986,7 @@ function MemberMyPageModify(props) {
                                                         appearance: 'none',
                                                         width: '100%',
                                                     }}
+                                                    title="이메일 제공자"
                                                 >
                                                     <option value="">선택하세요</option>
                                                     <option value="naver.com">naver.com</option>
@@ -997,6 +1001,7 @@ function MemberMyPageModify(props) {
                                         </div>
                                     </div>
                                 </li>
+
 
                                 <li className="inputBox type2">
                                     <span className="tt1">비밀번호 확인</span>
@@ -1201,176 +1206,184 @@ function MemberMyPageModify(props) {
 
                         {sessionUsermbrType === 2 && (
                             <div className="box02" data-aos="fade-up" data-aos-duration="1500">
-                            <ul className="inputWrap" data-aos="fade-up" data-aos-duration="1500">
-                                <li className="inputBox type2">
-                                    <span className="tt1">사진</span>
-                                    <div className="input" style={{height: "100%"}}>
-                                        <div style={{display: "flex", alignItems: "flex-start", gap: "20px"}}>
-                                            <div style={{
-                                                width: "150px",
-                                                height: "150px",
-                                                border: "1px solid #ddd",
-                                                borderRadius: "8px",
-                                                overflow: "hidden",
-                                                backgroundColor: "#f8f8f8"
-                                            }}>
-                                                <img
-                                                    src={
-                                                        cnsltProfileFile
-                                                            ? `http://133.186.250.158${cnsltProfileFile.atchFilePathNm}/${cnsltProfileFile.strgFileNm}.${cnsltProfileFile.atchFileExtnNm}`
-                                                            : notProfile
-                                                    }
-                                                    onError={(e) => {
-                                                        e.target.src = notProfile;
-                                                    }}
-                                                    alt="컨설턴트사진"
+                                <ul className="inputWrap" data-aos="fade-up" data-aos-duration="1500">
+                                    <li className="inputBox type2">
+                                        <span className="tt1">사진</span>
+                                        <div className="input" style={{height: "100%"}}>
+                                            <div style={{display: "flex", alignItems: "flex-start", gap: "20px"}}>
+                                                <div style={{
+                                                    width: "150px",
+                                                    height: "150px",
+                                                    border: "1px solid #ddd",
+                                                    borderRadius: "8px",
+                                                    overflow: "hidden",
+                                                    backgroundColor: "#f8f8f8"
+                                                }}>
+                                                    <img
+                                                        src={
+                                                            cnsltProfileFile
+                                                                ? `http://133.186.250.158${cnsltProfileFile.atchFilePathNm}/${cnsltProfileFile.strgFileNm}.${cnsltProfileFile.atchFileExtnNm}`
+                                                                : notProfile
+                                                        }
+                                                        onError={(e) => {
+                                                            e.target.src = notProfile;
+                                                        }}
+                                                        alt="컨설턴트사진"
+                                                    />
+                                                </div>
+
+                                                <div style={{flex: 1}}>
+                                                    <p style={{
+                                                        color: "#ff4444",
+                                                        fontSize: "14px",
+                                                        marginBottom: "8px"
+                                                    }}>
+                                                        - 대표 사진 등록시 상세, 목록, 축소 이미지에 자동 리사이징되어 들어갑니다.
+                                                    </p>
+                                                    <p style={{color: "#666", fontSize: "14px", marginBottom: "12px"}}>
+                                                        - 사진 권장 사이즈: 500px * 500px / 10M 이하 / gif, png, jpg(jpeg)
+                                                    </p>
+                                                    <label style={{display: "block", marginTop: "12px"}}
+                                                           htmlFor="formFile">
+                                                        <small className="text btn">파일 선택</small>
+                                                        <input type="file"
+                                                               name="formFile"
+                                                               id="formFile"
+                                                               onChange={handleImageChange}
+                                                               style={{display: "none"}} // 파일 선택 input 숨김
+                                                        />
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+
+                                    <li className="inputBox type2">
+                                        <span className="tt1">소개</span>
+                                        <div className="input" style={{height: "100%"}}>
+                                            <CommonEditor
+                                                value={consultDetail.cnsltSlfint || ""}
+                                                onChange={handleChange}
+                                            />
+                                        </div>
+                                    </li>
+
+                                    <li className="inputBox type2">
+                                        <span className="tt1">직위</span>
+                                        <label className="input" htmlFor="consultantPosition">
+                                            <input
+                                                type="text"
+                                                name="consultantPosition"
+                                                placeholder="직위를 입력해주세요"
+                                                value={consultDetail.jbpsNm || ""}
+                                                onChange={(e) => setConsultDetail({
+                                                    ...consultDetail,
+                                                    jbpsNm: e.target.value
+                                                })}
+                                            />
+                                        </label>
+                                    </li>
+
+                                    <li className="inputBox type2">
+                                        <label htmlFor="consultantExperience" className="tt1">경력</label>
+                                        <div className="flexinput input">
+                                            <input
+                                                type="text"
+                                                name="consultantExperience"
+                                                id="consultantExperience"
+                                                placeholder="숫자만 입력"
+                                                value={consultDetail.crrPrd || ""}
+                                                onChange={(e) => setConsultDetail({
+                                                    ...consultDetail,
+                                                    crrPrd: e.target.value
+                                                })}
+                                                style={{width: "120px"}}
+                                            />
+                                            <span style={{marginLeft: "10px", color: "#333"}}>년</span>
+                                        </div>
+                                    </li>
+
+                                    <li className="inputBox type2">
+                                        <span className="tt1">소속</span>
+                                        <label className="input" htmlFor="consultantAffiliation">
+                                            <input
+                                                type="text"
+                                                name="consultantAffiliation"
+                                                placeholder="소속을 입력해주세요"
+                                                value={consultDetail.ogdpNm || ""}
+                                                onChange={(e) => setConsultDetail({
+                                                    ...consultDetail,
+                                                    ogdpNm: e.target.value
+                                                })}
+                                            />
+                                        </label>
+                                    </li>
+
+                                    <li className="inputBox type2">
+                                        <label htmlFor="consultingOption1" className="tt1">컨설팅 항목</label>
+                                        <div className="input">
+                                            <div className="checkWrap" style={{display: "flex", gap: "20px"}}>
+                                                <input
+                                                    type="checkbox"
+                                                    name="consultingOption1"
+                                                    id="consultingOption1"
+                                                    checked={consultDetail.consultingOption1}
+                                                    onChange={(e) => setConsultDetail({
+                                                        ...consultDetail,
+                                                        consultingOption1: e.target.checked
+                                                    })}
                                                 />
                                             </div>
+                                        </div>
+                                    </li>
 
-                                            <div style={{flex: 1}}>
-                                                <p style={{color: "#ff4444", fontSize: "14px", marginBottom: "8px"}}>
-                                                    - 대표 사진 등록시 상세, 목록, 축소 이미지에 자동 리사이징되어 들어갑니다.
-                                                </p>
-                                                <p style={{color: "#666", fontSize: "14px", marginBottom: "12px"}}>
-                                                    - 사진 권장 사이즈: 500px * 500px / 10M 이하 / gif, png, jpg(jpeg)
-                                                </p>
-                                                <label style={{display: "block", marginTop: "12px"}} htmlFor="formFile">
-                                                    <small className="text btn">파일 선택</small>
-                                                    <input type="file"
-                                                           name="formFile"
-                                                           id="formFile"
-                                                           onChange={handleImageChange}
-                                                           style={{display: "none"}} // 파일 선택 input 숨김
+
+                                    <li className="inputBox type2">
+                                        <span className="tt1">자문분야</span>
+                                        <label className="input">
+                                            <div className="itemBox" style={{flex: 1}}>
+                                                {getComCdListToHtml(comCdList)}
+                                            </div>
+                                        </label>
+                                    </li>
+
+                                    <li className="inputBox type2">
+                                        <span className="tt1">컨설팅 활동</span>
+                                        <div className="input">
+                                            <div className="checkWrap" style={{display: "flex", gap: "20px"}}>
+                                                <label className="checkBox type3" htmlFor="cnsltFld">
+                                                    <input
+                                                        type="radio"
+                                                        name="cnsltActv"
+                                                        value="Y"
+                                                        className="signUpRadio"
+                                                        checked={consultDetail.cnsltActv === "Y"}
+                                                        onChange={() =>
+                                                            setConsultDetail({...consultDetail, cnsltActv: "Y"})
+                                                        }
                                                     />
+                                                    <small>공개</small>
+                                                </label>
+                                                <label className="checkBox type3" htmlFor="cnsltActv">
+                                                    <input
+                                                        type="radio"
+                                                        name="cnsltActv"
+                                                        value="N"
+                                                        className="signUpRadio"
+                                                        checked={consultDetail.cnsltActv === "N"}
+                                                        onChange={() =>
+                                                            setConsultDetail({...consultDetail, cnsltActv: "N"})
+                                                        }
+                                                    />
+                                                    <small>비공개</small>
                                                 </label>
                                             </div>
                                         </div>
-                                    </div>
-                                </li>
+                                    </li>
 
-                                <li className="inputBox type2">
-                                    <span className="tt1">소개</span>
-                                    <div className="input" style={{height: "100%"}}>
-                                        <CommonEditor
-                                            value={consultDetail.cnsltSlfint || ""}
-                                            onChange={handleChange}
-                                        />
-                                    </div>
-                                </li>
-
-                                <li className="inputBox type2">
-                                    <span className="tt1">직위</span>
-                                    <label className="input" htmlFor="consultantPosition">
-                                        <input
-                                            type="text"
-                                            name="consultantPosition"
-                                            placeholder="직위를 입력해주세요"
-                                            value={consultDetail.jbpsNm || ""}
-                                            onChange={(e) => setConsultDetail({
-                                                ...consultDetail,
-                                                jbpsNm: e.target.value
-                                            })}
-                                        />
-                                    </label>
-                                </li>
-
-                                <li className="inputBox type2">
-                                    <span className="tt1">경력</span>
-                                    <div className="flexinput input">
-                                        <input
-                                            type="text"
-                                            name="consultantExperience"
-                                            placeholder="숫자만 입력"
-                                            value={consultDetail.crrPrd || ""}
-                                            onChange={(e) => setConsultDetail({
-                                                ...consultDetail,
-                                                crrPrd: e.target.value
-                                            })}
-                                            style={{width: "120px"}}
-                                        />
-                                        <span style={{marginLeft: "10px", color: "#333"}}>년</span>
-                                    </div>
-                                </li>
-
-                                <li className="inputBox type2">
-                                    <span className="tt1">소속</span>
-                                    <label className="input" htmlFor="consultantAffiliation">
-                                        <input
-                                            type="text"
-                                            name="consultantAffiliation"
-                                            placeholder="소속을 입력해주세요"
-                                            value={consultDetail.ogdpNm || ""}
-                                            onChange={(e) => setConsultDetail({
-                                                ...consultDetail,
-                                                ogdpNm: e.target.value
-                                            })}
-                                        />
-                                    </label>
-                                </li>
-
-                                <li className="inputBox type2">
-                                    <span className="tt1">컨설팅 항목</span>
-                                    <div className="input">
-                                        <div className="checkWrap" style={{display: "flex", gap: "20px"}}>
-                                            <input
-                                                type="text"
-                                                name="consultingOption1"
-                                                checked={consultDetail.consultingOption1}
-                                                onChange={(e) => setConsultDetail({
-                                                    ...consultDetail,
-                                                    consultingOption1: e.target.checked
-                                                })}
-                                            />
-                                        </div>
-                                    </div>
-                                </li>
-
-                                <li className="inputBox type2">
-                                    <span className="tt1">자문분야</span>
-                                    <label className="input" >
-                                        <div className="itemBox" style={{flex: 1}}>
-                                            {getComCdListToHtml(comCdList)}
-                                        </div>
-                                    </label>
-                                </li>
-
-                                <li className="inputBox type2">
-                                    <span className="tt1">컨설팅 활동</span>
-                                    <div className="input">
-                                        <div className="checkWrap" style={{display: "flex", gap: "20px"}}>
-                                            <label className="checkBox type3" htmlFor="cnsltFld">
-                                                <input
-                                                    type="radio"
-                                                    name="cnsltActv"
-                                                    value="Y"
-                                                    className="signUpRadio"
-                                                    checked={consultDetail.cnsltActv === "Y"}
-                                                    onChange={() =>
-                                                        setConsultDetail({...consultDetail, cnsltActv: "Y"})
-                                                    }
-                                                />
-                                                <small>공개</small>
-                                            </label>
-                                            <label className="checkBox type3" htmlFor="cnsltActv">
-                                                <input
-                                                    type="radio"
-                                                    name="cnsltActv"
-                                                    value="N"
-                                                    className="signUpRadio"
-                                                    checked={consultDetail.cnsltActv === "N"}
-                                                    onChange={() =>
-                                                        setConsultDetail({...consultDetail, cnsltActv: "N"})
-                                                    }
-                                                />
-                                                <small>비공개</small>
-                                            </label>
-                                        </div>
-                                    </div>
-                                </li>
-
-                                <li className="inputBox type2">
-                                    <span className="tt1">간략 소개</span>
-                                    <label className="input" htmlFor="consultantAffiliation">
+                                    <li className="inputBox type2">
+                                        <span className="tt1">간략 소개</span>
+                                        <label className="input" htmlFor="consultantAffiliation">
                                     <textarea
                                         style={{height: "100px"}}
                                         name="consultantAffiliation"
@@ -1389,427 +1402,472 @@ function MemberMyPageModify(props) {
                                             });
                                         }}
                                     ></textarea>
-                                        <div style={{textAlign: "right", fontSize: "0.9em", color: "#666"}}>
-                                            {(consultDetail.rmrkCn || "").length} / 100
-                                        </div>
-                                    </label>
-                                </li>
-
-                                <li className="inputBox type2 width1">
-                                    <span className="tt1">자격증</span>
-                                    <div className="input" style={{height: "100%"}}>
-                                        <div style={{display: "flex", flexDirection: "column", gap: "10px"}}>
-                                            <div
-                                                className="certificate-header"
-                                                style={{
-                                                    display: "grid",
-                                                    gridTemplateColumns: "1fr 1fr 1fr 1fr auto",
-                                                    gap: "10px",
-                                                    paddingBottom: "5px",
-                                                    borderBottom: "1px solid #000",
-                                                }}>
-                                                <span>자격증명</span>
-                                                <span>발급기관</span>
-                                                <span>취득일</span>
-                                                <span>파일 업로드</span>
+                                            <div style={{textAlign: "right", fontSize: "0.9em", color: "#666"}}>
+                                                {(consultDetail.rmrkCn || "").length} / 100
                                             </div>
-                                            {certificates.map((cert, index) => (
+                                        </label>
+                                    </li>
+
+                                    <li className="inputBox type2 width1">
+                                        <span className="tt1">자격증</span>
+                                        <div className="input" style={{height: "100%"}}>
+                                            <div style={{display: "flex", flexDirection: "column", gap: "10px"}}>
                                                 <div
-                                                    key={cert.key}
-                                                    className="flexinput"
+                                                    className="certificate-header"
                                                     style={{
-                                                        display: "flex",
-                                                        alignItems: "center",
+                                                        display: "grid",
+                                                        gridTemplateColumns: "1fr 1fr 1fr 1fr auto",
                                                         gap: "10px",
-                                                    }}
-                                                >
-                                                    <input
-                                                        type="text"
-                                                        name="qlfcLcnsNm"
-                                                        placeholder="자격증명을 입력하세요"
-                                                        className="f_input2"
-                                                        style={{width: "29%"}}
-                                                        value={cert.qlfcLcnsNm}
-                                                        onChange={(e) => handleInputChange(e, cert.key, "cert", "qlfcLcnsNm")}
-                                                    />
-                                                    <input
-                                                        type="text"
-                                                        name="pblcnInstNm"
-                                                        placeholder="발급기관을 입력하세요"
-                                                        className="f_input2"
-                                                        value={cert.pblcnInstNm}
-                                                        style={{width: "29%"}}
-                                                        onChange={(e) => handleInputChange(e, cert.key, "cert", "pblcnInstNm")}
-                                                    />
-                                                    <input
-                                                        type="date"
-                                                        name="acqsYmd"
-                                                        placeholder="취득일"
-                                                        className="f_input2"
-                                                        style={{width: "29%"}}
-                                                        value={formatDate(cert.acqsYmd)}
-                                                        onChange={(e) => handleInputChange(e, cert.key, "cert", "acqsYmd")}
-                                                    />
-                                                    {selectedCertFiles.length > 0 && selectedCertFiles[index] ? (
-                                                        selectedCertFiles[index].isNew ? (
-                                                            <p className="file_name" id={`cert${index}`}
-                                                               style={{width: "20%"}}>
-                                                            <span style={{cursor: "pointer"}}>
-                                                                {selectedCertFiles[index].file.name}
-                                                            </span>
-                                                            </p>
-                                                        ) : (
-                                                            <p className="file_name" id={`CertFileNamePTag${cert.key}`}
-                                                               style={{width: "20%"}}>
-                                                            <span
-                                                                onClick={() => fileDownLoad(selectedCertFiles[index].atchFileSn, selectedCertFiles[index].atchFileNm)}
-                                                                style={{cursor: "pointer"}}>
-                                                                {selectedCertFiles[index].atchFileNm}
-                                                            </span>
-                                                            </p>
-                                                        )
-                                                    ) : (
-                                                        <div
-                                                            style={{
-                                                                display: "flex",
-                                                                alignItems: "center",
-                                                                gap: "10px",
-                                                            }}
-                                                            className="widthGroup20"
-                                                        >
-                                                            <p className="file_name" id={`cert${index}`}
-                                                               style={{width: "50%"}}></p>
-                                                            <label
-                                                                className="fileLabel"
-                                                                style={{marginLeft: "auto", cursor: "pointer"}}
-                                                                htmlFor="{`formCertFile${index}`}"
-                                                            >
-                                                                파일 선택
-                                                                <input
-                                                                    type="file"
-                                                                    name={`selectedCertFile${index}`}
-                                                                    id={`formCertFile${index}`}
-                                                                    className="noneTag"
-                                                                    onChange={(e) => handleFileChange(e, "cert", index)}
-                                                                />
-                                                            </label>
-                                                        </div>
-                                                    )}
-                                                    <button type="button" className="fileLabel"
-                                                            onClick={() => {
-                                                                const certFile = selectedCertFiles[index];
-                                                                if (certFile && certFile.atchFileSn) {
-                                                                    removeCertificate(cert.key, cert.qlfcLcnsSn, certFile.atchFileSn);
-                                                                } else {
-                                                                    removeCertificate(cert.key, cert.qlfcLcnsSn, null);
-                                                                }
-                                                            }}>
-                                                        삭제
-                                                    </button>
+                                                        paddingBottom: "5px",
+                                                        borderBottom: "1px solid #000",
+                                                    }}>
+                                                    <span>자격증명</span>
+                                                    <span>발급기관</span>
+                                                    <span>취득일</span>
+                                                    <span>파일 업로드</span>
                                                 </div>
-                                            ))}
-                                            <button
-                                                type="button"
-                                                className="writeBtn clickBtn"
-                                                style={{width: "10%", height: "30px"}}
-                                                onClick={addCertificate}
-                                            >
-                                                추가
-                                            </button>
-                                        </div>
-                                    </div>
-                                </li>
+                                                {certificates.map((cert, index) => (
+                                                    <div
+                                                        key={cert.key}
+                                                        className="flexinput"
+                                                        style={{
+                                                            display: "flex",
+                                                            alignItems: "center",
+                                                            gap: "10px",
+                                                        }}
+                                                    >
+                                                        <label htmlFor={`qlfcLcnsNm${index}`}
+                                                               className="visually-hidden"></label>
+                                                        <input
+                                                            type="text"
+                                                            name="qlfcLcnsNm"
+                                                            id={`qlfcLcnsNm${index}`}
+                                                            placeholder="자격증명을 입력하세요"
+                                                            className="f_input2"
+                                                            style={{width: "29%"}}
+                                                            value={cert.qlfcLcnsNm}
+                                                            onChange={(e) => handleInputChange(e, cert.key, "cert", "qlfcLcnsNm")}
+                                                        />
 
-                                <li className="inputBox type2 width1">
-                                    <span className="tt1">경력 상세</span>
-                                    <div className="input" style={{height: "100%"}}>
-                                        <div style={{display: "flex", flexDirection: "column", gap: "10px"}}>
-                                            <div
-                                                className="certificate-header"
-                                                style={{
-                                                    display: "grid",
-                                                    gridTemplateColumns: "1fr 1fr 1fr 1fr auto",
-                                                    gap: "10px",
-                                                    paddingBottom: "5px",
-                                                    borderBottom: "1px solid #000",
-                                                }}>
-                                                <span>근무처</span>
-                                                <span>직위</span>
-                                                <span>근무기간</span>
-                                                <span>파일 업로드</span>
-                                            </div>
-                                            {careers.map((career, index) => (
-                                                <div
-                                                    key={career.key}
-                                                    className="flexinput"
-                                                    style={{
-                                                        display: "flex",
-                                                        alignItems: "center",
-                                                        gap: "10px",
-                                                    }}
-                                                >
-                                                    <input
-                                                        type="text"
-                                                        name="ogdpCoNm"
-                                                        placeholder="근무처를 입력하세요"
-                                                        className="f_input2"
-                                                        style={{width: "29%"}}
-                                                        value={career.ogdpCoNm || ""}
-                                                        onChange={(e) => handleInputChange(e, career.key, "career", "ogdpCoNm")}
-                                                    />
-                                                    <input
-                                                        type="text"
-                                                        name="jbgdNm"
-                                                        placeholder="직위를 입력하세요"
-                                                        className="f_input2"
-                                                        style={{width: "29%"}}
-                                                        value={career.jbgdNm || ""}
-                                                        onChange={(e) => handleInputChange(e, career.key, "career", "jbgdNm")}
-                                                    />
-                                                    <input
-                                                        type="date"
-                                                        name="jncmpYmd"
-                                                        placeholder="입사일자"
-                                                        className="f_input2"
-                                                        style={{width: "14%"}}
-                                                        value={formatDate(career.jncmpYmd) || ""}
-                                                        onChange={(e) => handleInputChange(e, career.key, "career", "jncmpYmd")}
-                                                    />~&nbsp;
-                                                    <input
-                                                        type="date"
-                                                        name="rsgntnYmd"
-                                                        placeholder="퇴사일자"
-                                                        className="f_input2"
-                                                        style={{width: "14%"}}
-                                                        value={formatDate(career.rsgntnYmd) || ""}
-                                                        onChange={(e) => handleInputChange(e, career.key, "career", "rsgntnYmd")}
-                                                    />
-                                                    {selectedCareerFiles.length > 0 && selectedCareerFiles[index] ? (
-                                                        selectedCareerFiles[index].isNew ? (
-                                                            <p className="file_name" id={`career${index}`}
-                                                               style={{width: "20%"}}>
-                                                               <span style={{cursor: "pointer"}}>
-                                                                    {selectedCareerFiles[index].file.name}
-                                                                </span>
-                                                            </p>
+                                                        <label htmlFor={`pblcnInstNm${index}`} className="visually-hidden"></label>
+                                                        <input
+                                                            type="text"
+                                                            name="pblcnInstNm"
+                                                            id={`pblcnInstNm${index}`}
+                                                            placeholder="발급기관을 입력하세요"
+                                                            className="f_input2"
+                                                            value={cert.pblcnInstNm}
+                                                            style={{width: "29%"}}
+                                                            onChange={(e) => handleInputChange(e, cert.key, "cert", "pblcnInstNm")}
+                                                        />
+
+                                                        <label htmlFor={`acqsYmd${index}`} className="visually-hidden"></label>
+                                                        <input
+                                                            type="date"
+                                                            name="acqsYmd"
+                                                            id={`acqsYmd${index}`}
+                                                            placeholder="취득일"
+                                                            className="f_input2"
+                                                            style={{width: "29%"}}
+                                                            value={formatDate(cert.acqsYmd)}
+                                                            onChange={(e) => handleInputChange(e, cert.key, "cert", "acqsYmd")}
+                                                        />
+
+                                                        {selectedCertFiles.length > 0 && selectedCertFiles[index] ? (
+                                                            selectedCertFiles[index].isNew ? (
+                                                                <p className="file_name" id={`cert${index}`}
+                                                                   style={{width: "20%"}}>
+                                                                    <span style={{cursor: "pointer"}}>
+                                                                        {selectedCertFiles[index].file.name}
+                                                                    </span>
+                                                                </p>
+                                                            ) : (
+                                                                <p className="file_name"
+                                                                   id={`CertFileNamePTag${cert.key}`}
+                                                                   style={{width: "20%"}}>
+                                                                    <span
+                                                                        onClick={() => fileDownLoad(selectedCertFiles[index].atchFileSn, selectedCertFiles[index].atchFileNm)}
+                                                                        style={{cursor: "pointer"}}
+                                                                    >
+                                                                        {selectedCertFiles[index].atchFileNm}
+                                                                    </span>
+                                                                </p>
+                                                            )
                                                         ) : (
-                                                            <p className="file_name" id={`CrrFileNamePTag${career.key}`}
-                                                               style={{width: "20%"}}>
-                                                                <span
-                                                                    onClick={() => fileDownLoad(selectedCareerFiles[index].atchFileSn, selectedCareerFiles[index].atchFileNm)}
-                                                                    style={{cursor: "pointer"}}
+                                                            <div
+                                                                style={{
+                                                                    display: "flex",
+                                                                    alignItems: "center",
+                                                                    gap: "10px",
+                                                                }}
+                                                                className="widthGroup20"
+                                                            >
+                                                                <p className="file_name" id={`cert${index}`}
+                                                                   style={{width: "50%"}}></p>
+                                                                <label
+                                                                    className="fileLabel"
+                                                                    style={{marginLeft: "auto", cursor: "pointer"}}
+                                                                    htmlFor={`formCertFile${index}`}
                                                                 >
-                                                                    {selectedCareerFiles[index].atchFileNm}
-                                                                </span>
-                                                            </p>
-                                                        )
-                                                    ) : (
-                                                        <div
-                                                            style={{
-                                                                display: "flex",
-                                                                alignItems: "center",
-                                                                gap: "10px",
-                                                            }}
-                                                            className="widthGroup20"
-                                                        >
-                                                            <p className="file_name" id={`career${index}`}
-                                                               style={{width: "50%"}}></p>
-                                                            <label
-                                                                className="fileLabel"
-                                                                style={{marginLeft: "auto", cursor: "pointer"}}
-                                                                htmlFor="{`formCareerFile${index}`}"
-                                                            >
-                                                                파일 선택
-                                                                <input
-                                                                    type="file"
-                                                                    name={`selectedCareerFile${index}`}
-                                                                    id={`formCareerFile${index}`}
-                                                                    className="noneTag"
-                                                                    onChange={(e) => handleFileChange(e, "career", index)}
-                                                                />
-                                                            </label>
-                                                        </div>
-                                                    )}
-                                                    <button type="button" className="fileLabel"
-                                                            onClick={() => {
-                                                                const crrFile = selectedCareerFiles[index];
-                                                                if (crrFile && crrFile.atchFileSn) {
-                                                                    removeCareer(career.key, career.crrSn, crrFile.atchFileSn);
-                                                                } else {
-                                                                    removeCareer(career.key, career.crrSn, null);
-                                                                }
-                                                            }}>
-                                                        삭제
-                                                    </button>
-                                                </div>
-                                            ))}
-
-                                            <button
-                                                type="button"
-                                                className="writeBtn clickBtn"
-                                                style={{width: "10%", height: "30px"}}
-                                                onClick={addCareer}
-                                            >
-                                                추가
-                                            </button>
-                                        </div>
-                                    </div>
-                                </li>
-
-                                <li className="inputBox type2 width1">
-                                    <span className="tt1">학력 상세</span>
-                                    <div className="input" style={{height: "100%"}}>
-                                        <div style={{display: "flex", flexDirection: "column", gap: "10px"}}>
-                                            <div
-                                                className="certificate-header"
-                                                style={{
-                                                    display: "grid",
-                                                    gridTemplateColumns: "1fr 1fr 1fr 1fr 1fr 1fr auto",
-                                                    gap: "10px",
-                                                    paddingBottom: "5px",
-                                                    borderBottom: "1px solid #000",
-                                                }}>
-                                                <span>학교명</span>
-                                                <span>학과</span>
-                                                <span>전공</span>
-                                                <span>학위</span>
-                                                <span>졸업일자</span>
-                                                <span>파일 업로드</span>
-                                            </div>
-                                            {acbges.map((acbg, index) => (
-                                                <div
-                                                    key={acbg.key}
-                                                    className="flexinput"
-                                                    style={{
-                                                        display: "flex",
-                                                        alignItems: "center",
-                                                        gap: "10px",
-                                                    }}
+                                                                    파일 선택
+                                                                    <input
+                                                                        type="file"
+                                                                        name={`selectedCertFile${index}`}
+                                                                        id={`formCertFile${index}`}
+                                                                        className="noneTag"
+                                                                        onChange={(e) => handleFileChange(e, "cert", index)}
+                                                                    />
+                                                                </label>
+                                                            </div>
+                                                        )}
+                                                        <button type="button" className="fileLabel"
+                                                                onClick={() => {
+                                                                    const certFile = selectedCertFiles[index];
+                                                                    if (certFile && certFile.atchFileSn) {
+                                                                        removeCertificate(cert.key, cert.qlfcLcnsSn, certFile.atchFileSn);
+                                                                    } else {
+                                                                        removeCertificate(cert.key, cert.qlfcLcnsSn, null);
+                                                                    }
+                                                                }}>
+                                                            삭제
+                                                        </button>
+                                                    </div>
+                                                ))}
+                                                <button
+                                                    type="button"
+                                                    className="writeBtn clickBtn"
+                                                    style={{width: "10%", height: "30px"}}
+                                                    onClick={addCertificate}
                                                 >
-                                                    <input
-                                                        type="text"
-                                                        name="schlNm"
-                                                        placeholder="학교명을 입력하세요"
-                                                        className="f_input2"
-                                                        style={{width: "29%"}}
-                                                        value={acbg.schlNm || ""}
-                                                        onChange={(e) => handleInputChange(e, acbg.key, "acbg", "schlNm")}
-                                                    />
-                                                    <input
-                                                        type="text"
-                                                        name="scsbjtNm"
-                                                        placeholder="학과를 입력하세요"
-                                                        className="f_input2"
-                                                        style={{width: "29%"}}
-                                                        value={acbg.scsbjtNm || ""}
-                                                        onChange={(e) => handleInputChange(e, acbg.key, "acbg", "scsbjtNm")}
-                                                    />
-                                                    <input
-                                                        type="text"
-                                                        name="mjrNm"
-                                                        placeholder="전공을 입력하세요"
-                                                        className="f_input2"
-                                                        style={{width: "29%"}}
-                                                        value={acbg.mjrNm || ""}
-                                                        onChange={(e) => handleInputChange(e, acbg.key, "acbg", "mjrNm")}
-                                                    />
-                                                    <input
-                                                        type="text"
-                                                        name="dgrNm"
-                                                        placeholder="학위를 입력하세요"
-                                                        className="f_input2"
-                                                        style={{width: "29%"}}
-                                                        value={acbg.dgrNm || ""}
-                                                        onChange={(e) => handleInputChange(e, acbg.key, "acbg", "dgrNm")}
-                                                    />
-                                                    <input
-                                                        type="date"
-                                                        name="grdtnYmd"
-                                                        placeholder="졸업일자"
-                                                        className="f_input2"
-                                                        style={{width: "29%"}}
-                                                        value={formatDate(acbg.grdtnYmd) || ""}
-                                                        onChange={(e) => handleInputChange(e, acbg.key, "acbg", "grdtnYmd")}
-                                                    />
-                                                    {selectedAcbgFiles.length > 0 && selectedAcbgFiles[index] ? (
-                                                        selectedAcbgFiles[index].isNew ? (
-                                                            <p className="file_name" id={`acbg${index}`}
-                                                               style={{width: "20%"}}>
-                                                            <span style={{cursor: "pointer"}}>
-                                                                {selectedAcbgFiles[index].file.name}
-                                                            </span>
-                                                            </p>
-                                                        ) : (
-                                                            <p className="file_name" id={`AcbgFileNamePTag${acbg.key}`}
-                                                               style={{width: "20%"}}>
-                                                            <span
-                                                                onClick={() => fileDownLoad(selectedAcbgFiles[index].atchFileSn, selectedAcbgFiles[index].atchFileNm)}
-                                                                style={{cursor: "pointer"}}>
-                                                                {selectedAcbgFiles[index].atchFileNm}
-                                                            </span>
-                                                            </p>
-                                                        )
-                                                    ) : (
-                                                        <div
-                                                            style={{
-                                                                display: "flex",
-                                                                alignItems: "center",
-                                                                gap: "10px",
-                                                            }}
-                                                            className="widthGroup20"
-                                                        >
-                                                            <p className="file_name" id={`acbg${index}`}
-                                                               style={{width: "50%"}}></p>
-                                                            <label
-                                                                className="fileLabel"
-                                                                style={{marginLeft: "auto", cursor: "pointer"}}
-                                                                htmlFor="{`formAcbgFile${index}`}"
-                                                            >
-                                                                파일 선택
-                                                                <input
-                                                                    type="file"
-                                                                    name={`selectedAcbgFile${index}`}
-                                                                    id={`formAcbgFile${index}`}
-                                                                    className="noneTag"
-                                                                    onChange={(e) => handleFileChange(e, "acbg", index)}
-                                                                />
-                                                            </label>
-                                                        </div>
-                                                    )}
-                                                    <button type="button" className="fileLabel"
-                                                            onClick={() => {
-                                                                const acbgFile = selectedAcbgFiles[index];
-                                                                if (acbgFile && acbgFile.atchFileSn) {
-                                                                    removeAcbg(acbg.key, acbg.acbgSn, acbgFile.atchFileSn);
-                                                                } else {
-                                                                    removeAcbg(acbg.key, acbg.acbgSn, null);
-                                                                }
-                                                            }}
-                                                            style={{width: "6%"}}>
-                                                        삭제
-                                                    </button>
-                                                </div>
-                                            ))}
-                                            <button
-                                                type="button"
-                                                className="writeBtn clickBtn"
-                                                style={{width: "10%", height: "30px"}}
-                                                onClick={addAcbg}
-                                            >
-                                                추가
-                                            </button>
+                                                    추가
+                                                </button>
+                                            </div>
                                         </div>
-                                    </div>
-                                </li>
+                                    </li>
 
-                            </ul>
+                                    <li className="inputBox type2 width1">
+                                        <span className="tt1">경력 상세</span>
+                                        <div className="input" style={{height: "100%"}}>
+                                            <div style={{display: "flex", flexDirection: "column", gap: "10px"}}>
+                                                <div
+                                                    className="certificate-header"
+                                                    style={{
+                                                        display: "grid",
+                                                        gridTemplateColumns: "1fr 1fr 1fr 1fr auto",
+                                                        gap: "10px",
+                                                        paddingBottom: "5px",
+                                                        borderBottom: "1px solid #000",
+                                                    }}>
+                                                    <span>근무처</span>
+                                                    <span>직위</span>
+                                                    <span>근무기간</span>
+                                                    <span>파일 업로드</span>
+                                                </div>
+                                                {careers.map((career, index) => (
+                                                    <div
+                                                        key={career.key}
+                                                        className="flexinput"
+                                                        style={{
+                                                            display: "flex",
+                                                            alignItems: "center",
+                                                            gap: "10px",
+                                                        }}
+                                                    >
+                                                        <label htmlFor={`ogdpCoNm${index}`} className="visually-hidden"></label>
+                                                        <input
+                                                            type="text"
+                                                            name="ogdpCoNm"
+                                                            id={`ogdpCoNm${index}`}
+                                                            placeholder="근무처를 입력하세요"
+                                                            className="f_input2"
+                                                            style={{width: "29%"}}
+                                                            value={career.ogdpCoNm || ""}
+                                                            onChange={(e) => handleInputChange(e, career.key, "career", "ogdpCoNm")}
+                                                        />
+
+                                                        <label htmlFor={`jbgdNm${index}`} className="visually-hidden"></label>
+                                                        <input
+                                                            type="text"
+                                                            name="jbgdNm"
+                                                            id={`jbgdNm${index}`}
+                                                            placeholder="직위를 입력하세요"
+                                                            className="f_input2"
+                                                            style={{width: "29%"}}
+                                                            value={career.jbgdNm || ""}
+                                                            onChange={(e) => handleInputChange(e, career.key, "career", "jbgdNm")}
+                                                        />
+
+                                                        <label htmlFor={`jncmpYmd${index}`} className="visually-hidden"></label>
+                                                        <input
+                                                            type="date"
+                                                            name="jncmpYmd"
+                                                            id={`jncmpYmd${index}`}
+                                                            placeholder="입사일자"
+                                                            className="f_input2"
+                                                            style={{width: "14%"}}
+                                                            value={formatDate(career.jncmpYmd) || ""}
+                                                            onChange={(e) => handleInputChange(e, career.key, "career", "jncmpYmd")}
+                                                        />~&nbsp;
+
+                                                        <label htmlFor={`rsgntnYmd${index}`} className="visually-hidden"></label>
+                                                        <input
+                                                            type="date"
+                                                            name="rsgntnYmd"
+                                                            id={`rsgntnYmd${index}`}
+                                                            placeholder="퇴사일자"
+                                                            className="f_input2"
+                                                            style={{width: "14%"}}
+                                                            value={formatDate(career.rsgntnYmd) || ""}
+                                                            onChange={(e) => handleInputChange(e, career.key, "career", "rsgntnYmd")}
+                                                        />
+
+                                                        {selectedCareerFiles.length > 0 && selectedCareerFiles[index] ? (
+                                                            selectedCareerFiles[index].isNew ? (
+                                                                <p className="file_name" id={`career${index}`}
+                                                                   style={{width: "20%"}}>
+                                                                    <span style={{cursor: "pointer"}}>
+                                                                        {selectedCareerFiles[index].file.name}
+                                                                    </span>
+                                                                </p>
+                                                            ) : (
+                                                                <p className="file_name"
+                                                                   id={`CrrFileNamePTag${career.key}`}
+                                                                   style={{width: "20%"}}>
+                                                                    <span
+                                                                        onClick={() => fileDownLoad(selectedCareerFiles[index].atchFileSn, selectedCareerFiles[index].atchFileNm)}
+                                                                        style={{cursor: "pointer"}}
+                                                                    >
+                                                                        {selectedCareerFiles[index].atchFileNm}
+                                                                    </span>
+                                                                </p>
+                                                            )
+                                                        ) : (
+                                                            <div
+                                                                style={{
+                                                                    display: "flex",
+                                                                    alignItems: "center",
+                                                                    gap: "10px",
+                                                                }}
+                                                                className="widthGroup20"
+                                                            >
+                                                                <p className="file_name" id={`career${index}`}
+                                                                   style={{width: "50%"}}></p>
+                                                                <label
+                                                                    className="fileLabel"
+                                                                    style={{marginLeft: "auto", cursor: "pointer"}}
+                                                                    htmlFor={`formCareerFile${index}`}
+                                                                >
+                                                                    파일 선택
+                                                                    <input
+                                                                        type="file"
+                                                                        name={`selectedCareerFile${index}`}
+                                                                        id={`formCareerFile${index}`}
+                                                                        className="noneTag"
+                                                                        onChange={(e) => handleFileChange(e, "career", index)}
+                                                                    />
+                                                                </label>
+                                                            </div>
+                                                        )}
+                                                        <button type="button" className="fileLabel"
+                                                                onClick={() => {
+                                                                    const crrFile = selectedCareerFiles[index];
+                                                                    if (crrFile && crrFile.atchFileSn) {
+                                                                        removeCareer(career.key, career.crrSn, crrFile.atchFileSn);
+                                                                    } else {
+                                                                        removeCareer(career.key, career.crrSn, null);
+                                                                    }
+                                                                }}>
+                                                            삭제
+                                                        </button>
+                                                    </div>
+                                                ))}
+
+                                                <button
+                                                    type="button"
+                                                    className="writeBtn clickBtn"
+                                                    style={{width: "10%", height: "30px"}}
+                                                    onClick={addCareer}
+                                                >
+                                                    추가
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </li>
+
+
+                                    <li className="inputBox type2 width1">
+                                        <span className="tt1">학력 상세</span>
+                                        <div className="input" style={{height: "100%"}}>
+                                            <div style={{display: "flex", flexDirection: "column", gap: "10px"}}>
+                                                <div
+                                                    className="certificate-header"
+                                                    style={{
+                                                        display: "grid",
+                                                        gridTemplateColumns: "1fr 1fr 1fr 1fr 1fr 1fr auto",
+                                                        gap: "10px",
+                                                        paddingBottom: "5px",
+                                                        borderBottom: "1px solid #000",
+                                                    }}>
+                                                    <span>학교명</span>
+                                                    <span>학과</span>
+                                                    <span>전공</span>
+                                                    <span>학위</span>
+                                                    <span>졸업일자</span>
+                                                    <span>파일 업로드</span>
+                                                </div>
+                                                {acbges.map((acbg, index) => (
+                                                    <div
+                                                        key={acbg.key}
+                                                        className="flexinput"
+                                                        style={{
+                                                            display: "flex",
+                                                            alignItems: "center",
+                                                            gap: "10px",
+                                                        }}
+                                                    >
+                                                        <label htmlFor={`schlNm${index}`} className="visually-hidden"></label>
+                                                        <input
+                                                            type="text"
+                                                            name="schlNm"
+                                                            id={`schlNm${index}`}
+                                                            placeholder="학교명을 입력하세요"
+                                                            className="f_input2"
+                                                            style={{width: "29%"}}
+                                                            value={acbg.schlNm || ""}
+                                                            onChange={(e) => handleInputChange(e, acbg.key, "acbg", "schlNm")}
+                                                        />
+
+                                                        <label htmlFor={`scsbjtNm${index}`} className="visually-hidden"></label>
+                                                        <input
+                                                            type="text"
+                                                            name="scsbjtNm"
+                                                            id={`scsbjtNm${index}`}
+                                                            placeholder="학과를 입력하세요"
+                                                            className="f_input2"
+                                                            style={{width: "29%"}}
+                                                            value={acbg.scsbjtNm || ""}
+                                                            onChange={(e) => handleInputChange(e, acbg.key, "acbg", "scsbjtNm")}
+                                                        />
+
+                                                        <label htmlFor={`mjrNm${index}`} className="visually-hidden"></label>
+                                                        <input
+                                                            type="text"
+                                                            name="mjrNm"
+                                                            id={`mjrNm${index}`}
+                                                            placeholder="전공을 입력하세요"
+                                                            className="f_input2"
+                                                            style={{width: "29%"}}
+                                                            value={acbg.mjrNm || ""}
+                                                            onChange={(e) => handleInputChange(e, acbg.key, "acbg", "mjrNm")}
+                                                        />
+
+                                                        <label htmlFor={`dgrNm${index}`} className="visually-hidden"></label>
+                                                        <input
+                                                            type="text"
+                                                            name="dgrNm"
+                                                            id={`dgrNm${index}`}
+                                                            placeholder="학위를 입력하세요"
+                                                            className="f_input2"
+                                                            style={{width: "29%"}}
+                                                            value={acbg.dgrNm || ""}
+                                                            onChange={(e) => handleInputChange(e, acbg.key, "acbg", "dgrNm")}
+                                                        />
+
+                                                        <label htmlFor={`grdtnYmd${index}`} className="visually-hidden"></label>
+                                                        <input
+                                                            type="date"
+                                                            name="grdtnYmd"
+                                                            id={`grdtnYmd${index}`}
+                                                            placeholder="졸업일자"
+                                                            className="f_input2"
+                                                            style={{width: "29%"}}
+                                                            value={formatDate(acbg.grdtnYmd) || ""}
+                                                            onChange={(e) => handleInputChange(e, acbg.key, "acbg", "grdtnYmd")}
+                                                        />
+
+                                                        {selectedAcbgFiles.length > 0 && selectedAcbgFiles[index] ? (
+                                                            selectedAcbgFiles[index].isNew ? (
+                                                                <p className="file_name" id={`acbg${index}`}
+                                                                   style={{width: "20%"}}>
+                                                                    <span style={{cursor: "pointer"}}>
+                                                                        {selectedAcbgFiles[index].file.name}
+                                                                    </span>
+                                                                </p>
+                                                            ) : (
+                                                                <p className="file_name"
+                                                                   id={`AcbgFileNamePTag${acbg.key}`}
+                                                                   style={{width: "20%"}}>
+                                                                    <span
+                                                                        onClick={() => fileDownLoad(selectedAcbgFiles[index].atchFileSn, selectedAcbgFiles[index].atchFileNm)}
+                                                                        style={{cursor: "pointer"}}
+                                                                    >
+                                                                        {selectedAcbgFiles[index].atchFileNm}
+                                                                    </span>
+                                                                </p>
+                                                            )
+                                                        ) : (
+                                                            <div
+                                                                style={{
+                                                                    display: "flex",
+                                                                    alignItems: "center",
+                                                                    gap: "10px",
+                                                                }}
+                                                                className="widthGroup20"
+                                                            >
+                                                                <p className="file_name" id={`acbg${index}`}
+                                                                   style={{width: "50%"}}></p>
+                                                                <label
+                                                                    className="fileLabel"
+                                                                    style={{marginLeft: "auto", cursor: "pointer"}}
+                                                                    htmlFor={`formAcbgFile${index}`}
+                                                                >
+                                                                    파일 선택
+                                                                    <input
+                                                                        type="file"
+                                                                        name={`selectedAcbgFile${index}`}
+                                                                        id={`formAcbgFile${index}`}
+                                                                        className="noneTag"
+                                                                        onChange={(e) => handleFileChange(e, "acbg", index)}
+                                                                    />
+                                                                </label>
+                                                            </div>
+                                                        )}
+                                                        <button type="button" className="fileLabel"
+                                                                onClick={() => {
+                                                                    const acbgFile = selectedAcbgFiles[index];
+                                                                    if (acbgFile && acbgFile.atchFileSn) {
+                                                                        removeAcbg(acbg.key, acbg.acbgSn, acbgFile.atchFileSn);
+                                                                    } else {
+                                                                        removeAcbg(acbg.key, acbg.acbgSn, null);
+                                                                    }
+                                                                }}
+                                                                style={{width: "6%"}}>
+                                                            삭제
+                                                        </button>
+                                                    </div>
+                                                ))}
+
+                                                <button
+                                                    type="button"
+                                                    className="writeBtn clickBtn"
+                                                    style={{width: "10%", height: "30px"}}
+                                                    onClick={addAcbg}
+                                                >
+                                                    추가
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </li>
+
+
+                                </ul>
                             </div>
                         )}
 
                     {rcDetail.sysMngrYn === "Y" && (
-                    <div className="box02" data-aos="fade-up" data-aos-duration="1500">
+                        <div className="box02" data-aos="fade-up" data-aos-duration="1500">
                             <CompanyMemberList mvnEntSn={rcDetail.mvnEntSn} relInstSn={rcDetail.relInstSn}/>
-                    </div>
+                        </div>
                     )}
 
                     <div className="buttonBox">

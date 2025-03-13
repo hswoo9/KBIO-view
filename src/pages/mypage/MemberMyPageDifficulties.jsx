@@ -146,9 +146,9 @@ function MemberMyPageDifficulties(props) {
                             <div className="totalBox">
                                 <div className="total"><p>총 <strong>{paginationInfo.totalRecordCount}</strong>건</p></div>
                             </div>
-                            <div className="searchBox" >
+                            <div className="searchBox">
                                 <div className="itemBox type2">
-                                    <select className="niceSelectCustom">
+                                    <select id="searchOption" className="niceSelectCustom" title="검색 조건">
                                         <option value="">전체</option>
                                         <option value="ttl">제목</option>
                                         <option value="dfclMttrCn">내용</option>
