@@ -72,7 +72,6 @@ function setNormalMember(props) {
         getNormalMember(searchDto);
     };
 
-    console.log(memberDetail);
 
     const updateMember = () => {
         let requestOptions = {};
@@ -102,15 +101,15 @@ function setNormalMember(props) {
             return false;
         }
 
-        setMemberDetail({...memberDetail});
+        const filteredMemberDetail = { ...memberDetail };
+        delete filteredMemberDetail.lastLoginDate;
 
-        console.log(memberDetail);
+        console.log(filteredMemberDetail);
 
         const formData = new FormData();
 
-
-        for (let key in memberDetail) {
-            const value = memberDetail[key];
+        for (let key in filteredMemberDetail) {
+            const value = filteredMemberDetail[key];
             if (value !== null && value !== undefined && value !== '') {
                 formData.append(key, value);
             }
@@ -146,11 +145,6 @@ function setNormalMember(props) {
             }
         });
 
-    };
-
-    const decodePhoneNumber = (encodedPhoneNumber) => {
-        const decodedBytes = base64.toByteArray(encodedPhoneNumber);
-        return new TextDecoder().decode(decodedBytes);
     };
 
 
@@ -445,22 +439,12 @@ function setNormalMember(props) {
                             </div>
                         </li>
 
-                        <li className="inputBox type1 width4">
+                        <li className="inputBox type1 width2">
                             <label className="title"><small>가입일</small></label>
                             <div className="input">
                                 <input
                                     type="text"
                                     defaultValue={memberDetail.frstCrtDt ? new Date(memberDetail.frstCrtDt).toLocaleDateString() : ''} // 연월일만 표시
-                                    readOnly
-                                />
-                            </div>
-                        </li>
-                        <li className="inputBox type1 width4" style={{width: '50%'}}>
-                            <label className="title"><small>최근접속일시</small></label>
-                            <div className="input">
-                                <input
-                                    type="text"
-                                    defaultValue={memberDetail.lastLoginDate ? new Date(memberDetail.lastLoginDate).toLocaleDateString() : '-'}
                                     readOnly
                                 />
                             </div>
