@@ -23,7 +23,7 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/userInfo/, ""),
       },
       "/backApi" : {
-        target: "http://localhost:8080",
+        target: "http://127.0.0.1:8080",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/backApi/, ""),
       }
