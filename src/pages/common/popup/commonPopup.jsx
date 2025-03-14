@@ -4,6 +4,14 @@ import "@/css/popup.css";
 import * as EgovNet from "@/api/egovFetch";
 
 function CommonPopup(props) {
+    let hostName = window.location.hostname;
+
+    if(hostName == "localhost" || hostName == "127.0.0.1"){
+        hostName = "133.186.250.158"
+    }else{
+        hostName = "133.186.146.192"
+    }
+
     const location = useLocation();
     const [bnrPopup, setBnrPopup] = useState({tblComFile : {}});
 
@@ -52,7 +60,7 @@ function CommonPopup(props) {
     return (
         <>
             <img
-                src={`http://133.186.250.158${bnrPopup.tblComFile.atchFilePathNm}/${bnrPopup.tblComFile.strgFileNm}.${bnrPopup.tblComFile.atchFileExtnNm}`}
+                src={`http://${hostName}${bnrPopup.tblComFile.atchFilePathNm}/${bnrPopup.tblComFile.strgFileNm}.${bnrPopup.tblComFile.atchFileExtnNm}`}
                 alt={bnrPopup.tblComFile.atchFileNm}
                 onClick={(e) => {
                     window.open(`${bnrPopup.bnrPopupUrlAddr}`)

@@ -15,6 +15,14 @@ import {getComCdList} from "@/components/CommonComponents";
 import AOS from "aos";
 
 function ConsultantDetail(props) {
+    let hostName = window.location.hostname;
+
+    if(hostName == "localhost" || hostName == "127.0.0.1"){
+        hostName = "133.186.250.158"
+    }else{
+        hostName = "133.186.146.192"
+    }
+
     const sessionUser = getSessionItem("loginUser");
     const navigate = useNavigate();
     const location = useLocation();
@@ -211,7 +219,7 @@ function ConsultantDetail(props) {
                                                     item.atchFileExtnNm.toLowerCase() === "pdf" ? (
                                                         // PDF 파일을 iframe으로 표시
                                                         <iframe
-                                                            src={`http://133.186.250.158${item.atchFilePathNm}/${item.strgFileNm}.${item.atchFileExtnNm}`}
+                                                            src={`http://${hostName}${item.atchFilePathNm}/${item.strgFileNm}.${item.atchFileExtnNm}`}
                                                             width="100%"
                                                             height="100%"
                                                             title="PDF Preview">
@@ -219,7 +227,7 @@ function ConsultantDetail(props) {
                                                     ) : (
                                                         // 이미지 파일을 img 태그로 표시
                                                         <img
-                                                            src={`http://133.186.250.158${item.atchFilePathNm}/${item.strgFileNm}.${item.atchFileExtnNm}`}
+                                                            src={`http://${hostName}${item.atchFilePathNm}/${item.strgFileNm}.${item.atchFileExtnNm}`}
                                                             width="100%"
                                                             height="100%"
                                                             alt="image"
@@ -268,7 +276,7 @@ function ConsultantDetail(props) {
                             <img
                                 src={
                                     cnsltProfileFile
-                                        ? `http://133.186.250.158${cnsltProfileFile.atchFilePathNm}/${cnsltProfileFile.strgFileNm}.${cnsltProfileFile.atchFileExtnNm}`
+                                        ? `http://${hostName}${cnsltProfileFile.atchFilePathNm}/${cnsltProfileFile.strgFileNm}.${cnsltProfileFile.atchFileExtnNm}`
                                         : notProfile
                                 }
                                 onError={(e) => {
@@ -343,7 +351,7 @@ export default ConsultantDetail;
                 <img
                     src={
                         cnsltProfileFile
-                            ? `http://133.186.250.158${cnsltProfileFile.atchFilePathNm}/${cnsltProfileFile.strgFileNm}.${cnsltProfileFile.atchFileExtnNm}`
+                            ? `http://${hostName}${cnsltProfileFile.atchFilePathNm}/${cnsltProfileFile.strgFileNm}.${cnsltProfileFile.atchFileExtnNm}`
                             : notProfile
                     }
                     alt="컨설턴트사진"

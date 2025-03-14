@@ -4,8 +4,17 @@ import * as EgovNet from "@/api/egovFetch";
 import CommonSubMenu from "@/components/CommonSubMenu";
 import URL from "@/constants/url";
 import * as ComScript from "@/components/CommonScript";
+import {host} from "sockjs-client/lib/location.js";
 
 function RelatedDetail() {
+    let hostName = window.location.hostname;
+
+    if(hostName == "localhost" || hostName == "127.0.0.1"){
+        hostName = "133.186.250.158"
+    }else{
+        hostName = "133.186.146.192"
+    }
+
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -54,7 +63,7 @@ function RelatedDetail() {
                             <figure className="imgBox">
                                 {relatedDetail.logoFile != null ? (
                                     <img
-                                        src={`http://133.186.250.158${relatedDetail.logoFile.atchFilePathNm}/${relatedDetail.logoFile.strgFileNm}.${relatedDetail.logoFile.atchFileExtnNm}`}
+                                        src={`http://${hostName}${relatedDetail.logoFile.atchFilePathNm}/${relatedDetail.logoFile.strgFileNm}.${relatedDetail.logoFile.atchFileExtnNm}`}
                                         alt={`${relatedDetail.relInstNm}_로고`}
                                     />
                                 ) : (

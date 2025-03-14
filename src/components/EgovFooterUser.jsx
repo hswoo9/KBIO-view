@@ -9,6 +9,14 @@ import MainFooterEmail from "@/components/main/MainFooterEmail";
 import * as ComScript from "@/components/CommonScript";
 
 function EgovFooterUser() {
+  let hostName = window.location.hostname;
+
+  if(hostName == "localhost" || hostName == "127.0.0.1"){
+    hostName = "133.186.250.158"
+  }else{
+    hostName = "133.186.146.192"
+  }
+
   const [comCdList, setComCdList] = useState([]);
   const [familySiteList, setFamilySiteList] = useState([]);
   const [bannerList, setBannerList] = useState([]);
@@ -60,7 +68,7 @@ function EgovFooterUser() {
                       width : "200px"
                     }}>
                       <img
-                          src={`http://133.186.250.158${banner.tblComFile.atchFilePathNm}/${banner.tblComFile.strgFileNm}.${banner.tblComFile.atchFileExtnNm}`}
+                          src={`http://${hostName}${banner.tblComFile.atchFilePathNm}/${banner.tblComFile.strgFileNm}.${banner.tblComFile.atchFileExtnNm}`}
                           alt={banner.tblComFile.atchFileNm}
                           style={{
                             cursor:"pointer"

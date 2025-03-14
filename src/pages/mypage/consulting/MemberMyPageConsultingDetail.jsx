@@ -17,6 +17,14 @@ import SatisModal from "@/components/SatisModal";
 
 
 function MemberMyPageConsultingDetail(props) {
+    let hostName = window.location.hostname;
+
+    if(hostName == "localhost" || hostName == "127.0.0.1"){
+        hostName = "133.186.250.158"
+    }else{
+        hostName = "133.186.146.192"
+    }
+
     const sessionUser = getSessionItem("loginUser");
     const location = useLocation();
     const navigate = useNavigate();
@@ -166,7 +174,7 @@ function MemberMyPageConsultingDetail(props) {
                                             {sessionUser.mbrType === 2 ? (<figure className="profileBox">
                                                 <img
                                                     src={cnsltProfileFile
-                                                        ? `http://133.186.250.158${cnsltProfileFile.atchFilePathNm}/${cnsltProfileFile.strgFileNm}.${cnsltProfileFile.atchFileExtnNm}`
+                                                        ? `http://${hostName}${cnsltProfileFile.atchFilePathNm}/${cnsltProfileFile.strgFileNm}.${cnsltProfileFile.atchFileExtnNm}`
                                                         : ""}
                                                     alt="profile image"
                                                 />
@@ -227,7 +235,7 @@ function MemberMyPageConsultingDetail(props) {
                                             {sessionUser.mbrType === 2 ? ("") : (<figure className="profileBox">
                                                 <img
                                                     src={cnsltProfileFile
-                                                        ? `http://133.186.250.158${cnsltProfileFile.atchFilePathNm}/${cnsltProfileFile.strgFileNm}.${cnsltProfileFile.atchFileExtnNm}`
+                                                        ? `http://${hostName}${cnsltProfileFile.atchFilePathNm}/${cnsltProfileFile.strgFileNm}.${cnsltProfileFile.atchFileExtnNm}`
                                                         : ""}
                                                     alt="profile image"
                                                 />
@@ -542,7 +550,7 @@ function MemberMyPageConsultingDetail(props) {
                         <div className="profileBox">
                             <figure className="imgBox">
                                 <img src={cnsltProfileFile
-                                    ? `http://133.186.250.158${cnsltProfileFile.atchFilePathNm}/${cnsltProfileFile.strgFileNm}.${cnsltProfileFile.atchFileExtnNm}`
+                                    ? `http://${hostName}${cnsltProfileFile.atchFilePathNm}/${cnsltProfileFile.strgFileNm}.${cnsltProfileFile.atchFileExtnNm}`
                                     : ""}
                                      alt="profile image"/>
                             </figure>

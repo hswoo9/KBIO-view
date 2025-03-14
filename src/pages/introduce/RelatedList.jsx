@@ -10,6 +10,14 @@ import EgovUserPaging from "@/components/EgovUserPaging";
 import * as ComScript from "@/components/CommonScript";
 
 function RelatedList() {
+    let hostName = window.location.hostname;
+
+    if(hostName == "localhost" || hostName == "127.0.0.1"){
+        hostName = "133.186.250.158"
+    }else{
+        hostName = "133.186.146.192"
+    }
+
     const location = useLocation();
     const navigate = useNavigate();
     const userSn = getSessionItem("userSn");
@@ -79,7 +87,7 @@ function RelatedList() {
                                     <figure>
                                         {item.tblComFile != null ? (
                                             <img
-                                                src={`http://133.186.250.158${item.tblComFile.atchFilePathNm}/${item.tblComFile.strgFileNm}.${item.tblComFile.atchFileExtnNm}`} width="44" height="44"
+                                                src={`http://${hostName}${item.tblComFile.atchFilePathNm}/${item.tblComFile.strgFileNm}.${item.tblComFile.atchFileExtnNm}`} width="44" height="44"
                                                 alt={`${item.tblRelInst.relInstNm}_로고`}
                                             />
                                         ) : (

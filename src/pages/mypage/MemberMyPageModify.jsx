@@ -19,6 +19,14 @@ import notProfile from "@/assets/images/no_profile.png";
 import CompanyMemberList from "@/components/CompanyMemberList";
 
 function MemberMyPageModify(props) {
+    let hostName = window.location.hostname;
+
+    if(hostName == "localhost" || hostName == "127.0.0.1"){
+        hostName = "133.186.250.158"
+    }else{
+        hostName = "133.186.146.192"
+    }
+
     const navigate = useNavigate();
     const location = useLocation();
     const sessionUser = getSessionItem("loginUser");
@@ -1222,7 +1230,7 @@ function MemberMyPageModify(props) {
                                                     <img
                                                         src={
                                                             cnsltProfileFile
-                                                                ? `http://133.186.250.158${cnsltProfileFile.atchFilePathNm}/${cnsltProfileFile.strgFileNm}.${cnsltProfileFile.atchFileExtnNm}`
+                                                                ? `http://${hostName}${cnsltProfileFile.atchFilePathNm}/${cnsltProfileFile.strgFileNm}.${cnsltProfileFile.atchFileExtnNm}`
                                                                 : notProfile
                                                         }
                                                         onError={(e) => {

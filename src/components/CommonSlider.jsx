@@ -3,6 +3,13 @@ import "@/css/slickCustomTheme.css";
 import "@/css/slickCustom.css";
 
 const CommonSlider = ({data}) => {
+    let hostName = window.location.hostname;
+
+    if(hostName == "localhost" || hostName == "127.0.0.1"){
+        hostName = "133.186.250.158"
+    }else{
+        hostName = "133.186.146.192"
+    }
 
     const sliderSettings = {
         centerMode: true, //현재 컨텐츠 가운데 정렬
@@ -38,7 +45,7 @@ const CommonSlider = ({data}) => {
             }
         ]
     }
-    
+
     return (
         <div className="slider-container">
             <Slider {...sliderSettings}>
@@ -50,7 +57,7 @@ const CommonSlider = ({data}) => {
                         >
                             <img
                                 //src={window.location.hostname + item.tblComFile.atchFilePathNm + '/' + item.tblComFile.strgFileNm + '.' + item.tblComFile.atchFileExtnNm}
-                                src={'http://133.186.250.158'  + item.tblComFile.atchFilePathNm  + '/' + item.tblComFile.strgFileNm + '.' + item.tblComFile.atchFileExtnNm}
+                                src={'http://' + hostName  + item.tblComFile.atchFilePathNm  + '/' + item.tblComFile.strgFileNm + '.' + item.tblComFile.atchFileExtnNm}
                                 alt={`슬라이드 이미지`}
                                 className="slickImg"
                             />

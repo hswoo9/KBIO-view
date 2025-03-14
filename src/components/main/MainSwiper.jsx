@@ -6,6 +6,14 @@ import URL from "@/constants/url";
 import {NavLink} from "react-router-dom";
 
 const MainSwiper = ({data}) => {
+    let hostName = window.location.hostname;
+
+    if(hostName == "localhost" || hostName == "127.0.0.1"){
+        hostName = "133.186.250.158"
+    }else{
+        hostName = "133.186.146.192"
+    }
+
     const swiperRef = useRef(null);
     const [isAutoPlay, setIsAutoPlay] = useState(true);
     const toggleAutoPlay = () => {
@@ -63,7 +71,7 @@ const MainSwiper = ({data}) => {
                 <SwiperSlide className="swiper-slide" key={item.tblMvnEnt.mvnEntSn}>
                     <figure className="logoBox">
                         <img
-                            src={`${window.location.protocol}//133.186.250.158${item.tblComFile.atchFilePathNm}/${item.tblComFile.strgFileNm}.${item.tblComFile.atchFileExtnNm}`}
+                            src={`${window.location.protocol}//${hostName}${item.tblComFile.atchFilePathNm}/${item.tblComFile.strgFileNm}.${item.tblComFile.atchFileExtnNm}`}
                             alt={item.tblMvnEnt.mvnEntNm}
                             loading="lazy"
                             style={{
@@ -99,7 +107,7 @@ const MainSwiper = ({data}) => {
                     <SwiperSlide className="swiper-slide" key={item.tblMvnEnt.mvnEntSn + 100}>
                         <figure className="logoBox">
                             <img
-                                src={`${window.location.protocol}//133.186.250.158${item.tblComFile.atchFilePathNm}/${item.tblComFile.strgFileNm}.${item.tblComFile.atchFileExtnNm}`}
+                                src={`${window.location.protocol}//${hostName}${item.tblComFile.atchFilePathNm}/${item.tblComFile.strgFileNm}.${item.tblComFile.atchFileExtnNm}`}
                                 alt={item.tblMvnEnt.mvnEntNm}
                                 loading="lazy"
                                 style={{
@@ -121,7 +129,7 @@ const MainSwiper = ({data}) => {
                     <SwiperSlide className="swiper-slide" key={item.tblMvnEnt.mvnEntSn + 1000}>
                         <figure className="logoBox">
                             <img
-                                src={`${window.location.protocol}//133.186.250.158${item.tblComFile.atchFilePathNm}/${item.tblComFile.strgFileNm}.${item.tblComFile.atchFileExtnNm}`}
+                                src={`${window.location.protocol}//${hostName}${item.tblComFile.atchFilePathNm}/${item.tblComFile.strgFileNm}.${item.tblComFile.atchFileExtnNm}`}
                                 alt={item.tblMvnEnt.mvnEntNm}
                                 loading="lazy"
                                 style={{

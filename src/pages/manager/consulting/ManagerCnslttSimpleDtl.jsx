@@ -19,6 +19,13 @@ import {getComCdList} from "@/components/CommonComponents";
 import moment from "moment/moment.js";
 
 function ManagerCnslttSimpleDtl({ item, onBack }){
+    let hostName = window.location.hostname;
+
+    if(hostName == "localhost" || hostName == "127.0.0.1"){
+        hostName = "133.186.250.158"
+    }else{
+        hostName = "133.186.146.192"
+    }
 
     const [searchDto, setSearchDto] = useState(
         {userSn: item.userSn,
@@ -42,7 +49,7 @@ function ManagerCnslttSimpleDtl({ item, onBack }){
 
     const handleDownload = (file) => {
 
-        const downloadUrl = `http://133.186.250.158${file.atchFilePathNm}/${file.strgFileNm}.${file.atchFileExtnNm}`; // 실제 파일 경로로 변경
+        const downloadUrl = `http://${hostName}${file.atchFilePathNm}/${file.strgFileNm}.${file.atchFileExtnNm}`; // 실제 파일 경로로 변경
 
         const a = document.createElement('a');
         a.href = downloadUrl;

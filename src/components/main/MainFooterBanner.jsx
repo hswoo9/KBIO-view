@@ -8,7 +8,13 @@ import user_main_rolling_logo04 from "@/assets/images/user_main_rolling_logo04.s
 import user_main_rolling_logo05 from "@/assets/images/user_main_rolling_logo05.svg";
 
 const MainFooterBanner = ({data}) => {
+    let hostName = window.location.hostname;
 
+    if(hostName == "localhost" || hostName == "127.0.0.1"){
+        hostName = "133.186.250.158"
+    }else{
+        hostName = "133.186.146.192"
+    }
     const wrapRef = useRef(null);
     const listRef = useRef(null);
     const [windowSize, setWindowSize] = useState(getWindowSize());
@@ -34,7 +40,7 @@ const MainFooterBanner = ({data}) => {
                             <li key={item.tblBnrPopup.bnrPopupSn}>
                                 <a href={item.tblBnrPopup.bnrPopupUrlAddr || "/"} target="_blank">
                                     <img
-                                        src={`http://133.186.250.158${item.tblComFile.atchFilePathNm}/${item.tblComFile.strgFileNm}.${item.tblComFile.atchFileExtnNm}`}
+                                        src={`http://${hostName}${item.tblComFile.atchFilePathNm}/${item.tblComFile.strgFileNm}.${item.tblComFile.atchFileExtnNm}`}
                                         alt={item.tblComFile.atchFileNm}
                                         loading="lazy"
                                     />

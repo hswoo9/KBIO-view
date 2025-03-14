@@ -16,6 +16,14 @@ import ConsultingModal from "@/components/ConsultingModal";
 
 
 function ConsultantList(props) {
+    let hostName = window.location.hostname;
+
+    if(hostName == "localhost" || hostName == "127.0.0.1"){
+        hostName = "133.186.250.158"
+    }else{
+        hostName = "133.186.146.192"
+    }
+
     const sessionUser = getSessionItem("loginUser");
     const userSn = getSessionItem("userSn");
     const location = useLocation();
@@ -126,7 +134,7 @@ function ConsultantList(props) {
                                          <img
                                              src={
                                                  item.tblComFile
-                                                     ? `http://133.186.250.158${item.tblComFile.atchFilePathNm}/${item.tblComFile.strgFileNm}.${item.tblComFile.atchFileExtnNm}`
+                                                     ? `http://${hostName}${item.tblComFile.atchFilePathNm}/${item.tblComFile.strgFileNm}.${item.tblComFile.atchFileExtnNm}`
                                                      : notProfile
                                              }
                                              onError={(e) => {
@@ -179,7 +187,7 @@ function ConsultantList(props) {
                                  <img
                                              src={
                                                  item.tblComFile
-                                                     ? `http://133.186.250.158${item.tblComFile.atchFilePathNm}/${item.tblComFile.strgFileNm}.${item.tblComFile.atchFileExtnNm}`
+                                                     ? `http://${hostName}${item.tblComFile.atchFilePathNm}/${item.tblComFile.strgFileNm}.${item.tblComFile.atchFileExtnNm}`
                                                      : "" // 기본 이미지 (필요한 경우)
                                              }
                                              alt=""

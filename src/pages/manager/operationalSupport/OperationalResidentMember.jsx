@@ -12,6 +12,14 @@ import base64 from 'base64-js';
 import {getComCdList} from "@/components/CommonComponents";
 
 function OperationalResidentMember(props) {
+    let hostName = window.location.hostname;
+
+    if(hostName == "localhost" || hostName == "127.0.0.1"){
+        hostName = "133.186.250.158"
+    }else{
+        hostName = "133.186.146.192"
+    }
+
     const location = useLocation();
     const [mbrTpbizList, setMbrTpbizList] = useState([])
     const [residentMemberList, setAuthorityList] = useState([]);
@@ -145,7 +153,7 @@ function OperationalResidentMember(props) {
                             {/*기업 로고 이미지 추가할 것*/}
                             {selectedFiles && selectedFiles.atchFileSn ? (
                                 <img
-                                    src={`http://133.186.250.158${selectedFiles.atchFilePathNm}/${selectedFiles.strgFileNm}.${selectedFiles.atchFileExtnNm}`}
+                                    src={`http://${hostName}${selectedFiles.atchFilePathNm}/${selectedFiles.strgFileNm}.${selectedFiles.atchFileExtnNm}`}
                                     alt="image"
                                     width="200"
                                     height="60"

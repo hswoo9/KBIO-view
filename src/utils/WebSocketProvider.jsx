@@ -18,7 +18,7 @@ export const WebSocketProvider = ({ children }) => {
 
     let hostName = window.location.hostname;
 
-    if(window.location.hostname == "133.186.146.192"){
+    if(hostName == "133.186.146.192"){
       hostName = "127.0.0.1"
     }
 

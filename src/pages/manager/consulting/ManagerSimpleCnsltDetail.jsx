@@ -19,6 +19,13 @@ import moment from "moment/moment.js";
 
 
 function ManagerSimpleCnsltDetail(props) {
+    let hostName = window.location.hostname;
+
+    if(hostName == "localhost" || hostName == "127.0.0.1"){
+        hostName = "133.186.250.158"
+    }else{
+        hostName = "133.186.146.192"
+    }
 
     //const navigate = useNavigate();
     const location = useLocation();
@@ -52,7 +59,7 @@ function ManagerSimpleCnsltDetail(props) {
 
     const handleDownload = (file) => {
 
-        const downloadUrl = `http://133.186.250.158${file.atchFilePathNm}/${file.strgFileNm}.${file.atchFileExtnNm}`; // 실제 파일 경로로 변경
+        const downloadUrl = `http://${hostName}${file.atchFilePathNm}/${file.strgFileNm}.${file.atchFileExtnNm}`; // 실제 파일 경로로 변경
 
         const a = document.createElement('a');
             a.href = downloadUrl;
@@ -309,7 +316,7 @@ function ManagerSimpleCnsltDetail(props) {
                                     <img
                                         src={
                                             cnsltProfileFile
-                                                ? `http://133.186.250.158${cnsltProfileFile.atchFilePathNm}/${cnsltProfileFile.strgFileNm}.${cnsltProfileFile.atchFileExtnNm}`
+                                                ? `http://${hostName}${cnsltProfileFile.atchFilePathNm}/${cnsltProfileFile.strgFileNm}.${cnsltProfileFile.atchFileExtnNm}`
                                                 : "" // 기본 이미지 (필요한 경우)
                                         }
                                         alt="컨설턴트사진"

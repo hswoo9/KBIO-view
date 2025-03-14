@@ -6,6 +6,14 @@ import URL from "@/constants/url";
 import * as ComScript from "@/components/CommonScript";
 
 function OperationalDetail() {
+    let hostName = window.location.hostname;
+
+    if(hostName == "localhost" || hostName == "127.0.0.1"){
+        hostName = "133.186.250.158"
+    }else{
+        hostName = "133.186.146.192"
+    }
+
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -54,7 +62,7 @@ function OperationalDetail() {
                             <figure className="imgBox">
                                 {operationalDetail.tblComFile != null ? (
                                     <img
-                                        src={`http://133.186.250.158${operationalDetail.tblComFile.atchFilePathNm}/${operationalDetail.tblComFile.strgFileNm}.${operationalDetail.tblComFile.atchFileExtnNm}`}
+                                        src={`http://${hostName}${operationalDetail.tblComFile.atchFilePathNm}/${operationalDetail.tblComFile.strgFileNm}.${operationalDetail.tblComFile.atchFileExtnNm}`}
                                         alt={`${operationalDetail.mvnEntNm}_로고`}
                                     />
                                 ) : (

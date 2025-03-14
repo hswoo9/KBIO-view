@@ -139,10 +139,9 @@ export const fileDownLoad = async (atchFileSn, atchFileNm, trgtTblNm, trgtSn) =>
 
         let hostName = window.location.hostname;
 
-        if(window.location.hostname == "133.186.146.192"){
+        if(hostName == "133.186.146.192"){
             hostName = "127.0.0.1"
         }
-
 
         const response = await axios.post(`${window.location.protocol}//${hostName}:8080/commonApi/getFileDownLoad.do`, {
             atchFileSn : atchFileSn,
@@ -179,7 +178,7 @@ export const fileZipDownLoad = async (psnTblSn, zipFileName, trgtTblNm, trgtSn) 
     try {
         let hostName = window.location.hostname;
 
-        if(window.location.hostname == "133.186.146.192"){
+        if(hostName == "133.186.146.192"){
             hostName = "127.0.0.1"
         }
 

@@ -4,7 +4,6 @@ import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
 import { getSessionItem, setSessionItem, removeSessionItem } from "@/utils/storage";
 import CommonSubMenu from "@/components/CommonSubMenu";
-import {getBnrPopupList} from "@/components/main/MainComponents";
 import AOS from "aos";
 import EgovUserPaging from "@/components/EgovUserPaging";
 import * as ComScript from "@/components/CommonScript";
@@ -20,7 +19,6 @@ function KBioLabHub(props) {
   const sessionUserSn = sessionUser?.userSn;
   const userSn = getSessionItem("userSn");
   const [deptList, setDeptList] = useState([]);
-  const [popUpList, setPopUpList] = useState([]);
   const [paginationInfo, setPaginationInfo] = useState({});
   const [orgchtList, setOrgchtList] = useState([]);
   const [searchCondition, setSearchCondition] = useState(
@@ -39,24 +37,6 @@ function KBioLabHub(props) {
             getOrgchtList(searchCondition);
         }
     };
-
-  useEffect(() => {
-    popUpList.forEach((e, i) => {
-      const popUp = e.tblBnrPopup;
-      if(!localStorage.getItem(popUp.bnrPopupSn) || Date.now() > localStorage.getItem(popUp.bnrPopupSn)){
-        window.open(
-            `/popup?bnrPopupSn=${popUp.bnrPopupSn}`, // 여기에 원하는 URL 입력
-            `${popUp.bnrPopupSn}`,
-            `width=${popUp.popupWdthSz},
-            height=${popUp.popupVrtcSz},
-            left=${popUp.popupPstnWdth},
-            top=${popUp.popupPstnUpend}`
-        );
-
-        localStorage.removeItem(popUp.bnrPopupSn)
-      }
-    })
-  }, [popUpList]);
 
   const getOrgchtList = useCallback(
       (searchCondition) => {
@@ -114,28 +94,7 @@ function KBioLabHub(props) {
     }
 
   useEffect(() => {
-    getBnrPopupList("popup").then((data) => {
-      setPopUpList(data.filter(e => e.tblBnrPopup.bnrPopupKnd == "popup"));
-    });
-      getComCdList(12).then((data) => {
-          if(data != null){
-              let dataList = [];
-              dataList.push(
-                  <option value="" key="nodata">부서</option>
-              )
-              data.forEach(function(item, index){
-                  dataList.push(
-                      <option value={item.comCdSn} key={item.comCdSn}>{item.comCdNm}</option>
-                  )
-              });
-              setDeptList(dataList);
-          }
-      });
-
     AOS.init();
-
-
-
   }, []);
 
   return (

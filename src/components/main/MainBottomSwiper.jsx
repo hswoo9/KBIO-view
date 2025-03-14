@@ -13,6 +13,14 @@ import user_main_sec02_logo05 from "@/assets/images/user_main_sec02_logo05.png";
 import user_main_sec04_banner01 from "@/assets/images/user_main_sec04_banner01.jpg";
 
 const MainBottomSwiper = ({data}) => {
+    let hostName = window.location.hostname;
+
+    if(hostName == "localhost" || hostName == "127.0.0.1"){
+        hostName = "133.186.250.158"
+    }else{
+        hostName = "133.186.146.192"
+    }
+
     const swiperRef = useRef(null);
     const [isAutoPlay, setIsAutoPlay] = useState(true);
     const [swiperList, setSwiperList] = useState([]);
@@ -121,7 +129,7 @@ const MainBottomSwiper = ({data}) => {
                                                      }}
                                                 >
                                                     <img
-                                                        src={`http://133.186.250.158${bnr.tblComFile.atchFilePathNm}/${bnr.tblComFile.strgFileNm}.${bnr.tblComFile.atchFileExtnNm}`}
+                                                        src={`http://${hostName}${bnr.tblComFile.atchFilePathNm}/${bnr.tblComFile.strgFileNm}.${bnr.tblComFile.atchFileExtnNm}`}
                                                         alt={bnr.tblComFile.atchFileNm}
                                                         style={{
                                                             cursor: "pointer"
