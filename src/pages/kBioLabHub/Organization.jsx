@@ -94,6 +94,20 @@ function KBioLabHub(props) {
     }
 
   useEffect(() => {
+    getComCdList(12).then((data) => {
+      if(data != null){
+          let dataList = [];
+          dataList.push(
+              <option value="" key="nodata">부서</option>
+          )
+          data.forEach(function(item, index){
+              dataList.push(
+                  <option value={item.comCdSn} key={item.comCdSn}>{item.comCdNm}</option>
+              )
+          });
+          setDeptList(dataList);
+      }
+    });
     AOS.init();
   }, []);
 
