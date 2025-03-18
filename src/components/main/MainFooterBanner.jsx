@@ -18,6 +18,8 @@ const MainFooterBanner = ({data}) => {
     const wrapRef = useRef(null);
     const listRef = useRef(null);
     const [windowSize, setWindowSize] = useState(getWindowSize());
+    //const animationRef = useRef(null);
+    const [isAutoPlay, setIsAutoPlay] = useState(true);
     function getWindowSize() {
         if (window.innerWidth > 1279) return 'pc';
         if (window.innerWidth > 767) return 'ta';
@@ -67,7 +69,57 @@ const MainFooterBanner = ({data}) => {
 
     }, []);
 
-    const flowBannerAct = () => {
+    // 배너 애니메이션 시작
+    const startAnimation = () => {
+        const list = listRef.current;
+        const speed = 15;
+        const listWidth = list.offsetWidth;
+        list.style.animation = `${listWidth / speed}s linear infinite flowRolling`;
+    };
+
+    // 배너 애니메이션 정지
+    const stopAnimation = () => {
+        const list = listRef.current;
+        list.style.animation = "none";
+    };
+
+    // 재생/일시정지 버튼 동작
+    const togglePlayPause = () => {
+        if (isAutoPlay) {
+            stopAnimation();
+        } else {
+            startAnimation();
+        }
+        setIsAutoPlay(!isAutoPlay);
+    };
+
+    // 이전 배너 이동
+    const movePrev = () => {
+        //stopAnimation();
+        const list = listRef.current;
+        list.style.transform = `translateX(100%)`;
+        setTimeout(() => {
+            list.prepend(list.lastElementChild);
+            list.style.transition = "none";
+            list.style.transform = `translateX(0)`;
+            //startAnimation();
+        }, 300);
+    };
+
+    // 다음 배너 이동
+    const moveNext = () => {
+        //stopAnimation();
+        const list = listRef.current;
+        list.style.transform = `translateX(-100%)`;
+        setTimeout(() => {
+            list.appendChild(list.firstElementChild);
+            list.style.transition = "none";
+            list.style.transform = `translateX(0)`;
+            //startAnimation();
+        }, 300);
+    };
+
+    /*const flowBannerAct = () => {
         const wrap = wrapRef.current;
         const list = listRef.current;
         if(listRef.current.children.length > 0){
@@ -97,14 +149,44 @@ const MainFooterBanner = ({data}) => {
                 el.style.animation = `${listWidth / speed}s linear infinite flowRolling`;
             });
         }
+    };*/
+
+    const flowBannerAct = () => {
+        const wrap = wrapRef.current;
+        const list = listRef.current;
+        if (list.children.length > 0) {
+            let liCount = list.children.length;
+            const originalItems = Array.from(list.children);
+            let index = 0;
+            while (liCount < 10) {
+                const cloneItem = originalItems[index].cloneNode(true);
+                list.appendChild(cloneItem);
+                liCount++;
+                index = (index + 1) % originalItems.length;
+            }
+            startAnimation();
+        }
     };
 
     return (
-        <div className="rollingWrap">
-            <div className="moveWrap" ref={wrapRef}>
-                <ul className="imgMove" ref={listRef}>
-                    {bannerList}
-                </ul>
+        <div style={{display: "flex", alignItems: "center", justifyContent: "center"}}>
+            <div className="rollingWrap" style={{width: "75%", margin: "0 auto"}}>
+                <div className="moveWrap" ref={wrapRef}>
+                    <ul className="imgMove" ref={listRef}>
+                        {bannerList}
+                    </ul>
+                </div>
+            </div>
+            <div className="slideControl blue" style={{width: "10%", display: "flex", justifyContent: "center", gap: "10px"}}>
+                <button type="button" className="arrowBtn prevBtn swiperBtn" onClick={movePrev}>
+                    <div className="icon"></div>
+                </button>
+                <button type="button" onClick={togglePlayPause} className={isAutoPlay ? "pauseBtn" : "pauseBtn on"}>
+                    <div className="icon"></div>
+                </button>
+                <button type="button" className="arrowBtn nextBtn swiperBtn" onClick={moveNext}>
+                    <div className="icon"></div>
+                </button>
             </div>
         </div>
     );
