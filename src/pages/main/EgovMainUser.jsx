@@ -240,7 +240,7 @@ function EgovMainUser(props) {
             </div>
           </div>
         </section>
-        <MainFooterBanner/>
+          <MainFooterBanner/>
       </div>
   );
 }
