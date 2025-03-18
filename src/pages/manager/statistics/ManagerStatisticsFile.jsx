@@ -21,6 +21,7 @@ import {
     addMonths,
 } from "date-fns";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import moment from "moment/moment.js";
 
 function ManagerStatisticsFile(props) {
     const [isLoading, setIsLoading] = useState(true);  // 로딩 상태
@@ -120,7 +121,9 @@ function ManagerStatisticsFile(props) {
                                             onChange={(e) => {
                                                 setSearchDto(prev => ({
                                                     ...prev,
-                                                    searchMonth: e.target.value
+                                                    searchMonth: e.target.value,
+                                                    searchDate:"",
+                                                    lastDate:""
                                                 }));
                                             }}
                                     >
@@ -132,6 +135,28 @@ function ManagerStatisticsFile(props) {
                                     </select>
                                 </div>
                             </li>
+
+                            {/* 주간 시작일 선택 */}
+                            <li className="inputBox type1">
+                                <div className="input">
+                                    <input type="date"
+                                           id="searchDate"
+                                           name="searchDate"
+
+                                           onChange={(e) => {
+                                               const selectedDate = moment(e.target.value);
+                                               const lastDate = selectedDate.clone().add(6, 'days'); // 선택한 날짜로부터 6일 후 (총 7일)
+
+                                               setSearchDto({
+                                                   ...searchDto,
+                                                   searchDate: selectedDate.format('YYYY-MM-DD'),
+                                                   lastDate: lastDate.format('YYYY-MM-DD') // 일주일 후 날짜
+                                               });
+                                           }}
+                                    />
+                                </div>
+                            </li>
+
                         </ul>
                     </form>
                 </div>

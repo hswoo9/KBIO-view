@@ -14,9 +14,32 @@ function AccessTabPstFile(props) {
 
     const year = parseInt(searchDto.searchYear, 10);
     const month = parseInt(searchDto.searchMonth, 10);
-    const lastDay = new Date(year, month, 0).getDate();
+    //const lastDay = new Date(year, month, 0).getDate();
+    const lastDay = searchDto.lastDate
+        ? parseInt(searchDto.lastDate.split("-")[2], 10)
+        : new Date(year, month, 0).getDate();
 
-    const categories = Array.from({ length: lastDay }, (_, i) => String(i + 1 + "일").padStart(2, '0'));
+    //const categories = Array.from({ length: lastDay }, (_, i) => String(i + 1 + "일").padStart(2, '0'));
+    const categories = (() => {
+        if (searchDto.searchDate) {
+            const startDate = new Date(searchDto.searchDate);
+            const endDate = new Date(searchDto.lastDate || lastDay);
+            const categoryList = [];
+
+            while (startDate <= endDate) {
+                const day = String(startDate.getDate()).padStart(2, '0'); // 일자만 추출하여 두 자리로 맞춤
+                categoryList.push(day + "일");
+                startDate.setDate(startDate.getDate() + 1); // 다음 날짜로 이동
+            }
+
+            return categoryList;
+        } else {
+            return Array.from({ length: lastDay }, (_, i) =>
+                String(i + 1).padStart(2, '0') + "일"
+            );
+        }
+    })();
+
     const [pstFileUseList, setPstFileUseList] = useState([]);
     const [cnt, setCnt] = useState([])
 
