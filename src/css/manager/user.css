@@ -65,7 +65,7 @@ header .hInner .hTop .langBox {}
 header .hInner .hTop .langBox .nice-select {padding: .4rem 2rem .4rem .9rem; width: 4.22rem; box-sizing: border-box; border-radius: 1.6rem; background: var(--black); color: #fff; font-weight: 600;}
 header .hInner .hTop .langBox .nice-select:after {content: ""; width: 1.35rem; height: 1.35rem; background: url(../../assets/images/ico_arrow_small_white.svg) no-repeat center / contain; display: inline-block; top: 50%; transform: translateY(-50%);}
 header .hInner .hTop .langBox .nice-select .option {text-align: center}
-header .hInner .hBot {background: url(../../assets/images/header_bg.jpg) no-repeat center / cover; padding: 1rem 5.1% 4.6rem; display: flex; flex-direction: column; justify-content: space-between; height: 19rem; border-radius: 4rem; transition: .5s linear;}
+header .hInner .hBot {background: url(../../assets/images/sub_visual03.jpg) no-repeat center / cover; padding: 1rem 5.1% 4.6rem; display: flex; flex-direction: column; justify-content: space-between; height: 19rem; border-radius: 4rem; transition: .5s linear;}
 header .hInner .hBot .top {display: flex; align-items: center; justify-content: space-between; gap: 1rem;}
 header .hInner .hBot .top > *:not(nav) {flex: none;}
 header .hInner .hBot .top h1 {width: 140px;}
