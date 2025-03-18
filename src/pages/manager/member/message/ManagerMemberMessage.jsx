@@ -1,182 +1,83 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
-import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
-import axios from "axios";
-import * as EgovNet from "@/api/egovFetch";
-import URL from "@/constants/url";
-import CODE from "@/constants/code";
-import 'moment/locale/ko';
-
-import ManagerLeft from "@/components/manager/ManagerLeftMember";
+import React, { useState, useEffect } from "react";
+import { NavLink } from "react-router-dom";
 import Swal from 'sweetalert2';
 import EgovPaging from "@/components/EgovPaging";
+import ManagerLeft from "@/components/manager/ManagerLeftMember";
 
 /* bootstrip */
 import BtTable from 'react-bootstrap/Table';
 import BTButton from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { getSessionItem } from "@/utils/storage";
-import moment from "moment/moment.js";
 
-function CancelMemberList(props) {
-    const userStatusRef = useRef();
-    const searchTypeRef = useRef();
-    const searchValRef = useRef();
-    const navigate = useNavigate();
-    const location = useLocation();
-    const [searchDto, setSearchDto] = useState(
-        location.state?.searchDto || {
-            pageIndex: 1,
-            userId: "",
-            searchWrd: "",
-            mbrStts: "",
-            searchType: "",
-            searchVal : "",
-            kornFlnm: "",
-        }
-    );
-    const [paginationInfo, setPaginationInfo] = useState({});
-    const userTypeRef = useRef();
-    const userNmRef = useRef();
-    const [CancelMemberList, setAuthorityList] = useState([]);
-    const [saveEvent, setSaveEvent] = useState({});
+function MemberMessage(props) {
+    const [memberList, setMemberList] = useState([]);
+    const [paginationInfo, setPaginationInfo] = useState({
+        totalRecordCount: 8,   
+        currentPageNo: 1,
+        totalPageCount: 1,
+        pageSize: 8        
+    });
+    const [message, setMessage] = useState("");
 
     useEffect(() => {
-        if(saveEvent.save){
-            if(saveEvent.mode === "delete"){
-                delMemberData(saveEvent);
-            }
-        }
-    }, [saveEvent]);
+        const hardcodedData = [
+            { userSn: 1, mbrType: '입주기업', userId: 'user01', kornFlnm: '홍길동', mvnEntNm: '홍길동 회사', snsClsf: '네이버', phoneNumber: '010-1234-5678' },
+            { userSn: 2, mbrType: '컨설턴트', userId: 'user02', kornFlnm: '이순신', mvnEntNm: '이순신 회사', snsClsf: '카카오', phoneNumber: '010-9876-5432' },
+            { userSn: 3, mbrType: '입주기업', userId: 'user03', kornFlnm: '김철수', mvnEntNm: '철수 회사', snsClsf: '페이스북', phoneNumber: '010-1111-2222' },
+            { userSn: 4, mbrType: '컨설턴트', userId: 'user04', kornFlnm: '박영희', mvnEntNm: '영희 회사', snsClsf: '인스타그램', phoneNumber: '010-3333-4444' },
+            { userSn: 5, mbrType: '입주기업', userId: 'user05', kornFlnm: '이동훈', mvnEntNm: '동훈 회사', snsClsf: '트위터', phoneNumber: '010-5555-6666' },
+            { userSn: 6, mbrType: '컨설턴트', userId: 'user06', kornFlnm: '조하나', mvnEntNm: '하나 회사', snsClsf: '카카오', phoneNumber: '010-7777-8888' },
+            { userSn: 7, mbrType: '입주기업', userId: 'user07', kornFlnm: '김유진', mvnEntNm: '유진 회사', snsClsf: '네이버', phoneNumber: '010-9999-0000' },
+            { userSn: 8, mbrType: '컨설턴트', userId: 'user08', kornFlnm: '최태영', mvnEntNm: '태영 회사', snsClsf: '페이스북', phoneNumber: '010-1234-9876' }
+        ];
 
-    const activeEnter = (e) => {
-        if (e.key === "Enter") {
-            e.preventDefault();
-            getCancelMemberList(searchDto);
-        }
+        setMemberList(hardcodedData);
+    }, []);
+
+    const handleMessageChange = (e) => {
+        setMessage(e.target.value);
     };
 
+    const sendMessages = () => {
+        if (!message) {
+            Swal.fire('Error', 'Please enter a message to send.', 'error');
+            return;
+        }
 
-    const getCancelMemberList = useCallback(
-        (searchDto) => {
-            const CancelMemberListURL = "/memberApi/getCancelMemberList.do";
-            const requeCanceltions = {
-                method: "POST",
-                headers: {
-                    "Content-type": "application/json",
-                },
-                body: JSON.stringify(searchDto),
-            };
-
-            EgovNet.requestFetch(
-                CancelMemberListURL,
-                requeCanceltions,
-                (resp) => {
-                    setPaginationInfo(resp.paginationInfo);
-                    let dataList = [];
-                    dataList.push(
-                        <tr key="no-data">
-                            <td colSpan="8">검색된 결과가 없습니다.</td>
-                        </tr>
-                    );
-
-                    resp.result.getCancelMemberList.forEach(function (item, index) {
-                        if (index === 0) dataList = [];
-
-
-                        dataList.push(
-                            <tr key={item.userSn}>
-                                <td>{resp.paginationInfo.totalRecordCount - (resp.paginationInfo.currentPageNo - 1) * resp.paginationInfo.pageSize - index}</td>
-                                <td>
-                                    {item.mbrType === 9 ? '관리자' :
-                                        item.mbrType === 1 ? '입주기업' :
-                                            item.mbrType === 2 ? '컨설턴트' :
-                                                item.mbrType === 3 ? '유관기관' :
-                                                    item.mbrType === 4 ? '비입주기업' :
-                                                        '테스트'}
-                                </td>
-                                <td>{item.userId}</td>
-                                <td>{item.kornFlnm}</td>
-                                <td>{item.mvnEntNm}</td>
-                                <td>{item.snsClsf ? item.snsClsf : ""}</td>
-                                <td>{new Date(item.frstCrtDt).toISOString().split("T")[0]}</td>
-                                <td>{item.lastLoginDate ? new Date(item.lastLoginDate).toISOString().split("T")[0] : "-"}</td>
-                                <td>{item.whdwlDt ? new Date(item.whdwlDt).toISOString().split("T")[0] : "-"}</td>
-                            </tr>
-                        );
-                    });
-                    setAuthorityList(dataList);
-                },
-                function (resp) {
-
-                }
-            );
-        },
-        [CancelMemberList, searchDto]
-    );
-
-    useEffect(() => {
-        getCancelMemberList(searchDto);
-    }, []);
+        memberList.forEach((member) => {
+            sendSms(member.phoneNumber, message);
+        });
+    };
 
     return (
         <div id="container" className="container layout cms">
-            <ManagerLeft/>
+            <ManagerLeft />
             <div className="inner">
-                <h2 className="pageTitle"><p>탈퇴회원</p></h2>
+                <h2 className="pageTitle"><p>회원 메시지 발송</p></h2>
+
                 <div className="cateWrap">
                     <form action="">
                         <ul className="cateList">
                             <li className="inputBox type1">
-                                <p className="title">회원분류</p>
-                                <div className="itemBox">
-                                    <select
-                                        className="selectGroup"
-                                        name="mbrType"
-                                        onChange={(e) => {
-                                            setSearchDto({...searchDto, mbrType: e.target.value})
-                                        }}
-                                    >
-                                        <option value="">전체</option>
-                                        <option value="1">입주기업</option>
-                                        <option value="3">유관기관</option>
-                                        <option value="4">비입주기업</option>
-                                        <option value="2">컨설턴트</option>
-                                        <option value="9">관리자</option>
-                                    </select>
-                                </div>
-                            </li>
-
-                            <li className="inputBox type1">
-                                <p className="title">키워드</p>
+                                <p className="title">문자종류</p>
                                 <div className="itemBox">
                                     <select
                                         className="selectGroup"
                                         id="searchType"
                                         name="searchType"
-                                        title="검색유형"
-                                        ref={searchTypeRef}
-                                        onChange={(e) => {
-                                            setSearchDto({...searchDto, searchType: e.target.value})
-                                        }}
                                     >
                                         <option value="">전체</option>
-                                        <option value="userId">아이디</option>
-                                        <option value="kornFlnm">성명</option>
+                                        <option value="">일반문자</option>
+                                        <option value="">광고문자</option>
                                     </select>
                                 </div>
                             </li>
-                            <li className="searchBox inputBox type1" style={{width: "100%"}}>
+                            <li className="searchBox inputBox type1" style={{ width: "100%" }}>
                                 <label className="input">
                                     <input
                                         type="text"
                                         name="searchVal"
-                                        defaultValue={searchDto.searchVal}
-                                        placeholder=""
-                                        ref={searchValRef}
-                                        onChange={(e) => {
-                                            setSearchDto({...searchDto, searchVal: e.target.value})
-                                        }}
-                                        onKeyDown={activeEnter}
                                     />
                                 </label>
                             </li>
@@ -185,35 +86,12 @@ function CancelMemberList(props) {
                             <button
                                 type="button"
                                 className="refreshBtn btn btn1 gray"
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    searchTypeRef.current.value = "";
-                                    searchValRef.current.value = "";
-
-                                    const initialSearchDto = {
-                                        pageIndex: 1,
-                                        mbrStts: "",
-                                        kornFlnm: "",
-                                        userId: "",
-                                        searchType: "",
-                                        searchWrd: "",
-                                    };
-                                    setSearchDto(initialSearchDto);
-                                    getCancelMemberList(initialSearchDto);
-                                }}
                             >
                                 <div className="icon"></div>
                             </button>
                             <button
                                 type="button"
                                 className="searchBtn btn btn1 point"
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    getCancelMemberList({
-                                        ...searchDto,
-                                        pageIndex: 1
-                                    });
-                                }}
                             >
                                 <div className="icon"></div>
                             </button>
@@ -223,15 +101,7 @@ function CancelMemberList(props) {
 
                 <div className="contBox board type1 customContBox">
                     <div className="topBox">
-                        <p className="resultText">전체 : <span className="red">{paginationInfo.totalRecordCount}</span>건
-                            페이지 : <span
-                                className="red">{paginationInfo.currentPageNo}/{paginationInfo.totalPageCount}</span>
-                        </p>
-                        <div className="rightBox">
-                            <button type="button" className="btn btn2 downBtn red">
-                                <div className="icon"></div>
-                                <span>엑셀 다운로드</span></button>
-                        </div>
+                        <p className="resultText">전체 : <span className="red">{paginationInfo.totalRecordCount}</span>건</p>
                     </div>
                     <div className="tableBox type1">
                         <table>
@@ -244,13 +114,21 @@ function CancelMemberList(props) {
                                 <th className="th2">성명</th>
                                 <th className="th2">기업명</th>
                                 <th className="th1">소셜구분</th>
-                                <th className="th2">가입일</th>
-                                <th className="th2">최근 접속일시</th>
-                                <th className="th2">탈퇴 일시</th>
+                                <th className="th2">전화번호</th>
                             </tr>
                             </thead>
                             <tbody>
-                            {CancelMemberList}
+                            {memberList.slice(0, paginationInfo.pageSize).map((item, index) => (
+                                <tr key={item.userSn}>
+                                    <td>{index + 1}</td>
+                                    <td>{item.mbrType}</td>
+                                    <td>{item.userId}</td>
+                                    <td>{item.kornFlnm}</td>
+                                    <td>{item.mvnEntNm}</td>
+                                    <td>{item.snsClsf}</td>
+                                    <td>{item.phoneNumber}</td>
+                                </tr>
+                            ))}
                             </tbody>
                         </table>
                     </div>
@@ -258,12 +136,17 @@ function CancelMemberList(props) {
                         <EgovPaging
                             pagination={paginationInfo}
                             moveToPage={(passedPage) => {
-                                getCancelMemberList({
-                                    ...searchDto,
-                                    pageIndex: passedPage,
-                                });
+                                setPaginationInfo((prev) => ({
+                                    ...prev,
+                                    currentPageNo: passedPage
+                                }));
                             }}
                         />
+                        <NavLink to={""}>
+                            <button type="button" className="writeBtn clickBtn">
+                                <span>문자발송</span>
+                            </button>
+                        </NavLink>
                     </div>
                 </div>
             </div>
@@ -271,4 +154,4 @@ function CancelMemberList(props) {
     );
 }
 
-export default CancelMemberList;
+export default MemberMessage;
