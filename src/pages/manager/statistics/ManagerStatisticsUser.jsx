@@ -21,6 +21,7 @@ import {
 import {Link} from "react-router-dom";
 import * as EgovNet from "@/api/egovFetch";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import moment from "moment/moment.js";
 
 function ManagerStatisticsUser(props) {
     const [isLoading, setIsLoading] = useState(true);  // 로딩 상태
@@ -33,10 +34,32 @@ function ManagerStatisticsUser(props) {
 
     const year = parseInt(searchDto.searchYear, 10);
     const month = parseInt(searchDto.searchMonth, 10);
-    const lastDay = new Date(year, month, 0).getDate();
+    //const lastDay = new Date(year, month, 0).getDate();
+    const lastDay = searchDto.lastDate
+        ? parseInt(searchDto.lastDate.split("-")[2], 10)
+        : new Date(year, month, 0).getDate();
 
     const [userList, setUserList] = useState([]);
-    const categories = Array.from({ length: lastDay }, (_, i) => String(i + 1 + "일").padStart(2, '0'));
+    //const categories = Array.from({ length: lastDay }, (_, i) => String(i + 1 + "일").padStart(2, '0'));
+    const categories = (() => {
+        if (searchDto.searchDate) {
+            const startDate = new Date(searchDto.searchDate);
+            const endDate = new Date(searchDto.lastDate || lastDay);
+            const categoryList = [];
+
+            while (startDate <= endDate) {
+                const day = String(startDate.getDate()).padStart(2, '0'); // 일자만 추출하여 두 자리로 맞춤
+                categoryList.push(day + "일");
+                startDate.setDate(startDate.getDate() + 1); // 다음 날짜로 이동
+            }
+
+            return categoryList;
+        } else {
+            return Array.from({ length: lastDay }, (_, i) =>
+                String(i + 1).padStart(2, '0') + "일"
+            );
+        }
+    })();
     const [mbrType1UserCnt, setMbrType1UserCnt] = useState([])
     const [mbrType3UserCnt, setMbrType3UserCnt] = useState([])
     const [mbrType4UserCnt, setMbrType4UserCnt] = useState([])
@@ -210,7 +233,11 @@ function ManagerStatisticsUser(props) {
                                             id="searchMonth"
                                             defaultValue={searchDto.searchMonth}
                                             onChange={(e) => {
-                                                setSearchDto({...searchDto, searchMonth: e.target.value})
+                                                setSearchDto({...searchDto,
+                                                    searchMonth: e.target.value,
+                                                    searchDate:"",
+                                                    lastDate:""
+                                                })
                                             }}
                                     >
                                         {["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"].map((month, index) => (
@@ -221,6 +248,28 @@ function ManagerStatisticsUser(props) {
                                     </select>
                                 </div>
                             </li>
+
+                            {/* 주간 시작일 선택 */}
+                            <li className="inputBox type1">
+                                <div className="input">
+                                    <input type="date"
+                                           id="searchDate"
+                                           name="searchDate"
+
+                                           onChange={(e) => {
+                                               const selectedDate = moment(e.target.value);
+                                               const lastDate = selectedDate.clone().add(6, 'days'); // 선택한 날짜로부터 6일 후 (총 7일)
+
+                                               setSearchDto({
+                                                   ...searchDto,
+                                                   searchDate: selectedDate.format('YYYY-MM-DD'),
+                                                   lastDate: lastDate.format('YYYY-MM-DD') // 일주일 후 날짜
+                                               });
+                                           }}
+                                    />
+                                </div>
+                            </li>
+
                         </ul>
                     </form>
                 </div>

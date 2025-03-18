@@ -26,15 +26,15 @@ function AccessTabMoveIn(props) {
             const categoryList = [];
 
             while (startDate <= endDate) {
-                const day = String(startDate.getDate()).padStart(2, '0'); // DD 형식으로만 추출
-                categoryList.push(day); // "일" 제거
+                const day = String(startDate.getDate()).padStart(2, '0'); // 일자만 추출하여 두 자리로 맞춤
+                categoryList.push(day + "일");
                 startDate.setDate(startDate.getDate() + 1); // 다음 날짜로 이동
             }
 
             return categoryList;
         } else {
             return Array.from({ length: lastDay }, (_, i) =>
-                String(i + 1).padStart(2, '0')
+                String(i + 1).padStart(2, '0') + "일"
             );
         }
     })();

@@ -10,21 +10,21 @@ function AccessTabAll(props) {
         }
     );
 
-    useEffect(() => {
+    /*useEffect(() => {
         console.log("초기 props.searchDto:", props.searchDto);
         console.log("초기 searchDto 상태:", searchDto);
     }, []); // 컴포넌트 마운트 시 한 번 실행
 
     useEffect(() => {
         console.log("searchDto 변경됨:", searchDto);
-    }, [searchDto]); // searchDto 변경 시 실행
+    }, [searchDto]); // searchDto 변경 시 실행*/
 
     const year = parseInt(searchDto.searchYear, 10);
     const month = parseInt(searchDto.searchMonth, 10);
-    const lastDay = new Date(year, month, 0).getDate();
-    /*const lastDay = searchDto.lastDate
+    //const lastDay = new Date(year, month, 0).getDate();
+    const lastDay = searchDto.lastDate
             ? parseInt(searchDto.lastDate.split("-")[2], 10)
-            : new Date(year, month, 0).getDate();*/
+            : new Date(year, month, 0).getDate();
 
     const [userAccessList, setUserAccessList] = useState([]);
     //const categories = Array.from({ length: lastDay }, (_, i) => String(i + 1 + "일").padStart(2, '0'));
