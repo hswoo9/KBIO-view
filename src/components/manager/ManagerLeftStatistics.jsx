@@ -106,6 +106,15 @@ function ManagerLeftStatistics() {
                   <p>첨부자료이용통계</p>
                 </NavLink>
               </li>
+              <li onMouseOver={(e) => handleMouseOver(e)}>
+                <NavLink
+                    to={URL.MANAGER_STATISTICS_SEARCH}
+                    className={({isActive}) => (isActive ? "activeTag" : "")}
+                >
+                  <div className="icon"></div>
+                  <p>검색어통계</p>
+                </NavLink>
+              </li>
 
               {/*<li>
                 <NavLink
