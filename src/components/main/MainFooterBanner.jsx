@@ -1,11 +1,15 @@
 import React, { useState, useRef, useEffect } from 'react';
 import {getBnrPopupList} from "@/components/main/MainComponents";
+import play from '@/css/images/rel_play.png'
+import pause from '@/css/images/rel_pause.png'
+import next from '@/css/images/rel_next.png'
+import prev from '@/css/images/rel_prev.png'
 
-import user_main_rolling_logo01 from "@/assets/images/user_main_rolling_logo01.svg";
-import user_main_rolling_logo02 from "@/assets/images/user_main_rolling_logo02.svg";
-import user_main_rolling_logo03 from "@/assets/images/user_main_rolling_logo03.svg";
-import user_main_rolling_logo04 from "@/assets/images/user_main_rolling_logo04.svg";
-import user_main_rolling_logo05 from "@/assets/images/user_main_rolling_logo05.svg";
+import topBtn from '@/css/images/top-btn.svg'
+
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import Slider from "react-slick";
 
 const MainFooterBanner = ({data}) => {
     let hostName = window.location.hostname;
@@ -15,21 +19,20 @@ const MainFooterBanner = ({data}) => {
     }else{
         hostName = "133.186.146.192"
     }
-    const wrapRef = useRef(null);
-    const listRef = useRef(null);
-    const [windowSize, setWindowSize] = useState(getWindowSize());
-    function getWindowSize() {
-        if (window.innerWidth > 1279) return 'pc';
-        if (window.innerWidth > 767) return 'ta';
-        return 'mo';
-    }
 
-
-
+    const sliderRef = useRef(null);
     const [bannerList, setBannerList] = useState([]);
-    useEffect(() => {
-        flowBannerAct();
-    }, [bannerList]);
+    const [isPlaying, setIsPlaying] = useState(true); // 자동 재생 상태
+
+    const togglePlayPause = () => {
+        if (isPlaying) {
+            sliderRef.current.slickPause(); // 슬라이드 일시정지
+        } else {
+            sliderRef.current.slickPlay(); // 슬라이드 다시 시작
+        }
+        setIsPlaying(!isPlaying);
+    };
+
     useEffect(() => {
         getBnrPopupList("bnr").then((data) => {
             if(data != null){
@@ -37,74 +40,123 @@ const MainFooterBanner = ({data}) => {
                 data.forEach(function(item, index){
                     if(item.tblBnrPopup.bnrPopupFrm == "footSlides"){
                         list.push(
-                            <li key={item.tblBnrPopup.bnrPopupSn}>
-                                <a href={item.tblBnrPopup.bnrPopupUrlAddr || "/"} target="_blank">
+                            <div key={item.tblBnrPopup.bnrPopupSn}>
+                                <a  href={item.tblBnrPopup.bnrPopupUrlAddr || "/"} target="_blank">
                                     <img
-                                        src={`http://${hostName}${item.tblComFile.atchFilePathNm}/${item.tblComFile.strgFileNm}.${item.tblComFile.atchFileExtnNm}`}
+                                        src={`${window.location.protocol}//${hostName}${item.tblComFile.atchFilePathNm}/${item.tblComFile.strgFileNm}.${item.tblComFile.atchFileExtnNm}`}
                                         alt={item.tblComFile.atchFileNm}
                                         loading="lazy"
+                                        style={{height: "3.5rem"}}
                                     />
                                 </a>
-                            </li>
+                            </div>
                         );
                     }
                 });
+
+                if(list.length < 6 && list.length > 1){
+                    data.forEach(function(item, index){
+                        if(item.tblBnrPopup.bnrPopupFrm == "footSlides"){
+                            list.push(
+                                <div key={item.tblBnrPopup.bnrPopupSn + 100}>
+                                    <a  href={item.tblBnrPopup.bnrPopupUrlAddr || "/"} target="_blank">
+                                        <img
+                                            src={`${window.location.protocol}//${hostName}${item.tblComFile.atchFilePathNm}/${item.tblComFile.strgFileNm}.${item.tblComFile.atchFileExtnNm}`}
+                                            alt={item.tblComFile.atchFileNm}
+                                            loading="lazy"
+                                            style={{height: "3.5rem"}}
+                                        />
+                                    </a>
+                                </div>
+                            );
+                        }
+                    });
+
+                    data.forEach(function(item, index){
+                        if(item.tblBnrPopup.bnrPopupFrm == "footSlides"){
+                            list.push(
+                                <div key={item.tblBnrPopup.bnrPopupSn + 1000}>
+                                    <a  href={item.tblBnrPopup.bnrPopupUrlAddr || "/"} target="_blank">
+                                        <img
+                                            src={`${window.location.protocol}//${hostName}${item.tblComFile.atchFilePathNm}/${item.tblComFile.strgFileNm}.${item.tblComFile.atchFileExtnNm}`}
+                                            alt={item.tblComFile.atchFileNm}
+                                            loading="lazy"
+                                            style={{height: "3.5rem"}}
+                                        />
+                                    </a>
+                                </div>
+                            );
+                        }
+                    });
+                }
                 setBannerList(list);
             }
         });
-
-
     }, []);
 
-    useEffect(() => {
-        function handleResize() {
-            setWindowSize(getWindowSize());
-        }
-        window.addEventListener('resize', handleResize);
-        return () => {
-            window.removeEventListener('resize', handleResize);
-        };
-
-    }, []);
-
-    const flowBannerAct = () => {
-        const wrap = wrapRef.current;
-        const list = listRef.current;
-        if(listRef.current.children.length > 0){
-            let liCount = list.children.length;
-            const originalItems = Array.from(list.children); // 기존 li 목록 복사
-            let index = 0;
-            while (liCount < 10) {
-                const cloneItem = originalItems[index].cloneNode(true); // 기존 li 복사
-                list.appendChild(cloneItem);
-                liCount++;
-                index = (index + 1) % originalItems.length; // 순환하면서 복사
-            }
-
-            let wrapWidth = wrap.offsetWidth;
-            let listWidth = list.offsetWidth;
-            const speed = 15;
-            let $clone = list.cloneNode(true);
-            wrap.appendChild($clone);
-            if (listWidth < wrapWidth) {
-                const listCount = Math.ceil(wrapWidth * 2 / listWidth);
-                for (let i = 2; i < listCount; i++) {
-                    $clone = $clone.cloneNode(true);
-                    wrap.appendChild($clone);
-                }
-            }
-            wrap.querySelectorAll('.imgMove').forEach((el) => {
-                el.style.animation = `${listWidth / speed}s linear infinite flowRolling`;
-            });
-        }
+    const settings = {
+        draggable : false,
+        infinite: true,
+        slidesToShow: 6,
+        slidesToScroll: 1,
+        autoplay: true,
+        arrows: false,
+        responsive: [
+            { breakpoint: 1430, settings: { slidesToShow: 5, variableWidth: false } },
+            { breakpoint: 1200, settings: { slidesToShow: 4, variableWidth: false } },
+            { breakpoint: 960, settings: { slidesToShow: 3, variableWidth: false } },
+            { breakpoint: 500, settings: { slidesToShow: 2, variableWidth: false } },
+            { breakpoint: 400, settings: { slidesToShow: 1, variableWidth: false } },
+        ],
     };
 
     return (
-        <div className="rollingWrap">
-            <div className="moveWrap" ref={wrapRef}>
-                <ul className="imgMove" ref={listRef}>
-                    {bannerList}
-                </ul>
+        <div id="footer">
+            <div className="WRAP">
+                <div className="banner_list">
+                    <Slider {...settings} ref={sliderRef}>
+                        {bannerList}
+                    </Slider>
+                </div>
+
+                <div className="banner_control">
+                    <button
+                        type="button"
+                        className="banner_prev slick-arrow"
+                        id="banner_prev"
+                        onClick={() => sliderRef.current.slickPrev()} // 이전 버튼 클릭
+                    >
+                        <img
+                            src={prev}
+                            alt="이전"
+                        />
+                    </button>
+                    <button
+                        type="button"
+                        className="banner_next slick-arrow"
+                        id="banner_next"
+                        onClick={() => sliderRef.current.slickNext()} // 다음 버튼 클릭
+                    >
+                        <img
+                            src={next}
+                            alt="다음"
+                        />
+                    </button>
+                    <button
+                        type="button"
+                        className={`banner_play slick-arrow ${isPlaying ? "playing" : ""}`}
+                        onClick={togglePlayPause} // 재생 / 일시정지 토글
+                    >
+                        <img
+                            src={isPlaying ? pause : play}
+                            alt={isPlaying ? "일시정지" : "재생"}
+                        />
+                    </button>
+
+                    <div id="topBtn" title="상단으로 가기" onClick={() => window.scrollTo(0, 0)}>
+                        <img src={topBtn} alt="상단으로 가기"/>
+                    </div>
+                </div>
             </div>
         </div>
     );

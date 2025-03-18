@@ -40,7 +40,7 @@ function BusinessOverview(props) {
               <div className="textBox">
                 <p>사업기간: ‘23~31’년(9년), *’32년 이후 자립</p>
                 <p>총예산 : 2,726억원(정부:1,095/인천시:1,550/민간:81)</p>
-                <p>시설/장비: 바이오 연구시설〮장비, 입주공간, 공동커뮤니티 시설</p>
+                <p>시설/장비: 바이오 연구시설·장비, 입주공간, 공동커뮤니티 시설</p>
               </div>
               <figure className="imgBox"><img src={user_business_overview_box01_img} alt="image"/>
               </figure>

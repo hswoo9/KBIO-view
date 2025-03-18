@@ -1,0 +1,15 @@
+<svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+    <!-- 원형 배경 -->
+    <circle cx="60" cy="60" r="56" fill="black" stroke="black" stroke-width="4"/>
+
+    <!-- 위쪽 화살표 -->
+    <path d="M40,40 L60,30 L80,40" fill="transparent" stroke="white" stroke-width="4"/>
+
+    <path d="M40,55 L60,45 L80,55" fill="transparent" stroke="white" stroke-width="4"/>
+
+    <!-- TOP 텍스트 -->
+    <text x="60" y="90" font-size="28" font-weight="bold" text-anchor="middle" fill="white" font-family="Arial">
+        Top
+    </text>
+</svg>
+

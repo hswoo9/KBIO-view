@@ -629,6 +629,13 @@ function EgovHeader() {
     userMsgTopMakeHtml();
   }, [userMsgTopList]);
 
+  useEffect(() => {
+    if (window.location.pathname.split("/")[1] != "" && location.state?.menuSn == null) {
+      alert("잘못된 접근입니다.");
+      window.location.href = "/";
+    }
+  }, []);
+
   return (
       // <!-- header -->
       <header className={isScrolled ? 'scroll' : ''}>
