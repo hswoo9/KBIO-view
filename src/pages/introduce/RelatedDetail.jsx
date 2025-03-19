@@ -120,7 +120,7 @@ function RelatedDetail() {
                                 </li>
                                 <li>
                                     <strong className="left">소재지 <span className="blue">BI</span></strong>
-                                    <p className="right">{relatedDetail?.entAddr || ""} {relatedDetail?.entDaddr || ""}</p>
+                                    <p className="right">{relatedDetail?.instAddr || ""} {relatedDetail?.instDaddr || ""}</p>
                                 </li>
                             </ul>
                         </div>
