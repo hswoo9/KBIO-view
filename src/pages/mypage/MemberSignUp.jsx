@@ -429,8 +429,10 @@ function MemberSignUp(props) {
               clsNm: businessData.clsNm,
               entTelno: businessData.entTelno,
               bzentyEmlAddr: businessData.bzentyEmlAddr,
-              address: businessData.entAddr,
-              daddress: businessData.entDaddr,
+              //address: businessData.entAddr,
+              //daddress: businessData.entDaddr,
+              address: memberDetail.mbrType === 3 ? businessData.instAddr : businessData.entAddr,
+              daddress: memberDetail.mbrType === 3 ? businessData.instDaddr : businessData.entDaddr,
             });
           } else {
             Swal.fire({

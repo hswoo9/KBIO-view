@@ -462,7 +462,7 @@ function RelatedCompanyCreate(props){
                 setRelatedDetail({
                     ...relatedDetail,
                     zip: postcode,
-                    entAddr: searchAddress,
+                    instAddr: searchAddress,
                 });
             },
         }).open();
@@ -523,11 +523,11 @@ function RelatedCompanyCreate(props){
             return false;
         }
 
-        if (!relatedDetail.zip || !relatedDetail.entAddr) {
+        if (!relatedDetail.zip || !relatedDetail.instAddr) {
             Swal.fire("주소는 필수 값입니다.");
             return false;
         }
-        if (!relatedDetail.entDaddr) {
+        if (!relatedDetail.instDaddr) {
             Swal.fire("세부주소를 입력해주십시오.");
             return false;
         }
@@ -842,7 +842,7 @@ function RelatedCompanyCreate(props){
                     </li>
                     {/* 주소 */}
                     <li className="inputBox type1 email width3">
-                        <label className="title essential" htmlFor="entAddr">주소<small style={{color: "red"}}>*</small></label>
+                        <label className="title essential" htmlFor="instAddr">주소<small style={{color: "red"}}>*</small></label>
                         <div className="input">
                             <small className="text btn" onClick={searchAddress}>주소 검색</small>
                             <input
@@ -861,14 +861,14 @@ function RelatedCompanyCreate(props){
                             />
                             <input
                                 type="text"
-                                name="entAddr"
-                                id="entAddr"
+                                name="instAddr"
+                                id="instAddr"
                                 title="검색된 주소"
-                                value={relatedDetail.entAddr || ""}
+                                value={relatedDetail.instAddr || ""}
                                 onChange={(e) =>
                                     setRelatedDetail({
                                         ...relatedDetail,
-                                        entAddr: e.target.value,
+                                        instAddr: e.target.value,
                                     })
                                 }
                                 readOnly
@@ -878,16 +878,16 @@ function RelatedCompanyCreate(props){
                     </li>
                     {/* 상세주소 */}
                     <li className="inputBox type1 email width3">
-                        <label className="title essential" htmlFor="entDaddr">상세주소<small
+                        <label className="title essential" htmlFor="instDaddr">상세주소<small
                             style={{color: "red"}}>*</small></label>
                         <div className="input">
                             <input
                                 type="text"
-                                name="entDaddr"
-                                id="entDaddr"
-                                value={relatedDetail.entDaddr || ""}
+                                name="instDaddr"
+                                id="instDaddr"
+                                value={relatedDetail.instDaddr || ""}
                                 onChange={(e) =>
-                                    setRelatedDetail({ ...relatedDetail, entDaddr: e.target.value })
+                                    setRelatedDetail({ ...relatedDetail, instDaddr: e.target.value })
                                 }
                             >
                             </input>

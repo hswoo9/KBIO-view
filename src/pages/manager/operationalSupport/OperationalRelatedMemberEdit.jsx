@@ -361,7 +361,7 @@ function OperationRelatedMember(props) {
                             <div className="input">
                                 <input
                                     type="text"
-                                    value={`${rcDetail.entAddr || ''} ${rcDetail.entDaddr || ''}`}
+                                    value={`${rcDetail.instAddr || ''} ${rcDetail.instDaddr || ''}`}
                                     readOnly
                                 >
                                 </input>
