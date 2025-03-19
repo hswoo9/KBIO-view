@@ -398,6 +398,7 @@ function EgovHeader() {
   }, [isScrolled]);
 
 
+
   const activeEnter = (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
@@ -636,6 +637,13 @@ function EgovHeader() {
     }
   }, []);
 
+
+  const [searchText, setSearchText] = useState("");
+
+    const handleSearch = () => {
+      ComScript.closeModal("searchmap");
+    };
+
   return (
       // <!-- header -->
       <header className={isScrolled ? 'scroll' : ''}>
@@ -791,7 +799,7 @@ function EgovHeader() {
                 </ul>
               </nav>
               <div className="rightBox">
-                <NavLink
+                {/*<NavLink
                     to={URL.TOTAL_SEARCH}
                     state={{
                       menuNmPath: "통합검색"
@@ -801,7 +809,11 @@ function EgovHeader() {
                     <span className="visually-hidden">통합검색</span>
                     <div className="icon"></div>
                   </button>
-                </NavLink>
+                </NavLink>*/}
+                <button type="button" className="searchBtn" onClick={() => ComScript.openModal("searchmap")}>
+                  <span className="visually-hidden">통합검색</span>
+                  <div className="icon"></div>
+                </button>
                 <button type="button" className="sitemapBtn" onClick={() => ComScript.openModal("sitemap")}>
                   <div className="icon"></div>
                 </button>
@@ -1058,6 +1070,251 @@ function EgovHeader() {
             </div>
           </div>
         </div>
+
+        {/*<div className="searchmap modalCon">
+          <div className="bg" onClick={() => ComScript.closeModal("searchmap")}></div>
+          <div className="m-inner">
+            <div className="boxWrap">
+              <div className="close" onClick={() => ComScript.closeModal("searchmap")}>
+                <div className="icon"></div>
+              </div>
+              <div className="top">
+                <h2 className="title">통합검색</h2>
+              </div>
+              <div className="box">
+
+                <div className="cateWrap">
+                  <form action="">
+                    <ul className="cateList">
+                      <li className="searchBox inputBox type1">
+                        <div className="input">
+                          <input type="text"
+                                 name="program_search"
+                                 id="program_search" title="검색어"
+                                 placeholder="검색어를 입력해주세요."
+                          />
+                        </div>
+                      </li>
+                    </ul>
+                    <div className="rightBtn">
+                      <button type="button">
+                        검색
+                      </button>
+                    </div>
+                    <span>고급검색</span>
+                  </form>
+                  <span>추천키워드 #바이오랩허브 #k-bio #생명공학</span>
+                </div>
+
+
+              </div>
+            </div>
+          </div>
+        </div>*/}
+        <div className="searchmap modalCon">
+          <div className="bg" onClick={() => ComScript.closeModal("searchmap")}></div>
+          <div className="m-inner">
+            <div className="boxWrap">
+              <div className="close" onClick={() => ComScript.closeModal("searchmap")}>
+                <div className="icon"></div>
+              </div>
+              <div className="box">
+                <div className="cateWrap">
+                  <form action=""
+                        style={{display: "flex", alignItems: "center"}}>
+                    <div className="input" style={{flex: "1", marginRight: "8px"}}>
+                      <input
+                          type="text"
+                          name="program_search"
+                          id="program_search"
+                          title="검색어"
+                          placeholder="검색어를 입력해주세요."
+                          value={searchText}
+                          onChange={(e) => setSearchText(e.target.value)}
+                          style={{
+                            width: "95%",
+                            padding: "8px",
+                            border: "1px solid #ddd",
+                            borderRadius: "4px",
+                          }}
+                      />
+                    </div>
+                    <NavLink
+                        to={URL.TOTAL_SEARCH}
+                        state={{
+                          menuNmPath: "통합검색",
+                          searchText: searchText,
+                        }}
+                        onClick={handleSearch}
+                    >
+                    <button
+                        type="button"
+                        style={{
+                          padding: "8px 16px",
+                          backgroundColor: "#007bff",
+                          color: "#fff",
+                          border: "none",
+                          borderRadius: "4px",
+                          cursor: "pointer",
+                        }}
+                    >
+                      검색
+                    </button>
+                    </NavLink>
+                  </form>
+                  <div style={{display: "flex", justifyContent: "space-between", marginTop: "4px", marginBottom:"40px"}}>
+            <span style={{fontSize: "15px", color: "#666"}}>
+              추천키워드 #바이오랩허브 #k-bio #생명공학
+            </span>
+                    <span style={{fontSize: "15px", color: "#666"}}>
+              고급검색
+            </span>
+                  </div>
+
+                  {/* 구분선 */}
+                  <hr style={{margin: "8px 0", border: "0.5px solid #ddd"}}/>
+
+                  {/* 인기검색어와 최근검색어 목록 */}
+                  <div style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    marginTop: "4px",
+                    //alignItems: "center"
+                  }}>
+
+
+                    <div style={{flex: "1", marginLeft: "10px"}}>
+                      <h3 style={{fontSize: "20px", fontWeight: "bold", marginBottom: "20px"}}>인기검색어</h3>
+                      <ul style={{listStyle: "none", padding: "0"}}>
+                        <li style={{
+                          fontSize: "14px",
+                          marginBottom: "5px",
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center"
+                        }}>
+                          <span>1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;K-바이오</span>
+                          <span style={{color: "red", fontSize: "12px"}}>▲ 15</span>
+                        </li>
+                        <li style={{
+                          fontSize: "14px",
+                          marginBottom: "5px",
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center"
+                        }}>
+                          <span>2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;바이오 산업</span>
+                          <span style={{color: "blue", fontSize: "12px"}}>▼ 5</span>
+                        </li>
+                        <li style={{
+                          fontSize: "14px",
+                          marginBottom: "5px",
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center"
+                        }}>
+                          <span>3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;컨설팅</span>
+                          <span style={{color: "red", fontSize: "12px"}}>▲ 8</span>
+                        </li>
+                        <li style={{
+                          fontSize: "14px",
+                          marginBottom: "5px",
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center"
+                        }}>
+                          <span>4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;스마트 팩토리</span>
+                          <span style={{color: "blue", fontSize: "12px"}}>▼ 3</span>
+                        </li>
+                        <li style={{
+                          fontSize: "14px",
+                          marginBottom: "5px",
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center"
+                        }}>
+                          <span>5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;오시는 길</span>
+                          <span style={{color: "red", fontSize: "12px"}}>-</span>
+                        </li>
+                        <li style={{
+                          fontSize: "14px",
+                          marginBottom: "5px",
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center"
+                        }}>
+                          <span>6&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AI 기술</span>
+                          <span style={{color: "red", fontSize: "12px"}}>-</span>
+                        </li>
+                      </ul>
+                    </div>
+
+
+                    {/* 세로 구분선 */}
+                    <div style={{
+                      width: "1px",
+                      height: "200px",
+                      backgroundColor: "#ddd",
+                      margin: "0 15px",
+                      alignSelf: "stretch"
+                    }}></div>
+
+                    <div style={{flex: "1", marginRight: "10px"}}>
+                      <h3 style={{fontSize: "20px", fontWeight: "bold", marginBottom: "20px"}}>최근검색어</h3>
+                      <ul style={{listStyle: "none", padding: "0"}}>
+                        {["컨설팅", "의약바이오", "간편상담", "오시는 길"].map((keyword, index) => (
+                            <li
+                                key={index}
+                                style={{
+                                  fontSize: "14px",
+                                  marginBottom: "5px",
+                                  display: "flex",
+                                  justifyContent: "space-between",
+                                  alignItems: "center",
+                                }}
+                            >
+                              <span>{keyword}</span>
+                              <button
+                                  style={{
+                                    background: "transparent",
+                                    border: "none",
+                                    color: "#888",
+                                    fontSize: "14px",
+                                    cursor: "pointer",
+                                  }}
+                              >
+                                ✖
+                              </button>
+                            </li>
+                        ))}
+                      </ul>
+                      {/* 최근검색어 전체삭제 버튼 */}
+                      <button
+                          style={{
+                            marginTop: "10px",
+                            background: "transparent",
+                            border: "none",
+                            color: "#888",
+                            fontSize: "14px",
+                            cursor: "pointer",
+                            display: "flex",
+                            alignItems: "center",
+                          }}
+                      >
+                        최근검색어 전체삭제 ✖
+                      </button>
+                    </div>
+
+
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
       </header>
   );
 }

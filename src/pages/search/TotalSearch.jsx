@@ -14,7 +14,7 @@ const TotalSearch = () => {
             pageIndex: 1,
             pageUnit : 10,
             searchType: "",
-            searchVal : "",
+            searchVal: location.state?.searchText || "",
             searchStartDt : moment(new Date()).format("YYYY-MM-DD") + "T00:00:00",
             searchEndDt : moment(new Date()).format("YYYY-MM-DD") + "T00:00:00",
         }
