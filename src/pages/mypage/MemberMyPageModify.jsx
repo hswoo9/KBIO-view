@@ -1182,7 +1182,8 @@ function MemberMyPageModify(props) {
                                         <label className="input" style={{paddingRight: "6rem"}} htmlFor="company_address1">
                                             <input type="text" name="company_address1" id="company_address1" readOnly
                                                    title="주소"
-                                                   value={rcDetail.entAddr || ""}/>
+                                                   value={sessionUsermbrType === 3 ? rcDetail.instAddr : rcDetail.entAddr || ""}
+                                                   />
                                         </label>
                                     </li>
                                     <li className="inputBox type2">
@@ -1202,7 +1203,7 @@ function MemberMyPageModify(props) {
                                                 placeholder="상세주소를 입력해주세요"
                                                 title="상세주소"
                                                 readOnly
-                                                value={rcDetail.entDaddr || ""}
+                                                value={sessionUsermbrType === 3 ? rcDetail.instDaddr : rcDetail.entDaddr || ""}
                                             />
                                         </label>
                                     </li>

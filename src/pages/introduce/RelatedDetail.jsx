@@ -77,7 +77,7 @@ function RelatedDetail() {
                             <div className="textBox">
                                 <div className="nameBox">
                                     <strong className="name">{relatedDetail?.relInstNm}</strong>
-                                    <p className="address">{relatedDetail?.entAddr || ""} {relatedDetail?.entDaddr || ""}</p>
+                                    <p className="address">{relatedDetail?.instAddr || ""} {relatedDetail?.instDaddr || ""}</p>
                                 </div>
                                 <p className="intro" dangerouslySetInnerHTML={{__html: relatedDetail?.bzentyExpln || ""}}></p>
                             </div>
