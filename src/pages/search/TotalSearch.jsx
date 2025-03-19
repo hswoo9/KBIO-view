@@ -265,7 +265,7 @@ const TotalSearch = () => {
     }, []);
 
     return (
-        <div className="container search">
+        /*<div className="container search">
             <div className="inner">
                 <div className="inner2">
                     <div className="searchFormWrap type2" data-aos="fade-up" data-aos-duration="1500">
@@ -382,9 +382,9 @@ const TotalSearch = () => {
                         <ul className="list">
                             <li className="active"><a href="#"><span>전체</span><span
                                 className="small">({paginationInfo.totalRecordCount || 0}건)</span></a></li>
-                            {/*<li><a href="#"><span>예약신청</span><span className="small">(16건)</span></a></li>
-                            <li><a href="#"><span>컨설팅</span><span className="small">(20건)</span></a></li>*/}
-                            {/*<li><a href="#"><span>커뮤니티</span><span className="small">({paginationInfo.totalRecordCount || 0}건)</span></a></li>*/}
+                            {/!*<li><a href="#"><span>예약신청</span><span className="small">(16건)</span></a></li>
+                            <li><a href="#"><span>컨설팅</span><span className="small">(20건)</span></a></li>*!/}
+                            {/!*<li><a href="#"><span>커뮤니티</span><span className="small">({paginationInfo.totalRecordCount || 0}건)</span></a></li>*!/}
                         </ul>
                     </div>
                     <div className="tableCont type1" data-aos="fade-up" data-aos-duration="1500">
@@ -406,6 +406,365 @@ const TotalSearch = () => {
                             <span>더보기</span>
                         </a>
                     )}
+                </div>
+            </div>
+        </div>*/
+
+        <div className="container search">
+            <div className="inner">
+                <div className="inner2">
+                    <div className="searchFormWrap type2" data-aos="fade-up" data-aos-duration="1500">
+                        <form>
+                            <div className="searchBox">
+                                <div className="itemBox type2">
+                                    <select
+                                        className="selectGroup customUserSelect"
+                                        value={searchCondition.searchType || ""}
+                                        onChange={(e) =>
+                                            setSearchCondition({...searchCondition, searchType: e.target.value})
+                                        }
+                                    >
+                                        <option value="">전체</option>
+                                        <option value="1">제목</option>
+                                        <option value="2">내용</option>
+                                        <option value="3">첨부파일</option>
+                                    </select>
+                                </div>
+                                <div className="inputBox type1 date">
+                                    <label className="input">
+                                        <input
+                                            type="text"
+                                            id="data_write1"
+                                            name="data_write1"
+                                            className="datepicker"
+                                            readOnly
+                                            onClick={handleOpenStartDatePicker}
+                                            value={selectedStartDate || ""}
+                                        />
+                                    </label>
+                                    <input type="date"
+                                           className="noneTag"
+                                           id="startDt"
+                                           ref={startDtRef}
+                                           value={moment(searchCondition.searchStartDt).format('YYYY-MM-DD')}
+                                           onChange={handleStartDtChange}
+                                    />
+                                    <button type="button" className="calenBtn" onClick={handleOpenStartDatePicker}>
+                                        <div className="icon"></div>
+                                    </button>
+                                </div>
+                                <div className="inputBox type1 date">
+                                    <label className="input">
+                                        <input
+                                            type="text"
+                                            id="data_write2"
+                                            name="data_write2"
+                                            className="datepicker"
+                                            readOnly
+                                            onClick={handleOpenEndDatePicker}
+                                            value={selectedEndDate || ""}
+                                        />
+                                    </label>
+                                    <input type="date"
+                                           className="noneTag"
+                                           id="endDt"
+                                           ref={endDtRef}
+                                           value={moment(searchCondition.searchEndDt).format('YYYY-MM-DD')}
+                                           onChange={handleEndDtChange}
+                                    />
+                                    <button type="button" className="calenBtn" onClick={handleOpenEndDatePicker}>
+                                        <div className="icon"></div>
+                                    </button>
+                                </div>
+                                <div className="inputBox type1">
+                                    <label className="input">
+                                        <input
+                                            type="text"
+                                            id="board_search"
+                                            name="board_search"
+                                            placeholder="검색어를 입력해주세요."
+                                            value={searchCondition.searchVal || ""}
+                                            ref={kwdRef}
+                                            onChange={(e) => {
+                                                kwdRef.current.value = e.target.value;
+                                                setSearchCondition({
+                                                    ...searchCondition,
+                                                    searchVal: e.target.value
+                                                })
+                                            }}
+                                            onKeyDown={activeEnter}
+                                        />
+                                    </label>
+                                </div>
+                                <button type="button" className="searchBtn"
+                                        onClick={() => getSearchDataList(searchCondition)}
+                                >
+                                    <div className="icon"></div>
+                                </button>
+                            </div>
+                            <div className="keywrodBox">
+                                <strong className="title">추천키워드</strong>
+                                <ul className="list">
+                                    {suggestionKeyWord}
+                                </ul>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div className="resultWrap" style={{ display: "flex", gap: "16px" }}>
+                        {/* 레프트 박스 (검색 필터) */}
+                        <div
+                            className="filterBox"
+                            style={{
+                                flex: 1,
+                                padding: "16px",
+                                backgroundColor: "#f4f4f4",
+                                borderRadius: "8px",
+                                boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                            }}
+                        >
+                            <h3 style={{marginBottom: "12px", fontSize: "18px"}}>검색 필터</h3>
+                            <label style={{marginBottom: "8px", display: "flex", alignItems: "center", gap: "8px"}}>
+                                <div style={{
+                                    width: "16px",
+                                    height: "16px",
+                                    border: "1px solid #ccc",
+                                    backgroundColor: "#fff",
+                                    marginRight: "4px"
+                                }}></div>
+                                공지사항
+                            </label>
+                            <label style={{marginBottom: "8px", display: "flex", alignItems: "center", gap: "8px"}}>
+                                <div style={{
+                                    width: "16px",
+                                    height: "16px",
+                                    border: "1px solid #ccc",
+                                    backgroundColor: "#fff",
+                                    marginRight: "4px"
+                                }}></div>
+                                보도자료
+                            </label>
+                            <label style={{marginBottom: "8px", display: "flex", alignItems: "center", gap: "8px"}}>
+                                <div style={{
+                                    width: "16px",
+                                    height: "16px",
+                                    border: "1px solid #ccc",
+                                    backgroundColor: "#fff",
+                                    marginRight: "4px"
+                                }}></div>
+                                Q&A
+                            </label>
+                            <label style={{marginBottom: "8px", display: "flex", alignItems: "center", gap: "8px"}}>
+                            <div style={{
+                                    width: "16px",
+                                    height: "16px",
+                                    border: "1px solid #ccc",
+                                    backgroundColor: "#fff",
+                                    marginRight: "4px"
+                                }}></div> FAQ
+                            </label>
+                            <label style={{ marginBottom: "8px", display: "flex", alignItems: "center", gap: "8px" }}>
+                                <div style={{
+                                    width: "16px",
+                                    height: "16px",
+                                    border: "1px solid #ccc",
+                                    backgroundColor: "#fff",
+                                    marginRight: "4px"
+                                }}></div> 자료실
+                            </label>
+                            <label style={{ marginBottom: "30px", display: "flex", alignItems: "center", gap: "8px" }}>
+                                <div style={{
+                                    width: "16px",
+                                    height: "16px",
+                                    border: "1px solid #ccc",
+                                    backgroundColor: "#fff",
+                                    marginRight: "4px"
+                                }}></div> 연구자료실
+                            </label>
+
+                            <hr style={{border: "1px solid #ddd", margin: "16px 0"}}/>
+
+                            <h3 style={{marginBottom: "12px", fontSize: "18px"}}>검색 기간</h3>
+                            <div style={{marginBottom: "12px", display: "flex", gap: "8px"}}>
+                                <button style={{
+                                    padding: "6px 12px",
+                                    border: "1px solid #ccc",
+                                    borderRadius: "4px",
+                                    backgroundColor: "#f4f4f4",
+                                    cursor: "pointer"
+                                }}>1개월
+                                </button>
+                                <button style={{
+                                    padding: "6px 12px",
+                                    border: "1px solid #ccc",
+                                    borderRadius: "4px",
+                                    backgroundColor: "#f4f4f4",
+                                    cursor: "pointer"
+                                }}>3개월
+                                </button>
+                                <button style={{
+                                    padding: "6px 12px",
+                                    border: "1px solid #ccc",
+                                    borderRadius: "4px",
+                                    backgroundColor: "#f4f4f4",
+                                    cursor: "pointer"
+                                }}>6개월
+                                </button>
+                            </div>
+
+                            <div style={{marginBottom: "30px", display: "flex", gap: "8px"}}>
+                                <input type="date" style={{
+                                    padding: "6px",
+                                    border: "1px solid #ccc",
+                                    borderRadius: "4px"
+                                }}/>
+                                <input type="date" style={{
+                                    padding: "6px",
+                                    border: "1px solid #ccc",
+                                    borderRadius: "4px"
+                                }}/>
+                            </div>
+
+                            <hr style={{border: "1px solid #ddd", margin: "16px 0"}}/>
+
+                            <h3 style={{marginBottom: "12px", fontSize: "18px"}}>자료 유형</h3>
+                            <label style={{marginBottom: "8px", display: "flex", alignItems: "center", gap: "8px"}}>
+                                <div style={{
+                                    width: "16px",
+                                    height: "16px",
+                                    border: "1px solid #ccc",
+                                    backgroundColor: "#fff",
+                                    marginRight: "4px"
+                                }}></div>
+                                PDF(3)
+                            </label>
+                            <label style={{marginBottom: "30px", display: "flex", alignItems: "center", gap: "8px"}}>
+                                <div style={{
+                                    width: "16px",
+                                    height: "16px",
+                                    border: "1px solid #ccc",
+                                    backgroundColor: "#fff",
+                                    marginRight: "4px"
+                                }}></div>
+                                HWP(1)
+                            </label>
+                        </div>
+
+                        {/* 검색 결과 박스 */}
+                        <div className="resultBox" data-aos="fade-up" data-aos-duration="1500" style={{flex: 3}}>
+                            <p style={{fontSize: "20px", marginBottom: "20px"}}>
+                                <span style={{color: "#04359b"}}>"#생명#생물학#생명과학"</span>으로도 검색해보세요.
+                            </p>
+                            <p>
+                                {searchCondition.searchVal ? (
+                                    <>
+                                        <strong>“{searchCondition.searchVal}”</strong> 에 대한 검색결과
+                                    </>
+                                ) : (
+                                    <>전체 검색결과는</>
+                                )}{" "}
+                                총 <strong>{paginationInfo.totalRecordCount || 0}건</strong>이 검색되었습니다.
+                            </p>
+                            <p style={{ fontSize: "18px" }}>
+                                <span style={{ color: "#04359b" }}>"#생명#생물학#생명과학"</span>에 대한 검색결과 총 <span style={{ color: "red" }}>1</span>건이 추가 검색되었습니다.
+                            </p>
+
+
+                            {/* 탭 박스 */}
+                            <div className="tabBox type1" data-aos="fade-up" data-aos-duration="1500">
+                                <div className="bg hover"></div>
+                                <ul className="list" style={{display: "flex", gap: "8px", padding: "4px 0"}}>
+                                    <li className="active" style={{flex: "none", fontSize: "14px", padding: "4px 8px"}}>
+                                        <a href="#" style={{textDecoration: "none"}}>
+                                            <span>전체</span>
+                                            <span className="small" style={{marginLeft: "4px", fontSize: "12px"}}>
+                                                ({paginationInfo.totalRecordCount || 0}건)
+                                                </span>
+                                        </a>
+                                    </li>
+                                    <li style={{flex: "none", fontSize: "14px", padding: "4px 8px"}}>
+                                        <a href="#" style={{textDecoration: "none"}}>
+                                            <span>공지사항</span>
+                                            <span className="small"
+                                                  style={{
+                                                      marginLeft: "4px",
+                                                      fontSize: "12px"
+                                                  }}>({paginationInfo.totalRecordCount || 0}건)</span>
+                                        </a>
+                                    </li>
+                                    <li style={{flex: "none", fontSize: "14px", padding: "4px 8px"}}>
+                                        <a href="#" style={{textDecoration: "none"}}>
+                                            <span>보도자료</span>
+                                            <span className="small"
+                                                  style={{
+                                                      marginLeft: "4px",
+                                                      fontSize: "12px"
+                                                  }}>({paginationInfo.totalRecordCount || 0}건)</span>
+                                        </a>
+                                    </li>
+                                    <li style={{flex: "none", fontSize: "14px", padding: "4px 8px"}}>
+                                        <a href="#" style={{textDecoration: "none"}}>
+                                            <span>Q&A</span>
+                                            <span className="small" style={{marginLeft: "4px", fontSize: "12px"}}>
+                                            ({paginationInfo.totalRecordCount || 0}건)
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li style={{flex: "none", fontSize: "14px", padding: "4px 8px"}}>
+                                        <a href="#" style={{textDecoration: "none"}}>
+                                            <span>FAQ</span>
+                                            <span className="small" style={{marginLeft: "4px", fontSize: "12px"}}>
+                                            ({paginationInfo.totalRecordCount || 0}건)
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li style={{flex: "none", fontSize: "14px", padding: "4px 8px"}}>
+                                        <a href="#" style={{textDecoration: "none"}}>
+                                            <span>자료실</span>
+                                            <span className="small" style={{marginLeft: "4px", fontSize: "12px"}}>
+                                            ({paginationInfo.totalRecordCount || 0}건)
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li style={{flex: "none", fontSize: "14px", padding: "4px 8px"}}>
+                                        <a href="#" style={{textDecoration: "none"}}>
+                                            <span>연구자료실</span>
+                                            <span className="small" style={{marginLeft: "4px", fontSize: "12px"}}>
+                                            ({paginationInfo.totalRecordCount || 0}건)
+                                            </span>
+                                        </a>
+                                    </li>
+                                    {/* 추가 탭 필요 시 주석 해제 */}
+                                    {/* <li><a href="#"><span>예약신청</span><span className="small">(16건)</span></a></li>
+                                    <li><a href="#"><span>컨설팅</span><span className="small">(20건)</span></a></li>
+                                    <li><a href="#"><span>커뮤니티</span><span className="small">({paginationInfo.totalRecordCount || 0}건)</span></a></li> */}
+                                </ul>
+                            </div>
+
+                            {/* 테이블 컨테이너 */}
+                            <div className="tableCont type1" data-aos="fade-up" data-aos-duration="1500">
+                                <table>
+                                    <caption>통합검색</caption>
+                                    <thead>
+                                    <tr>
+                                        <th>제목</th>
+                                        <th>내용</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {searchDataList}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            {/* 더보기 버튼 */}
+                            {searchDataList.length > 10 && (
+                                <a className="clickBtn black" style={{cursor: "pointer"}} onClick={pageUnitAddEvent}>
+                                    <span>더보기</span>
+                                </a>
+                            )}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
