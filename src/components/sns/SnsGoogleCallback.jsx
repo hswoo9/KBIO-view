@@ -17,8 +17,16 @@ const SnsGoogleCallback = () => {
     let authorizationCode  = new URL(window.location.href).searchParams.get("code");
     if (authorizationCode) {
       const googleLoginAction = async () => {
+        let hostName = window.location.hostname;
+        let apiPort = ":" + import.meta.env.VITE_APP_API_PORT
+
+        if(hostName == "133.186.146.192"){
+          hostName = "127.0.0.1"
+          apiPort = ""
+        }
+
         const resp = await axios.post(
-            "http://127.0.0.1:8080/loginApi/loginAction",
+        `${window.location.protocol}//${hostName}${apiPort}/api/loginApi/loginAction`,
             JSON.stringify({code : authorizationCode, loginType : "sns", snsType : "google"}),
   {
           headers: {

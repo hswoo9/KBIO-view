@@ -138,12 +138,14 @@ export const fileDownLoad = async (atchFileSn, atchFileNm, trgtTblNm, trgtSn) =>
     try {
 
         let hostName = window.location.hostname;
+        let apiPort = ":" + import.meta.env.VITE_APP_API_PORT
 
         if(hostName == "133.186.146.192"){
             hostName = "127.0.0.1"
+            apiPort = ""
         }
 
-        const response = await axios.post(`${window.location.protocol}//${hostName}:8080/commonApi/getFileDownLoad.do`, {
+        const response = await axios.post(`${window.location.protocol}//${hostName}${apiPort}/api/commonApi/getFileDownLoad.do`, {
             atchFileSn : atchFileSn,
             trgtTblNm : trgtTblNm,
             trgtSn : trgtSn
@@ -177,12 +179,14 @@ export const fileDownLoad = async (atchFileSn, atchFileNm, trgtTblNm, trgtSn) =>
 export const fileZipDownLoad = async (psnTblSn, zipFileName, trgtTblNm, trgtSn) => {
     try {
         let hostName = window.location.hostname;
+        let apiPort = ":" + import.meta.env.VITE_APP_API_PORT
 
         if(hostName == "133.186.146.192"){
             hostName = "127.0.0.1"
+            apiPort = ""
         }
 
-        const response = await axios.post(`${window.location.protocol}//${hostName}:8080/commonApi/getFileZipDownLoad.do`, {
+        const response = await axios.post(`${window.location.protocol}//${hostName}${apiPort}` + import.meta.env.VITE_APP_API_PORT + `/commonApi/getFileZipDownLoad.do`, {
             psnTblSn : psnTblSn,
             zipFileName : zipFileName,
             trgtTblNm : trgtTblNm,

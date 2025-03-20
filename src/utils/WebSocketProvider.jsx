@@ -17,12 +17,15 @@ export const WebSocketProvider = ({ children }) => {
     if (!sessionUserSn) return;
 
     let hostName = window.location.hostname;
+    let apiPort = ":" + import.meta.env.VITE_APP_API_PORT
 
     if(hostName == "133.186.146.192"){
       hostName = "127.0.0.1"
+      apiPort = ""
     }
 
-    const socketInstance = new SockJS(`${window.location.protocol}//${hostName}:8080/ws?userSn=${sessionUserSn}`);
+
+    const socketInstance = new SockJS(`${window.location.protocol}//${hostName}${apiPort}/ws?userSn=${sessionUserSn}`);
 
     socketInstance.onopen = () => {
       console.log('WebSocket 연결됨');
