@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useRef, useState} from "react";
-import { useNavigate, NavLink } from "react-router-dom";
+import { useNavigate, NavLink, useLocation } from "react-router-dom";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
 import AOS from "aos";
@@ -7,16 +7,19 @@ import moment from "moment/moment.js";
 import * as EgovNet from "@/api/egovFetch";
 
 const TotalSearch = () => {
+    const location = useLocation();
     const navigate = useNavigate();
     const kwdRef = useRef();
+
+
     const [searchCondition, setSearchCondition] = useState(
         location.state?.searchCondition || {
             pageIndex: 1,
             pageUnit : 10,
             searchType: "",
             searchVal: location.state?.searchText || "",
-            searchStartDt : moment(new Date()).format("YYYY-MM-DD") + "T00:00:00",
-            searchEndDt : moment(new Date()).format("YYYY-MM-DD") + "T00:00:00",
+            searchStartDt: location.state?.searchText ? moment(new Date()).subtract(3, "months").format("YYYY-MM-DD") + "T00:00:00" : moment(new Date()).format("YYYY-MM-DD") + "T00:00:00",
+            searchEndDt: moment(new Date()).format("YYYY-MM-DD") + "T00:00:00",
         }
     );
 
@@ -524,62 +527,40 @@ const TotalSearch = () => {
                             }}
                         >
                             <h3 style={{marginBottom: "12px", fontSize: "18px"}}>검색 필터</h3>
-                            <label style={{marginBottom: "8px", display: "flex", alignItems: "center", gap: "8px"}}>
-                                <div style={{
+                            <label className="checkBox type1" style={{marginBottom: "8px", display: "flex", alignItems: "center", gap: "8px"}}>
+                                {/*<div style={{
                                     width: "16px",
                                     height: "16px",
                                     border: "1px solid #ccc",
                                     backgroundColor: "#fff",
                                     marginRight: "4px"
-                                }}></div>
+                                }}></div>*/}
+                                <input type="checkbox"
+                                />
                                 공지사항
                             </label>
-                            <label style={{marginBottom: "8px", display: "flex", alignItems: "center", gap: "8px"}}>
-                                <div style={{
-                                    width: "16px",
-                                    height: "16px",
-                                    border: "1px solid #ccc",
-                                    backgroundColor: "#fff",
-                                    marginRight: "4px"
-                                }}></div>
+                            <label className="checkBox type1" style={{marginBottom: "8px", display: "flex", alignItems: "center", gap: "8px"}}>
+                                <input type="checkbox"
+
+                                />
                                 보도자료
                             </label>
-                            <label style={{marginBottom: "8px", display: "flex", alignItems: "center", gap: "8px"}}>
-                                <div style={{
-                                    width: "16px",
-                                    height: "16px",
-                                    border: "1px solid #ccc",
-                                    backgroundColor: "#fff",
-                                    marginRight: "4px"
-                                }}></div>
+                            <label className="checkBox type1" style={{marginBottom: "8px", display: "flex", alignItems: "center", gap: "8px"}}>
+                                <input type="checkbox"
+                                />
                                 Q&A
                             </label>
-                            <label style={{marginBottom: "8px", display: "flex", alignItems: "center", gap: "8px"}}>
-                            <div style={{
-                                    width: "16px",
-                                    height: "16px",
-                                    border: "1px solid #ccc",
-                                    backgroundColor: "#fff",
-                                    marginRight: "4px"
-                                }}></div> FAQ
+                            <label className="checkBox type1" style={{marginBottom: "8px", display: "flex", alignItems: "center", gap: "8px"}}>
+                                <input type="checkbox"
+                                />FAQ
                             </label>
-                            <label style={{ marginBottom: "8px", display: "flex", alignItems: "center", gap: "8px" }}>
-                                <div style={{
-                                    width: "16px",
-                                    height: "16px",
-                                    border: "1px solid #ccc",
-                                    backgroundColor: "#fff",
-                                    marginRight: "4px"
-                                }}></div> 자료실
+                            <label className="checkBox type1" style={{marginBottom: "8px", display: "flex", alignItems: "center", gap: "8px"}}>
+                                <input type="checkbox"
+                                /> 자료실
                             </label>
-                            <label style={{ marginBottom: "30px", display: "flex", alignItems: "center", gap: "8px" }}>
-                                <div style={{
-                                    width: "16px",
-                                    height: "16px",
-                                    border: "1px solid #ccc",
-                                    backgroundColor: "#fff",
-                                    marginRight: "4px"
-                                }}></div> 연구자료실
+                            <label className="checkBox type1" style={{marginBottom: "30px", display: "flex", alignItems: "center", gap: "8px"}}>
+                                <input type="checkbox"
+                                /> 연구자료실
                             </label>
 
                             <hr style={{border: "1px solid #ddd", margin: "16px 0"}}/>
@@ -628,24 +609,14 @@ const TotalSearch = () => {
                             <hr style={{border: "1px solid #ddd", margin: "16px 0"}}/>
 
                             <h3 style={{marginBottom: "12px", fontSize: "18px"}}>자료 유형</h3>
-                            <label style={{marginBottom: "8px", display: "flex", alignItems: "center", gap: "8px"}}>
-                                <div style={{
-                                    width: "16px",
-                                    height: "16px",
-                                    border: "1px solid #ccc",
-                                    backgroundColor: "#fff",
-                                    marginRight: "4px"
-                                }}></div>
+                            <label className="checkBox type1" style={{marginBottom: "8px", display: "flex", alignItems: "center", gap: "8px"}}>
+                                <input type="checkbox"
+                                />
                                 PDF(3)
                             </label>
-                            <label style={{marginBottom: "30px", display: "flex", alignItems: "center", gap: "8px"}}>
-                                <div style={{
-                                    width: "16px",
-                                    height: "16px",
-                                    border: "1px solid #ccc",
-                                    backgroundColor: "#fff",
-                                    marginRight: "4px"
-                                }}></div>
+                            <label className="checkBox type1" style={{marginBottom: "30px", display: "flex", alignItems: "center", gap: "8px"}}>
+                                <input type="checkbox"
+                                />
                                 HWP(1)
                             </label>
                         </div>
@@ -699,14 +670,14 @@ const TotalSearch = () => {
                                                   style={{
                                                       marginLeft: "4px",
                                                       fontSize: "12px"
-                                                  }}>({paginationInfo.totalRecordCount || 0}건)</span>
+                                                  }}>(0건)</span>
                                         </a>
                                     </li>
                                     <li style={{flex: "none", fontSize: "14px", padding: "4px 8px"}}>
                                         <a href="#" style={{textDecoration: "none"}}>
                                             <span>Q&A</span>
                                             <span className="small" style={{marginLeft: "4px", fontSize: "12px"}}>
-                                            ({paginationInfo.totalRecordCount || 0}건)
+                                            (0건)
                                             </span>
                                         </a>
                                     </li>
@@ -714,7 +685,7 @@ const TotalSearch = () => {
                                         <a href="#" style={{textDecoration: "none"}}>
                                             <span>FAQ</span>
                                             <span className="small" style={{marginLeft: "4px", fontSize: "12px"}}>
-                                            ({paginationInfo.totalRecordCount || 0}건)
+                                            (0건)
                                             </span>
                                         </a>
                                     </li>
@@ -722,7 +693,7 @@ const TotalSearch = () => {
                                         <a href="#" style={{textDecoration: "none"}}>
                                             <span>자료실</span>
                                             <span className="small" style={{marginLeft: "4px", fontSize: "12px"}}>
-                                            ({paginationInfo.totalRecordCount || 0}건)
+                                            (0건)
                                             </span>
                                         </a>
                                     </li>
@@ -730,7 +701,7 @@ const TotalSearch = () => {
                                         <a href="#" style={{textDecoration: "none"}}>
                                             <span>연구자료실</span>
                                             <span className="small" style={{marginLeft: "4px", fontSize: "12px"}}>
-                                            ({paginationInfo.totalRecordCount || 0}건)
+                                            (0건)
                                             </span>
                                         </a>
                                     </li>
