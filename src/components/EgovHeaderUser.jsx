@@ -631,7 +631,8 @@ function EgovHeader() {
   }, [userMsgTopList]);
 
   useEffect(() => {
-    if (window.location.pathname.split("/")[1] != "" && location.state?.menuSn == null) {
+    console.log(window.location.pathname.split("/")[1])
+    if (window.location.pathname.split("/")[1] != "" && window.location.pathname.split("/")[1] != "login" && location.state?.menuSn == null) {
       alert("잘못된 접근입니다.");
       window.location.href = "/";
     }
