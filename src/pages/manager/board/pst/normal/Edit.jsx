@@ -501,7 +501,7 @@ function setPst(props) {
                 </div>
               </li>
               <li className="inputBox type1 width1">
-                <label className="title essential"><small>내용(한글)</small></label>
+                <label className="title essential"><small>내용(국문)</small></label>
                 <div>
                   <CommonEditor
                       value={pstDetail.pstCn || ""}
