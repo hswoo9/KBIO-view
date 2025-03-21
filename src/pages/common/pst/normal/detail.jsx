@@ -282,7 +282,7 @@ function commonPstDetail(props) {
     return () => observer.disconnect();
   }, []);
 
-  const content = currentLang === "en" ? pst.pstEngCn : pst.pstCn;
+  const content = currentLang === "en" ? pst.pstEngCn || "" : pst.pstCn || "";
 
   function activeEnter (e, type) {
     if (e.key === "Enter") {
