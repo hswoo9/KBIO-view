@@ -329,13 +329,13 @@ function setPst(props) {
                 <li className="inputBox type1 width1">
                   <label className="title"><small>내용(국문)</small></label>
                   <div className="input"
-                       dangerouslySetInnerHTML={{__html: ComScript.convertOembedToIframe(pstDetail.pstCn)}}></div>
+                       dangerouslySetInnerHTML={{__html: ComScript.convertOembedToIframe(pstDetail.pstCn || "")}}></div>
                 </li>
 
                 <li className="inputBox type1 width1">
                   <label className="title"><small>내용(영문)</small></label>
                   <div className="input"
-                       dangerouslySetInnerHTML={{__html: ComScript.convertOembedToIframe(pstDetail.pstEngCn)}}></div>
+                       dangerouslySetInnerHTML={{__html: ComScript.convertOembedToIframe(pstDetail.pstEngCn || "")}}></div>
                 </li>
 
                 {bbsDetail.cmntPsbltyYn == "Y" && (
