@@ -25,7 +25,7 @@ export const WebSocketProvider = ({ children }) => {
     }
 
 
-    const socketInstance = new SockJS(`${window.location.protocol}//${hostName}${apiPort}/ws?userSn=${sessionUserSn}`);
+    const socketInstance = new SockJS(`${window.location.protocol}//${hostName}${apiPort}/api/ws?userSn=${sessionUserSn}`);
 
     socketInstance.onopen = () => {
       console.log('WebSocket 연결됨');
