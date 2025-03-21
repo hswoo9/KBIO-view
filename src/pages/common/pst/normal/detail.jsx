@@ -16,9 +16,15 @@ import CommonSubMenu from "@/components/CommonSubMenu";
 import * as ComScript from "@/components/CommonScript";
 
 function commonPstDetail(props) {
+  const getCurrentLanguage = () => {
+    const match = document.cookie.match(/googtrans=\/([^\/]*)\/([^;]*)/);
+    return match ? match[2] : "ko"; // 기본값 'ko'
+  };
+
   const sessionUser = getSessionItem("loginUser");
   const navigate = useNavigate();
   const location = useLocation();
+  const [currentLang, setCurrentLang] = useState(getCurrentLanguage());
 
   const [searchDto, setSearchDto] = useState({
     bbsSn : location.state?.bbsSn,
@@ -266,6 +272,18 @@ function commonPstDetail(props) {
     });
   };
 
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      setCurrentLang(getCurrentLanguage());
+    });
+
+    observer.observe(document.body, { childList: true, subtree: true });
+
+    return () => observer.disconnect();
+  }, []);
+
+  const content = currentLang === "en" ? pst.pstEngCn : pst.pstCn;
+
   function activeEnter (e, type) {
     if (e.key === "Enter") {
       e.preventDefault();
@@ -353,7 +371,7 @@ function commonPstDetail(props) {
                 <tbody>
                 <tr>
                   <td>
-                    <div className="textBox" dangerouslySetInnerHTML={{__html: ComScript.convertOembedToIframe(pst.pstCn)}}>
+                    <div className="textBox" dangerouslySetInnerHTML={{__html: ComScript.convertOembedToIframe(content)}}>
                     </div>
                   </td>
                 </tr>

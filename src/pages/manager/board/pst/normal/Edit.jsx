@@ -39,13 +39,21 @@ function setPst(props) {
   const [fileList, setFileList] = useState([]);
   const [bbsDetail, setBbsDetail] = useState({});
 
-  const isFirstRender = useRef(true);
-  const handleChange = (value) => {
-    if(isFirstRender.current){
-      isFirstRender.current = false;
+  const isFirstRender = {
+    pstCn: true,
+    pstEngCn: true
+  };
+
+  const handleChange = (fieldName, value) => {
+    if (isFirstRender[fieldName].current) {
+      isFirstRender[fieldName].current = false;
       return;
     }
-    setPstDetail({...pstDetail, pstCn: value});
+    setPstDetail(prev => ({
+      ...prev,
+      [fieldName]: value
+    }));
+
   };
 
   const getBbs = (searchDto) => {
@@ -204,6 +212,7 @@ function setPst(props) {
       Swal.fire("제목을 입력해주세요.");
       return;
     }
+
     if (!pstDetail.pstCn) {
       Swal.fire("내용을 입력해주세요.");
       return;
@@ -492,14 +501,27 @@ function setPst(props) {
                 </div>
               </li>
               <li className="inputBox type1 width1">
-                <label className="title essential"><small>내용</small></label>
+                <label className="title essential"><small>내용(한글)</small></label>
                 <div>
                   <CommonEditor
-                      value={pstDetail.pstCn}
-                      onChange={handleChange}
+                      value={pstDetail.pstCn || ""}
+                      onChange={(value) => handleChange("pstCn", value)}
+
                   />
                 </div>
               </li>
+
+              <li className="inputBox type1 width1">
+                <label className="title essential"><small>내용(영문)</small></label>
+                <div>
+                  <CommonEditor
+                      value={pstDetail.pstEngCn || ""}
+                      onChange={(value) => handleChange("pstEngCn", value)}
+
+                  />
+                </div>
+              </li>
+
               {bbsDetail.wrtrRlsYn == "Y" && upPstSn == null && pstDetail.upPstSn == null && (
                   <>
                     <li className="inputBox type1 width2">
