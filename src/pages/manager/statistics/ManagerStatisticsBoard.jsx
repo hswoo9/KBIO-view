@@ -88,7 +88,7 @@ function ManagerStatisticsBoard(props) {
             }
 
             <div className="inner">
-                <h2 className="pageTitle"><p>게시물접속통계</p></h2>
+                <h2 className="pageTitle"><p>커뮤니티접속통계</p></h2>
                 <div className="cateWrap">
                     <form action="">
                         <ul className="cateList">
