@@ -645,6 +645,9 @@ function EgovHeader() {
       ComScript.closeModal("searchmap");
     };
 
+
+
+
   return (
       // <!-- header -->
       <header className={isScrolled ? 'scroll' : ''}>
@@ -1138,6 +1141,15 @@ function EgovHeader() {
                             border: "1px solid #ddd",
                             borderRadius: "4px",
                           }}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                              e.preventDefault();
+                              navigate(URL.TOTAL_SEARCH, {
+                                state: { menuNmPath: "통합검색", searchText : searchText }
+                              });
+                              ComScript.closeModal("searchmap");
+                            }
+                          }}
                       />
                     </div>
                     <NavLink
@@ -1147,6 +1159,7 @@ function EgovHeader() {
                           searchText: searchText,
                         }}
                         onClick={handleSearch}
+
                     >
                     <button
                         type="button"
@@ -1158,6 +1171,7 @@ function EgovHeader() {
                           borderRadius: "4px",
                           cursor: "pointer",
                         }}
+
                     >
                       검색
                     </button>
