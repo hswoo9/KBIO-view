@@ -1,3 +1,5 @@
+import Swal from "sweetalert2";
+
 const SnsKakaoBt = () => {
     const KAKAO_CLIENT_ID = import.meta.env.VITE_APP_KAKAO_CLIENTID; // 발급받은 클라이언트 아이디
     const REDIRECT_URI = import.meta.env.VITE_APP_KAKAO_CALLBACKURL; // Callback URL
@@ -8,8 +10,19 @@ const SnsKakaoBt = () => {
         window.location.href = KAKAO_AUTH_URL;
     };
 
-    return (
+    const handleServiceNotReady = () => {
+        Swal.fire("서비스 준비중입니다.");
+    };
+
+
+    /*return (
         <button type="button" onClick={KakaoLogin}>
+            <div className="icon"></div>
+            <p style={{margin: 0, textAlign: "center"}}>카카오 아이디 로그인</p>
+        </button>
+    );*/
+    return (
+        <button type="button" onClick={handleServiceNotReady}>
             <div className="icon"></div>
             <p style={{margin: 0, textAlign: "center"}}>카카오 아이디 로그인</p>
         </button>

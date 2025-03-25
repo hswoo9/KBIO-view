@@ -42,20 +42,23 @@ function EgovHeader() {
   const NAVER_AUTH_URL = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${NAVER_CLIENT_ID}&state=${NAVER_STATE}&redirect_uri=${NAVER_REDIRECT_URI}`;
 
   const NaverLogin = () => {
-    window.location.href = NAVER_AUTH_URL;
+    Swal.fire("서비스 준비중입니다.");
+    /*window.location.href = NAVER_AUTH_URL;*/
   };
 
   const KakaoLogin = () => {
-    window.location.href = KAKAO_AUTH_URL;
+    Swal.fire("서비스 준비중입니다.");
+    /*window.location.href = KAKAO_AUTH_URL;*/
   };
 
   const GoogleLogin = () => {
+    Swal.fire("서비스 준비중입니다.");
     // 구글 로그인 화면으로 이동시키기
-    window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?
+    /*window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?
 		client_id=${GOOGLE_CLIENTID}
 		&redirect_uri=${GOOGLE_CALLBACKURL}
 		&response_type=code
-		&scope=email profile`;
+		&scope=email profile`;*/
   };
 
 
