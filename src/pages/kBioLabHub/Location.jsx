@@ -73,8 +73,8 @@ function KbioLocation(props) {
                     <li>
                       <strong className="num">M6724</strong>
                       <div className="text">
-                        <p className="tt1">송도 ↔ 신촌(연세대학교 정문) </p>
-                        <span className="tt2">첫차 05:00 / 막차 23:10 / 배차간격 20분</span>
+                        <p className="tt1">송도 ↔ 서울역 </p>
+                        <span className="tt2">첫차 04:50 / 막차 22:30 / 배차간격 30~50분</span>
                       </div>
                     </li>
                     <li>
