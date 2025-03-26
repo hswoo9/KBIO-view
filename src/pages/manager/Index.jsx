@@ -29,7 +29,7 @@ import LoadingSpinner from "@/components/LoadingSpinner";
 
 function Index(props) {
     const [isLoading, setIsLoading] = useState(true);  // 로딩 상태
-
+    const [nowLi, setNowLi] = useState(null);
 // mngrAcsIpChk(useNavigate())
     const [status, setStatus] = useState({
         mvnEntCnt : 0,
@@ -266,7 +266,6 @@ function Index(props) {
     }, [currentMonth]);
     return (
         <div id="container" className="container layout home">
-
             {isLoading &&
                 <LoadingSpinner />
             }
