@@ -410,7 +410,7 @@ function setPst(props) {
                         >
                           <option value="">선택</option>
                           {comCdList.map((item, index) => (
-                              <option value={item.comCdSn}>{item.comCdNm}</option>
+                              <option value={item.comCdSn} key={item.comCdSn}>{item.comCdNm}</option>
                           ))}
                         </select>
                       </div>
