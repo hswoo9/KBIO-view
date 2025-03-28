@@ -1,14 +1,7 @@
-// import React, { memo, useState, useEffect } from "react";
-// import { CKEditor } from "@ckeditor/ckeditor5-react";
-// import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import translations from 'ckeditor5/translations/ko.js';
 import "@/css/commonEditor.css";
 import * as EgovNet from "@/api/egovFetch";
 import CODE from "@/constants/code";
-
-/**
- *
- * */
 
 import React, { useState, useEffect, useRef, useMemo, memo } from 'react';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
