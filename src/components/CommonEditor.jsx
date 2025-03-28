@@ -1,5 +1,5 @@
 import translations from 'ckeditor5/translations/ko.js';
-import "@/css/commonEditor.css";
+// import "@/css/commonEditor.css";
 import * as EgovNet from "@/api/egovFetch";
 import CODE from "@/constants/code";
 
@@ -17,7 +17,6 @@ import {
     Essentials,
     Heading,
     ImageBlock,
-    ImageCaption,
     ImageInline,
     ImageInsertViaUrl,
     ImageResize,
@@ -47,7 +46,6 @@ import {
     TodoList,
     Underline
 } from 'ckeditor5';
-
 import 'ckeditor5/ckeditor5.css';
 
 
@@ -138,7 +136,6 @@ const CommonEditor = memo(({ value, onChange}) => {
                     Essentials,
                     Heading,
                     ImageBlock,
-                    ImageCaption,
                     ImageInline,
                     ImageInsertViaUrl,
                     ImageResize,
@@ -214,16 +211,7 @@ const CommonEditor = memo(({ value, onChange}) => {
                     ]
                 },
                 image: {
-                    toolbar: [
-                        'toggleImageCaption',
-                        'imageTextAlternative',
-                        '|',
-                        'imageStyle:inline',
-                        'imageStyle:wrapText',
-                        'imageStyle:breakText',
-                        '|',
-                        'resizeImage'
-                    ]
+                    toolbar: ['imageTextAlternative', '|', 'imageStyle:inline', 'imageStyle:wrapText', 'imageStyle:breakText', '|', 'resizeImage']
                 },
                 licenseKey: 'GPL',
                 link: {
@@ -264,12 +252,11 @@ const CommonEditor = memo(({ value, onChange}) => {
             }
         };
     }, [isLayoutReady]);
-
     return (
         <div className="main-container">
             <div className="editor-container editor-container_classic-editor" ref={editorContainerRef}>
                 <div className="editor-container__editor">
-                    <div ref={editorRef}>{editorConfig && <CKEditor editor={ClassicEditor} data={value} onChange={(event, editor) => onChange(editor.getData())} config={editorConfig} />}</div>
+                    <div ref={editorRef}>{editorConfig && <CKEditor editor={ClassicEditor} onReady={(editor) => console.log(editor.config.get('image'))} data={value} onChange={(event, editor) => onChange(editor.getData())} config={editorConfig} />}</div>
                 </div>
             </div>
         </div>
