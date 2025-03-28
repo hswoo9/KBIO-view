@@ -7,16 +7,18 @@ import CODE from "@/constants/code";
 
 import ManagerLeft from "@/components/manager/ManagerLeftConsulting";
 import EgovPaging from "@/components/EgovPaging";
-
+import * as ComScript from "@/components/CommonScript";
 import Swal from 'sweetalert2';
 
 /* bootstrip */
 import { getSessionItem } from "@/utils/storage";
 import {getComCdList, excelExport} from "@/components/CommonComponents";
 import moment from "moment/moment.js";
+import {sendMessageFn, useWebSocket} from "@/utils/WebSocketProvider";
 
 function ManagerSimpleCnslt(props) {
     const sessionUser = getSessionItem("loginUser");
+    const { socket, isConnected } = useWebSocket();
     const location = useLocation();
 
     const searchTypeRef = useRef();
@@ -33,6 +35,8 @@ function ManagerSimpleCnslt(props) {
             searchVal : "",
         }
     );
+
+
     const [cnsltantList, setCnsltantList] = useState([]);
 
     const [consultingList, setConsultingList] = useState([]);
@@ -42,6 +46,45 @@ function ManagerSimpleCnslt(props) {
     const [cnsltSttsCdList, setCnsltSttsCd] = useState([]);
 
     const [paginationInfo, setPaginationInfo] = useState({});
+
+    useEffect(() => {
+        if (isConnected) {
+            console.log("WebSocket 연결됨 (ManagerSimpleCnslt.jsx)");
+        } else {
+            console.log("WebSocket 연결 안됨 (ManagerSimpleCnslt.jsx)");
+        }
+    }, [isConnected]);
+
+
+    const setAlarmConfirm = async (userSn, type) => {
+            if(isConnected) {
+                if(type === "cancle"){
+                    sendMessageFn(
+                        socket,
+                        "private",
+                        sessionUser.userSn,
+                        userSn.toString(),
+                        "컨설팅의뢰 취소",
+                        "컨설팅의뢰가 취소되었습니다. 자세한 사유는 관리자에 문의 바랍니다."
+                    );
+                }else if (type === "match"){
+                    sendMessageFn(
+                        socket,
+                        "private",
+                        sessionUser.userSn,
+                        userSn.toString(),
+                        "컨설팅의뢰 요청",
+                        "컨설팅의뢰 요청이 들어왔습니다."
+                    );
+                } else {
+                    console.error("잘못된 type 값입니다.", type);
+                }
+            } else {
+                console.log("WebSocket 연결이 열려 있지 않습니다.");
+                Swal.fire("알림", "WebSocket 연결이 열려 있지 않습니다. 나중에 다시 시도해주세요.", "error");
+            }
+    };
+
 
     const activeEnter = (e) => {
         if (e.key === "Enter") {
@@ -75,6 +118,10 @@ function ManagerSimpleCnslt(props) {
                 EgovNet.requestFetch(url, requestOptions, (resp) => {
                     if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
                         Swal.fire("승인되었습니다.");
+                        if(resp.result.resultType === "matchComplete"){
+                            console.log(resp.result.resultUserSn);
+                            setAlarmConfirm(resp.result.resultUserSn,"match");
+                        }
                         getConsultingList(searchDto);
                     } else {
                         alert("ERR : " + resp.resultMessage);
@@ -87,7 +134,7 @@ function ManagerSimpleCnslt(props) {
         });
     };
 
-    const cancleCnsltSttsCd = (cnsltAplySn) => {
+    const cancleCnsltSttsCd = (cnsltAplySn, userSn) => {
         const url = "/consultingApi/cancleCnsltDtlSttsCd";
 
         Swal.fire({
@@ -112,6 +159,7 @@ function ManagerSimpleCnslt(props) {
                     if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
                         Swal.fire("취소되었습니다.");
                         getConsultingList(searchDto);
+                        setAlarmConfirm(userSn,"cancle");
                     } else {
                         alert("ERR : " + resp.resultMessage);
                     }
@@ -245,6 +293,7 @@ function ManagerSimpleCnslt(props) {
                         Swal.fire("승인되었습니다.");
                         getConsultingList(searchDto);
                         modelCloseEvent();
+                        setAlarmConfirm(selCnsltantList.cnslttUserSn,"match");
                     } else {
                         alert("ERR : " + resp.resultMessage);
                     }
@@ -377,7 +426,7 @@ function ManagerSimpleCnslt(props) {
                                                         <button
                                                             type="button"
                                                             onClick={() => {
-                                                                cancleCnsltSttsCd(item.cnsltAplySn);
+                                                                cancleCnsltSttsCd(item.cnsltAplySn, item.userSn);
                                                             }}
                                                         >
                                                             취소
@@ -397,7 +446,7 @@ function ManagerSimpleCnslt(props) {
                                                         <button
                                                             type="button"
                                                             onClick={() => {
-                                                                cancleCnsltSttsCd(item.cnsltAplySn);
+                                                                cancleCnsltSttsCd(item.cnsltAplySn, item.userSn);
                                                             }}
                                                         >
                                                             취소
@@ -415,7 +464,7 @@ function ManagerSimpleCnslt(props) {
                                                         <button
                                                             type="button"
                                                             onClick={() => {
-                                                                cancleCnsltSttsCd(item.cnsltAplySn);
+                                                                cancleCnsltSttsCd(item.cnsltAplySn, item.userSn);
                                                             }}
                                                         >
                                                             취소

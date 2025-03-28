@@ -694,94 +694,105 @@ function MemberMyPageModify(props) {
             cancelButtonText: "취소"
         }).then((result) => {
             if (result.isConfirmed) {
-                if (!memberDetail.emailPrefix || !memberDetail.emailDomain) {
-                    Swal.fire("이메일을 입력해주세요.");
-                    return;
-                }
-
-                if (newPassword && !validatePassword(newPassword)) {
-                    Swal.fire("비밀번호는 8자 이상, 16자 이하이며, 최소 1개의 숫자, 문자, 특수문자를 포함해야 합니다.");
-                    return;
-                }
-
-                if (!memberDetail.addr) {
-                    Swal.fire("주소를 입력해주세요.");
-                    return;
-                }
-
-                if (!memberDetail.daddr) {
-                    Swal.fire("상세주소를 입력해주세요.");
-                    return;
-                }
-
-                if (sessionUsermbrType === 2) {
-                    const { jbpsNm, ogdpNm, cnsltSlfint, crrPrd, rmrkCn } = consultDetail;
-                    if (!jbpsNm || !ogdpNm || !cnsltSlfint || !crrPrd || !rmrkCn) {
-                        Swal.fire("모든 컨설턴트 정보를 입력해야 합니다.");
-                        return;
-                    }
-                    for (const cert of certificates) {
-                        if (!cert.qlfcLcnsNm || !cert.pblcnInstNm || !cert.acqsYmd) {
-                            Swal.fire("모든 자격증 정보를 입력해야 합니다.");
-                            return;
+                if (newPassword) {
+                    Swal.fire({
+                        title: "비밀번호를 변경하시겠습니까?",
+                        showCloseButton: true,
+                        showCancelButton: true,
+                        confirmButtonText: "확인",
+                        cancelButtonText: "취소"
+                    }).then((passwordChangeResult) => {
+                        if (passwordChangeResult.isConfirmed) {
+                            proceedWithUpdate();
                         }
-                    }
-
-                    for (const career of careers) {
-                        if (!career.ogdpCoNm || !career.jbgdNm || !career.jncmpYmd || !career.rsgntnYmd) {
-                            Swal.fire("모든 경력 정보를 입력해야 합니다.");
-                            return;
-                        }
-                    }
-
-                    for (const acbg of acbges) {
-                        if (!acbg.schlNm || !acbg.scsbjtNm || !acbg.mjrNm || !acbg.dgrNm || !acbg.grdtnYmd) {
-                            Swal.fire("모든 학력 정보를 입력해야 합니다.");
-                            return;
-                        }
-                    }
+                    });
+                } else {
+                    proceedWithUpdate();
                 }
-
-
-                const emailPrefix = memberDetail.emailPrefix;
-                const emailDomain = memberDetail.emailDomain;
-                const email = `${emailPrefix}@${emailDomain}`;
-
-
-                const updatedMemberDetail = {
-                    ...memberDetail,
-                    emailPrefix,
-                    emailDomain,
-                    email,
-                    emailProvider: emailDomain,
-                    userPwdRe: newPassword,
-                };
-
-                const hasConsultData = consultDetail && Object.keys(consultDetail).length > 0;
-
-                const hasCertData = certificates && certificates.length > 0 ? certificates : null;
-                const hasCrrData = careers && careers.length > 0 ? careers : null;
-                const hasAcbgData = acbges && acbges.length > 0 ? acbges : null;
-
-
-                setSaveEvent({
-                    ...saveEvent,
-                    save: true,
-                    mode: "save",
-                    memberDetail: updatedMemberDetail,
-                    consultDetail: hasConsultData ? consultDetail : null,
-                    hasCertData: hasCertData,
-                    hasCrrData: hasCrrData,
-                    hasAcbgData: hasAcbgData
-                });
-                
-                
-                
-                
-            } else {
             }
         });
     };
+
+    const proceedWithUpdate = () => {
+        if (!memberDetail.emailPrefix || !memberDetail.emailDomain) {
+            Swal.fire("이메일을 입력해주세요.");
+            return;
+        }
+
+        if (newPassword && !validatePassword(newPassword)) {
+            Swal.fire("비밀번호는 8자 이상, 16자 이하이며, 최소 1개의 숫자, 문자, 특수문자를 포함해야 합니다.");
+            return;
+        }
+
+        if (!memberDetail.addr) {
+            Swal.fire("주소를 입력해주세요.");
+            return;
+        }
+
+        if (!memberDetail.daddr) {
+            Swal.fire("상세주소를 입력해주세요.");
+            return;
+        }
+
+        if (sessionUsermbrType === 2) {
+            const { jbpsNm, ogdpNm, cnsltSlfint, crrPrd, rmrkCn } = consultDetail;
+            if (!jbpsNm || !ogdpNm || !cnsltSlfint || !crrPrd || !rmrkCn) {
+                Swal.fire("모든 컨설턴트 정보를 입력해야 합니다.");
+                return;
+            }
+            for (const cert of certificates) {
+                if (!cert.qlfcLcnsNm || !cert.pblcnInstNm || !cert.acqsYmd) {
+                    Swal.fire("모든 자격증 정보를 입력해야 합니다.");
+                    return;
+                }
+            }
+
+            for (const career of careers) {
+                if (!career.ogdpCoNm || !career.jbgdNm || !career.jncmpYmd || !career.rsgntnYmd) {
+                    Swal.fire("모든 경력 정보를 입력해야 합니다.");
+                    return;
+                }
+            }
+
+            for (const acbg of acbges) {
+                if (!acbg.schlNm || !acbg.scsbjtNm || !acbg.mjrNm || !acbg.dgrNm || !acbg.grdtnYmd) {
+                    Swal.fire("모든 학력 정보를 입력해야 합니다.");
+                    return;
+                }
+            }
+        }
+
+        const emailPrefix = memberDetail.emailPrefix;
+        const emailDomain = memberDetail.emailDomain;
+        const email = `${emailPrefix}@${emailDomain}`;
+
+        const updatedMemberDetail = {
+            ...memberDetail,
+            emailPrefix,
+            emailDomain,
+            email,
+            emailProvider: emailDomain,
+            userPwdRe: newPassword,
+        };
+
+        const hasConsultData = consultDetail && Object.keys(consultDetail).length > 0;
+
+        const hasCertData = certificates && certificates.length > 0 ? certificates : null;
+        const hasCrrData = careers && careers.length > 0 ? careers : null;
+        const hasAcbgData = acbges && acbges.length > 0 ? acbges : null;
+
+        setSaveEvent({
+            ...saveEvent,
+            save: true,
+            mode: "save",
+            memberDetail: updatedMemberDetail,
+            consultDetail: hasConsultData ? consultDetail : null,
+            hasCertData: hasCertData,
+            hasCrrData: hasCrrData,
+            hasAcbgData: hasAcbgData
+        });
+    };
+
     const [saveEvent, setSaveEvent] = useState({});
 
     useEffect(() => {

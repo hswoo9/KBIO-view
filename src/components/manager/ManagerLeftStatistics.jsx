@@ -94,7 +94,7 @@ function ManagerLeftStatistics() {
                     className={({isActive}) => (isActive ? "activeTag" : "")}
                 >
                   <div className="icon"></div>
-                  <p>게시물접속통계</p>
+                  <p>커뮤니티접속통계</p>
                 </NavLink>
               </li>
               <li onMouseOver={(e) => handleMouseOver(e)}>

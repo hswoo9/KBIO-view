@@ -159,9 +159,15 @@ function MemberMessage(props) {
                                 }));
                             }}
                         />
-                            <button type="button" className="writeBtn clickBtn" onClick={() => {
-                                ComScript.openModal("requestModal")
-                                }}>
+                        <button type="button" className="writeBtn clickBtn" onClick={() => {
+                            Swal.fire({
+                                title: '서비스 준비중입니다.',
+                                confirmButtonText: '확인'
+                            }).then(() => {
+                                ComScript.closeModal("requestModal");
+                            });
+                            ComScript.openModal("requestModal");
+                            }}>
                                 <span>문자발송</span>
                             </button>
                     </div>
