@@ -40,7 +40,6 @@ function RelatedDetail() {
             getRelInstDetailURL,
             requestOptions,
             (resp) => {
-                console.log(resp.result.related)
                 setRelInstDetail(resp.result.related);
             },
             (error) => {
