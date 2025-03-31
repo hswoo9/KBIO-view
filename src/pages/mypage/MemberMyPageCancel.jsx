@@ -9,9 +9,8 @@ import ManagerLeft from "@/components/manager/ManagerLeftMember";
 import EgovRadioButtonGroup from "@/components/EgovRadioButtonGroup";
 import Swal from "sweetalert2";
 import base64 from 'base64-js';
-import { getSessionItem } from "@/utils/storage";
+import { getSessionItem, removeSessionItem } from "@/utils/storage";
 import CommonSubMenu from "@/components/CommonSubMenu";
-
 
 const EgovMyPage = () => {
     const location = useLocation();
@@ -27,8 +26,8 @@ const EgovMyPage = () => {
         userSe: "USR",
     });
 
-    const idRef = useRef(null); //id입력 부분에서 엔터키 이벤트 발생 확인
-    const passwordRef = useRef(null); //비밀번호 입력 부분
+    const idRef = useRef(null);
+    const passwordRef = useRef(null);
 
     const activeEnter = (e) => {
         if (e.key === "Enter") {
@@ -37,14 +36,41 @@ const EgovMyPage = () => {
         }
     };
 
+    const handleImageClick = () => {
+        const CancelMemberUrl = `/memberApi/myPageCancelMember`;
+        const requestOptions = {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json",
+            },
+            body: JSON.stringify({
+                userSn: sessionUserSn
+            }),
+        };
 
-    const checkUser =() => {
-        if(!passwordRef.current.value){
+        EgovNet.requestFetch(CancelMemberUrl, requestOptions, (resp) => {
+            if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
+                removeSessionItem("loginUser");
+                Swal.fire("회원탈퇴가 완료되었습니다.");
+                navigate(URL.MEMBER_MYPAGE_COMPLETE_CANCEL, {
+                    state: {
+                        menuSn: location.state?.menuSn,
+                        menuNmPath: location.state?.menuNmPath
+                    }
+                });
+            } else {
+                Swal.fire("ERR : " + resp.resultMessage);
+            }
+        });
+    };
+
+    const checkUser = () => {
+        if (!passwordRef.current.value) {
             Swal.fire("비밀번호를 입력해주세요.");
             passwordRef.current.focus();
             return;
         }
-        
+
         const checkUrl = "/memberApi/checkUser.do";
         const requestOptions = {
             method: "POST",
@@ -55,74 +81,78 @@ const EgovMyPage = () => {
         };
 
         EgovNet.requestFetch(checkUrl, requestOptions, (resp) => {
-            if(resp.resultCode != "200") {
+            if (resp.resultCode != "200") {
                 Swal.fire(resp.resultMessage);
                 return;
-            }else{
-                navigate(URL.MEMBER_MYPAGE_IDENTITY, {
-                    state: {
-                        menuSn: location.state?.menuSn,
-                        menuNmPath: location.state?.menuNmPath,
-                    },
+            } else {
+                Swal.fire({
+                    title: "회원 탈퇴",
+                    text: "정말로 회원 탈퇴를 하시겠습니까?",
+                    showCancelButton: true,
+                    confirmButtonText: "확인",
+                    cancelButtonText: "취소",
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        handleImageClick();
+                    }
                 });
             }
         });
-    }
+    };
 
     return (
         <div id="container" className="container withdraw step2">
             <div className="inner">
-                <CommonSubMenu/>
+                <CommonSubMenu />
 
                 <div className="inner2" data-aos="fade-up" data-aos-duration="1500">
                     <div className="titleWrap type1">
                         <p className="tt1">회원 탈퇴</p>
-                        <strong className="tt2">K-BIO LabHub회원탈퇴를 진행하려면 가입하신 방법에 따라 “실명확인” 후 회원탈퇴가 가능합니다. <br/>입력한 정보는
+                        <strong className="tt2">K-BIO LabHub회원탈퇴를 진행하려면 가입하신 방법에 따라 “실명확인” 후 회원탈퇴가 가능합니다. <br />입력한 정보는
                             회원탈퇴
                             이외의 목적으로 사용하지 않습니다.</strong>
                     </div>
-                        <ul className="listBox" style={{width : "200%"}}>
-                            <li className="inputBox type2 textBox">
-                                <p className="title">아이디</p>
-                                <p className="text">
-                                    <input
-                                        type="text"
-                                        name="id"
-                                        id="id"
-                                        placeholder="아이디"
-                                        title="아이디"
-                                        value={sessionUser?.id}
-                                        onKeyDown={activeEnter}
-                                        readOnly
-                                    />
-                                </p>
-                            </li>
-                            <li className="inputBox type2">
-                                <label className="tt1">비밀번호 입력</label>
-                                <div className="input">
-                                    <input
-                                        type="password"
-                                        name="password"
-                                        id="password"
-                                        placeholder="비밀번호"
-                                        title="비밀번호"
-                                        onChange={(e) =>
-                                            setUserInfo({...userInfo, password: e.target.value})
-                                        }
-                                        ref={passwordRef}
-                                        onKeyDown={activeEnter}
-                                    />
-                                </div>
-                            </li>
-                        </ul>
-                        <button type="button" className="clickBtn" onClick={checkUser}>
-                            <span>확인</span>
-                        </button>
+                    <ul className="listBox" style={{ width: "200%" }}>
+                        <li className="inputBox type2 textBox">
+                            <p className="title">아이디</p>
+                            <p className="text">
+                                <input
+                                    type="text"
+                                    name="id"
+                                    id="id"
+                                    placeholder="아이디"
+                                    title="아이디"
+                                    value={sessionUser?.id}
+                                    onKeyDown={activeEnter}
+                                    readOnly
+                                />
+                            </p>
+                        </li>
+                        <li className="inputBox type2">
+                            <label className="tt1">비밀번호 입력</label>
+                            <div className="input">
+                                <input
+                                    type="password"
+                                    name="password"
+                                    id="password"
+                                    placeholder="비밀번호"
+                                    title="비밀번호"
+                                    onChange={(e) =>
+                                        setUserInfo({ ...userInfo, password: e.target.value })
+                                    }
+                                    ref={passwordRef}
+                                    onKeyDown={activeEnter}
+                                />
+                            </div>
+                        </li>
+                    </ul>
+                    <button type="button" className="clickBtn" onClick={checkUser}>
+                        <span>확인</span>
+                    </button>
                 </div>
             </div>
         </div>
-    )
-        ;
+    );
 };
 
 export default EgovMyPage;
