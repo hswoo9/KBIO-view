@@ -4,6 +4,7 @@ import axios from "axios";
 import * as EgovNet from "@/api/egovFetch";
 import URL from "@/constants/url";
 import CODE from "@/constants/code";
+import { getSessionItem, removeSessionItem } from "@/utils/storage";
 
 import {
     format,
@@ -28,6 +29,8 @@ import moment from "moment";
 import LoadingSpinner from "@/components/LoadingSpinner";
 
 function Index(props) {
+    const navigate = useNavigate();
+    const sessionUser = getSessionItem("loginUser");
     const [isLoading, setIsLoading] = useState(true);  // 로딩 상태
     const [nowLi, setNowLi] = useState(null);
 // mngrAcsIpChk(useNavigate())
@@ -47,6 +50,12 @@ function Index(props) {
     const [calendarDataList, setCalendarDataList] = useState([]);
 
     const [currentMonth, setCurrentMonth] = useState(new Date());
+
+    useEffect(() => {
+        if (!sessionUser) {
+            navigate(URL.MANAGER_LOGIN);
+        }
+    }, [navigate]);
 
     // 연도 및 월 변경 핸들러
     const handleYearChange = (e) => {

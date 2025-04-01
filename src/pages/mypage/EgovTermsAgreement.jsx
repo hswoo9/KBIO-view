@@ -27,9 +27,9 @@ const EgovTermsAgreement = () => {
             return;
         }
         if (location.state?.signupType) {
-            navigate(URL.IDENTITY_VERIFICATION, { state: { signupType } });
+            navigate(URL.MYPAGE_CREATE, { state: { signupType } });
         }else{
-            navigate(URL.IDENTITY_VERIFICATION, { state : location.state} );
+            navigate(URL.MYPAGE_CREATE, { state : location.state} );
         }
 
     };
