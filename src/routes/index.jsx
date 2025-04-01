@@ -24,6 +24,7 @@ import IntroduceOperational from "@/pages/introduce/OperationalList";
 import IntroduceOperationalDetail from "@/pages/introduce/OperationalDetail";
 import IntroduceRelated from "@/pages/introduce/RelatedList";
 import IntroduceRelatedDetail from "@/pages/introduce/RelatedDetail";
+import IntroduceMou from "@/pages/introduce/MouList";
 import TotalSearch from "@/pages/search/TotalSearch";
 import UserError404 from "@/pages/error_pages/UserError404";
 
@@ -358,6 +359,7 @@ const SecondRoutes = () => {
               <Route path={URL.INTRODUCE_OPERATIONAL_DETAIL} element={<IntroduceOperationalDetail/>}/>
               <Route path={URL.INTRODUCE_RELATED_LIST} element={<IntroduceRelated/>}/>
               <Route path={URL.INTRODUCE_RELATED_DETAIL} element={<IntroduceRelatedDetail/>}/>
+              <Route path={URL.INTRODUCE_MOU_LIST} element={<IntroduceMou/>}/>
 
               {/* COMMON */}
               <Route path={URL.COMMON_CONTENT_VIEW} element={<CommonContentView/>}/>

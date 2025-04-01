@@ -13,6 +13,7 @@ const URL = {
   INTRODUCE_OPERATIONAL_DETAIL: "/insi/operationaldetail",
   INTRODUCE_RELATED_LIST: "/insi/relatedList",
   INTRODUCE_RELATED_DETAIL: "/insi/relateddetail",
+  INTRODUCE_MOU_LIST: "/insi/mouList",
   //COMMON
   COMMON_POPUP : "/popup",
   COMMON_CONTENT_VIEW : "/content/view",
