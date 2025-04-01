@@ -28,6 +28,7 @@ import moment from "moment";
 import LoadingSpinner from "@/components/LoadingSpinner";
 
 function Index(props) {
+    const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(true);  // 로딩 상태
     const [nowLi, setNowLi] = useState(null);
 // mngrAcsIpChk(useNavigate())
@@ -47,6 +48,13 @@ function Index(props) {
     const [calendarDataList, setCalendarDataList] = useState([]);
 
     const [currentMonth, setCurrentMonth] = useState(new Date());
+
+    useEffect(() => {
+        const sessionUser = sessionStorage.getItem("sessionUser");
+        if (!sessionUser) {
+            navigate(URL.MANAGER_LOGIN);
+        }
+    }, [navigate]);
 
     // 연도 및 월 변경 핸들러
     const handleYearChange = (e) => {
