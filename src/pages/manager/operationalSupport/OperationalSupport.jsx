@@ -46,6 +46,11 @@ function OperationalSupport(props) {
                 item.brno = String(item['사업자등록번호']).replaceAll("-", "");
                 item.rpsvNm = item['대표자'];
                 item.entTelno = String(item['대표전화']).replaceAll("-", "");
+                item.bzentyEmlAddr = item['대표이메일'];
+                item.hmpgAddr = item['홈페이지'];
+                item.zip = item['우편번호'];
+                item.entAddr = item['주소'];
+                item.entDaddr = item['상세주소'];
                 item.entClsf = item['분류코드(시트참조)'];
                 item.entTpbiz = item['업종코드(시트참조)'];
                 item.creatrSn = sessionUser?.userSn;
@@ -117,7 +122,7 @@ function OperationalSupport(props) {
     const excelUploadSample = () => {
         let sheetDatas = [{
             sheetName : "입주기업 업로드 양식",
-            header : ['기업명', '사업자등록번호', '대표자', '대표전화', '분류코드(시트참조)', '업종코드(시트참조)'],
+            header : ['기업명', '사업자등록번호', '대표자', '대표전화', '대표이메일', '홈페이지' ,'우편번호', '주소' , '상세주소', '분류코드(시트참조)', '업종코드(시트참조)'],
             row : []
         }];
 
