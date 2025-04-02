@@ -53,6 +53,20 @@ const CommonEditor = memo(({ value, onChange}) => {
     const editorContainerRef = useRef(null);
     const editorRef = useRef(null);
     const [isLayoutReady, setIsLayoutReady] = useState(false);
+    useEffect(() => {
+        const style = document.createElement("style");
+        style.innerHTML = `
+        .ck-content .media {
+            max-width: 75% !important;
+            margin: 0 auto;
+        }
+    `;
+        document.head.appendChild(style);
+
+        return () => {
+            document.head.removeChild(style);
+        };
+    }, []);
 
     useEffect(() => {
         setIsLayoutReady(true);
