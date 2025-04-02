@@ -13,13 +13,12 @@ function MouList() {
     const userSn = getSessionItem("userSn");
     const location = useLocation();
     const navigate = useNavigate();
-
+    const userStatusRef = useRef();
+    const searchTypeRef = useRef();
+    const searchValRef = useRef();
     const [paginationInfo, setPaginationInfo] = useState({});
     const [mouList, setMouList] = useState([]);
     const [searchDto, setSearchDto] = useState({
-        category: "",
-        keywordType: "",
-        keyword: "",
         pageIndex: 1,
         searchType: "",
         searchVal: "",
@@ -98,7 +97,7 @@ function MouList() {
 
     useEffect(() => {
         getMouList(searchDto);
-    }, [searchDto]);
+    }, []);
 
     return (
         <div id="container" className="container resident">
@@ -119,6 +118,7 @@ function MouList() {
                                         id="searchType"
                                         name="searchType"
                                         title="검색유형"
+                                        ref={searchTypeRef}
                                         onChange={(e) => setSearchDto({ ...searchDto, searchType: e.target.value })}
                                     >
                                         <option value="">전체</option>
@@ -130,7 +130,8 @@ function MouList() {
                                         <input
                                             type="text"
                                             name="searchVal"
-                                            value={searchDto.searchVal}
+                                            defaultValue={searchDto.searchVal}
+                                            ref={searchValRef}
                                             onChange={(e) => setSearchDto({ ...searchDto, searchVal: e.target.value })}
                                             onKeyDown={activeEnter}
                                         />
