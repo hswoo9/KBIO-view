@@ -62,7 +62,7 @@ function MouList() {
                         }}
                     >
                         <td className="cate" style={{width:"20%"}}>
-                            <p>{item.mouClbrClsf}</p>
+                            <p>{item.mouClsfNm}</p>
                         </td>
                         <td style={{width:"20%"}}>
                             <figure>
