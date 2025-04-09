@@ -81,7 +81,7 @@ const MainSwiper = ({data}) => {
                     </figure>
                     <div className="textBox">
                         <h3 className="tt1">{item.tblMvnEnt.mvnEntNm}</h3>
-                        <p className="tt2" dangerouslySetInnerHTML={{__html: item.bzentyExpln || "기업소개가 없습니다."}}></p>
+                        <p className="tt2" dangerouslySetInnerHTML={{__html: item.tblMvnEnt.bzentyExpln || "기업소개가 없습니다."}}></p>
                     </div>
                     <NavLink
                         to={URL.INTRODUCE_OPERATIONAL_DETAIL}
