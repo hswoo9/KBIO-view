@@ -49,6 +49,7 @@ function RelatedDetail() {
     };
 
     useEffect(() => {
+        window.scrollTo(0, 0);
         getRelInstDetail();
     }, [searchDto]);
 

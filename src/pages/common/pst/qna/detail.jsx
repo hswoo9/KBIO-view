@@ -110,6 +110,7 @@ function commonPstDetail(props) {
   }
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     getPst(searchDto);
   }, [searchDto.pstSn]);
 

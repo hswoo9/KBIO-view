@@ -24,6 +24,7 @@ import user_business_overview_box05_icon06 from "@/assets/images/user_business_o
 
 function BusinessOverview(props) {
   useEffect(() => {
+    window.scrollTo(0, 0);
     AOS.init();
   }, []);
 

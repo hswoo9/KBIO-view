@@ -166,6 +166,7 @@ function commonPstList(props) {
         });
     }, [bbsSn]);
     useEffect(() => {
+        window.scrollTo(0, 0);
         getPstList(searchDto);
     }, [searchDto.bbsSn]);
 

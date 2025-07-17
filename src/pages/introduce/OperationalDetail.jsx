@@ -49,6 +49,7 @@ function OperationalDetail() {
     };
 
     useEffect(() => {
+        window.scrollTo(0, 0);
         getOperationalDetail();
     }, [searchDto]);
 

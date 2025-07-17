@@ -301,6 +301,7 @@ function setCommonPst(props) {
   }, []);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     if(bbs.pstCtgryYn == "Y"){
       const cdGroupSn =
           bbs.bbsTypeNm == "0" ? 7 :

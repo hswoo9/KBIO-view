@@ -137,6 +137,7 @@ function ConsultantDetail(props) {
     }, []);
 
     useEffect(() => {
+        window.scrollTo(0, 0);
         getConsultantDetail();
     }, [searchDto]);
 

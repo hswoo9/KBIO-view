@@ -86,6 +86,7 @@ function KBioLabHub(props) {
   );
 
     useEffect(() => {
+        window.scrollTo(0, 0);
         getOrgchtList(searchCondition);
     }, [searchCondition.deptSn]);
 

@@ -139,6 +139,7 @@ function RelatedList() {
     );
 
     useEffect(() => {
+        window.scrollTo(0, 0);
         getRelatedList(searchDto);
     }, []);
 

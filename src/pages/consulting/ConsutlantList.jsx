@@ -317,6 +317,7 @@ function ConsultantList(props) {
     }, []);
 
     useEffect(() => {
+        window.scrollTo(0, 0);
         getConsultantList(searchDto);
     }, [comCdList]);
 

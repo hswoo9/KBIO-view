@@ -96,6 +96,7 @@ function MouList() {
     }, [mouList, searchDto]);
 
     useEffect(() => {
+        window.scrollTo(0, 0);
         getMouList(searchDto);
     }, []);
 

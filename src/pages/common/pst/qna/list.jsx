@@ -146,6 +146,7 @@ function commonPstList(props) {
     );
 
     useEffect(() => {
+        window.scrollTo(0, 0);
         getPstList(searchDto);
         AOS.init();
     }, []);

@@ -319,6 +319,7 @@ function setCommonPst(props) {
   }, []);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     if(bbs.pstCtgryYn == "Y"){
       getComCdList(8).then((data) => {
         setComCdList(data);
