@@ -426,6 +426,24 @@ function setPst(props) {
                   />
                 </div>
               </li>
+              <li className="toggleBox width4">
+                <div className="box">
+                  <p className="title essential">사용여부</p>
+                  <div className="toggleSwithWrap">
+                    <input type="checkbox"
+                           id="useYn"
+                           checked={pstDetail.actvtnYn === "Y"}
+                           onChange={(e) => setPstDetail({
+                             ...pstDetail,
+                             actvtnYn: e.target.checked ? "Y" : "N"
+                           })}
+                    />
+                    <label htmlFor="useYn" className="toggleSwitch">
+                      <span className="toggleButton"></span>
+                    </label>
+                  </div>
+                </div>
+              </li>
             </ul>
             <div className="buttonBox">
               <div className="leftBox">
