@@ -202,13 +202,10 @@ function EgovHeader() {
           if (userId) {
             Swal.fire({
               title: "ID 찾기 성공",
-              text: `회원님의 ID는 '${userId}'입니다.`,})
-              .then(() => {
-                const modal = document.querySelector('.findId.modalCon');
-                if (modal) {
-                  modal.style.display = 'none';
-                }
-            });
+              text: `회원님의 ID는 '${userId}'입니다.`,
+            }).then(() => {
+              ComScript.closeModal("findId");
+            })
           } else {
             Swal.fire({
               title: "찾기 실패",
