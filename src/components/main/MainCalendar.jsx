@@ -310,13 +310,13 @@ function MainCalendar() {
                                 <caption>달력</caption>
                                 <thead>
                                 <tr>
-                                    <th><p>일</p></th>
-                                    <th><p>월</p></th>
-                                    <th><p>화</p></th>
-                                    <th><p>수</p></th>
-                                    <th><p>목</p></th>
-                                    <th><p>금</p></th>
-                                    <th><p>토</p></th>
+                                    <th><p>일요일</p></th>
+                                    <th><p>월요일</p></th>
+                                    <th><p>화요일</p></th>
+                                    <th><p>수요일</p></th>
+                                    <th><p>목요일</p></th>
+                                    <th><p>금요일</p></th>
+                                    <th><p>토요일</p></th>
                                 </tr>
                                 </thead>
                                 <tbody>
