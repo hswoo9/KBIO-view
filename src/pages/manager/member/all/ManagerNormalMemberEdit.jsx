@@ -109,6 +109,7 @@ function setNormalMember(props) {
         const formData = new FormData();
 
         for (let key in filteredMemberDetail) {
+            if (key === "userPw") continue;
             const value = filteredMemberDetail[key];
             if (value !== null && value !== undefined && value !== '') {
                 formData.append(key, value);
@@ -129,7 +130,7 @@ function setNormalMember(props) {
                     body: formData
                 };
 
-                EgovNet.requestFetch("/memberApi/managerMemberInsert", requestOptions, (resp) => {
+                EgovNet.requestFetch("/memberApi/managerMemberModify", requestOptions, (resp) => {
                     if (Number(resp.resultCode) === Number(CODE.RCV_SUCCESS)) {
                         Swal.fire("수정되었습니다.");
                         navigate(URL.MANAGER_NORMAL_MEMBER);
@@ -224,6 +225,7 @@ function setNormalMember(props) {
                             title: "비밀번호가 초기화되었습니다.",
                             confirmButtonText: "확인"
                         })
+                        navigate(URL.MANAGER_NORMAL_MEMBER);
                     } else {
                         Swal.fire({
                             title: "오류가 발생했습니다.",
@@ -308,6 +310,7 @@ function setNormalMember(props) {
                                 <input
                                     type="password"
                                     defaultValue={memberDetail.userPw || ''}
+                                    onChange={(e) => setMemberDetail({...memberDetail, userPw: e.target.value})}
                                 />
                                 <button type="button" className="pwdBtn btn" onClick={(e) => {
                                     pwdReset();
