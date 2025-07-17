@@ -439,15 +439,8 @@ function MemberSignUp(props) {
               text: "로컬 데이터는 있으나 상세 정보가 없습니다.",
             });
           }
-        } else if (resp.resultCode === 400) {
-          Swal.fire({
-            text: "해당 기업은 K-바이오 랩허브 비입주기업입니다.",
-          }).then(async () => {
-            setMemberDetail({
-              ...memberDetail,
-              isResident: false,
-            });
-
+            } else if (resp.resultCode === 400) {
+            // 비입주기업인지, 사업자가 없는지 공공 API 먼저 호출
             const apiKey = import.meta.env.VITE_APP_DATA_API_CLIENTID;
             const url = `https://api.odcloud.kr/api/nts-businessman/v1/status?serviceKey=${apiKey}`;
 
@@ -458,22 +451,41 @@ function MemberSignUp(props) {
 
               const businessStatus = response.data.data[0]?.b_stt_cd;
 
-              let statusMessage = "사업자가 존재하지 않습니다.";
+              if (!businessStatus) {
+                // 사업자가 존재하지 않을 때만 메시지 띄우고 종료
+                Swal.fire({ text: "사업자가 존재하지 않습니다." });
+                setMemberDetail({
+                  ...memberDetail,
+                  isResident: false,
+                });
+                return;
+              }
+
+
+              let statusMessage = "";
               if (businessStatus === '01') {
-                statusMessage = "사업자가 정상적으로 운영 중입니다.";
+                statusMessage = "해당 기업은 K-바이오 랩허브 비입주기업입니다.";
               } else if (businessStatus === '02') {
                 statusMessage = "사업자가 휴업 중입니다.";
               } else if (businessStatus === '03') {
                 statusMessage = "사업자가 폐업 상태입니다.";
+              } else {
+                statusMessage = "사업자 상태를 알 수 없습니다.";
               }
 
+              setMemberDetail({
+                ...memberDetail,
+                isResident: false,
+              });
+
+              // 사업자 상태 메시지 보여주기
               Swal.fire({ text: statusMessage });
+
             } catch (error) {
               Swal.fire({
                 text: "공공 API 요청 중 문제가 발생했습니다.",
               });
             }
-          });
         } else {
           Swal.fire({
             text: "서버에서 데이터를 조회할 수 없습니다.",
