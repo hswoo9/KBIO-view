@@ -59,7 +59,7 @@ function commonPstList(props) {
 
     const getPstList = useCallback(
         (searchDto) => {
-            const pstListURL = "/pstApi/getPstList.do";
+            const pstListURL = "/memberpstApi/getPstList.do";
             const requestOptions = {
                 method: "POST",
                 headers: {
