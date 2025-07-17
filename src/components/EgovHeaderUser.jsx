@@ -941,7 +941,7 @@ function EgovHeader() {
                         onChange={handleSaveIDFlag}
                         checked={saveIDFlag}
                     />
-                    <small>로그인 상태 유지</small>
+                    <small>아이디 저장</small>
                   </label>
                 </div>
                 <button type="button" className="loginBtn" onClick={submitFormHandler}><span>로그인</span></button>
