@@ -499,12 +499,13 @@ function MemberSignUp(props) {
 
     new window.daum.Postcode({
       oncomplete: function (data) {
-        const fullAddress = data.address;
+        const nonAddress = data.address;
+        const nonZipCode = data.zonecode;
         setMemberDetail({
           ...memberDetail,
-          nonpostcode: fullAddress,
-          nonaddress: fullAddress,
-          nonsearchAddress: fullAddress,
+          nonZipCode: nonZipCode,
+          nonAddr: nonAddress,
+          nonsearchAddress: '',
         });
       },
     }).open();
@@ -1494,7 +1495,7 @@ function MemberSignUp(props) {
                             name="business_address1"
                             id="non-business_address1"
                             title="주소"
-                            value={memberDetail.nonAddress1 || ""}
+                            value={memberDetail.nonAddr || ""}
                             readOnly
                         />
                         <button type="button" className="addressBtn btn" onClick={nonsearchAddress}>
