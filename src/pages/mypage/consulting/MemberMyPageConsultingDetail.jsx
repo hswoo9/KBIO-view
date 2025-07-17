@@ -521,7 +521,7 @@ function MemberMyPageConsultingDetail(props) {
                         Swal.fire("처리완료 되었습니다.").then(() => {
                             setSearchDto((prev) => ({
                                 ...prev,
-                                cnsltSttsCd: "201"
+                                cnsltSttsCd: "200"
                             }));
                             getSimpleDetail();
                             console.log("se :", searchDto);
@@ -577,7 +577,7 @@ function MemberMyPageConsultingDetail(props) {
 
                     <div className="chatWrap">
                         <div className="titleWrap type2">
-                            {searchDto.cnsltSttsCd === "201" && (
+                            {searchDto.cnsltSttsCd === "200" && (
                                 <div className="state complete">
                                     <p>처리완료</p>
                                 </div>
@@ -650,7 +650,7 @@ function MemberMyPageConsultingDetail(props) {
                                             </button>
                                         </NavLink>
                                     </>
-                                ) : searchDto.cnsltSttsCd === "201" ? (
+                                ) : searchDto.cnsltSttsCd === "200" ? (
                                     // 처리 완료 상태일 경우
                                     <>
                                         <button type="button" className="clickBtn surveyBtn"
