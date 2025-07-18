@@ -212,7 +212,7 @@ function ManagerTermsList(props) {
                                         type="text"
                                         name="searchVal"
                                         value={searchDto.searchVal}
-                                        placeholder=""
+                                        placeholder="검색어를 입력해주세요"
                                         ref={searchValRef}
                                         onChange={(e) => {
                                             setSearchDto({...searchDto, searchVal: e.target.value})

@@ -35,9 +35,18 @@ function ManagerBbs(props) {
 
     const activeEnter = (e) => {
         if (e.key === "Enter") {
+            console.log(searchDto.actvtnYn);
             e.preventDefault();
             getBbsList(searchDto);
         }
+    };
+
+    const searchReset = () => {
+        setSearchDto({
+            pageIndex: 1,
+            bbsNm: "",
+            actvtnYn: ""
+        });
     };
 
     const getBbsList = useCallback(
@@ -110,14 +119,20 @@ function ManagerBbs(props) {
                             <li className="inputBox type1">
                                 <p className="title">활성여부</p>
                                 <div className="itemBox">
-                                    <select className="selectGroup">
+                                    <select className="selectGroup"
+                                            name="actvtnYn"
+                                            value={searchDto.actvtnYn || ""}
+                                            onChange={(e) => {
+                                                setSearchDto({...searchDto, actvtnYn: e.target.value})
+                                            }}
+                                    >
                                         <option value="">전체</option>
                                         <option value="Y">사용</option>
                                         <option value="N">미사용</option>
                                     </select>
                                 </div>
                             </li>
-                            <li className="inputBox type1">
+                            {/*<li className="inputBox type1">
                                 <p className="title">키워드</p>
                                 <div className="itemBox">
                                     <select className="selectGroup"
@@ -140,15 +155,13 @@ function ManagerBbs(props) {
                                         <option value="2">QNA</option>
                                     </select>
                                 </div>
-                            </li>
+                            </li>*/}
                             <li className="searchBox inputBox type1">
                                 <label className="input">
                                     <input type="text"
                                            name=""
-                                           defaultValue={
-                                               searchDto && searchDto.bbsNm
-                                           }
-                                           placeholder=""
+                                           value={searchDto.bbsNm || ""}
+                                           placeholder="검색어를 입력해주세요"
                                            ref={bbsNmRef}
                                            onChange={(e) => {
                                                setSearchDto({...searchDto, bbsNm: e.target.value})
@@ -159,7 +172,9 @@ function ManagerBbs(props) {
                             </li>
                         </ul>
                         <div className="rightBtn">
-                            <button type="button" className="refreshBtn btn btn1 gray">
+                            <button type="button" className="refreshBtn btn btn1 gray"
+                                    onClick={searchReset}
+                            >
                                 <div className="icon"></div>
                             </button>
                             <button type="button"
@@ -168,8 +183,6 @@ function ManagerBbs(props) {
                                         getBbsList({
                                             ...searchDto,
                                             pageIndex: 1,
-                                            bbsTypeNm: bbsTypeNmRef.current.value,
-                                            bbsNm: bbsNmRef.current.value,
                                         });
                                     }}
                             >

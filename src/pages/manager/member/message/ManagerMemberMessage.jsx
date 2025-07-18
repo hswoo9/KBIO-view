@@ -101,6 +101,7 @@ function MemberMessage(props) {
                                     <input
                                         type="text"
                                         name="searchVal"
+                                        placeholder="검색어를 입력해주세요"
                                     />
                                 </label>
                             </li>

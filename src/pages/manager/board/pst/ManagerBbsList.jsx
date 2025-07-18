@@ -26,6 +26,7 @@ function ManagerBbs(props) {
     );
     const [paginationInfo, setPaginationInfo] = useState({});
     const bbsTypeNmRef = useRef();
+    const [bbsTypeNm, setBbsTypeNm] = useState("");
     const bbsNmRef = useRef();
     const [bbsList, setBbsList] = useState([]);
 
@@ -33,6 +34,22 @@ function ManagerBbs(props) {
         if (e.key === "Enter") {
             e.preventDefault();
             getBbsList(searchDto);
+        }
+    };
+
+    const searchReset = () => {
+        setSearchDto({
+            pageIndex: 1,
+            bbsNm: "",
+            bbsTypeNm: "",
+        });
+
+        if (bbsTypeNmRef.current) {
+            bbsTypeNmRef.current.value = "";
+        }
+
+        if (bbsNmRef.current) {
+            bbsNmRef.current.value = "";
         }
     };
 
@@ -142,10 +159,8 @@ function ManagerBbs(props) {
                                 <label className="input">
                                     <input type="text"
                                            name=""
-                                           value={
-                                               searchDto && searchDto.bbsNm
-                                           }
-                                           placeholder=""
+                                           value={searchDto.bbsNm || ""}
+                                           placeholder="검색어를 입력해주세요"
                                            ref={bbsNmRef}
                                            onChange={(e) => {
                                                setSearchDto({ ...searchDto, bbsNm: e.target.value })
@@ -156,7 +171,9 @@ function ManagerBbs(props) {
                             </li>
                         </ul>
                         <div className="rightBtn">
-                            <button type="button" className="refreshBtn btn btn1 gray">
+                            <button type="button" className="refreshBtn btn btn1 gray"
+                                    onClick={searchReset}
+                            >
                                 <div className="icon"></div>
                             </button>
                             <button type="button"
