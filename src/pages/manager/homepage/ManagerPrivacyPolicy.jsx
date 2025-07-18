@@ -33,6 +33,15 @@ function ManagerPrivacyList(props) {
         }
     );
 
+    const searchReset = () => {
+        setSearchDto({
+            pageIndex: 1,
+            searchVal: "",
+            searchType: "",
+            useYn: ""
+        });
+    };
+
     const [paginationInfo, setPaginationInfo] = useState({});
 
     const [privacyPolicyList, setprivacyPolicyList] = useState([]);
@@ -168,6 +177,7 @@ function ManagerPrivacyList(props) {
                                 <div className="itemBox">
                                     <select className="selectGroup"
                                             name="useYn"
+                                            value={searchDto.useYn || ""}
                                             onChange={(e) => {
                                                 setSearchDto({...searchDto, useYn: e.target.value})
                                             }}
@@ -187,6 +197,7 @@ function ManagerPrivacyList(props) {
                                         name="searchType"
                                         title="검색유형"
                                         ref={searchTypeRef}
+                                        value={searchDto.searchType || ""}
                                         onChange={(e) => {
                                             setSearchDto({...searchDto, searchType: e.target.value})
                                         }}
@@ -202,7 +213,7 @@ function ManagerPrivacyList(props) {
                                     <input
                                         type="text"
                                         name="searchVal"
-                                        defaultValue={searchDto.searchVal}
+                                        value={searchDto.searchVal}
                                         placeholder=""
                                         ref={searchValRef}
                                         onChange={(e) => {
@@ -214,7 +225,9 @@ function ManagerPrivacyList(props) {
                             </li>
                         </ul>
                         <div className="rightBtn">
-                            <button type="button" className="refreshBtn btn btn1 gray">
+                            <button type="button" className="refreshBtn btn btn1 gray"
+                                    onClick={searchReset}
+                            >
                                 <div className="icon"></div>
                             </button>
                             <button type="button" className="searchBtn btn btn1 point"
