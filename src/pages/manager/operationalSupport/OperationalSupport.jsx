@@ -307,17 +307,6 @@ function OperationalSupport(props) {
 
     const searchReset = () => {
         setSearchDto({
-            ...searchDto,
-            pageIndex: 1,
-            searchVal: "",
-            searchType: "",
-            entClsf : "",
-            // entTpbiz: "",
-            actvtnYn : ""
-        });
-
-        getRcList({
-            ...searchDto,
             pageIndex: 1,
             searchVal: "",
             searchType: "",

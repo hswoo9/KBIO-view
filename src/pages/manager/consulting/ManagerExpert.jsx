@@ -24,6 +24,16 @@ function ManagerExpert(props) {
             searchVal : "",
         }
     );
+
+    const searchReset = () => {
+        setSearchDto({
+            pageIndex: 1,
+            cnsltFld: "",
+            searchType: "",
+            searchVal : ""
+        });
+    };
+
     const [paginationInfo, setPaginationInfo] = useState({});
 
     const searchTypeRef = useRef();
@@ -170,6 +180,7 @@ function ManagerExpert(props) {
                                     <select
                                         className="selectGroup"
                                         name="cnsltFld"
+                                        value={searchDto.cnsltFld || ""}
                                         onChange={(e) => {
                                             setSearchDto({...searchDto, cnsltFld: e.target.value})
                                         }}
@@ -186,6 +197,7 @@ function ManagerExpert(props) {
                                 <div className="itemBox">
                                     <select className="selectGroup"
                                             name="cnsltActv"
+                                            value={searchDto.cnsltActv || ""}
                                             onChange={(e) => {
                                                 setSearchDto({...searchDto, cnsltActv: e.target.value})
                                             }}
@@ -204,6 +216,7 @@ function ManagerExpert(props) {
                                         id="searchType"
                                         name="searchType"
                                         title="검색유형"
+                                        value={searchDto.searchType || ""}
                                         ref={searchTypeRef}
                                         onChange={(e) => {
                                             setSearchDto({...searchDto, searchType: e.target.value})
@@ -233,7 +246,9 @@ function ManagerExpert(props) {
                             </li>
                         </ul>
                         <div className="rightBtn">
-                            <button type="button" className="refreshBtn btn btn1 gray">
+                            <button type="button" className="refreshBtn btn btn1 gray"
+                                    onClick={searchReset}
+                            >
                                 <div className="icon"></div>
                             </button>
                             <button type="button" className="searchBtn btn btn1 point"

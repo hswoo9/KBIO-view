@@ -36,6 +36,18 @@ function ManagerMatching(props) {
         }
     );
 
+    const searchReset = () => {
+        setSearchDto({
+            pageIndex: 1,
+            startDt: "",
+            endDt: "",
+            answerYn: "",
+            dfclMttrFld: "",
+            searchType: "",
+            searchVal: ""
+        });
+    };
+
 
     const [cnsltantList, setCnsltantList] = useState([]);
 
@@ -513,6 +525,7 @@ function ManagerMatching(props) {
                                            id="startDt"
                                            name="startDt"
                                            style={{width:"47%"}}
+                                           value={searchDto.startDt || ""}
                                            onChange={(e) =>
                                                setSearchDto({
                                                    ...searchDto,
@@ -524,6 +537,7 @@ function ManagerMatching(props) {
                                            id="endDt"
                                            name="endDt"
                                            style={{width:"47%"}}
+                                           value={searchDto.endDt || ""}
                                            onChange={(e) =>
                                                setSearchDto({
                                                    ...searchDto,
@@ -539,6 +553,7 @@ function ManagerMatching(props) {
                                     <select
                                         className="selectGroup"
                                         name="cnsltFld"
+                                        value={searchDto.cnsltFld || ""}
                                         onChange={(e) => {
                                             setSearchDto({...searchDto, cnsltFld: e.target.value})
                                         }}
@@ -556,6 +571,7 @@ function ManagerMatching(props) {
                                     <select
                                         className="selectGroup"
                                         name="cnsltSttsCd"
+                                        value={searchDto.cnsltSttsCd || ""}
                                         onChange={(e) => {
                                             setSearchDto({...searchDto, cnsltSttsCd: e.target.value})
                                         }}
@@ -576,6 +592,7 @@ function ManagerMatching(props) {
                                         name="searchType"
                                         title="검색유형"
                                         ref={searchTypeRef}
+                                        value={searchDto.searchType || ""}
                                         onChange={(e) => {
                                             setSearchDto({...searchDto, searchType: e.target.value})
                                         }}
@@ -593,7 +610,7 @@ function ManagerMatching(props) {
                                     <input
                                         type="text"
                                         name="searchVal"
-                                        defaultValue={searchDto.searchVal}
+                                        defaultValue={searchDto.searchVal || ""}
                                         placeholder=""
                                         ref={searchValRef}
                                         onChange={(e) => {
@@ -605,7 +622,9 @@ function ManagerMatching(props) {
                             </li>
                         </ul>
                         <div className="rightBtn">
-                            <button type="button" className="refreshBtn btn btn1 gray">
+                            <button type="button" className="refreshBtn btn btn1 gray"
+                                    onClick={searchReset}
+                            >
                                 <div className="icon"></div>
                             </button>
                             <button type="button" className="searchBtn btn btn1 point"

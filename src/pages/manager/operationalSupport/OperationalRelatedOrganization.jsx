@@ -304,23 +304,12 @@ function OperationalRelatedOrganization(props) {
 
     const searchReset = () => {
         setSearchDto({
-            ...searchDto,
             pageIndex: 1,
             searchVal: "",
             searchType: "",
             clsf : "",
             // tpbiz: "",
-            actvtnYn : ""
-        });
-
-        getRcList({
-            ...searchDto,
-            pageIndex: 1,
-            searchVal: "",
-            searchType: "",
-            clsf : "",
-            // tpbiz: "",
-            actvtnYn : ""
+            rlsYn : ""
         });
     }
 
@@ -382,7 +371,6 @@ function OperationalRelatedOrganization(props) {
                                 <div className="itemBox">
                                     <select
                                         className="selectGroup"
-                                        id="actvtnYn"
                                         value={searchDto.rlsYn || ""}
                                         onChange={(e) =>
                                             setSearchDto({...searchDto, rlsYn: e.target.value})

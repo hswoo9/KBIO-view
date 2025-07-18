@@ -46,6 +46,18 @@ function OperationalDifficulties(props) {
         }
     };
 
+    const searchReset = () => {
+        setSearchDto({
+            pageIndex: 1,
+            startDt: "",
+            endDt: "",
+            answerYn: "",
+            dfclMttrFld: "",
+            searchType: "",
+            searchVal: ""
+        });
+    };
+
     const dataExcelDownload = useCallback(() => {
 
         //let excelParams = searchDto;
@@ -171,6 +183,7 @@ function OperationalDifficulties(props) {
                                            id="startDt"
                                            name="startDt"
                                            style={{width: "47%"}}
+                                           value={searchDto.startDt || ""}
                                            onChange={(e) =>
                                                setSearchDto({
                                                    ...searchDto,
@@ -182,6 +195,7 @@ function OperationalDifficulties(props) {
                                            id="endDt"
                                            name="endDt"
                                            style={{width: "47%"}}
+                                           value={searchDto.endDt || ""}
                                            onChange={(e) =>
                                                setSearchDto({
                                                    ...searchDto,
@@ -197,6 +211,7 @@ function OperationalDifficulties(props) {
                                     <select
                                         className="selectGroup"
                                         name="answer"
+                                        value={searchDto.answerYn || ""}
                                         onChange={(e) => {
                                             setSearchDto({...searchDto, answerYn: e.target.value})
                                         }}
@@ -213,6 +228,7 @@ function OperationalDifficulties(props) {
                                     <select
                                         className="selectGroup"
                                         name="dfclMttrFld"
+                                        value={searchDto.dfclMttrFld || ""}
                                         onChange={(e) => {
                                             setSearchDto({...searchDto, dfclMttrFld: e.target.value})
                                         }}
@@ -232,6 +248,7 @@ function OperationalDifficulties(props) {
                                         id="searchType"
                                         name="searchType"
                                         title="검색유형"
+                                        value={searchDto.searchType || ""}
                                         ref={searchTypeRef}
                                         onChange={(e) => {
                                             setSearchDto({...searchDto, searchType: e.target.value})
@@ -261,7 +278,9 @@ function OperationalDifficulties(props) {
                             </li>
                         </ul>
                         <div className="rightBtn">
-                            <button type="button" className="refreshBtn btn btn1 gray">
+                            <button type="button" className="refreshBtn btn btn1 gray"
+                                    onClick={searchReset}
+                            >
                                 <div className="icon"></div>
                             </button>
                             <button type="button" className="searchBtn btn btn1 point"
