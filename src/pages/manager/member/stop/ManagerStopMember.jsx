@@ -34,6 +34,17 @@ function StopMemberList(props) {
             kornFlnm: "",
         }
     );
+
+    const searchReset = () => {
+        setSearchDto({
+            pageIndex: 1,
+            mbrType: "",
+            searchVal: "",
+            searchType: ""
+        });
+    };
+
+
     const [paginationInfo, setPaginationInfo] = useState({});
     const userTypeRef = useRef();
     const userNmRef = useRef();
@@ -201,6 +212,7 @@ function StopMemberList(props) {
                                     <select
                                         className="selectGroup"
                                         name="mbrType"
+                                        value={searchDto.mbrType || ""}
                                         onChange={(e) => {
                                             setSearchDto({...searchDto, mbrType: e.target.value})
                                         }}
@@ -224,6 +236,7 @@ function StopMemberList(props) {
                                         name="searchType"
                                         title="검색유형"
                                         ref={searchTypeRef}
+                                        value={searchDto.searchType || ""}
                                         onChange={(e) => {
                                             setSearchDto({...searchDto, searchType: e.target.value})
                                         }}
@@ -254,22 +267,7 @@ function StopMemberList(props) {
                             <button
                                 type="button"
                                 className="refreshBtn btn btn1 gray"
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    searchTypeRef.current.value = "";
-                                    searchValRef.current.value = "";
-
-                                    const initialSearchDto = {
-                                        pageIndex: 1,
-                                        mbrStts: "",
-                                        kornFlnm: "",
-                                        userId: "",
-                                        searchType: "",
-                                        searchWrd: "",
-                                    };
-                                    setSearchDto(initialSearchDto);
-                                    getstopMemberList(initialSearchDto);
-                                }}
+                                onClick={searchReset}
                             >
                                 <div className="icon"></div>
                             </button>

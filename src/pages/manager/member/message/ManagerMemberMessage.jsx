@@ -12,6 +12,8 @@ function MemberMessage(props) {
     const [memberList, setMemberList] = useState([]);
     const [paginationInfo, setPaginationInfo] = useState({});
     const [message, setMessage] = useState("");
+    const [searchType, setSearchType] = useState("");
+    const [searchVal, setSearchVal] = useState("");
 
     useEffect(() => {
         setPaginationInfo({
@@ -27,7 +29,10 @@ function MemberMessage(props) {
         });
     }, [memberList]);
 
-
+    const searchReset = () => {
+        setSearchType("");
+        setSearchVal("");
+    };
 
     useEffect(() => {
         const messageData = [
@@ -82,10 +87,12 @@ function MemberMessage(props) {
                                         className="selectGroup"
                                         id="searchType"
                                         name="searchType"
+                                        value={searchType}
+                                        onChange={(e) => setSearchType(e.target.value)}
                                     >
                                         <option value="">전체</option>
-                                        <option value="">일반문자</option>
-                                        <option value="">광고문자</option>
+                                        <option value="1">일반문자</option>
+                                        <option value="2">광고문자</option>
                                     </select>
                                 </div>
                             </li>
@@ -102,6 +109,7 @@ function MemberMessage(props) {
                             <button
                                 type="button"
                                 className="refreshBtn btn btn1 gray"
+                                onClick={searchReset}
                             >
                                 <div className="icon"></div>
                             </button>
