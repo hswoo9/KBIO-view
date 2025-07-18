@@ -44,6 +44,28 @@ function MemberMyPageConsultingDetail(props) {
         cnsltAplySn : location.state?.cnsltAplySn,
     });
 
+    useEffect(() => {
+        const handleBeforeUnload = (e) => {
+            e.preventDefault();
+            e.returnValue = '';
+        };
+
+        const handleKeyDown = (e) => {
+            if (e.key === 'F5' || (e.ctrlKey && e.key === 'r')) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+        };
+
+        window.addEventListener('beforeunload', handleBeforeUnload);
+        window.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, []);;
+
     const [cnsltProfileFile, setCnsltProfileFile] = useState({});
     const [cnsltCertificateFile, setCnsltCertificateFile] = useState([]);
     const acceptFileTypes = 'pdf,hwp,docx,xls,ppt';
