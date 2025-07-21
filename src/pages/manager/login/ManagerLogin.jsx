@@ -117,7 +117,8 @@ function ManagerLogin(props) {
         });
         return;
       }else{
-        setSessionItem("loginUser", {userSn : resp.result.userSn, name : resp.result.userName, id : resp.result.userId, userSe : resp.result.userSe});
+        setSessionItem("loginUser", {userSn : resp.result.userSn, name : resp.result.userName, id : resp.result.userId, userSe : resp.result.userSe
+          , authrtGroupSn: resp.result.authrtGroupSn, authrtGroupNm: resp.result.authrtGroupNm});
         // setSessionItem("userName", resp.userName);
         setSessionItem("jToken", resp.result.jToken);
         setSessionItem("userSn", resp.result.userSn);

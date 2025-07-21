@@ -15,8 +15,11 @@ function ManagerTop( ) {
   const sessionUserName = sessionUser?.name;
   const sessionUserSe = sessionUser?.userSe;
   const sessionUserSn = sessionUser?.userSn;
+  const sessionGroupSn = sessionUser?.authrtGroupSn;
   const userSn = getSessionItem("userSn");
   const navigate = useNavigate();
+
+  console.log(sessionGroupSn);
 
   const [topMenuList, setTopMenuList] = useState([]);
   const [nowLi, setNowLi] = useState(null);
@@ -65,6 +68,10 @@ function ManagerTop( ) {
   }, [location.pathname, nowLi]);
 
 
+  useEffect(() => {
+    const sessionUser = getSessionItem("loginUser");
+    console.log("로그인된 사용자 정보:", sessionUser);
+  }, []);
 
   const logInHandler = () => {
     navigate(URL.MANAGER_LOGIN);
@@ -275,15 +282,17 @@ function ManagerTop( ) {
                   <p>통계</p>
                 </a>
               </li>
-              <li onMouseOver={(e) => handleMouseOver(e)}>
-                <a
-                    data-url={URL.MANAGER_MENU_MANAGEMENT}
-                    onClick={ (e) => {onClickHandle(e, URL.MANAGER_MENU_MANAGEMENT, "CMS")}}
-                    className="cursorTag"
-                >
-                  <p>CMS</p>
-                </a>
-              </li>
+              { (sessionGroupSn === 2 || sessionGroupSn === 3) && (
+                  <li onMouseOver={(e) => handleMouseOver(e)}>
+                    <a
+                        data-url={URL.MANAGER_MENU_MANAGEMENT}
+                        onClick={(e) => onClickHandle(e, URL.MANAGER_MENU_MANAGEMENT, "CMS")}
+                        className="cursorTag"
+                    >
+                      <p>CMS</p>
+                    </a>
+                  </li>
+              )}
             </ul>
           </div>
           <div className="rightBox">
